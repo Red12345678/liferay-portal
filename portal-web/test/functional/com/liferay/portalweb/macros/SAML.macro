@@ -1,4 +1,5 @@
 definition {
+
 	@description = "Configures Liferay SAML as the IdP and Liferay SAML as the SP."
 	macro configureLiferaySAMLAsIdP {
 		// Configure IdP (Identity Provider) on http://localhost:8080 with database lportal and saml deployed
@@ -6,13 +7,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "SAML Admin"
-		);
+			portlet = "SAML Admin");
 
 		SAMLRole.configure(
 			samlEntityID = "${samlEntityID}",
-			samlRoleType = "Identity Provider"
-		);
+			samlRoleType = "Identity Provider");
 
 		SAMLRole.configureCertificateAndPrivateKey(samlKeyPassword = "${samlEntityID}");
 
@@ -23,8 +22,7 @@ definition {
 		if ((isSet(idpSessionIdleTimeout)) || (isSet(idpSessionMaximumAge))) {
 			SAMLRole.configureIdentityProvider(
 				idpSessionIdleTimeout = "${idpSessionIdleTimeout}",
-				idpSessionMaximumAge = "${idpSessionMaximumAge}"
-			);
+				idpSessionMaximumAge = "${idpSessionMaximumAge}");
 		}
 
 		SAMLNavigation.gotoGeneral();
@@ -41,29 +39,25 @@ definition {
 			specificURL = "${spURL}",
 			syntaxCheckingEnabled = "${syntaxCheckingEnabled}",
 			userEmailAddress = "test@liferay.com",
-			userScreenName = "${userScreenName}"
-		);
+			userScreenName = "${userScreenName}");
 
 		Navigator.openSpecificURL(url = "${spURL}");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "SAML Admin"
-		);
+			portlet = "SAML Admin");
 
 		SAMLRole.configure(
 			samlEntityID = "${samlEntityID}",
-			samlRoleType = "Service Provider"
-		);
+			samlRoleType = "Service Provider");
 
 		SAMLRole.configureCertificateAndPrivateKey(samlKeyPassword = "${samlEntityID}");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "SAML Admin"
-		);
+			portlet = "SAML Admin");
 
 		SAMLNavigation.gotoIdentityProviderConnection();
 
@@ -71,8 +65,7 @@ definition {
 			IdpEntityID = "samlidp",
 			IdpMetadataURL = "http://localhost:8080/c/portal/saml/metadata",
 			IdpNameID = "samlidp",
-			nameIdentifierFormat = "${nameIdentifierFormat}"
-		);
+			nameIdentifierFormat = "${nameIdentifierFormat}");
 
 		SAMLNavigation.gotoGeneral();
 
@@ -83,14 +76,15 @@ definition {
 		Navigator.openURL();
 
 		if (IsElementNotPresent(locator1 = "ProductMenu#PRODUCT_MENU_OPENED")) {
-			User.loginPG(password = "test", userEmailAddress = "test@liferay.com");
+			User.loginPG(
+				password = "test",
+				userEmailAddress = "test@liferay.com");
 		}
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "SAML Admin"
-		);
+			portlet = "SAML Admin");
 
 		SAMLNavigation.gotoServiceProviderConnection();
 
@@ -100,17 +94,20 @@ definition {
 			nameIdentifierFormat = "${nameIdentifierFormat}",
 			SPEntityID = "${samlEntityID}",
 			SPMetadataURL = "${spURL}/c/portal/saml/metadata",
-			SPNameID = "${samlEntityID}"
-		);
+			SPNameID = "${samlEntityID}");
 	}
 
 	@description = "Sign into portal by executing a IdP initiated SSO login. The IdP will redirect to the SP. If the same users with the same email address are present on both instances, it will authenticate and show the SP. SAML can authenticate across major portal versions, that is, the IdP can be Portal 6.1 EE GA3 and the SP can be Portal 6.2. EE GA1. For testing purposes, it is obvious if the authentication succeeds or fails if the IdP and SP are different portal versions."
 	macro executeIdPInitiatedSSO {
 		Navigator.openSpecificURL(url = "${idpInitiatedSSOURL}");
 
-		Type(locator1 = "TextInput#EMAIL_ADDRESS", value1 = "test@liferay.com");
+		Type(
+			locator1 = "TextInput#EMAIL_ADDRESS",
+			value1 = "test@liferay.com");
 
-		Type(locator1 = "TextInput#PASSWORD", value1 = "test");
+		Type(
+			locator1 = "TextInput#PASSWORD",
+			value1 = "test");
 
 		if (("${rememberMeChecked}" == "true") && (isSet(rememberMeChecked))) {
 			Check(locator1 = "Checkbox#REMEMBER_ME");
@@ -130,12 +127,18 @@ definition {
 	macro executeSPInitiatedSSO {
 		Navigator.openSpecificURL(url = "${spURL}");
 
-		AssertClick(locator1 = "UserBar#USER_SIGN_IN", value1 = "Sign In");
+		AssertClick(
+			locator1 = "UserBar#USER_SIGN_IN",
+			value1 = "Sign In");
 
 		if (!(("${idpLoggedIn}" == "true") && (isSet(idpLoggedIn)))) {
-			Type(locator1 = "TextInput#EMAIL_ADDRESS", value1 = "test@liferay.com");
+			Type(
+				locator1 = "TextInput#EMAIL_ADDRESS",
+				value1 = "test@liferay.com");
 
-			Type(locator1 = "TextInput#PASSWORD", value1 = "test");
+			Type(
+				locator1 = "TextInput#PASSWORD",
+				value1 = "test");
 
 			if (("${rememberMeChecked}" == "true") && (isSet(rememberMeChecked))) {
 				Check(locator1 = "Checkbox#REMEMBER_ME");
@@ -148,4 +151,5 @@ definition {
 			AssertLocation.assertPartialLocation(value1 = "${spURL}");
 		}
 	}
+
 }

@@ -1,15 +1,13 @@
 definition {
+
 	macro viewAsGuestPG {
 		AssertElementNotPresent(locator1 = "IFrame#MARVEL");
 
-		Navigator.openSpecificURL(
-			url = "http://localhost:5601/o/portal-search-elasticsearch-marvel-web/marvel-proxy/app/kibana"
-		);
+		Navigator.openSpecificURL(url = "http://localhost:5601/o/portal-search-elasticsearch-marvel-web/marvel-proxy/app/kibana");
 
 		AssertTextPresent(
 			locator1 = "Home#DIRECT_URL",
-			value1 = "{&quot;statusCode&quot;:404,&quot;error&quot;:&quot;Not Found&quot;}"
-		);
+			value1 = "{&quot;statusCode&quot;:404,&quot;error&quot;:&quot;Not Found&quot;}");
 	}
 
 	macro viewPG {
@@ -21,8 +19,7 @@ definition {
 
 		AssertClick(
 			locator1 = "Marvel#CLUSTER_NAME",
-			value1 = "LiferayElasticsearchCluster"
-		);
+			value1 = "LiferayElasticsearchCluster");
 
 		AssertElementPresent(locator1 = "Marvel#CLUSTERS");
 
@@ -46,4 +43,5 @@ definition {
 
 		AssertElementPresent(locator1 = "Marvel#SHARD_ACTIVITY_HEADER");
 	}
+
 }

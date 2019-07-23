@@ -43,14 +43,13 @@ public class GZipFilter extends BasePortalFilter {
 
 		boolean filterEnabled = false;
 
-		if (super.isFilterEnabled()) {
-			if (ServerDetector.isJBoss() || ServerDetector.isJetty() ||
-				ServerDetector.isJOnAS() || ServerDetector.isOC4J() ||
-				ServerDetector.isTomcat() || ServerDetector.isWebLogic() ||
-				ServerDetector.isWebSphere()) {
+		if (super.isFilterEnabled() &&
+			(ServerDetector.isJBoss() || ServerDetector.isJetty() ||
+			 ServerDetector.isJOnAS() || ServerDetector.isOC4J() ||
+			 ServerDetector.isTomcat() || ServerDetector.isWebLogic() ||
+			 ServerDetector.isWebSphere())) {
 
-				filterEnabled = true;
-			}
+			filterEnabled = true;
 		}
 
 		_filterEnabled = filterEnabled;
@@ -71,27 +70,24 @@ public class GZipFilter extends BasePortalFilter {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected boolean isAlreadyFiltered(HttpServletRequest request) {
 		if (request.getAttribute(SKIP_FILTER) != null) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected boolean isCompress(HttpServletRequest request) {
 		if (ParamUtil.getBoolean(request, _COMPRESS, true)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected boolean isInclude(HttpServletRequest request) {
@@ -101,9 +97,8 @@ public class GZipFilter extends BasePortalFilter {
 		if (uri == null) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override

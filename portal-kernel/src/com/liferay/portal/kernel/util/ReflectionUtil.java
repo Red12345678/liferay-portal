@@ -174,7 +174,7 @@ public class ReflectionUtil {
 			superClass = superClass.getSuperclass();
 		}
 
-		return interfaceClasses.toArray(new Class<?>[interfaceClasses.size()]);
+		return interfaceClasses.toArray(new Class<?>[0]);
 	}
 
 	/**

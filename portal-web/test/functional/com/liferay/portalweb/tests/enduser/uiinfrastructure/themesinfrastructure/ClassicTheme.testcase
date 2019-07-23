@@ -1,5 +1,6 @@
 @component-name = "portal-user-interface"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "User Interface";
@@ -25,8 +26,7 @@ definition {
 		Page.viewCurrentTheme(
 			navTab = "Look and Feel",
 			page = "Classic Theme Page",
-			themeName = "Classic Theme"
-		);
+			themeName = "Classic Theme");
 
 		Theme.configureLookAndFeelSpecificLook();
 
@@ -62,4 +62,5 @@ definition {
 
 		Smoke.viewWelcomePage();
 	}
+
 }

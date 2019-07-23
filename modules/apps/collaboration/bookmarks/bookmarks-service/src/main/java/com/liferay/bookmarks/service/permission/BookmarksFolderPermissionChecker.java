@@ -123,12 +123,11 @@ public class BookmarksFolderPermissionChecker
 			return BookmarksResourcePermissionChecker.contains(
 				permissionChecker, groupId, actionId);
 		}
-		else {
-			BookmarksFolder folder =
-				_bookmarksFolderLocalService.getBookmarksFolder(folderId);
 
-			return contains(permissionChecker, folder, actionId);
-		}
+		BookmarksFolder folder =
+			_bookmarksFolderLocalService.getBookmarksFolder(folderId);
+
+		return contains(permissionChecker, folder, actionId);
 	}
 
 	@Override

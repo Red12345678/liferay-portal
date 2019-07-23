@@ -206,7 +206,7 @@ public class ConfigurableUtilTest {
 		@Meta.AD(required = false)
 		public String testNullResult();
 
-		@Meta.AD(required = true)
+		@Meta.AD
 		public String testReqiredString();
 
 		@Meta.AD(deflt = "1", required = false)

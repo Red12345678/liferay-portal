@@ -29,7 +29,6 @@ import com.liferay.portal.osgi.web.servlet.context.helper.internal.JspServletWra
 import com.liferay.portal.osgi.web.servlet.context.helper.internal.order.OrderImpl;
 import com.liferay.portal.osgi.web.servlet.context.helper.internal.order.OrderUtil;
 import com.liferay.portal.osgi.web.servlet.context.helper.order.Order;
-import com.liferay.portal.osgi.web.servlet.context.helper.order.Order.Path;
 
 import java.io.InputStream;
 
@@ -44,7 +43,6 @@ import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -268,7 +266,7 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 				return;
 			}
 
-			EnumMap<Path, String[]> routes = _order.getRoutes();
+			EnumMap<Order.Path, String[]> routes = _order.getRoutes();
 
 			List<String> beforeNames = new ArrayList<>(2);
 
@@ -281,7 +279,8 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 			}
 
 			if (ListUtil.isNotEmpty(beforeNames)) {
-				routes.put(Path.BEFORE, beforeNames.toArray(new String[0]));
+				routes.put(
+					Order.Path.BEFORE, beforeNames.toArray(new String[0]));
 			}
 
 			List<String> afterNames = new ArrayList<>(2);
@@ -295,7 +294,7 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 			}
 
 			if (ListUtil.isNotEmpty(afterNames)) {
-				routes.put(Path.AFTER, afterNames.toArray(new String[0]));
+				routes.put(Order.Path.AFTER, afterNames.toArray(new String[0]));
 			}
 
 			_order.setRoutes(routes);
@@ -643,7 +642,7 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 		Map<String, String> assembledContextParameters,
 		Map<String, String> fragmentContextParameters) {
 
-		for (Entry<String, String> entry :
+		for (Map.Entry<String, String> entry :
 				fragmentContextParameters.entrySet()) {
 
 			String name = entry.getKey();
@@ -660,7 +659,7 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 			Map<String, FilterDefinition> fragmentFilterDefinitions)
 		throws Exception {
 
-		for (Entry<String, FilterDefinition> entry :
+		for (Map.Entry<String, FilterDefinition> entry :
 				fragmentFilterDefinitions.entrySet()) {
 
 			String filterName = entry.getKey();
@@ -692,7 +691,7 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 			Map<String, String> fragmentInitParameters =
 				fragmentFilterDefinition.getInitParameters();
 
-			for (Entry<String, String> initParametersEntry :
+			for (Map.Entry<String, String> initParametersEntry :
 					fragmentInitParameters.entrySet()) {
 
 				String initParameterName = initParametersEntry.getKey();
@@ -720,10 +719,9 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 								"Init paramter name ", initParameterName,
 								" conflicts with filter name ", filterName));
 					}
-					else {
-						assembledInitParameters.put(
-							initParameterName, initParametersEntry.getValue());
-					}
+
+					assembledInitParameters.put(
+						initParameterName, initParametersEntry.getValue());
 				}
 			}
 
@@ -786,7 +784,7 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 			Map<String, ServletDefinition> fragmentServletDefinitions)
 		throws Exception {
 
-		for (Entry<String, ServletDefinition> entry :
+		for (Map.Entry<String, ServletDefinition> entry :
 				fragmentServletDefinitions.entrySet()) {
 
 			String servletName = entry.getKey();
@@ -818,7 +816,7 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 			Map<String, String> fragmentServletInitParameters =
 				fragmentServletDefinition.getInitParameters();
 
-			for (Entry<String, String> initParameterEntry :
+			for (Map.Entry<String, String> initParameterEntry :
 					fragmentServletInitParameters.entrySet()) {
 
 				String initParameterName = initParameterEntry.getKey();
@@ -846,10 +844,9 @@ public class WebXMLDefinitionLoader extends DefaultHandler {
 								"Init paramter name ", initParameterName,
 								" conflicts with servlet name ", servletName));
 					}
-					else {
-						assembledInitInitParameters.put(
-							initParameterName, initParameterEntry.getValue());
-					}
+
+					assembledInitInitParameters.put(
+						initParameterName, initParameterEntry.getValue());
 				}
 			}
 

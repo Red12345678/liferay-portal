@@ -140,9 +140,8 @@ public class WorkflowInstanceLinkLocalServiceImpl
 		if (!workflowInstanceLinks.isEmpty()) {
 			return workflowInstanceLinks.get(0);
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override
@@ -183,9 +182,8 @@ public class WorkflowInstanceLinkLocalServiceImpl
 
 			throw new NoSuchWorkflowInstanceLinkException(sb.toString());
 		}
-		else {
-			return workflowInstanceLinks.get(0);
-		}
+
+		return workflowInstanceLinks.get(0);
 	}
 
 	@Override

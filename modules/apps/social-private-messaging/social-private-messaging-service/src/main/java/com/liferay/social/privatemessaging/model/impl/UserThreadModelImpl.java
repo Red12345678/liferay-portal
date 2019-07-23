@@ -37,6 +37,9 @@ import com.liferay.social.privatemessaging.model.UserThreadSoap;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.ArrayList;
@@ -274,6 +277,32 @@ public class UserThreadModelImpl
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, UserThread>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			UserThread.class.getClassLoader(), UserThread.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<UserThread> constructor =
+				(Constructor<UserThread>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
 	}
 
 	private static final Map<String, Function<UserThread, Object>>
@@ -715,8 +744,12 @@ public class UserThreadModelImpl
 	@Override
 	public UserThread toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (UserThread)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, UserThread>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -932,11 +965,12 @@ public class UserThreadModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		UserThread.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		UserThread.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, UserThread>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private long _userThreadId;
 	private long _companyId;

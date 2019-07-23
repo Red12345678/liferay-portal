@@ -1,5 +1,6 @@
 @component-name = "portal-web-forms-and-data-lists"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Forms";
@@ -22,8 +23,7 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Content",
 				panel = "Site Administration",
-				portlet = "Forms"
-			);
+				portlet = "Forms");
 
 			FormsAdmin.teardownForms();
 
@@ -37,13 +37,12 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -57,7 +56,9 @@ definition {
 
 		Form.editFieldLabel(fieldValue = "Label");
 
-		FormFields.editHelpText(fieldHelpText = "Help Text", fieldName = "tip");
+		FormFields.editHelpText(
+			fieldHelpText = "Help Text",
+			fieldName = "tip");
 
 		FormFields.enableSwitcher(fieldName = "required");
 
@@ -68,39 +69,37 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdmin.viewForm(
 			formDescription = "Created Form Description",
-			formName = "Created Form Name"
-		);
+			formName = "Created Form Name");
 
 		FormsAdminNavigator.gotoPermissions(
 			entryTitle = "Created Form Name",
-			menuItem = "Permissions"
-		);
+			menuItem = "Permissions");
 
 		Role.definePermissionPG(
 			permissionDefinitionKey = "CONTENT_PERMISSIONS_ADD_RECORD_CHECKBOX",
-			roleName = "Power User"
-		);
+			roleName = "Power User");
 
 		Navigator.openURL();
 
-		Page.add(pageName = "Private Form Page", sitePagePrivacy = "Private");
+		Page.add(
+			pageName = "Private Form Page",
+			sitePagePrivacy = "Private");
 
 		Navigator.gotoPage(
 			pageName = "Private Form Page",
-			sitePagePrivacy = "Private Pages"
-		);
+			sitePagePrivacy = "Private Pages");
 
-		Portlet.addPG(pageName = "Private Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Private Form Page",
+			portletName = "Form");
 
 		FormPortletConfiguration.configureScopePG(
 			portletName = "Form",
-			scopeSelection = "Global"
-		);
+			scopeSelection = "Global");
 
 		FormPortletConfiguration.selectForm(formName = "Created Form Name");
 
@@ -110,10 +109,11 @@ definition {
 
 		Navigator.gotoPage(
 			pageName = "Private Form Page",
-			sitePagePrivacy = "Private Pages"
-		);
+			sitePagePrivacy = "Private Pages");
 
-		FormFields.viewTextLabel(fieldLabel = "Label", fieldName = "Label");
+		FormFields.viewTextLabel(
+			fieldLabel = "Label",
+			fieldName = "Label");
 	}
 
 	@priority = "5"
@@ -123,20 +123,16 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
-		PortalSettings.configureCurrentLanguagesCP(
-			defaultPortalLanguage = "Spanish (Spain)"
-		);
+		PortalSettings.configureCurrentLanguagesCP(defaultPortalLanguage = "Spanish (Spain)");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -156,7 +152,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -168,13 +166,11 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "Text Field On Spanish Portal",
-			fieldName = "TextFieldOnSpanishPortal"
-		);
+			fieldName = "TextFieldOnSpanishPortal");
 
 		FormFields.editText(
 			fieldName = "TextFieldOnSpanishPortal",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 
 		FormPortlet.submit();
 
@@ -183,23 +179,20 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Text Field On Spanish Portal",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 
 		FormsAdminNavigator.gotoView();
 
 		FormsAdmin.viewTextEntry(
 			fieldLabel = "Text Field On Spanish Portal",
 			fieldName = "TextFieldOnSpanishPortal",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 	}
 
 	@priority = "5"
@@ -212,8 +205,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoHeaderMenuItem(menuItem = "Data Providers");
 
@@ -225,8 +217,7 @@ definition {
 			password = "test",
 			storedAttribute = "name",
 			url = "${portalURL}/api/jsonws/country/get-countries",
-			username = "test@liferay.com"
-		);
+			username = "test@liferay.com");
 
 		FormsAdmin.saveDataProvider();
 
@@ -235,8 +226,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -258,7 +248,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -270,13 +262,11 @@ definition {
 
 		FormFields.viewSelectLabel(
 			fieldLabel = "Data Provider Select Field",
-			fieldName = "DataProviderSelectField"
-		);
+			fieldName = "DataProviderSelectField");
 
 		FormFields.selectSelectOption(
 			fieldName = "SelectField",
-			selectOption = "United States"
-		);
+			selectOption = "United States");
 
 		FormPortlet.submit();
 
@@ -285,15 +275,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Data Provider Select Field",
-			fieldValue = "united-states"
-		);
+			fieldValue = "united-states");
 	}
 
 	@description = "This is a use case for LPS-64379."
@@ -304,8 +292,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -317,7 +304,9 @@ definition {
 
 		Form.save();
 
-		FormsAdmin.viewForm(formDescription = "", formName = "Untitled Form");
+		FormsAdmin.viewForm(
+			formDescription = "",
+			formName = "Untitled Form");
 	}
 
 	@description = "This is a use case for LPS-60520."
@@ -328,8 +317,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -355,7 +343,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -365,13 +355,21 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.viewTextField(fieldLabel = "Text Field", fieldName = "TextField");
+		FormFields.viewTextField(
+			fieldLabel = "Text Field",
+			fieldName = "TextField");
 
-		FormFields.editText(fieldName = "TextField", fieldValue = "Text Field Value");
+		FormFields.editText(
+			fieldName = "TextField",
+			fieldValue = "Text Field Value");
 
-		FormFields.viewDateField(fieldLabel = "Date Field", fieldName = "DateField");
+		FormFields.viewDateField(
+			fieldLabel = "Date Field",
+			fieldName = "DateField");
 
-		FormFields.editDate(fieldName = "DateField", fieldValue = "01/01/2016");
+		FormFields.editDate(
+			fieldName = "DateField",
+			fieldValue = "01/01/2016");
 
 		FormPortlet.submit();
 
@@ -380,23 +378,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "Created Form Name"
-		);
+			rowEntry = "Created Form Name");
 
 		FormsAdminNavigator.gotoDeleteField(
 			fieldLabel = "Date Field",
-			fieldName = "DateField"
-		);
+			fieldName = "DateField");
 
 		FormFields.viewDateFieldNotPresent(
 			fieldLabel = "Date Field",
-			fieldName = "DateField"
-		);
+			fieldName = "DateField");
 
 		Form.save();
 
@@ -406,8 +400,7 @@ definition {
 
 		FormsAdmin.viewFormTableEntryNotPresent(
 			fieldLabel = "Date Field",
-			fieldValue = "1/1/16"
-		);
+			fieldValue = "1/1/16");
 	}
 
 	@priority = "4"
@@ -417,8 +410,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -462,7 +454,9 @@ definition {
 
 		FormFields.viewFieldName(fieldName = "SelectName");
 
-		FormFields.editOptionsRow(optionName = "Select1", optionValue = "Select 1");
+		FormFields.editOptionsRow(
+			optionName = "Select1",
+			optionValue = "Select 1");
 
 		FormFields.viewOptionsRowFieldName(fieldName = "Select1");
 
@@ -471,12 +465,15 @@ definition {
 		FormFields.editOptionsRow(
 			optionName = "Select2",
 			optionValue = "Select 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
-		FormFields.viewOptionsRowFieldName(fieldName = "Select2", rowNumber = "2");
+		FormFields.viewOptionsRowFieldName(
+			fieldName = "Select2",
+			rowNumber = "2");
 
-		FormFields.editOptionsRowNameField(optionValue = "Select2Name", rowNumber = "2");
+		FormFields.editOptionsRowNameField(
+			optionValue = "Select2Name",
+			rowNumber = "2");
 
 		FormFields.save();
 
@@ -490,7 +487,9 @@ definition {
 
 		FormFields.viewFieldName(fieldName = "RadioName");
 
-		FormFields.editOptionsRow(optionName = "Option1", optionValue = "Option 1");
+		FormFields.editOptionsRow(
+			optionName = "Option1",
+			optionValue = "Option 1");
 
 		FormFields.viewOptionsRowFieldName(fieldName = "Option1");
 
@@ -499,12 +498,15 @@ definition {
 		FormFields.editOptionsRow(
 			optionName = "Option2",
 			optionValue = "Option 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
-		FormFields.viewOptionsRowFieldName(fieldName = "Option2", rowNumber = "2");
+		FormFields.viewOptionsRowFieldName(
+			fieldName = "Option2",
+			rowNumber = "2");
 
-		FormFields.editOptionsRowNameField(optionValue = "Option2Name", rowNumber = "2");
+		FormFields.editOptionsRowNameField(
+			optionValue = "Option2Name",
+			rowNumber = "2");
 
 		FormFields.save();
 
@@ -537,13 +539,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "Created Form Name"
-		);
+			rowEntry = "Created Form Name");
 
 		FormsAdminNavigator.gotoEditField(fieldName = "Paragraph");
 
@@ -563,7 +563,9 @@ definition {
 
 		FormFields.viewOptionsRowFieldName(fieldName = "Select1Name");
 
-		FormFields.viewOptionsRowFieldName(fieldName = "Select2Name", rowNumber = "2");
+		FormFields.viewOptionsRowFieldName(
+			fieldName = "Select2Name",
+			rowNumber = "2");
 
 		FormFields.saveEdit();
 
@@ -573,7 +575,9 @@ definition {
 
 		FormFields.viewOptionsRowFieldName(fieldName = "Option1Name");
 
-		FormFields.viewOptionsRowFieldName(fieldName = "Option2Name", rowNumber = "2");
+		FormFields.viewOptionsRowFieldName(
+			fieldName = "Option2Name",
+			rowNumber = "2");
 
 		FormFields.saveEdit();
 
@@ -602,8 +606,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "System Settings"
-		);
+			portlet = "System Settings");
 
 		SystemSettings.gotoCategory(category = "Forms and Workflow");
 
@@ -611,20 +614,17 @@ definition {
 
 		FormFields.viewCheckboxLabel(
 			fieldLabel = "Changeable Default Language",
-			fieldName = "changeableDefaultLanguage"
-		);
+			fieldName = "changeableDefaultLanguage");
 
 		FormFields.viewCheckboxNotChecked(fieldName = "changeableDefaultLanguage");
 
 		FormFields.viewFieldHelpText(
 			fieldHelpText = "If checked, the default language of data definitions will be changeable. The default language of data definitions is inherited from the site settings.",
-			fieldName = "changeableDefaultLanguage"
-		);
+			fieldName = "changeableDefaultLanguage");
 
 		FormFields.viewSelectLabel(
 			fieldLabel = "Default Display View",
-			fieldName = "defaultDisplayView"
-		);
+			fieldName = "defaultDisplayView");
 
 		FormFields.viewSelectValue(fieldName = "defaultDisplayView");
 
@@ -632,8 +632,7 @@ definition {
 
 		FormFields.selectSelectOption(
 			fieldName = "defaultDisplayView",
-			selectOption = "Descriptive"
-		);
+			selectOption = "Descriptive");
 
 		SystemSettings.saveConfiguration();
 
@@ -643,104 +642,91 @@ definition {
 
 		FormFields.viewSelectOption(
 			fieldName = "defaultDisplayView",
-			selectOption = "Descriptive"
-		);
+			selectOption = "Descriptive");
 
 		SystemSettings.exitEditConfiguration();
 
 		SystemSettings.resetConfiguration(
 			category = "Forms and Workflow",
-			configurationName = "Dynamic Data Lists"
-		);
+			configurationName = "Dynamic Data Lists");
 
-		SystemSettings.editConfiguration(
-			configurationName = "Dynamic Data Mapping Service"
-		);
+		SystemSettings.editConfiguration(configurationName = "Dynamic Data Mapping Service");
 
 		FormFields.viewRepeatableTextMultilineField(
 			fieldHelpText = "Set the allowed file extensions for template images. A file extension of * will permit all file extensions.",
 			fieldLabel = "Small image extensions",
 			fieldName = "smallImageExtensions",
-			repeatableFieldNumber = "4"
-		);
+			repeatableFieldNumber = "4");
 
 		FormFields.addRepeatableField(
 			fieldName = "smallImageExtensions",
-			repeatableFieldNumber = "4"
-		);
+			repeatableFieldNumber = "4");
 
 		FormFields.viewRepeatableTextMultilineField(
 			fieldHelpText = "Set the allowed file extensions for template images. A file extension of * will permit all file extensions.",
 			fieldLabel = "Small image extensions",
 			fieldName = "smallImageExtensions",
-			repeatableFieldNumber = "5"
-		);
+			repeatableFieldNumber = "5");
 
 		FormFields.viewTextField(
 			fieldHelpText = "Set the maximum file size for template images in bytes. A value of 0 can be used to indicate unlimited file size.",
 			fieldLabel = "Small image max size",
-			fieldName = "smallImageMaxSize"
-		);
+			fieldName = "smallImageMaxSize");
 
 		FormFields.editRepeatableTextMultiline(
 			fieldName = "smallImageExtensions",
 			fieldValue = ".svg",
-			repeatableFieldNumber = "4"
-		);
+			repeatableFieldNumber = "4");
 
 		FormFields.editRepeatableTextMultiline(
 			fieldName = "smallImageExtensions",
 			fieldValue = "*",
-			repeatableFieldNumber = "5"
-		);
+			repeatableFieldNumber = "5");
 
-		FormFields.editText(fieldName = "smallImageMaxSize", fieldValue = "5120");
+		FormFields.editText(
+			fieldName = "smallImageMaxSize",
+			fieldValue = "5120");
 
 		SystemSettings.saveConfiguration();
 
-		SystemSettings.editConfiguration(
-			configurationName = "Dynamic Data Mapping Service"
-		);
+		SystemSettings.editConfiguration(configurationName = "Dynamic Data Mapping Service");
 
 		FormFields.viewRepeatableTextMultilineValue(
 			fieldName = "smallImageExtensions",
 			fieldValue = ".svg",
-			repeatableFieldNumber = "4"
-		);
+			repeatableFieldNumber = "4");
 
 		FormFields.viewRepeatableTextMultilineValue(
 			fieldName = "smallImageExtensions",
 			fieldValue = "*",
-			repeatableFieldNumber = "5"
-		);
+			repeatableFieldNumber = "5");
 
-		FormFields.viewTextValue(fieldName = "smallImageMaxSize", fieldValue = "5120");
+		FormFields.viewTextValue(
+			fieldName = "smallImageMaxSize",
+			fieldValue = "5120");
 
 		SystemSettings.exitEditConfiguration();
 
 		SystemSettings.resetConfiguration(
 			category = "Forms and Workflow",
-			configurationName = "Dynamic Data Mapping Service"
-		);
+			configurationName = "Dynamic Data Mapping Service");
 
 		SystemSettings.gotoCategory(category = "Other");
 
-		SystemSettings.editConfiguration(
-			configurationName = "Apache Felix Declarative Service Implementation"
-		);
+		SystemSettings.editConfiguration(configurationName = "Apache Felix Declarative Service Implementation");
 
 		FormFields.viewTextField(
 			fieldHelpText = "How long a lock is held before releasing due to suspected deadlock",
 			fieldLabel = "Lock timeout milliseconds",
-			fieldName = "ds.lock.timeout.milliseconds"
-		);
+			fieldName = "ds.lock.timeout.milliseconds");
 
-		FormFields.editText(fieldName = "ds.lock.timeout.milliseconds", fieldValue = "");
+		FormFields.editText(
+			fieldName = "ds.lock.timeout.milliseconds",
+			fieldValue = "");
 
 		FormFields.viewFieldValidationErrorMessage(
 			fieldName = "ds.lock.timeout.milliseconds",
-			fieldValidationErrorMessage = "This field is required."
-		);
+			fieldValidationErrorMessage = "This field is required.");
 
 		SystemSettings.exitEditConfiguration();
 
@@ -750,18 +736,15 @@ definition {
 
 		FormFields.viewCheckboxLabel(
 			fieldLabel = "Apply Versioning",
-			fieldName = "applyVersioning"
-		);
+			fieldName = "applyVersioning");
 
 		FormFields.viewCheckboxLabel(
 			fieldLabel = "Explain Module Resolutions",
-			fieldName = "explainResolutions"
-		);
+			fieldName = "explainResolutions");
 
 		FormFields.viewCheckboxLabel(
 			fieldLabel = "Expose Global",
-			fieldName = "exposeGlobal"
-		);
+			fieldName = "exposeGlobal");
 
 		FormFields.viewCheckboxChecked(fieldName = "applyVersioning");
 
@@ -783,8 +766,7 @@ definition {
 
 		SystemSettings.resetConfiguration(
 			category = "Foundation",
-			configurationName = "JavaScript Loader"
-		);
+			configurationName = "JavaScript Loader");
 	}
 
 	@description = "This is a use case for LPS-59749"
@@ -795,49 +777,45 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		Portlet.viewDefaultDisplayStyle(displayStyle = "Descriptive");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "System Settings"
-		);
+			portlet = "System Settings");
 
 		SystemSettings.gotoCategory(category = "Forms and Workflow");
 
 		SystemSettings.editConfiguration(configurationName = "Forms");
 
-		FormFields.selectSelectOption(fieldName = "DisplayView", selectOption = "List");
+		FormFields.selectSelectOption(
+			fieldName = "DisplayView",
+			selectOption = "List");
 
 		PortletEntry.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		Portlet.viewDefaultDisplayStyle(displayStyle = "List");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "System Settings"
-		);
+			portlet = "System Settings");
 
 		SystemSettings.resetConfiguration(
 			category = "Forms and Workflow",
-			configurationName = "Forms"
-		);
+			configurationName = "Forms");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		Portlet.viewDefaultDisplayStyle(displayStyle = "Descriptive");
 	}
@@ -850,8 +828,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -898,8 +875,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoEditFormByName(formName = "Checkbox");
 
@@ -910,8 +886,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoEditFormByName(formName = "Text");
 
@@ -921,13 +896,16 @@ definition {
 	@description = "This is a use case for LPS-61740"
 	@priority = "5"
 	test PreviewAndPublishForm {
+		property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
+		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
+		property environment.acceptance = "true";
+
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -946,8 +924,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoEditFormByName();
 
@@ -958,8 +935,7 @@ definition {
 		Form.previewForm(
 			fieldLabel = "Text Field",
 			fieldName = "TextField",
-			fieldValue = "Preview Form Text entry"
-		);
+			fieldValue = "Preview Form Text entry");
 
 		Navigator.closeWindow();
 
@@ -968,8 +944,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoEditFormByName();
 
@@ -982,31 +957,27 @@ definition {
 		Form.submitFormPublish(
 			fieldLabel = "Text Field",
 			fieldName = "TextField",
-			fieldValue = "Published form text entry"
-		);
+			fieldValue = "Published form text entry");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Text Field",
-			fieldValue = "Published form text entry"
-		);
+			fieldValue = "Published form text entry");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoEditFormByName();
 
@@ -1029,8 +1000,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -1048,7 +1018,9 @@ definition {
 
 		Page.add(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -1059,7 +1031,9 @@ definition {
 		Navigator.gotoPage(pageName = "Form Page");
 
 		for (var fieldValue : list "${fieldValueList}") {
-			FormFields.editText(fieldName = "TextField", fieldValue = "${fieldValue}");
+			FormFields.editText(
+				fieldName = "TextField",
+				fieldValue = "${fieldValue}");
 
 			FormPortlet.submit();
 		}
@@ -1069,35 +1043,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdmin.viewForm(
 			formDescription = "Test Form Description",
-			formName = "Test Form"
-		);
+			formName = "Test Form");
 
 		FormsAdminNavigator.gotoViewEntries(formName = "Test Form");
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Text Field",
-			fieldValue = "testEntry1"
-		);
+			fieldValue = "testEntry1");
 
 		for (var fieldValue : list "${fieldValueList}") {
 			FormsAdmin.searchFormEntry(searchTerm = "${fieldValue}");
 
 			FormsAdmin.viewFormTableEntry(
 				fieldLabel = "Text Field",
-				fieldValue = "${fieldValue}"
-			);
+				fieldValue = "${fieldValue}");
 
 			for (var fieldValueNotVisible : list "${fieldValueList}") {
 				if (!("${fieldValueNotVisible}" == "${fieldValue}")) {
 					FormsAdmin.viewTableEntryNotPresent(
 						fieldLabel = "Text Field",
-						fieldValue = "${fieldValueNotVisible}"
-					);
+						fieldValue = "${fieldValueNotVisible}");
 				}
 			}
 		}
@@ -1114,8 +1083,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -1131,7 +1099,9 @@ definition {
 
 		Form.addColumn(columnLineNumber = "3");
 
-		Form.gotoAddField(columnSize = "10", fieldType = "Text Field");
+		Form.gotoAddField(
+			columnSize = "10",
+			fieldType = "Text Field");
 
 		Form.editFieldLabel(fieldValue = "two");
 
@@ -1139,7 +1109,9 @@ definition {
 
 		Form.addColumn(columnLineNumber = "10");
 
-		Form.gotoAddField(columnSize = "3", fieldType = "Text Field");
+		Form.gotoAddField(
+			columnSize = "3",
+			fieldType = "Text Field");
 
 		Form.editFieldLabel(fieldValue = "three");
 
@@ -1151,17 +1123,25 @@ definition {
 
 		FormFields.save();
 
-		Form.addColumn(columnLineNumber = "2", rowNumber = "2");
+		Form.addColumn(
+			columnLineNumber = "2",
+			rowNumber = "2");
 
-		Form.gotoAddField(columnSize = "11", fieldType = "Text Field");
+		Form.gotoAddField(
+			columnSize = "11",
+			fieldType = "Text Field");
 
 		Form.editFieldLabel(fieldValue = "five");
 
 		FormFields.save();
 
-		Form.addColumn(columnLineNumber = "7", rowNumber = "2");
+		Form.addColumn(
+			columnLineNumber = "7",
+			rowNumber = "2");
 
-		Form.gotoAddField(columnSize = "6", fieldType = "Text Field");
+		Form.gotoAddField(
+			columnSize = "6",
+			fieldType = "Text Field");
 
 		Form.editFieldLabel(fieldValue = "six");
 
@@ -1173,7 +1153,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -1186,8 +1168,7 @@ definition {
 		for (var fieldName : list "one,two,three,four,five,six") {
 			FormFields.editText(
 				fieldName = "${fieldName}",
-				fieldValue = "Field ${fieldName}"
-			);
+				fieldValue = "Field ${fieldName}");
 		}
 
 		FormPortlet.submit();
@@ -1197,16 +1178,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		for (var fieldLabel : list "one,two,three,four,five") {
 			FormsAdmin.viewFormTableEntry(
 				fieldLabel = "${fieldLabel}",
-				fieldValue = "Field ${fieldLabel}"
-			);
+				fieldValue = "Field ${fieldLabel}");
 		}
 	}
 
@@ -1220,8 +1199,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -1241,8 +1219,7 @@ definition {
 			fromAddress = "test@liferay.com",
 			fromName = "Sender Name",
 			subject = "Form Subject",
-			toAddress = "formreviewer@liferay.com"
-		);
+			toAddress = "formreviewer@liferay.com");
 
 		Form.save();
 
@@ -1250,7 +1227,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -1260,9 +1239,13 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.viewTextLabel(fieldLabel = "Text Field", fieldName = "TextField");
+		FormFields.viewTextLabel(
+			fieldLabel = "Text Field",
+			fieldName = "TextField");
 
-		FormFields.editText(fieldName = "TextField", fieldValue = "Text Field Value");
+		FormFields.editText(
+			fieldName = "TextField",
+			fieldValue = "Text Field Value");
 
 		FormPortlet.submitSuccessfully();
 
@@ -1271,21 +1254,18 @@ definition {
 			content = "Text Field Value",
 			recipient = "formreviewer@liferay.com",
 			sender = "Sender Name",
-			subject = "submitted an entry"
-		);
+			subject = "submitted an entry");
 
 		MockMock.clickBodyLink(
 			asset = "Form Subject",
-			bodyLink = "Click here to access the form"
-		);
+			bodyLink = "Click here to access the form");
 
 		SelectWindow.selectPopUp(locator1 = "null");
 
 		FormsAdmin.viewTextEntry(
 			fieldLabel = "Text Field",
 			fieldName = "TextField",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 	}
 
 	@description = "This is a use case for LPS-60818."
@@ -1299,8 +1279,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -1324,7 +1303,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -1334,9 +1315,13 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.viewTextField(fieldLabel = "Text Field", fieldName = "TextField");
+		FormFields.viewTextField(
+			fieldLabel = "Text Field",
+			fieldName = "TextField");
 
-		FormFields.editText(fieldName = "TextField", fieldValue = "Text Field Value");
+		FormFields.editText(
+			fieldName = "TextField",
+			fieldValue = "Text Field Value");
 
 		FormFields.viewCaptchaField();
 
@@ -1346,8 +1331,7 @@ definition {
 
 		FormFields.viewTextValue(
 			fieldName = "TextField",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 	}
 
 	@priority = "5"
@@ -1360,8 +1344,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -1387,13 +1370,14 @@ definition {
 
 		Form.editFieldLabel(fieldValue = "Select");
 
-		FormFields.editOptionsRow(optionName = "Select1", optionValue = "Select 1");
+		FormFields.editOptionsRow(
+			optionName = "Select1",
+			optionValue = "Select 1");
 
 		FormFields.editOptionsRow(
 			optionName = "Select2",
 			optionValue = "Select 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		FormFields.save();
 
@@ -1401,13 +1385,14 @@ definition {
 
 		Form.editFieldLabel(fieldValue = "Radio");
 
-		FormFields.editOptionsRow(optionName = "Option1", optionValue = "Option 1");
+		FormFields.editOptionsRow(
+			optionName = "Option1",
+			optionValue = "Option 1");
 
 		FormFields.editOptionsRow(
 			optionName = "Option2",
 			optionValue = "Option 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		FormFields.save();
 
@@ -1429,7 +1414,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -1441,39 +1428,54 @@ definition {
 
 		FormFields.viewParagraphField(
 			fieldTitle = "Paragraph",
-			fieldValue = "Paragraph body text."
-		);
+			fieldValue = "Paragraph body text.");
 
-		FormFields.viewTextLabel(fieldLabel = "Text", fieldName = "Text");
+		FormFields.viewTextLabel(
+			fieldLabel = "Text",
+			fieldName = "Text");
 
-		FormFields.viewSelectLabel(fieldLabel = "Select", fieldName = "Select");
+		FormFields.viewSelectLabel(
+			fieldLabel = "Select",
+			fieldName = "Select");
 
-		FormFields.selectSelectOption(fieldName = "Select", selectOption = "Select 1");
+		FormFields.selectSelectOption(
+			fieldName = "Select",
+			selectOption = "Select 1");
 
-		FormFields.selectSelectOption(fieldName = "Select", selectOption = "Select 2");
+		FormFields.selectSelectOption(
+			fieldName = "Select",
+			selectOption = "Select 2");
 
-		FormFields.viewRadioLabel(fieldLabel = "Radio", fieldName = "Radio");
+		FormFields.viewRadioLabel(
+			fieldLabel = "Radio",
+			fieldName = "Radio");
 
-		FormFields.selectRadioOption(fieldName = "Radio", radioOption = "Option 1");
+		FormFields.selectRadioOption(
+			fieldName = "Radio",
+			radioOption = "Option 1");
 
-		FormFields.selectRadioOption(fieldName = "Radio", radioOption = "Option 2");
+		FormFields.selectRadioOption(
+			fieldName = "Radio",
+			radioOption = "Option 2");
 
-		FormFields.viewDateLabel(fieldLabel = "Date", fieldName = "Date");
+		FormFields.viewDateLabel(
+			fieldLabel = "Date",
+			fieldName = "Date");
 
-		FormFields.viewCheckboxLabel(fieldLabel = "Checkbox", fieldName = "Checkbox");
+		FormFields.viewCheckboxLabel(
+			fieldLabel = "Checkbox",
+			fieldName = "Checkbox");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "Created Form Name"
-		);
+			rowEntry = "Created Form Name");
 
 		FormsAdminNavigator.gotoEditField(fieldName = "Paragraph");
 
@@ -1495,14 +1497,12 @@ definition {
 
 		FormFields.editOptionsRow(
 			optionName = "NewSelect1",
-			optionValue = "New Select 1"
-		);
+			optionValue = "New Select 1");
 
 		FormFields.editOptionsRow(
 			optionName = "NewSelect2",
 			optionValue = "New Select 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		FormFields.saveEdit();
 
@@ -1512,14 +1512,12 @@ definition {
 
 		FormFields.editOptionsRow(
 			optionName = "NewOption1",
-			optionValue = "New Option 1"
-		);
+			optionValue = "New Option 1");
 
 		FormFields.editOptionsRow(
 			optionName = "NewOption2",
 			optionValue = "New Option 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		FormFields.saveEdit();
 
@@ -1541,32 +1539,31 @@ definition {
 
 		FormFields.viewParagraphField(
 			fieldTitle = "New Paragraph",
-			fieldValue = "New Paragraph body text."
-		);
+			fieldValue = "New Paragraph body text.");
 
-		FormFields.editText(fieldName = "NewText", fieldValue = "Text");
-
-		FormFields.selectSelectOption(
-			fieldName = "NewSelect",
-			selectOption = "New Select 1"
-		);
+		FormFields.editText(
+			fieldName = "NewText",
+			fieldValue = "Text");
 
 		FormFields.selectSelectOption(
 			fieldName = "NewSelect",
-			selectOption = "New Select 2"
-		);
+			selectOption = "New Select 1");
+
+		FormFields.selectSelectOption(
+			fieldName = "NewSelect",
+			selectOption = "New Select 2");
 
 		FormFields.selectRadioOption(
 			fieldName = "NewRadio",
-			radioOption = "New Option 1"
-		);
+			radioOption = "New Option 1");
 
 		FormFields.selectRadioOption(
 			fieldName = "NewRadio",
-			radioOption = "New Option 2"
-		);
+			radioOption = "New Option 2");
 
-		FormFields.editDate(fieldName = "NewDate", fieldValue = "05/02/2016");
+		FormFields.editDate(
+			fieldName = "NewDate",
+			fieldValue = "05/02/2016");
 
 		FormFields.enableCheckbox(fieldName = "NewCheckbox");
 
@@ -1577,8 +1574,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
@@ -1586,43 +1582,36 @@ definition {
 
 		FormFields.viewParagraphField(
 			fieldTitle = "New Paragraph",
-			fieldValue = "New Paragraph body text."
-		);
+			fieldValue = "New Paragraph body text.");
 
 		FormsAdmin.viewTextEntry(
 			fieldLabel = "New Text",
 			fieldName = "NewText",
-			fieldValue = "Text"
-		);
+			fieldValue = "Text");
 
 		FormsAdmin.viewSelectEntry(
 			fieldLabel = "New Select",
 			fieldName = "NewSelect",
-			selectOption = "New Select 2"
-		);
+			selectOption = "New Select 2");
 
 		FormsAdmin.viewRadioEntry(
 			fieldLabel = "New Radio",
 			fieldName = "NewRadio",
-			fieldValue = "New Option 1"
-		);
+			fieldValue = "New Option 1");
 
 		FormsAdmin.viewDateEntry(
 			fieldLabel = "New Date",
 			fieldName = "NewDate",
-			fieldValue = "05/02/2016"
-		);
+			fieldValue = "05/02/2016");
 
 		FormsAdmin.viewCheckboxEntry(
 			fieldLabel = "New Checkbox",
-			fieldName = "NewCheckbox"
-		);
+			fieldName = "NewCheckbox");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LAR.exportPortlet(larFileName = "FormsExport.lar");
 
@@ -1631,34 +1620,34 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Page Name", siteName = "Site Name");
+		Page.add(
+			pageName = "Site Page Name",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
-		LAR.importPortlet(larFileName = "FormsExport.lar", siteName = "Site Name");
+		LAR.importPortlet(
+			larFileName = "FormsExport.lar",
+			siteName = "Site Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
@@ -1666,37 +1655,31 @@ definition {
 
 		FormFields.viewParagraphField(
 			fieldTitle = "New Paragraph",
-			fieldValue = "New Paragraph body text."
-		);
+			fieldValue = "New Paragraph body text.");
 
 		FormsAdmin.viewTextEntry(
 			fieldLabel = "New Text",
 			fieldName = "NewText",
-			fieldValue = "Text"
-		);
+			fieldValue = "Text");
 
 		FormsAdmin.viewSelectEntry(
 			fieldLabel = "New Select",
 			fieldName = "NewSelect",
-			selectOption = "New Select 2"
-		);
+			selectOption = "New Select 2");
 
 		FormsAdmin.viewRadioEntry(
 			fieldLabel = "New Radio",
 			fieldName = "NewRadio",
-			fieldValue = "New Option 1"
-		);
+			fieldValue = "New Option 1");
 
 		FormsAdmin.viewDateEntry(
 			fieldLabel = "New Date",
 			fieldName = "NewDate",
-			fieldValue = "05/02/2016"
-		);
+			fieldValue = "05/02/2016");
 
 		FormsAdmin.viewCheckboxEntry(
 			fieldLabel = "New Checkbox",
-			fieldName = "NewCheckbox"
-		);
+			fieldName = "NewCheckbox");
 	}
 
 	@description = "This is a use case for LPS-64798."
@@ -1710,8 +1693,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -1749,13 +1731,14 @@ definition {
 
 		Form.editFieldLabel(fieldValue = "Select");
 
-		FormFields.editOptionsRow(optionName = "Select1", optionValue = "Select 1");
+		FormFields.editOptionsRow(
+			optionName = "Select1",
+			optionValue = "Select 1");
 
 		FormFields.editOptionsRow(
 			optionName = "Select2",
 			optionValue = "Select 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		FormFields.save();
 
@@ -1765,13 +1748,14 @@ definition {
 
 		FormFields.enableSwitcher(fieldName = "required");
 
-		FormFields.editOptionsRow(optionName = "Option1", optionValue = "Option 1");
+		FormFields.editOptionsRow(
+			optionName = "Option1",
+			optionValue = "Option 1");
 
 		FormFields.editOptionsRow(
 			optionName = "Option2",
 			optionValue = "Option 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		FormFields.save();
 
@@ -1805,7 +1789,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -1817,33 +1803,37 @@ definition {
 
 		FormFields.viewParagraphField(
 			fieldTitle = "Paragraph",
-			fieldValue = "Paragraph body text."
-		);
+			fieldValue = "Paragraph body text.");
 
 		FormFields.editText(
 			fieldName = "SingleLineText",
-			fieldValue = "Single Line Text"
-		);
+			fieldValue = "Single Line Text");
 
 		FormFields.editTextMultiline(
 			fieldName = "MultilineText",
-			fieldValue = "Multiline Text"
-		);
+			fieldValue = "Multiline Text");
 
-		FormFields.selectSelectOption(fieldName = "Select", selectOption = "Select 1");
+		FormFields.selectSelectOption(
+			fieldName = "Select",
+			selectOption = "Select 1");
 
-		FormFields.selectRadioOption(fieldName = "Radio", radioOption = "Option 1");
+		FormFields.selectRadioOption(
+			fieldName = "Radio",
+			radioOption = "Option 1");
 
-		FormFields.editDate(fieldName = "Date", fieldValue = "05/02/2016");
+		FormFields.editDate(
+			fieldName = "Date",
+			fieldValue = "05/02/2016");
 
 		FormFields.enableCheckbox(fieldName = "Checkbox");
 
-		FormPortlet.nextPage(formPageCurrent = "Page 1", formPageNext = "Page 2");
+		FormPortlet.nextPage(
+			formPageCurrent = "Page 1",
+			formPageNext = "Page 2");
 
 		FormFields.editText(
 			fieldName = "SingleLineText2",
-			fieldValue = "SingleLineText2"
-		);
+			fieldValue = "SingleLineText2");
 
 		FormPortlet.submit();
 
@@ -1852,8 +1842,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
@@ -1861,48 +1850,45 @@ definition {
 
 		FormFields.viewParagraphField(
 			fieldTitle = "Paragraph",
-			fieldValue = "Paragraph body text."
-		);
+			fieldValue = "Paragraph body text.");
 
 		FormsAdmin.viewTextEntry(
 			fieldLabel = "SingleLineText",
 			fieldName = "SingleLineText",
-			fieldValue = "Single Line Text"
-		);
+			fieldValue = "Single Line Text");
 
 		FormsAdmin.viewMultilineTextEntry(
 			fieldLabel = "MultilineText",
 			fieldName = "MultilineText",
-			fieldValue = "Multiline Text"
-		);
+			fieldValue = "Multiline Text");
 
 		FormsAdmin.viewSelectEntry(
 			fieldLabel = "Select",
 			fieldName = "Select",
-			selectOption = "Select 1"
-		);
+			selectOption = "Select 1");
 
 		FormsAdmin.viewRadioEntry(
 			fieldLabel = "Radio",
 			fieldName = "Radio",
-			fieldValue = "Option 1"
-		);
+			fieldValue = "Option 1");
 
 		FormsAdmin.viewDateEntry(
 			fieldLabel = "Date",
 			fieldName = "Date",
-			fieldValue = "05/02/2016"
-		);
+			fieldValue = "05/02/2016");
 
-		FormsAdmin.viewCheckboxEntry(fieldLabel = "Checkbox", fieldName = "Checkbox");
+		FormsAdmin.viewCheckboxEntry(
+			fieldLabel = "Checkbox",
+			fieldName = "Checkbox");
 
-		FormPortlet.nextPage(formPageCurrent = "Page 1", formPageNext = "Page 2");
+		FormPortlet.nextPage(
+			formPageCurrent = "Page 1",
+			formPageNext = "Page 2");
 
 		FormsAdmin.viewTextEntry(
 			fieldLabel = "SingleLineText2",
 			fieldName = "SingleLineText2",
-			fieldValue = "SingleLineText2"
-		);
+			fieldValue = "SingleLineText2");
 	}
 
 	@priority = "5"
@@ -1912,8 +1898,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -1933,8 +1918,7 @@ definition {
 			validationArgument = "Contains",
 			validationErrorMessage = "Text must contain &quot;Test&quot;",
 			validationInput = "Test",
-			validationType = "Text"
-		);
+			validationType = "Text");
 
 		FormFields.save();
 
@@ -1944,7 +1928,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -1954,15 +1940,19 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.viewTextLabel(fieldLabel = "Text", fieldName = "Text");
+		FormFields.viewTextLabel(
+			fieldLabel = "Text",
+			fieldName = "Text");
 
-		FormFields.editText(fieldName = "Text", fieldValue = "Text Field Value");
+		FormFields.editText(
+			fieldName = "Text",
+			fieldValue = "Text Field Value");
 
-		FormPortlet.submitWithValidationError(
-			validationErrorMessage = "Text must contain &quot;Test&quot;"
-		);
+		FormPortlet.submitWithValidationError(validationErrorMessage = "Text must contain &quot;Test&quot;");
 
-		FormFields.editText(fieldName = "Text", fieldValue = "Test");
+		FormFields.editText(
+			fieldName = "Text",
+			fieldValue = "Test");
 
 		FormPortlet.submit();
 
@@ -1971,14 +1961,15 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdmin.viewForm();
 
 		FormsAdminNavigator.gotoViewEntries();
 
-		FormsAdmin.viewFormTableEntry(fieldLabel = "Text", fieldValue = "Test");
+		FormsAdmin.viewFormTableEntry(
+			fieldLabel = "Text",
+			fieldValue = "Test");
 	}
 
 	@priority = "4"
@@ -1988,8 +1979,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2013,13 +2003,14 @@ definition {
 
 		Form.editFieldLabel(fieldValue = "Radio Field");
 
-		FormFields.editOptionsRow(optionName = "Option1", optionValue = "Option 1");
+		FormFields.editOptionsRow(
+			optionName = "Option1",
+			optionValue = "Option 1");
 
 		FormFields.editOptionsRow(
 			optionName = "Option2",
 			optionValue = "Option 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		FormFields.save();
 
@@ -2027,13 +2018,14 @@ definition {
 
 		Form.editFieldLabel(fieldValue = "Select Field");
 
-		FormFields.editOptionsRow(optionName = "Select1", optionValue = "Select 1");
+		FormFields.editOptionsRow(
+			optionName = "Select1",
+			optionValue = "Select 1");
 
 		FormFields.editOptionsRow(
 			optionName = "Select2",
 			optionValue = "Select 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		FormFields.save();
 
@@ -2043,7 +2035,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2053,30 +2047,35 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.viewTextLabel(fieldLabel = "Text Field", fieldName = "TextField");
+		FormFields.viewTextLabel(
+			fieldLabel = "Text Field",
+			fieldName = "TextField");
 
-		FormFields.editText(fieldName = "TextField", fieldValue = "Text Field Value");
+		FormFields.editText(
+			fieldName = "TextField",
+			fieldValue = "Text Field Value");
 
 		FormFields.viewCheckboxLabel(
 			fieldLabel = "Checkbox Field",
-			fieldName = "CheckboxField"
-		);
+			fieldName = "CheckboxField");
 
 		FormFields.enableCheckbox(fieldName = "CheckboxField");
 
-		FormFields.viewRadioLabel(fieldLabel = "Radio Field", fieldName = "RadioField");
+		FormFields.viewRadioLabel(
+			fieldLabel = "Radio Field",
+			fieldName = "RadioField");
 
-		FormFields.selectRadioOption(fieldName = "RadioField", radioOption = "Option 1");
+		FormFields.selectRadioOption(
+			fieldName = "RadioField",
+			radioOption = "Option 1");
 
 		FormFields.viewSelectLabel(
 			fieldLabel = "Select Field",
-			fieldName = "SelectField"
-		);
+			fieldName = "SelectField");
 
 		FormFields.selectSelectOption(
 			fieldName = "SelectField",
-			selectOption = "Select 2"
-		);
+			selectOption = "Select 2");
 
 		FormPortlet.submit();
 
@@ -2085,8 +2084,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		Portlet.changeDisplayStyle(displayStyle = "Descriptive");
 
@@ -2094,45 +2092,40 @@ definition {
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Text Field",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 
-		FormsAdmin.viewFormTableEntry(fieldLabel = "Checkbox Field", fieldValue = "Yes");
+		FormsAdmin.viewFormTableEntry(
+			fieldLabel = "Checkbox Field",
+			fieldValue = "Yes");
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Radio Field",
-			fieldValue = "Option 1"
-		);
+			fieldValue = "Option 1");
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Select Field",
-			fieldValue = "Select 2"
-		);
+			fieldValue = "Select 2");
 
 		FormsAdminNavigator.gotoView();
 
 		FormsAdmin.viewTextEntry(
 			fieldLabel = "Text Field",
 			fieldName = "TextField",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 
 		FormsAdmin.viewCheckboxEntry(
 			fieldLabel = "Checkbox Field",
-			fieldName = "CheckboxField"
-		);
+			fieldName = "CheckboxField");
 
 		FormsAdmin.viewRadioEntry(
 			fieldLabel = "Radio Field",
 			fieldName = "RadioField",
-			fieldValue = "Option 1"
-		);
+			fieldValue = "Option 1");
 
 		FormsAdmin.viewSelectEntry(
 			fieldLabel = "Select Field",
 			fieldName = "SelectField",
-			fieldValue = "Select 2"
-		);
+			fieldValue = "Select 2");
 	}
 
 	@priority = "4"
@@ -2142,8 +2135,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2157,8 +2149,7 @@ definition {
 			FormFields.editOptionsRow(
 				optionName = "${number}",
 				optionValue = "${number}",
-				rowNumber = "${number}"
-			);
+				rowNumber = "${number}");
 		}
 
 		FormFields.save();
@@ -2168,8 +2159,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoEditFormByName();
 
@@ -2181,14 +2171,12 @@ definition {
 
 		Form.viewFormPublish(
 			fieldLabel = "Multiple Selection",
-			fieldName = "MultipleSelection"
-		);
+			fieldName = "MultipleSelection");
 
 		for (var checkboxOption : list "1,2,4") {
 			FormFields.selectCheckboxOption(
 				checkboxOption = "${checkboxOption}",
-				fieldName = "MultipleSelection"
-			);
+				fieldName = "MultipleSelection");
 		}
 
 		FormPortlet.clickSubmit();
@@ -2200,22 +2188,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		for (var fieldValue : list "1,2,4") {
 			FormsAdmin.viewFormTableEntry(
 				fieldLabel = "Multiple Selection",
-				fieldValue = "${fieldValue}"
-			);
+				fieldValue = "${fieldValue}");
 		}
 
 		FormsAdmin.viewFormTableEntryNotPresent(
 			fieldLabel = "Multiple Selection",
-			fieldValue = "3"
-		);
+			fieldValue = "3");
 	}
 
 	@description = "This is a use case for LPS-61450 and LPS-61252."
@@ -2226,8 +2211,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2247,7 +2231,9 @@ definition {
 
 		Page.add(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2259,8 +2245,7 @@ definition {
 
 		FormFields.viewParagraphField(
 			fieldTitle = "Paragraph Field",
-			fieldValue = "Paragraph field body text."
-		);
+			fieldValue = "Paragraph field body text.");
 
 		FormPortlet.submit();
 
@@ -2269,19 +2254,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
-		FormsAdmin.viewFormTableEntry(fieldLabel = "Status", fieldValue = "Approved");
+		FormsAdmin.viewFormTableEntry(
+			fieldLabel = "Status",
+			fieldValue = "Approved");
 
 		FormsAdminNavigator.gotoView();
 
 		FormsAdmin.viewParagraphEntry(
 			fieldTitle = "Paragraph Field",
-			fieldValue = "Paragraph field body text."
-		);
+			fieldValue = "Paragraph field body text.");
 	}
 
 	@description = "This is a use case for LPS-59338."
@@ -2292,8 +2277,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2315,7 +2299,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2327,8 +2313,7 @@ definition {
 
 		FormFields.viewCheckboxLabel(
 			fieldLabel = "Checkbox Field",
-			fieldName = "CheckboxField"
-		);
+			fieldName = "CheckboxField");
 
 		FormFields.viewRequiredAsterisk();
 
@@ -2343,12 +2328,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
-		FormsAdmin.viewFormTableEntry(fieldLabel = "Checkbox Field", fieldValue = "Yes");
+		FormsAdmin.viewFormTableEntry(
+			fieldLabel = "Checkbox Field",
+			fieldValue = "Yes");
 	}
 
 	@description = "This is a use case for LPS-59997."
@@ -2359,8 +2345,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2384,7 +2369,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2394,7 +2381,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.viewTextLabel(fieldLabel = "Text Field", fieldName = "TextField");
+		FormFields.viewTextLabel(
+			fieldLabel = "Text Field",
+			fieldName = "TextField");
 
 		FormFields.viewRequiredAsterisk();
 
@@ -2404,8 +2393,7 @@ definition {
 
 		FormFields.editTextMultiline(
 			fieldName = "TextField",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 
 		FormPortlet.submit();
 
@@ -2414,15 +2402,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Text Field",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 	}
 
 	@priority = "4"
@@ -2432,8 +2418,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2449,13 +2434,14 @@ definition {
 
 		FormFields.enableAdvancedOptions();
 
-		FormFields.editOptionsRow(optionName = "Option1", optionValue = "Option 1");
+		FormFields.editOptionsRow(
+			optionName = "Option1",
+			optionValue = "Option 1");
 
 		FormFields.editOptionsRow(
 			optionName = "Option2",
 			optionValue = "Option 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		FormFields.save();
 
@@ -2465,7 +2451,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2475,13 +2463,17 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.viewRadioLabel(fieldLabel = "Radio Field", fieldName = "RadioField");
+		FormFields.viewRadioLabel(
+			fieldLabel = "Radio Field",
+			fieldName = "RadioField");
 
 		FormFields.viewRequiredAsterisk();
 
 		FormPortlet.submitWithValidationError();
 
-		FormFields.selectRadioOption(fieldName = "RadioField", radioOption = "Option 1");
+		FormFields.selectRadioOption(
+			fieldName = "RadioField",
+			radioOption = "Option 1");
 
 		FormPortlet.submit();
 
@@ -2490,15 +2482,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Radio Field",
-			fieldValue = "Option 1"
-		);
+			fieldValue = "Option 1");
 	}
 
 	@description = "This is a use case for LPS-59335."
@@ -2511,8 +2501,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2538,7 +2527,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2550,14 +2541,12 @@ definition {
 
 		FormFields.addRepeatableField(
 			fieldName = "TextField",
-			repeatableFieldNumber = "1"
-		);
+			repeatableFieldNumber = "1");
 
 		FormFields.editRepeatingText(
 			fieldName = "TextField",
 			fieldValue = "Text Field Value",
-			fieldValueRepeat = "Text Field Value Repeat"
-		);
+			fieldValueRepeat = "Text Field Value Repeat");
 
 		FormPortlet.submitSuccessfully();
 
@@ -2566,15 +2555,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Text",
-			fieldValue = "Text Field Value, Text Field Value Repeat"
-		);
+			fieldValue = "Text Field Value, Text Field Value Repeat");
 	}
 
 	@description = "This is a use case for LPS-58829."
@@ -2588,8 +2575,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2611,7 +2597,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2621,13 +2609,17 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.viewTextLabel(fieldLabel = "Text Field", fieldName = "TextField");
+		FormFields.viewTextLabel(
+			fieldLabel = "Text Field",
+			fieldName = "TextField");
 
 		FormFields.viewRequiredAsterisk();
 
 		FormPortlet.submitWithValidationError();
 
-		FormFields.editText(fieldName = "TextField", fieldValue = "Text Field Value");
+		FormFields.editText(
+			fieldName = "TextField",
+			fieldValue = "Text Field Value");
 
 		FormPortlet.submit();
 
@@ -2636,15 +2628,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Text Field",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 	}
 
 	@description = "This is a use case for LPS-59351."
@@ -2655,8 +2645,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2678,7 +2667,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2690,8 +2681,7 @@ definition {
 
 		FormFields.viewSwitcherLabel(
 			fieldLabel = "Checkbox Field",
-			fieldName = "CheckboxField"
-		);
+			fieldName = "CheckboxField");
 
 		FormFields.enableSwitcher(fieldName = "CheckboxField");
 
@@ -2704,19 +2694,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
-		FormsAdmin.viewFormTableEntry(fieldLabel = "Checkbox Field", fieldValue = "Yes");
+		FormsAdmin.viewFormTableEntry(
+			fieldLabel = "Checkbox Field",
+			fieldValue = "Yes");
 
 		FormsAdminNavigator.gotoView();
 
 		FormsAdmin.viewCheckboxEntry(
 			fieldLabel = "Checkbox Field",
-			fieldName = "CheckboxField"
-		);
+			fieldName = "CheckboxField");
 	}
 
 	@priority = "4"
@@ -2726,8 +2716,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2747,7 +2736,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2757,9 +2748,13 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.viewTextLabel(fieldLabel = "Text Field", fieldName = "TextField");
+		FormFields.viewTextLabel(
+			fieldLabel = "Text Field",
+			fieldName = "TextField");
 
-		FormFields.editText(fieldName = "TextField", fieldValue = "Text Field Value");
+		FormFields.editText(
+			fieldName = "TextField",
+			fieldValue = "Text Field Value");
 
 		FormPortlet.submit();
 
@@ -2768,23 +2763,20 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Text Field",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 
 		FormsAdminNavigator.gotoView();
 
 		FormsAdmin.viewTextEntry(
 			fieldLabel = "Text Field",
 			fieldName = "TextField",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 	}
 
 	@priority = "5"
@@ -2796,8 +2788,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2819,17 +2810,20 @@ definition {
 
 		Form.gotoAddField(fieldType = "Single Selection");
 
-		FormFields.editText(fieldName = "label", fieldValue = "Radio");
+		FormFields.editText(
+			fieldName = "label",
+			fieldValue = "Radio");
 
 		FormFields.viewFieldName(fieldName = "Radio");
 
-		FormFields.editOptionsRow(optionName = "Option1", optionValue = "Option 1");
+		FormFields.editOptionsRow(
+			optionName = "Option1",
+			optionValue = "Option 1");
 
 		FormFields.editOptionsRow(
 			optionName = "Option2",
 			optionValue = "Option 2",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		FormFields.save();
 
@@ -2849,7 +2843,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2859,19 +2855,33 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.viewTextLabel(fieldLabel = "Text", fieldName = "Text");
+		FormFields.viewTextLabel(
+			fieldLabel = "Text",
+			fieldName = "Text");
 
-		FormFields.editText(fieldName = "Text", fieldValue = "Text Field Value");
+		FormFields.editText(
+			fieldName = "Text",
+			fieldValue = "Text Field Value");
 
-		FormPortlet.nextPage(formPageCurrent = "Page 1", formPageNext = "Page 2");
+		FormPortlet.nextPage(
+			formPageCurrent = "Page 1",
+			formPageNext = "Page 2");
 
-		FormFields.viewRadioLabel(fieldLabel = "Radio", fieldName = "Radio");
+		FormFields.viewRadioLabel(
+			fieldLabel = "Radio",
+			fieldName = "Radio");
 
-		FormFields.selectRadioOption(fieldName = "Radio", radioOption = "Option 2");
+		FormFields.selectRadioOption(
+			fieldName = "Radio",
+			radioOption = "Option 2");
 
-		FormPortlet.nextPage(formPageCurrent = "Page 2", formPageNext = "Page 3");
+		FormPortlet.nextPage(
+			formPageCurrent = "Page 2",
+			formPageNext = "Page 3");
 
-		FormFields.viewCheckboxLabel(fieldLabel = "Checkbox", fieldName = "Checkbox");
+		FormFields.viewCheckboxLabel(
+			fieldLabel = "Checkbox",
+			fieldName = "Checkbox");
 
 		FormFields.enableCheckbox(fieldName = "Checkbox");
 
@@ -2882,19 +2892,21 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		FormsAdminNavigator.gotoViewEntries();
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Text",
-			fieldValue = "Text Field Value"
-		);
+			fieldValue = "Text Field Value");
 
-		FormsAdmin.viewFormTableEntry(fieldLabel = "Radio", fieldValue = "Option 2");
+		FormsAdmin.viewFormTableEntry(
+			fieldLabel = "Radio",
+			fieldValue = "Option 2");
 
-		FormsAdmin.viewFormTableEntry(fieldLabel = "Checkbox", fieldValue = "Yes");
+		FormsAdmin.viewFormTableEntry(
+			fieldLabel = "Checkbox",
+			fieldValue = "Yes");
 	}
 
 	@description = "This is a use case for LPS-64305."
@@ -2905,8 +2917,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -2918,8 +2929,7 @@ definition {
 
 		FormFields.editText(
 			fieldName = "label",
-			fieldValue = ",.?/;:{}[]\|-+!@#$%^*()=_"
-		);
+			fieldValue = ",.?/;:{}[]\|-+!@#$%^*()=_");
 
 		FormFields.viewFieldName(fieldName = "text");
 
@@ -2931,7 +2941,9 @@ definition {
 
 		Form.gotoAddField(fieldType = "Text Field");
 
-		FormFields.editText(fieldName = "label", fieldValue = "Jump, She exclaimed!");
+		FormFields.editText(
+			fieldName = "label",
+			fieldValue = "Jump, She exclaimed!");
 
 		FormFields.viewFieldName(fieldName = "JumpSheExclaimed");
 
@@ -2947,7 +2959,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -2959,20 +2973,19 @@ definition {
 
 		FormFields.viewTextField(
 			fieldLabel = ",.?/;:{}[]\|-+!@#$%^*()=_",
-			fieldName = "text"
-		);
+			fieldName = "text");
 
 		FormFields.viewTextField(
 			fieldLabel = "Jump, She exclaimed!",
-			fieldName = "JumpSheExclaimed"
-		);
+			fieldName = "JumpSheExclaimed");
 
-		FormFields.editText(fieldName = "text", fieldValue = "1,2,3.");
+		FormFields.editText(
+			fieldName = "text",
+			fieldValue = "1,2,3.");
 
 		FormFields.editText(
 			fieldName = "JumpSheExclaimed",
-			fieldValue = ",.?/;:{}[]\|-+!@#$%^*()=_"
-		);
+			fieldValue = ",.?/;:{}[]\|-+!@#$%^*()=_");
 
 		FormPortlet.submitSuccessfully();
 	}
@@ -2984,8 +2997,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -3009,7 +3021,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -3021,13 +3035,11 @@ definition {
 
 		FormFields.addRepeatableField(
 			fieldName = "TextField",
-			repeatableFieldNumber = "1"
-		);
+			repeatableFieldNumber = "1");
 
 		FormFields.viewRepeatableTextFieldLabel(
 			fieldLabel = "Text Field",
-			fieldName = "TextField"
-		);
+			fieldName = "TextField");
 	}
 
 	@description = "This is a use case for LPS-59604."
@@ -3038,8 +3050,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -3061,8 +3072,7 @@ definition {
 
 		FormFields.editText(
 			fieldName = "visibility",
-			fieldValue = "equals(VisibleField, &quot;test&quot;)"
-		);
+			fieldValue = "equals(VisibleField, &quot;test&quot;)");
 
 		FormFields.save();
 
@@ -3070,7 +3080,9 @@ definition {
 
 		Page.add(pageName = "Form Page");
 
-		Portlet.addPG(pageName = "Form Page", portletName = "Form");
+		Portlet.addPG(
+			pageName = "Form Page",
+			portletName = "Form");
 
 		FormPortletNavigator.gotoSelectForm();
 
@@ -3080,19 +3092,25 @@ definition {
 
 		Navigator.gotoPage(pageName = "Form Page");
 
-		FormFields.editText(fieldName = "VisibleField", fieldValue = "quality test");
+		FormFields.editText(
+			fieldName = "VisibleField",
+			fieldValue = "quality test");
 
 		FormPortletNavigator.clickFormContent();
 
 		FormFields.viewTextFieldNotVisible(
 			fieldLabel = "Hidden Field",
-			fieldName = "HiddenField"
-		);
+			fieldName = "HiddenField");
 
-		FormFields.editText(fieldName = "VisibleField", fieldValue = "test");
+		FormFields.editText(
+			fieldName = "VisibleField",
+			fieldValue = "test");
 
 		FormPortletNavigator.clickFormContent();
 
-		FormFields.viewTextField(fieldLabel = "Hidden Field", fieldName = "HiddenField");
+		FormFields.viewTextField(
+			fieldLabel = "Hidden Field",
+			fieldName = "HiddenField");
 	}
+
 }

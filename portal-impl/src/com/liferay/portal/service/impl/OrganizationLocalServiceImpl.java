@@ -578,9 +578,8 @@ public class OrganizationLocalServiceImpl
 		if (organization != null) {
 			return organization.getOrganizationId();
 		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	@Override
@@ -667,10 +666,9 @@ public class OrganizationLocalServiceImpl
 			return organizationPersistence.findByCompanyId(
 				companyId, start, end);
 		}
-		else {
-			return organizationPersistence.findByC_P(
-				companyId, parentOrganizationId, start, end);
-		}
+
+		return organizationPersistence.findByC_P(
+			companyId, parentOrganizationId, start, end);
 	}
 
 	public List<Organization> getOrganizations(
@@ -732,10 +730,9 @@ public class OrganizationLocalServiceImpl
 
 			return organizationPersistence.countByCompanyId(companyId);
 		}
-		else {
-			return organizationPersistence.countByC_P(
-				companyId, parentOrganizationId);
-		}
+
+		return organizationPersistence.countByC_P(
+			companyId, parentOrganizationId);
 	}
 
 	public int getOrganizationsCount(
@@ -2124,10 +2121,9 @@ public class OrganizationLocalServiceImpl
 
 			return true;
 		}
-		else {
-			return isParentOrganization(
-				parentOrganizationId, organization.getParentOrganizationId());
-		}
+
+		return isParentOrganization(
+			parentOrganizationId, organization.getParentOrganizationId());
 	}
 
 	protected boolean isUseCustomSQL(LinkedHashMap<String, Object> params) {
@@ -2279,20 +2275,17 @@ public class OrganizationLocalServiceImpl
 		if (Validator.isNull(name)) {
 			throw new OrganizationNameException();
 		}
-		else {
-			Organization organization = organizationPersistence.fetchByC_N(
-				companyId, name);
 
-			if ((organization != null) &&
-				StringUtil.equalsIgnoreCase(organization.getName(), name)) {
+		Organization organization = organizationPersistence.fetchByC_N(
+			companyId, name);
 
-				if ((organizationId <= 0) ||
-					(organization.getOrganizationId() != organizationId)) {
+		if ((organization != null) &&
+			StringUtil.equalsIgnoreCase(organization.getName(), name) &&
+			((organizationId <= 0) ||
+			 (organization.getOrganizationId() != organizationId))) {
 
-					throw new DuplicateOrganizationException(
-						"There is another organization named " + name);
-				}
-			}
+			throw new DuplicateOrganizationException(
+				"There is another organization named " + name);
 		}
 
 		boolean countryRequired = GetterUtil.getBoolean(

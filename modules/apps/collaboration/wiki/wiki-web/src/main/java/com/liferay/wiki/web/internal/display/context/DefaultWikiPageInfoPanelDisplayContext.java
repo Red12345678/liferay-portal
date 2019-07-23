@@ -94,9 +94,8 @@ public class DefaultWikiPageInfoPanelDisplayContext
 		if (items.size() > 1) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -111,15 +110,14 @@ public class DefaultWikiPageInfoPanelDisplayContext
 		if (pages.size() == 1) {
 			return true;
 		}
-		else {
-			WikiPage page = _wikiPageInfoPanelRequestHelper.getPage();
 
-			if (page != null) {
-				return true;
-			}
+		WikiPage page = _wikiPageInfoPanelRequestHelper.getPage();
 
-			return false;
+		if (page != null) {
+			return true;
 		}
+
+		return false;
 	}
 
 	protected List<WikiPage> getSelectedPages() {

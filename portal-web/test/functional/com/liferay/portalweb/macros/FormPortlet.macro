@@ -1,26 +1,29 @@
 definition {
+
 	var validationErrorMessage = "This field is required.";
 
 	macro clickSubmit {
-		AssertClick(locator1 = "Button#SUBMIT_1", value1 = "Submit");
+		AssertClick(
+			locator1 = "Button#SUBMIT_1",
+			value1 = "Submit");
 	}
 
 	macro nextPage {
-		AssertClick(locator1 = "Button#NEXT", value1 = "Next");
+		AssertClick(
+			locator1 = "Button#NEXT",
+			value1 = "Next");
 
 		var key_formPageName = "${formPageCurrent}";
 
 		AssertTextEquals(
 			locator1 = "FormPortlet#FORM_PAGE_INACTIVE",
-			value1 = "${formPageCurrent}"
-		);
+			value1 = "${formPageCurrent}");
 
 		var key_formPageName = "${formPageNext}";
 
 		AssertTextEquals(
 			locator1 = "FormPortlet#FORM_PAGE_ACTIVE",
-			value1 = "${formPageNext}"
-		);
+			value1 = "${formPageNext}");
 	}
 
 	macro submit {
@@ -38,7 +41,9 @@ definition {
 	macro submitWithError {
 		FormPortlet.submit();
 
-		AssertTextEquals(locator1 = "Message#ERROR", value1 = "${errorMessage}");
+		AssertTextEquals(
+			locator1 = "Message#ERROR",
+			value1 = "${errorMessage}");
 	}
 
 	macro submitWithValidationError {
@@ -46,7 +51,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Message#ERROR_FORM_FIELD_REQUIRED",
-			value1 = "${validationErrorMessage}"
-		);
+			value1 = "${validationErrorMessage}");
 	}
+
 }

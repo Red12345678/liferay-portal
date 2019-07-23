@@ -75,7 +75,7 @@ import com.liferay.portal.kernel.model.Release;
 import com.liferay.portal.kernel.model.TrashedModel;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
-import com.liferay.portal.kernel.portlet.PortletProvider.Action;
+import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.portlet.PortletRequestModel;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
@@ -789,10 +789,10 @@ public class JournalPortlet extends MVCPortlet {
 		String portletResource = ParamUtil.getString(
 			actionRequest, "portletResource");
 
-		long referringPlid = ParamUtil.getLong(actionRequest, "referringPlid");
+		long refererPlid = ParamUtil.getLong(actionRequest, "refererPlid");
 
-		if (Validator.isNotNull(portletResource) && (referringPlid > 0)) {
-			Layout layout = _layoutLocalService.getLayout(referringPlid);
+		if (Validator.isNotNull(portletResource) && (refererPlid > 0)) {
+			Layout layout = _layoutLocalService.getLayout(refererPlid);
 
 			PortletPreferences portletPreferences =
 				PortletPreferencesFactoryUtil.getStrictPortletSetup(
@@ -821,7 +821,7 @@ public class JournalPortlet extends MVCPortlet {
 
 		if (article.getClassNameId() == ddmStructureClassNameId) {
 			String ddmPortletId = PortletProviderUtil.getPortletId(
-				DDMStructure.class.getName(), Action.EDIT);
+				DDMStructure.class.getName(), PortletProvider.Action.EDIT);
 
 			MultiSessionMessages.add(
 				actionRequest, ddmPortletId + "requestProcessed");
@@ -1274,15 +1274,15 @@ public class JournalPortlet extends MVCPortlet {
 			if (windowState.equals(LiferayWindowState.POP_UP)) {
 				redirect = _portal.escapeRedirect(redirect);
 
-				if (Validator.isNotNull(redirect)) {
-					if (actionName.equals("addArticle") && (article != null)) {
-						redirect = _httpUtil.addParameter(
-							redirect, namespace + "className",
-							JournalArticle.class.getName());
-						redirect = _httpUtil.addParameter(
-							redirect, namespace + "classPK",
-							JournalArticleAssetRenderer.getClassPK(article));
-					}
+				if (Validator.isNotNull(redirect) &&
+					actionName.equals("addArticle") && (article != null)) {
+
+					redirect = _httpUtil.addParameter(
+						redirect, namespace + "className",
+						JournalArticle.class.getName());
+					redirect = _httpUtil.addParameter(
+						redirect, namespace + "classPK",
+						JournalArticleAssetRenderer.getClassPK(article));
 				}
 			}
 		}
@@ -1429,10 +1429,10 @@ public class JournalPortlet extends MVCPortlet {
 
 		Layout layout = themeDisplay.getLayout();
 
-		long referringPlid = ParamUtil.getLong(actionRequest, "referringPlid");
+		long refererPlid = ParamUtil.getLong(actionRequest, "refererPlid");
 
-		if (referringPlid > 0) {
-			layout = _layoutLocalService.fetchLayout(referringPlid);
+		if (refererPlid > 0) {
+			layout = _layoutLocalService.fetchLayout(refererPlid);
 		}
 
 		_journalContentSearchLocalService.updateContentSearch(

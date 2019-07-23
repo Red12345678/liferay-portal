@@ -608,20 +608,19 @@ public class DDMImpl implements DDM {
 			propertyValue = localizedValue.getString(defaultLocale);
 		}
 
-		if (type.equals(DDMImpl.TYPE_RADIO) ||
-			type.equals(DDMImpl.TYPE_SELECT)) {
+		if ((type.equals(DDMImpl.TYPE_RADIO) ||
+			 type.equals(DDMImpl.TYPE_SELECT)) &&
+			propertyName.equals("predefinedValue")) {
 
-			if (propertyName.equals("predefinedValue")) {
-				try {
-					jsonObject.put(
-						propertyName,
-						JSONFactoryUtil.createJSONArray(propertyValue));
-				}
-				catch (Exception e) {
-				}
-
-				return;
+			try {
+				jsonObject.put(
+					propertyName,
+					JSONFactoryUtil.createJSONArray(propertyValue));
 			}
+			catch (Exception e) {
+			}
+
+			return;
 		}
 
 		jsonObject.put(propertyName, propertyValue);
@@ -780,6 +779,7 @@ public class DDMImpl implements DDM {
 			jsonObject.put("localizable", ddmFormField.isLocalizable());
 			jsonObject.put("multiple", ddmFormField.isMultiple());
 			jsonObject.put("name", ddmFormField.getName());
+			jsonObject.put("readOnly", ddmFormField.isReadOnly());
 			jsonObject.put("repeatable", ddmFormField.isRepeatable());
 			jsonObject.put("required", ddmFormField.isRequired());
 			jsonObject.put("showLabel", ddmFormField.isShowLabel());

@@ -1,5 +1,6 @@
 @component-name = "portal-util-misc"
 definition {
+
 	property osgi.app.includes = "dictionary";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -33,16 +34,16 @@ definition {
 
 		Dictionary.findPG(dictionaryWord = "dog");
 
-		SelectWindow(locator1 = "title=Dog | Define Dog at Dictionary.com");
+		SelectWindow(locator1 = "title=Dog | Definition of Dog at Dictionary.com");
 
 		AssertTextEquals(
+			key_dictionaryTerm = "dog",
 			locator1 = "Portlet#WORD",
-			value1 = "dog",
-			key_dictionaryTerm = "dog"
-		);
+			value1 = "dog");
 
 		Close(locator1 = "title=Dog | Define Dog at Dictionary.com");
 
 		SelectWindow(locator1 = "title=Dictionary Page - ${siteName}");
 	}
+
 }

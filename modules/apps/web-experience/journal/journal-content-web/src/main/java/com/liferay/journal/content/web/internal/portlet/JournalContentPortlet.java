@@ -185,7 +185,7 @@ public class JournalContentPortlet extends MVCPortlet {
 		}
 		catch (PortalException pe) {
 			if (_log.isDebugEnabled()) {
-				_log.debug(pe);
+				_log.debug(pe, pe);
 			}
 		}
 
@@ -241,7 +241,7 @@ public class JournalContentPortlet extends MVCPortlet {
 			}
 			catch (PortalException pe) {
 				if (_log.isDebugEnabled()) {
-					_log.debug(pe);
+					_log.debug(pe, pe);
 				}
 			}
 

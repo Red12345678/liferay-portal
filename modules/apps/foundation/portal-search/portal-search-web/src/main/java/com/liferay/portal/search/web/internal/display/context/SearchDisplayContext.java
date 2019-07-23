@@ -515,13 +515,10 @@ public class SearchDisplayContext {
 		Optional<Long> groupIdOptional = getThisSiteGroupId();
 
 		groupIdOptional.ifPresent(
-			groupId -> {
-				searchSettings.addCondition(
-					new BooleanClauseImpl<>(
-						new TermQueryImpl(
-							Field.GROUP_ID, String.valueOf(groupId)),
-						BooleanClauseOccur.MUST));
-			});
+			groupId -> searchSettings.addCondition(
+				new BooleanClauseImpl<>(
+					new TermQueryImpl(Field.GROUP_ID, String.valueOf(groupId)),
+					BooleanClauseOccur.MUST)));
 	}
 
 	protected SearchScope getSearchScope() {

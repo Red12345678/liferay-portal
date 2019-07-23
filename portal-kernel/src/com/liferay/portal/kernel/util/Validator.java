@@ -42,9 +42,8 @@ public class Validator {
 		if (boolean1 == boolean2) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -55,9 +54,8 @@ public class Validator {
 		if (byte1 == byte2) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -68,9 +66,8 @@ public class Validator {
 		if (char1 == char2) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -81,9 +78,8 @@ public class Validator {
 		if (Double.compare(double1, double2) == 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -94,9 +90,8 @@ public class Validator {
 		if (Float.compare(float1, float2) == 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -107,9 +102,8 @@ public class Validator {
 		if (int1 == int2) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -120,9 +114,8 @@ public class Validator {
 		if (long1 == long2) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -149,9 +142,8 @@ public class Validator {
 		if (short1 == short2) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -412,9 +404,8 @@ public class Validator {
 		if ((i >= 32) && (i <= 126)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public static boolean isBlank(String s) {
@@ -1027,9 +1018,8 @@ public class Validator {
 		if ((l == null) || (l.longValue() == 0)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -1247,9 +1237,8 @@ public class Validator {
 		if (matcher.matches()) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -1266,9 +1255,8 @@ public class Validator {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -1286,9 +1274,8 @@ public class Validator {
 		if ((i == 0) || Character.isWhitespace(c)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -1351,8 +1338,8 @@ public class Validator {
 	private static final String _XML_EMPTY = "<root />";
 
 	private static final Pattern _emailAddressPattern = Pattern.compile(
-		"[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@" +
-			"(?:\\w(?:[\\w-]*\\w)?\\.)*\\w(?:[\\w-]*\\w)?");
+		"^[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@" +
+			"(?:\\w(?:[\\w-]*\\w)?\\.)+(\\w(?:[\\w-]*\\w))$");
 	private static final Pattern _ipv4AddressPattern;
 	private static final Pattern _ipv6AddressPattern;
 	private static final Pattern _variableNamePattern = Pattern.compile(

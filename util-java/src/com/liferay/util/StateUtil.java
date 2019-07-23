@@ -73,18 +73,16 @@ public class StateUtil {
 		if (Arrays.binarySearch(STATES, state) >= 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public static boolean isStateId(String stateId) {
 		if (Arrays.binarySearch(STATE_IDS_ORDERED, stateId) >= 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

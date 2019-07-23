@@ -1,5 +1,6 @@
 @component-name = "portal-user-management-and-portal-configuration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Portal Instances";
@@ -30,14 +31,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Virtual Instances"
-		);
+			portlet = "Virtual Instances");
 
 		PortalInstances.addCP(
 			mailDomain = "www.able.com",
 			virtualHost = "www.able.com",
-			webId = "www.able.com"
-		);
+			webId = "www.able.com");
 
 		PortalInstances.viewCP(virtualHost = "www.able.com");
 	}
@@ -49,18 +48,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
-		PortalSettings.editDefaultLandingPageCP(
-			defaultLandingPage = "/web/guest/landing"
-		);
+		PortalSettings.editDefaultLandingPageCP(defaultLandingPage = "/web/guest/landing");
 
 		Page.add(pageName = "landing");
 
 		User.logoutPG();
 
-		User.loginPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 
 		var portalURL = PropsUtil.get("portal.url");
 
@@ -77,7 +75,9 @@ definition {
 
 		User.logoutPG();
 
-		User.loginPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 
 		var portalURL = PropsUtil.get("portal.url");
 
@@ -91,14 +91,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Virtual Instances"
-		);
+			portlet = "Virtual Instances");
 
 		PortalInstances.addCP(
 			mailDomain = "www.able.com",
 			virtualHost = "www.able.com",
-			webId = "www.able.com"
-		);
+			webId = "www.able.com");
 
 		PortalInstances.deleteCP(virtualHost = "www.able.com");
 	}
@@ -110,40 +108,34 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Virtual Instances"
-		);
+			portlet = "Virtual Instances");
 
 		PortalInstances.addCP(
 			mailDomain = "www.able.com",
 			virtualHost = "www.able.com",
-			webId = "www.able.com"
-		);
+			webId = "www.able.com");
 
 		PortalInstances.addCP(
 			mailDomain = "www.baker.com",
 			virtualHost = "www.baker.com",
-			webId = "www.baker.com"
-		);
+			webId = "www.baker.com");
 
 		User.firstLoginPG(
 			password = "test",
 			userEmailAddress = "test@www.able.com",
-			virtualHostsURL = "http://www.able.com:8080"
-		);
+			virtualHostsURL = "http://www.able.com:8080");
 
 		Navigator.openSpecificURL(url = "http://www.able.com:8080");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Document_1.doc",
-			dmDocumentTitle = "DM Document Title"
-		);
+			dmDocumentTitle = "DM Document Title");
 
 		DMNavigator.gotoDocumentCP(dmDocumentTitle = "DM Document Title");
 
@@ -155,8 +147,7 @@ definition {
 		User.firstLoginPG(
 			password = "test",
 			userEmailAddress = "test@www.baker.com",
-			virtualHostsURL = "http://www.baker.com:8080"
-		);
+			virtualHostsURL = "http://www.baker.com:8080");
 
 		Navigator.openSpecificURL(url = "${otherInstanceAccessAttempt}");
 
@@ -164,8 +155,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Message#ERROR_2",
-			value1 = "You do not have the required permissions."
-		);
+			value1 = "You do not have the required permissions.");
 	}
 
 	@priority = "5"
@@ -175,14 +165,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Virtual Instances"
-		);
+			portlet = "Virtual Instances");
 
 		PortalInstances.addCP(
 			mailDomain = "www.able.com",
 			virtualHost = "www.able.com",
-			webId = "www.able.com"
-		);
+			webId = "www.able.com");
 
 		Navigator.openURL();
 
@@ -209,8 +197,7 @@ definition {
 		User.firstLoginPG(
 			password = "test",
 			userEmailAddress = "test@www.able.com",
-			virtualHostsURL = "http://www.able.com:8080"
-		);
+			virtualHostsURL = "http://www.able.com:8080");
 
 		Page.viewNoPG(pageName = "Blogs Page");
 
@@ -224,15 +211,13 @@ definition {
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Web Content Page",
-			url = "http://www.able.com:8080"
-		);
+			url = "http://www.able.com:8080");
 
 		Portlet.addPG(portletName = "Web Content Display");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Web Content Page",
-			url = "http://www.able.com:8080"
-		);
+			url = "http://www.able.com:8080");
 
 		Portlet.addPG(portletName = "Hello World");
 
@@ -243,8 +228,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Virtual Instances"
-		);
+			portlet = "Virtual Instances");
 
 		PortalInstances.deactivatePortalInstance(virtualHost = "www.able.com");
 
@@ -252,8 +236,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Home#STATUS_MESSAGE",
-			value1 = "This instance is inactive. Please contact the administrator."
-		);
+			value1 = "This instance is inactive. Please contact the administrator.");
 	}
 
 	// LPS-84364
@@ -267,8 +250,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		PortalSettings.editVirtualHostCP(virtualHostName = "www.able.com");
 
@@ -277,42 +259,38 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		Site.addVirtualHostsURLCP(
 			publicPageVirtualHostURL = "www.baker.com",
-			publicVirtualHosts = "${publicPageVirtualHostURL}"
-		);
+			publicVirtualHosts = "${publicPageVirtualHostURL}");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		Site.addVirtualHostsURLCP(
 			privatePageVirtualHostURL = "www.charlie.com",
-			privateVirtualHosts = "${privatePageVirtualHostURL}"
-		);
+			privateVirtualHosts = "${privatePageVirtualHostURL}");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(pageName = "Public Page");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Private Page", sitePagePrivacy = "Private Pages");
+		Page.add(
+			pageName = "Private Page",
+			sitePagePrivacy = "Private Pages");
 
 		Navigator.openSpecificURL(url = "http://www.charlie.com:8080");
 
@@ -323,16 +301,19 @@ definition {
 		User.loginPG(
 			password = "test",
 			specificURL = "http://www.charlie.com:8080/group/guest",
-			userEmailAddress = "test@liferay.com"
-		);
+			userEmailAddress = "test@liferay.com");
 
 		var key_pageName = "Private Page";
 
-		AssertTextEquals(locator1 = "Home#PAGE", value1 = "Private Page");
+		AssertTextEquals(
+			locator1 = "Home#PAGE",
+			value1 = "Private Page");
 
 		User.logoutPG();
 
-		User.loginUserPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 	}
 
 	@priority = "4"
@@ -342,8 +323,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "System Settings"
-		);
+			portlet = "System Settings");
 
 		SystemSettings.gotoCategory(category = "Foundation");
 
@@ -358,29 +338,26 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Virtual Instances"
-		);
+			portlet = "Virtual Instances");
 
 		PortalInstances.addCP(
 			mailDomain = "www.able.com",
 			virtualHost = "www.able.com",
-			webId = "www.able.com"
-		);
+			webId = "www.able.com");
 
 		User.firstLoginPG(
 			password = "test",
 			userEmailAddress = "test@www.able.com",
-			virtualHostsURL = "http://www.able.com:8080"
-		);
+			virtualHostsURL = "http://www.able.com:8080");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		PortalSettingsNavigator.gotoLDAP();
 
 		PortalSettings.viewEnabledLDAPSetting(enableCheckboxKey = "ENABLED");
 	}
+
 }

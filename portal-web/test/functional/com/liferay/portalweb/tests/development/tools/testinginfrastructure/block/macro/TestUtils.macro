@@ -1,4 +1,5 @@
 definition {
+
 	macro assertEquals {
 		echo("${expected}");
 
@@ -8,9 +9,7 @@ definition {
 			echo("PASSED");
 		}
 		else {
-			TestUtils.fail(
-				message = "FAILED: expected &apos;${expected}&apos;, actual was &apos;${actual}&apos;"
-			);
+			TestUtils.fail(message = "FAILED: expected &apos;${expected}&apos;, actual was &apos;${actual}&apos;");
 		}
 	}
 
@@ -37,4 +36,5 @@ definition {
 
 		Page.add(pageName = "Test Page Name");
 	}
+
 }

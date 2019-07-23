@@ -34,9 +34,8 @@ public class DocumentConversionUtil {
 		if (returnObj != null) {
 			return (File)returnObj;
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	public static String[] getConversions(String extension) throws Exception {
@@ -46,9 +45,8 @@ public class DocumentConversionUtil {
 		if (returnObj != null) {
 			return (String[])returnObj;
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	private static final String _CLASS_NAME =

@@ -1,10 +1,22 @@
 @component-name = "portal-upgrades"
 definition {
+
 	property database.types = "db2,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property ignore.errors = "Plugin security management is not enabled. Enable a security manager, then restart.";
 	property testray.main.component.name = "Upgrades User and System Management";
+
+	@description = "This is a use case for LPS-73277."
+	@priority = "5"
+	test ResetTestUserPasswordAfterUpgrade625 {
+		property data.archive.type = "data-archive-portal";
+		property database.types = "mariadb,mysql,postgresql";
+		property portal.version = "6.2.5";
+		property setup.wizard.enabled = "true";
+
+		Upgrade.resetTestUserPassword();
+	}
 
 	@description = "This is a use case for LPS-73277."
 	@priority = "5"
@@ -26,14 +38,70 @@ definition {
 		Upgrade.resetTestUserPassword();
 	}
 
-	@description = "This is a use case for LPS-73277."
 	@priority = "5"
-	test ResetTestUserPasswordAfterUpgrade625 {
-		property data.archive.type = "data-archive-portal";
-		property database.types = "mariadb,mysql,postgresql";
+	test ViewAndEditUserAfterUpgrade625 {
+		property data.archive.type = "data-archive-user";
+		property database.types = "mysql";
 		property portal.version = "6.2.5";
-		property setup.wizard.enabled = "true";
 
-		Upgrade.resetTestUserPassword();
+		SignIn.signIn();
+
+		Upgrade.reindexSearches();
+
+		Upgrade.viewAndEditUser();
 	}
+
+	@priority = "5"
+	test ViewAndEditUserAfterUpgrade704 {
+		property data.archive.type = "data-archive-user";
+		property database.types = "mariadb,mysql,postgresql";
+		property portal.version = "7.0.4";
+
+		SignIn.signIn();
+
+		Upgrade.reindexSearches();
+
+		Upgrade.viewAndEditUser();
+	}
+
+	@priority = "5"
+	test ViewAndEditUserAfterUpgrade70106 {
+		property data.archive.type = "data-archive-user";
+		property database.types = "db2,mariadb,mysql,oracle,postgresql,sybase";
+		property portal.version = "7.0.10.6";
+		property test.run.environment = "EE";
+
+		SignIn.signIn();
+
+		Upgrade.reindexSearches();
+
+		Upgrade.viewAndEditUser();
+	}
+
+	@priority = "5"
+	test ViewAndEditUserAfterUpgrade621015 {
+		property data.archive.type = "data-archive-user";
+		property database.types = "db2,mysql,oracle";
+		property portal.version = "6.2.10.15";
+
+		SignIn.signIn();
+
+		Upgrade.reindexSearches();
+
+		Upgrade.viewAndEditUser();
+	}
+
+	@priority = "5"
+	test ViewAndEditUserAfterUpgrade621021 {
+		property data.archive.type = "data-archive-user";
+		property database.types = "db2,mysql,oracle,postgresql";
+		property portal.version = "6.2.10.21";
+
+		SignIn.signIn();
+
+		Upgrade.reindexSearches();
+
+		Upgrade.viewAndEditUser();
+	}
+
 }

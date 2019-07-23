@@ -1,5 +1,6 @@
 @component-name = "portal-security"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Security";
@@ -23,43 +24,35 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "${userEmailAddress}",
 			userFirstName = "${userFirstName}",
 			userLastName = "${userLastName}",
-			userScreenName = "${userScreenName}"
-		);
+			userScreenName = "${userScreenName}");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "${userEmailAddress}",
-			userScreenName = "${userScreenName}"
-		);
+			userScreenName = "${userScreenName}");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
-		PortalSettings.editConfigurationAuthenticationGeneral(
-			authenticationMethod = "By Screen Name"
-		);
+		PortalSettings.editConfigurationAuthenticationGeneral(authenticationMethod = "By Screen Name");
 
 		PortalSettings.editConfigurationAuthenticationCAS(
 			casLoginURL = "${portalURL}/cas-web/login",
 			casLogoutURL = "${portalURL}/cas-web/logout",
 			casServerURL = "${portalURL}/cas-web",
-			casServiceURL = "${portalURL}/c/portal/login"
-		);
+			casServiceURL = "${portalURL}/c/portal/login");
 
 		User.logoutPG();
 
@@ -88,8 +81,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Panel.expandPanel(panelHeading = "Authentication");
 
@@ -97,33 +89,29 @@ definition {
 
 		PortalSettings.editConfigurationAuthenticationFacebook(
 			facebookApplicationID = "${facebookApplicationID}",
-			facebookApplicationSecret = "${facebookApplicationSecret}"
-		);
+			facebookApplicationSecret = "${facebookApplicationSecret}");
 
 		User.logoutPG();
 
 		User.loginUserWithFacebookSSOEnabledPG(
 			facebookEmail = "${facebookEmail}",
 			facebookPassword = "${facebookPassword}",
-			siteName = "${siteName}"
-		);
+			siteName = "${siteName}");
 
 		User.logoutUserPG();
 
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "test@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 	}
 
 	@priority = "4"
 	test GoogleSSOSmoke {
 		property dummy.socket.proxy.disabled = "true";
 		property test.name.skip.portal.instance = "Login#GoogleSSOSmoke";
-		var googlePropertiesSet = MathUtil.randomNumber("3");
-		var googleClientID = PropsUtil.get("google.client.id.${googlePropertiesSet}");
-		var googleClientSecret = PropsUtil.get("google.client.secret.${googlePropertiesSet}");
+		var googleClientID = PropsUtil.get("google.client.id.2");
+		var googleClientSecret = PropsUtil.get("google.client.secret.2");
 		var userEmailAddress = PropsUtil.get("email.address.1");
 		var userPassword = PropsUtil.get("email.password.1");
 
@@ -134,8 +122,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Panel.expandPanel(panelHeading = "Authentication");
 
@@ -143,20 +130,20 @@ definition {
 
 		PortalSettings.enableGoogleSSOCP(
 			googleClientID = "${googleClientID}",
-			googleClientSecret = "${googleClientSecret}"
-		);
+			googleClientSecret = "${googleClientSecret}");
 
 		User.logoutPG();
 
 		User.loginUserWithGoogleSSOEnabledPG(
 			siteName = "${siteName}",
 			userEmailAddress = "${userEmailAddress}",
-			userPassword = "${userPassword}"
-		);
+			userPassword = "${userPassword}");
 
 		User.logoutPG();
 
-		User.loginUserPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 	}
 
 	@priority = "4"
@@ -208,12 +195,9 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
-		PortalSettings.configureCurrentLanguagesCP(
-			currentPortalLanguages = "Spanish (Spain)"
-		);
+		PortalSettings.configureCurrentLanguagesCP(currentPortalLanguages = "Spanish (Spain)");
 
 		User.logoutPG();
 
@@ -226,8 +210,7 @@ definition {
 		User.loginPG(
 			localization = "ES",
 			password = "test",
-			userEmailAddress = "test@liferay.com"
-		);
+			userEmailAddress = "test@liferay.com");
 	}
 
 	@ignore = "true"
@@ -246,8 +229,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Panel.expandPanel(panelHeading = "Authentication");
 
@@ -262,12 +244,13 @@ definition {
 			openIDUsername = "${openIDUsername}",
 			password = "test",
 			userEmailAddress = "userea2@liferay.com",
-			userName = "userfn2"
-		);
+			userName = "userfn2");
 
 		User.logoutPG();
 
-		User.loginUserPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 	}
 
 	@priority = "5"
@@ -280,8 +263,7 @@ definition {
 
 		AntCommand(
 			locator1 = "build-test-authentication.xml",
-			value1 = "run-openam-tools"
-		);
+			value1 = "run-openam-tools");
 
 		var pauseCount = "0";
 
@@ -304,8 +286,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Pause(locator1 = "30000");
 
@@ -316,8 +297,7 @@ definition {
 		PortalSettings.configureOpenSSO(
 			OpenSSOLoginURL = "http://test.able.com:8080/openam/UI/Login?goto=http://www.able.com:8080/c/portal/login",
 			OpenSSOLogoutURL = "http://test.able.com:8080/openam/UI/Logout?goto=http://www.able.com:8080/web/guest/home",
-			OpenSSOServiceURL = "http://test.able.com:8080/openam"
-		);
+			OpenSSOServiceURL = "http://test.able.com:8080/openam");
 
 		PortalSettingsNavigator.gotoAuthenticationOpenSSO();
 
@@ -328,8 +308,7 @@ definition {
 		User.loginUserWithOpenSSOEnabledPG(
 			hostsURL = "http://www.able.com:8080",
 			password = "password",
-			userScreenName = "test"
-		);
+			userScreenName = "test");
 	}
 
 	@priority = "5"
@@ -341,8 +320,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "System Settings"
-		);
+			portlet = "System Settings");
 
 		SystemSettings.gotoCategory(category = "Foundation");
 
@@ -356,7 +334,7 @@ definition {
 
 		AntCommand(
 			locator1 = "build-test-authentication.xml",
-			value1 = "verify-token-based-login"
-		);
+			value1 = "verify-token-based-login");
 	}
+
 }

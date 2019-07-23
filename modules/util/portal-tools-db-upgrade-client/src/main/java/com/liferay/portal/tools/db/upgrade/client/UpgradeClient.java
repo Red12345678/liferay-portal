@@ -209,9 +209,8 @@ public class UpgradeClient {
 
 					break;
 				}
-				else {
-					System.out.println(line);
-				}
+
+				System.out.println(line);
 			}
 
 			System.out.flush();
@@ -234,9 +233,8 @@ public class UpgradeClient {
 					if (line.equals("exit") || line.equals("quit")) {
 						break;
 					}
-					else {
-						System.out.println(gogoTelnetClient.send(line));
-					}
+
+					System.out.println(gogoTelnetClient.send(line));
 				}
 			}
 		}
@@ -361,11 +359,10 @@ public class UpgradeClient {
 
 			return false;
 		}
-		else {
-			System.out.println(" done.");
 
-			return true;
-		}
+		System.out.println(" done.");
+
+		return true;
 	}
 
 	private void _printHelp() {

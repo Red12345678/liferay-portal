@@ -1,5 +1,6 @@
 @component-name = "portal-plugins-osgi"
 definition {
+
 	property osgi.app.includes = "social-private-messaging";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -20,4 +21,5 @@ definition {
 
 		Portlet.addPG(portletName = "Private Messaging");
 	}
+
 }

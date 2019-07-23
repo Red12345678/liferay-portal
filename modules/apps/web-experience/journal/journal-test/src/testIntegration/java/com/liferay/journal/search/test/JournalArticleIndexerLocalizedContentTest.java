@@ -47,7 +47,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -389,9 +388,9 @@ public class JournalArticleIndexerLocalizedContentTest {
 	private static Map<String, String> _withSortableValues(
 		Map<String, String> map) {
 
-		Set<Entry<String, String>> entrySet = map.entrySet();
+		Set<Map.Entry<String, String>> entrySet = map.entrySet();
 
-		Stream<Entry<String, String>> entries = entrySet.stream();
+		Stream<Map.Entry<String, String>> entries = entrySet.stream();
 
 		Map<String, String> map2 = entries.collect(
 			Collectors.toMap(

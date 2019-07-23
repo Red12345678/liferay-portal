@@ -1,5 +1,6 @@
 @component-name = "portal-user-interface"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.component.names = "Accessibility";
@@ -29,8 +30,7 @@ definition {
 
 		WebContent.addPGViaWCD(
 			webContentContent = "Web Content Content",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 
 		SignOut.signOut();
 
@@ -164,4 +164,5 @@ definition {
 
 		AssertAccessible();
 	}
+
 }

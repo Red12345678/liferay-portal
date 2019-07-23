@@ -868,7 +868,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 
 			User user = _userLocalService.fetchUser(assigneeClassPK);
 
-			if (user != null) {
+			if ((user != null) && user.isActive()) {
 				return true;
 			}
 
@@ -885,7 +885,11 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 					kaleoTaskInstanceToken.getGroupId(), assigneeClassPK);
 
 			for (UserGroupRole userGroupRole : userGroupRoles) {
-				if (userGroupRole.getUserId() != userId) {
+				User user = userGroupRole.getUser();
+
+				if ((user != null) && user.isActive() &&
+					(user.getUserId() != userId)) {
+
 					return true;
 				}
 			}
@@ -900,7 +904,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 					userGroupGroupRole.getUserGroupId());
 
 				for (User user : userGroupUsers) {
-					if (user.getUserId() != userId) {
+					if (user.isActive() && (user.getUserId() != userId)) {
 						return true;
 					}
 				}
@@ -913,7 +917,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 					null);
 
 			for (User user : inheritedRoleUsers) {
-				if (user.getUserId() != userId) {
+				if (user.isActive() && (user.getUserId() != userId)) {
 					return true;
 				}
 			}
@@ -933,7 +937,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		if (assigneeClassName.equals(User.class.getName())) {
 			User user = _userLocalService.fetchUser(assigneeClassPK);
 
-			if (user != null) {
+			if ((user != null) && user.isActive()) {
 				users.add(user);
 			}
 
@@ -952,7 +956,9 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 			for (UserGroupRole userGroupRole : userGroupRoles) {
 				User user = userGroupRole.getUser();
 
-				users.add(user);
+				if (user.isActive()) {
+					users.add(user);
+				}
 			}
 
 			List<UserGroupGroupRole> userGroupGroupRoles =
@@ -964,7 +970,11 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 				List<User> userGroupUsers = _userLocalService.getUserGroupUsers(
 					userGroupGroupRole.getUserGroupId());
 
-				users.addAll(userGroupUsers);
+				for (User user : userGroupUsers) {
+					if (user.isActive()) {
+						users.add(user);
+					}
+				}
 			}
 		}
 		else {
@@ -973,7 +983,11 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 					assigneeClassPK, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
 					null);
 
-			users.addAll(inheritedRoleUsers);
+			for (User user : inheritedRoleUsers) {
+				if (user.isActive()) {
+					users.add(user);
+				}
+			}
 		}
 	}
 

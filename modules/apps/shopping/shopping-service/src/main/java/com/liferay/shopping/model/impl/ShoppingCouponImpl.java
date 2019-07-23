@@ -28,9 +28,8 @@ public class ShoppingCouponImpl extends ShoppingCouponBaseImpl {
 		if (hasValidStartDate() && hasValidEndDate()) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -51,9 +50,8 @@ public class ShoppingCouponImpl extends ShoppingCouponBaseImpl {
 		if (CalendarUtil.beforeByDay(new Date(), getStartDate())) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 }

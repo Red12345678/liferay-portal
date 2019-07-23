@@ -135,9 +135,8 @@ public class WSRPConsumerLocalServiceImpl
 			throw new NoSuchConsumerException(
 				"No WSRP consumer exists with uuid " + wsrpConsumerUuid);
 		}
-		else {
-			return wsrpConsumers.get(0);
-		}
+
+		return wsrpConsumers.get(0);
 	}
 
 	@Override

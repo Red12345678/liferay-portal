@@ -1058,18 +1058,16 @@ public class ArrayUtil {
 		if (array == null) {
 			return 0;
 		}
-		else {
-			return array.length;
-		}
+
+		return array.length;
 	}
 
 	public static Object getValue(Object[] array, int pos) {
 		if ((array == null) || (array.length <= pos)) {
 			return null;
 		}
-		else {
-			return array[pos];
-		}
+
+		return array[pos];
 	}
 
 	public static boolean isEmpty(boolean[] array) {

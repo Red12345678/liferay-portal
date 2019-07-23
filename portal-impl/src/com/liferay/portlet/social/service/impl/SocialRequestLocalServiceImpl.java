@@ -341,9 +341,8 @@ public class SocialRequestLocalServiceImpl
 
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	/**
@@ -374,9 +373,8 @@ public class SocialRequestLocalServiceImpl
 		if ((socialRequest == null) || (socialRequest.getStatus() != status)) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	/**

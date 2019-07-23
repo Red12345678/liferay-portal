@@ -1,6 +1,7 @@
 @component-name = "portal-document-management-ee"
 @ignore = "true"
 definition {
+
 	property dummy.socket.proxy.disabled = "true";
 	property osgi.app.includes = "sharepoint-rest";
 	property portal.ssl.enabled = "true";
@@ -26,8 +27,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "System Settings"
-		);
+			portlet = "System Settings");
 
 		SystemSettings.gotoCategory(category = "Collaboration");
 
@@ -36,58 +36,49 @@ definition {
 		Click(locator1 = "Button#ADD_ENTRY");
 
 		Type(
+			key_text = "name",
 			locator1 = "TextArea#ANY",
-			value1 = "${configurationName}",
-			key_text = "name"
-		);
+			value1 = "${configurationName}");
 
 		Type(
+			key_text = "authorizationGrantEndpoint",
 			locator1 = "TextArea#ANY",
-			value1 = "${authorizationGrantEndpoint}",
-			key_text = "authorizationGrantEndpoint"
-		);
+			value1 = "${authorizationGrantEndpoint}");
 
 		Type(
+			key_text = "authorizationTokenEndpoint",
 			locator1 = "TextArea#ANY",
-			value1 = "${authorizationTokenEndpoint}",
-			key_text = "authorizationTokenEndpoint"
-		);
+			value1 = "${authorizationTokenEndpoint}");
 
 		Type(
+			key_text = "clientId",
 			locator1 = "TextArea#ANY",
-			value1 = "${clientId}",
-			key_text = "clientId"
-		);
+			value1 = "${clientId}");
 
 		Type(
+			key_text = "clientSecret",
 			locator1 = "TextArea#ANY",
-			value1 = "${clientSecret}",
-			key_text = "clientSecret"
-		);
+			value1 = "${clientSecret}");
 
 		Type(
+			key_text = "scope",
 			locator1 = "TextArea#ANY",
-			value1 = "${configurationScope}",
-			key_text = "scope"
-		);
+			value1 = "${configurationScope}");
 
 		Type(
+			key_text = "tenantId",
 			locator1 = "TextArea#ANY",
-			value1 = "${tenantId}",
-			key_text = "tenantId"
-		);
+			value1 = "${tenantId}");
 
 		Type(
+			key_text = "siteDomain",
 			locator1 = "TextArea#ANY",
-			value1 = "${siteDomain}",
-			key_text = "siteDomain"
-		);
+			value1 = "${siteDomain}");
 
 		Type(
+			key_text = "resource",
 			locator1 = "TextArea#ANY",
-			value1 = "${configurationResource}",
-			key_text = "resource"
-		);
+			value1 = "${configurationResource}");
 
 		Button.clickSave();
 
@@ -96,24 +87,21 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMPortlet.setDescriptiveView();
 
 		DMNavigator.gotoAddRepositoryCP();
 
 		Type(
+			key_fieldLabel = "Name",
 			locator1 = "TextInput#GENERIC_TEXT_INPUT",
-			value1 = "${configurationName}",
-			key_fieldLabel = "Name"
-		);
+			value1 = "${configurationName}");
 
 		DMRepository.addSharepoint(
 			dmRepositoryLibraryPath = "Documentos compartidos",
 			dmRepositoryName = "Sharepoint (${configurationName})",
-			dmRepositorySiteAbsoluteURL = "https://liferaycolab.sharepoint.com"
-		);
+			dmRepositorySiteAbsoluteURL = "https://liferaycolab.sharepoint.com");
 
 		PortletEntry.save();
 
@@ -122,16 +110,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMPortlet.setDescriptiveView();
 
 		AssertClick(
+			key_dmRepositoryName = "${configurationName}",
 			locator1 = "DocumentsAndMedia#REPOSITORY_FOLDER_NAME_DESCRIPTIVE_VIEW",
-			value1 = "${configurationName}",
-			key_dmRepositoryName = "${configurationName}"
-		);
+			value1 = "${configurationName}");
 
 		MicrosoftLogin.accountSignIn();
 
@@ -142,8 +128,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 	}
 
 	tearDown {
@@ -162,4 +147,5 @@ definition {
 
 		DMRepository.viewBreadcrumb(dmRepositoryName = "${configurationName}");
 	}
+
 }

@@ -171,12 +171,14 @@ AUI.add(
 					_onBlurInput: function() {
 						var instance = this;
 
-						var inputDate = document.getElementById('inputDateForm');
+						var triggerNode = instance.getTriggerNode();
 
-						if (inputDate.value.length == 0) {
-							var nullDate = instance.getISODate(null);
+						if (triggerNode.get('id') === 'inputDateForm') {
+							if (triggerNode.get('value').length === 0) {
+							   var nullDate = instance.getISODate(null);
 
-							instance.setValue(nullDate);
+							   instance.setValue(nullDate);
+							}
 						}
 
 						if (!instance.hasFocus(document.activeElement)) {

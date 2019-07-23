@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property custom.properties = "default.layout.template.id=1_column";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -22,8 +23,7 @@ definition {
 
 			Blogs.tearDownConfigurationDisplaySettingsPG(
 				pageName = "Blogs Page",
-				portletName = "Blogs"
-			);
+				portletName = "Blogs");
 
 			KBArticle.tearDownCP();
 
@@ -46,59 +46,46 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
-		KBArticle.configureKBSocialBookmarkSites(
-			enableSocialBookmarkSites = "twitter,facebook,plusone,addthis,delicious,digg,evernote,linkedin,newsvine,reddit,slashdot,stumbleupon,tuenti"
-		);
+		KBArticle.configureKBSocialBookmarkSites(enableSocialBookmarkSites = "twitter,facebook,plusone,addthis,delicious,digg,evernote,linkedin,newsvine,reddit,slashdot,stumbleupon,tuenti");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		Click(locator1 = "Icon#SHARE");
 
 		for (var socialBookmarkSites : list "Twitter,Facebook,LinkedIn,Delicious,Digg,Evernote,Newsvine,Reddit,Slashdot,StumbleUpon,Tuenti") {
-			KBArticle.viewEnabledKBSocialBookmarkSites(
-				socialBookmarkSite = "${socialBookmarkSites}"
-			);
+			KBArticle.viewEnabledKBSocialBookmarkSites(socialBookmarkSite = "${socialBookmarkSites}");
 		}
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		KBArticle.configureKBSocialBookmarkSites(
 			disableSocialBookmarkSites = "twitter,newsvine,reddit,slashdot,stumbleupon,tuenti",
-			enableSocialBookmarkSites = "facebook,plusone,addthis,delicious,digg,evernote,linkedin"
-		);
+			enableSocialBookmarkSites = "facebook,plusone,addthis,delicious,digg,evernote,linkedin");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		for (var socialBookmarkSites : list "Facebook,AddThis,LinkedIn,Delicious,Digg,Evernote") {
-			KBArticle.viewEnabledKBSocialBookmarkSites(
-				socialBookmarkSite = "${socialBookmarkSites}"
-			);
+			KBArticle.viewEnabledKBSocialBookmarkSites(socialBookmarkSite = "${socialBookmarkSites}");
 		}
 
 		for (var socialBookmarkSites : list "Twitter,Newsvine,Reddit,Slashdot,StumbleUpon,Tuenti") {
-			KBArticle.viewDisabledKBSocialBookmarkSites(
-				socialBookmarkSite = "${socialBookmarkSites}"
-			);
+			KBArticle.viewDisabledKBSocialBookmarkSites(socialBookmarkSite = "${socialBookmarkSites}");
 		}
 	}
 
@@ -118,27 +105,19 @@ definition {
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
 			entrySubtitle = "Blogs Entry Subtitle",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
-		Blogs.enableSocialBookmarkSites(
-			socialBookmarkSites = "twitter,facebook,plusone,addthis,delicious,digg,evernote,linkedin,newsvine,reddit,slashdot,stumbleupon,tuenti"
-		);
+		Blogs.enableSocialBookmarkSites(socialBookmarkSites = "twitter,facebook,plusone,addthis,delicious,digg,evernote,linkedin,newsvine,reddit,slashdot,stumbleupon,tuenti");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
-		BlogsEntry.viewEnabledSocialBookmarkSites(
-			socialBookmarkSites = "Twitter,Facebook,LinkedIn,Delicious,Digg,Evernote,Newsvine,Reddit,Slashdot,StumbleUpon,Tuenti"
-		);
+		BlogsEntry.viewEnabledSocialBookmarkSites(socialBookmarkSites = "Twitter,Facebook,LinkedIn,Delicious,Digg,Evernote,Newsvine,Reddit,Slashdot,StumbleUpon,Tuenti");
 
-		Blogs.disableSocialBookmarkSites(
-			socialBookmarkSites = "twitter,facebook,plusone,addthis,delicious,digg,evernote,linkedin,newsvine,reddit,slashdot,stumbleupon,tuenti"
-		);
+		Blogs.disableSocialBookmarkSites(socialBookmarkSites = "twitter,facebook,plusone,addthis,delicious,digg,evernote,linkedin,newsvine,reddit,slashdot,stumbleupon,tuenti");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -161,31 +140,25 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
-		KBArticle.configureKBSocialBookmarkSites(
-			enableSocialBookmarkSites = "${socialBookmarkSites}"
-		);
+		KBArticle.configureKBSocialBookmarkSites(enableSocialBookmarkSites = "${socialBookmarkSites}");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		for (var socialBookmarkSites : list "Twitter,Facebook,AddThis,LinkedIn,Delicious,Digg,Evernote,Newsvine,Reddit,Slashdot,StumbleUpon,Tuenti") {
-			KBArticle.viewEnabledKBSocialBookmarkSites(
-				socialBookmarkSite = "${socialBookmarkSites}"
-			);
+			KBArticle.viewEnabledKBSocialBookmarkSites(socialBookmarkSite = "${socialBookmarkSites}");
 		}
 	}
+
 }

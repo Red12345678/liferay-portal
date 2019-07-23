@@ -675,9 +675,8 @@ public class ResourcePermissionLocalServiceImpl
 		if ((actionIds & bitwiseValue) == bitwiseValue) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**

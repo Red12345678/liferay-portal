@@ -1,6 +1,7 @@
 @component-name = "portal-integrations"
 @ignore = "true"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property portlet.plugins.includes = "akismet-portlet";
@@ -38,65 +39,60 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Apps",
 			panel = "Control Panel",
-			portlet = "Akismet"
-		);
+			portlet = "Akismet");
 
 		AkismetPortlet.configure(enableSpamModerationFor = "Wiki");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		User.editUserSiteCP(siteName = "${siteName}", userScreenName = "usersn");
+		User.editUserSiteCP(
+			siteName = "${siteName}",
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_WIKI_GENERAL_PERMISSIONS_ACCESS_IN_SITE_ADMINISTRATION_CHECKBOX",
 			permissionDefinitionValue = "Access in Site Administration",
 			roleName = "Authenticated",
-			roleUser = "User"
-		);
+			roleUser = "User");
 
-		User.firstLoginPG(password = "test", userEmailAddress = "userea@liferay.com");
+		User.firstLoginPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -104,28 +100,27 @@ definition {
 
 		WikiPage.addCP(
 			wikiPageContent = "Wiki Page Content",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 
 		User.logoutPG();
 
-		User.loginPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
 		WikiNavigator.gotoCP(
 			wikiPageRevision = "1.0",
 			wikiPageTitle = "Wiki Page Title",
-			wikiPageUsername = "userfn userln"
-		);
+			wikiPageUsername = "userfn userln");
 
 		WikiPage.markAsSpamCP(wikiPageRevision = "1.0");
 
@@ -134,8 +129,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Spam Moderation"
-		);
+			portlet = "Spam Moderation");
 
 		SpamModerationPortlet.navigateToWikis();
 
@@ -143,16 +137,14 @@ definition {
 			assetType = "wikiPage",
 			wikiPageRevision = "1.0",
 			wikiPageTitle = "Wiki Page Title",
-			wikiPageUsername = "userfn userln"
-		);
+			wikiPageUsername = "userfn userln");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Spam Moderation"
-		);
+			portlet = "Spam Moderation");
 
 		SpamModerationPortlet.viewDefault(assetType = "wikiPage");
 
@@ -161,18 +153,18 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
 		WikiNavigator.gotoCP(
 			wikiPageRevision = "1.0",
 			wikiPageTitle = "Wiki Page Title",
-			wikiPageUsername = "userfn userln"
-		);
+			wikiPageUsername = "userfn userln");
 
-		WikiPage.viewCP(akismetEnabled = "true", wikiPageRevision = "1.0");
+		WikiPage.viewCP(
+			akismetEnabled = "true",
+			wikiPageRevision = "1.0");
 	}
 
 	@priority = "4"
@@ -182,65 +174,60 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Apps",
 			panel = "Control Panel",
-			portlet = "Akismet"
-		);
+			portlet = "Akismet");
 
 		AkismetPortlet.configure(enableSpamModerationFor = "Wiki");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		User.editUserSiteCP(siteName = "${siteName}", userScreenName = "usersn");
+		User.editUserSiteCP(
+			siteName = "${siteName}",
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_WIKI_GENERAL_PERMISSIONS_ACCESS_IN_SITE_ADMINISTRATION_CHECKBOX",
 			permissionDefinitionValue = "Access in Site Administration",
 			roleName = "Authenticated",
-			roleUser = "User"
-		);
+			roleUser = "User");
 
-		User.firstLoginPG(password = "test", userEmailAddress = "userea@liferay.com");
+		User.firstLoginPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -248,28 +235,27 @@ definition {
 
 		WikiPage.addCP(
 			wikiPageContent = "Wiki Page Content",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 
 		User.logoutPG();
 
-		User.loginPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
 		WikiNavigator.gotoCP(
 			wikiPageRevision = "1.0",
 			wikiPageTitle = "Wiki Page Title",
-			wikiPageUsername = "userfn userln"
-		);
+			wikiPageUsername = "userfn userln");
 
 		WikiPage.markAsSpamCP(wikiPageRevision = "1.0");
 
@@ -278,8 +264,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Spam Moderation"
-		);
+			portlet = "Spam Moderation");
 
 		SpamModerationPortlet.navigateToWikis();
 
@@ -287,7 +272,7 @@ definition {
 			assetType = "wikiPage",
 			wikiPageRevision = "1.0",
 			wikiPageTitle = "Wiki Page Title",
-			wikiPageUsername = "userfn userln"
-		);
+			wikiPageUsername = "userfn userln");
 	}
+
 }

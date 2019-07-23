@@ -1,5 +1,6 @@
 @component-name = "portal-workflow"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Workflow";
@@ -17,13 +18,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow Configuration"
-		);
+			portlet = "Workflow Configuration");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver (Version 1)",
-			workflowResourceValue = "Message Boards Message"
-		);
+			workflowResourceValue = "Message Boards Message");
 
 		Page.add(pageName = "Message Boards Page");
 
@@ -59,24 +58,21 @@ definition {
 
 		MessageboardsThread.addWithWorkflowPG(
 			threadBody = "MB Thread Body",
-			threadSubject = "MB Thread Subject"
-		);
+			threadSubject = "MB Thread Subject");
 
 		Navigator.gotoPage(pageName = "Message Boards Page");
 
 		MessageboardsThread.viewWithWorkflowPG(
 			threadBody = "MB Thread Body",
 			threadSubject = "MB Thread Subject",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "MB Thread Subject",
 			workflowAssetType = "Message Boards Message",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.gotoPage(pageName = "Message Boards Page");
 
@@ -84,16 +80,14 @@ definition {
 			pageName = "Message Boards Page",
 			threadBody = "MB Thread Body",
 			threadSubject = "MB Thread Subject",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "MB Thread Subject",
 			workflowAssetType = "Message Boards Message",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.gotoPage(pageName = "Message Boards Page");
 
@@ -101,31 +95,25 @@ definition {
 			lastPostUserName = "Test Test",
 			postCount = "1",
 			threadBody = "MB Thread Body",
-			threadSubject = "MB Thread Subject"
-		);
+			threadSubject = "MB Thread Subject");
 
 		MessageboardsThread.viewPG(
 			threadBody = "MB Thread Body",
-			threadSubject = "MB Thread Subject"
-		);
+			threadSubject = "MB Thread Subject");
 
 		Page.gotoMyAccount(portletName = "My Submissions");
 
-		Workflow.gotoViewCompletedAssetViaMySubmissions(
-			workflowAssetTitle = "MB Thread Subject"
-		);
+		Workflow.gotoViewCompletedAssetViaMySubmissions(workflowAssetTitle = "MB Thread Subject");
 
 		MessageboardsThread.viewAsWorkflowAsset(
 			threadBody = "MB Thread Body",
-			threadSubject = "MB Thread Subject"
-		);
+			threadSubject = "MB Thread Subject");
 
 		MessageboardsThread.gotoViewInContext();
 
 		MessageboardsThread.viewPG(
 			threadBody = "MB Thread Body",
-			threadSubject = "MB Thread Subject"
-		);
+			threadSubject = "MB Thread Subject");
 	}
 
 	@priority = "4"
@@ -137,31 +125,27 @@ definition {
 		MessageboardsThread.addWithWorkflowPG(
 			pageName = "Message Boards Page",
 			threadBody = "MB Thread Body",
-			threadSubject = "MB Thread Subject"
-		);
+			threadSubject = "MB Thread Subject");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "MB Thread Subject",
 			workflowAssetType = "Message Boards Message",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.rejectTaskByActions(
 			workflowAssetTitle = "MB Thread Subject",
 			workflowAssetType = "Message Boards Message",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewRejectedTask(
 			workflowAssetTitle = "MB Thread Subject",
-			workflowAssetType = "Message Boards Message"
-		);
+			workflowAssetType = "Message Boards Message");
 
 		Navigator.gotoPage(pageName = "Message Boards Page");
 
@@ -169,7 +153,7 @@ definition {
 			pageName = "Message Boards Page",
 			threadBody = "MB Thread Body",
 			threadSubject = "MB Thread Subject",
-			workflowTask = "Update"
-		);
+			workflowTask = "Update");
 	}
+
 }

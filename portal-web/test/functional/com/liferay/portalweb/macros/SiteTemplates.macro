@@ -1,4 +1,5 @@
 definition {
+
 	macro addChildPageViaSiteTemplateCP {
 		var key_siteTemplateName = "${siteTemplateName}";
 
@@ -14,8 +15,7 @@ definition {
 			page = "Private Pages",
 			pageName = "${pageName}",
 			siteChildPageName = "${siteChildPageName}",
-			siteScopeSelected = "true"
-		);
+			siteScopeSelected = "true");
 	}
 
 	macro addCP {
@@ -23,18 +23,14 @@ definition {
 
 		PortletEntry.inputName(name = "${siteTemplateName}");
 
-		PortletEntry.inputDescription(
-			description = "This is a site template description"
-		);
+		PortletEntry.inputDescription(description = "This is a site template description");
 
 		if ("${siteTemplateActive}" == "No") {
 			Uncheck.uncheckHiddenToggleSwitch(locator1 = "ToggleSwitch#ACTIVE");
 		}
 
 		if ("${disableChanges}" == "true") {
-			Uncheck.uncheckHiddenToggleSwitch(
-				locator1 = "ToggleSwitch#ALLOW_SITE_ADMIN_MODIFY_PAGES"
-			);
+			Uncheck.uncheckHiddenToggleSwitch(locator1 = "ToggleSwitch#ALLOW_SITE_ADMIN_MODIFY_PAGES");
 		}
 
 		PortletEntry.save();
@@ -58,7 +54,9 @@ definition {
 		MenuItem.click(menuItem = "Add Page");
 
 		if (isSet(pageType)) {
-			Select(locator1 = "SitePagesEditPage#PAGE_TYPE_SELECT", value1 = "${pageType}");
+			Select(
+				locator1 = "SitePagesEditPage#PAGE_TYPE_SELECT",
+				value1 = "${pageType}");
 
 			if ("${pageTemplateAutoApplyChanges}" == "true") {
 				var key_pageType = "${pageType}";
@@ -67,26 +65,27 @@ definition {
 
 				AssertTextEquals(
 					locator1 = "Message#TOOLTIP",
-					value1 = "Automatically apply changes done to the page template."
-				);
+					value1 = "Automatically apply changes done to the page template.");
 
 				Check.checkToggleSwitch(
 					locator1 = "SitePagesEditPage#PAGE_TYPE_TEMPLATE_AUTOMATICALLY_APPLY_CHANGES_CHECKBOX",
-					value1 = "${pageType}"
-				);
+					value1 = "${pageType}");
 			}
 
 			if ("${pageType}" == "Link to URL") {
 				Page._addPageTypeLinkToURL(
 					pageTypeDescription = "${pageTypeDescription}",
-					pageTypeURL = "${pageTypeURL}"
-				);
+					pageTypeURL = "${pageTypeURL}");
 			}
 		}
 
-		Type.clickAtType(locator1 = "TextInput#NAME", value1 = "${pageName}");
+		Type.clickAtType(
+			locator1 = "TextInput#NAME",
+			value1 = "${pageName}");
 
-		AssertClick(locator1 = "Button#ADD_PAGE_BTN", value1 = "Add Page");
+		AssertClick(
+			locator1 = "Button#ADD_PAGE_BTN",
+			value1 = "Add Page");
 	}
 
 	macro deleteCP {
@@ -96,9 +95,7 @@ definition {
 
 		MenuItem.clickNoError(menuItem = "Delete");
 
-		Confirm(
-			value1 = "Are you sure you want to delete this? It will be deleted immediately."
-		);
+		Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		if ("${associatedToSite}" == "true") {
 			Alert.viewRequestFailedToComplete();
@@ -112,15 +109,12 @@ definition {
 
 	macro deleteViaDeleteIconCP {
 		Click(
-			locator1 = "Checkbox#SITE_TEMPLATE",
-			key_siteTemplateName = "${siteTemplateName}"
-		);
+			key_siteTemplateName = "${siteTemplateName}",
+			locator1 = "Checkbox#SITE_TEMPLATE");
 
 		ClickNoError(locator1 = "Icon#DELETE");
 
-		Confirm(
-			value1 = "Are you sure you want to delete this? It will be deleted immediately."
-		);
+		Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 	}
@@ -154,8 +148,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "SiteTemplates#SITE_TEMPLATE_TABLE_NAME",
-			value1 = "${siteTemplateName}"
-		);
+			value1 = "${siteTemplateName}");
 
 		LexiconEntry.openEntryMenu(rowEntry = "${siteTemplateName}");
 
@@ -165,15 +158,13 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "SiteTemplates#SITE_TEMPLATE_NAME",
-			value1 = "${siteTemplateName}"
-		);
+			value1 = "${siteTemplateName}");
 
 		ProductMenuHelper.expandCategory(category = "Configuration");
 
 		AssertClick(
 			locator1 = "SiteTemplates#CONFIGURATION_SITE_TEMPLATE_SETTINGS",
-			value1 = "Site Template Settings"
-		);
+			value1 = "Site Template Settings");
 
 		SiteAdmin.viewPortletTitle(portletTitle = "Site Template Settings");
 	}
@@ -183,8 +174,7 @@ definition {
 
 		AssertClick.assertPartialTextClickAt(
 			locator1 = "SiteTemplates#SITE_TEMPLATE_TABLE_NAME",
-			value1 = "${siteTemplateName}"
-		);
+			value1 = "${siteTemplateName}");
 
 		SelectWindow(locator1 = "home - ${siteTemplateName} - ${siteName}");
 	}
@@ -194,19 +184,21 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Message#CUSTOMIZED_PAGE_INFO",
-			value1 = "This page has been changed since the last update from the site template."
-		);
+			value1 = "This page has been changed since the last update from the site template.");
 
-		AssertTextEquals(locator1 = "Button#RESET_CHANGES", value1 = "Reset Changes");
+		AssertTextEquals(
+			locator1 = "Button#RESET_CHANGES",
+			value1 = "Reset Changes");
 
 		var key_portletTitleName = "${portletName}";
 
 		AssertTextEquals(
 			locator1 = "Home#PAGE_COLUMN_PORTLET_COLUMN_${columnNumberTo}_PORTLET_TITLE",
-			value1 = "${portletName}"
-		);
+			value1 = "${portletName}");
 
-		AssertClick(locator1 = "Button#RESET_CHANGES", value1 = "Reset Changes");
+		AssertClick(
+			locator1 = "Button#RESET_CHANGES",
+			value1 = "Reset Changes");
 
 		AssertElementNotPresent(locator1 = "ControlMenu#INFO");
 	}
@@ -215,8 +207,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Site Templates"
-		);
+			portlet = "Site Templates");
 
 		var key_siteTemplateName = "Site Template Name";
 
@@ -225,9 +216,7 @@ definition {
 
 			MenuItem.clickNoError(menuItem = "Delete");
 
-			Confirm(
-				value1 = "Are you sure you want to delete this? It will be deleted immediately."
-			);
+			Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 			Alert.viewSuccessMessage();
 		}
@@ -235,17 +224,15 @@ definition {
 
 	macro viewCP {
 		AssertTextEquals.assertPartialText(
+			key_siteTemplateName = "${siteTemplateName}",
 			locator1 = "SiteTemplates#SITE_TEMPLATE_TABLE_NAME",
-			value1 = "${siteTemplateName}",
-			key_siteTemplateName = "${siteTemplateName}"
-		);
+			value1 = "${siteTemplateName}");
 
 		if (isSet(siteTemplateDescription)) {
 			AssertTextEquals(
+				key_siteTemplateDescription = "${siteTemplateDescription}",
 				locator1 = "SiteTemplates#SITE_TEMPLATE_TABLE_DESCRIPTION",
-				value1 = "${siteTemplateDescription}",
-				key_siteTemplateDescription = "${siteTemplateDescription}"
-			);
+				value1 = "${siteTemplateDescription}");
 		}
 	}
 
@@ -255,8 +242,7 @@ definition {
 
 			AssertTextEquals.assertPartialText(
 				locator1 = "SiteTemplates#SITE_TEMPLATE_TABLE_NAME",
-				value1 = "${siteTemplateName}"
-			);
+				value1 = "${siteTemplateName}");
 		}
 
 		AssertElementNotPresent(locator1 = "SiteTemplates#SITE_TEMPLATE_TABLE_NAME_3");
@@ -268,8 +254,7 @@ definition {
 
 			AssertTextEquals.assertPartialText(
 				locator1 = "SiteTemplates#SITE_TEMPLATE_TABLE_NAME",
-				value1 = "${siteTemplateNameTranslation}"
-			);
+				value1 = "${siteTemplateNameTranslation}");
 		}
 
 		for (var DescriptionTranslation : list "${siteTemplateDescriptionList}") {
@@ -277,8 +262,7 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "SiteTemplates#SITE_TEMPLATE_TABLE_DESCRIPTION",
-				value1 = "${DescriptionTranslation}"
-			);
+				value1 = "${DescriptionTranslation}");
 		}
 	}
 
@@ -287,14 +271,15 @@ definition {
 
 		AssertTextNotPresent(
 			locator1 = "Message#CUSTOMIZED_PAGE_INFO",
-			value1 = "This page has been changed since the last update from the site template."
-		);
+			value1 = "This page has been changed since the last update from the site template.");
 	}
 
 	macro viewNoSiteOrWorkflowLinksCP {
 		LexiconEntry.viewEntryName(rowEntry = "Site Template Name");
 
-		LexiconEntry.gotoEntryMenuItem( menuItem = "Manage", rowEntry = "Site Template Name" );
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Manage",
+			rowEntry = "Site Template Name");
 
 		ProductMenuHelper.expandPanel(panel = "Site Administration");
 
@@ -305,15 +290,12 @@ definition {
 
 			AssertTextNotPresent(
 				locator1 = "Home#SITE_ADMINISTRATION_NAVIGATION",
-				value1 = "${portletName}"
-			);
+				value1 = "${portletName}");
 		}
 
 		var key_portletCategoryName = "${portletCategoryName}";
 
-		AssertElementNotPresent(
-			locator1 = "Home#SITE_ADMINISTRATION_CATEGORY_COLLAPSED"
-		);
+		AssertElementNotPresent(locator1 = "Home#SITE_ADMINISTRATION_CATEGORY_COLLAPSED");
 	}
 
 	macro viewNoTemplatesDisplay {
@@ -327,20 +309,17 @@ definition {
 	macro viewResetPageChanges {
 		AssertTextNotPresent(
 			locator1 = "Message#CUSTOMIZED_PAGE_INFO",
-			value1 = "This page has been changed since the last update from the site template."
-		);
+			value1 = "This page has been changed since the last update from the site template.");
 
 		AssertTextNotPresent(
 			locator1 = "Button#RESET_CHANGES",
-			value1 = "Reset Changes"
-		);
+			value1 = "Reset Changes");
 
 		var key_portletTitleName = "${portletName}";
 
 		AssertTextEquals(
 			locator1 = "Home#PAGE_COLUMN_PORTLET_COLUMN_${columnNumberFrom}_PORTLET_TITLE",
-			value1 = "${portletName}"
-		);
+			value1 = "${portletName}");
 	}
 
 	macro viewTemplateStatusCP {
@@ -348,12 +327,11 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "SiteTemplates#SITE_TEMPLATE_TABLE_NAME",
-			value1 = "${siteTemplateName}"
-		);
+			value1 = "${siteTemplateName}");
 
 		AssertTextEquals(
 			locator1 = "SiteTemplates#SITE_TEMPLATE_TABLE_ACTIVE",
-			value1 = "${siteTemplateActiveEdit}"
-		);
+			value1 = "${siteTemplateActiveEdit}");
 	}
+
 }

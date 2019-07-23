@@ -48,6 +48,7 @@ import com.liferay.portal.kernel.exception.WebsiteURLException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.Address;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.CompanyConstants;
 import com.liferay.portal.kernel.model.Contact;
 import com.liferay.portal.kernel.model.EmailAddress;
 import com.liferay.portal.kernel.model.Group;
@@ -67,6 +68,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.auth.session.AuthenticatedSessionManagerUtil;
 import com.liferay.portal.kernel.security.membershippolicy.MembershipPolicyException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.ListTypeLocalService;
@@ -90,7 +92,6 @@ import com.liferay.portal.kernel.util.URLCodec;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.util.PropsValues;
 import com.liferay.portlet.InvokerPortletImpl;
 import com.liferay.portlet.admin.util.AdminUtil;
 import com.liferay.portlet.announcements.model.impl.AnnouncementsDeliveryImpl;
@@ -222,7 +223,7 @@ public class EditUserMVCActionCommand extends BaseMVCActionCommand {
 				languageId, timeZoneId, greeting, comments, firstName,
 				middleName, lastName, prefixId, suffixId, male, birthdayMonth,
 				birthdayDay, birthdayYear, smsSn, facebookSn, jabberSn, skypeSn,
-				twitterSn, jobTitle, groupIds, organizationIds, roleIds,
+				twitterSn, jobTitle, null, organizationIds, roleIds,
 				userGroupRoles, userGroupIds, addresses, emailAddresses, phones,
 				websites, announcementsDeliveries, serviceContext);
 		}
@@ -740,12 +741,27 @@ public class EditUserMVCActionCommand extends BaseMVCActionCommand {
 
 			// Password
 
-			if (PropsValues.SESSION_STORE_PASSWORD &&
-				Validator.isNotNull(newPassword1)) {
+			if (Validator.isNotNull(newPassword1) ||
+				Validator.isNotNull(newPassword2)) {
 
-				portletSession.setAttribute(
-					WebKeys.USER_PASSWORD, newPassword1,
-					PortletSession.APPLICATION_SCOPE);
+				String login = null;
+
+				Company company = themeDisplay.getCompany();
+
+				String authType = company.getAuthType();
+
+				if (authType.equals(CompanyConstants.AUTH_TYPE_EA)) {
+					login = user.getEmailAddress();
+				}
+				else if (authType.equals(CompanyConstants.AUTH_TYPE_SN)) {
+					login = user.getScreenName();
+				}
+				else if (authType.equals(CompanyConstants.AUTH_TYPE_ID)) {
+					login = String.valueOf(user.getUserId());
+				}
+
+				AuthenticatedSessionManagerUtil.login(
+					request, response, login, newPassword1, false, null);
 			}
 
 			updateLanguageId = true;

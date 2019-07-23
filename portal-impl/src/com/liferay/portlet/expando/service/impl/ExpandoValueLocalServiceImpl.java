@@ -962,10 +962,9 @@ public class ExpandoValueLocalServiceImpl
 			return expandoValuePersistence.findByT_C(
 				table.getTableId(), column.getColumnId(), start, end);
 		}
-		else {
-			return expandoValuePersistence.findByT_C_D(
-				table.getTableId(), column.getColumnId(), data, start, end);
-		}
+
+		return expandoValuePersistence.findByT_C_D(
+			table.getTableId(), column.getColumnId(), data, start, end);
 	}
 
 	@Override
@@ -1026,10 +1025,9 @@ public class ExpandoValueLocalServiceImpl
 			return expandoValuePersistence.countByT_C(
 				table.getTableId(), column.getColumnId());
 		}
-		else {
-			return expandoValuePersistence.countByT_C_D(
-				table.getTableId(), column.getColumnId(), data);
-		}
+
+		return expandoValuePersistence.countByT_C_D(
+			table.getTableId(), column.getColumnId(), data);
 	}
 
 	@Override
@@ -1116,9 +1114,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getBoolean();
-		}
+
+		return value.getBoolean();
 	}
 
 	@Override
@@ -1133,9 +1130,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getBooleanArray();
-		}
+
+		return value.getBooleanArray();
 	}
 
 	@Override
@@ -1150,9 +1146,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getDate();
-		}
+
+		return value.getDate();
 	}
 
 	@Override
@@ -1167,9 +1162,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getDateArray();
-		}
+
+		return value.getDateArray();
 	}
 
 	@Override
@@ -1184,9 +1178,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getDouble();
-		}
+
+		return value.getDouble();
 	}
 
 	@Override
@@ -1201,9 +1194,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getDoubleArray();
-		}
+
+		return value.getDoubleArray();
 	}
 
 	@Override
@@ -1218,9 +1210,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getFloat();
-		}
+
+		return value.getFloat();
 	}
 
 	@Override
@@ -1235,9 +1226,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getFloatArray();
-		}
+
+		return value.getFloatArray();
 	}
 
 	@Override
@@ -1252,9 +1242,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getInteger();
-		}
+
+		return value.getInteger();
 	}
 
 	@Override
@@ -1269,9 +1258,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getIntegerArray();
-		}
+
+		return value.getIntegerArray();
 	}
 
 	@Override
@@ -1286,9 +1274,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getLong();
-		}
+
+		return value.getLong();
 	}
 
 	@Override
@@ -1303,9 +1290,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getLongArray();
-		}
+
+		return value.getLongArray();
 	}
 
 	@Override
@@ -1328,9 +1314,8 @@ public class ExpandoValueLocalServiceImpl
 		if (type == ExpandoColumnConstants.STRING_ARRAY_LOCALIZED) {
 			return value.getStringArrayMap();
 		}
-		else {
-			return value.getStringMap();
-		}
+
+		return value.getStringMap();
 	}
 
 	@Override
@@ -1345,9 +1330,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getNumber();
-		}
+
+		return value.getNumber();
 	}
 
 	@Override
@@ -1362,9 +1346,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getNumberArray();
-		}
+
+		return value.getNumberArray();
 	}
 
 	@Override
@@ -1379,9 +1362,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getShort();
-		}
+
+		return value.getShort();
 	}
 
 	@Override
@@ -1396,9 +1378,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getShortArray();
-		}
+
+		return value.getShortArray();
 	}
 
 	@Override
@@ -1413,9 +1394,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getString();
-		}
+
+		return value.getString();
 	}
 
 	@Override
@@ -1430,9 +1410,8 @@ public class ExpandoValueLocalServiceImpl
 		if (value == null) {
 			return defaultData;
 		}
-		else {
-			return value.getStringArray();
-		}
+
+		return value.getStringArray();
 	}
 
 	@Override

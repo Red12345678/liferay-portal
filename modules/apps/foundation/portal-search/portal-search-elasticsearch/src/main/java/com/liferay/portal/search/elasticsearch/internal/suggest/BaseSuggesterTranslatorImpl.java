@@ -25,9 +25,8 @@ public abstract class BaseSuggesterTranslatorImpl {
 		if (sort == Suggester.Sort.FREQUENCY) {
 			return "frequency";
 		}
-		else {
-			return "score";
-		}
+
+		return "score";
 	}
 
 	protected String translate(Suggester.StringDistance stringDistance) {

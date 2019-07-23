@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Administration";
@@ -40,49 +41,41 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		UsersAndOrganizationsNavigator.gotoOrganizations();
 
 		LAR.importPortlet(
 			larFileName = "organizations-7.0.lar",
 			portletName = "Users and Organizations",
-			uploadFrom = "dependencies"
-		);
+			uploadFrom = "dependencies");
 
 		UsersAndOrganizationsNavigator.gotoOrganizations();
 
 		Organization.viewCP(
 			orgName = "Space Program Academy of Continuing Education",
-			orgType = "Organization"
-		);
+			orgType = "Organization");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		Organization.editOrganizationCreateSite(
-			orgName = "College of Agricultural Science"
-		);
+		Organization.editOrganizationCreateSite(orgName = "College of Agricultural Science");
 
-		ProductMenu.gotoSite(site = "College of Agricultural Science");
+		Navigator.openSiteURL(siteName = "College of Agricultural Science");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Site Templates"
-		);
+			portlet = "Site Templates");
 
 		LAR.importPortlet(
 			larFileName = "class-site-template-7.0.lar",
 			portletName = "Site Templates",
-			uploadFrom = "dependencies"
-		);
+			uploadFrom = "dependencies");
 
 		SiteTemplates.viewCP(siteTemplateName = "Digital Class Room");
 
@@ -91,47 +84,40 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(
 			membershipType = "Private",
 			parentSiteName = "College of Agricultural Science",
 			siteName = "Moon Rocks 101",
-			siteType = "Blank"
-		);
+			siteType = "Blank");
 
 		Site.selectPageType(
 			selectPrivatePages = "true",
-			siteTemplate = "Digital Class Room"
-		);
+			siteTemplate = "Digital Class Room");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(
 			membershipType = "Private",
 			parentSiteName = "College of Agricultural Science",
 			siteName = "Moon Rocks 202",
-			siteType = "Blank"
-		);
+			siteType = "Blank");
 
 		Site.selectPageType(
 			checkPrivatePagesPropagation = "true",
 			selectPrivatePages = "true",
-			siteTemplate = "Digital Class Room"
-		);
+			siteTemplate = "Digital Class Room");
 
 		Navigator.openPrivateSiteURL(siteName = "Moon Rocks 101");
 
 		for (var pageName : list "Courses,Student Boards,Materials") {
 			Navigator.gotoPrivateSitePage(
 				pageName = "${pageName}",
-				siteName = "Moon Rocks 101"
-			);
+				siteName = "Moon Rocks 101");
 		}
 
 		Navigator.openPrivateSiteURL(siteName = "Moon Rocks 202");
@@ -139,8 +125,7 @@ definition {
 		for (var pageName : list "Courses,Student Boards,Materials") {
 			Navigator.gotoPrivateSitePage(
 				pageName = "${pageName}",
-				siteName = "Moon Rocks 202"
-			);
+				siteName = "Moon Rocks 202");
 		}
 	}
 
@@ -152,8 +137,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
@@ -164,8 +148,7 @@ definition {
 		Page.addPageTranslations(
 			page = "Home",
 			pageTranslation = "es_ES",
-			pageTranslationName = "Casa"
-		);
+			pageTranslationName = "Casa");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -173,8 +156,7 @@ definition {
 			pageLocalizationMessage = "This page is displayed in Spanish (Spain). Display the page in English (United States). Set Spanish (Spain) as your preferred language.",
 			pageLocalizationPreferredLanguage = "Set Spanish (Spain) as your preferred language.",
 			pageName = "Casa",
-			sitePageURL = "${portalURL}/es/web/site-name/home"
-		);
+			sitePageURL = "${portalURL}/es/web/site-name/home");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -185,16 +167,14 @@ definition {
 			pageName = "Home",
 			siteChildPageName = "Blog Page",
 			siteName = "Site Name",
-			siteScopeSelected = "true"
-		);
+			siteScopeSelected = "true");
 
 		SitePageNavigator.gotoPages(page = "Public Pages");
 
 		Page.addPageTranslations(
 			page = "Blog Page",
 			pageTranslation = "es_ES",
-			pageTranslationName = "Blog Página"
-		);
+			pageTranslationName = "Blog Página");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -202,8 +182,7 @@ definition {
 			childPageName = "Blog Página",
 			pageLocalizationMessage = "This page is displayed in Spanish (Spain). Display the page in English (United States). Set Spanish (Spain) as your preferred language.",
 			pageLocalizationPreferredLanguage = "Set Spanish (Spain) as your preferred language.",
-			sitePageURL = "${portalURL}/es/web/site-name/blog-page"
-		);
+			sitePageURL = "${portalURL}/es/web/site-name/blog-page");
 	}
 
 	@priority = "3"
@@ -211,8 +190,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addCommunityCP(siteName = "Site Name");
 
@@ -220,17 +198,13 @@ definition {
 
 		PermissionsInline.gotoConfigurationPG(portletName = "Polls Display");
 
-		PermissionsInline.assertDefaultPG(
-			roleList = "Guest,Owner,Power User,Site Member,User"
-		);
+		PermissionsInline.assertDefaultPG(roleList = "Guest,Owner,Power User,Site Member,User");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		PermissionsInline.gotoConfigurationPG(portletName = "Message Boards");
 
-		PermissionsInline.assertDefaultPG(
-			roleList = "Guest,Owner,Power User,Site Member,User"
-		);
+		PermissionsInline.assertDefaultPG(roleList = "Guest,Owner,Power User,Site Member,User");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -242,8 +216,7 @@ definition {
 
 		SiteTemplates.resetPageChanges(
 			columnNumberTo = "1",
-			portletName = "Asset Publisher"
-		);
+			portletName = "Asset Publisher");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -251,9 +224,7 @@ definition {
 
 		PermissionsInline.gotoConfigurationPG(portletName = "Polls Display");
 
-		PermissionsInline.assertDefaultPG(
-			roleList = "Guest,Owner,Power User,Site Member,User"
-		);
+		PermissionsInline.assertDefaultPG(roleList = "Guest,Owner,Power User,Site Member,User");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -261,8 +232,7 @@ definition {
 			pollsQuestion = "What is the most important issue for this election?",
 			pollsQuestionChoiceA = "The Economy",
 			pollsQuestionChoiceB = "The National Debt",
-			pollsQuestionTitle = "Election Poll"
-		);
+			pollsQuestionTitle = "Election Poll");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -272,21 +242,17 @@ definition {
 
 		Polls.viewPollPG(
 			pollsQuestion = "What is the most important issue for this election?",
-			pollsQuestionChoiceList = "The Economy,The National Debt"
-		);
+			pollsQuestionChoiceList = "The Economy,The National Debt");
 
 		PermissionsInline.gotoConfigurationPG(portletName = "Message Boards");
 
-		PermissionsInline.assertDefaultPG(
-			roleList = "Guest,Owner,Power User,Site Member,User"
-		);
+		PermissionsInline.assertDefaultPG(roleList = "Guest,Owner,Power User,Site Member,User");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		MessageboardsThread.addPG(
 			threadBody = "This is the message boards thread.",
-			threadSubject = "Thread"
-		);
+			threadSubject = "Thread");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -294,13 +260,11 @@ definition {
 			lastPostUserName = "Test Test",
 			postCount = "1",
 			threadBody = "This is the message boards thread.",
-			threadSubject = "Thread"
-		);
+			threadSubject = "Thread");
 
 		MessageboardsThread.viewPG(
 			threadBody = "This is the message boards thread.",
-			threadSubject = "Thread"
-		);
+			threadSubject = "Thread");
 
 		User.logoutPG();
 
@@ -314,23 +278,25 @@ definition {
 			lastPostUserName = "Test Test",
 			postCount = "1",
 			threadBody = "This is the message boards thread.",
-			threadSubject = "Thread"
-		);
+			threadSubject = "Thread");
 
 		MessageboardsThread.viewPG(
 			threadBody = "This is the message boards thread.",
-			threadSubject = "Thread"
-		);
+			threadSubject = "Thread");
 
 		Portlet.viewTitle(portletName = "Election Poll");
 
-		AssertTextEquals(locator1 = "Message#INFO", value1 = "Please sign in to vote.");
+		AssertTextEquals(
+			locator1 = "Message#INFO",
+			value1 = "Please sign in to vote.");
 
 		AssertElementPresent(locator1 = "Search#SEARCH_FIELD");
 
 		Portlet.viewTitle(portletName = "User Statistics");
 
-		SignIn.signIn(userEmailAddress = "test@liferay.com", userPassword = "test");
+		SignIn.signIn(
+			userEmailAddress = "test@liferay.com",
+			userPassword = "test");
 
 		Navigator.openSpecificURL(url = "${portalURL}/web/site-name/home");
 
@@ -338,8 +304,7 @@ definition {
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Remove",
-			roleList = "Guest,Owner,Power User,Site Member,User"
-		);
+			roleList = "Guest,Owner,Power User,Site Member,User");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -347,8 +312,7 @@ definition {
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Remove",
-			roleList = "Guest,Owner,Power User,Site Member,User"
-		);
+			roleList = "Guest,Owner,Power User,Site Member,User");
 
 		User.logoutPG();
 
@@ -356,13 +320,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Message#ERROR_1_COLUMN_1",
-			value1 = "You do not have the roles required to access this portlet."
-		);
+			value1 = "You do not have the roles required to access this portlet.");
 
 		AssertTextEquals(
 			locator1 = "Message#ERROR_1_COLUMN_2",
-			value1 = "You do not have the roles required to access this portlet."
-		);
+			value1 = "You do not have the roles required to access this portlet.");
 	}
 
 	@priority = "4"
@@ -370,19 +332,20 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
-		Site.viewGlobalLandingDefault(portletName = "Web Content", siteName = "Global");
+		Site.viewGlobalLandingDefault(
+			portletName = "Web Content",
+			siteName = "Global");
 	}
+
 }

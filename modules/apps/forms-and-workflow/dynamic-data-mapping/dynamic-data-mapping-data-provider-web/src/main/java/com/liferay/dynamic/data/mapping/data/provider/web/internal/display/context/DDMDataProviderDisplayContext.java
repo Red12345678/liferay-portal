@@ -199,14 +199,12 @@ public class DDMDataProviderDisplayContext {
 				searchContainer.getEnd(),
 				searchContainer.getOrderByComparator());
 		}
-		else {
-			return _ddmDataProviderInstanceService.search(
-				_ddmDataProviderRequestHelper.getCompanyId(),
-				new long[] {_ddmDataProviderRequestHelper.getScopeGroupId()},
-				searchTerms.getKeywords(), searchContainer.getStart(),
-				searchContainer.getEnd(),
-				searchContainer.getOrderByComparator());
-		}
+
+		return _ddmDataProviderInstanceService.search(
+			_ddmDataProviderRequestHelper.getCompanyId(),
+			new long[] {_ddmDataProviderRequestHelper.getScopeGroupId()},
+			searchTerms.getKeywords(), searchContainer.getStart(),
+			searchContainer.getEnd(), searchContainer.getOrderByComparator());
 	}
 
 	public int getSearchContainerTotal(
@@ -223,12 +221,11 @@ public class DDMDataProviderDisplayContext {
 				searchTerms.getName(), searchTerms.getDescription(),
 				searchTerms.isAndOperator());
 		}
-		else {
-			return _ddmDataProviderInstanceService.searchCount(
-				_ddmDataProviderRequestHelper.getCompanyId(),
-				new long[] {_ddmDataProviderRequestHelper.getScopeGroupId()},
-				searchTerms.getKeywords());
-		}
+
+		return _ddmDataProviderInstanceService.searchCount(
+			_ddmDataProviderRequestHelper.getCompanyId(),
+			new long[] {_ddmDataProviderRequestHelper.getScopeGroupId()},
+			searchTerms.getKeywords());
 	}
 
 	public String getUserPortraitURL(long userId) throws PortalException {

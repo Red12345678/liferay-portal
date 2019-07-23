@@ -1,5 +1,6 @@
 @component-name = "portal-plugins-osgi"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property plugins.deployment.type = "osgi";
@@ -15,6 +16,9 @@ definition {
 		var appName = "Email to Message Boards Filter";
 		var portletName = "email-to-mb-filter-hook";
 
-		OSGiSmoke.Smoke(appName = "${portletName}", portletName = "${portletName}");
+		OSGiSmoke.Smoke(
+			appName = "${portletName}",
+			portletName = "${portletName}");
 	}
+
 }

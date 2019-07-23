@@ -162,8 +162,6 @@ name = HtmlUtil.escapeJS(name);
 
 	var instancePendingData;
 
-	window['<%= name %>']._dataReady = false;
-
 	var getInitialContent = function() {
 		var data;
 
@@ -344,6 +342,8 @@ name = HtmlUtil.escapeJS(name);
 			}
 		}
 	};
+
+	window['<%= name %>']._dataReady = false;
 
 	window['<%= name %>']._setStyles = function() {
 		var ckEditor = A.one('#cke_<%= name %>');

@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Microblogs Web
 Bundle-SymbolicName: com.liferay.microblogs.web
-Bundle-Version: 2.0.40
+Bundle-Version: 2.0.42
 Liferay-Releng-Module-Group-Title: Microblogs
 Web-ContextPath: /microblogs-web
 -dsannotations-options: inherit

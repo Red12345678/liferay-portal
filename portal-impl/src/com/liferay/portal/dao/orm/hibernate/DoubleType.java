@@ -99,9 +99,8 @@ public class DoubleType implements CompositeUserType, Serializable {
 		if (value == null) {
 			return DEFAULT_VALUE;
 		}
-		else {
-			return value;
-		}
+
+		return value;
 	}
 
 	@Override

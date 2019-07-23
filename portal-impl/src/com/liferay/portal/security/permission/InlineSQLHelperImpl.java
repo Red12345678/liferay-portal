@@ -243,11 +243,10 @@ public class InlineSQLHelperImpl implements InlineSQLHelper {
 				sql, className, classPKField, userIdField, groupIds,
 				bridgeJoin);
 		}
-		else {
-			return replacePermissionCheckJoin(
-				sql, className, classPKField, userIdField, groupIdField,
-				groupIds, bridgeJoin);
-		}
+
+		return replacePermissionCheckJoin(
+			sql, className, classPKField, userIdField, groupIdField, groupIds,
+			bridgeJoin);
 	}
 
 	protected Set<Long> getOwnerResourceBlockIds(

@@ -213,9 +213,8 @@ public class ServerDetector {
 			if (ServerDetector.class.getResource(className) != null) {
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 	}
 
@@ -276,9 +275,8 @@ public class ServerDetector {
 		if (value != null) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	private static final boolean _SUPPORTS_COMET = false;

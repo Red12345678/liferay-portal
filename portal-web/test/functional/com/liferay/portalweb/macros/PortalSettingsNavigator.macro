@@ -1,22 +1,33 @@
 definition {
+
 	macro gotoAuthenticationFacebook {
-		AssertClick(locator1 = "NavTab#FACEBOOK", value1 = "Facebook");
+		AssertClick(
+			locator1 = "NavTab#FACEBOOK",
+			value1 = "Facebook");
 	}
 
 	macro gotoAuthenticationGoogle {
-		AssertClick(locator1 = "NavTab#GOOGLE", value1 = "Google");
+		AssertClick(
+			locator1 = "NavTab#GOOGLE",
+			value1 = "Google");
 	}
 
 	macro gotoAuthenticationLDAP {
-		AssertClick(locator1 = "NavTab#LDAP", value1 = "LDAP");
+		AssertClick(
+			locator1 = "NavTab#LDAP",
+			value1 = "LDAP");
 	}
 
 	macro gotoAuthenticationOpenID {
-		AssertClick(locator1 = "NavTab#OPENID", value1 = "OpenID");
+		AssertClick(
+			locator1 = "NavTab#OPENID",
+			value1 = "OpenID");
 	}
 
 	macro gotoAuthenticationOpenSSO {
-		AssertClick(locator1 = "NavTab#OPENSSO", value1 = "OpenSSO");
+		AssertClick(
+			locator1 = "NavTab#OPENSSO",
+			value1 = "OpenSSO");
 	}
 
 	macro gotoLDAP {
@@ -24,4 +35,5 @@ definition {
 
 		PortalSettingsNavigator.gotoAuthenticationLDAP();
 	}
+
 }

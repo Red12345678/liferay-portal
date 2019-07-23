@@ -41,5 +41,5 @@
 		"metal-cli": "^4.0.1"
 	},
 	"name": "frontend-js-metal-web",
-	"version": "1.0.26"
+	"version": "1.0.27"
 }

@@ -51,12 +51,10 @@ public class OrderImpl implements Order {
 	public boolean isAfterOthers() {
 		boolean value = false;
 
-		if (_routes.get(Path.AFTER) != null) {
-			if (Arrays.binarySearch(_routes.get(Path.AFTER), Order.OTHERS) >=
-					0) {
+		if ((_routes.get(Path.AFTER) != null) &&
+			(Arrays.binarySearch(_routes.get(Path.AFTER), Order.OTHERS) >= 0)) {
 
-				value = true;
-			}
+			value = true;
 		}
 
 		return value;
@@ -75,12 +73,11 @@ public class OrderImpl implements Order {
 	public boolean isBeforeOthers() {
 		boolean value = false;
 
-		if (_routes.get(Path.BEFORE) != null) {
-			if (Arrays.binarySearch(_routes.get(Path.BEFORE), Order.OTHERS) >=
-					0) {
+		if ((_routes.get(Path.BEFORE) != null) &&
+			(Arrays.binarySearch(_routes.get(Path.BEFORE), Order.OTHERS) >=
+				0)) {
 
-				value = true;
-			}
+			value = true;
 		}
 
 		return value;

@@ -77,12 +77,11 @@ public class ExportImportPermissionUtil {
 				getAvailableResourceBlockPermissionActionIds(
 					className, GetterUtil.getLong(primKey), actionIds);
 		}
-		else {
-			return ResourcePermissionLocalServiceUtil.
-				getAvailableResourcePermissionActionIds(
-					companyId, className, ResourceConstants.SCOPE_INDIVIDUAL,
-					primKey, actionIds);
-		}
+
+		return ResourcePermissionLocalServiceUtil.
+			getAvailableResourcePermissionActionIds(
+				companyId, className, ResourceConstants.SCOPE_INDIVIDUAL,
+				primKey, actionIds);
 	}
 
 	public static String getTeamRoleName(String roleName) {

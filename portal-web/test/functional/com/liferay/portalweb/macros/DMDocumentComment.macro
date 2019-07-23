@@ -1,17 +1,21 @@
 definition {
+
 	macro addPG {
 		var key_dmDocumentTitle = "${dmDocumentTitle}";
 
 		AssertClick(
 			locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_TITLE",
-			value1 = "${dmDocumentTitle}"
-		);
+			value1 = "${dmDocumentTitle}");
 
-		Type(locator1 = "Comments#COMMENT_FIELD", value1 = "${commentBody}");
+		Type(
+			locator1 = "Comments#COMMENT_FIELD",
+			value1 = "${commentBody}");
 
 		Pause(locator1 = "3000");
 
-		AssertClick(locator1 = "Button#REPLY", value1 = "Reply");
+		AssertClick(
+			locator1 = "Button#REPLY",
+			value1 = "Reply");
 
 		Pause(locator1 = "3000");
 
@@ -23,14 +27,13 @@ definition {
 
 		AssertClick(
 			locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_TITLE",
-			value1 = "${dmDocumentTitle}"
-		);
+			value1 = "${dmDocumentTitle}");
 
 		var key_entryComment = "${commentBody}";
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Comments#COMMENT_BODY_SPECIFIC",
-			value1 = "${commentBody}"
-		);
+			value1 = "${commentBody}");
 	}
+
 }

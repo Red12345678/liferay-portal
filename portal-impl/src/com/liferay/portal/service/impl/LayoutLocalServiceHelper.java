@@ -288,13 +288,11 @@ public class LayoutLocalServiceHelper implements IdentifiableOSGiService {
 			}
 		}
 
-		if (!layoutTypeController.isParentable()) {
-			if (layoutPersistence.countByG_P_P(
-					groupId, privateLayout, layoutId) > 0) {
+		if (!layoutTypeController.isParentable() &&
+			(layoutPersistence.countByG_P_P(groupId, privateLayout, layoutId) >
+				0)) {
 
-				throw new LayoutTypeException(
-					LayoutTypeException.NOT_PARENTABLE);
-			}
+			throw new LayoutTypeException(LayoutTypeException.NOT_PARENTABLE);
 		}
 
 		validateFriendlyURLs(groupId, privateLayout, layoutId, friendlyURLMap);

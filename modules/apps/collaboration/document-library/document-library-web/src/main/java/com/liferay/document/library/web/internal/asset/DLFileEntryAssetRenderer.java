@@ -108,9 +108,8 @@ public class DLFileEntryAssetRenderer
 
 			return _fileVersion.getFileVersionId();
 		}
-		else {
-			return _fileEntry.getFileEntryId();
-		}
+
+		return _fileEntry.getFileEntryId();
 	}
 
 	@Override
@@ -123,9 +122,8 @@ public class DLFileEntryAssetRenderer
 		if (PropsValues.DL_FILE_ENTRY_COMMENTS_ENABLED) {
 			return "edit_file_entry_discussion";
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	/**
@@ -154,9 +152,8 @@ public class DLFileEntryAssetRenderer
 
 			return "/document_library/asset/file_entry_" + template + ".jsp";
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override

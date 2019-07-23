@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.client.solrj.response.FacetField.Count;
 
 /**
  * @author Raymond Augé
@@ -35,10 +34,10 @@ public class SolrFacetFieldCollector implements FacetCollector {
 	public SolrFacetFieldCollector(String fieldName, FacetField facetField) {
 		_fieldName = fieldName;
 
-		List<Count> counts = facetField.getValues();
+		List<FacetField.Count> counts = facetField.getValues();
 
 		if (ListUtil.isNotEmpty(counts)) {
-			for (Count count : counts) {
+			for (FacetField.Count count : counts) {
 				if (count.getCount() > 0) {
 					_counts.put(count.getName(), count);
 				}
@@ -53,7 +52,7 @@ public class SolrFacetFieldCollector implements FacetCollector {
 
 	@Override
 	public TermCollector getTermCollector(String term) {
-		Count count = _counts.get(term);
+		FacetField.Count count = _counts.get(term);
 
 		int occurences = 0;
 
@@ -72,8 +71,8 @@ public class SolrFacetFieldCollector implements FacetCollector {
 
 		List<TermCollector> termCollectors = new ArrayList<>();
 
-		for (Map.Entry<String, Count> entry : _counts.entrySet()) {
-			Count count = entry.getValue();
+		for (Map.Entry<String, FacetField.Count> entry : _counts.entrySet()) {
+			FacetField.Count count = entry.getValue();
 
 			TermCollector termCollector = new DefaultTermCollector(
 				entry.getKey(), (int)count.getCount());
@@ -86,7 +85,7 @@ public class SolrFacetFieldCollector implements FacetCollector {
 		return _termCollectors;
 	}
 
-	private final Map<String, Count> _counts = new LinkedHashMap<>();
+	private final Map<String, FacetField.Count> _counts = new LinkedHashMap<>();
 	private final String _fieldName;
 	private List<TermCollector> _termCollectors;
 

@@ -1,4 +1,5 @@
 definition {
+
 	macro clickMoveToRecycleBin {
 		MenuItem.click(menuItem = "Move to the Recycle Bin");
 	}
@@ -6,17 +7,23 @@ definition {
 	macro inputDescription {
 		Click(locator1 = "TextArea#DESCRIPTION");
 
-		Type(locator1 = "TextArea#DESCRIPTION", value1 = "${description}");
+		Type(
+			locator1 = "TextArea#DESCRIPTION",
+			value1 = "${description}");
 	}
 
 	macro inputDescriptionTextInput {
 		Click(locator1 = "TextInput#DESCRIPTION");
 
-		Type(locator1 = "TextInput#DESCRIPTION", value1 = "${description}");
+		Type(
+			locator1 = "TextInput#DESCRIPTION",
+			value1 = "${description}");
 	}
 
 	macro inputLocalizedName {
-		Click(locator1 = "Language#SITE_NAME_TRANSLATION", key_language = "${language}");
+		Click(
+			key_language = "${language}",
+			locator1 = "Language#SITE_NAME_TRANSLATION");
 
 		PortletEntry.inputName(name = "${localizedName}");
 	}
@@ -24,7 +31,9 @@ definition {
 	macro inputName {
 		Click(locator1 = "TextInput#NAME");
 
-		Type(locator1 = "TextInput#NAME", value1 = "${name}");
+		Type(
+			locator1 = "TextInput#NAME",
+			value1 = "${name}");
 
 		if (IsElementPresent(locator1 = "TextInput#NAME_INVALID")) {
 			Click(locator1 = "TextInput#NAME_MARGIN");
@@ -34,7 +43,9 @@ definition {
 	macro inputTitle {
 		Click(locator1 = "TextInput#TITLE");
 
-		Type(locator1 = "TextInput#TITLE", value1 = "${title}");
+		Type(
+			locator1 = "TextInput#TITLE",
+			value1 = "${title}");
 
 		if (IsElementPresent(locator1 = "TextInput#TITLE_INVALID")) {
 			Click(locator1 = "TextInput#TITLE_MARGIN");
@@ -64,4 +75,5 @@ definition {
 	macro viewNoNavItemLink {
 		AssertElementNotPresent(locator1 = "NavBar#NAV_ITEM_LINK");
 	}
+
 }

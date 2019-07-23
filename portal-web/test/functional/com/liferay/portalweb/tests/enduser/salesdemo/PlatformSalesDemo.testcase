@@ -1,6 +1,7 @@
 @component-name = "portal-portal-services"
 @ignore = "true"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property portlet.plugins.includes = "sample-drools-portlet";
@@ -22,8 +23,7 @@ definition {
 		else {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "test@liferay.com",
-				userLoginFullName = "Test Test"
-			);
+				userLoginFullName = "Test Test");
 
 			Page.tearDownPG();
 
@@ -55,30 +55,26 @@ definition {
 			userAddressPostalCode = "91789",
 			userAddressRegion = "California",
 			userAddressStreet1 = "1220 Brea Canyon Rd",
-			userAddressType = "Business"
-		);
+			userAddressType = "Business");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoManageStructures();
 
 		WebContentStructures.addCP(
 			structureDescription = "WC Structure Description",
-			structureName = "WC Structure Name"
-		);
+			structureName = "WC Structure Name");
 
 		for (var structureFieldName : list "Text,Image") {
 			DynamicDataMapping.addField(
 				field = "${structureFieldName}",
 				fieldFieldLabel = "${structureFieldName}",
-				fieldName = StringUtil.replace("${structureFieldName}", " ", "")
-			);
+				fieldName = StringUtil.replace("${structureFieldName}", " ", ""));
 		}
 
 		WebContentStructures.saveCP(structureName = "WC Structure Name");
@@ -88,22 +84,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoManageTemplates();
 
 		WebContentTemplates.addCP(
 			templateDescription = "${templateDescription}",
 			templateLanguage = "ftl",
-			templateName = "${templateName}"
-		);
+			templateName = "${templateName}");
 
 		WebContentTemplates.addStructure(
 			structureName = "${structureName}",
 			templateFieldNames = "${structureFieldNames}",
-			templateLanguage = "ftl"
-		);
+			templateLanguage = "ftl");
 
 		DDLDataDefinition.save();
 
@@ -112,16 +105,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContent.addWithStructureCP(
 			structureName = "${structureName}",
 			templateName = "${templateName}",
 			webContentImage = "${webContentImage}",
 			webContentText = "${webContentText}",
-			webContentTitle = "${webContentTitle}"
-		);
+			webContentTitle = "${webContentTitle}");
 
 		PortletEntry.publish();
 
@@ -129,11 +120,11 @@ definition {
 
 		Page.add(pageName = "WC Page");
 
-		Portlet.addPG(pageName = "WC Page", portletName = "Web Content Display");
+		Portlet.addPG(
+			pageName = "WC Page",
+			portletName = "Web Content Display");
 
-		WebContentDisplayPortlet.selectWebContent(
-			webContentTitle = "${webContentTitle}"
-		);
+		WebContentDisplayPortlet.selectWebContent(webContentTitle = "${webContentTitle}");
 
 		WebContentNavigator.gotoEditPGViaWCD();
 
@@ -141,70 +132,62 @@ definition {
 
 		Page.add(pageName = "Drools Page");
 
-		Portlet.addPG(pageName = "Drools Page", portletName = "Sample Drools");
+		Portlet.addPG(
+			pageName = "Drools Page",
+			portletName = "Sample Drools");
 
 		Drools.viewDefaultPG(welcomeMessage = "Welcome Test Test!");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			password = "password",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.assignSiteRoleCP(
 			siteRoleName = "Site Administrator",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Page.gotoMyAccount(portletName = "Addresses");
 
@@ -213,15 +196,14 @@ definition {
 			userAddressPostalCode = "91789",
 			userAddressRegion = "Berlin",
 			userAddressStreet1 = "1220 Brea Canyon Rd",
-			userAddressType = "Business"
-		);
+			userAddressType = "Business");
 
 		Navigator.gotoPage(pageName = "Drools Page");
 
 		Drools.viewContentPG(
 			droolsContent = "${webContentText}",
 			screenshotFileName = "web_content_image_field.png",
-			welcomeMessage = "Welcome userfn userln!"
-		);
+			welcomeMessage = "Welcome userfn userln!");
 	}
+
 }

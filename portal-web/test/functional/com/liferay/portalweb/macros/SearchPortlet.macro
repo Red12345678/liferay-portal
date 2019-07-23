@@ -1,12 +1,17 @@
 definition {
+
 	macro searchPG {
 		var key_portletName = "${portletName}";
 
 		AssertElementPresent(locator1 = "Portlet#SEARCH_PORTLET_FIELD");
 
-		Type(locator1 = "Portlet#SEARCH_PORTLET_FIELD", value1 = "${searchTerm}");
+		Type(
+			locator1 = "Portlet#SEARCH_PORTLET_FIELD",
+			value1 = "${searchTerm}");
 
-		KeyPress(locator1 = "Portlet#SEARCH_PORTLET_FIELD", value1 = "\RETURN");
+		KeyPress(
+			locator1 = "Portlet#SEARCH_PORTLET_FIELD",
+			value1 = "\RETURN");
 	}
 
 	macro viewSearchNoAssetTitle {
@@ -14,8 +19,7 @@ definition {
 
 		AssertTextNotPresent(
 			locator1 = "SearchResults#ASSET_ENTRY_TABLE_TITLE",
-			value1 = "${searchAssetTitle}"
-		);
+			value1 = "${searchAssetTitle}");
 	}
 
 	macro viewSearchResultsPG {
@@ -24,19 +28,17 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "SearchResults#ASSET_ENTRY_TABLE_TITLE_SPECIFIC",
-			value1 = "${searchAssetTitle}"
-		);
+			value1 = "${searchAssetTitle}");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "SearchResults#ASSET_ENTRY_TABLE_TYPE_SPECIFIC",
-			value1 = "${searchAssetType}"
-		);
+			value1 = "${searchAssetType}");
 
 		if (isSet(searchAssetSummary)) {
 			AssertTextEquals.assertPartialText(
 				locator1 = "SearchResults#ASSET_ENTRY_TABLE_SUMMARY_SPECIFIC",
-				value1 = "${searchAssetSummary}"
-			);
+				value1 = "${searchAssetSummary}");
 		}
 	}
+
 }

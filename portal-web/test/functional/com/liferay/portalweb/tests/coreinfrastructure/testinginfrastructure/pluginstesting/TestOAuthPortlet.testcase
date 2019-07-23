@@ -1,5 +1,6 @@
 @component-name = "portal-test-plugins"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Test Plugins";
@@ -19,14 +20,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "OAuth Admin"
-		);
+			portlet = "OAuth Admin");
 
 		TestOAuth.addApplication(
 			applicationName = "oauth1",
 			callbackURI = "http://localhost:8080",
-			websiteURL = "http://www.liferay.com"
-		);
+			websiteURL = "http://www.liferay.com");
 
 		var applicationCredentials = TestOAuth.getApplicationCredentials(applicationName = "oauth1");
 
@@ -46,9 +45,9 @@ definition {
 		TestOAuth.testConsumerKeyAndSecret(
 			consumerKey = "${consumerKey}",
 			consumerSecret = "${consumerSecret}",
-			webID = "liferay.com"
-		);
+			webID = "liferay.com");
 
 		TestOAuth.viewJSON(domainName = "liferay.com");
 	}
+
 }

@@ -18,7 +18,7 @@
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");
-String backURL = ParamUtil.getString(request, "backURL");
+String backURL = journalDisplayContext.getBackURL();
 
 String referringPortletResource = ParamUtil.getString(request, "referringPortletResource");
 
@@ -47,6 +47,7 @@ JournalArticle article = journalDisplayContext.getArticle();
 
 		portletURL.setParameter("mvcPath", "/view_article_history.jsp");
 		portletURL.setParameter("redirect", redirect);
+		portletURL.setParameter("backURL", backURL);
 		portletURL.setParameter("referringPortletResource", referringPortletResource);
 		portletURL.setParameter("groupId", String.valueOf(article.getGroupId()));
 		portletURL.setParameter("articleId", article.getArticleId());

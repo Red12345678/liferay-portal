@@ -191,9 +191,6 @@ public class CreateAccountMVCActionCommand extends BaseMVCActionCommand {
 			if (user.getStatus() == WorkflowConstants.STATUS_APPROVED) {
 				SessionMessages.add(
 					request, "userAdded", user.getEmailAddress());
-				SessionMessages.add(
-					request, "userAddedPassword",
-					user.getPasswordUnencrypted());
 			}
 			else {
 				SessionMessages.add(
@@ -513,8 +510,6 @@ public class CreateAccountMVCActionCommand extends BaseMVCActionCommand {
 
 		if (user.getStatus() == WorkflowConstants.STATUS_APPROVED) {
 			SessionMessages.add(request, "userAdded", user.getEmailAddress());
-			SessionMessages.add(
-				request, "userAddedPassword", user.getPasswordUnencrypted());
 		}
 		else {
 			SessionMessages.add(request, "userPending", user.getEmailAddress());

@@ -61,11 +61,9 @@ public class MentionsUserNotificationHandler
 			return getAssetRenderer(
 				mbMessage.getClassName(), mbMessage.getClassPK());
 		}
-		else {
-			return getAssetRenderer(
-				jsonObject.getString("className"),
-				jsonObject.getLong("classPK"));
-		}
+
+		return getAssetRenderer(
+			jsonObject.getString("className"), jsonObject.getLong("classPK"));
 	}
 
 	@Override
@@ -97,17 +95,16 @@ public class MentionsUserNotificationHandler
 				},
 				false);
 		}
-		else {
-			return LanguageUtil.format(
-				resourceBundle, "x-mentioned-you-in-a-x",
-				new String[] {
-					HtmlUtil.escape(
-						_portal.getUserName(
-							jsonObject.getLong("userId"), StringPool.BLANK)),
-					StringUtil.toLowerCase(HtmlUtil.escape(typeName))
-				},
-				false);
-		}
+
+		return LanguageUtil.format(
+			resourceBundle, "x-mentioned-you-in-a-x",
+			new String[] {
+				HtmlUtil.escape(
+					_portal.getUserName(
+						jsonObject.getLong("userId"), StringPool.BLANK)),
+				StringUtil.toLowerCase(HtmlUtil.escape(typeName))
+			},
+			false);
 	}
 
 	@Reference(unbind = "-")

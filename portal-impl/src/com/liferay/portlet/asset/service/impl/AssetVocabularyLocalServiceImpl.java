@@ -463,9 +463,8 @@ public class AssetVocabularyLocalServiceImpl
 		if (assetVocabularyPersistence.countByG_N(groupId, name) == 0) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	protected BaseModelSearchResult<AssetVocabulary> searchVocabularies(

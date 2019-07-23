@@ -83,9 +83,8 @@ public class WorkflowPermissionImpl implements WorkflowPermission {
 			if (!hasPermission && actionId.equals(ActionKeys.VIEW)) {
 				return null;
 			}
-			else {
-				return hasPermission;
-			}
+
+			return hasPermission;
 		}
 
 		return null;

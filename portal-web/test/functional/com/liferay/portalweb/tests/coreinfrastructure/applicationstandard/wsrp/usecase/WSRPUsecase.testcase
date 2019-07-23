@@ -1,5 +1,6 @@
 @component-name = "portal-legacy"
 definition {
+
 	property dummy.socket.proxy.disabled = "true";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -8,6 +9,10 @@ definition {
 
 	setUp {
 		TestCase.setUpPortalInstance();
+
+		Portlet.shutdownServer();
+
+		Portlet.startServer(deleteLiferayHome = "false");
 
 		User.firstLoginPG();
 	}
@@ -30,52 +35,44 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "WSRP Admin"
-		);
+			portlet = "WSRP Admin");
 
 		WSRP.addProducerCP(
 			portletsAvailableSelect = "Unit Converter",
-			producerName = "Producer Demo"
-		);
+			producerName = "Producer Demo");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "WSRP Admin"
-		);
+			portlet = "WSRP Admin");
 
 		WSRP.addConsumerCP(
 			consumerName = "Consumer Demo",
-			producerName = "Producer Demo"
-		);
+			producerName = "Producer Demo");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "WSRP Admin"
-		);
+			portlet = "WSRP Admin");
 
 		WSRP.addConsumerPortletCP(
 			consumerName = "Consumer Demo",
 			consumerPortletName = "WSRP Unit Converter",
-			consumerPortletType = "Unit Converter"
-		);
+			consumerPortletType = "Unit Converter");
 
 		var key_consumerPortletName = "WSRP Unit Converter";
 
 		AssertTextEquals(
 			locator1 = "WSRPAdminManagePortlets#PORTLET_TABLE_NAME",
-			value1 = "WSRP Unit Converter"
-		);
+			value1 = "WSRP Unit Converter");
 
 		AssertTextEquals(
 			locator1 = "WSRPAdminManagePortlets#PORTLET_TABLE_REMOTE_PORTLET",
-			value1 = "Unit Converter"
-		);
+			value1 = "Unit Converter");
 
 		AssertElementPresent(locator1 = "WSRPAdminManagePortlets#PORTLET_TABLE_DELETE");
 
@@ -90,7 +87,7 @@ definition {
 			initialValue = "12",
 			targetUnit = "Foot",
 			targetValue = "1.0",
-			unitType = "Length"
-		);
+			unitType = "Length");
 	}
+
 }

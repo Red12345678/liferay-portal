@@ -413,9 +413,8 @@ public class SubscriptionLocalServiceImpl
 		if (subscription != null) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -441,9 +440,8 @@ public class SubscriptionLocalServiceImpl
 		if (count > 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

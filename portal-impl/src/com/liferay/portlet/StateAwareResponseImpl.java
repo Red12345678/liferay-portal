@@ -58,9 +58,8 @@ public abstract class StateAwareResponseImpl
 
 			return portletApp.getDefaultNamespace();
 		}
-		else {
-			return XMLConstants.NULL_NS_URI;
-		}
+
+		return XMLConstants.NULL_NS_URI;
 	}
 
 	public List<Event> getEvents() {
@@ -220,29 +219,28 @@ public abstract class StateAwareResponseImpl
 		if (params == null) {
 			throw new IllegalArgumentException();
 		}
-		else {
-			Map<String, String[]> newParams = new LinkedHashMap<>();
 
-			for (Map.Entry<String, String[]> entry : params.entrySet()) {
-				String key = entry.getKey();
-				String[] value = entry.getValue();
+		Map<String, String[]> newParams = new LinkedHashMap<>();
 
-				if (key == null) {
-					throw new IllegalArgumentException();
-				}
-				else if (value == null) {
-					throw new IllegalArgumentException();
-				}
+		for (Map.Entry<String, String[]> entry : params.entrySet()) {
+			String key = entry.getKey();
+			String[] value = entry.getValue();
 
-				if (setPublicRenderParameter(key, value)) {
-					continue;
-				}
-
-				newParams.put(key, value);
+			if (key == null) {
+				throw new IllegalArgumentException();
+			}
+			else if (value == null) {
+				throw new IllegalArgumentException();
 			}
 
-			_params = newParams;
+			if (setPublicRenderParameter(key, value)) {
+				continue;
+			}
+
+			newParams.put(key, value);
 		}
+
+		_params = newParams;
 
 		_calledSetRenderParameter = true;
 	}

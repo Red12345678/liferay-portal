@@ -60,9 +60,8 @@ public class BundleUtil {
 		if (Validator.isNotNull(fragmentHost)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

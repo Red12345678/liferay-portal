@@ -1,4 +1,5 @@
 definition {
+
 	macro getFileContent {
 		var baseDir = PropsUtil.get("test.base.dir.name");
 		var dependenciesDir = PropsUtil.get("test.dependencies.dir.name");
@@ -43,4 +44,5 @@ definition {
 			SignIn.signInPortalInstanceSetUp();
 		}
 	}
+
 }

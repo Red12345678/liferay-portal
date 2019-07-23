@@ -298,9 +298,8 @@ public class DocumentConversionUtil {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	private void _populateConversionsMap(String documentFamily) {

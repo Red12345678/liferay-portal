@@ -49,38 +49,7 @@ out.println(PortalUtil.escapeRedirect("/"));
 		);
 	}
 
-	@priority = "5"
-	test NoGuestRoleFromWCDArticleHistoryURL {
-		property portal.acceptance = "true";
-		var portalURL = PropsUtil.get("portal.url");
-		var url = "${portalURL}/web/guest/home?&amp;p_p_id=com_liferay_journal_web_portlet_JournalPortlet&amp;p_p_lifecycle=0&amp;p_p_state=maximized&amp;p_p_mode=view&amp;_com_liferay_journal_web_portlet_JournalPortlet_struts_action=%2Fjournal%2Fview_article_history&amp;_com_liferay_journal_web_portlet_JournalPortlet_groupId=10180&amp;_com_liferay_journal_web_portlet_JournalPortlet_articleId=";
-
-		Page.add(pageName = "Web Content Display Page");
-
-		Portlet.addPG(portletName = "Web Content Display");
-
-		WebContent.addPGViaWCD(
-			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC WebContent Title"
-		);
-
-		WebContent.viewPGViaWCD(webContentContent = "WC WebContent Content");
-
-		WebContentNavigator.gotoEditPGViaWCD();
-
-		var articleID = selenium.getText("WCEditWebContent#ARTICLE_ID");
-
-		User.logoutPG();
-
-		Navigator.openSpecificURL(url = "${url}${articleID}");
-
-		AssertTextEquals(
-			locator1 = "Message#ERROR",
-			value1 = "You do not have the roles required to access this portlet."
-		);
-	}
-
-	@description = "This is a use case for LPS-68070."
+	@description = "This is a use case for LPS-87768."
 	@priority = "5"
 	test NoPermissionFromUnauthorizedURLAsPowerUser {
 		property test.name.skip.portal.instance = "SecurityTestingUsecase#NoPermissionFromUnauthorizedURLAsPowerUser";
@@ -126,28 +95,19 @@ out.println(PortalUtil.escapeRedirect("/"));
 
 		WaitForSPARefresh();
 
-		var groupId = Page.getGroupIdFromHtmlSource();
-
+		var authToken = Page.getAuthTokenFromHtmlSource();
+		var plid = Page.getPlidFromHtmlSource();
 		var portalURL = PropsUtil.get("portal.url");
 
-		Api.gotoPAuthURL(
-			url = "${portalURL}/api/jsonws/layout/update-layout/group-id/${groupId}/private-layout/false/layout-id/1/type-settings/layout-template-id%3D2_columns_ii%0Acolumn-1%3Dcom_liferay_marketplace_app_manager_web_portlet_MarketplaceAppManagerPortlet?p_auth="
+		Navigator.openSpecificURL(
+			url = '''${portalURL}/c/portal/update_layout?cmd=add&p_p_col_id=column-1&p_p_col_pos=0&p_p_id=com_liferay_marketplace_store_web_portlet_MarketplacePurchasedPortlet&p_auth=${authToken}&p_l_id=${plid}'''
 		);
 
 		UserBar.gotoProfile();
 
 		AssertElementNotPresent(
-			locator1 = "ListGroupItem#ITEM_NAME",
-			key_itemName = "Liferay Marketplace"
-		);
-
-		Portlet.viewBody(
-			portletBody = "Portlet is temporarily unavailable.",
-			portletName = "App Manager"
-		);
-
-		AssertConsoleTextPresent(
-			value1 = "must be the company administrator to perform the action"
+			locator1 = "Portlet#BODY",
+			key_portletName = "Purchased"
 		);
 	}
 

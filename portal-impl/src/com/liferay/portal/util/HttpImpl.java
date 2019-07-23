@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.kernel.util.InetAddressUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -498,10 +499,8 @@ public class HttpImpl implements Http {
 				completeURL, sessionId);
 		}
 
-		if (_log.isWarnEnabled()) {
-			if (completeURL.contains("?&")) {
-				_log.warn("Invalid url " + completeURL);
-			}
+		if (_log.isWarnEnabled() && completeURL.contains("?&")) {
+			_log.warn("Invalid url " + completeURL);
 		}
 
 		return completeURL;
@@ -559,7 +558,8 @@ public class HttpImpl implements Http {
 		try {
 			URL urlObj = new URL(url);
 
-			InetAddress address = InetAddress.getByName(urlObj.getHost());
+			InetAddress address = InetAddressUtil.getInetAddressByName(
+				urlObj.getHost());
 
 			return address.getHostAddress();
 		}
@@ -1909,9 +1909,8 @@ public class HttpImpl implements Http {
 							cookies, auth, body, fileParts, parts, response,
 							followRedirects, timeout);
 					}
-					else {
-						response.setRedirect(locationHeaderValue);
-					}
+
+					response.setRedirect(locationHeaderValue);
 				}
 			}
 

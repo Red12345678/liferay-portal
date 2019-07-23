@@ -963,10 +963,9 @@ public class JournalServiceVerifyProcess extends VerifyLayout {
 
 				return;
 			}
-			else {
-				if (_log.isInfoEnabled()) {
-					_log.info("Fix oracle new line");
-				}
+
+			if (_log.isInfoEnabled()) {
+				_log.info("Fix oracle new line");
 			}
 		}
 	}

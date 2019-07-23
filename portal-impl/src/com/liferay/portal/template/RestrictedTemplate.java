@@ -26,8 +26,10 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author Tina Tian
+ * @author     Tina Tian
+ * @deprecated As of Mueller (7.2.x), with no direct replacement
  */
+@Deprecated
 public class RestrictedTemplate implements Template {
 
 	public RestrictedTemplate(

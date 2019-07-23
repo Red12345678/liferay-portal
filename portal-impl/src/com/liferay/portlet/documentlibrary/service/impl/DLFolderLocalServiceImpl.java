@@ -402,10 +402,9 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 		if (includeMountfolders) {
 			return dlFolderPersistence.findByG_P(groupId, parentFolderId);
 		}
-		else {
-			return dlFolderPersistence.findByG_M_P_H(
-				groupId, false, parentFolderId, false);
-		}
+
+		return dlFolderPersistence.findByG_M_P_H(
+			groupId, false, parentFolderId, false);
 	}
 
 	@Override
@@ -417,10 +416,9 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 			return dlFolderPersistence.findByG_P(
 				groupId, parentFolderId, start, end, obc);
 		}
-		else {
-			return dlFolderPersistence.findByG_M_P_H(
-				groupId, false, parentFolderId, false, start, end, obc);
-		}
+
+		return dlFolderPersistence.findByG_M_P_H(
+			groupId, false, parentFolderId, false, start, end, obc);
 	}
 
 	@Override
@@ -433,10 +431,9 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 			return dlFolderPersistence.findByG_P_H_S(
 				groupId, parentFolderId, false, status, start, end, obc);
 		}
-		else {
-			return dlFolderPersistence.findByG_M_P_H_S(
-				groupId, false, parentFolderId, false, status, start, end, obc);
-		}
+
+		return dlFolderPersistence.findByG_M_P_H_S(
+			groupId, false, parentFolderId, false, status, start, end, obc);
 	}
 
 	@Override
@@ -477,10 +474,9 @@ public class DLFolderLocalServiceImpl extends DLFolderLocalServiceBaseImpl {
 		if (includeMountfolders) {
 			return dlFolderPersistence.countByG_P(groupId, parentFolderId);
 		}
-		else {
-			return dlFolderPersistence.countByG_M_P_H(
-				groupId, false, parentFolderId, false);
-		}
+
+		return dlFolderPersistence.countByG_M_P_H(
+			groupId, false, parentFolderId, false);
 	}
 
 	@Override

@@ -218,9 +218,8 @@ public class CentralizedThreadLocal<T> extends ThreadLocal<T> {
 		if (_shortLived) {
 			return _shortLivedThreadLocals.get();
 		}
-		else {
-			return _longLivedThreadLocals.get();
-		}
+
+		return _longLivedThreadLocals.get();
 	}
 
 	private static final int _HASH_INCREMENT = 0x61c88647;

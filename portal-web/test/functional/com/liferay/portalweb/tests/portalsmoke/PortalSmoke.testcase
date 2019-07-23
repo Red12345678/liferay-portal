@@ -1,5 +1,6 @@
 @component-name = "portal-smoke"
 definition {
+
 	property portal.release = "true";
 	property portal.smoke = "true";
 	property portal.upstream = "true";
@@ -37,16 +38,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Liferay Connected Services"
-		);
+			portlet = "Liferay Connected Services");
 
-		SiteAdmin.viewPortletTitle(
-			portletTitle = "Liferay Connected Services"
-		);
+		SiteAdmin.viewPortletTitle(portletTitle = "Liferay Connected Services");
 
-		Alert.viewSuccessMessageText(
-			successMessage = "Connected"
-		);
+		Alert.viewSuccessMessageText(successMessage = "Connected");
 
 		AssertElementPresent(locator1 = "LCSClient#PROJECT_HOME_LINK");
 		AssertElementPresent(locator1 = "LCSClient#ENVIRONMENT_LINK");
@@ -68,9 +64,7 @@ definition {
 
 		// Assert mismatching checksum for release bundles
 
-		AssertConsoleTextNotPresent(
-			value1 = "Running validation because of mismatched checksum"
-		);
+		AssertConsoleTextNotPresent(value1 = "Running validation because of mismatched checksum");
 	}
 
 	@priority = "5"
@@ -93,4 +87,5 @@ definition {
 
 		Smoke.runSmoke();
 	}
+
 }

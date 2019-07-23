@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Frontend Taglib Soy
 Bundle-SymbolicName: com.liferay.frontend.taglib.soy
-Bundle-Version: 1.0.15
+Bundle-Version: 1.0.16
 Export-Package: com.liferay.frontend.taglib.soy.servlet.taglib
 Liferay-Releng-Module-Group-Title: Frontend Infrastructure
 Provide-Capability:\

@@ -1,4 +1,5 @@
 definition {
+
 	macro addCP {
 		var key_webContentTitle = "${folderName}";
 
@@ -16,14 +17,11 @@ definition {
 
 		Portlet.changeDisplayStyle(displayStyle = "Descriptive");
 
-		AssertElementPresent.pauseAssertVisible(
-			locator1 = "WC#ENTRY_DESCRIPTIVE_THUMBNAIL"
-		);
+		AssertElementPresent.pauseAssertVisible(locator1 = "WC#ENTRY_DESCRIPTIVE_THUMBNAIL");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "WC#ENTRY_DESCRIPTIVE_TITLE",
-			value1 = "${folderName}"
-		);
+			value1 = "${folderName}");
 	}
 
 	macro addSubfolderCP {
@@ -33,7 +31,9 @@ definition {
 
 		Click(locator1 = "WC#ENTRY_DESCRIPTIVE_TITLE");
 
-		AssertTextEquals(locator1 = "Portlet#HEADER", value1 = "${folderName}");
+		AssertTextEquals(
+			locator1 = "Portlet#HEADER",
+			value1 = "${folderName}");
 
 		LexiconEntry.gotoAddMenuItem(menuItem = "Subfolder");
 
@@ -47,14 +47,11 @@ definition {
 
 		Alert.viewSuccessMessage();
 
-		AssertElementPresent.pauseAssertVisible(
-			locator1 = "WC#ENTRY_DESCRIPTIVE_THUMBNAIL"
-		);
+		AssertElementPresent.pauseAssertVisible(locator1 = "WC#ENTRY_DESCRIPTIVE_THUMBNAIL");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "WC#ENTRY_DESCRIPTIVE_TITLE",
-			value1 = "${subfolderName}"
-		);
+			value1 = "${subfolderName}");
 	}
 
 	macro checkSubfolderPermissions {
@@ -64,7 +61,9 @@ definition {
 
 		Click(locator1 = "WC#ENTRY_DESCRIPTIVE_TITLE");
 
-		AssertTextEquals(locator1 = "Portlet#HEADER", value1 = "${folderName}");
+		AssertTextEquals(
+			locator1 = "Portlet#HEADER",
+			value1 = "${folderName}");
 
 		MouseOver(locator1 = "Button#PLUS");
 
@@ -79,8 +78,7 @@ definition {
 	macro configureWorkflowCP {
 		WebContentFolder.gotoEditCP(
 			folderName = "${folderName}",
-			webContentTitle = "${folderName}"
-		);
+			webContentTitle = "${folderName}");
 
 		if (IsElementNotPresent.isNotVisible(locator1 = "WCEditFolder#WORKFLOW_PARENT_FOLDER_RADIO")) {
 			Click(locator1 = "WCEditFolder#WORKFLOW_STRUCTURE_RESTRICTIONS_TOGGLE");
@@ -94,8 +92,7 @@ definition {
 
 			AssertClick(
 				locator1 = "WCEditFolder#WORKFLOW_SPECIFIC_RESTRICTIONS_CHOOSE_STRUCTURE_BUTTON",
-				value1 = "Choose Structure"
-			);
+				value1 = "Choose Structure");
 
 			SelectFrame(value1 = "relative=top");
 
@@ -105,27 +102,22 @@ definition {
 
 			AssertClickNoError(
 				locator1 = "DDMSelectStructure#DDM_STRUCTURE_TABLE_NAME_LINK",
-				value1 = "${structureName}"
-			);
+				value1 = "${structureName}");
 
-			Confirm.assertConfirmationNoWait(
-				value1 = "Selecting a new structure deletes all unsaved content. Do you want to proceed?"
-			);
+			Confirm.assertConfirmationNoWait(value1 = "Selecting a new structure deletes all unsaved content. Do you want to proceed?");
 
 			SelectFrame(value1 = "relative=top");
 
 			Select(
 				locator1 = "WCEditFolder#WORKFLOW_SPECIFIC_RESTRICTIONS_STRUCTURE_WORKFLOW_SELECT",
-				value1 = "${workflowDefinition}"
-			);
+				value1 = "${workflowDefinition}");
 		}
 		else if ("${workflowRestriction}" == "Default Workflow") {
 			Click(locator1 = "WCEditFolder#WORKFLOW_DEFAULT_WORKFLOW_RADIO");
 
 			Select(
 				locator1 = "WCEditFolder#WORKFLOW_DEFAULT_WORKFLOW_WORKFLOW_SELECT",
-				value1 = "${workflowDefinition}"
-			);
+				value1 = "${workflowDefinition}");
 		}
 
 		PortletEntry.save();
@@ -138,12 +130,15 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "WC#ENTRY_DESCRIPTIVE_TITLE",
-			value1 = "${folderName}"
-		);
+			value1 = "${folderName}");
 
-		AssertClick(locator1 = "WC#ENTRY_DESCRIPTIVE_TITLE", value1 = "${folderName}");
+		AssertClick(
+			locator1 = "WC#ENTRY_DESCRIPTIVE_TITLE",
+			value1 = "${folderName}");
 
-		AssertTextEquals(locator1 = "Portlet#HEADER", value1 = "${folderName}");
+		AssertTextEquals(
+			locator1 = "Portlet#HEADER",
+			value1 = "${folderName}");
 	}
 
 	macro gotoEditCP {
@@ -153,8 +148,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "WC#ENTRY_DESCRIPTIVE_TITLE",
-			value1 = "${webContentTitle}"
-		);
+			value1 = "${webContentTitle}");
 
 		Click(locator1 = "WC#ENTRY_DESCRIPTIVE_MENULIST_ICON");
 
@@ -168,8 +162,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "WC#ENTRY_DESCRIPTIVE_TITLE",
-			value1 = "${folderName}"
-		);
+			value1 = "${folderName}");
 
 		Click(locator1 = "WC#ENTRY_DESCRIPTIVE_MENULIST_ICON");
 
@@ -177,4 +170,5 @@ definition {
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
 	}
+
 }

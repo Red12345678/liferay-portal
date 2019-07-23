@@ -149,7 +149,13 @@ public class FieldConstants {
 			return GetterUtil.getFloat(value);
 		}
 		else if (type.equals(INTEGER)) {
-			return GetterUtil.getInteger(value);
+			int integerValue = GetterUtil.getInteger(value);
+
+			if (integerValue == 0) {
+				return GetterUtil.getLong(value);
+			}
+
+			return integerValue;
 		}
 		else if (type.equals(LONG)) {
 			return GetterUtil.getLong(value);

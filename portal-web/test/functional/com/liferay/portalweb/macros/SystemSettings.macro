@@ -1,4 +1,5 @@
 definition {
+
 	macro editConfiguration {
 		var key_rowEntry = "${configurationName}";
 
@@ -19,24 +20,25 @@ definition {
 	macro editSecurityCredential {
 		Type(
 			locator1 = "SystemSettings#SECURITY_CREDENTIAL_FIELD",
-			value1 = "${securityCredential}"
-		);
+			value1 = "${securityCredential}");
 
 		var key_fieldName = "securityPrincipal";
 
-		Type(locator1 = "FormFields#TEXT_MULTILINE_FIELD", value1 = "test");
+		Type(
+			locator1 = "FormFields#TEXT_MULTILINE_FIELD",
+			value1 = "test");
 
 		AssertElementPresent(locator1 = "SystemSettings#SECURITY_CREDENTIAL_FIELD");
 
-		SikuliAssertElementPresent(
-			locator1 = "SystemSettings#SECURITY_CREDENTIAL_HIDDEN_IMAGE"
-		);
+		SikuliAssertElementPresent(locator1 = "SystemSettings#SECURITY_CREDENTIAL_HIDDEN_IMAGE");
 	}
 
 	macro editTextAreaSetting {
 		var key_fieldName = "${settingName}";
 
-		Type(locator1 = "DDMField#TEXT_BOX", value1 = "${settingValue}");
+		Type(
+			locator1 = "DDMField#TEXT_BOX",
+			value1 = "${settingValue}");
 	}
 
 	macro enableSetting {
@@ -52,8 +54,7 @@ definition {
 
 		AssertClick(
 			locator1 = "SystemSettings#MENUBAR_CATEGORY",
-			value1 = "${category}"
-		);
+			value1 = "${category}");
 	}
 
 	macro resetConfiguration {
@@ -93,8 +94,7 @@ definition {
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "${configurationName}"
-		);
+			rowEntry = "${configurationName}");
 
 		if ("${configurationName}" == "LDAP Auth") {
 			if ("${enableLDAP}" == "true") {
@@ -105,4 +105,5 @@ definition {
 			}
 		}
 	}
+
 }

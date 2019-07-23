@@ -85,7 +85,7 @@ public class DeleteWorkflowDefinitionFileMVCActionCommand
 			deleteTempFileEntry(actionRequest, actionResponse);
 		}
 		catch (Exception e) {
-			_log.error(e);
+			_log.error(e, e);
 		}
 	}
 

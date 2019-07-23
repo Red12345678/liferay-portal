@@ -320,9 +320,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 			return (Date)message.get(SchedulerEngine.END_TIME);
 		}
-		else {
-			return jobState.getTriggerDate(SchedulerEngine.END_TIME);
-		}
+
+		return jobState.getTriggerDate(SchedulerEngine.END_TIME);
 	}
 
 	@Override
@@ -353,9 +352,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 			return (Date)message.get(SchedulerEngine.FINAL_FIRE_TIME);
 		}
-		else {
-			return jobState.getTriggerDate(SchedulerEngine.FINAL_FIRE_TIME);
-		}
+
+		return jobState.getTriggerDate(SchedulerEngine.FINAL_FIRE_TIME);
 	}
 
 	@Override
@@ -436,9 +434,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 			return (Date)message.get(SchedulerEngine.NEXT_FIRE_TIME);
 		}
-		else {
-			return jobState.getTriggerDate(SchedulerEngine.NEXT_FIRE_TIME);
-		}
+
+		return jobState.getTriggerDate(SchedulerEngine.NEXT_FIRE_TIME);
 	}
 
 	@Override
@@ -469,9 +466,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 			return (Date)message.get(SchedulerEngine.PREVIOUS_FIRE_TIME);
 		}
-		else {
-			return jobState.getTriggerDate(SchedulerEngine.PREVIOUS_FIRE_TIME);
-		}
+
+		return jobState.getTriggerDate(SchedulerEngine.PREVIOUS_FIRE_TIME);
 	}
 
 	@Override
@@ -533,9 +529,8 @@ public class SchedulerEngineHelperImpl implements SchedulerEngineHelper {
 
 			return (Date)message.get(SchedulerEngine.START_TIME);
 		}
-		else {
-			return jobState.getTriggerDate(SchedulerEngine.START_TIME);
-		}
+
+		return jobState.getTriggerDate(SchedulerEngine.START_TIME);
 	}
 
 	@Override

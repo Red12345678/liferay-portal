@@ -31,6 +31,9 @@ import com.liferay.shopping.model.ShoppingOrderItemModel;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.Collections;
@@ -217,6 +220,32 @@ public class ShoppingOrderItemModelImpl
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, ShoppingOrderItem>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			ShoppingOrderItem.class.getClassLoader(), ShoppingOrderItem.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<ShoppingOrderItem> constructor =
+				(Constructor<ShoppingOrderItem>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
 	}
 
 	private static final Map<String, Function<ShoppingOrderItem, Object>>
@@ -653,8 +682,12 @@ public class ShoppingOrderItemModelImpl
 	@Override
 	public ShoppingOrderItem toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (ShoppingOrderItem)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, ShoppingOrderItem>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -881,11 +914,12 @@ public class ShoppingOrderItemModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		ShoppingOrderItem.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		ShoppingOrderItem.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, ShoppingOrderItem>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private long _orderItemId;
 	private long _companyId;

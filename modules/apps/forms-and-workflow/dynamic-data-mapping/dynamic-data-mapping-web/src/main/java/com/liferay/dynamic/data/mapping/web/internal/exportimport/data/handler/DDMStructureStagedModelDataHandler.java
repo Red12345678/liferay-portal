@@ -31,6 +31,7 @@ import com.liferay.dynamic.data.mapping.service.DDMDataProviderInstanceLinkLocal
 import com.liferay.dynamic.data.mapping.service.DDMDataProviderInstanceLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLayoutLocalService;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLocalService;
+import com.liferay.dynamic.data.mapping.service.DDMStructureVersionLocalService;
 import com.liferay.dynamic.data.mapping.service.permission.DDMStructurePermission;
 import com.liferay.exportimport.kernel.lar.ExportImportPathUtil;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
@@ -147,13 +148,9 @@ public class DDMStructureStagedModelDataHandler
 			return referenceAttributes;
 		}
 
-		boolean preloaded = false;
-
-		if (defaultUserId == structure.getUserId()) {
-			preloaded = true;
-		}
-
-		referenceAttributes.put("preloaded", String.valueOf(preloaded));
+		referenceAttributes.put(
+			"preloaded",
+			String.valueOf(isPreloadedStructure(defaultUserId, structure)));
 
 		return referenceAttributes;
 	}
@@ -219,7 +216,7 @@ public class DDMStructureStagedModelDataHandler
 		long defaultUserId = _userLocalService.getDefaultUserId(
 			structure.getCompanyId());
 
-		if (defaultUserId == structure.getUserId()) {
+		if (isPreloadedStructure(defaultUserId, structure)) {
 			structureElement.addAttribute("preloaded", "true");
 		}
 
@@ -332,10 +329,19 @@ public class DDMStructureStagedModelDataHandler
 
 		long groupId = portletDataContext.getScopeGroupId();
 
-		long structureGroupId = structure.getGroupId();
+		if (structure.getGroupId() ==
+				portletDataContext.getSourceCompanyGroupId()) {
 
-		if (structureGroupId == portletDataContext.getSourceCompanyGroupId()) {
-			groupId = portletDataContext.getCompanyGroupId();
+			Map<Long, Long> groupIds =
+				(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
+					Group.class);
+
+			Long companyGroupId = groupIds.get(
+				portletDataContext.getCompanyGroupId());
+
+			if ((companyGroupId == null) || (groupId != companyGroupId)) {
+				groupId = portletDataContext.getCompanyGroupId();
+			}
 		}
 
 		if (portletDataContext.isDataStrategyMirror()) {
@@ -666,6 +672,34 @@ public class DDMStructureStagedModelDataHandler
 		return false;
 	}
 
+	protected boolean isPreloadedStructure(
+		long defaultUserId, DDMStructure structure) {
+
+		if (defaultUserId == structure.getUserId()) {
+			return true;
+		}
+
+		DDMStructureVersion ddmStructureVersion = null;
+
+		try {
+			ddmStructureVersion =
+				_ddmStructureVersionLocalService.getStructureVersion(
+					structure.getStructureId(),
+					DDMStructureConstants.VERSION_DEFAULT);
+		}
+		catch (PortalException pe) {
+			_log.error(pe, pe);
+		}
+
+		if ((ddmStructureVersion != null) &&
+			(defaultUserId == ddmStructureVersion.getUserId())) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	@Reference(unbind = "-")
 	protected void setDDMFormJSONDeserializer(
 		DDMFormJSONDeserializer ddmFormJSONDeserializer) {
@@ -695,6 +729,13 @@ public class DDMStructureStagedModelDataHandler
 	}
 
 	@Reference(unbind = "-")
+	protected void setDDMStructureVersionLocalService(
+		DDMStructureVersionLocalService ddmStructureVersionLocalService) {
+
+		_ddmStructureVersionLocalService = ddmStructureVersionLocalService;
+	}
+
+	@Reference(unbind = "-")
 	protected void setUserLocalService(UserLocalService userLocalService) {
 		_userLocalService = userLocalService;
 	}
@@ -720,6 +761,7 @@ public class DDMStructureStagedModelDataHandler
 	private DDMFormLayoutJSONDeserializer _ddmFormLayoutJSONDeserializer;
 	private DDMStructureLayoutLocalService _ddmStructureLayoutLocalService;
 	private DDMStructureLocalService _ddmStructureLocalService;
+	private DDMStructureVersionLocalService _ddmStructureVersionLocalService;
 
 	@Reference
 	private GroupLocalService _groupLocalService;

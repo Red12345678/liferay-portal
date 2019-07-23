@@ -18,15 +18,13 @@ import com.liferay.petra.log4j.Log4JUtil;
 import com.liferay.portal.kernel.process.ProcessCallable;
 import com.liferay.portal.kernel.process.ProcessChannel;
 import com.liferay.portal.kernel.process.ProcessConfig;
-import com.liferay.portal.kernel.process.ProcessConfig.Builder;
 import com.liferay.portal.kernel.process.ProcessException;
 import com.liferay.portal.kernel.process.local.LocalProcessExecutor;
-import com.liferay.portal.kernel.process.local.LocalProcessLauncher.ProcessContext;
+import com.liferay.portal.kernel.process.local.LocalProcessLauncher;
 import com.liferay.portal.kernel.resiliency.mpi.MPIHelperUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.ci.AutoBalanceTestCase;
 import com.liferay.portal.kernel.test.junit.BridgeJUnitTestRunner;
-import com.liferay.portal.kernel.test.junit.BridgeJUnitTestRunner.BridgeRunListener;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.ReflectionUtil;
@@ -50,7 +48,6 @@ import java.io.Serializable;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.net.Proxy.Type;
 import java.net.ProxySelector;
 import java.net.SocketAddress;
 import java.net.URI;
@@ -114,7 +111,7 @@ public class PACLAggregateTest extends AutoBalanceTestCase {
 	}
 
 	protected ProcessConfig createProcessConfig() {
-		Builder builder = new Builder();
+		ProcessConfig.Builder builder = new ProcessConfig.Builder();
 
 		List<String> arguments = new ArrayList<>();
 
@@ -249,7 +246,7 @@ public class PACLAggregateTest extends AutoBalanceTestCase {
 					uri.getHost() + StringPool.COLON + uri.getPort())) {
 
 				return Collections.singletonList(
-					new Proxy(Type.HTTP, new InetSocketAddress(0)));
+					new Proxy(Proxy.Type.HTTP, new InetSocketAddress(0)));
 			}
 
 			return Collections.singletonList(Proxy.NO_PROXY);
@@ -337,7 +334,7 @@ public class PACLAggregateTest extends AutoBalanceTestCase {
 
 				return BridgeJUnitTestRunner.runBridgeTests(
 					new ProcessBridgeRunListener(PACLAggregateTest.class),
-					_classes.toArray(new Class<?>[_classes.size()]));
+					_classes.toArray(new Class<?>[0]));
 			}
 			catch (IOException ioe) {
 				ioException = ioe;
@@ -413,12 +410,13 @@ public class PACLAggregateTest extends AutoBalanceTestCase {
 
 	}
 
-	private static class ProcessBridgeRunListener extends BridgeRunListener {
+	private static class ProcessBridgeRunListener
+		extends BridgeJUnitTestRunner.BridgeRunListener {
 
 		@Override
 		protected void bridge(final String methodName, final Object argument) {
 			try {
-				ProcessContext.writeProcessCallable(
+				LocalProcessLauncher.ProcessContext.writeProcessCallable(
 					new ProcessCallable<Serializable>() {
 
 						@Override

@@ -1,5 +1,6 @@
 @component-name = "portal-util-misc"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Util";
@@ -32,18 +33,17 @@ definition {
 
 		Type.sendKeysApplicationSearch(
 			locator1 = "NavBar#APPLICATION_SEARCH_FIELD",
-			value1 = "${portletName}"
-		);
+			value1 = "${portletName}");
 
 		var portletLocator = "//span[@data-title=&quot;${portletName}&quot; and contains(@class,&apos;add-content-item&apos;)]";
 
 		AssertClick.pauseMakeVisibleAssertTextEqualsClickAt(
 			locator1 = "${portletLocator}",
-			value1 = "Add"
-		);
+			value1 = "Add");
 
 		Navigator.gotoPage(pageName = "Quick Note Page");
 
 		QuickNote.addPG(noteContent = "Test Note Content");
 	}
+
 }

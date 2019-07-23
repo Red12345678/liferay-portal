@@ -1,17 +1,25 @@
 definition {
+
 	macro addApplication {
-		AssertClick(locator1 = "TestOAuth#OAUTH_ADMIN_ADD", value1 = "Add");
+		AssertClick(
+			locator1 = "TestOAuth#OAUTH_ADMIN_ADD",
+			value1 = "Add");
 
 		Type(
 			locator1 = "TestOAuth#OAUTH_ADMIN_APPLICATION_NAME",
-			value1 = "${applicationName}"
-		);
+			value1 = "${applicationName}");
 
-		Type(locator1 = "TestOAuth#OAUTH_ADMIN_WEBSITE_URL", value1 = "${websiteURL}");
+		Type(
+			locator1 = "TestOAuth#OAUTH_ADMIN_WEBSITE_URL",
+			value1 = "${websiteURL}");
 
-		Type(locator1 = "TestOAuth#OAUTH_ADMIN_CALLBACK_URI", value1 = "${callbackURI}");
+		Type(
+			locator1 = "TestOAuth#OAUTH_ADMIN_CALLBACK_URI",
+			value1 = "${callbackURI}");
 
-		AssertClick(locator1 = "Button#SAVE", value1 = "Save");
+		AssertClick(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
 		Alert.viewSuccessMessage();
 	}
@@ -21,8 +29,7 @@ definition {
 
 		AssertClick(
 			locator1 = "TestOAuth#OAUTH_ADMIN_TABLE_NAME",
-			value1 = "${applicationName}"
-		);
+			value1 = "${applicationName}");
 
 		AssertElementPresent(locator1 = "Icon#ANGLE_LEFT_BACK");
 
@@ -45,29 +52,37 @@ definition {
 	}
 
 	macro testConsumerKeyAndSecret {
-		Type(locator1 = "TestOAuth#TEST_PORTLET_KEY", value1 = "${consumerKey}");
+		Type(
+			locator1 = "TestOAuth#TEST_PORTLET_KEY",
+			value1 = "${consumerKey}");
 
-		Type(locator1 = "TestOAuth#TEST_PORTLET_SECRET", value1 = "${consumerSecret}");
+		Type(
+			locator1 = "TestOAuth#TEST_PORTLET_SECRET",
+			value1 = "${consumerSecret}");
 
-		AssertClick(locator1 = "Button#SAVE", value1 = "Save");
+		AssertClick(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
 		Alert.viewSuccessMessage();
 
 		AssertClick(
 			locator1 = "TestOAuth#TEST_PORTLET_AUTHORIZE_ACCESS",
-			value1 = "Authorize Access"
-		);
+			value1 = "Authorize Access");
 
 		AssertClick(
 			locator1 = "TestOAuth#TEST_PORTLET_GRANT_ACCESS",
-			value1 = "Grant Access"
-		);
+			value1 = "Grant Access");
 
 		Alert.viewSuccessMessage();
 
-		Type(locator1 = "TestOAuth#TEST_PORTLET_WEB_ID", value1 = "${webID}");
+		Type(
+			locator1 = "TestOAuth#TEST_PORTLET_WEB_ID",
+			value1 = "${webID}");
 
-		AssertClick(locator1 = "TestOAuth#TEST_PORTLET_TEST", value1 = "Test");
+		AssertClick(
+			locator1 = "TestOAuth#TEST_PORTLET_TEST",
+			value1 = "Test");
 	}
 
 	macro viewJSON {
@@ -75,12 +90,11 @@ definition {
 
 		AssertTextPresent(
 			locator1 = "TestOAuth#TEST_PORTLET_JSON",
-			value1 = "&quot;mx&quot;:&quot;${domainName}&quot;"
-		);
+			value1 = "&quot;mx&quot;:&quot;${domainName}&quot;");
 
 		AssertTextPresent(
 			locator1 = "TestOAuth#TEST_PORTLET_JSON",
-			value1 = "&quot;webId&quot;:&quot;${domainName}&quot;"
-		);
+			value1 = "&quot;webId&quot;:&quot;${domainName}&quot;");
 	}
+
 }

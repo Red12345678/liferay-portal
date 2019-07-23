@@ -15,7 +15,12 @@
 package com.liferay.bookmarks.web.internal.portlet.action;
 
 import com.liferay.bookmarks.constants.BookmarksPortletKeys;
+import com.liferay.bookmarks.model.BookmarksEntry;
+import com.liferay.bookmarks.service.permission.BookmarksEntryPermissionChecker;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -33,6 +38,15 @@ import org.osgi.service.component.annotations.Component;
 	service = MVCRenderCommand.class
 )
 public class EditEntryMVCRenderCommand extends GetEntryMVCRenderCommand {
+
+	@Override
+	protected void checkPermissions(
+			PermissionChecker permissionChecker, BookmarksEntry entry)
+		throws PortalException {
+
+		BookmarksEntryPermissionChecker.check(
+			permissionChecker, entry, ActionKeys.UPDATE);
+	}
 
 	@Override
 	protected String getPath() {

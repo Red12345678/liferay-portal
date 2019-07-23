@@ -1,5 +1,6 @@
 @component-name = "portal-training"
 definition {
+
 	property liferay.training.dependency.jars = "tools/dummy-factory/liferay.dummy.factory-0.17.0.jar";
 	property portal.release = "false";
 	property portal.upstream = "false";
@@ -44,29 +45,25 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "App",
 			panel = "Control Panel",
-			portlet = "Dummy Factory"
-		);
+			portlet = "Dummy Factory");
 
 		DummyFactory.addBulkAssets(
 			baseName = "Blog Title",
 			contents = "Blog contents",
 			dateType = "Blogs",
-			number = "500"
-		);
+			number = "500");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Portlet.changeDisplayStyle(displayStyle = "List");
 
 		AssertTextEquals.assertPartialText(
+			key_entryTitle = "Blog Title",
 			locator1 = "Blogs#ENTRY_TABLE_TITLE",
-			value1 = "Blog Title",
-			key_entryTitle = "Blog Title"
-		);
+			value1 = "Blog Title");
 	}
 
 	@priority = "5"
@@ -81,32 +78,27 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "App",
 			panel = "Control Panel",
-			portlet = "Dummy Factory"
-		);
+			portlet = "Dummy Factory");
 
 		DummyFactory.addBulkAssets(
 			baseName = "Liferay Category",
 			dateType = "Category / Vocabulary",
-			number = "500"
-		);
+			number = "500");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Categories"
-		);
+			portlet = "Categories");
 
 		AssertClick(
+			key_vocabularyName = "Topic",
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "Topic",
-			key_vocabularyName = "Topic"
-		);
+			value1 = "Topic");
 
 		AssertTextEquals.assertPartialText(
+			key_categoryName = "Liferay Category",
 			locator1 = "Categories#VOCABULARY_CATEGORY",
-			value1 = "Liferay Category",
-			key_categoryName = "Liferay Category"
-		);
+			value1 = "Liferay Category");
 	}
 
 	@priority = "5"
@@ -123,27 +115,23 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "App",
 			panel = "Control Panel",
-			portlet = "Dummy Factory"
-		);
+			portlet = "Dummy Factory");
 
 		DummyFactory.addBulkAssets(
 			baseName = "Document",
 			dateType = "Documents",
 			number = "500",
-			siteName = "${siteName}"
-		);
+			siteName = "${siteName}");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		AssertTextEquals.assertPartialText(
+			key_dmDocumentTitle = "Document",
 			locator1 = "DocumentsAndMedia#ICON_DOCUMENT_TITLE",
-			value1 = "Document",
-			key_dmDocumentTitle = "Document"
-		);
+			value1 = "Document");
 	}
 
 	@priority = "5"
@@ -156,38 +144,31 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "App",
 			panel = "Control Panel",
-			portlet = "Dummy Factory"
-		);
+			portlet = "Dummy Factory");
 
 		DummyFactory.addBulkAssets(
 			baseName = "Liferay Organization",
 			dateType = "Organizations",
-			number = "500"
-		);
+			number = "500");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Server Administration"
-		);
+			portlet = "Server Administration");
 
-		ServerAdministration.executeServerResourcesActions(
-			actionsDescription = "Reindex all search indexes."
-		);
+		ServerAdministration.executeServerResourcesActions(actionsDescription = "Reindex all search indexes.");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		UsersAndOrganizationsNavigator.gotoOrganizations();
 
 		AssertTextEquals.assertPartialText(
+			key_orgName = "Liferay Organization",
 			locator1 = "UsersAndOrganizations#ORGANIZATION_TABLE_NAME",
-			value1 = "Liferay Organization",
-			key_orgName = "Liferay Organization"
-		);
+			value1 = "Liferay Organization");
 	}
 
 	@priority = "5"
@@ -204,15 +185,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "App",
 			panel = "Control Panel",
-			portlet = "Dummy Factory"
-		);
+			portlet = "Dummy Factory");
 
 		DummyFactory.addBulkAssets(
 			baseName = "Liferay Page",
 			dateType = "Pages",
 			number = "500",
-			siteName = "${siteName}"
-		);
+			siteName = "${siteName}");
 
 		ProductMenuHelper.expandPanel(panel = "Site Administration");
 
@@ -220,8 +199,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "SitePages#PAGE_TREE_PAGE_LINK_2",
-			value1 = "Liferay Page"
-		);
+			value1 = "Liferay Page");
 	}
 
 	@priority = "5"
@@ -236,26 +214,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "App",
 			panel = "Control Panel",
-			portlet = "Dummy Factory"
-		);
+			portlet = "Dummy Factory");
 
 		DummyFactory.addBulkAssets(
 			baseName = "Liferay Site",
 			dateType = "Sites",
-			number = "500"
-		);
+			number = "500");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		AssertTextEquals.assertPartialText(
+			key_siteName = "Liferay Site",
 			locator1 = "Sites#SITE_TABLE_NAME",
-			value1 = "Liferay Site",
-			key_siteName = "Liferay Site"
-		);
+			value1 = "Liferay Site");
 	}
 
 	@priority = "5"
@@ -272,28 +246,24 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "App",
 			panel = "Control Panel",
-			portlet = "Dummy Factory"
-		);
+			portlet = "Dummy Factory");
 
 		DummyFactory.addBulkAssets(
 			body = "Liferay Message Board",
 			dateType = "Message Board",
 			number = "500",
 			siteName = "${siteName}",
-			subject = "Thread"
-		);
+			subject = "Thread");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Message Boards"
-		);
+			portlet = "Message Boards");
 
 		AssertTextEquals.assertPartialText(
+			key_threadSubject = "Thread",
 			locator1 = "MessageBoards#THREAD_LIST_THREAD",
-			value1 = "Thread",
-			key_threadSubject = "Thread"
-		);
+			value1 = "Thread");
 	}
 
 	@priority = "5"
@@ -308,26 +278,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "App",
 			panel = "Control Panel",
-			portlet = "Dummy Factory"
-		);
+			portlet = "Dummy Factory");
 
 		DummyFactory.addBulkAssets(
 			baseName = "liferaytester",
 			dateType = "Users",
-			number = "500"
-		);
+			number = "500");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		AssertTextEquals.assertPartialText(
+			key_userScreenName = "liferaytester",
 			locator1 = "UsersAndOrganizations#USER_TABLE_SCREEN_NAME_LINK",
-			value1 = "liferaytester",
-			key_userScreenName = "liferaytester"
-		);
+			value1 = "liferaytester");
 	}
 
 	@priority = "5"
@@ -344,29 +310,25 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "App",
 			panel = "Control Panel",
-			portlet = "Dummy Factory"
-		);
+			portlet = "Dummy Factory");
 
 		DummyFactory.addBulkAssets(
 			baseName = "Web Content",
 			dateType = "Web Content Articles",
 			number = "500",
-			siteName = "${siteName}"
-		);
+			siteName = "${siteName}");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		Portlet.changeDisplayStyle(displayStyle = "Descriptive");
 
 		AssertTextEquals.assertPartialText(
+			key_webContentTitle = "Web Content",
 			locator1 = "WC#ENTRY_DESCRIPTIVE_TITLE",
-			value1 = "Web Content",
-			key_webContentTitle = "Web Content"
-		);
+			value1 = "Web Content");
 	}
 
 	@priority = "5"
@@ -383,34 +345,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		ProductMenu.gotoPortlet(
 			category = "App",
 			panel = "Control Panel",
-			portlet = "Dummy Factory"
-		);
+			portlet = "Dummy Factory");
 
 		DummyFactory.addBulkAssets(
 			baseName = "Wiki Node",
 			dateType = "Wiki",
 			number = "500",
-			siteName = "${siteName}"
-		);
+			siteName = "${siteName}");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		Click(locator1 = "Icon#DISPLAY_STYLE_LIST");
 
 		AssertTextEquals.assertPartialText(
+			key_wikiNodeName = "Wiki Node",
 			locator1 = "Wiki#NODE_TABLE_WIKI_NAME",
-			value1 = "Wiki Node",
-			key_wikiNodeName = "Wiki Node"
-		);
+			value1 = "Wiki Node");
 	}
+
 }

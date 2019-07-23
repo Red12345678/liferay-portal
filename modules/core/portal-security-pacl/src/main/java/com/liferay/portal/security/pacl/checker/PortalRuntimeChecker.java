@@ -282,12 +282,11 @@ public class PortalRuntimeChecker extends BaseChecker {
 			return true;
 		}
 
-		if (Validator.isNotNull(property)) {
-			if (getBeanPropertyClassNames.contains(
-					className.concat(StringPool.POUND).concat(property))) {
+		if (Validator.isNotNull(property) &&
+			getBeanPropertyClassNames.contains(
+				className.concat(StringPool.POUND).concat(property))) {
 
-				return true;
-			}
+			return true;
 		}
 
 		return false;
@@ -368,12 +367,11 @@ public class PortalRuntimeChecker extends BaseChecker {
 			return true;
 		}
 
-		if (Validator.isNotNull(property)) {
-			if (setBeanPropertyClassNames.contains(
-					className.concat(StringPool.POUND).concat(property))) {
+		if (Validator.isNotNull(property) &&
+			setBeanPropertyClassNames.contains(
+				className.concat(StringPool.POUND).concat(property))) {
 
-				return true;
-			}
+			return true;
 		}
 
 		return false;

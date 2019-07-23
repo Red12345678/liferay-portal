@@ -327,9 +327,8 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		if (_urlEncoder != null) {
 			return _urlEncoder.encodeURL(response, path);
 		}
-		else {
-			return path;
-		}
+
+		return path;
 	}
 
 	public long getCompanyId() {
@@ -581,7 +580,7 @@ public abstract class PortletResponseImpl implements LiferayPortletResponse {
 		}
 		catch (SystemException se) {
 			if (_log.isWarnEnabled()) {
-				_log.warn(se);
+				_log.warn(se, se);
 			}
 		}
 

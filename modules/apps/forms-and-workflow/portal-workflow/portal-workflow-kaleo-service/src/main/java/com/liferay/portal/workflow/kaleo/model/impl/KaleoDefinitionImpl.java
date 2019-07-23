@@ -40,9 +40,8 @@ public class KaleoDefinitionImpl extends KaleoDefinitionBaseImpl {
 		if (count > 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

@@ -196,7 +196,7 @@ Map<Long, Integer> groupUsersCounts = UserLocalServiceUtil.searchCounts(company.
 						</h6>
 
 						<h6 class="text-default">
-							<strong><liferay-ui:message key="members" /></strong>: <%= String.valueOf(groupUsersCounts.get(group.getGroupId())) %>
+							<strong><liferay-ui:message key="members" /></strong>: <%= GetterUtil.getInteger(groupUsersCounts.get(group.getGroupId())) %>
 						</h6>
 
 						<c:if test='<%= tabs1.equals("my-sites") && PropsValues.LIVE_USERS_ENABLED %>'>
@@ -229,7 +229,7 @@ Map<Long, Integer> groupUsersCounts = UserLocalServiceUtil.searchCounts(company.
 									url="<%= rowURL %>"
 								>
 									<liferay-frontend:vertical-card-footer>
-										<strong><liferay-ui:message key="members" /></strong>: <%= String.valueOf(groupUsersCounts.get(group.getGroupId())) %>
+										<strong><liferay-ui:message key="members" /></strong>: <%= GetterUtil.getInteger(groupUsersCounts.get(group.getGroupId())) %>
 									</liferay-frontend:vertical-card-footer>
 								</liferay-frontend:vertical-card>
 							</c:when>
@@ -244,7 +244,7 @@ Map<Long, Integer> groupUsersCounts = UserLocalServiceUtil.searchCounts(company.
 									url="<%= rowURL %>"
 								>
 									<liferay-frontend:vertical-card-footer>
-										<strong><liferay-ui:message key="members" /></strong>: <%= String.valueOf(groupUsersCounts.get(group.getGroupId())) %>
+										<strong><liferay-ui:message key="members" /></strong>: <%= GetterUtil.getInteger(groupUsersCounts.get(group.getGroupId())) %>
 									</liferay-frontend:vertical-card-footer>
 								</liferay-frontend:icon-vertical-card>
 							</c:otherwise>
@@ -277,7 +277,7 @@ Map<Long, Integer> groupUsersCounts = UserLocalServiceUtil.searchCounts(company.
 
 					<liferay-ui:search-container-column-text
 						name="members"
-						value="<%= String.valueOf(groupUsersCounts.get(group.getGroupId())) %>"
+						value="<%= String.valueOf(GetterUtil.getInteger(groupUsersCounts.get(group.getGroupId()))) %>"
 					/>
 
 					<c:if test='<%= tabs1.equals("my-sites") && PropsValues.LIVE_USERS_ENABLED %>'>

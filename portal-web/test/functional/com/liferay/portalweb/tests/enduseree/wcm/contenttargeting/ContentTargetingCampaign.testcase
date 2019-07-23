@@ -1,5 +1,6 @@
 @component-name = "extra-apps-content-targeting"
 definition {
+
 	property custom.properties = "layout.parallel.render.enable=false";
 	property extraapps.plugins.includes = "content-targeting";
 	property ignore.errors = "IX_DC6100CC";
@@ -20,18 +21,18 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Test Page Name", siteName = "Site Name");
+		Page.add(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 	}
 
 	tearDown {
@@ -43,8 +44,7 @@ definition {
 		else {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "test@liferay.com",
-				userLoginFullName = "Test Test"
-			);
+				userLoginFullName = "Test Test");
 
 			Site.tearDownCP();
 		}
@@ -55,28 +55,25 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingCampaign#AddBlankCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.addCP(
 			campaignDescription = "Campaign Description",
@@ -86,25 +83,22 @@ definition {
 			campaignPriorityField = "3",
 			campaignStartDate = "1/1/2015",
 			campaignStartTime = "12:00 AM",
-			userSegmentSelect = "User Segment Name"
-		);
+			userSegmentSelect = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.viewCampaignCP(
 			campaignDescription = "Campaign Description",
 			campaignName = "Campaign Name",
 			campaignPriority = "3",
-			campaignStatus = "Started"
-		);
+			campaignStatus = "Started");
 	}
 
 	@priority = "5"
@@ -112,42 +106,37 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingCampaign#AddCampaignContentCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Document_1.jpg",
-			dmDocumentTitle = "DM Document Title"
-		);
+			dmDocumentTitle = "DM Document Title");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.addCP(
 			campaignDescription = "Campaign Description",
@@ -157,54 +146,47 @@ definition {
 			campaignPriorityField = "3",
 			campaignStartDate = "1/1/2015",
 			campaignStartTime = "12:00 AM",
-			userSegmentSelect = "User Segment Name"
-		);
+			userSegmentSelect = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoAddReport(campaignName = "Campaign Name");
 
 		ContentTargetingCampaign.addReportName(
 			reportDescription = "Content Report Description",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.addTrackingActionContentCP(
 			contentMetricName = "Content Metric Name",
 			contentTitle = "DM Document Title",
 			contentTrackingActionSelect = "View",
-			menulistContent = "Basic Document"
-		);
+			menulistContent = "Basic Document");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoEditReport(
 			campaignName = "Campaign Name",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.viewTrackingActionsCP(
 			campaignName = "Campaign Name",
 			contentMetricName = "Content Metric Name",
 			contentTitle = "DM Document Title",
-			viewTrackingActionsList = "Content"
-		);
+			viewTrackingActionsList = "Content");
 	}
 
 	@priority = "5"
@@ -212,28 +194,25 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingCampaign#AddCampaignCustomFormCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.addCP(
 			campaignDescription = "Campaign Description",
@@ -243,54 +222,47 @@ definition {
 			campaignPriorityField = "3",
 			campaignStartDate = "1/1/2015",
 			campaignStartTime = "12:00 AM",
-			userSegmentSelect = "User Segment Name"
-		);
+			userSegmentSelect = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoAddReport(campaignName = "Campaign Name");
 
 		ContentTargetingCampaign.addReportName(
 			reportDescription = "Content Report Description",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.addTrackingActionCustomFormCP(
 			formAlias = "Form Alias",
 			formId = "Form id",
-			formTrackingActionSelect = "Submit"
-		);
+			formTrackingActionSelect = "Submit");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoEditReport(
 			campaignName = "Campaign Name",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.viewTrackingActionsCP(
 			campaignName = "Campaign Name",
 			formAlias = "Form Alias",
 			formId = "Form id",
 			formTrackingActionSelect = "Submit",
-			viewTrackingActionsList = "Custom Form"
-		);
+			viewTrackingActionsList = "Custom Form");
 	}
 
 	@priority = "5"
@@ -298,28 +270,25 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingCampaign#AddCampaignDDLFormCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.addCP(
 			campaignDescription = "Campaign Description",
@@ -329,16 +298,14 @@ definition {
 			campaignPriorityField = "3",
 			campaignStartDate = "1/1/2015",
 			campaignStartTime = "12:00 AM",
-			userSegmentSelect = "User Segment Name"
-		);
+			userSegmentSelect = "User Segment Name");
 
 		PortletEntry.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Forms"
-		);
+			portlet = "Forms");
 
 		LexiconEntry.gotoAdd();
 
@@ -357,42 +324,36 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoAddReport(campaignName = "Campaign Name");
 
 		ContentTargetingCampaign.addReportName(
 			reportDescription = "Content Report Description",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.addTrackingActionDDLFormCP(
 			formAlias = "Form Alias",
 			formName = "Created Form Name",
-			formTrackingActionSelect = "Submit"
-		);
+			formTrackingActionSelect = "Submit");
 
 		PortletEntry.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoEditReport(
 			campaignName = "Campaign Name",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.viewTrackingActionsCP(
 			campaignName = "Campaign Name",
 			formAlias = "Form Alias",
 			formName = "Created Form Name",
 			formTrackingActionSelect = "Submit",
-			viewTrackingActionsList = "Form"
-		);
+			viewTrackingActionsList = "Form");
 	}
 
 	@priority = "5"
@@ -400,28 +361,25 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingCampaign#AddCampaignLinkCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.addCP(
 			campaignDescription = "Campaign Description",
@@ -431,16 +389,14 @@ definition {
 			campaignPriorityField = "3",
 			campaignStartDate = "1/1/2015",
 			campaignStartTime = "12:00 AM",
-			userSegmentSelect = "User Segment Name"
-		);
+			userSegmentSelect = "User Segment Name");
 
 		PortletEntry.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Navigator.gotoNavTab(navTab = "Configuration");
 
@@ -448,49 +404,43 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoAddReport(campaignName = "Campaign Name");
 
 		ContentTargetingCampaign.addReportName(
 			reportDescription = "Content Report Description",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.addTrackingActionLinkCP(
 			linkAlias = "Link Alias",
 			linkId = "Link id",
-			linkTrackingActionSelect = "Click"
-		);
+			linkTrackingActionSelect = "Click");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoEditReport(
 			campaignName = "Campaign Name",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.viewTrackingActionsCP(
 			campaignName = "Campaign Name",
 			linkAlias = "Link Alias",
 			linkId = "Link id",
 			linkTrackingActionSelect = "Click",
-			viewTrackingActionsList = "Link"
-		);
+			viewTrackingActionsList = "Link");
 	}
 
 	@priority = "5"
@@ -498,28 +448,25 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingCampaign#AddCampaignPageCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.addCP(
 			campaignDescription = "Campaign Description",
@@ -529,53 +476,46 @@ definition {
 			campaignPriorityField = "3",
 			campaignStartDate = "1/1/2015",
 			campaignStartTime = "12:00 AM",
-			userSegmentSelect = "User Segment Name"
-		);
+			userSegmentSelect = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoAddReport(campaignName = "Campaign Name");
 
 		ContentTargetingCampaign.addReportName(
 			reportDescription = "Content Report Description",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.addTrackingActionPageCP(
 			pageAlias = "Page Alias",
-			pageFriendlyURL = "/test-page-name"
-		);
+			pageFriendlyURL = "/test-page-name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoEditReport(
 			campaignName = "Campaign Name",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.viewTrackingActionsCP(
 			campaignName = "Campaign Name",
 			pageAlias = "Page Alias",
 			pageFriendlyURL = "/test-page-name",
 			pageTrackingActionSelect = "View",
-			viewTrackingActionsList = "Page"
-		);
+			viewTrackingActionsList = "Page");
 	}
 
 	@priority = "5"
@@ -583,28 +523,25 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingCampaign#AddCampaignYouTubeCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.addCP(
 			campaignDescription = "Campaign Description",
@@ -614,16 +551,14 @@ definition {
 			campaignPriorityField = "3",
 			campaignStartDate = "1/1/2015",
 			campaignStartTime = "12:00 AM",
-			userSegmentSelect = "User Segment Name"
-		);
+			userSegmentSelect = "User Segment Name");
 
 		PortletEntry.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Navigator.gotoNavTab(navTab = "Configuration");
 
@@ -631,49 +566,43 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoAddReport(campaignName = "Campaign Name");
 
 		ContentTargetingCampaign.addReportName(
 			reportDescription = "Content Report Description",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.addTrackingActionYoutubevideosCP(
 			youtubeAlias = "YouTube Alias",
 			youtubeTrackingActionSelect = "Playing",
-			youtubeVideoId = "YouTube id"
-		);
+			youtubeVideoId = "YouTube id");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoEditReport(
 			campaignName = "Campaign Name",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.viewTrackingActionsCP(
 			campaignName = "Campaign Name",
 			viewTrackingActionsList = "YouTube",
 			youtubeAlias = "YouTube Alias",
 			youtubeTrackingActionSelect = "Playing",
-			youtubeVideoId = "YouTube id"
-		);
+			youtubeVideoId = "YouTube id");
 	}
 
 	@priority = "5"
@@ -681,28 +610,25 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingCampaign#DeleteCampaignCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.addCP(
 			campaignDescription = "Campaign Description",
@@ -712,18 +638,16 @@ definition {
 			campaignPriorityField = "3",
 			campaignStartDate = "1/1/2015",
 			campaignStartTime = "12:00 AM",
-			userSegmentSelect = "User Segment Name"
-		);
+			userSegmentSelect = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.deleteCampaignCP(campaignName = "Campaign Name");
 	}
@@ -733,33 +657,29 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingCampaign#EditCampaignCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "New US Description",
-			userSegmentName = "New US Name"
-		);
+			userSegmentName = "New US Name");
 
 		PortletEntry.save();
 
@@ -771,62 +691,54 @@ definition {
 			campaignPriorityField = "3",
 			campaignStartDate = "1/1/2015",
 			campaignStartTime = "12:00 AM",
-			userSegmentSelect = "User Segment Name"
-		);
+			userSegmentSelect = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoAddReport(campaignName = "Campaign Name");
 
 		ContentTargetingCampaign.addReportName(
 			reportDescription = "Content Report Description",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.addTrackingActionCustomFormCP(
 			formAlias = "Form Alias",
 			formId = "Form id",
-			formTrackingActionSelect = "Submit"
-		);
+			formTrackingActionSelect = "Submit");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoEditReport(
 			campaignName = "Campaign Name",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.viewTrackingActionsCP(
 			campaignName = "Campaign Name",
 			formAlias = "Form Alias",
 			formId = "Form id",
 			formTrackingActionSelect = "Submit",
-			viewTrackingActionsList = "Form"
-		);
+			viewTrackingActionsList = "Form");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.editCampaignCP(
 			campaignDescriptionEdit = "Campaign Description Edit",
@@ -837,57 +749,48 @@ definition {
 			campaignPriorityFieldEdit = "5",
 			campaignStartDateEdit = "1/1/2015",
 			campaignStartTimeEdit = "12:00 PM",
-			userSegmentSelectEdit = "New US Name"
-		);
+			userSegmentSelectEdit = "New US Name");
 
 		PortletEntry.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Navigator.gotoNavTab(navTab = "Configuration");
 
-		ContentTargeting.enableAnalytics(
-			analyticsList = "YouTube Videos,Link,Link Clicks"
-		);
+		ContentTargeting.enableAnalytics(analyticsList = "YouTube Videos,Link,Link Clicks");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoEditReport(
 			campaignName = "Campaign Name Edit",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.editCustomReport(
 			trackingActionAddList = "youtube,link",
-			trackingActionDeleteList = "form"
-		);
+			trackingActionDeleteList = "form");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.gotoEditReport(
 			campaignName = "Campaign Name Edit",
-			reportName = "Content Report Name"
-		);
+			reportName = "Content Report Name");
 
 		ContentTargetingCampaign.viewTrackingActionsCP(
 			campaignName = "Campaign Name Edit",
@@ -897,8 +800,7 @@ definition {
 			viewTrackingActionsList = "Link,YouTube",
 			youtubeAlias = "Youtube Alias",
 			youtubeTrackingActionSelect = "Playing",
-			youtubeVideoId = "Youtube id"
-		);
+			youtubeVideoId = "Youtube id");
 	}
 
 	@priority = "3"
@@ -906,28 +808,25 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingCampaign#ViewInactiveCampaignCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.addCP(
 			campaignDescription = "Campaign Description",
@@ -938,24 +837,22 @@ definition {
 			campaignPriorityField = "3",
 			campaignStartDate = "1/1/2015",
 			campaignStartTime = "12:00 AM",
-			userSegmentSelect = "User Segment Name"
-		);
+			userSegmentSelect = "User Segment Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingCampaign.viewCampaignCP(
 			campaignDescription = "Campaign Description",
 			campaignName = "Campaign Name",
 			campaignPriority = "3",
-			campaignStatus = "Inactive"
-		);
+			campaignStatus = "Inactive");
 	}
+
 }

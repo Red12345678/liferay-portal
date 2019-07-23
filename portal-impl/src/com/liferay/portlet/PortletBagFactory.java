@@ -496,11 +496,10 @@ public class PortletBagFactory {
 			return ProxyFactory.newInstance(
 				_classLoader, interfaceClasses, implClassName);
 		}
-		else {
-			Class<?> clazz = _classLoader.loadClass(implClassName);
 
-			return clazz.newInstance();
-		}
+		Class<?> clazz = _classLoader.loadClass(implClassName);
+
+		return clazz.newInstance();
 	}
 
 	protected List<OpenSearch> newOpenSearches(

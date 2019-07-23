@@ -37,6 +37,9 @@ import com.liferay.shopping.model.ShoppingCouponSoap;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.ArrayList;
@@ -294,6 +297,32 @@ public class ShoppingCouponModelImpl
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, ShoppingCoupon>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			ShoppingCoupon.class.getClassLoader(), ShoppingCoupon.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<ShoppingCoupon> constructor =
+				(Constructor<ShoppingCoupon>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
 	}
 
 	private static final Map<String, Function<ShoppingCoupon, Object>>
@@ -1011,8 +1040,12 @@ public class ShoppingCouponModelImpl
 	@Override
 	public ShoppingCoupon toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (ShoppingCoupon)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, ShoppingCoupon>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -1291,11 +1324,12 @@ public class ShoppingCouponModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		ShoppingCoupon.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		ShoppingCoupon.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, ShoppingCoupon>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private long _couponId;
 	private long _groupId;

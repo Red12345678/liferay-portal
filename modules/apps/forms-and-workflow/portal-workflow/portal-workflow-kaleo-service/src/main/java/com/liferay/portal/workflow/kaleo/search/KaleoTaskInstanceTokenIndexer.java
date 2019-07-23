@@ -135,8 +135,6 @@ public class KaleoTaskInstanceTokenIndexer
 		if (appendSearchCriteria(kaleoTaskInstanceTokenQuery)) {
 			appendAssetPrimaryKeyTerm(
 				contextBooleanFilter, kaleoTaskInstanceTokenQuery);
-			appendAssetTypeTerm(
-				contextBooleanFilter, kaleoTaskInstanceTokenQuery);
 			appendDueDateRangeTerm(
 				contextBooleanFilter, kaleoTaskInstanceTokenQuery);
 		}
@@ -158,6 +156,9 @@ public class KaleoTaskInstanceTokenIndexer
 
 		appendAssetTitleTerm(
 			searchQuery, kaleoTaskInstanceTokenQuery.getAssetTitle(),
+			searchContext);
+		appendAssetTypeTerm(
+			searchQuery, kaleoTaskInstanceTokenQuery.getAssetTypes(),
 			searchContext);
 		appendTaskNameTerm(
 			searchQuery, kaleoTaskInstanceTokenQuery.getTaskName(),
@@ -201,19 +202,20 @@ public class KaleoTaskInstanceTokenIndexer
 	}
 
 	protected void appendAssetTypeTerm(
-		BooleanFilter booleanFilter,
-		KaleoTaskInstanceTokenQuery kaleoTaskInstanceTokenQuery) {
-
-		String[] assetTypes = kaleoTaskInstanceTokenQuery.getAssetTypes();
+			BooleanQuery booleanQuery, String[] assetTypes,
+			SearchContext searchContext)
+		throws Exception {
 
 		if (ArrayUtil.isEmpty(assetTypes)) {
 			return;
 		}
 
-		for (String assetType : assetTypes) {
-			booleanFilter.addTerm(
-				KaleoTaskInstanceTokenField.CLASS_NAME, assetType);
-		}
+		searchContext.setAttribute(
+			KaleoTaskInstanceTokenField.CLASS_NAME, assetTypes);
+
+		addSearchTerm(
+			booleanQuery, searchContext, KaleoTaskInstanceTokenField.CLASS_NAME,
+			false);
 	}
 
 	protected void appendAssigneeClassIdsNameTerm(

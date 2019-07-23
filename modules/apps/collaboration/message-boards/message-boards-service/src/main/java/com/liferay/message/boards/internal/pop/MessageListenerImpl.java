@@ -295,9 +295,8 @@ public class MessageListenerImpl implements MessageListener {
 		if (PropsValues.POP_SERVER_SUBDOMAIN.length() > 0) {
 			return recipient;
 		}
-		else {
-			return MBUtil.getParentMessageIdString(message);
-		}
+
+		return MBUtil.getParentMessageIdString(message);
 	}
 
 	protected boolean isAutoReply(Message message) throws MessagingException {

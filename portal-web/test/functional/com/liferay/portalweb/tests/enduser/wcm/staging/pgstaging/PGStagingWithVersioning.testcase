@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Staging";
@@ -12,36 +13,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Staging Test Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 	}
 
 	tearDown {
@@ -59,8 +57,7 @@ definition {
 	test AddEventRepeatDaily {
 		Staging.addEventRepeatDaily(
 			scheduleTitleName = "Event Daily Name",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 	}
 
 	@priority = "5"
@@ -72,28 +69,27 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.viewPageVariationPG(pageVariationName = "Page Variation Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		SitePageNavigator.gotoEditPage(page = "Staging Test Page");
 
 		Page.addFriendlyURLLocalizedPG(
 			friendlyUrlLocalized = "de_DE",
-			localizedFriendlyURL = "/german"
-		);
+			localizedFriendlyURL = "/german");
 
 		Page.hideFromNavigationMenu();
 
 		SitePageNavigator.gotoEditPage(page = "Staging Test Page");
 
-		Page.viewPageFriendlyURLPG(friendlyUrlLocalized = "de_DE", pageName = "german");
+		Page.viewPageFriendlyURLPG(
+			friendlyUrlLocalized = "de_DE",
+			pageName = "german");
 	}
 
 	@priority = "5"
@@ -103,25 +99,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Staging Page Versioning",
 			pageStaging = "true",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Page Versioning",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Hello World");
 
 		Staging.markAsReadyForPublication();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -131,8 +124,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Page Versioning",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.viewSpecificPG(portletName = "Hello World");
 	}
@@ -141,17 +133,13 @@ definition {
 	test AddSitePagesVariation {
 		property portal.acceptance = "true";
 
-		Staging.addSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name"
-		);
+		Staging.addSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
-		Staging.viewSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name"
-		);
+		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name");
 	}
+
 }

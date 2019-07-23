@@ -71,24 +71,30 @@ public class PortalSynchronousLogListener implements SynchronousLogListener {
 			return;
 		}
 
-		Bundle bundle = extendedLogEntry.getBundle();
+		String name = extendedLogEntry.getLoggerName();
+
+		if (name == null) {
+			Bundle bundle = extendedLogEntry.getBundle();
+
+			String symbolicName = bundle.getSymbolicName();
+
+			name = symbolicName.replace('.', '_');
+		}
 
 		_log(
-			bundle.getSymbolicName(), extendedLogEntry.getLevel(),
-			extendedLogEntry.getMessage(), context,
-			extendedLogEntry.getException());
+			name, extendedLogEntry.getLevel(), extendedLogEntry.getMessage(),
+			context, extendedLogEntry.getException());
 	}
 
 	private synchronized void _log(
-		String category, int level, String message, Object context,
+		String name, int level, String message, Object context,
 		Throwable throwable) {
 
 		if (context == null) {
 			context = "";
 		}
 
-		Logger log = LoggerFactory.getLogger(
-			"osgi.logging.".concat(category.replace('.', '_')));
+		Logger log = LoggerFactory.getLogger("osgi.logging.".concat(name));
 
 		if ((level == LogService.LOG_DEBUG) && log.isDebugEnabled()) {
 			log.debug(_FORMAT, message, context, throwable);

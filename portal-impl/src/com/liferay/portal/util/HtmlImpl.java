@@ -842,9 +842,8 @@ public class HtmlImpl implements Html {
 
 			return !Character.isLetter(item);
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected int stripTag(char[] tag, String text, int pos) {
@@ -875,12 +874,10 @@ public class HtmlImpl implements Html {
 
 					break;
 				}
-				else {
 
-					// Skip past "</"
+				// Skip past "</"
 
-					x += 2;
-				}
+				x += 2;
 			}
 			else {
 				break;

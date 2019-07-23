@@ -2,7 +2,7 @@
 
 <suppressions>
 	<checkstyle>
-		<suppress checks="SubnameCheck" files="modules/apps/collaboration/document-library/document-library-repository-cmis-impl/src/main/java/com/liferay/document/library/repository/cmis/internal/CMISRepository\.java" />
+		<suppress checks="CamelCaseNameCheck" files="modules/apps/collaboration/document-library/document-library-repository-cmis-impl/src/main/java/com/liferay/document/library/repository/cmis/internal/CMISRepository\.java" />
 		<suppress checks="TestClassCheck" files="modules/apps/collaboration/document-library/document-library-test/src/testIntegration/java/com/liferay/document/library/webdav/test/BaseWebDAVTestCase\.java" />
 	</checkstyle>
 </suppressions>

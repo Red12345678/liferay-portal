@@ -82,14 +82,13 @@ public class PortalServiceChecker extends BaseChecker {
 
 		String name = portalServicePermission.getShortName();
 
-		if (name.equals(PORTAL_SERVICE_PERMISSION_SERVICE)) {
-			if (!hasService(
-					portalServicePermission.getServletContextName(),
-					portalServicePermission.getClassName(),
-					portalServicePermission.getMethodName(), permission)) {
+		if (name.equals(PORTAL_SERVICE_PERMISSION_SERVICE) &&
+			!hasService(
+				portalServicePermission.getServletContextName(),
+				portalServicePermission.getClassName(),
+				portalServicePermission.getMethodName(), permission)) {
 
-				return false;
-			}
+			return false;
 		}
 
 		return true;

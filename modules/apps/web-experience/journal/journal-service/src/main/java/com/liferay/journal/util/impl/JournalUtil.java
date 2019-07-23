@@ -1248,9 +1248,8 @@ public class JournalUtil {
 		if (nodes.size() == 1) {
 			return (Element)nodes.get(0);
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	private static void _mergeArticleContentDelete(

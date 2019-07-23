@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site and Page Templates";
@@ -28,13 +29,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.addCP(
 			pageTemplateActive = "Yes",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 	}
 
 	@priority = "5"
@@ -45,46 +44,39 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.addCP(
 			pageTemplateActive = "Yes",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Site Page",
 			pageTemplateName = "Page Template Name",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		Page.viewPageTemplate(
 			page = "Site Page",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.gotoPageTemplateViaEdit(pageTemplateName = "Page Template Name");
 
@@ -98,7 +90,9 @@ definition {
 
 		SelectWindow(locator1 = "title=Page Templates - Control Panel - ${siteName}");
 
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		Portlet.viewPG(portletName = "Blogs");
 
@@ -113,8 +107,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.gotoPageTemplateViaEdit(pageTemplateName = "Page Template Name");
 
@@ -126,7 +119,9 @@ definition {
 
 		SelectWindow(locator1 = "title=Page Templates - Control Panel - ${siteName}");
 
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		Portlet.viewNoSpecificPG(portletName = "Web Content Display");
 	}
@@ -138,37 +133,31 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.addCP(
 			pageTemplateActive = "Yes",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.deactivateAndActivate(
 			pageTemplateName = "Page Template Name",
-			pageTemplateStatus = "No"
-		);
+			pageTemplateStatus = "No");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.viewStatus(
 			pageTemplateName = "Page Template Name",
-			pageTemplateStatus = "No"
-		);
+			pageTemplateStatus = "No");
 
-		ProductMenu.gotoSite(site = "${siteName}");
+		Navigator.openSiteURL(siteName = "${siteName}");
 
 		SitePageNavigator.gotoPages(page = "Public Pages");
 
@@ -179,26 +168,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.deactivateAndActivate(
 			pageTemplateName = "Page Template Name",
-			pageTemplateStatus = "Yes"
-		);
+			pageTemplateStatus = "Yes");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.viewStatus(
 			pageTemplateName = "Page Template Name",
-			pageTemplateStatus = "Yes"
-		);
+			pageTemplateStatus = "Yes");
 
-		ProductMenu.gotoSite(site = "${siteName}");
+		Navigator.openSiteURL(siteName = "${siteName}");
 
 		SitePageNavigator.gotoPages(page = "Public Pages");
 
@@ -214,33 +199,28 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.addCP(
 			pageTemplateActive = "Yes",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.deleteCP(pageTemplateName = "Page Template Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
-		PageTemplate.viewDefaultCP(
-			pageTemplateNameList = "Blog,Content Display Page,Wiki"
-		);
+		PageTemplate.viewDefaultCP(pageTemplateNameList = "Blog,Content Display Page,Wiki");
 	}
 
+	@description = "This is a use case for LPS-54099."
 	@priority = "5"
 	test EditPageTemplate {
 		property portal.acceptance = "true";
@@ -248,18 +228,36 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.addCP(
 			pageTemplateActive = "Yes",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
+
+		PageTemplate.gotoPageTemplateViaEdit(pageTemplateName = "Page Template Name");
+
+		var siteName = TestCase.getSiteName(siteName = "${siteName}");
+
+		SelectWindow(locator1 = "title=Page Template Name - ${siteName}");
+
+		Portlet.addPG(portletName = "Calendar");
+
+		CalendarNavigator.gotoConfiguration();
+
+		CalendarConfiguration.selectWeekStartsOn(weekStartDay = "Saturday");
+
+		PortletEntry.save();
+
+		Close.closeWindow(locator1 = "title=Page Template Name - ${siteName}");
+
+		ProductMenu.gotoPortlet(
+			category = "Sites",
+			panel = "Control Panel",
+			portlet = "Page Templates");
 
 		PageTemplate.editCP(
 			pageTemplateActive = "No",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 	}
 
 	@priority = "4"
@@ -267,35 +265,29 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.addCP(
 			pageTemplateActive = "Yes",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.editDescription(
 			pageTemplateDescription = "This is a page template description",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.viewDescription(
 			pageTemplateDescription = "This is a page template description edit",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 	}
 
 	@priority = "5"
@@ -305,13 +297,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		LAR.importPortlet(
 			larFileName = "college-and-department-page-templates.lar",
-			uploadFrom = "dependencies"
-		);
+			uploadFrom = "dependencies");
 
 		PageTemplate.viewCP(pageTemplateName = "College Landing Page");
 
@@ -321,15 +311,13 @@ definition {
 
 		PageTemplate.viewPG(
 			pageTemplateName = "College Landing Page",
-			siteName = "${siteName}"
-		);
+			siteName = "${siteName}");
 
 		Portlet.viewSpecificPG(portletName = "Media Gallery");
 
 		Portlet.viewDuplicatePG(
 			portletName = "Web Content Display",
-			totalPortletCount = "3"
-		);
+			totalPortletCount = "3");
 
 		Portlet.viewSpecificPG(portletName = "Asset Publisher");
 
@@ -342,20 +330,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.viewPG(
 			pageTemplateName = "Department Landing Page",
-			siteName = "${siteName}"
-		);
+			siteName = "${siteName}");
 
 		Portlet.viewSpecificPG(portletName = "Media Gallery");
 
 		Portlet.viewDuplicatePG(
 			portletName = "Web Content Display",
-			totalPortletCount = "2"
-		);
+			totalPortletCount = "2");
 
 		Portlet.viewSpecificPG(portletName = "Members");
 
@@ -367,63 +352,51 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
-		PageTemplate.viewDefaultCP(
-			pageTemplateNameList = "Blog,Content Display Page,Wiki"
-		);
+		PageTemplate.viewDefaultCP(pageTemplateNameList = "Blog,Content Display Page,Wiki");
 
 		ProductMenu.gotoPortlet(
 			category = "My Account",
 			panel = "User",
-			portlet = "Account Settings"
-		);
+			portlet = "Account Settings");
 
 		MyAccount.changeUserLanguage(
 			languageName = "español (España)",
 			saveButton = "Save",
-			successMessage = "Su petición ha terminado con éxito."
-		);
+			successMessage = "Su petición ha terminado con éxito.");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Sitios web",
 			panel = "Control Panel",
-			portlet = "Plantillas de página"
-		);
+			portlet = "Plantillas de página");
 
 		PageTemplate.viewDefaultLocalizedCP(
 			pageTemplateDescriptionList = "edite y vea blogs desde esta página. Explore los temas usando etiquetas y conecte con otros miembros del blog.,edite y explore contenidos web de esta página. Busque contenido adicional, explore contenido relacionado con etiquetas y hojee las categorías del contenido.,Colabora con los miembros a través de la wiki en esta página. Descubre el contenido relacionado a través de etiquetas y navega rápida y fácilmente por las categorías.",
-			pageTemplateNameList = "Blog,Seleccione una página de visualización,Wiki"
-		);
+			pageTemplateNameList = "Blog,Seleccione una página de visualización,Wiki");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Mi cuenta",
 			panel = "User",
-			portlet = "Mi cuenta"
-		);
+			portlet = "Mi cuenta");
 
 		MyAccount.changeUserLanguage(
 			languageName = "English (United States)",
 			saveButton = "Guardar",
-			successMessage = "Your request completed successfully."
-		);
+			successMessage = "Your request completed successfully.");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
-		PageTemplate.viewDefaultCP(
-			pageTemplateNameList = "Blog,Content Display Page,Wiki"
-		);
+		PageTemplate.viewDefaultCP(pageTemplateNameList = "Blog,Content Display Page,Wiki");
 	}
 
 	@priority = "4"
@@ -433,35 +406,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.addCP(
 			pageTemplateActive = "Yes",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 		PageTemplate.viewPG(
 			pageTemplateName = "Page Template Name",
-			siteName = "${siteName}"
-		);
+			siteName = "${siteName}");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.editCP(
 			pageTemplateActive = "Yes",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		PageTemplate.viewPG(
 			pageTemplateName = "Page Template Name Edit",
-			siteName = "${siteName}"
-		);
+			siteName = "${siteName}");
 	}
+
 }

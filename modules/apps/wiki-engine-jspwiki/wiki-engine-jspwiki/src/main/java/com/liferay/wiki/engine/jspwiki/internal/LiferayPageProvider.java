@@ -234,9 +234,8 @@ public class LiferayPageProvider implements WikiPageProvider {
 			if (count > 0) {
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 		catch (Exception e) {
 			_log.error(e, e);

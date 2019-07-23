@@ -16,11 +16,9 @@ package com.liferay.portal.template.soy.internal;
 
 import com.google.common.io.CharStreams;
 import com.google.template.soy.SoyFileSet;
-import com.google.template.soy.SoyFileSet.Builder;
 import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.msgs.SoyMsgBundle;
 import com.google.template.soy.tofu.SoyTofu;
-import com.google.template.soy.tofu.SoyTofu.Renderer;
 import com.google.template.soy.tofu.SoyTofuOptions;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -70,11 +68,12 @@ public class SoyTemplate extends AbstractMultiResourceTemplate {
 		List<TemplateResource> templateResources,
 		TemplateResource errorTemplateResource, Map<String, Object> context,
 		SoyTemplateContextHelper templateContextHelper, boolean privileged,
-		SoyTofuCacheHandler soyTofuCacheHandler) {
+		SoyTofuCacheHandler soyTofuCacheHandler, boolean restricted) {
 
 		super(
 			templateResources, errorTemplateResource, context,
-			templateContextHelper, TemplateConstants.LANG_TYPE_SOY, 0);
+			templateContextHelper, TemplateConstants.LANG_TYPE_SOY, 0,
+			restricted);
 
 		_templateContextHelper = templateContextHelper;
 		_privileged = privileged;
@@ -142,7 +141,7 @@ public class SoyTemplate extends AbstractMultiResourceTemplate {
 				new TemplatePrivilegedExceptionAction(templateResources));
 		}
 		else {
-			Builder builder = SoyFileSet.builder();
+			SoyFileSet.Builder builder = SoyFileSet.builder();
 
 			Set<String> templateIds = new HashSet<>();
 
@@ -268,7 +267,7 @@ public class SoyTemplate extends AbstractMultiResourceTemplate {
 
 			SoyTofu soyTofu = soyTofuCacheBag.getSoyTofu();
 
-			Renderer renderer = soyTofu.newRenderer(namespace);
+			SoyTofu.Renderer renderer = soyTofu.newRenderer(namespace);
 
 			renderer.setData(getSoyMapData());
 
@@ -353,7 +352,7 @@ public class SoyTemplate extends AbstractMultiResourceTemplate {
 
 		@Override
 		public SoyFileSet run() throws Exception {
-			Builder builder = SoyFileSet.builder();
+			SoyFileSet.Builder builder = SoyFileSet.builder();
 
 			for (TemplateResource templateResource : _templateResources) {
 				String templateContent = getTemplateContent(templateResource);

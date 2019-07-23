@@ -264,27 +264,24 @@ public class Version implements Comparable<Version>, Serializable {
 		if (compareTo(getInstance(version)) > 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isPreviousVersionThan(String version) {
 		if (compareTo(getInstance(version)) < 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isSameVersionAs(String version) {
 		if (compareTo(getInstance(version)) == 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override

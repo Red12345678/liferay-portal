@@ -117,7 +117,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -792,7 +791,9 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 		Map<String, String> ddmTemplateScriptMap = getDDMTemplateScriptMap(
 			structureId);
 
-		for (Entry<String, String> entrySet : ddmTemplateScriptMap.entrySet()) {
+		for (Map.Entry<String, String> entrySet :
+				ddmTemplateScriptMap.entrySet()) {
+
 			String[] templateIdAndLanguage = StringUtil.split(
 				entrySet.getKey(), StringPool.DOLLAR);
 

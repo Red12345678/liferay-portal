@@ -689,9 +689,8 @@ public class FileSystemStore extends BaseStore {
 
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 
 		@Override

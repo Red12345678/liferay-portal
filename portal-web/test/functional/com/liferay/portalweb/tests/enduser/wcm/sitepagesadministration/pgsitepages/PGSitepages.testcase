@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Pages Administration";
@@ -33,7 +34,9 @@ definition {
 
 		Navigator.gotoPage(pageName = "Site Page");
 
-		Page.add(pageName = "Site Page Name", pageTemplateName = "Content Display Page");
+		Page.add(
+			pageName = "Site Page Name",
+			pageTemplateName = "Content Display Page");
 
 		Navigator.gotoPage(pageName = "Site Page Name");
 
@@ -81,8 +84,7 @@ definition {
 		Page.editPageMetadata(
 			HTMLTitle = "S.P.A.C.E.Home",
 			metaTagsDescription = "Welcome to S.P.A.C.E., a graduate-level school for those passionate about expanding their horizons through science, research, and space travel",
-			metaTagsKeywords = "space, education, space travel, graduateschool"
-		);
+			metaTagsKeywords = "space, education, space travel, graduateschool");
 
 		Navigator.gotoPage(pageName = "Site Page Edit");
 
@@ -93,8 +95,7 @@ definition {
 		Page.viewPageMetadata(
 			HTMLTitle = "S.P.A.C.E.Home",
 			metaTagsDescription = "Welcome to S.P.A.C.E., a graduate-level school for those passionate about expanding their horizons through science, research, and space travel",
-			metaTagsKeywords = "space, education, space travel, graduateschool"
-		);
+			metaTagsKeywords = "space, education, space travel, graduateschool");
 	}
 
 	@priority = "4"
@@ -111,4 +112,5 @@ definition {
 
 		Page.view(pageName = "Site Page Edit");
 	}
+
 }

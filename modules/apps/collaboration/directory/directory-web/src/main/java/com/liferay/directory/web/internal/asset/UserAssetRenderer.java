@@ -77,9 +77,8 @@ public class UserAssetRenderer extends BaseJSPAssetRenderer<User> {
 
 			return "/asset/abstract.jsp";
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override

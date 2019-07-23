@@ -18,7 +18,12 @@
 
 <%
 User selUser = (User)request.getAttribute("user.selUser");
-List<Group> groups = (List<Group>)request.getAttribute("user.groups");
+
+List<Group> groups = new ArrayList<>();
+
+groups.addAll((List<Group>)request.getAttribute("user.groups"));
+groups.addAll((List<Group>)request.getAttribute("user.inheritedSites"));
+
 List<Organization> organizations = (List<Organization>)request.getAttribute("user.organizations");
 Long[] organizationIds = UsersAdminUtil.getOrganizationIds(organizations);
 List<Role> roles = (List<Role>)request.getAttribute("user.roles");
@@ -59,8 +64,10 @@ String organizationRoleSyncEntitiesEventName = liferayPortletResponse.getNamespa
 <aui:input name="deleteRoleIds" type="hidden" />
 
 <liferay-ui:search-container
+	compactEmptyResultsMessage="<%= true %>"
 	cssClass="lfr-search-container-roles"
 	curParam="regularRolesCur"
+	emptyResultsMessage="this-user-is-not-assigned-any-regular-roles"
 	headerNames="title,null"
 	id="rolesSearchContainer"
 	iteratorURL="<%= currentURLObj %>"
@@ -161,56 +168,54 @@ String organizationRoleSyncEntitiesEventName = liferayPortletResponse.getNamespa
 	</aui:script>
 </c:if>
 
-<h3><liferay-ui:message key="inherited-regular-roles" /></h3>
+<c:if test="<%= !roleGroups.isEmpty() %>">
+	<h3><liferay-ui:message key="inherited-regular-roles" /></h3>
 
-<c:if test="<%= roleGroups.isEmpty() %>">
-	<liferay-ui:message key="this-user-does-not-have-any-inherited-regular-roles" />
-</c:if>
-
-<liferay-ui:search-container
-	cssClass="lfr-search-container-inherited-regular-roles"
-	curParam="inheritedRegularRolesCur"
-	headerNames="title,group"
-	id="inheritedRolesSearchContainer"
-	iteratorURL="<%= currentURLObj %>"
-	total="<%= roleGroups.size() %>"
->
-	<liferay-ui:search-container-results
-		results="<%= roleGroups.subList(searchContainer.getStart(), searchContainer.getResultEnd()) %>"
-	/>
-
-	<liferay-ui:search-container-row
-		className="com.liferay.portal.kernel.model.Group"
-		keyProperty="groupId"
-		modelVar="group"
-		rowIdProperty="friendlyURL"
+	<liferay-ui:search-container
+		cssClass="lfr-search-container-inherited-regular-roles"
+		curParam="inheritedRegularRolesCur"
+		headerNames="title,group"
+		id="inheritedRolesSearchContainer"
+		iteratorURL="<%= currentURLObj %>"
+		total="<%= roleGroups.size() %>"
 	>
-
-		<%
-		List<Role> groupRoles = RoleLocalServiceUtil.getGroupRoles(group.getGroupId());
-		%>
-
-		<liferay-ui:search-container-column-text
-			name="title"
-			value="<%= HtmlUtil.escape(ListUtil.toString(groupRoles, Role.NAME_ACCESSOR)) %>"
-		>
-			<liferay-ui:icon
-				iconCssClass="<%= RolesAdminUtil.getIconCssClass(groupRoles.get(0)) %>"
-				label="<%= true %>"
-				message="<%= HtmlUtil.escape(ListUtil.toString(groupRoles, Role.NAME_ACCESSOR)) %>"
-			/>
-		</liferay-ui:search-container-column-text>
-
-		<liferay-ui:search-container-column-text
-			name="group"
-			value="<%= HtmlUtil.escape(group.getDescriptiveName(locale)) %>"
+		<liferay-ui:search-container-results
+			results="<%= roleGroups.subList(searchContainer.getStart(), searchContainer.getResultEnd()) %>"
 		/>
-	</liferay-ui:search-container-row>
 
-	<liferay-ui:search-iterator
-		markupView="lexicon"
-	/>
-</liferay-ui:search-container>
+		<liferay-ui:search-container-row
+			className="com.liferay.portal.kernel.model.Group"
+			keyProperty="groupId"
+			modelVar="group"
+			rowIdProperty="friendlyURL"
+		>
+
+			<%
+			List<Role> groupRoles = RoleLocalServiceUtil.getGroupRoles(group.getGroupId());
+			%>
+
+			<liferay-ui:search-container-column-text
+				name="title"
+				value="<%= HtmlUtil.escape(ListUtil.toString(groupRoles, Role.NAME_ACCESSOR)) %>"
+			>
+				<liferay-ui:icon
+					iconCssClass="<%= RolesAdminUtil.getIconCssClass(groupRoles.get(0)) %>"
+					label="<%= true %>"
+					message="<%= HtmlUtil.escape(ListUtil.toString(groupRoles, Role.NAME_ACCESSOR)) %>"
+				/>
+			</liferay-ui:search-container-column-text>
+
+			<liferay-ui:search-container-column-text
+				name="group"
+				value="<%= HtmlUtil.escape(group.getDescriptiveName(locale)) %>"
+			/>
+		</liferay-ui:search-container-row>
+
+		<liferay-ui:search-iterator
+			markupView="lexicon"
+		/>
+	</liferay-ui:search-container>
+</c:if>
 
 <h3><liferay-ui:message key="organization-roles" /></h3>
 

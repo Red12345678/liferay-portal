@@ -80,9 +80,8 @@ public class BlogsEntryAssetRenderer
 		if (PropsValues.BLOGS_ENTRY_COMMENTS_ENABLED) {
 			return "edit_entry_discussion";
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	/**
@@ -106,9 +105,8 @@ public class BlogsEntryAssetRenderer
 
 			return "/blogs/asset/" + template + ".jsp";
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override

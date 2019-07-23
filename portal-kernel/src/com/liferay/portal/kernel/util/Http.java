@@ -426,9 +426,8 @@ public interface Http {
 			if (_method == Method.DELETE) {
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 
 		public boolean isFollowRedirects() {
@@ -439,18 +438,16 @@ public interface Http {
 			if (_method == Method.GET) {
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 
 		public boolean isHead() {
 			if (_method == Method.HEAD) {
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 
 		public boolean isPatch() {
@@ -465,18 +462,16 @@ public interface Http {
 			if (_method == Method.POST) {
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 
 		public boolean isPut() {
 			if (_method == Method.PUT) {
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 
 		public void setAuth(Http.Auth auth) {
@@ -625,9 +620,8 @@ public interface Http {
 			if (_headers == null) {
 				return null;
 			}
-			else {
-				return _headers.get(StringUtil.toLowerCase(name));
-			}
+
+			return _headers.get(StringUtil.toLowerCase(name));
 		}
 
 		public Map<String, String> getHeaders() {

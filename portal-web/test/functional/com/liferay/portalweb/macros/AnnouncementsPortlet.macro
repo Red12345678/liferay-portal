@@ -1,13 +1,15 @@
 definition {
+
 	macro configureDisplayCountPG {
 		Portlet.gotoPortletOptions(
 			portletName = "Announcements",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		IFrame.selectDialogFrame();
 
-		Select(locator1 = "Select#MAXIMUM_ITEMS_TO_DISPLAY", value1 = "5");
+		Select(
+			locator1 = "Select#MAXIMUM_ITEMS_TO_DISPLAY",
+			value1 = "5");
 
 		PortletEntry.save();
 
@@ -17,8 +19,7 @@ definition {
 	macro configurePaginationManageEntriesPG {
 		Select(
 			locator1 = "AnnouncementsManageEntries#DISTRIBUTION_SCOPE_SELECT",
-			value1 = "${distributionScope}"
-		);
+			value1 = "${distributionScope}");
 
 		Click(locator1 = "Button#ITEMS_PER_PAGE");
 
@@ -26,4 +27,5 @@ definition {
 
 		MenuItem.click(menuItem = "${itemsPerPage}");
 	}
+
 }

@@ -8,6 +8,11 @@
 <tr><td rowspan="1" colspan="3">UsersAndOrganizationsEditUser</td></tr>
 </thead>
 <tbody>
+<tr>
+	<td>USER_INFORMATION_REMOVE</td>
+	<td>//tr[contains(.,'${key_informationName}')]//*[*[name()='svg'][contains(@class,'icon-times')]]</td>
+	<td></td>
+</tr>
 <!--DETAILS-->
 <tr>
 	<td>DETAILS_BIRTHDAY_FIELD</td>
@@ -94,6 +99,11 @@
 <tr>
 	<td>ORGANIZATIONS_SELECT_LINK</td>
 	<td>//a[contains(@id,'selectOrganizationLink')]/span</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ORGANIZATIONS_TABLE_ROLES</td>
+	<td>//tr[contains(.,'${key_orgName}')]/td[3]</td>
 	<td></td>
 </tr>
 <tr>
@@ -196,6 +206,44 @@
 <tr>
 	<td></td>
 	<td></td>
+	<td></td>
+</tr>
+<!--USER_IDENTIFICATION-->
+<tr>
+	<td>USER_IDENTIFICATION_PHONE_NUMBERS</td>
+	<td>//fieldset[contains(@id,'phoneNumbers')]//input[contains(@id,'phoneNumber')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>USER_IDENTIFICATION_PHONE_NUMBERS_TYPE</td>
+	<td>//fieldset[contains(@id,'phoneNumbers')]//select[contains(@id,'phoneType')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>USER_IDENTIFICATION_ADDITIONAL_EMAIL_ADDRESSES</td>
+	<td>//fieldset[contains(@id,'additionalEmailAddresses')]//input[contains(@value,'${key_emailAddress}')]</td>
+	<td></td>
+</tr>
+
+<tr>
+	<td>USER_IDENTIFICATION_WEBSITES_URL</td>
+	<td>//fieldset[contains(@id,'websites')]//input[contains(@id,'websiteUrl')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>USER_IDENTIFICATION_WEBSITES_TYPE</td>
+	<td>//fieldset[contains(@id,'websites')]//select[contains(@id,'websiteType')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>USER_IDENTIFICATION_REMOVE_ICON</td>
+	<td>//fieldset[contains(@id,'${key_rowEntry}')]//button[contains(@class,'delete-row')]</td>
+	<td></td>
+</tr>
+<!--ANNOUNCEMENTS-->
+<tr>
+	<td>ANNOUNCEMENTS_NOTIFICATION_CHECKBOX</td>
+	<td>//input[contains(@title,'${key_announcementType}') and contains(@id,'${key_notificationType}')]</td>
 	<td></td>
 </tr>
 <!--DISPLAY_SETTINGS-->

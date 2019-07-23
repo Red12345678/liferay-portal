@@ -208,9 +208,8 @@ public class LocalProcessLauncher {
 			if (heartbeatThread != null) {
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 
 		public static void writeProcessCallable(
@@ -307,11 +306,10 @@ public class LocalProcessLauncher {
 					if (_detach) {
 						return;
 					}
-					else {
-						shutdownThrowable = ie;
 
-						shutdownCode = ShutdownHook.INTERRUPTION_CODE;
-					}
+					shutdownThrowable = ie;
+
+					shutdownCode = ShutdownHook.INTERRUPTION_CODE;
 				}
 				catch (IOException ioe) {
 					shutdownThrowable = ioe;

@@ -55,7 +55,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#CampaignAddMultipleWithPrioritiesViaCampaignDisplayPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -72,7 +72,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -89,7 +89,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -108,7 +108,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Low Priority Web Content Title");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -127,7 +127,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Higher Priority Web Content Title");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -148,7 +148,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -172,7 +172,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -193,7 +193,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -256,7 +256,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#CampaignAddViaCampaignContentDisplayPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -273,7 +273,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -292,7 +292,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -313,7 +313,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -364,7 +364,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#CampaignDeleteMultiple";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -384,7 +384,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -404,7 +404,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -424,7 +424,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -440,7 +440,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#CampaignViewContentViewsReports";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -457,7 +457,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -471,7 +471,7 @@ definition {
 			dmDocumentTitle = "DM Document Title"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -492,7 +492,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -516,7 +516,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -536,7 +536,7 @@ definition {
 			viewTrackingActionsList = "Content"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -570,7 +570,7 @@ definition {
 
 		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -703,7 +703,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#CampaignViewOtherwiseDisplayContentViaCampaignDisplayPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -722,7 +722,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -741,7 +741,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -760,7 +760,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title Otherwise");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -781,7 +781,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -837,7 +837,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#CampaignViewOtherwiseDontDisplayViaCampaignDisplayPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -856,7 +856,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -875,7 +875,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -896,7 +896,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -947,7 +947,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#CampaignViewStatusCP";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -967,7 +967,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -989,7 +989,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1009,7 +1009,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1031,7 +1031,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1046,7 +1046,7 @@ definition {
 			campaignStatus = "Started"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1067,7 +1067,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#CampaignViewTrackingActionReports";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1084,7 +1084,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1098,7 +1098,7 @@ definition {
 			dmDocumentTitle = "DM Document Title"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1119,7 +1119,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1143,7 +1143,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1163,7 +1163,7 @@ definition {
 			viewTrackingActionsList = "Content"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1195,7 +1195,7 @@ definition {
 
 		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1330,7 +1330,7 @@ definition {
 
 		PortletEntry.publish();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1371,11 +1371,7 @@ definition {
 			value1 = "Successful"
 		);
 
-		Portlet.changeDisplayStyle(displayStyle = "list");
-
 		var larFileName = LAR.getLarFileName();
-
-		Portlet.changeDisplayStyle(displayStyle = "descriptive");
 
 		Click(locator1 = "SitePagesExport#CURRENT_AND_PREVIOUS_DOWNLOAD");
 
@@ -1397,7 +1393,7 @@ definition {
 			siteName = "Import Site"
 		);
 
-		ProductMenu.gotoSite(site = "Import Site");
+		Navigator.openSiteLanding(siteURLKey = "Import Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1437,7 +1433,7 @@ definition {
 
 		PortletEntry.publish();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoStagingSite();
 
@@ -1495,7 +1491,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#ExportImportDeletions";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1510,7 +1506,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1543,11 +1539,7 @@ definition {
 			value1 = "Successful"
 		);
 
-		Portlet.changeDisplayStyle(displayStyle = "list");
-
 		var larFileName = LAR.getLarFileName();
-
-		Portlet.changeDisplayStyle(displayStyle = "descriptive");
 
 		Click(locator1 = "SitePagesExport#CURRENT_AND_PREVIOUS_DOWNLOAD");
 
@@ -1565,7 +1557,7 @@ definition {
 
 		LAR.importSiteCP(larFileName = "${larFileName}", siteName = "Import Site");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1575,7 +1567,7 @@ definition {
 
 		ContentTargetingUserSegment.deleteAllCP();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1603,11 +1595,7 @@ definition {
 			value1 = "Successful"
 		);
 
-		Portlet.changeDisplayStyle(displayStyle = "list");
-
 		var larFileName = LAR.getLarFileName();
-
-		Portlet.changeDisplayStyle(displayStyle = "descriptive");
 
 		Click(locator1 = "SitePagesExport#CURRENT_AND_PREVIOUS_DOWNLOAD");
 
@@ -1615,7 +1603,7 @@ definition {
 
 		SelectFrame(value1 = "relative=top");
 
-		SitePageNavigator.gotoPages(page = "Public Pages", siteName = "Import Site");
+		Navigator.openSiteLanding(siteURLKey = "Import Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
@@ -1630,7 +1618,7 @@ definition {
 			siteName = "Import Site"
 		);
 
-		ProductMenu.gotoSite(site = "Import Site");
+		Navigator.openSiteLanding(siteURLKey = "Import Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1642,7 +1630,7 @@ definition {
 			userSegmentName = "User Segment Name"
 		);
 
-		ProductMenu.gotoSite(site = "Import Site");
+		Navigator.openSiteLanding(siteURLKey = "Import Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1673,11 +1661,7 @@ definition {
 			value1 = "Successful"
 		);
 
-		Portlet.changeDisplayStyle(displayStyle = "list");
-
 		var larFileName = LAR.getLarFileName();
-
-		Portlet.changeDisplayStyle(displayStyle = "descriptive");
 
 		Click(locator1 = "SitePagesExport#CURRENT_AND_PREVIOUS_DOWNLOAD");
 
@@ -1721,7 +1705,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#ExportImportViewOnlyContentCTWithReferencedWCImported";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1740,7 +1724,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1759,7 +1743,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "WC Title Unreferenced");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1779,7 +1763,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1799,7 +1783,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -1839,11 +1823,7 @@ definition {
 			value1 = "Successful"
 		);
 
-		Portlet.changeDisplayStyle(displayStyle = "list");
-
 		var larFileName = LAR.getLarFileName();
-
-		Portlet.changeDisplayStyle(displayStyle = "descriptive");
 
 		Click(locator1 = "SitePagesExport#CURRENT_AND_PREVIOUS_DOWNLOAD");
 
@@ -1861,7 +1841,7 @@ definition {
 
 		LAR.importSiteCP(larFileName = "${larFileName}", siteName = "Import Site");
 
-		ProductMenu.gotoSite(site = "Import Site");
+		Navigator.openSiteURL(siteName = "Import Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1876,7 +1856,7 @@ definition {
 			webContentTitle = "Web Content Title"
 		);
 
-		ProductMenu.gotoSite(site = "Import Site");
+		Navigator.openSiteURL(siteName = "Import Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1902,7 +1882,7 @@ definition {
 
 		Staging.activateStagingCP(siteName = "Site Name");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -1921,7 +1901,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -1940,7 +1920,7 @@ definition {
 			webContentTitle = "Web Content Title"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -2122,7 +2102,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#StagingCTDeletions";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
@@ -2143,7 +2123,7 @@ definition {
 
 		Staging.publishToLive();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -2155,7 +2135,7 @@ definition {
 
 		ContentTargetingUserSegment.deleteAllCP();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -2190,7 +2170,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#StagingCTDisabled";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
@@ -2203,7 +2183,7 @@ definition {
 			uncheckContent = "Audience Targeting"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2220,7 +2200,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -2277,7 +2257,7 @@ definition {
 			viewEntryContentList = "Web Content Content"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2309,7 +2289,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#StagingCTEnabled";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
@@ -2447,7 +2427,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentAddCategorizationToContent";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2466,7 +2446,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2496,7 +2476,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentAddFromGlobalSiteViaCampaign";
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2515,7 +2495,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteLanding(siteURLKey = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2536,7 +2516,7 @@ definition {
 
 		ContentTargetingCampaign.saveCP();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteLanding(siteURLKey = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2558,7 +2538,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentAddFromParentSiteViaCampaign";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2593,7 +2573,7 @@ definition {
 
 		Page.add(pageName = "Page Name", siteName = "Child SiteName");
 
-		ProductMenu.gotoSite(site = "Child SiteName");
+		Navigator.openSiteURL(siteName = "Child SiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2614,7 +2594,7 @@ definition {
 
 		ContentTargetingCampaign.saveCP();
 
-		ProductMenu.gotoSite(site = "Child SiteName");
+		Navigator.openSiteURL(siteName = "Child SiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2636,7 +2616,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentAddGlobalCategorizationToSiteContent";
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2655,7 +2635,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteLanding(siteURLKey = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2688,7 +2668,7 @@ definition {
 		Page.add(pageName = "Site Page Name", siteName = "Site Name");
 
 		for (var ruleName : list "Admin,Page Visited,Male,Woman") {
-			ProductMenu.gotoSite(site = "Site Name");
+			Navigator.openSiteURL(siteName = "Site Name");
 
 			ProductMenu.gotoPortlet(
 				category = "Content",
@@ -2708,7 +2688,7 @@ definition {
 			WebContent.viewTitle(webContentTitle = "WC Title ${ruleName}");
 		}
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2770,7 +2750,7 @@ definition {
 				userScreenName = "${userScreenName}"
 			);
 
-			ProductMenu.gotoSite(site = "Site Name");
+			Navigator.openSiteURL(siteName = "Site Name");
 
 			ProductMenu.gotoPortlet(
 				category = "Members",
@@ -2882,7 +2862,7 @@ definition {
 
 		Site.addBlankCP(parentSiteName = "Site Name", siteName = "Child SiteName");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteLanding(siteURLKey = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2901,7 +2881,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Child SiteName");
+		Navigator.openSiteLanding(siteURLKey = "Child SiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2925,7 +2905,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentAddWithAllViaUserSegmentContentDisplayPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2944,7 +2924,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title All");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2963,7 +2943,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title Otherwise");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -2983,7 +2963,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3038,7 +3018,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentAddWithAnyViaUserSegmentContentDisplayPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3057,7 +3037,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title Any");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3076,7 +3056,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title Otherwise");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3096,7 +3076,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3150,7 +3130,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentAddWithBelongsViaUserSegmentContentDisplayPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3167,7 +3147,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3181,7 +3161,7 @@ definition {
 			dmDocumentTitle = "DM Document Title 1"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3278,7 +3258,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentAddWithDoesNotBelongViaUserSegmentContentDisplayPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3295,7 +3275,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3314,7 +3294,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title Female");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3419,7 +3399,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentAddWithOtherwiseDontDisplayAnythingViaUserSegmentContentDisplayPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3438,7 +3418,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3488,7 +3468,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentDeleteMultiple";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3503,7 +3483,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3518,7 +3498,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3533,7 +3513,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3736,7 +3716,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentSimulateRulesViaSimulatorPG";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3755,7 +3735,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title Male");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3774,7 +3754,7 @@ definition {
 
 		WebContent.viewTitle(webContentTitle = "Web Content Title Female");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3791,7 +3771,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -3988,7 +3968,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentViewAnyContentWithCategorizationViaContentListPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -4005,7 +3985,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -4104,7 +4084,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentViewInSimulatorPG";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -4170,7 +4150,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -4215,7 +4195,7 @@ definition {
 		property content.targeting.release = "true";
 		property test.name.skip.portal.instance = "ContentTargetingUsecase#UserSegmentViewSpecificContentWithCategorizationViaContentListPortlet";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -4232,7 +4212,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",

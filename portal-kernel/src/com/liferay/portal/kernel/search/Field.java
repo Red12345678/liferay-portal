@@ -101,9 +101,8 @@ public class Field implements Serializable {
 	public static final String KEYWORD_SEARCH = "keywordSearch";
 
 	public static final String[] KEYWORDS = {
-		Field.ASSET_CATEGORY_TITLES, Field.ASSET_TAG_NAMES, Field.COMMENTS,
-		Field.CONTENT, Field.DESCRIPTION, Field.PROPERTIES, Field.TITLE,
-		Field.URL, Field.USER_NAME
+		ASSET_CATEGORY_TITLES, ASSET_TAG_NAMES, COMMENTS, CONTENT, DESCRIPTION,
+		Field.PROPERTIES, Field.TITLE, Field.URL, Field.USER_NAME
 	};
 
 	public static final String LANGUAGE_ID = "languageId";
@@ -166,9 +165,9 @@ public class Field implements Serializable {
 	public static final String UID = "uid";
 
 	public static final String[] UNSCORED_FIELD_NAMES = {
-		Field.ASSET_CATEGORY_IDS, Field.COMPANY_ID, Field.ENTRY_CLASS_NAME,
-		Field.ENTRY_CLASS_PK, Field.FOLDER_ID, Field.GROUP_ID,
-		Field.GROUP_ROLE_ID, Field.ROLE_ID, Field.SCOPE_GROUP_ID, Field.USER_ID
+		ASSET_CATEGORY_IDS, COMPANY_ID, ENTRY_CLASS_NAME, ENTRY_CLASS_PK,
+		FOLDER_ID, GROUP_ID, GROUP_ROLE_ID, ROLE_ID, SCOPE_GROUP_ID,
+		Field.USER_ID
 	};
 
 	public static final String URL = "url";
@@ -266,9 +265,8 @@ public class Field implements Serializable {
 		if (ArrayUtil.isNotEmpty(_values)) {
 			return _values[0];
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	public String[] getValues() {
@@ -287,18 +285,16 @@ public class Field implements Serializable {
 		if (_dates != null) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isLocalized() {
 		if (_localizedValues != null) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isNested() {

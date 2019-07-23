@@ -146,9 +146,8 @@ public class MBThreadFlagLocalServiceImpl
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

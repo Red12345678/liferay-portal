@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.osgi.web.servlet.context.helper.definition.WebXMLDefinition;
 import com.liferay.portal.osgi.web.servlet.context.helper.order.Order;
-import com.liferay.portal.osgi.web.servlet.context.helper.order.Order.Path;
 import com.liferay.portal.osgi.web.servlet.context.helper.order.OrderBeforeAndAfterException;
 import com.liferay.portal.osgi.web.servlet.context.helper.order.OrderCircularDependencyException;
 import com.liferay.portal.osgi.web.servlet.context.helper.order.OrderMaxAttemptsException;
@@ -60,10 +59,10 @@ public class OrderUtil {
 	private static String[] _appendAndSort(String[]... namesArray) {
 		Map<String, Integer> map = new HashMap<>();
 
-		if (namesArray[0] != null) {
-			if (Arrays.binarySearch(namesArray[0], Order.OTHERS) >= 0) {
-				map.put(Order.OTHERS, 1);
-			}
+		if ((namesArray[0] != null) &&
+			(Arrays.binarySearch(namesArray[0], Order.OTHERS) >= 0)) {
+
+			map.put(Order.OTHERS, 1);
 		}
 
 		for (String[] names : namesArray) {
@@ -289,7 +288,7 @@ public class OrderUtil {
 		Order order2 = webXMLDefinition2.getOrder();
 
 		if (order1.isOrdered() && !order2.isOrdered()) {
-			EnumMap<Path, String[]> routes = order1.getRoutes();
+			EnumMap<Order.Path, String[]> routes = order1.getRoutes();
 
 			if (!ArrayUtil.isEmpty(routes.get(Order.Path.AFTER)) &&
 				!order1.isBeforeOthers()) {

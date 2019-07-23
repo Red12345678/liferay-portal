@@ -140,13 +140,12 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 
 			int status = HttpServletResponse.SC_CREATED;
 
-			if (overwrite) {
-				if (deleteResource(
-						groupId, parentFolderId, name,
-						webDAVRequest.getLockUuid())) {
+			if (overwrite &&
+				deleteResource(
+					groupId, parentFolderId, name,
+					webDAVRequest.getLockUuid())) {
 
-					status = HttpServletResponse.SC_NO_CONTENT;
-				}
+				status = HttpServletResponse.SC_NO_CONTENT;
 			}
 
 			if (depth == 0) {
@@ -227,13 +226,12 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 
 			int status = HttpServletResponse.SC_CREATED;
 
-			if (overwrite) {
-				if (deleteResource(
-						groupId, parentFolderId, title,
-						webDAVRequest.getLockUuid())) {
+			if (overwrite &&
+				deleteResource(
+					groupId, parentFolderId, title,
+					webDAVRequest.getLockUuid())) {
 
-					status = HttpServletResponse.SC_NO_CONTENT;
-				}
+				status = HttpServletResponse.SC_NO_CONTENT;
 			}
 
 			_dlAppService.addFileEntry(
@@ -289,9 +287,8 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 				if (webDAVRequest.isAppleDoubleRequest()) {
 					return HttpServletResponse.SC_NO_CONTENT;
 				}
-				else {
-					return HttpServletResponse.SC_NOT_FOUND;
-				}
+
+				return HttpServletResponse.SC_NOT_FOUND;
 			}
 
 			Object model = resource.getModel();
@@ -633,13 +630,12 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 
 			int status = HttpServletResponse.SC_CREATED;
 
-			if (overwrite) {
-				if (deleteResource(
-						groupId, parentFolderId, name,
-						webDAVRequest.getLockUuid())) {
+			if (overwrite &&
+				deleteResource(
+					groupId, parentFolderId, name,
+					webDAVRequest.getLockUuid())) {
 
-					status = HttpServletResponse.SC_NO_CONTENT;
-				}
+				status = HttpServletResponse.SC_NO_CONTENT;
 			}
 
 			if (parentFolderId != folder.getParentFolderId()) {
@@ -709,13 +705,12 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 
 			int status = HttpServletResponse.SC_CREATED;
 
-			if (overwrite) {
-				if (deleteResource(
-						groupId, newParentFolderId, title,
-						webDAVRequest.getLockUuid())) {
+			if (overwrite &&
+				deleteResource(
+					groupId, newParentFolderId, title,
+					webDAVRequest.getLockUuid())) {
 
-					status = HttpServletResponse.SC_NO_CONTENT;
-				}
+				status = HttpServletResponse.SC_NO_CONTENT;
 			}
 
 			// LPS-5415
@@ -1153,22 +1148,20 @@ public class DLWebDAVStorageImpl extends BaseWebDAVStorageImpl {
 
 			return fileEntry.hasLock();
 		}
-		else {
 
-			// Client claims to know of a lock. Verify the lock UUID.
+		// Client claims to know of a lock. Verify the lock UUID.
 
-			try {
-				return _dlAppService.verifyFileEntryLock(
-					fileEntry.getRepositoryId(), fileEntry.getFileEntryId(),
-					lockUuid);
+		try {
+			return _dlAppService.verifyFileEntryLock(
+				fileEntry.getRepositoryId(), fileEntry.getFileEntryId(),
+				lockUuid);
+		}
+		catch (NoSuchLockException nsle) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(nsle, nsle);
 			}
-			catch (NoSuchLockException nsle) {
-				if (_log.isDebugEnabled()) {
-					_log.debug(nsle, nsle);
-				}
 
-				return false;
-			}
+			return false;
 		}
 	}
 

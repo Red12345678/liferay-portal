@@ -883,9 +883,8 @@ public class ShoppingUtil {
 		if (pos == -1) {
 			return StringPool.BLANK;
 		}
-		else {
-			return itemId.substring(pos + 1);
-		}
+
+		return itemId.substring(pos + 1);
 	}
 
 	public static long getItemId(String itemId) {
@@ -1040,10 +1039,9 @@ public class ShoppingUtil {
 
 			return ShoppingOrderConstants.STATUS_CHECKOUT;
 		}
-		else {
-			return Character.toUpperCase(ppPaymentStatus.charAt(0)) +
-				ppPaymentStatus.substring(1);
-		}
+
+		return Character.toUpperCase(ppPaymentStatus.charAt(0)) +
+			ppPaymentStatus.substring(1);
 	}
 
 	public static boolean isInStock(ShoppingItem item) {
@@ -1055,21 +1053,19 @@ public class ShoppingUtil {
 			if (item.getStockQuantity() > 0) {
 				return true;
 			}
-			else {
-				return false;
-			}
-		}
-		else {
-			String[] fieldsQuantities = item.getFieldsQuantitiesArray();
-
-			for (String fieldsQuantity : fieldsQuantities) {
-				if (GetterUtil.getInteger(fieldsQuantity) > 0) {
-					return true;
-				}
-			}
 
 			return false;
 		}
+
+		String[] fieldsQuantities = item.getFieldsQuantitiesArray();
+
+		for (String fieldsQuantity : fieldsQuantities) {
+			if (GetterUtil.getInteger(fieldsQuantity) > 0) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public static boolean isInStock(
@@ -1088,34 +1084,31 @@ public class ShoppingUtil {
 
 				return true;
 			}
-			else {
-				return false;
-			}
-		}
-		else {
-			String[] fieldsQuantities = item.getFieldsQuantitiesArray();
-
-			int stockQuantity = 0;
-
-			if (fieldsQuantities.length > 0) {
-				int rowPos = getFieldsQuantitiesPos(
-					item, itemFields, fieldsArray);
-
-				stockQuantity = GetterUtil.getInteger(fieldsQuantities[rowPos]);
-			}
-
-			try {
-				if ((stockQuantity > 0) &&
-					(stockQuantity >= orderedQuantity.intValue())) {
-
-					return true;
-				}
-			}
-			catch (Exception e) {
-			}
 
 			return false;
 		}
+
+		String[] fieldsQuantities = item.getFieldsQuantitiesArray();
+
+		int stockQuantity = 0;
+
+		if (fieldsQuantities.length > 0) {
+			int rowPos = getFieldsQuantitiesPos(item, itemFields, fieldsArray);
+
+			stockQuantity = GetterUtil.getInteger(fieldsQuantities[rowPos]);
+		}
+
+		try {
+			if ((stockQuantity > 0) &&
+				(stockQuantity >= orderedQuantity.intValue())) {
+
+				return true;
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return false;
 	}
 
 	public static boolean meetsMinOrder(
@@ -1130,9 +1123,8 @@ public class ShoppingUtil {
 
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	private static ShoppingItemPrice _getItemPrice(ShoppingItem item, int count)

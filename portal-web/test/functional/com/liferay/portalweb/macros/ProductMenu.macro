@@ -1,9 +1,12 @@
 definition {
+
 	@summary = "Navigate to the Live site"
 	macro gotoLiveSite {
 		ProductMenuHelper.expandPanel(panel = "Site Administration");
 
-		AssertClick(locator1 = "ProductMenu#LIVE_LINK", value1 = "Live");
+		AssertClick(
+			locator1 = "ProductMenu#LIVE_LINK",
+			value1 = "Live");
 	}
 
 	@summary = "Navigate to Navigate to Product Menu > Sites > ${category} > ${page}"
@@ -35,8 +38,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "ProductMenu#PRODUCT_MENU_PANEL_SITE_ADMINISTRATION_SITE_NAME",
-			value1 = "${site}"
-		);
+			value1 = "${site}");
 	}
 
 	@summary = "Navigate to Product Menu > Profile"
@@ -62,7 +64,9 @@ definition {
 		ProductMenuHelper.expandCategory(category = "Navigation");
 
 		if (IsElementNotPresent(locator1 = "ProductMenu#PRIVATE_PAGES_SELECTED")) {
-			AssertClick(locator1 = "ProductMenu#PRIVATE_PAGES", value1 = "Private Pages");
+			AssertClick(
+				locator1 = "ProductMenu#PRIVATE_PAGES",
+				value1 = "Private Pages");
 		}
 
 		Pause(locator1 = "5000");
@@ -103,15 +107,16 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "ProductMenu#PRODUCT_MENU_PANEL_SITE_ADMINISTRATION_SITE_NAME",
-			value1 = "${site}"
-		);
+			value1 = "${site}");
 	}
 
 	@summary = "Navigate to ${site} via the 'Go to Site' link"
 	macro gotoSiteViaLink {
 		ProductMenuHelper.expandPanel(panel = "Site Administration");
 
-		AssertClick(locator1 = "ProductMenu#GO_TO_SITES_LINK", value1 = "Go to Site");
+		AssertClick(
+			locator1 = "ProductMenu#GO_TO_SITES_LINK",
+			value1 = "Go to Site");
 	}
 
 	@summary = "Navigate to the Staging site"
@@ -119,7 +124,9 @@ definition {
 		if (IsElementNotPresent(locator1 = "ProductMenu#STAGING_SELECTED")) {
 			ProductMenuHelper.expandPanel(panel = "Site Administration");
 
-			AssertClick(locator1 = "ProductMenu#STAGING_LINK", value1 = "Staging");
+			AssertClick(
+				locator1 = "ProductMenu#STAGING_LINK",
+				value1 = "Staging");
 		}
 
 		AssertVisible(locator1 = "ProductMenu#STAGING_SELECTED");
@@ -135,4 +142,5 @@ definition {
 
 		ProductMenuHelper.viewNoSite(site = "${site}");
 	}
+
 }

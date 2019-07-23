@@ -1,11 +1,11 @@
 definition {
+
 	macro populateFieldCheckBox {
 		var key_wfFieldName = "${wfFieldName}";
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_CHECKBOX_FIELD_HEADER",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		AssertElementPresent(locator1 = "WebForm#FORM_FIELDS_CHECKBOX_FIELD");
 
@@ -22,13 +22,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_FIELD_HEADER",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		Select(
 			locator1 = "WebForm#FORM_FIELDS_OPTIONS_FIELD",
-			value1 = "${wfFieldValue}"
-		);
+			value1 = "${wfFieldValue}");
 	}
 
 	macro populateFieldRadio {
@@ -36,8 +34,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_FIELD_HEADER",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		var key_wfRadioFieldOption = "${wfFieldValue}";
 
@@ -49,10 +46,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_FIELD_HEADER",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
-		Type(locator1 = "WebForm#FORM_FIELDS_TEXT_FIELD", value1 = "${wfFieldValue}");
+		Type(
+			locator1 = "WebForm#FORM_FIELDS_TEXT_FIELD",
+			value1 = "${wfFieldValue}");
 	}
 
 	macro populateFieldTextBox {
@@ -60,30 +58,31 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_FIELD_HEADER",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		Type(
 			locator1 = "WebForm#FORM_FIELDS_TEXT_BOX_FIELD",
-			value1 = "${wfFieldValue}"
-		);
+			value1 = "${wfFieldValue}");
 	}
 
 	macro sendBlankPG {
-		AssertClick(locator1 = "Button#SEND", value1 = "Send");
+		AssertClick(
+			locator1 = "Button#SEND",
+			value1 = "Send");
 
 		AssertElementNotPresent(locator1 = "Message#SUCCESS");
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_FIELD_MANDATORY_MESSAGE",
-			value1 = "This field is mandatory."
-		);
+			value1 = "This field is mandatory.");
 	}
 
 	macro sendPG {
 		Click(locator1 = "WebForm#FORM_INFORMATION_TITLE");
 
-		AssertClick(locator1 = "Button#SEND", value1 = "Send");
+		AssertClick(
+			locator1 = "Button#SEND",
+			value1 = "Send");
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
 	}
@@ -93,8 +92,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_CHECKBOX_FIELD_HEADER",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		AssertElementPresent(locator1 = "WebForm#FORM_FIELDS_CHECKBOX_FIELD");
 	}
@@ -104,8 +102,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_FIELD_HEADER",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		AssertElementPresent(locator1 = "WebForm#FORM_FIELDS_OPTIONS_FIELD");
 	}
@@ -113,8 +110,7 @@ definition {
 	macro viewFormFieldParagraph {
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_PARAGRAPH_FIELD",
-			value1 = "${wfParagraphFieldText}"
-		);
+			value1 = "${wfParagraphFieldText}");
 	}
 
 	macro viewFormFieldRadio {
@@ -122,16 +118,14 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_FIELD_HEADER",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		for (var wfRadioFieldOption : list "${optionsList}") {
 			var key_wfRadioFieldOption = "${wfRadioFieldOption}";
 
 			AssertTextEquals(
 				locator1 = "WebForm#FORM_FIELDS_RADIO_FIELD_OPTION_LABEL",
-				value1 = "${wfRadioFieldOption}"
-			);
+				value1 = "${wfRadioFieldOption}");
 		}
 	}
 
@@ -140,8 +134,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_FIELD_HEADER",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		AssertElementPresent(locator1 = "WebForm#FORM_FIELDS_TEXT_FIELD");
 	}
@@ -151,8 +144,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_FIELDS_FIELD_HEADER",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		AssertElementPresent(locator1 = "WebForm#FORM_FIELDS_TEXT_BOX_FIELD");
 	}
@@ -160,12 +152,11 @@ definition {
 	macro viewPG {
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_INFORMATION_TITLE",
-			value1 = "${wfInformationTitle}"
-		);
+			value1 = "${wfInformationTitle}");
 
 		AssertTextEquals(
 			locator1 = "WebForm#FORM_INFORMATION_DESCRIPTION",
-			value1 = "${wfInformationDescription}"
-		);
+			value1 = "${wfInformationDescription}");
 	}
+
 }

@@ -1,4 +1,5 @@
 definition {
+
 	macro addCP {
 		LexiconEntry.gotoHeaderMenuItem(menuItem = "Templates");
 
@@ -6,8 +7,7 @@ definition {
 
 		AlloyEditor.addTitleAndContent(
 			content = "${kbTemplateContent}",
-			title = "${kbTemplateTitle}"
-		);
+			title = "${kbTemplateTitle}");
 
 		PortletEntry.publish();
 	}
@@ -17,8 +17,7 @@ definition {
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "View",
-			rowEntry = "${kbTemplateTitle}"
-		);
+			rowEntry = "${kbTemplateTitle}");
 	}
 
 	macro tearDownCP {
@@ -27,15 +26,16 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		LexiconEntry.gotoHeaderMenuItem(menuItem = "Templates");
 
 		if (IsElementPresent(locator1 = "ContentRow#ENTRY_CONTENT_ROW_1")) {
 			Check.checkAll(locator1 = "Checkbox#SELECT_ALL");
 
-			AssertClickNoError(locator1 = "Button#DELETE", value1 = "Delete");
+			AssertClickNoError(
+				locator1 = "Button#DELETE",
+				value1 = "Delete");
 
 			Confirm(value1 = "Are you sure you want to delete the selected templates?");
 
@@ -48,13 +48,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "KnowledgeBaseTemplate#TEMPLATE_TITLE",
-			value1 = "${kbTemplateTitle}"
-		);
+			value1 = "${kbTemplateTitle}");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "KnowledgeBaseTemplate#TEMPLATE_CONTENT",
-			value1 = "${kbTemplateContent}"
-		);
+			value1 = "${kbTemplateContent}");
 	}
 
 	macro viewCPViaAddTemplate {
@@ -62,12 +60,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "AlloyEditor#TITLE_FIELD",
-			value1 = "${kbTemplateTitle}"
-		);
+			value1 = "${kbTemplateTitle}");
 
 		AssertTextEquals(
 			locator1 = "AlloyEditor#CONTENT_FIELD",
-			value1 = "${kbTemplateContent}"
-		);
+			value1 = "${kbTemplateContent}");
 	}
+
 }

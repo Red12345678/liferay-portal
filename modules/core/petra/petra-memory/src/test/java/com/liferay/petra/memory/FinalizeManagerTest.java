@@ -14,7 +14,6 @@
 
 package com.liferay.petra.memory;
 
-import com.liferay.petra.memory.FinalizeManager.ReferenceFactory;
 import com.liferay.portal.kernel.test.GCUtil;
 import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
@@ -244,7 +243,7 @@ public class FinalizeManagerTest {
 
 		MarkFinalizeAction markFinalizeAction = new MarkFinalizeAction();
 
-		ReferenceFactory referenceFactory =
+		FinalizeManager.ReferenceFactory referenceFactory =
 			FinalizeManager.PHANTOM_REFERENCE_FACTORY;
 
 		if (referenceType == ReferenceType.WEAK) {

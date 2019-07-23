@@ -1,10 +1,13 @@
 definition {
+
 	macro _gotoPage {
 		var key_pageName = "${pageName}";
 		var count = "0";
 
 		while ((!("${count}" == "3")) && (IsElementNotPresent(locator1 = "Home#PAGE_ACTIVE"))) {
-			AssertClick(locator1 = "Home#PAGE", value1 = "${pageName}");
+			AssertClick(
+				locator1 = "Home#PAGE",
+				value1 = "${pageName}");
 
 			var count = MathUtil.sum("${count}", "1");
 		}
@@ -43,9 +46,7 @@ definition {
 
 			var portalURL = PropsUtil.get("portal.url");
 
-			Navigator.openSpecificURL(
-				url = StringUtil.replace("${currentURL}", "${portalURL}", "${portalURL}/${locale}")
-			);
+			Navigator.openSpecificURL(url = StringUtil.replace("${currentURL}", "${portalURL}", "${portalURL}/${locale}"));
 		}
 	}
 
@@ -62,13 +63,17 @@ definition {
 	macro gotoEditPageViaControlMenu {
 		Click(locator1 = "ControlMenu#EDIT_COG");
 
-		AssertTextEquals(locator1 = "Portlet#HEADER", value1 = "${pageName}");
+		AssertTextEquals(
+			locator1 = "Portlet#HEADER",
+			value1 = "${pageName}");
 	}
 
 	macro gotoNavItem {
 		var key_navItem = "${navItem}";
 
-		AssertClick(locator1 = "NavBar#NAV_ITEM_LINK", value1 = "${navItem}");
+		AssertClick(
+			locator1 = "NavBar#NAV_ITEM_LINK",
+			value1 = "${navItem}");
 
 		AssertElementPresent(locator1 = "NavBar#ACTIVE_NAV_ITEM_LINK");
 	}
@@ -76,7 +81,9 @@ definition {
 	macro gotoNavTab {
 		var key_tab = "${navTab}";
 
-		AssertClick(locator1 = "NavTab#TAB_LINK", value1 = "${navTab}");
+		AssertClick(
+			locator1 = "NavTab#TAB_LINK",
+			value1 = "${navTab}");
 
 		AssertElementPresent(locator1 = "NavTab#ACTIVE_TAB_LINK");
 	}
@@ -171,6 +178,12 @@ definition {
 		Open(locator1 = "/group/guest");
 	}
 
+	macro openSiteLanding {
+		var siteNameURL = StringUtil.replace("${siteURLKey}", " ", "-");
+		var siteURLKey = StringUtil.lowerCase("${siteNameURL}");
+		Navigator.openWithAppendToBaseURL(urlAppend = "group/${siteURLKey}/~/control_panel/manage?p_p_id=com_liferay_journal_web_portlet_JournalPortlet");
+	}
+
 	macro openSiteURL {
 		var siteNameURL = StringUtil.replace("${siteName}", " ", "-");
 		var siteNameURL = StringUtil.lowerCase("${siteNameURL}");
@@ -193,7 +206,18 @@ definition {
 		Open(locator1 = "/web/guest/home");
 	}
 
+	macro openWithAppendToBaseURL {
+		var baseURL = "${baseURL}";
+
+		if (contains("${baseURL}", "{baseURL}")) {
+			var baseURL = PropsUtil.get("portal.url");
+		}
+
+		Open(locator1 = "${baseURL}/${urlAppend}");
+	}
+
 	macro selectSpecificWindow {
 		SelectWindow(locator1 = "title=${windowTitle}");
 	}
+
 }

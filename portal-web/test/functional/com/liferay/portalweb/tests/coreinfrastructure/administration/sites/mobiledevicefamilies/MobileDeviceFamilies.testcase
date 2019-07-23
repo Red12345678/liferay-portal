@@ -1,5 +1,6 @@
 @component-name = "portal-mobile-device-rules"
 definition {
+
 	property osgi.app.includes = "portal-mobile-device-detection-fiftyonedegrees";
 	property osgi.module.configuration.file.names = "com.liferay.portal.bundle.blacklist.internal.BundleBlacklistConfiguration.config";
 	property osgi.module.configurations = "blacklistBundleSymbolicNames=";
@@ -35,8 +36,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
@@ -49,44 +49,38 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Mobile Device Families"
-		);
+			portlet = "Mobile Device Families");
 
 		MobileDevice.addDeviceFamilyCP(deviceFamilyName = "Linux Family Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Mobile Device Families"
-		);
+			portlet = "Mobile Device Families");
 
 		MobileDevice.addClassificationRuleCP(
 			classificationName = "Classification Name",
 			deviceType = "Any",
 			mobileDeviceFamilyName = "Linux Family Name",
-			ruleOSScope = "Linux"
-		);
+			ruleOSScope = "Linux");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Mobile Device Families"
-		);
+			portlet = "Mobile Device Families");
 
 		MobileDevice.addDeviceFamilyCP(deviceFamilyName = "Windows Device Family Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Mobile Device Families"
-		);
+			portlet = "Mobile Device Families");
 
 		MobileDevice.addClassificationRuleCP(
 			classificationName = "Classification Name",
 			deviceType = "Any",
 			mobileDeviceFamilyName = "Windows Device Family Name",
-			ruleOSScope = "Windows"
-		);
+			ruleOSScope = "Windows");
 
 		Page.add(pageName = "Mobile Device Family Test Page");
 
@@ -102,16 +96,14 @@ definition {
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Permissions",
-			rowEntry = "Linux Family Name"
-		);
+			rowEntry = "Linux Family Name");
 
 		IFrame.selectPermissionsFrame();
 
 		Role.viewPermissionPG(
 			permissionDefinitionKey = "CONTENT_PERMISSIONS_VIEW_CHECKBOX",
 			permissionFlagged = "true",
-			roleName = "Owner"
-		);
+			roleName = "Owner");
 
 		IFrame.closeFrame();
 
@@ -119,8 +111,7 @@ definition {
 			actionName = "Mobile Device Family Test Action",
 			actionType = "Redirect to Site",
 			pageName = "Page for Linux",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Page.selectMobileDeviceFamily(deviceFamilyName = "Windows Device Family Name");
 
@@ -128,8 +119,7 @@ definition {
 			actionName = "Windows Device Family Test Action",
 			actionType = "Redirect to Site",
 			pageName = "Page for Windows",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		PortletEntry.save();
 
@@ -137,7 +127,7 @@ definition {
 
 		MobileDevice.assertRedirectActionPG(
 			pageName = "Mobile Device Family Test Page",
-			redirectPageName = "Page for Linux"
-		);
+			redirectPageName = "Page for Linux");
 	}
+
 }

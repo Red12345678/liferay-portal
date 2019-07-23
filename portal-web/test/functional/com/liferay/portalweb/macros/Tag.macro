@@ -1,4 +1,5 @@
 definition {
+
 	macro _addCP {
 		LexiconEntry.gotoAdd();
 
@@ -10,24 +11,23 @@ definition {
 
 		BlogsEntry.addEntryContent(
 			entryContent = "${entryContent}",
-			entryTitle = "${entryTitle}"
-		);
+			entryTitle = "${entryTitle}");
 
 		Panel.expandPanel(panelHeading = "Categorization");
 
 		var key_tagName = "${tagName}";
 
-		Type(locator1 = "AssetCategorization#TAGS_FIELD", value1 = "tag ");
+		Type(
+			locator1 = "AssetCategorization#TAGS_FIELD",
+			value1 = "tag ");
 
 		AssertTextEquals(
 			locator1 = "AssetCategorization#TAG_AUTO_COMPLETE_SPECIFIC",
-			value1 = "${tagName}"
-		);
+			value1 = "${tagName}");
 
 		AssertClick(
 			locator1 = "AssetCategorization#TAG_AUTO_COMPLETE_SPECIFIC",
-			value1 = "${tagName}"
-		);
+			value1 = "${tagName}");
 
 		PortletEntry.publish();
 	}
@@ -70,8 +70,7 @@ definition {
 		if ("${deleteMethod}" == "From List") {
 			LexiconEntry.gotoEntryMenuItemNoError(
 				menuItem = "Delete",
-				rowEntry = "${tagName}"
-			);
+				rowEntry = "${tagName}");
 		}
 		else if ("${deleteMethod}" == "From Toolbar") {
 			Check(locator1 = "Tags#TAG_ENTRY_TABLE_CHECKBOX");
@@ -86,36 +85,36 @@ definition {
 			MenuItem.clickNoError(menuItem = "Delete");
 		}
 
-		Confirm(
-			value1 = "Are you sure you want to delete this? It will be deleted immediately."
-		);
+		Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 
 		AssertTextEquals(
 			locator1 = "Message#EMPTY_INFO",
-			value1 = "There are no tags. You can add a tag by clicking the plus button on the bottom right corner."
-		);
+			value1 = "There are no tags. You can add a tag by clicking the plus button on the bottom right corner.");
 
 		AssertTextNotPresent(value1 = "${tagName}");
 	}
 
 	macro editCancelCP {
-		LexiconEntry.gotoEntryMenuItem(menuItem = "Edit", rowEntry = "${tagName}");
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Edit",
+			rowEntry = "${tagName}");
 
 		SiteAdmin.viewPortletTitle(portletTitle = "${tagName}");
 
 		Button.clickCancel();
 
 		AssertTextEquals(
+			key_tagName = "${tagName}",
 			locator1 = "Tags#TAG_ENTRY_TABLE_NAME",
-			value1 = "${tagName}",
-			key_tagName = "${tagName}"
-		);
+			value1 = "${tagName}");
 	}
 
 	macro editCP {
-		LexiconEntry.gotoEntryMenuItem(menuItem = "Edit", rowEntry = "${tagName}");
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Edit",
+			rowEntry = "${tagName}");
 
 		SiteAdmin.viewPortletTitle(portletTitle = "${tagName}");
 
@@ -131,7 +130,9 @@ definition {
 
 		ClickNoError(locator1 = "Icon#MERGE");
 
-		AssertClickNoError(locator1 = "Button#SAVE", value1 = "Save");
+		AssertClickNoError(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
 		Confirm(value1 = "Please choose at least 2 tags.");
 	}
@@ -139,7 +140,9 @@ definition {
 	macro mergeTags {
 		if (isSet(tagNameList)) {
 			for (var tagName : list "${tagNameList}") {
-				Check(locator1 = "Tags#TAG_ENTRY_TABLE_CHECKBOX", key_tagName = "${tagName}");
+				Check(
+					key_tagName = "${tagName}",
+					locator1 = "Tags#TAG_ENTRY_TABLE_CHECKBOX");
 			}
 		}
 		else {
@@ -154,9 +157,8 @@ definition {
 			IFrame.selectDialogFrame();
 
 			Check(
-				locator1 = "Tags#TAG_ENTRY_TABLE_CHECKBOX",
-				key_tagName = "${selectTagName}"
-			);
+				key_tagName = "${selectTagName}",
+				locator1 = "Tags#TAG_ENTRY_TABLE_CHECKBOX");
 
 			SelectFrameTop();
 
@@ -165,10 +167,11 @@ definition {
 
 		Select(
 			locator1 = "Tags#MERGE_TAGS_INTO_THIS_TAG_SELECT",
-			value1 = "${selectTagToMergeTo}"
-		);
+			value1 = "${selectTagToMergeTo}");
 
-		AssertClickNoError(locator1 = "Button#SAVE", value1 = "Save");
+		AssertClickNoError(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
 		Confirm.assertPartialConfirmation(value1 = "${mergeConfirmation}");
 
@@ -176,29 +179,41 @@ definition {
 	}
 
 	macro searchTagCP {
-		Type(locator1 = "TextInput#SEARCH", value1 = "3");
+		Type(
+			locator1 = "TextInput#SEARCH",
+			value1 = "3");
 
 		Click(locator1 = "Icon#BASIC_SEARCH");
 
 		var key_tagName = "${tagName3}";
 
-		AssertTextEquals(locator1 = "Tags#TAG_ENTRY_TABLE_NAME", value1 = "${tagName3}");
+		AssertTextEquals(
+			locator1 = "Tags#TAG_ENTRY_TABLE_NAME",
+			value1 = "${tagName3}");
 
-		Type(locator1 = "TextInput#SEARCH", value1 = "tag");
+		Type(
+			locator1 = "TextInput#SEARCH",
+			value1 = "tag");
 
 		Click(locator1 = "Icon#BASIC_SEARCH");
 
 		var key_tagName = "${tagName1}";
 
-		AssertTextEquals(locator1 = "Tags#TAG_ENTRY_TABLE_NAME", value1 = "${tagName1}");
+		AssertTextEquals(
+			locator1 = "Tags#TAG_ENTRY_TABLE_NAME",
+			value1 = "${tagName1}");
 
 		var key_tagName = "${tagName2}";
 
-		AssertTextEquals(locator1 = "Tags#TAG_ENTRY_TABLE_NAME", value1 = "${tagName2}");
+		AssertTextEquals(
+			locator1 = "Tags#TAG_ENTRY_TABLE_NAME",
+			value1 = "${tagName2}");
 
 		var key_tagName = "${tagName3}";
 
-		AssertTextEquals(locator1 = "Tags#TAG_ENTRY_TABLE_NAME", value1 = "${tagName3}");
+		AssertTextEquals(
+			locator1 = "Tags#TAG_ENTRY_TABLE_NAME",
+			value1 = "${tagName3}");
 	}
 
 	macro tearDownCP {
@@ -212,37 +227,34 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Tags"
-		);
+			portlet = "Tags");
 
 		if (IsElementNotPresent(locator1 = "Message#EMPTY_INFO")) {
 			Check.checkAll(locator1 = "Checkbox#SELECT_ALL");
 
 			ClickNoError(locator1 = "Icon#DELETE");
 
-			Confirm(
-				value1 = "Are you sure you want to delete this? It will be deleted immediately."
-			);
+			Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 		}
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Message#EMPTY_INFO",
-			value1 = "There are no tags."
-		);
+			value1 = "There are no tags.");
 	}
 
 	macro viewCP {
 		var key_tagName = "${tagName}";
 
-		AssertTextEquals(locator1 = "Tags#TAG_ENTRY_TABLE_NAME", value1 = "${tagName}");
+		AssertTextEquals(
+			locator1 = "Tags#TAG_ENTRY_TABLE_NAME",
+			value1 = "${tagName}");
 	}
 
 	macro viewMergedTagsCP {
 		AssertTextNotPresent(
+			key_tagName = "${tagName}",
 			locator1 = "Tags#TAG_ENTRY_TABLE_NAME",
-			value1 = "${tagName}",
-			key_tagName = "${tagName}"
-		);
+			value1 = "${tagName}");
 	}
 
 	macro viewTagMenuNotEditableOnLive {
@@ -254,14 +266,21 @@ definition {
 	macro viewTagsCP {
 		var key_tagName = "${tagName1}";
 
-		AssertTextEquals(locator1 = "Tags#TAG_ENTRY_TABLE_NAME", value1 = "${tagName1}");
+		AssertTextEquals(
+			locator1 = "Tags#TAG_ENTRY_TABLE_NAME",
+			value1 = "${tagName1}");
 
 		var key_tagName = "${tagName2}";
 
-		AssertTextEquals(locator1 = "Tags#TAG_ENTRY_TABLE_NAME", value1 = "${tagName2}");
+		AssertTextEquals(
+			locator1 = "Tags#TAG_ENTRY_TABLE_NAME",
+			value1 = "${tagName2}");
 
 		var key_tagName = "${tagName3}";
 
-		AssertTextEquals(locator1 = "Tags#TAG_ENTRY_TABLE_NAME", value1 = "${tagName3}");
+		AssertTextEquals(
+			locator1 = "Tags#TAG_ENTRY_TABLE_NAME",
+			value1 = "${tagName3}");
 	}
+
 }

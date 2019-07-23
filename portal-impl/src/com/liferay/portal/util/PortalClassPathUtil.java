@@ -16,7 +16,6 @@ package com.liferay.portal.util;
 
 import com.liferay.petra.lang.CentralizedThreadLocal;
 import com.liferay.petra.process.ProcessConfig;
-import com.liferay.petra.process.ProcessConfig.Builder;
 import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -52,7 +51,7 @@ import javax.servlet.ServletException;
 public class PortalClassPathUtil {
 
 	public static ProcessConfig createProcessConfig(Class<?>... classes) {
-		Builder builder = new Builder();
+		ProcessConfig.Builder builder = new ProcessConfig.Builder();
 
 		builder.setArguments(Arrays.asList("-Djava.awt.headless=true"));
 
@@ -113,7 +112,7 @@ public class PortalClassPathUtil {
 
 		String portalClassPath = sb.toString();
 
-		Builder builder = new Builder();
+		ProcessConfig.Builder builder = new ProcessConfig.Builder();
 
 		builder.setArguments(Arrays.asList("-Djava.awt.headless=true"));
 		builder.setBootstrapClassPath(globalClassPath);

@@ -17,7 +17,6 @@ package com.liferay.portal.dao.jdbc;
 import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.dao.jdbc.DataSourceFactoryUtil;
 import com.liferay.portal.kernel.test.rule.NewEnv;
-import com.liferay.portal.kernel.test.rule.NewEnv.JVMArgsLine;
 import com.liferay.portal.kernel.test.rule.NewEnvTestRule;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -139,11 +138,11 @@ public class DataSourceFactoryImplTest {
 			Paths.get(PropsValues.LIFERAY_LIB_PORTAL_DIR, jarName));
 	}
 
-	@JVMArgsLine(
+	@NewEnv(type = NewEnv.Type.JVM)
+	@NewEnv.JVMArgsLine(
 		"-Dcatalina.base=. -D" + _HIKARICP_JAR_URL + "=${" + _HIKARICP_JAR_URL +
 			"}"
 	)
-	@NewEnv(type = NewEnv.Type.JVM)
 	@Test
 	public void testHikariCP() throws Exception {
 		RegistryUtil.setRegistry(new BasicRegistryImpl());

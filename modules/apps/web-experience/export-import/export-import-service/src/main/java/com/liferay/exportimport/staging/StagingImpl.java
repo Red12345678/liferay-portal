@@ -85,6 +85,7 @@ import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.ResourceActionsUtil;
+import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.LayoutBranchLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
@@ -1331,6 +1332,27 @@ public class StagingImpl implements Staging {
 
 	@Override
 	public boolean isGroupAccessible(Group group, Group fromGroup) {
+		if (fromGroup == null) {
+			long companyId = group.getCompanyId();
+
+			try {
+				Company company = _companyLocalService.getCompany(companyId);
+
+				Group companyGroup = company.getGroup();
+
+				if (group.equals(companyGroup)) {
+					return true;
+				}
+			}
+			catch (PortalException pe) {
+				if (_log.isWarnEnabled()) {
+					_log.warn("Company group does not exist", pe);
+				}
+			}
+
+			return false;
+		}
+
 		if (group.equals(fromGroup)) {
 			return true;
 		}
@@ -2555,9 +2577,8 @@ public class StagingImpl implements Staging {
 			if (tabs1.equals("public-pages")) {
 				return false;
 			}
-			else {
-				return true;
-			}
+
+			return true;
 		}
 
 		return ParamUtil.getBoolean(portletRequest, "privateLayout", true);
@@ -2605,9 +2626,8 @@ public class StagingImpl implements Staging {
 			if (layoutRevision != null) {
 				return layoutRevision.getLayoutRevisionId();
 			}
-			else {
-				return 0;
-			}
+
+			return 0;
 		}
 
 		RecentLayoutRevision recentLayoutRevision =
@@ -3174,6 +3194,9 @@ public class StagingImpl implements Staging {
 
 	@Reference
 	private BackgroundTaskManager _backgroundTaskManager;
+
+	@Reference
+	private CompanyLocalService _companyLocalService;
 
 	private ExportImportConfigurationLocalService
 		_exportImportConfigurationLocalService;

@@ -1,4 +1,4 @@
 Bundle-Name: Liferay Portal Store DB
 Bundle-SymbolicName: com.liferay.portal.store.db
-Bundle-Version: 2.0.7
+Bundle-Version: 2.0.9
 Liferay-Releng-Module-Group-Title: Data Stores

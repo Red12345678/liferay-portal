@@ -218,9 +218,8 @@ public class SharedSessionWrapper implements HttpSession {
 		if (_portletSession != null) {
 			return _portletSession;
 		}
-		else {
-			return _portalSession;
-		}
+
+		return _portalSession;
 	}
 
 	protected HttpSession getSessionDelegate(String name) {

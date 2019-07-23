@@ -1,5 +1,6 @@
 @component-name = "portal-test-plugins"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Test Plugins";
@@ -19,7 +20,9 @@ definition {
 
 		Portlet.addPG(portletName = "Test Localized Portlet");
 
-		AssertClick(locator1 = "TestLocalized#CHINESE_LOCALIZATION", value1 = "Chinese");
+		AssertClick(
+			locator1 = "TestLocalized#CHINESE_LOCALIZATION",
+			value1 = "Chinese");
 
 		AssertVisible(locator1 = "TestBlob#TEST_PORTLET_BODY_PASSED");
 
@@ -34,7 +37,9 @@ definition {
 
 		AssertElementNotPresent(locator1 = "TestJSR#TEST_PORTLET_BODY_FAILED");
 
-		AssertClick(locator1 = "TestLocalized#ENGLISH_LOCALIZATION", value1 = "English");
+		AssertClick(
+			locator1 = "TestLocalized#ENGLISH_LOCALIZATION",
+			value1 = "English");
 
 		AssertVisible(locator1 = "TestBlob#TEST_PORTLET_BODY_PASSED");
 
@@ -47,7 +52,9 @@ definition {
 
 		Portlet.addPG(portletName = "Test Localized Portlet");
 
-		AssertClick(locator1 = "TestLocalized#FRENCH_LOCALIZATION", value1 = "French");
+		AssertClick(
+			locator1 = "TestLocalized#FRENCH_LOCALIZATION",
+			value1 = "French");
 
 		AssertVisible(locator1 = "TestBlob#TEST_PORTLET_BODY_PASSED");
 
@@ -60,10 +67,13 @@ definition {
 
 		Portlet.addPG(portletName = "Test Localized Portlet");
 
-		AssertClick(locator1 = "TestLocalized#SPANISH_LOCALIZATION", value1 = "Spanish");
+		AssertClick(
+			locator1 = "TestLocalized#SPANISH_LOCALIZATION",
+			value1 = "Spanish");
 
 		AssertVisible(locator1 = "TestBlob#TEST_PORTLET_BODY_PASSED");
 
 		AssertTextNotPresent(value1 = "FAILED");
 	}
+
 }

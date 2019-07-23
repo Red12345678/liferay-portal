@@ -72,14 +72,12 @@ public class KBFolderPermission implements BaseModelPermissionChecker {
 		throws PortalException {
 
 		if (actionId.equals(ActionKeys.VIEW) &&
-			PropsValues.PERMISSIONS_VIEW_DYNAMIC_INHERITANCE) {
+			PropsValues.PERMISSIONS_VIEW_DYNAMIC_INHERITANCE &&
+			!contains(
+				permissionChecker, kbFolder.getGroupId(),
+				kbFolder.getParentKBFolderId(), actionId)) {
 
-			if (!contains(
-					permissionChecker, kbFolder.getGroupId(),
-					kbFolder.getParentKBFolderId(), actionId)) {
-
-				return false;
-			}
+			return false;
 		}
 
 		if (permissionChecker.hasOwnerPermission(

@@ -49,7 +49,7 @@ public class DDLFormPortletDataHandler extends BasePortletDataHandler {
 	@Activate
 	protected void activate() {
 		setDataLevel(DataLevel.PORTLET_INSTANCE);
-		setDataPortletPreferences("groupId", "recordSetId");
+		setDataPortletPreferences("recordSetId");
 		setExportControls(new PortletDataHandlerControl[0]);
 	}
 
@@ -63,7 +63,6 @@ public class DDLFormPortletDataHandler extends BasePortletDataHandler {
 			return portletPreferences;
 		}
 
-		portletPreferences.setValue("groupId", StringPool.BLANK);
 		portletPreferences.setValue("recordSetId", StringPool.BLANK);
 
 		return portletPreferences;

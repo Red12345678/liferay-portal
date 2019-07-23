@@ -105,9 +105,8 @@ public class URLCodec {
 		if (sb == null) {
 			return encodedURLString;
 		}
-		else {
-			return sb.toString();
-		}
+
+		return sb.toString();
 	}
 
 	public static String encodeURL(String rawURLString) {
@@ -272,13 +271,12 @@ public class URLCodec {
 
 				count++;
 
-				if (Character.isHighSurrogate(rawChar)) {
-					if (((i + 1) < rawString.length()) &&
-						Character.isLowSurrogate(rawString.charAt(i + 1))) {
+				if (Character.isHighSurrogate(rawChar) &&
+					((i + 1) < rawString.length()) &&
+					Character.isLowSurrogate(rawString.charAt(i + 1))) {
 
-						i++;
-						count++;
-					}
+					i++;
+					count++;
 				}
 			}
 			else {

@@ -55,7 +55,7 @@ definition {
 		property content.targeting.release = "true";
 		property portal.acceptance = "true";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",

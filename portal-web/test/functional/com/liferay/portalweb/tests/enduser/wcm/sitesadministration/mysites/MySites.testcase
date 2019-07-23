@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Administration";
@@ -31,15 +32,16 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Sites",
 				panel = "Control Panel",
-				portlet = "Sites"
-			);
+				portlet = "Sites");
 
 			Site.addBlankCP(siteName = "Site Name ${number}");
 		}
 
 		Navigator.openURL();
 
-		Page.add(pageName = "Test Page", siteName = "${siteName}");
+		Page.add(
+			pageName = "Test Page",
+			siteName = "${siteName}");
 
 		Portlet.addPG(portletName = "My Sites");
 
@@ -57,42 +59,36 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutPG();
 
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		UserBar.gotoDashboard();
 
@@ -103,8 +99,7 @@ definition {
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "test@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 	}
 
 	@priority = "5"
@@ -114,54 +109,51 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.addBlankCP(membershipType = "Private", siteName = "Site Name");
+		Site.addBlankCP(
+			membershipType = "Private",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutPG();
 
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		UserBar.gotoDashboard();
 
-		Site.joinViaMySitesPG(membershipType = "Private", siteName = "Site Name");
+		Site.joinViaMySitesPG(
+			membershipType = "Private",
+			siteName = "Site Name");
 
 		User.logoutPG();
 
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "test@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 	}
 
 	@priority = "5"
@@ -169,46 +161,44 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.addBlankCP(membershipType = "Restricted", siteName = "Site Name");
+		Site.addBlankCP(
+			membershipType = "Restricted",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutPG();
 
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		UserBar.gotoDashboard();
 
-		Site.joinViaMySitesPG(membershipType = "Restricted", siteName = "Site Name");
+		Site.joinViaMySitesPG(
+			membershipType = "Restricted",
+			siteName = "Site Name");
 
 		UserBar.gotoDashboard();
 
@@ -221,43 +211,40 @@ definition {
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "test@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoSite(site = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.approveJoinSiteRestrictedViaMySitesPG(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutPG();
 
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		UserBar.gotoDashboard();
 
-		Site.viewMySitesViaMySitesPG(memberCount = "2", siteName = "Site Name");
+		Site.viewMySitesViaMySitesPG(
+			memberCount = "2",
+			siteName = "Site Name");
 
 		User.logoutPG();
 
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "test@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 	}
 
 	@priority = "5"
@@ -267,42 +254,36 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutPG();
 
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		UserBar.gotoDashboard();
 
@@ -317,25 +298,27 @@ definition {
 		User.loginPG(
 			password = "test",
 			userEmailAddress = "test@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 	}
 
 	@priority = "4"
 	test SearchSite {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		Page.add(pageName = "Test Page", siteName = "${siteName}");
+		Page.add(
+			pageName = "Test Page",
+			siteName = "${siteName}");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
-		Page.add(pageName = "Site Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -343,7 +326,9 @@ definition {
 
 		Site.searchInputCP(siteName = "Site Name");
 
-		Site.viewMySitesViaMySitesPG(memberCount = "1", siteName = "Site Name");
+		Site.viewMySitesViaMySitesPG(
+			memberCount = "1",
+			siteName = "Site Name");
 	}
 
 	@priority = "3"
@@ -353,76 +338,79 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		User.assignRegularRoleCP(roleName = "Power User", userScreenName = "usersn");
+		User.assignRegularRoleCP(
+			roleName = "Power User",
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
-		Page.add(pageName = "Public Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Public Page",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		Site.assignUserSitesCP(siteName = "Site Name", userScreenName = "usersn");
+		Site.assignUserSitesCP(
+			siteName = "Site Name",
+			userScreenName = "usersn");
 
 		Navigator.openURL();
 
-		Page.add(pageName = "Test Page", siteName = "${siteName}");
+		Page.add(
+			pageName = "Test Page",
+			siteName = "${siteName}");
 
 		Portlet.addPG(portletName = "My Sites");
 
-		User.firstLoginPG(password = "test", userEmailAddress = "userea@liferay.com");
+		User.firstLoginPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
-		Site.viewMySitesViaMySitesPG(memberCount = "2", siteName = "Site Name");
+		Site.viewMySitesViaMySitesPG(
+			memberCount = "2",
+			siteName = "Site Name");
 	}
 
 	@priority = "3"
@@ -432,28 +420,27 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		ProductMenu.gotoSite(site = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		Site.inactivateCP(siteName = "Site Name");
 
-		Page.add(pageName = "Test Page", siteName = "${siteName}");
+		Page.add(
+			pageName = "Test Page",
+			siteName = "${siteName}");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -461,7 +448,9 @@ definition {
 
 		Site.searchInputCP(siteName = "Site Name");
 
-		Site.viewNoMySitesViaMySitesPG(memberCount = "1", siteName = "Site Name");
+		Site.viewNoMySitesViaMySitesPG(
+			memberCount = "1",
+			siteName = "Site Name");
 	}
 
 	@priority = "3"
@@ -471,70 +460,72 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		User.assignRegularRoleCP(roleName = "Administrator", userScreenName = "usersn");
+		User.assignRegularRoleCP(
+			roleName = "Administrator",
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
-		Page.add(pageName = "Public Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Public Page",
+			siteName = "Site Name");
 
 		Site.manageMembershipOptions(allowManualMembershipManagement = "false");
 
 		Navigator.openURL();
 
-		Page.add(pageName = "Test Page", siteName = "${siteName}");
+		Page.add(
+			pageName = "Test Page",
+			siteName = "${siteName}");
 
 		Portlet.addPG(portletName = "My Sites");
 
-		User.firstLoginPG(password = "test", userEmailAddress = "userea@liferay.com");
+		User.firstLoginPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
-		MySites.viewNoOptions(navItem = "Available Sites", siteName = "Site Name");
+		MySites.viewNoOptions(
+			navItem = "Available Sites",
+			siteName = "Site Name");
 	}
 
 	@priority = "3"
@@ -544,18 +535,21 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
-		Page.add(pageName = "Public Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Public Page",
+			siteName = "Site Name");
 
 		Site.manageMembershipOptions(allowManualMembershipManagement = "false");
 
 		Navigator.openURL();
 
-		Page.add(pageName = "Test Page", siteName = "${siteName}");
+		Page.add(
+			pageName = "Test Page",
+			siteName = "${siteName}");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -563,36 +557,39 @@ definition {
 
 		Site.searchInputCP(siteName = "Site Name");
 
-		MySites.viewNoOptions(itemName = "Leave", siteName = "Site Name");
+		MySites.viewNoOptions(
+			itemName = "Leave",
+			siteName = "Site Name");
 	}
 
 	@priority = "3"
 	test ViewSitePages {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		Page.add(pageName = "Test Page", siteName = "${siteName}");
+		Page.add(
+			pageName = "Test Page",
+			siteName = "${siteName}");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
-		Page.add(pageName = "Public Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Public Page",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Private Page",
 			siteName = "Site Name",
-			sitePagePrivacy = "Private"
-		);
+			sitePagePrivacy = "Private");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -601,16 +598,14 @@ definition {
 		MySites.gotoPagesPG(
 			menuItem = "Go to Public Pages",
 			pageName = "Public Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
 		MySites.gotoPagesPG(
 			menuItem = "Go to Private Pages",
 			pageName = "Private Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 	}
 
 	@priority = "4"
@@ -620,39 +615,41 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		ProductMenu.gotoSite(site = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		for (var tagName : list "apple,banana,mango") {
 			Tag.addViaSiteCP(tagName = "${tagName}");
 		}
 
-		Page.add(pageName = "Test Page", siteName = "${siteName}");
+		Page.add(
+			pageName = "Test Page",
+			siteName = "${siteName}");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
 		Portlet.addPG(portletName = "My Sites");
 
-		Site.viewMySitesViaMySitesPG(memberCount = "1", siteName = "Site Name");
+		Site.viewMySitesViaMySitesPG(
+			memberCount = "1",
+			siteName = "Site Name");
 
 		for (var tagName : list "apple,banana,mango") {
 			MySites.viewTags(tagName = "${tagName}");
 		}
 	}
+
 }

@@ -36,9 +36,8 @@ public class SocialInteractionsConfiguration {
 		if (_socialInteractionsType.equals(SocialInteractionsType.ALL_USERS)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isSocialInteractionsFriendsEnabled() {
@@ -51,9 +50,8 @@ public class SocialInteractionsConfiguration {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isSocialInteractionsSitesEnabled() {

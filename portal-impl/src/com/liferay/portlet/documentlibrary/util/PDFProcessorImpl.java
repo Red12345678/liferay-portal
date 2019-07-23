@@ -949,10 +949,10 @@ public class PDFProcessorImpl
 	}
 
 	private boolean _hasImages(FileVersion fileVersion) throws Exception {
-		if (PropsValues.DL_FILE_ENTRY_PREVIEW_ENABLED) {
-			if (!hasPreview(fileVersion)) {
-				return false;
-			}
+		if (PropsValues.DL_FILE_ENTRY_PREVIEW_ENABLED &&
+			!hasPreview(fileVersion)) {
+
+			return false;
 		}
 
 		return hasThumbnails(fileVersion);
@@ -966,9 +966,8 @@ public class PDFProcessorImpl
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	private boolean _isGenerateThumbnail(FileVersion fileVersion)
@@ -979,9 +978,8 @@ public class PDFProcessorImpl
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	private void _queueGeneration(

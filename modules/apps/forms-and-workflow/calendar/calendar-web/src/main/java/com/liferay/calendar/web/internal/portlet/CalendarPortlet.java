@@ -1292,10 +1292,8 @@ public class CalendarPortlet extends MVCPortlet {
 				continue;
 			}
 
-			if (calendarResource.isUser()) {
-				if (!showUserEvents) {
-					continue;
-				}
+			if (calendarResource.isUser() && !showUserEvents) {
+				continue;
 			}
 
 			Group group = _groupLocalService.getGroup(calendar.getGroupId());

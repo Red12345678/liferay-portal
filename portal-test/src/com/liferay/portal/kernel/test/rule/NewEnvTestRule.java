@@ -18,16 +18,11 @@ import com.liferay.petra.process.ClassPathUtil;
 import com.liferay.petra.process.ProcessCallable;
 import com.liferay.petra.process.ProcessChannel;
 import com.liferay.petra.process.ProcessConfig;
-import com.liferay.petra.process.ProcessConfig.Builder;
 import com.liferay.petra.process.ProcessException;
 import com.liferay.petra.process.ProcessExecutor;
 import com.liferay.petra.process.local.LocalProcessExecutor;
-import com.liferay.petra.process.local.LocalProcessLauncher.ProcessContext;
-import com.liferay.petra.process.local.LocalProcessLauncher.ShutdownHook;
+import com.liferay.petra.process.local.LocalProcessLauncher;
 import com.liferay.petra.string.CharPool;
-import com.liferay.portal.kernel.test.rule.BaseTestRule.StatementWrapper;
-import com.liferay.portal.kernel.test.rule.NewEnv.Environment;
-import com.liferay.portal.kernel.test.rule.NewEnv.JVMArgsLine;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.MethodKey;
@@ -89,7 +84,7 @@ public class NewEnvTestRule implements TestRule {
 			return new RunInNewClassLoaderStatement(statement, description);
 		}
 
-		Builder builder = new Builder();
+		ProcessConfig.Builder builder = new ProcessConfig.Builder();
 
 		builder.setArguments(createArguments(description));
 		builder.setBootstrapClassPath(CLASS_PATH);
@@ -105,9 +100,9 @@ public class NewEnvTestRule implements TestRule {
 			return;
 		}
 
-		ProcessContext.attach(
+		LocalProcessLauncher.ProcessContext.attach(
 			message, 1000,
-			new ShutdownHook() {
+			new LocalProcessLauncher.ShutdownHook() {
 
 				@Override
 				public boolean shutdown(
@@ -159,13 +154,14 @@ public class NewEnvTestRule implements TestRule {
 
 		Class<?> testClass = description.getTestClass();
 
-		JVMArgsLine jvmArgsLine = testClass.getAnnotation(JVMArgsLine.class);
+		NewEnv.JVMArgsLine jvmArgsLine = testClass.getAnnotation(
+			NewEnv.JVMArgsLine.class);
 
 		if (jvmArgsLine != null) {
 			arguments.addAll(processJVMArgsLine(jvmArgsLine));
 		}
 
-		jvmArgsLine = description.getAnnotation(JVMArgsLine.class);
+		jvmArgsLine = description.getAnnotation(NewEnv.JVMArgsLine.class);
 
 		if (jvmArgsLine != null) {
 			arguments.addAll(processJVMArgsLine(jvmArgsLine));
@@ -251,7 +247,7 @@ public class NewEnvTestRule implements TestRule {
 		return environmentMap;
 	}
 
-	protected List<String> processJVMArgsLine(JVMArgsLine jvmArgsLine) {
+	protected List<String> processJVMArgsLine(NewEnv.JVMArgsLine jvmArgsLine) {
 		String[] jvmArgs = StringUtil.split(
 			jvmArgsLine.value(), StringPool.SPACE);
 
@@ -290,12 +286,15 @@ public class NewEnvTestRule implements TestRule {
 		return sb.toString();
 	}
 
-	protected void setEnvironment(Builder builder, Description description) {
+	protected void setEnvironment(
+		ProcessConfig.Builder builder, Description description) {
+
 		Map<String, String> environmentMap = new HashMap<>(System.getenv());
 
 		Class<?> testClass = description.getTestClass();
 
-		Environment environment = testClass.getAnnotation(Environment.class);
+		NewEnv.Environment environment = testClass.getAnnotation(
+			NewEnv.Environment.class);
 
 		if (environment != null) {
 			Map<String, String> map = processEnvironmentVariables(
@@ -309,7 +308,7 @@ public class NewEnvTestRule implements TestRule {
 			}
 		}
 
-		environment = description.getAnnotation(Environment.class);
+		environment = description.getAnnotation(NewEnv.Environment.class);
 
 		if (environment != null) {
 			Map<String, String> map = processEnvironmentVariables(
@@ -413,7 +412,8 @@ public class NewEnvTestRule implements TestRule {
 
 	}
 
-	private class RunInNewClassLoaderStatement extends StatementWrapper {
+	private class RunInNewClassLoaderStatement
+		extends BaseTestRule.StatementWrapper {
 
 		public RunInNewClassLoaderStatement(
 			Statement statement, Description description) {
@@ -490,7 +490,7 @@ public class NewEnvTestRule implements TestRule {
 
 	}
 
-	private class RunInNewJVMStatment extends StatementWrapper {
+	private class RunInNewJVMStatment extends BaseTestRule.StatementWrapper {
 
 		public RunInNewJVMStatment(
 			ProcessConfig processConfig, Statement statement,

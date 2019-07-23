@@ -5,7 +5,7 @@ dependencies {
 
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "2.4.0"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.4.0"
-	compileOnly group: "org.osgi", name: "org.osgi.core", version: "6.0.0"
+	compileOnly group: "org.osgi", name: "osgi.core", version: "6.0.0"
 }
 
 deploy {

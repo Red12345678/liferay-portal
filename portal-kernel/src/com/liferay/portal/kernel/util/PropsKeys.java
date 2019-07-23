@@ -128,7 +128,7 @@ public interface PropsKeys {
 		"asset.categories.selector.max.entries";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Wilberforce (7.0.x), with no direct replacement
+	 * @deprecated As of Wilberforce (7.0.x), with no direct replacement
 	 */
 	@Deprecated
 	public static final String ASSET_ENTRY_VALIDATOR = "asset.entry.validator";
@@ -1080,6 +1080,12 @@ public interface PropsKeys {
 	public static final String DL_WEBDAV_SUBSTITUTION_CHAR =
 		"dl.webdav.substitution.char";
 
+	public static final String DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS =
+		"dns.security.address.timeout.seconds";
+
+	public static final String DNS_SECURITY_THREAD_LIMIT =
+		"dns.security.thread.limit";
+
 	public static final String DYNAMIC_RESOURCE_SERVLET_ALLOWED_PATHS =
 		"dynamic.resource.servlet.allowed.paths";
 
@@ -1100,7 +1106,7 @@ public interface PropsKeys {
 			"ehcache.bootstrap.cache.loader.properties.default";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), replaced by {@link
+	 * @deprecated As of Judson (7.1.x), As of Judson (7.1.x), replaced by {@link
 	 *             #EHCACHE_REPLICATOR_PROPERTIES}
 	 */
 	@Deprecated
@@ -1108,7 +1114,7 @@ public interface PropsKeys {
 		"ehcache.cluster.link.replicator.properties";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), replaced by {@link
+	 * @deprecated As of Judson (7.1.x), As of Judson (7.1.x), replaced by {@link
 	 *             #EHCACHE_REPLICATOR_PROPERTIES_DEFAULT}
 	 */
 	@Deprecated
@@ -1205,7 +1211,7 @@ public interface PropsKeys {
 			"field.enable.com.liferay.portal.kernel.model.Organization.status";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), replaced by {@link
+	 * @deprecated As of Judson (7.1.x), As of Judson (7.1.x), replaced by {@link
 	 *             #FIELD_ENABLE_COM_LIFERAY_PORTAL_KERNEL_MODEL_CONTACT_BIRTHDAY}
 	 */
 	@Deprecated
@@ -1214,7 +1220,7 @@ public interface PropsKeys {
 			"field.enable.com.liferay.portal.kernel.model.Contact.birthday";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), replaced by {@link
+	 * @deprecated As of Judson (7.1.x), As of Judson (7.1.x), replaced by {@link
 	 *             #FIELD_ENABLE_COM_LIFERAY_PORTAL_KERNEL_MODEL_CONTACT_MALE}
 	 */
 	@Deprecated
@@ -1223,7 +1229,7 @@ public interface PropsKeys {
 			"field.enable.com.liferay.portal.kernel.model.Contact.male";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), replaced by {@link
+	 * @deprecated As of Judson (7.1.x), As of Judson (7.1.x), replaced by {@link
 	 *             #FIELD_ENABLE_COM_LIFERAY_PORTAL_KERNEL_MODEL_ORGANIZATION_STATUS}
 	 */
 	@Deprecated
@@ -1349,7 +1355,7 @@ public interface PropsKeys {
 		"index.search.engine.id";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), with no direct replacement
+	 * @deprecated As of Judson (7.1.x), as of Judson (7.1.x), with no direct replacement
 	 */
 	@Deprecated
 	public static final String INDEX_SEARCH_HIGHLIGHT_ENABLED =
@@ -1450,7 +1456,7 @@ public interface PropsKeys {
 		"invoker.filter.chain.cache.enabled";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), replaced with {@link
+	 * @deprecated As of Judson (7.1.x), As of Judson (7.1.x), replaced with {@link
 	 *             #INVOKER_FILTER_CHAIN_ENABLED}
 	 */
 	@Deprecated
@@ -1612,7 +1618,7 @@ public interface PropsKeys {
 		"layout.parallel.render.enable";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), with no direct replacement
+	 * @deprecated As of Judson (7.1.x), as of Judson (7.1.x), with no direct replacement
 	 */
 	@Deprecated
 	public static final String
@@ -1985,14 +1991,14 @@ public interface PropsKeys {
 		"message.boards.user.ranks";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), with no direct replacement
+	 * @deprecated As of Judson (7.1.x), as of Judson (7.1.x), with no direct replacement
 	 */
 	@Deprecated
 	public static final String MICROSOFT_TRANSLATOR_CLIENT_ID =
 		"microsoft.translator.client.id";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), with no direct replacement
+	 * @deprecated As of Judson (7.1.x), as of Judson (7.1.x), with no direct replacement
 	 */
 	@Deprecated
 	public static final String MICROSOFT_TRANSLATOR_CLIENT_SECRET =
@@ -2009,7 +2015,7 @@ public interface PropsKeys {
 		"minifier.inline.content.cache.enabled";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), replaced by {@link
+	 * @deprecated As of Judson (7.1.x), As of Judson (7.1.x), replaced by {@link
 	 *             #MINIFIER_INLINE_CONTENT_CACHE_ENABLED}
 	 */
 	@Deprecated
@@ -2057,8 +2063,11 @@ public interface PropsKeys {
 	public static final String MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL =
 		"module.framework.dynamic.install.start.level";
 
+	public static final String MODULE_FRAMEWORK_EXPORT_PASSWORD_ATTRIBUTES =
+		"module.framework.export.password.attributes";
+
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), with no direct replacement
+	 * @deprecated As of Judson (7.1.x), as of Judson (7.1.x), with no direct replacement
 	 */
 	@Deprecated
 	public static final String MODULE_FRAMEWORK_INITIAL_BUNDLES =
@@ -2822,21 +2831,21 @@ public interface PropsKeys {
 		"search.container.page.iterator.max.pages";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), with no direct replacement
+	 * @deprecated As of Judson (7.1.x), as of Judson (7.1.x), with no direct replacement
 	 */
 	@Deprecated
 	public static final String SEARCH_CONTAINER_SHOW_PAGINATION_BOTTOM =
 		"search.container.show.pagination.bottom";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), with no direct replacement
+	 * @deprecated As of Judson (7.1.x), as of Judson (7.1.x), with no direct replacement
 	 */
 	@Deprecated
 	public static final String SEARCH_CONTAINER_SHOW_PAGINATION_TOP =
 		"search.container.show.pagination.top";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), with no direct replacement
+	 * @deprecated As of Judson (7.1.x), as of Judson (7.1.x), with no direct replacement
 	 */
 	@Deprecated
 	public static final String SEARCH_CONTAINER_SHOW_PAGINATION_TOP_DELTA =
@@ -2940,7 +2949,7 @@ public interface PropsKeys {
 		"setup.database.jar.url";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), with no direct replacement
+	 * @deprecated As of Judson (7.1.x), as of Judson (7.1.x), with no direct replacement
 	 */
 	@Deprecated
 	public static final String SETUP_DATABASE_TYPES = "setup.database.types";
@@ -3261,7 +3270,7 @@ public interface PropsKeys {
 	public static final String SYSTEM_SITE_ROLES = "system.site.roles";
 
 	/**
-	 * @deprecated As of 7.0.0, As of Judson (7.1.x), replaced by {@link
+	 * @deprecated As of Judson (7.1.x), As of Judson (7.1.x), replaced by {@link
 	 *             #TABLE_MAPPER_CACHELESS_MAPPING_TABLE_NAMES}
 	 */
 	@Deprecated

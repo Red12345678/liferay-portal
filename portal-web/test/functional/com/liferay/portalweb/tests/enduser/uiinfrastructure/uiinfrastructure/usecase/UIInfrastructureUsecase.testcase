@@ -1,5 +1,6 @@
 @component-name = "portal-user-interface"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "User Interface";
@@ -38,12 +39,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
-		WebContent.addLocale(language = "Hebrew (Israel)", locale = "iw_IL");
+		WebContent.addLocale(
+			language = "Hebrew (Israel)",
+			locale = "iw_IL");
 
 		WebContent.addCP(webContentTitle = "WC Title");
 
@@ -66,8 +68,7 @@ definition {
 		task ("Assert the 'Configuration' iframe of the Hello World portlet") {
 			Portlet.gotoPortletOptions(
 				portletName = "Hello World",
-				portletOption = "Configuration"
-			);
+				portletOption = "Configuration");
 
 			IFrame.selectConfigurationFrame();
 
@@ -81,10 +82,11 @@ definition {
 		task ("Assert the 'Look and Feel' modal of the Hello World portlet") {
 			Portlet.gotoPortletOptions(
 				portletName = "Hello World",
-				portletOption = "Look and Feel Configuration"
-			);
+				portletOption = "Look and Feel Configuration");
 
-			AssertTextEquals(locator1 = "NavTab#GENERAL", value1 = "General");
+			AssertTextEquals(
+				locator1 = "NavTab#GENERAL",
+				value1 = "General");
 
 			Click(locator1 = "Icon#CLOSE");
 		}
@@ -92,14 +94,12 @@ definition {
 		Portlet.dragAndDropPortletToColumnPG(
 			columnNumberFrom = "1",
 			columnNumberTo = "2",
-			portletName = "Hello World"
-		);
+			portletName = "Hello World");
 
 		Portlet.dragAndDropPortletToColumnPG(
 			columnNumberFrom = "2",
 			columnNumberTo = "1",
-			portletName = "Hello World"
-		);
+			portletName = "Hello World");
 
 		task ("Removes Hello World Portlets on Test Page and Welcome Page") {
 			Navigator.gotoPage(pageName = "Test Page");
@@ -121,28 +121,24 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "skandi@liferay.com",
 			userFirstName = "Skändi",
 			userLastName = "Ääkkönen",
-			userScreenName = "uskandi"
-		);
+			userScreenName = "uskandi");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.viewCP(
 			userEmailAddress = "skandi@liferay.com",
 			userFirstName = "Skändi",
 			userLastName = "Ääkkönen",
-			userScreenName = "uskandi"
-		);
+			userScreenName = "uskandi");
 	}
 
 	@priority = "5"
@@ -152,20 +148,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsNavigator.gotoAddEntry();
 
 		BlogsEntry.addEntryContent(
 			entryContent = "Blogs Content",
-			entryTitle = "Blogs Title"
-		);
+			entryTitle = "Blogs Title");
 
 		Button.clickPublish();
 
-		Alert.viewSuccessMessageText(
-			successMessage = "Your request completed successfully."
-		);
+		Alert.viewSuccessMessageText(successMessage = "Your request completed successfully.");
 	}
+
 }

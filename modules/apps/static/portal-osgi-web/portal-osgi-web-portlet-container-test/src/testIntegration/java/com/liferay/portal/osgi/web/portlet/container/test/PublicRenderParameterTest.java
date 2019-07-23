@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.test.randomizerbumpers.FriendlyURLRandomizerBumper;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.test.PortletContainerTestUtil;
-import com.liferay.portal.util.test.PortletContainerTestUtil.Response;
 import com.liferay.portlet.PortletURLImpl;
 
 import java.io.IOException;
@@ -150,7 +149,8 @@ public class PublicRenderParameterTest extends BasePortletContainerTestCase {
 			portletURLString.contains(
 				PortletQName.PUBLIC_RENDER_PARAMETER_NAMESPACE));
 
-		Response response = PortletContainerTestUtil.request(portletURLString);
+		PortletContainerTestUtil.Response response =
+			PortletContainerTestUtil.request(portletURLString);
 
 		Assert.assertEquals(200, response.getCode());
 
@@ -209,7 +209,8 @@ public class PublicRenderParameterTest extends BasePortletContainerTestCase {
 			portletURLString.contains(
 				PortletQName.PUBLIC_RENDER_PARAMETER_NAMESPACE));
 
-		Response response = PortletContainerTestUtil.request(portletURLString);
+		PortletContainerTestUtil.Response response =
+			PortletContainerTestUtil.request(portletURLString);
 
 		Assert.assertEquals(200, response.getCode());
 

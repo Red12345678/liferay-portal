@@ -39,7 +39,6 @@ import com.liferay.portal.util.PropsUtil;
 import com.liferay.portal.util.PropsValues;
 import com.liferay.portal.util.test.LayoutTestUtil;
 import com.liferay.portal.util.test.PortletContainerTestUtil;
-import com.liferay.portal.util.test.PortletContainerTestUtil.Response;
 import com.liferay.portlet.PortletURLImpl;
 
 import java.io.IOException;
@@ -400,8 +399,8 @@ public class EmbeddedPortletTest {
 			portletURL.setParameter(
 				"testRuntimePortletId", testRuntimePortletId);
 
-			Response response = PortletContainerTestUtil.request(
-				portletURL.toString());
+			PortletContainerTestUtil.Response response =
+				PortletContainerTestUtil.request(portletURL.toString());
 
 			Assert.assertEquals(200, response.getCode());
 
@@ -480,8 +479,8 @@ public class EmbeddedPortletTest {
 			portletURL.setParameter(
 				"testRuntimePortletId", testRuntimePortletId);
 
-			Response response = PortletContainerTestUtil.request(
-				portletURL.toString());
+			PortletContainerTestUtil.Response response =
+				PortletContainerTestUtil.request(portletURL.toString());
 
 			Assert.assertEquals(200, response.getCode());
 

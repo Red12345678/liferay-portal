@@ -31,7 +31,7 @@ TeamDisplayTerms searchTerms = (TeamDisplayTerms)teamSearch.getSearchTerms();
 
 portletURL.setParameter(teamSearch.getCurParam(), String.valueOf(teamSearch.getCur()));
 
-int teamsCount = TeamLocalServiceUtil.searchCount(scopeGroupId, searchTerms.getKeywords(), searchTerms.getDescription(), new LinkedHashMap<String, Object>());
+int teamsCount = TeamLocalServiceUtil.searchCount(scopeGroupId, searchTerms.getKeywords(), searchTerms.getKeywords(), new LinkedHashMap<String, Object>());
 
 teamSearch.setTotal(teamsCount);
 %>

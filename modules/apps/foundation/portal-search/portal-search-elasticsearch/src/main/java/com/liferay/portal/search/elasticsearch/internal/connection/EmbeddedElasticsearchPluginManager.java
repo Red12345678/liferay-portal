@@ -27,7 +27,6 @@ import java.util.Optional;
 
 import org.elasticsearch.Version;
 import org.elasticsearch.common.cli.Terminal;
-import org.elasticsearch.common.cli.Terminal.Verbosity;
 
 /**
  * @author Artur Aquino
@@ -122,7 +121,7 @@ public class EmbeddedElasticsearchPluginManager {
 	protected Terminal getTerminal() {
 		Terminal terminal = Terminal.DEFAULT;
 
-		terminal.verbosity(Verbosity.SILENT);
+		terminal.verbosity(Terminal.Verbosity.SILENT);
 
 		return terminal;
 	}

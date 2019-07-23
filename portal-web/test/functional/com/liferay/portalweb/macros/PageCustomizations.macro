@@ -1,4 +1,5 @@
 definition {
+
 	macro enableSectionCustomizableCP {
 		var key_columnId = "${columnId}";
 
@@ -8,13 +9,9 @@ definition {
 
 		Panel.expandPanel(panelHeading = "Customization Settings");
 
-		Check.checkToggleSwitch(
-			locator1 = "SitePagesEditPage#CUSTOMIZATION_SETTINGS_SHOW_CUSTOMIZABLE_SECTIONS"
-		);
+		Check.checkToggleSwitch(locator1 = "SitePagesEditPage#CUSTOMIZATION_SETTINGS_SHOW_CUSTOMIZABLE_SECTIONS");
 
-		Check.checkToggleSwitch(
-			locator1 = "SitePagesEditPage#CUSTOMIZATION_SETTINGS_CUSTOMIZABLE_COLUMN"
-		);
+		Check.checkToggleSwitch(locator1 = "SitePagesEditPage#CUSTOMIZATION_SETTINGS_CUSTOMIZABLE_COLUMN");
 
 		PortletEntry.save();
 	}
@@ -22,15 +19,13 @@ definition {
 	macro enableSectionCustomizablePG {
 		var key_columnId = "${columnId}";
 
-		Check.checkToggleSwitch(
-			locator1 = "SitePagesEditPage#CUSTOMIZATION_SETTINGS_SHOW_CUSTOMIZABLE_SECTIONS"
-		);
+		Check.checkToggleSwitch(locator1 = "SitePagesEditPage#CUSTOMIZATION_SETTINGS_SHOW_CUSTOMIZABLE_SECTIONS");
 
-		Check.checkToggleSwitch(
-			locator1 = "SitePagesEditPage#CUSTOMIZATION_SETTINGS_CUSTOMIZABLE_COLUMN_CHECKBOX"
-		);
+		Check.checkToggleSwitch(locator1 = "SitePagesEditPage#CUSTOMIZATION_SETTINGS_CUSTOMIZABLE_COLUMN_CHECKBOX");
 
-		AssertClick.pauseAssertTextClickAt(locator1 = "Button#SAVE", value1 = "Save");
+		AssertClick.pauseAssertTextClickAt(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
 		Alert.viewSuccessMessage();
 	}
@@ -54,9 +49,7 @@ definition {
 
 			MenuItem.clickNoError(menuItem = "Reset My Customizations");
 
-			Confirm(
-				value1 = "Are you sure you want to reset your customizations to default?"
-			);
+			Confirm(value1 = "Are you sure you want to reset your customizations to default?");
 		}
 	}
 
@@ -65,17 +58,15 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Home#PAGE_CUSTOMIZATION_MESSAGE_INFO",
-			value1 = "You can customize this page."
-		);
+			value1 = "You can customize this page.");
 
 		AssertTextEquals(
 			locator1 = "Home#PAGE_CUSTOMIZATION_VIEW_DEFAULT_PAGE",
-			value1 = "View Page without my customizations"
-		);
+			value1 = "View Page without my customizations");
 
 		AssertTextEquals(
 			locator1 = "Home#PAGE_CUSTOMIZATION_RESET_MY_CUSTOMIZATIONS",
-			value1 = "Reset My Customizations"
-		);
+			value1 = "Reset My Customizations");
 	}
+
 }

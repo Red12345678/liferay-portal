@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 
 <suppressions>
+	<checkstyle>
+		<suppress checks="CamelCaseNameCheck" files="modules/apps/foundation/portal-search/portal-search/src/main/java/com/liferay/portal/search/internal/SearchEngineInitializer\.java" />
+	</checkstyle>
 	<source-check>
-		<suppress checks="LanguageKeysCheck" files="portal-search-api/.*" />
+		<suppress checks="YMLEmptyLinesCheck" files="modules/apps/foundation/portal-search/portal-search-elasticsearch/src/main/resources/META-INF/elasticsearch-optional-defaults\.yml" />
 	</source-check>
 </suppressions>

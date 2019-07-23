@@ -42,9 +42,8 @@ public class LiferayDataHandler extends DummyDataHandler {
 		if (StringUtil.equalsIgnoreCase(label, namespaceString)) {
 			return _fileNamespace;
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override

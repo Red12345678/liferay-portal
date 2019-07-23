@@ -58,7 +58,6 @@ import javax.mail.FetchProfile;
 import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
-import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -107,15 +106,14 @@ public class IMAPAccessor {
 			if (jxFolder.exists()) {
 				throw new MailException(MailException.FOLDER_ALREADY_EXISTS);
 			}
-			else {
-				if (jxFolder.create(Folder.HOLDS_MESSAGES)) {
-					return new String[] {
-						jxFolder.getFullName(), jxFolder.getName()
-					};
-				}
 
-				throw new MailException(MailException.FOLDER_CREATE_FAILED);
+			if (jxFolder.create(Folder.HOLDS_MESSAGES)) {
+				return new String[] {
+					jxFolder.getFullName(), jxFolder.getName()
+				};
 			}
+
+			throw new MailException(MailException.FOLDER_CREATE_FAILED);
 		}
 		catch (MessagingException me) {
 			throw new MailException(me);
@@ -392,9 +390,8 @@ public class IMAPAccessor {
 					jxFolder.getFullName(), jxFolder.getName()
 				};
 			}
-			else {
-				throw new MailException(MailException.FOLDER_RENAME_FAILED);
-			}
+
+			throw new MailException(MailException.FOLDER_RENAME_FAILED);
 		}
 		catch (MessagingException me) {
 			throw new MailException(me);
@@ -634,11 +631,11 @@ public class IMAPAccessor {
 				String sender = InternetAddressUtil.toString(
 					jxMessage.getFrom());
 				String to = InternetAddressUtil.toString(
-					jxMessage.getRecipients(RecipientType.TO));
+					jxMessage.getRecipients(Message.RecipientType.TO));
 				String cc = InternetAddressUtil.toString(
-					jxMessage.getRecipients(RecipientType.CC));
+					jxMessage.getRecipients(Message.RecipientType.CC));
 				String bcc = InternetAddressUtil.toString(
-					jxMessage.getRecipients(RecipientType.BCC));
+					jxMessage.getRecipients(Message.RecipientType.BCC));
 				Date sentDate = jxMessage.getSentDate();
 				String subject = jxMessage.getSubject();
 				String flags = getFlags(jxMessage);
@@ -865,9 +862,8 @@ public class IMAPAccessor {
 
 			return getMessage(folderId, jxFolder, oldest);
 		}
-		else {
-			return jxMessage;
-		}
+
+		return jxMessage;
 	}
 
 	protected int[] getMessageIndexes(
@@ -1058,20 +1054,20 @@ public class IMAPAccessor {
 	}
 
 	protected InternetAddress[] getRecipients(
-			long messageId, RecipientType recipientType)
+			long messageId, Message.RecipientType recipientType)
 		throws PortalException {
 
 		try {
 			com.liferay.mail.reader.model.Message message =
 				MessageLocalServiceUtil.getMessage(messageId);
 
-			if (recipientType.equals(RecipientType.TO)) {
+			if (recipientType.equals(Message.RecipientType.TO)) {
 				return InternetAddress.parse(message.getTo());
 			}
-			else if (recipientType.equals(RecipientType.CC)) {
+			else if (recipientType.equals(Message.RecipientType.CC)) {
 				return InternetAddress.parse(message.getCc());
 			}
-			else if (recipientType.equals(RecipientType.BCC)) {
+			else if (recipientType.equals(Message.RecipientType.BCC)) {
 				return InternetAddress.parse(message.getBcc());
 			}
 			else {

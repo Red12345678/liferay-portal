@@ -227,9 +227,8 @@ public class LocaleUtil {
 			if (useDefault) {
 				return _locale;
 			}
-			else {
-				return null;
-			}
+
+			return null;
 		}
 
 		Locale locale = _locales.get(languageId);

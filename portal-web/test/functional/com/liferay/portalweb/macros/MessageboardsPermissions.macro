@@ -1,6 +1,9 @@
 definition {
+
 	macro checkReplyToMessageForGuestPG {
-		AssertClick(locator1 = "Button#PERMISSIONS", value1 = "Permissions");
+		AssertClick(
+			locator1 = "Button#PERMISSIONS",
+			value1 = "Permissions");
 
 		IFrame.selectDialogFrame();
 
@@ -12,4 +15,5 @@ definition {
 
 		Click(locator1 = "Icon#CLOSE");
 	}
+
 }

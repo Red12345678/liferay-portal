@@ -1,6 +1,9 @@
 definition {
+
 	macro click {
-		Click.mouseDownMouseUp(locator1 = "Button#ANY", key_text = "${button}");
+		Click.mouseDownMouseUp(
+			key_text = "${button}",
+			locator1 = "Button#ANY");
 	}
 
 	macro clickAddRow {
@@ -28,7 +31,9 @@ definition {
 	}
 
 	macro clickPublish {
-		ScrollWebElementIntoView(locator1 = "Button#ANY", key_text = "Publish");
+		ScrollWebElementIntoView(
+			key_text = "Publish",
+			locator1 = "Button#ANY");
 
 		Button.click(button = "Publish");
 	}
@@ -50,6 +55,9 @@ definition {
 	}
 
 	macro viewNotPresent {
-		AssertElementNotPresent(locator1 = "Button#ANY", key_text = "${button}");
+		AssertElementNotPresent(
+			key_text = "${button}",
+			locator1 = "Button#ANY");
 	}
+
 }

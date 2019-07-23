@@ -66,9 +66,8 @@ public class ShoppingCartItemImpl implements ShoppingCartItem {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -78,9 +77,8 @@ public class ShoppingCartItemImpl implements ShoppingCartItem {
 		if (Validator.isNull(_fields)) {
 			return String.valueOf(itemId);
 		}
-		else {
-			return itemId + "|" + _fields;
-		}
+
+		return itemId + "|" + _fields;
 	}
 
 	@Override

@@ -150,15 +150,21 @@ public class AssetBrowserDisplayContext {
 		assetBrowserSearch.setTotal(total);
 
 		if (AssetBrowserWebConfigurationValues.SEARCH_WITH_DATABASE) {
+			long[] subtypeSelectionIds = null;
+
+			if (getSubtypeSelectionId() > 0) {
+				subtypeSelectionIds = new long[] {getSubtypeSelectionId()};
+			}
+
 			List<AssetEntry> assetEntries =
 				AssetEntryLocalServiceUtil.getEntries(
 					getFilterGroupIds(),
 					new long[] {assetRendererFactory.getClassNameId()},
-					new long[] {getSubtypeSelectionId()}, getKeywords(),
-					getKeywords(), getKeywords(), getKeywords(), getListable(),
-					false, false, assetBrowserSearch.getStart(),
-					assetBrowserSearch.getEnd(), "modifiedDate",
-					StringPool.BLANK, getOrderByType(), StringPool.BLANK);
+					subtypeSelectionIds, getKeywords(), getKeywords(),
+					getKeywords(), getKeywords(), getListable(), false, false,
+					assetBrowserSearch.getStart(), assetBrowserSearch.getEnd(),
+					"modifiedDate", StringPool.BLANK, getOrderByType(),
+					StringPool.BLANK);
 
 			assetBrowserSearch.setResults(assetEntries);
 		}
@@ -176,13 +182,13 @@ public class AssetBrowserDisplayContext {
 
 			if (Objects.equals(getOrderByCol(), "modified-date")) {
 				sort = new Sort(
-					Field.MODIFIED_DATE, Sort.LONG_TYPE, orderByAsc);
+					Field.MODIFIED_DATE, Sort.LONG_TYPE, !orderByAsc);
 			}
 			else if (Objects.equals(getOrderByCol(), "title")) {
 				String sortFieldName = DocumentImpl.getSortableFieldName(
 					"localized_title_".concat(themeDisplay.getLanguageId()));
 
-				sort = new Sort(sortFieldName, Sort.STRING_TYPE, orderByAsc);
+				sort = new Sort(sortFieldName, Sort.STRING_TYPE, !orderByAsc);
 			}
 
 			Hits hits = AssetEntryLocalServiceUtil.search(
@@ -440,10 +446,16 @@ public class AssetBrowserDisplayContext {
 		int total = 0;
 
 		if (AssetBrowserWebConfigurationValues.SEARCH_WITH_DATABASE) {
+			long[] subtypeSelectionIds = null;
+
+			if (getSubtypeSelectionId() > 0) {
+				subtypeSelectionIds = new long[] {getSubtypeSelectionId()};
+			}
+
 			total = AssetEntryLocalServiceUtil.getEntriesCount(
 				groupIds, new long[] {assetRendererFactory.getClassNameId()},
-				getKeywords(), getKeywords(), getKeywords(), getKeywords(),
-				getListable(), false, false);
+				subtypeSelectionIds, getKeywords(), getKeywords(),
+				getKeywords(), getKeywords(), getListable(), false, false);
 		}
 		else {
 			total = (int)AssetEntryLocalServiceUtil.searchCount(

@@ -168,7 +168,7 @@ public class AssetTagStagedModelDataHandler
 			}
 			catch (DuplicateTagException dte) {
 				if (_log.isDebugEnabled()) {
-					_log.debug(dte);
+					_log.debug(dte, dte);
 				}
 
 				importedAssetTag = _assetTagLocalService.addTag(
@@ -184,7 +184,7 @@ public class AssetTagStagedModelDataHandler
 			}
 			catch (DuplicateTagException dte) {
 				if (_log.isDebugEnabled()) {
-					_log.debug(dte);
+					_log.debug(dte, dte);
 				}
 
 				importedAssetTag = _assetTagLocalService.updateTag(

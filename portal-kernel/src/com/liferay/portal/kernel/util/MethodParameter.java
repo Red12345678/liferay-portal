@@ -207,7 +207,7 @@ public class MethodParameter {
 			return null;
 		}
 
-		return genericTypeslist.toArray(new Class<?>[genericTypeslist.size()]);
+		return genericTypeslist.toArray(new Class<?>[0]);
 	}
 
 	private boolean _isPrimitive(char c) {
@@ -217,9 +217,8 @@ public class MethodParameter {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	private final Class<?>[] _genericTypes;

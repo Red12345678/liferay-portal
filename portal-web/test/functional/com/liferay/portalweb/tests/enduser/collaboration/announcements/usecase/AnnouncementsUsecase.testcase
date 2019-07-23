@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property custom.properties = "default.layout.template.id=1_column";
@@ -44,8 +45,7 @@ definition {
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content",
 			entryTitle = "Announcements Entry Title",
-			entryURL = "http://www.google.com"
-		);
+			entryURL = "http://www.google.com");
 
 		Navigator.gotoPage(pageName = "Announcements Page");
 
@@ -53,29 +53,29 @@ definition {
 			announcementType = "General",
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content",
-			entryTitle = "Announcements Entry Title"
-		);
+			entryTitle = "Announcements Entry Title");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.addCP(siteName = "Community Site Name", siteType = "Community");
+		Site.addCP(
+			siteName = "Community Site Name",
+			siteType = "Community");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Page Name", siteName = "Community Site Name");
+		Page.add(
+			pageName = "Site Page Name",
+			siteName = "Community Site Name");
 
 		Navigator.gotoSitePage(
 			pageName = "Site Page Name",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Portlet.addPG(portletName = "Announcements");
 
@@ -83,8 +83,7 @@ definition {
 			announcementType = "General",
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content",
-			entryTitle = "Announcements Entry Title"
-		);
+			entryTitle = "Announcements Entry Title");
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
@@ -92,13 +91,11 @@ definition {
 			distributionScope = "${siteName}",
 			entryContent = "Announcements Entry2 Scoped Content",
 			entryTitle = "Announcements Entry2 Scoped Title",
-			entryURL = "http://www.yahoo.com"
-		);
+			entryURL = "http://www.yahoo.com");
 
 		Navigator.gotoSitePage(
 			pageName = "Site Page Name",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		AnnouncementsEntry.viewNoPG(entryTitle = "Announcements Entry2 Scoped Title");
 
@@ -108,50 +105,45 @@ definition {
 			announcementType = "General",
 			distributionScope = "${siteName}",
 			entryContent = "Announcements Entry2 Scoped Content",
-			entryTitle = "Announcements Entry2 Scoped Title"
-		);
+			entryTitle = "Announcements Entry2 Scoped Title");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutPG();
 
-		User.loginPG(password = "test", userEmailAddress = "userea@liferay.com");
+		User.loginPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
 
 		Navigator.gotoPage(pageName = "Announcements Page");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content",
-			entryTitle = "Announcements Entry Title"
-		);
+			entryTitle = "Announcements Entry Title");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "${siteName}",
 			entryContent = "Announcements Entry2 Scoped Content",
-			entryTitle = "Announcements Entry2 Scoped Title"
-		);
+			entryTitle = "Announcements Entry2 Scoped Title");
 	}
 
 	@priority = "3"
@@ -169,8 +161,7 @@ definition {
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 1",
 			entryTitle = "Announcements Entry Title 1",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Announcements Page");
 
@@ -179,8 +170,7 @@ definition {
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 2",
 			entryTitle = "Announcements Entry Title 2",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Announcements Page");
 
@@ -189,8 +179,7 @@ definition {
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 3",
 			entryTitle = "Announcements Entry Title 3",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Announcements Page");
 
@@ -199,8 +188,7 @@ definition {
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 4",
 			entryTitle = "Announcements Entry Title 4",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Announcements Page");
 
@@ -209,8 +197,7 @@ definition {
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 5",
 			entryTitle = "Announcements Entry Title 5",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Announcements Page");
 
@@ -219,8 +206,7 @@ definition {
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 6",
 			entryTitle = "Announcements Entry Title 6",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Announcements Page");
 
@@ -229,8 +215,7 @@ definition {
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 7",
 			entryTitle = "Announcements Entry Title 7",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Announcements Page");
 
@@ -242,272 +227,237 @@ definition {
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 3",
 			entryTitle = "Announcements Entry Title 3",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 4",
 			entryTitle = "Announcements Entry Title 4",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 5",
 			entryTitle = "Announcements Entry Title 5",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 6",
 			entryTitle = "Announcements Entry Title 6",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 7",
 			entryTitle = "Announcements Entry Title 7",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		var key_entryTitle = "Announcements Entry Title";
 
 		AssertTextNotPresent(
 			locator1 = "Announcements#CARD_VIEW_ENTRY_TITLE",
-			value1 = "Announcements Entry Title 1"
-		);
+			value1 = "Announcements Entry Title 1");
 
 		AssertTextNotPresent(
 			locator1 = "Announcements#CARD_VIEW_ENTRY_TITLE",
-			value1 = "Announcements Entry Title 2"
-		);
+			value1 = "Announcements Entry Title 2");
 
-		AssertClick(locator1 = "Pagination#NEXT_LINK", value1 = "Next");
+		AssertClick(
+			locator1 = "Pagination#NEXT_LINK",
+			value1 = "Next");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 1",
 			entryTitle = "Announcements Entry Title 1",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 2",
 			entryTitle = "Announcements Entry Title 2",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		var key_entryTitle = "Announcements Entry Title";
 
 		AssertTextNotPresent(
 			locator1 = "Announcements#CARD_VIEW_ENTRY_TITLE",
-			value1 = "Announcements Entry Title 3"
-		);
+			value1 = "Announcements Entry Title 3");
 
 		AssertTextNotPresent(
 			locator1 = "Announcements#CARD_VIEW_ENTRY_TITLE",
-			value1 = "Announcements Entry Title 4"
-		);
+			value1 = "Announcements Entry Title 4");
 
 		AssertTextNotPresent(
 			locator1 = "Announcements#CARD_VIEW_ENTRY_TITLE",
-			value1 = "Announcements Entry Title 5"
-		);
+			value1 = "Announcements Entry Title 5");
 
 		AssertTextNotPresent(
 			locator1 = "Announcements#CARD_VIEW_ENTRY_TITLE",
-			value1 = "Announcements Entry Title 6"
-		);
+			value1 = "Announcements Entry Title 6");
 
 		AssertTextNotPresent(
 			locator1 = "Announcements#CARD_VIEW_ENTRY_TITLE",
-			value1 = "Announcements Entry Title 7"
-		);
+			value1 = "Announcements Entry Title 7");
 
-		AssertClick(locator1 = "Pagination#PREVIOUS_LINK", value1 = "Previous");
+		AssertClick(
+			locator1 = "Pagination#PREVIOUS_LINK",
+			value1 = "Previous");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 3",
 			entryTitle = "Announcements Entry Title 3",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 4",
 			entryTitle = "Announcements Entry Title 4",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 5",
 			entryTitle = "Announcements Entry Title 5",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 6",
 			entryTitle = "Announcements Entry Title 6",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		AnnouncementsEntry.viewViaEntriesPG(
 			distributionScope = "General",
 			entryContent = "Announcements Entry Content 7",
 			entryTitle = "Announcements Entry Title 7",
-			entryURL = "http://www.liferay.com"
-		);
+			entryURL = "http://www.liferay.com");
 
 		var key_entryTitle = "Announcements Entry Title";
 
 		AssertTextNotPresent(
 			locator1 = "Announcements#CARD_VIEW_ENTRY_TITLE",
-			value1 = "Announcements Entry Title 1"
-		);
+			value1 = "Announcements Entry Title 1");
 
 		AssertTextNotPresent(
 			locator1 = "Announcements#CARD_VIEW_ENTRY_TITLE",
-			value1 = "Announcements Entry Title 2"
-		);
+			value1 = "Announcements Entry Title 2");
 
 		Navigator.gotoPage(pageName = "Announcements Page");
 
 		AssertClick(
 			locator1 = "Announcements#NAVIGATION_MANAGE_ENTRIES",
-			value1 = "Manage Entries"
-		);
+			value1 = "Manage Entries");
 
 		AnnouncementsPortlet.configurePaginationManageEntriesPG(
 			distributionScope = "General",
-			itemsPerPage = "5"
-		);
+			itemsPerPage = "5");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 1"
-		);
+			entryTitle = "Announcements Entry Title 1");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 2"
-		);
+			entryTitle = "Announcements Entry Title 2");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 3"
-		);
+			entryTitle = "Announcements Entry Title 3");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 4"
-		);
+			entryTitle = "Announcements Entry Title 4");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 5"
-		);
+			entryTitle = "Announcements Entry Title 5");
 
 		AssertTextNotPresent(
 			locator1 = "AnnouncementsManageEntries#ENTRY_TABLE_TITLE",
-			value1 = "Announcements Entry Title 6"
-		);
+			value1 = "Announcements Entry Title 6");
 
 		AssertTextNotPresent(
 			locator1 = "AnnouncementsManageEntries#ENTRY_TABLE_TITLE",
-			value1 = "Announcements Entry Title 7"
-		);
+			value1 = "Announcements Entry Title 7");
 
-		AssertClick(locator1 = "Pagination#NEXT_LINK", value1 = "Next");
+		AssertClick(
+			locator1 = "Pagination#NEXT_LINK",
+			value1 = "Next");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 6"
-		);
+			entryTitle = "Announcements Entry Title 6");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 7"
-		);
+			entryTitle = "Announcements Entry Title 7");
 
 		AssertTextNotPresent(
 			locator1 = "AnnouncementsManageEntries#ENTRY_TABLE_TITLE",
-			value1 = "Announcements Entry Title 1"
-		);
+			value1 = "Announcements Entry Title 1");
 
 		AssertTextNotPresent(
 			locator1 = "AnnouncementsManageEntries#ENTRY_TABLE_TITLE",
-			value1 = "Announcements Entry Title 2"
-		);
+			value1 = "Announcements Entry Title 2");
 
 		AssertTextNotPresent(
 			locator1 = "AnnouncementsManageEntries#ENTRY_TABLE_TITLE",
-			value1 = "Announcements Entry Title 3"
-		);
+			value1 = "Announcements Entry Title 3");
 
 		AssertTextNotPresent(
 			locator1 = "AnnouncementsManageEntries#ENTRY_TABLE_TITLE",
-			value1 = "Announcements Entry Title 4"
-		);
+			value1 = "Announcements Entry Title 4");
 
 		AssertTextNotPresent(
 			locator1 = "AnnouncementsManageEntries#ENTRY_TABLE_TITLE",
-			value1 = "Announcements Entry Title 5"
-		);
+			value1 = "Announcements Entry Title 5");
 
-		AssertClick(locator1 = "Pagination#PREVIOUS_LINK", value1 = "Previous");
+		AssertClick(
+			locator1 = "Pagination#PREVIOUS_LINK",
+			value1 = "Previous");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 1"
-		);
+			entryTitle = "Announcements Entry Title 1");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 2"
-		);
+			entryTitle = "Announcements Entry Title 2");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 3"
-		);
+			entryTitle = "Announcements Entry Title 3");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 4"
-		);
+			entryTitle = "Announcements Entry Title 4");
 
 		AnnouncementsEntry.viewViaManageEntriesPG(
 			announcementType = "General",
 			distributionScope = "General",
-			entryTitle = "Announcements Entry Title 5"
-		);
+			entryTitle = "Announcements Entry Title 5");
 
 		AssertTextNotPresent(
 			locator1 = "AnnouncementsManageEntries#ENTRY_TABLE_TITLE",
-			value1 = "Announcements Entry Title 6"
-		);
+			value1 = "Announcements Entry Title 6");
 
 		AssertTextNotPresent(
 			locator1 = "AnnouncementsManageEntries#ENTRY_TABLE_TITLE",
-			value1 = "Announcements Entry Title 7"
-		);
+			value1 = "Announcements Entry Title 7");
 	}
+
 }

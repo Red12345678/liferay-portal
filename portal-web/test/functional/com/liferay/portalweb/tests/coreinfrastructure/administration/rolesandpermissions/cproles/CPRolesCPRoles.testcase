@@ -1,5 +1,6 @@
 @component-name = "portal-permissions"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Permissions";
@@ -19,8 +20,7 @@ definition {
 		else {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "test@liferay.com",
-				userLoginFullName = "Test Test"
-			);
+				userLoginFullName = "Test Test");
 
 			User.tearDownCP();
 
@@ -39,22 +39,19 @@ definition {
 			userLastName = "userln",
 			userLoginEmailAddress = "test@liferay.com",
 			userLoginFullName = "Test Test",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Permissions.definePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_USERS_ROLES_GENERAL_PERMISSIONS_ACCESS_IN_CONTROL_PANEL_CHECKBOX",
 			permissionDefinitionValue = "Access in Control Panel",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		AssertElementNotPresent(locator1 = "NavBar#ADD");
 
@@ -63,46 +60,42 @@ definition {
 			permissionDefinitionValue = "Add Role",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		Permissions.definePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_USERS_ROLES_RESOURCE_PERMISSIONS_ROLE_VIEW_CHECKBOX",
 			permissionDefinitionValue = "View",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.addCP(roleName = "Orgrole1 Name", roleType = "Organization");
+		Role.addCP(
+			roleName = "Orgrole1 Name",
+			roleType = "Organization");
 
 		Permissions.removePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_GENERAL_PERMISSIONS_ADD_ROLE_CHECKBOX",
 			permissionDefinitionValue = "Add Role",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		Permissions.removePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_USERS_ROLES_RESOURCE_PERMISSIONS_ROLE_VIEW_CHECKBOX",
 			permissionDefinitionValue = "View",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		AssertElementNotPresent(locator1 = "NavBar#ADD");
 	}
@@ -116,22 +109,19 @@ definition {
 			userLastName = "userln",
 			userLoginEmailAddress = "test@liferay.com",
 			userLoginFullName = "Test Test",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Permissions.definePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_USERS_ROLES_GENERAL_PERMISSIONS_ACCESS_IN_CONTROL_PANEL_CHECKBOX",
 			permissionDefinitionValue = "Access in Control Panel",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		AssertElementNotPresent(locator1 = "NavBar#ADD");
 
@@ -140,22 +130,19 @@ definition {
 			permissionDefinitionValue = "Add Role",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		Permissions.definePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_USERS_ROLES_RESOURCE_PERMISSIONS_ROLE_VIEW_CHECKBOX",
 			permissionDefinitionValue = "View",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addCP(roleName = "Regrole1 Name");
 
@@ -164,22 +151,19 @@ definition {
 			permissionDefinitionValue = "Add Role",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		Permissions.removePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_USERS_ROLES_RESOURCE_PERMISSIONS_ROLE_VIEW_CHECKBOX",
 			permissionDefinitionValue = "View",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		AssertElementNotPresent(locator1 = "NavBar#ADD");
 	}
@@ -193,22 +177,19 @@ definition {
 			userLastName = "userln",
 			userLoginEmailAddress = "test@liferay.com",
 			userLoginFullName = "Test Test",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Permissions.definePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_USERS_ROLES_GENERAL_PERMISSIONS_ACCESS_IN_CONTROL_PANEL_CHECKBOX",
 			permissionDefinitionValue = "Access in Control Panel",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		AssertElementNotPresent(locator1 = "NavBar#ADD");
 
@@ -217,47 +198,44 @@ definition {
 			permissionDefinitionValue = "Add Role",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		Permissions.definePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_USERS_ROLES_RESOURCE_PERMISSIONS_ROLE_VIEW_CHECKBOX",
 			permissionDefinitionValue = "View",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.addCP(roleName = "Siterole Name", roleType = "Site");
+		Role.addCP(
+			roleName = "Siterole Name",
+			roleType = "Site");
 
 		Permissions.removePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_GENERAL_PERMISSIONS_ADD_ROLE_CHECKBOX",
 			permissionDefinitionValue = "Add Role",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		Permissions.definePermissionLoginUserCP(
 			permissionDefinitionKey = "CONTROL_PANEL_USERS_ROLES_RESOURCE_PERMISSIONS_ROLE_VIEW_CHECKBOX",
 			permissionDefinitionValue = "View",
 			roleName = "Regrole Name",
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		AssertElementNotPresent(locator1 = "NavBar#ADD");
 	}
+
 }

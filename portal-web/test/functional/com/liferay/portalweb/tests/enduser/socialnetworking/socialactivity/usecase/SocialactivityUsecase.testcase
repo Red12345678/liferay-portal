@@ -1,5 +1,6 @@
 @component-name = "portal-social-networking"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property custom.properties = "default.layout.template.id=1_column";
@@ -37,34 +38,29 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Social Activity"
-		);
+			portlet = "Social Activity");
 
 		SocialActivity.enableBlogsCP();
 
@@ -73,8 +69,7 @@ definition {
 			contributionLimitValue = "2",
 			participationIncrement = "2",
 			participationLimitValue = "2",
-			userAction = "Adds a Comment"
-		);
+			userAction = "Adds a Comment");
 
 		SocialActivity.removeActionCP(userAction = "Reads a Blog");
 
@@ -82,8 +77,7 @@ definition {
 
 		SocialActivity.configureActionCP(
 			participationIncrement = "0",
-			userAction = "Votes on a Blog"
-		);
+			userAction = "Votes on a Blog");
 
 		Page.add(pageName = "Social Activity Page");
 
@@ -95,8 +89,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Portlet#BODY",
-			value1 = "There are no active users for this period."
-		);
+			value1 = "There are no active users for this period.");
 
 		Page.add(pageName = "Blogs Page");
 
@@ -106,8 +99,7 @@ definition {
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Social Activity Page");
 
@@ -115,15 +107,13 @@ definition {
 			contributionScore = "Contribution Score: 0 (Total: 0)",
 			participationScore = "Participation Score: 5 (Total: 5)",
 			userName = "Test Test",
-			userRank = "Rank: 1"
-		);
+			userRank = "Rank: 1");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntryComment.add(entryComment = "Blogs Entry Comment 1");
 
@@ -133,15 +123,13 @@ definition {
 			contributionScore = "Contribution Score: 0 (Total: 0)",
 			participationScore = "Participation Score: 7 (Total: 7)",
 			userName = "Test Test",
-			userRank = "Rank: 1"
-		);
+			userRank = "Rank: 1");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntryComment.add(entryComment = "Blogs Entry Comment 2");
 
@@ -151,8 +139,7 @@ definition {
 			contributionScore = "Contribution Score: 0 (Total: 0)",
 			participationScore = "Participation Score: 9 (Total: 9)",
 			userName = "Test Test",
-			userRank = "Rank: 1"
-		);
+			userRank = "Rank: 1");
 
 		User.logoutPG();
 
@@ -162,8 +149,7 @@ definition {
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntryComment.add(entryComment = "Blogs Entry Comment from userfn");
 
@@ -173,27 +159,23 @@ definition {
 			contributionScore = "Contribution Score: 2 (Total: 2)",
 			participationScore = "Participation Score: 9 (Total: 9)",
 			userName = "Test Test",
-			userRank = "Rank: 1"
-		);
+			userRank = "Rank: 1");
 
 		SocialActivity.viewPGViaUserStatistics(
 			contributionScore = "Contribution Score: 0 (Total: 0)",
 			participationScore = "Participation Score: 2 (Total: 2)",
 			userName = "userfn userln",
-			userRank = "Rank: 2"
-		);
+			userRank = "Rank: 2");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntryComment.add(entryComment = "Blogs Entry Comment 3");
 
@@ -203,15 +185,13 @@ definition {
 			contributionScore = "Contribution Score: 2 (Total: 2)",
 			participationScore = "Participation Score: 9 (Total: 9)",
 			userName = "Test Test",
-			userRank = "Rank: 1"
-		);
+			userRank = "Rank: 1");
 
 		SocialActivity.viewPGViaUserStatistics(
 			contributionScore = "Contribution Score: 0 (Total: 0)",
 			participationScore = "Participation Score: 2 (Total: 2)",
 			userName = "userfn userln",
-			userRank = "Rank: 2"
-		);
+			userRank = "Rank: 2");
 	}
 
 	@priority = "4"
@@ -233,8 +213,7 @@ definition {
 		Page.gotoSALocalizedCP(
 			adminLocalized = "Administration du portail",
 			portletCategoryName = "Paramètres",
-			portletName = "Activité sociale"
-		);
+			portletName = "Activité sociale");
 
 		AssertVisible(locator1 = "Portlet#HEADER");
 
@@ -245,8 +224,7 @@ definition {
 		Page.gotoSALocalizedCP(
 			adminLocalized = "システム管理",
 			portletCategoryName = "設定",
-			portletName = "ソーシャルアクティビティ"
-		);
+			portletName = "ソーシャルアクティビティ");
 
 		AssertVisible(locator1 = "Portlet#HEADER");
 
@@ -257,8 +235,7 @@ definition {
 		Page.gotoSALocalizedCP(
 			adminLocalized = "Administração",
 			portletCategoryName = "Configuração",
-			portletName = "Atividade Social"
-		);
+			portletName = "Atividade Social");
 
 		AssertVisible(locator1 = "Portlet#HEADER");
 
@@ -271,15 +248,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Social Activity"
-		);
+			portlet = "Social Activity");
 
 		Page.gotoMyAccount(portletName = "Account Settings");
 
 		AssertSelectedLabel(
 			locator1 = "MyAccount#LANGUAGE_SELECT",
-			value1 = "English (United States)"
-		);
+			value1 = "English (United States)");
 	}
 
 	@priority = "4"
@@ -294,13 +269,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Portlet#BODY",
-			value1 = "There are no active users for this period."
-		);
+			value1 = "There are no active users for this period.");
 
 		Portlet.gotoPortletOptions(
 			portletName = "User Statistics",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		SelectFrame(locator1 = "UserStatisticsConfiguration#CONFIGURATION_IFRAME");
 
@@ -322,8 +295,7 @@ definition {
 
 		Portlet.gotoPortletOptions(
 			portletName = "User Statistics",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		IFrame.selectDialogFrame();
 
@@ -352,23 +324,20 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Portlet#BODY",
-			value1 = "Please configure this portlet and select at least one activity counter."
-		);
+			value1 = "Please configure this portlet and select at least one activity counter.");
 
 		SocialActivity.updateGroupStatisticsConfiguration(
 			chartType = "column diagram",
 			chartWidth = "55%",
 			dataRange = "last 12 months",
-			displayActivityCounterName = "blog entries of This site&apos;s users"
-		);
+			displayActivityCounterName = "blog entries of This site&apos;s users");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Social Activity"
-		);
+			portlet = "Social Activity");
 
 		SocialActivity.enableBlogsCP();
 
@@ -380,20 +349,18 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Content",
 				panel = "Site Administration",
-				portlet = "Blogs"
-			);
+				portlet = "Blogs");
 
 			Blogs.addEntry(
 				entryContent = "Blogs Entry${entryCount} Content",
-				entryTitle = "Blogs Entry${entryCount} Title"
-			);
+				entryTitle = "Blogs Entry${entryCount} Title");
 		}
 
 		Navigator.gotoPage(pageName = "Group Statistics Page");
 
 		SocialActivity.viewPGViaGroupStatistics(
 			currentValue = "3",
-			siteStatistics = "Users&apos; Blog Entries"
-		);
+			siteStatistics = "Users&apos; Blog Entries");
 	}
+
 }

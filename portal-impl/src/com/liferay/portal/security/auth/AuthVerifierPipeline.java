@@ -178,10 +178,10 @@ public class AuthVerifierPipeline {
 		while (iterator.hasNext() && !merge) {
 			String settingsKey = iterator.next();
 
-			if (settingsKey.startsWith(authVerifierSettingsKey)) {
-				if (settings.get(settingsKey) instanceof String) {
-					merge = true;
-				}
+			if (settingsKey.startsWith(authVerifierSettingsKey) &&
+				(settings.get(settingsKey) instanceof String)) {
+
+				merge = true;
 			}
 		}
 

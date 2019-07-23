@@ -567,20 +567,16 @@ public class LDAPAuth implements Authenticator {
 			User user = _userLocalService.fetchUserByEmailAddress(
 				companyId, emailAddress);
 
-			if (user != null) {
-				if (_omniadmin.isOmniadmin(user)) {
-					return SUCCESS;
-				}
+			if ((user != null) && _omniadmin.isOmniadmin(user)) {
+				return SUCCESS;
 			}
 		}
 		else if (Validator.isNotNull(screenName)) {
 			User user = _userLocalService.fetchUserByScreenName(
 				companyId, screenName);
 
-			if (user != null) {
-				if (_omniadmin.isOmniadmin(user)) {
-					return SUCCESS;
-				}
+			if ((user != null) && _omniadmin.isOmniadmin(user)) {
+				return SUCCESS;
 			}
 		}
 
@@ -608,9 +604,8 @@ public class LDAPAuth implements Authenticator {
 		if (ldapAuthConfiguration.required()) {
 			return failureCode;
 		}
-		else {
-			return SUCCESS;
-		}
+
+		return SUCCESS;
 	}
 
 	protected LDAPAuthResult getFailedLDAPAuthResult(Map<String, Object> env) {

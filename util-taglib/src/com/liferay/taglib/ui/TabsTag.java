@@ -176,11 +176,8 @@ public class TabsTag extends IncludeTag {
 
 			request.setAttribute("liferay-ui:tabs:urls", _urls);
 
-			if (_value == null) {
-				if (_tabsValues.length > 0) {
-					_value = ParamUtil.getString(
-						request, _param, _tabsValues[0]);
-				}
+			if ((_value == null) && (_tabsValues.length > 0)) {
+				_value = ParamUtil.getString(request, _param, _tabsValues[0]);
 			}
 
 			if (Validator.isNull(_value)) {
@@ -228,9 +225,8 @@ public class TabsTag extends IncludeTag {
 		if (_names.length > _namesPos) {
 			return _names[_namesPos];
 		}
-		else {
-			return StringPool.BLANK;
-		}
+
+		return StringPool.BLANK;
 	}
 
 	public boolean getSectionSelected() {
@@ -239,9 +235,8 @@ public class TabsTag extends IncludeTag {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public void incrementSection() {
@@ -411,9 +406,8 @@ public class TabsTag extends IncludeTag {
 		if (Validator.isNull(_endPage)) {
 			return _END_PAGE;
 		}
-		else {
-			return _endPage;
-		}
+
+		return _endPage;
 	}
 
 	@Override
@@ -421,9 +415,8 @@ public class TabsTag extends IncludeTag {
 		if (Validator.isNull(_startPage)) {
 			return _START_PAGE;
 		}
-		else {
-			return _startPage;
-		}
+
+		return _startPage;
 	}
 
 	private static final String _END_PAGE = "/html/taglib/ui/tabs/end.jsp";

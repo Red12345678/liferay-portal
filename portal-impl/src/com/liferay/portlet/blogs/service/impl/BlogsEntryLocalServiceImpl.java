@@ -654,12 +654,11 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 				queryDefinition.getStart(), queryDefinition.getEnd(),
 				queryDefinition.getOrderByComparator());
 		}
-		else {
-			return blogsEntryPersistence.findByC_LtD_S(
-				companyId, displayDate, queryDefinition.getStatus(),
-				queryDefinition.getStart(), queryDefinition.getEnd(),
-				queryDefinition.getOrderByComparator());
-		}
+
+		return blogsEntryPersistence.findByC_LtD_S(
+			companyId, displayDate, queryDefinition.getStatus(),
+			queryDefinition.getStart(), queryDefinition.getEnd(),
+			queryDefinition.getOrderByComparator());
 	}
 
 	@Override
@@ -671,10 +670,9 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 			return blogsEntryPersistence.countByC_LtD_NotS(
 				companyId, displayDate, queryDefinition.getStatus());
 		}
-		else {
-			return blogsEntryPersistence.countByC_LtD_S(
-				companyId, displayDate, queryDefinition.getStatus());
-		}
+
+		return blogsEntryPersistence.countByC_LtD_S(
+			companyId, displayDate, queryDefinition.getStatus());
 	}
 
 	@Override
@@ -727,12 +725,11 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 				queryDefinition.getStart(), queryDefinition.getEnd(),
 				queryDefinition.getOrderByComparator());
 		}
-		else {
-			return blogsEntryPersistence.findByG_LtD_S(
-				groupId, displayDate, queryDefinition.getStatus(),
-				queryDefinition.getStart(), queryDefinition.getEnd(),
-				queryDefinition.getOrderByComparator());
-		}
+
+		return blogsEntryPersistence.findByG_LtD_S(
+			groupId, displayDate, queryDefinition.getStatus(),
+			queryDefinition.getStart(), queryDefinition.getEnd(),
+			queryDefinition.getOrderByComparator());
 	}
 
 	@Override
@@ -745,12 +742,10 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 				queryDefinition.getStart(), queryDefinition.getEnd(),
 				queryDefinition.getOrderByComparator());
 		}
-		else {
-			return blogsEntryPersistence.findByG_S(
-				groupId, queryDefinition.getStatus(),
-				queryDefinition.getStart(), queryDefinition.getEnd(),
-				queryDefinition.getOrderByComparator());
-		}
+
+		return blogsEntryPersistence.findByG_S(
+			groupId, queryDefinition.getStatus(), queryDefinition.getStart(),
+			queryDefinition.getEnd(), queryDefinition.getOrderByComparator());
 	}
 
 	@Override
@@ -762,10 +757,9 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 			return blogsEntryPersistence.countByG_LtD_NotS(
 				groupId, displayDate, queryDefinition.getStatus());
 		}
-		else {
-			return blogsEntryPersistence.countByG_LtD_S(
-				groupId, displayDate, queryDefinition.getStatus());
-		}
+
+		return blogsEntryPersistence.countByG_LtD_S(
+			groupId, displayDate, queryDefinition.getStatus());
 	}
 
 	@Override
@@ -776,10 +770,9 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 			return blogsEntryPersistence.countByG_NotS(
 				groupId, queryDefinition.getStatus());
 		}
-		else {
-			return blogsEntryPersistence.countByG_S(
-				groupId, queryDefinition.getStatus());
-		}
+
+		return blogsEntryPersistence.countByG_S(
+			groupId, queryDefinition.getStatus());
 	}
 
 	@Override
@@ -802,12 +795,11 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 				queryDefinition.getStart(), queryDefinition.getEnd(),
 				queryDefinition.getOrderByComparator());
 		}
-		else {
-			return blogsEntryPersistence.findByG_U_S(
-				groupId, userId, queryDefinition.getStatus(),
-				queryDefinition.getStart(), queryDefinition.getEnd(),
-				queryDefinition.getOrderByComparator());
-		}
+
+		return blogsEntryPersistence.findByG_U_S(
+			groupId, userId, queryDefinition.getStatus(),
+			queryDefinition.getStart(), queryDefinition.getEnd(),
+			queryDefinition.getOrderByComparator());
 	}
 
 	@Override
@@ -819,10 +811,9 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 			return blogsEntryPersistence.countByG_U_LtD_NotS(
 				groupId, userId, displayDate, queryDefinition.getStatus());
 		}
-		else {
-			return blogsEntryPersistence.countByG_U_LtD_S(
-				groupId, userId, displayDate, queryDefinition.getStatus());
-		}
+
+		return blogsEntryPersistence.countByG_U_LtD_S(
+			groupId, userId, displayDate, queryDefinition.getStatus());
 	}
 
 	@Override
@@ -1656,18 +1647,17 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceBaseImpl {
 			if ((entry == null) || (entryId == entry.getEntryId())) {
 				break;
 			}
-			else {
-				String suffix = StringPool.DASH + i;
 
-				String prefix = urlTitle;
+			String suffix = StringPool.DASH + i;
 
-				if (urlTitle.length() > suffix.length()) {
-					prefix = urlTitle.substring(
-						0, urlTitle.length() - suffix.length());
-				}
+			String prefix = urlTitle;
 
-				urlTitle = prefix + suffix;
+			if (urlTitle.length() > suffix.length()) {
+				prefix = urlTitle.substring(
+					0, urlTitle.length() - suffix.length());
 			}
+
+			urlTitle = prefix + suffix;
 		}
 
 		return urlTitle;

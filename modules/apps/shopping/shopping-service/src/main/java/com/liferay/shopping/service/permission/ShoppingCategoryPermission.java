@@ -71,12 +71,11 @@ public class ShoppingCategoryPermission implements BaseModelPermissionChecker {
 			return ShoppingPermission.contains(
 				permissionChecker, groupId, actionId);
 		}
-		else {
-			ShoppingCategory category =
-				ShoppingCategoryLocalServiceUtil.getCategory(categoryId);
 
-			return contains(permissionChecker, category, actionId);
-		}
+		ShoppingCategory category =
+			ShoppingCategoryLocalServiceUtil.getCategory(categoryId);
+
+		return contains(permissionChecker, category, actionId);
 	}
 
 	public static boolean contains(

@@ -243,10 +243,9 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 			return assetCategoryPersistence.filterFindByG_V(
 				groupId, vocabularyId, start, end, obc);
 		}
-		else {
-			return assetCategoryPersistence.filterFindByG_LikeN_V(
-				groupId, name, vocabularyId, start, end, obc);
-		}
+
+		return assetCategoryPersistence.filterFindByG_LikeN_V(
+			groupId, name, vocabularyId, start, end, obc);
 	}
 
 	@Override
@@ -270,10 +269,9 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 			return assetCategoryPersistence.filterCountByG_V(
 				groupId, vocabularyId);
 		}
-		else {
-			return assetCategoryPersistence.filterCountByG_LikeN_V(
-				groupId, name, vocabularyId);
-		}
+
+		return assetCategoryPersistence.filterCountByG_LikeN_V(
+			groupId, name, vocabularyId);
 	}
 
 	@Override
@@ -357,10 +355,9 @@ public class AssetCategoryServiceImpl extends AssetCategoryServiceBaseImpl {
 			return assetCategoryPersistence.filterFindByG_V(
 				groupId, vocabularyId, start, end, obc);
 		}
-		else {
-			return assetCategoryPersistence.filterFindByG_LikeN_V(
-				groupId, name, vocabularyId, start, end, obc);
-		}
+
+		return assetCategoryPersistence.filterFindByG_LikeN_V(
+			groupId, name, vocabularyId, start, end, obc);
 	}
 
 	@Override

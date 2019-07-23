@@ -247,8 +247,7 @@ public class LayoutAdminPortlet extends MVCPortlet {
 			SitesUtil.mergeLayoutPrototypeLayout(layout.getGroup(), layout);
 		}
 		else {
-			long copyLayoutId = ParamUtil.getLong(
-				uploadPortletRequest, "copyLayoutId");
+			long copyPlid = ParamUtil.getLong(uploadPortletRequest, "copyPlid");
 
 			Layout copyLayout = null;
 
@@ -256,9 +255,8 @@ public class LayoutAdminPortlet extends MVCPortlet {
 				uploadPortletRequest, "layoutTemplateId",
 				PropsValues.DEFAULT_LAYOUT_TEMPLATE_ID);
 
-			if (copyLayoutId > 0) {
-				copyLayout = layoutLocalService.fetchLayout(
-					groupId, privateLayout, copyLayoutId);
+			if (copyPlid > 0) {
+				copyLayout = layoutLocalService.fetchLayout(copyPlid);
 
 				if ((copyLayout != null) && copyLayout.isTypePortlet()) {
 					LayoutTypePortlet copyLayoutTypePortlet =
@@ -320,13 +318,9 @@ public class LayoutAdminPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		long groupId = ParamUtil.getLong(actionRequest, "groupId");
-		boolean privateLayout = ParamUtil.getBoolean(
-			actionRequest, "privateLayout");
-		long layoutId = ParamUtil.getLong(actionRequest, "layoutId");
+		long selPlid = ParamUtil.getLong(actionRequest, "selPlid");
 
-		Layout layout = layoutLocalService.getLayout(
-			groupId, privateLayout, layoutId);
+		Layout layout = layoutLocalService.getLayout(selPlid);
 
 		String layoutType = layout.getType();
 
@@ -334,14 +328,13 @@ public class LayoutAdminPortlet extends MVCPortlet {
 			return;
 		}
 
-		long copyLayoutId = ParamUtil.getLong(actionRequest, "copyLayoutId");
+		long copyPlid = ParamUtil.getLong(actionRequest, "copyPlid");
 
-		if ((copyLayoutId == 0) || (copyLayoutId == layout.getLayoutId())) {
+		if ((copyPlid == 0) || (copyPlid == layout.getPlid())) {
 			return;
 		}
 
-		Layout copyLayout = layoutLocalService.fetchLayout(
-			groupId, privateLayout, copyLayoutId);
+		Layout copyLayout = layoutLocalService.fetchLayout(copyPlid);
 
 		if ((copyLayout == null) || !copyLayout.isTypePortlet()) {
 			return;
@@ -357,7 +350,7 @@ public class LayoutAdminPortlet extends MVCPortlet {
 		SitesUtil.copyLookAndFeel(layout, copyLayout);
 
 		layoutService.updateLayout(
-			groupId, privateLayout, layoutId,
+			layout.getGroupId(), layout.isPrivateLayout(), layout.getLayoutId(),
 			sourceLayoutTypeSettingsProperties.toString());
 	}
 

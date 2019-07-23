@@ -386,9 +386,8 @@ public class ShindigUtil {
 		if (user.isDefaultUser()) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	public static void setHost(String host) {

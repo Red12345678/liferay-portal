@@ -224,13 +224,10 @@ public class PortletResponseUtil {
 			return;
 		}
 
-		if (contentLength > 0) {
-			if (mimeResponse instanceof ResourceResponse) {
-				ResourceResponse resourceResponse =
-					(ResourceResponse)mimeResponse;
+		if ((contentLength > 0) && (mimeResponse instanceof ResourceResponse)) {
+			ResourceResponse resourceResponse = (ResourceResponse)mimeResponse;
 
-				resourceResponse.setContentLength(contentLength);
-			}
+			resourceResponse.setContentLength(contentLength);
 		}
 
 		StreamUtil.transfer(inputStream, mimeResponse.getPortletOutputStream());
@@ -304,7 +301,7 @@ public class PortletResponseUtil {
 		}
 		catch (Exception e) {
 			if (_log.isWarnEnabled()) {
-				_log.warn(e);
+				_log.warn(e, e);
 			}
 		}
 

@@ -84,7 +84,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -773,7 +772,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 			Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesExtra);
 
 		if (_log.isDebugEnabled()) {
-			for (Entry<String, String> entry : properties.entrySet()) {
+			for (Map.Entry<String, String> entry : properties.entrySet()) {
 				_log.debug(
 					StringBundler.concat(
 						"OSGi framework property key \"", entry.getKey(),
@@ -968,13 +967,12 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 					if (bundleVersion.equals(curBundleVersion)) {
 						return bundle;
 					}
-					else {
-						bundle.uninstall();
 
-						_refreshBundles(Collections.singletonList(bundle));
+					bundle.uninstall();
 
-						return null;
-					}
+					_refreshBundles(Collections.singletonList(bundle));
+
+					return null;
 				}
 			}
 
@@ -1011,31 +1009,6 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		}
 
 		return sb.toString();
-	}
-
-	private boolean _hasLazyActivationPolicy(Bundle bundle) {
-		Dictionary<String, String> headers = bundle.getHeaders();
-
-		String fragmentHost = headers.get(Constants.FRAGMENT_HOST);
-
-		if (fragmentHost != null) {
-			return false;
-		}
-
-		String activationPolicy = headers.get(
-			Constants.BUNDLE_ACTIVATIONPOLICY);
-
-		if (activationPolicy == null) {
-			return false;
-		}
-
-		Parameters parameters = OSGiHeader.parseHeader(activationPolicy);
-
-		if (parameters.containsKey(Constants.ACTIVATION_LAZY)) {
-			return true;
-		}
-
-		return false;
 	}
 
 	private void _initRequiredStartupDirs() {

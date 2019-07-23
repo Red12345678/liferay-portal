@@ -17,29 +17,13 @@
 <%@ include file="/init.jsp" %>
 
 <%
-String displayStyle = portalPreferences.getValue(SiteMembershipsPortletKeys.SITE_MEMBERSHIPS_ADMIN, "display-style", "icon");
-String eventName = ParamUtil.getString(request, "eventName", liferayPortletResponse.getNamespace() + "selectUserGroupsRoles");
+UserGroupRolesDisplayContext userGroupRolesDisplayContext = new UserGroupRolesDisplayContext(request, renderRequest, renderResponse);
 
-PortletURL portletURL = renderResponse.createRenderURL();
+String displayStyle = userGroupRolesDisplayContext.getDisplayStyle();
 
-portletURL.setParameter("mvcPath", "/user_groups_roles.jsp");
-portletURL.setParameter("userGroupId", String.valueOf(siteMembershipsDisplayContext.getUserGroupId()));
+PortletURL portletURL = userGroupRolesDisplayContext.getPortletURL();
 
-RoleSearch roleSearch = new RoleSearch(renderRequest, PortletURLUtil.clone(portletURL, renderResponse));
-
-RoleSearchTerms searchTerms = (RoleSearchTerms)roleSearch.getSearchTerms();
-
-List<Role> roles = RoleLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), new Integer[] {RoleConstants.TYPE_SITE}, QueryUtil.ALL_POS, QueryUtil.ALL_POS, roleSearch.getOrderByComparator());
-
-roles = UsersAdminUtil.filterGroupRoles(permissionChecker, siteMembershipsDisplayContext.getGroupId(), roles);
-
-int rolesCount = roles.size();
-
-roleSearch.setTotal(rolesCount);
-
-roles = ListUtil.subList(roles, roleSearch.getStart(), roleSearch.getEnd());
-
-roleSearch.setResults(roles);
+RoleSearch roleSearch = (RoleSearch)userGroupRolesDisplayContext.getRoleSearchSearchContainer();
 %>
 
 <aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
@@ -47,7 +31,7 @@ roleSearch.setResults(roles);
 		<aui:nav-item label="site-roles" selected="<%= true %>" />
 	</aui:nav>
 
-	<c:if test="<%= (rolesCount > 0) || searchTerms.isSearch() %>">
+	<c:if test="<%= (roleSearch.getTotal() > 0) || roleSearch.getSearchTerms().isSearch() %>">
 		<aui:nav-bar-search>
 			<aui:form action="<%= portletURL.toString() %>" name="searchFm">
 				<liferay-ui:input-search
@@ -60,7 +44,7 @@ roleSearch.setResults(roles);
 </aui:nav-bar>
 
 <liferay-frontend:management-bar
-	disabled="<%= (rolesCount <= 0) && !searchTerms.isSearch() %>"
+	disabled="<%= (roleSearch.getTotal() <= 0) && !roleSearch.getSearchTerms().isSearch() %>"
 	includeCheckBox="<%= true %>"
 	searchContainerId="userGroupGroupRoleRole"
 >
@@ -94,7 +78,7 @@ roleSearch.setResults(roles);
 <aui:form cssClass="container-fluid-1280 portlet-site-memberships-assign-site-roles" name="fm">
 	<liferay-ui:search-container
 		id="userGroupGroupRoleRole"
-		rowChecker="<%= new UserGroupGroupRoleRoleChecker(renderResponse, siteMembershipsDisplayContext.getUserGroup(), siteMembershipsDisplayContext.getGroup()) %>"
+		rowChecker="<%= roleSearch.getRowChecker() %>"
 		searchContainer="<%= roleSearch %>"
 	>
 		<liferay-ui:search-container-row
@@ -119,7 +103,7 @@ roleSearch.setResults(roles);
 		'rowToggled',
 		function(event) {
 			Liferay.Util.getOpener().Liferay.fire(
-				'<%= HtmlUtil.escapeJS(eventName) %>',
+				'<%= HtmlUtil.escapeJS(userGroupRolesDisplayContext.getEventName()) %>',
 				{
 					data: event.elements.allSelectedElements.getDOMNodes()
 				}

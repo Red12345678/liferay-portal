@@ -131,7 +131,16 @@ String socialBookmarksDisplayPosition = blogsPortletInstanceConfiguration.social
 
 					<c:if test="<%= (blogsPortletInstanceConfiguration.displayStyle().equals(BlogsUtil.DISPLAY_STYLE_FULL_CONTENT) || viewSingleEntry) && Validator.isNotNull(subtitle) %>">
 						<div class="entry-subtitle">
-							<h4><%= HtmlUtil.escape(subtitle) %></h4>
+							<c:choose>
+								<c:when test="<%= viewSingleEntry %>">
+									<div class="view-single-entry">
+										<h4><%= HtmlUtil.escape(subtitle) %></h4>
+									</div>
+								</c:when>
+								<c:otherwise>
+									<h4><%= HtmlUtil.escape(subtitle) %></h4>
+								</c:otherwise>
+							</c:choose>
 						</div>
 					</c:if>
 				</div>

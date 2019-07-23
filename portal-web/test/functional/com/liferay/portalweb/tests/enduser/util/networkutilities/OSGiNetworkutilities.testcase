@@ -1,5 +1,6 @@
 @component-name = "portal-util-misc"
 definition {
+
 	property osgi.app.includes = "network-utilities";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -29,6 +30,9 @@ definition {
 	test SearchDNSDomain {
 		Navigator.gotoPage(pageName = "Network Utilities Page");
 
-		NetworkUtilities.searchPG(dnsDomain = "", networkDomain = "localhost");
+		NetworkUtilities.searchPG(
+			dnsDomain = "",
+			networkDomain = "localhost");
 	}
+
 }

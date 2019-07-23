@@ -65,9 +65,8 @@ public class CategoryItemNameComparator extends OrderByComparator<Object> {
 		if (_ascending) {
 			return value;
 		}
-		else {
-			return -value;
-		}
+
+		return -value;
 	}
 
 	@Override
@@ -75,9 +74,8 @@ public class CategoryItemNameComparator extends OrderByComparator<Object> {
 		if (_ascending) {
 			return ORDER_BY_ASC;
 		}
-		else {
-			return ORDER_BY_DESC;
-		}
+
+		return ORDER_BY_DESC;
 	}
 
 	@Override
@@ -96,11 +94,10 @@ public class CategoryItemNameComparator extends OrderByComparator<Object> {
 
 			return item.getName();
 		}
-		else {
-			ShoppingCategory category = (ShoppingCategory)object;
 
-			return category.getName();
-		}
+		ShoppingCategory category = (ShoppingCategory)object;
+
+		return category.getName();
 	}
 
 	private final boolean _ascending;

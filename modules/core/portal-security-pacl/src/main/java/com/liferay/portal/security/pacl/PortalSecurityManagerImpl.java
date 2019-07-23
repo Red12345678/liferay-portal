@@ -72,7 +72,6 @@ import com.liferay.portal.servlet.DirectRequestDispatcherFactoryImpl;
 import com.liferay.portal.spring.aop.ServiceBeanAopProxy;
 import com.liferay.portal.spring.bean.BeanReferenceAnnotationBeanPostProcessor;
 import com.liferay.portal.spring.bean.BeanReferenceRefreshUtil;
-import com.liferay.portal.spring.bean.BeanReferenceRefreshUtil.PACL;
 import com.liferay.portal.spring.context.PortletApplicationContext;
 import com.liferay.portal.template.BaseTemplateManager;
 import com.liferay.portal.template.TemplateContextHelper;
@@ -84,7 +83,6 @@ import com.liferay.portlet.PortletURLImpl;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Member;
@@ -152,7 +150,7 @@ public class PortalSecurityManagerImpl
 
 		_originalSecurityManager = System.getSecurityManager();
 
-		Lookup lookup = MethodHandles.lookup();
+		MethodHandles.Lookup lookup = MethodHandles.lookup();
 
 		Class<?> clazz = getClass();
 
@@ -636,7 +634,8 @@ public class PortalSecurityManagerImpl
 
 	}
 
-	private static class DoBeanReferenceRefreshUtilPACL implements PACL {
+	private static class DoBeanReferenceRefreshUtilPACL
+		implements BeanReferenceRefreshUtil.PACL {
 
 		@Override
 		public Object getNewReferencedBean(

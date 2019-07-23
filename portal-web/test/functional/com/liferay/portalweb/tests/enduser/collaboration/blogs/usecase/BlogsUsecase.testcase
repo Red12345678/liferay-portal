@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property custom.properties = "default.layout.template.id=1_column";
@@ -27,8 +28,7 @@ definition {
 		else {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "test@liferay.com",
-				userLoginFullName = "Test Test"
-			);
+				userLoginFullName = "Test Test");
 
 			BlogsEntry.tearDownCP();
 
@@ -51,28 +51,24 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntryWithHTML(
 			entryContent = '''<b>Bold Type</b> <i>Italics</i>''',
 			entrySubtitle = "Blogs Entry Subtitle",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Bold Type Italics",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewEntry(
 			entryContentBold = "Bold Type",
 			entryContentItalics = "Italics",
 			entrySubtitle = "Blogs Entry Subtitle",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 	}
 
 	@priority = "4"
@@ -82,8 +78,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsNavigator.gotoAddEntry();
 
@@ -92,8 +87,7 @@ definition {
 		BlogsEntry.addContentWithInlineImage(
 			entryContent = "Blogs Entry Content",
 			navTab = "Upload Image",
-			uploadFileName = "Document_1.jpg"
-		);
+			uploadFileName = "Document_1.jpg");
 
 		Pause(locator1 = "1000");
 
@@ -103,13 +97,11 @@ definition {
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewInlineImage(uploadFileName = "Document_1");
 	}
@@ -119,8 +111,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
@@ -128,15 +119,21 @@ definition {
 
 		Page.add(pageName = "Site Page 2");
 
-		Navigator.gotoSitePage(pageName = "Site Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page 1",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Blogs");
 
-		Navigator.gotoSitePage(pageName = "Site Page 2", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page 2",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Blogs");
 
-		Navigator.gotoSitePage(pageName = "Site Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page 1",
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
@@ -157,8 +154,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
@@ -170,7 +166,9 @@ definition {
 
 		Button.clickSave();
 
-		Navigator.gotoSitePage(pageName = "Site Page 2", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page 2",
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
@@ -183,8 +181,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
@@ -202,22 +199,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		for (var entryCount : list "1,2") {
 			DMDocument.addCP(
 				dmDocumentDescription = "DM Document Description",
 				dmDocumentFile = "Document_${entryCount}.jpg",
-				dmDocumentTitle = "Document_${entryCount}.jpg"
-			);
+				dmDocumentTitle = "Document_${entryCount}.jpg");
 		}
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntryWithUploadedCoverImage(
 			coverImageName = "Document_3",
@@ -225,8 +219,7 @@ definition {
 			entrySubtitle = "Blogs Entry Subtitle",
 			entryTitle = "Blogs Entry Title",
 			navTab = "Documents and Media",
-			uploadFileName = "Document_3.jpg"
-		);
+			uploadFileName = "Document_3.jpg");
 
 		PortletEntry.publish();
 
@@ -236,8 +229,7 @@ definition {
 			entryContent = "Blogs Entry Content",
 			entrySubtitle = "Blogs Entry Subtitle",
 			entryTitle = "Blogs Entry Title",
-			uploadFileName = "Document_3"
-		);
+			uploadFileName = "Document_3");
 
 		BlogsNavigator.gotoBrowseImage();
 
@@ -251,7 +243,9 @@ definition {
 
 		SelectFrameTop(value1 = "relative=top");
 
-		AssertClick(locator1 = "ItemSelector#ADD_BUTTON", value1 = "Add");
+		AssertClick(
+			locator1 = "ItemSelector#ADD_BUTTON",
+			value1 = "Add");
 
 		PortletEntry.publish();
 
@@ -261,22 +255,19 @@ definition {
 			entryContent = "Blogs Entry Content",
 			entrySubtitle = "Blogs Entry Subtitle",
 			entryTitle = "Blogs Entry Title",
-			uploadFileName = "Document_1"
-		);
+			uploadFileName = "Document_1");
 	}
 
 	@priority = "4"
 	test ChangeBlogsRatingType {
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Navigator.gotoNavTab(navTab = "Social");
 
@@ -288,8 +279,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Ratings#AVERAGE_LABEL",
-			value1 = "Average (0 Votes)"
-		);
+			value1 = "Average (0 Votes)");
 
 		AssertElementPresent(locator1 = "Ratings#YOUR_RATING_STAR_EMPTY_1");
 	}
@@ -301,44 +291,40 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsNavigator.moveToRecycleBinCP(
 			assetType = "Blogs Entry",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Recycle Bin"
-		);
+			portlet = "Recycle Bin");
 
-		RecycleBin.deleteCP(assetName = "Blogs Entry Title", assetType = "Blogs Entry");
+		RecycleBin.deleteCP(
+			assetName = "Blogs Entry Title",
+			assetType = "Blogs Entry");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Recycle Bin"
-		);
+			portlet = "Recycle Bin");
 
 		RecycleBin.viewDefaultCP(assetName = "Blogs Entry Title");
 
@@ -347,8 +333,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsEntry.viewDefaultCP(entryTitle = "Blogs Entry Title");
 	}
@@ -360,47 +345,43 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addDraft(
 			entryContent = "Blogs Entry Content",
 			entrySubtitle = "Blogs Entry Subtitle",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		DMPortlet.setDescriptiveView();
 
 		BlogsEntry.moveToRecycleBinDraftCP(
 			assetType = "Blogs Entry",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Recycle Bin"
-		);
+			portlet = "Recycle Bin");
 
-		RecycleBin.deleteCP(assetName = "Blogs Entry Title", assetType = "Blogs Entry");
+		RecycleBin.deleteCP(
+			assetName = "Blogs Entry Title",
+			assetType = "Blogs Entry");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Recycle Bin"
-		);
+			portlet = "Recycle Bin");
 
 		RecycleBin.viewDefaultCP(assetName = "Blogs Entry Title");
 
@@ -409,8 +390,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsEntry.viewDefaultCP(entryTitle = "Blogs Entry Title");
 	}
@@ -425,87 +405,80 @@ definition {
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry1 Content",
-			entryTitle = "Blogs Entry1 Title"
-		);
+			entryTitle = "Blogs Entry1 Title");
 
 		BlogsEntry.addWithTrackbackURLPG(
 			entryContent = "Blogs Entry1 Content",
 			entryContent2 = "Blogs Entry2 Content",
 			entryTitle = "Blogs Entry1 Title",
 			entryTitle2 = "Blogs Entry2 Title",
-			pageName = "Blogs Page"
-		);
+			pageName = "Blogs Page");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry1 Content",
-			entryTitle = "Blogs Entry1 Title"
-		);
+			entryTitle = "Blogs Entry1 Title");
 
 		BlogsEntryComment.viewPG(
 			commentCount = "1",
 			entryComment = "[...] Blogs Entry2 Content [...] Read More",
-			userFullName = "Test Test"
-		);
+			userFullName = "Test Test");
 
-		AssertClick(locator1 = "Link#READ_MORE", value1 = "Read More");
+		AssertClick(
+			locator1 = "Link#READ_MORE",
+			value1 = "Read More");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry2 Content",
-			entryTitle = "Blogs Entry2 Title"
-		);
+			entryTitle = "Blogs Entry2 Title");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Virtual Instances"
-		);
+			portlet = "Virtual Instances");
 
 		PortalInstances.addCP(
 			mailDomain = "www.able.com",
 			virtualHost = "www.able.com",
-			webId = "www.able.com"
-		);
+			webId = "www.able.com");
 
 		User.firstLoginPG(
 			password = "test",
 			userEmailAddress = "test@www.able.com",
-			virtualHostsURL = "http://www.able.com:8080"
-		);
+			virtualHostsURL = "http://www.able.com:8080");
 
-		Page.add(pageName = "Blogs Page", siteScopeSelected = "true");
+		Page.add(
+			pageName = "Blogs Page",
+			siteScopeSelected = "true");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Blogs Page",
-			url = "http://www.able.com:8080"
-		);
+			url = "http://www.able.com:8080");
 
 		Portlet.addPG(portletName = "Blogs");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry3 Content",
-			entryTitle = "Blogs Entry3 Title"
-		);
+			entryTitle = "Blogs Entry3 Title");
 
 		var key_entryTitle = "Blogs Entry3 Title";
 
-		AssertClick(locator1 = "Blogs#ENTRY_COMMENTS_COUNT", value1 = "0");
+		AssertClick(
+			locator1 = "Blogs#ENTRY_COMMENTS_COUNT",
+			value1 = "0");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry3 Content",
-			entryTitle = "Blogs Entry3 Title"
-		);
+			entryTitle = "Blogs Entry3 Title");
 
 		AssertTextEquals.assertValue(
 			locator1 = "BlogsEntry#COMMENTS_TRACKBACK_URL",
-			value1 = "http://www.able.com:8080/web/guest/blogs-page/-/blogs/trackback/blogs-entry3-title"
-		);
+			value1 = "http://www.able.com:8080/web/guest/blogs-page/-/blogs/trackback/blogs-entry3-title");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Blogs Page",
-			url = "http://www.able.com:8080"
-		);
+			url = "http://www.able.com:8080");
 
 		BlogsEntry.addWithTrackbackURLPG(
 			entryContent = "Blogs Entry3 Content",
@@ -515,73 +488,65 @@ definition {
 			pageName = "Blogs Page",
 			siteName = "http://www.able.com:8080",
 			virtualHosts = "true",
-			virtualHostsURL = "www.able.com:8080"
-		);
+			virtualHostsURL = "www.able.com:8080");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry4 Content",
-			entryTitle = "Blogs Entry4 Title"
-		);
+			entryTitle = "Blogs Entry4 Title");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry3 Content",
-			entryTitle = "Blogs Entry3 Title"
-		);
+			entryTitle = "Blogs Entry3 Title");
 
 		BlogsEntryComment.viewPG(
 			commentCount = "1",
 			entryComment = "[...] Blogs Entry4 Content [...] Read More",
 			entryContent = "Blogs Entry3 Content",
 			entryTitle = "Blogs Entry3 Title",
-			userFullName = "Test Test"
-		);
+			userFullName = "Test Test");
 
 		AssertTextEquals.assertValue(
 			locator1 = "BlogsEntry#COMMENTS_TRACKBACK_URL",
-			value1 = "http://www.able.com:8080/web/guest/blogs-page/-/blogs/trackback/blogs-entry3-title"
-		);
+			value1 = "http://www.able.com:8080/web/guest/blogs-page/-/blogs/trackback/blogs-entry3-title");
 
-		AssertClick(locator1 = "Link#READ_MORE", value1 = "Read More");
+		AssertClick(
+			locator1 = "Link#READ_MORE",
+			value1 = "Read More");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry4 Content",
-			entryTitle = "Blogs Entry4 Title"
-		);
+			entryTitle = "Blogs Entry4 Title");
 
 		User.firstLoginPG(
 			password = "test",
 			userEmailAddress = "test@liferay.com",
-			virtualHostsURL = "http://www.able.com:8080"
-		);
+			virtualHostsURL = "http://www.able.com:8080");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Blogs Page",
-			url = "http://www.able.com:8080"
-		);
+			url = "http://www.able.com:8080");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry5 Content",
-			entryTitle = "Blogs Entry5 Title"
-		);
+			entryTitle = "Blogs Entry5 Title");
 
 		var key_entryTitle = "Blogs Entry5 Title";
 
-		AssertClick(locator1 = "Blogs#ENTRY_COMMENTS_COUNT", value1 = "0");
+		AssertClick(
+			locator1 = "Blogs#ENTRY_COMMENTS_COUNT",
+			value1 = "0");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry5 Content",
-			entryTitle = "Blogs Entry5 Title"
-		);
+			entryTitle = "Blogs Entry5 Title");
 
 		AssertTextEquals.assertValue(
 			locator1 = "BlogsEntry#COMMENTS_TRACKBACK_URL",
-			value1 = "http://www.able.com:8080/web/guest/blogs-page/-/blogs/trackback/blogs-entry5-title"
-		);
+			value1 = "http://www.able.com:8080/web/guest/blogs-page/-/blogs/trackback/blogs-entry5-title");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Blogs Page",
-			url = "http://www.able.com:8080"
-		);
+			url = "http://www.able.com:8080");
 
 		BlogsEntry.addWithTrackbackURLPG(
 			entryContent = "Blogs Entry5 Content",
@@ -590,36 +555,32 @@ definition {
 			entryTitle2 = "Blogs Entry6 Title",
 			pageName = "Blogs Page",
 			virtualHosts = "true",
-			virtualHostsURL = "http://www.able.com:8080"
-		);
+			virtualHostsURL = "http://www.able.com:8080");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry6 Content",
-			entryTitle = "Blogs Entry6 Title"
-		);
+			entryTitle = "Blogs Entry6 Title");
 
 		BlogsNavigator.gotoPG(
 			entryContent = "Blogs Entry5 Content",
-			entryTitle = "Blogs Entry5 Title"
-		);
+			entryTitle = "Blogs Entry5 Title");
 
 		BlogsEntryComment.viewPG(
 			commentCount = "1",
 			entryComment = "[...] Blogs Entry6 Content [...] Read More",
-			userFullName = "Test Test"
-		);
+			userFullName = "Test Test");
 
 		AssertTextEquals.assertValue(
 			locator1 = "BlogsEntry#COMMENTS_TRACKBACK_URL",
-			value1 = "http://www.able.com:8080/web/guest/blogs-page/-/blogs/trackback/blogs-entry5-title"
-		);
+			value1 = "http://www.able.com:8080/web/guest/blogs-page/-/blogs/trackback/blogs-entry5-title");
 
-		AssertClick(locator1 = "Link#READ_MORE", value1 = "Read More");
+		AssertClick(
+			locator1 = "Link#READ_MORE",
+			value1 = "Read More");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry6 Content",
-			entryTitle = "Blogs Entry6 Title"
-		);
+			entryTitle = "Blogs Entry6 Title");
 	}
 
 	@priority = "4"
@@ -628,27 +589,23 @@ definition {
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntryComment.add(entryComment = "Blogs Entry Comment");
 
@@ -656,14 +613,12 @@ definition {
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntryComment.viewPG(
 			commentCount = "1",
 			entryComment = "Blogs Entry Comment",
-			userFullName = "Test Test"
-		);
+			userFullName = "Test Test");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -681,26 +636,22 @@ definition {
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntryComment.viewPG(
 			commentCount = "1",
 			entryComment = "Blogs Entry Comment",
-			userFullName = "Test Test"
-		);
+			userFullName = "Test Test");
 	}
 
 	@priority = "5"
@@ -712,48 +663,41 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsNavigator.moveToRecycleBinCP(
 			assetType = "Blogs Entry",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Recycle Bin"
-		);
+			portlet = "Recycle Bin");
 
 		RecycleBin.restoreCP(
 			assetName = "Blogs Entry Title",
 			assetRestoreLocation = "Blogs",
-			assetType = "Blogs Entry"
-		);
+			assetType = "Blogs Entry");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Recycle Bin"
-		);
+			portlet = "Recycle Bin");
 
 		RecycleBin.viewDefaultCP(assetName = "Blogs Entry Title");
 
@@ -762,312 +706,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsNavigator.gotoEntryCP(entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
-	}
-
-	@priority = "3"
-	test StagingBlogs {
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites"
-		);
-
-		Site.addCP(siteName = "Site Name", siteType = "Blank");
-
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites"
-		);
-
-		Page.add(pageName = "Site Page Name", siteName = "Site Name");
-
-		Navigator.openSiteURL(siteName = "Site Name");
-
-		ProductMenu.gotoPortlet(
-			category = "Publishing",
-			panel = "Site Administration",
-			portlet = "Staging"
-		);
-
-		Staging.activateStagingCP(siteName = "Site Name");
-
-		Navigator.gotoStagedSitePage(
-			pageName = "Site Page Name",
-			siteName = "Site Name"
-		);
-
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites"
-		);
-
-		Page.add(
-			pageName = "Blogs Page 1",
-			pageStaging = "true",
-			siteName = "Site Name"
-		);
-
-		Portlet.addPG(portletName = "Blogs");
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page 1", siteName = "Site Name");
-
-		Portlet.addPG(portletName = "Blogs Aggregator");
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page 1", siteName = "Site Name");
-
-		Portlet.addPG(portletName = "Recent Bloggers");
-
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites"
-		);
-
-		Page.add(
-			pageName = "Blogs Page 2",
-			pageStaging = "true",
-			siteName = "Site Name"
-		);
-
-		Portlet.addPG(portletName = "Blogs");
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page 1", siteName = "Site Name");
-
-		Blogs.addEntry(
-			entryContent = "Blogs Entry Content 1",
-			entryTitle = "Blogs Entry Title 1"
-		);
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page 1", siteName = "Site Name");
-
-		RecentBloggers.viewPG(entryAuthor = "Test Test", postCount = "1");
-
-		BlogsAggregatorPortlet.viewBlogsEntryViaBAPortletPG(
-			viewEntryTitle = "Blogs Entry Title 1"
-		);
-
-		BlogsEntry.viewPG(
-			entryContent = "Blogs Entry Content 1",
-			entryTitle = "Blogs Entry Title 1"
-		);
-
-		Navigator.gotoStagedSitePage(
-			pageName = "Site Page Name",
-			siteName = "Site Name"
-		);
-
-		Staging.gotoPublishToLive();
-
-		Staging.configurePublishToLive(checkPageName = "Blogs Page 1");
-
-		Staging.publishToLive();
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page 1", siteName = "Site Name");
-
-		RecentBloggers.viewPG(entryAuthor = "Test Test", postCount = "1");
-
-		BlogsAggregatorPortlet.viewBlogsEntryViaBAPortletPG(
-			viewEntryTitle = "Blogs Entry Title 1"
-		);
-
-		BlogsNavigator.gotoEntryPG(
-			entryContent = "Blogs Entry Content 1",
-			entryTitle = "Blogs Entry Title 1"
-		);
-
-		BlogsEntry.viewPG(
-			entryContent = "Blogs Entry Content 1",
-			entryTitle = "Blogs Entry Title 1"
-		);
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page 2", siteName = "Site Name");
-
-		BlogsConfiguration.configureScopePG(
-			scopeSelection = "Blogs Page 2 (Create New)"
-		);
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page 2", siteName = "Site Name");
-
-		Blogs.addEntry(
-			entryContent = "Blogs Entry Content 2",
-			entryTitle = "Blogs Entry Title 2"
-		);
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page 1", siteName = "Site Name");
-
-		BlogsAggregatorPortlet.viewBlogsEntryViaBAPortletPG(
-			viewEntryTitle = "Blogs Entry Title 1,Blogs Entry Title 2"
-		);
-
-		BlogsAggregatorPortlet.configureSelectionMethod(selectionMethod = "Scope");
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page 1", siteName = "Site Name");
-
-		BlogsAggregatorPortlet.viewBlogsEntryViaBAPortletPG(
-			viewEntryTitle = "Blogs Entry Title 1",
-			viewNoEntryTitle = "Blogs Entry Title 2"
-		);
-
-		SitePageNavigator.gotoPages(page = "Public Pages", site = "Site Name");
-
-		Staging.gotoPublishToLive();
-
-		Staging.configurePublishToLive(
-			checkPageName = "Blogs Page 2",
-			contentDateRange = "All"
-		);
-
-		Staging.publishToLive();
-
-		Navigator.gotoSitePage(pageName = "Blogs Page 2", siteName = "Site Name");
-
-		BlogsNavigator.gotoEntryPG(
-			entryContent = "Blogs Entry Content 2",
-			entryTitle = "Blogs Entry Title 2"
-		);
-
-		BlogsEntry.viewPG(
-			entryContent = "Blogs Entry Content 2",
-			entryTitle = "Blogs Entry Title 2"
-		);
-
-		Navigator.gotoSitePage(pageName = "Blogs Page 1", siteName = "Site Name");
-
-		BlogsAggregatorPortlet.viewBlogsEntryViaBAPortletPG(
-			viewEntryTitle = "Blogs Entry Title 1",
-			viewNoEntryTitle = "Blogs Entry Title 2"
-		);
-	}
-
-	@priority = "3"
-	test StagingBlogsCP {
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites"
-		);
-
-		Site.addCP(siteName = "Site Name", siteType = "Blank");
-
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites"
-		);
-
-		Page.add(pageName = "Site Page Name", siteName = "Site Name");
-
-		Navigator.openSiteURL(siteName = "Site Name");
-
-		ProductMenu.gotoPortlet(
-			category = "Publishing",
-			panel = "Site Administration",
-			portlet = "Staging"
-		);
-
-		Staging.activateStagingCP(
-			pageVersioningEnabled = "true",
-			siteName = "Site Name"
-		);
-
-		ProductMenu.gotoPortlet(
-			category = "Content",
-			panel = "Site Administration",
-			portlet = "Blogs"
-		);
-
-		Blogs.addEntry(
-			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
-
-		ProductMenu.gotoSite(site = "Site Name");
-
-		Navigator.gotoStagedView();
-
-		Staging.gotoPublishToLive();
-
-		Staging.publishToLive();
-	}
-
-	@priority = "3"
-	test StagingBlogsWithScheduledPublishing {
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites"
-		);
-
-		Site.addCP(siteName = "Site Name", siteType = "Blank");
-
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites"
-		);
-
-		Page.add(pageName = "Blogs Page", siteName = "Site Name");
-
-		Navigator.openSiteURL(siteName = "Site Name");
-
-		ProductMenu.gotoPortlet(
-			category = "Publishing",
-			panel = "Site Administration",
-			portlet = "Staging"
-		);
-
-		Staging.activateStagingCP(siteName = "Site Name");
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page", siteName = "Site Name");
-
-		Portlet.addPG(portletName = "Blogs");
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page", siteName = "Site Name");
-
-		BlogsNavigator.gotoAddEntry();
-
-		BlogsEntry.addEntryContent(
-			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
-
-		Panel.expandPanel(panelHeading = "Configuration");
-
-		BlogsEntry.scheduleBlogEntry();
-
-		PortletEntry.publish();
-
-		Navigator.gotoStagedSitePage(pageName = "Blogs Page", siteName = "Site Name");
-
-		Navigator.gotoNavItem(navItem = "Not Published (1)");
-
-		Staging.gotoPublishToLive();
-
-		Staging.configurePublishToLive(checkPageName = "Blogs Page");
-
-		Staging.publishToLive();
-
-		Navigator.gotoSitePage(pageName = "Blogs Page", siteName = "Site Name");
-
-		Blogs.viewNoEntryCP();
-
-		Pause(locator1 = "180000");
-
-		BlogsEntry.viewEntry(
-			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 	}
 
 	@priority = "4"
@@ -1078,18 +723,15 @@ definition {
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content 2",
-			entryTitle = "Blogs Entry Title 2"
-		);
+			entryTitle = "Blogs Entry Title 2");
 
 		BlogsEntry.removeViewPermissionsPG(
 			entryTitle = "Blogs Entry Title 2",
-			roleName = "Guest"
-		);
+			roleName = "Guest");
 
 		User.logoutPG();
 
@@ -1097,13 +739,11 @@ definition {
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewNoPG(entryTitle = "Blogs Entry Title 2");
 
@@ -1112,14 +752,12 @@ definition {
 		BlogsEntry.viewEntryViaAPPG(
 			assetTitle = "Blogs Entry Title",
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewNoEntryViaAPPG(
 			assetTitle = "Blogs Entry Title 2",
 			entryContent = "Blogs Entry Content 2",
-			entryTitle = "Blogs Entry Title 2"
-		);
+			entryTitle = "Blogs Entry Title 2");
 	}
 
 	@priority = "3"
@@ -1130,59 +768,53 @@ definition {
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|'''
-		);
+			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|''');
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|'''
-		);
+			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|''');
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|'''
-		);
+			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|''');
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Virtual Instances"
-		);
+			portlet = "Virtual Instances");
 
 		PortalInstances.addCP(
 			mailDomain = "www.able.com",
 			virtualHost = "www.able.com",
-			webId = "www.able.com"
-		);
+			webId = "www.able.com");
 
 		User.logoutPG();
 
 		User.firstLoginPG(
 			password = "test",
 			userEmailAddress = "test@www.able.com",
-			virtualHostsURL = "http://www.able.com:8080"
-		);
+			virtualHostsURL = "http://www.able.com:8080");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		Site.addVirtualHostsURLCP(
 			privatePageVirtualHostURL = "${privatePageVirtualHostURL}",
-			privateVirtualHosts = "true"
-		);
+			privateVirtualHosts = "true");
 
 		SitePageNavigator.gotoPages(page = "Public Pages");
 
 		Page.add(pageName = "Public Blogs Page");
 
-		Page.add(pageName = "Private Blogs Page", sitePagePrivacy = "Private");
+		Page.add(
+			pageName = "Private Blogs Page",
+			sitePagePrivacy = "Private");
 
-		ProductMenu.gotoSite(site = "www.able.com");
+		Navigator.openSiteLanding(siteURLKey = "www.able.com");
 
 		ProductMenu.gotoPrivatePages();
 
@@ -1190,40 +822,34 @@ definition {
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry2 Content",
-			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|'''
-		);
+			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|''');
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry2 Content",
-			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|'''
-		);
+			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|''');
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry2 Content",
-			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|'''
-		);
+			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|''');
 
 		User.logoutPG();
 
 		User.firstLoginPG(
 			password = "test",
 			userEmailAddress = "test@www.able.com",
-			virtualHostsURL = "http://www.baker.com:8080"
-		);
+			virtualHostsURL = "http://www.baker.com:8080");
 
-		ProductMenu.gotoSite(site = "www.able.com");
+		Navigator.openSiteLanding(siteURLKey = "www.able.com");
 
 		ProductMenu.gotoPrivatePages();
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry2 Content",
-			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|'''
-		);
+			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|''');
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry2 Content",
-			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|'''
-		);
+			entryTitle = '''Blogs Entry Title `~!@#$%^&*(){}[],.<>/?|''');
 	}
 
 	@priority = "4"
@@ -1234,8 +860,7 @@ definition {
 
 		BlogsEntry.addEntryContent(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Panel.expandPanel(panelHeading = "Configuration");
 
@@ -1257,8 +882,7 @@ definition {
 
 		BlogsEntry.viewEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 	}
 
 	@priority = "3"
@@ -1274,16 +898,14 @@ definition {
 		Blogs.addViaAP(
 			entryContent = "Blogs Entry Content",
 			entrySubtitle = "Blogs Entry Subtitle",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		BlogsEntry.viewEntryViaAPPG(
 			assetTitle = "Blogs Entry Title",
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1295,8 +917,7 @@ definition {
 			entrySubtitle = "",
 			entrySubtitleEdit = "Blogs Entry Subtitle Edit",
 			entryTitle = "Blogs Entry Title",
-			entryTitleEdit = "Blogs Entry Title Edit"
-		);
+			entryTitleEdit = "Blogs Entry Title Edit");
 
 		BlogsEntry.saveAsDraft();
 
@@ -1305,30 +926,26 @@ definition {
 		BlogsEntry.viewNoEntryViaAPPG(
 			assetTitle = "Blogs Entry Title",
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.publishDraftCP(
 			entryContent = "Blogs Entry Content Edit",
 			entrySubtitle = "Blogs Entry Subtitle Edit",
-			entryTitle = "Blogs Entry Title Edit"
-		);
+			entryTitle = "Blogs Entry Title Edit");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		BlogsEntry.viewEntryViaAPPG(
 			assetTitle = "Blogs Entry Title Edit",
 			entryContent = "Blogs Entry Content Edit",
-			entryTitle = "Blogs Entry Title Edit"
-		);
+			entryTitle = "Blogs Entry Title Edit");
 	}
 
 	@priority = "3"
@@ -1347,8 +964,7 @@ definition {
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1356,8 +972,7 @@ definition {
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Page.add(pageName = "Recent Bloggers Page");
 
@@ -1367,14 +982,15 @@ definition {
 
 		var key_entryAuthor = "Test Test";
 
-		AssertClick(locator1 = "Blogs#RECENT_BLOGGER_USER_NAME", value1 = "Test Test");
+		AssertClick(
+			locator1 = "Blogs#RECENT_BLOGGER_USER_NAME",
+			value1 = "Test Test");
 
 		AssertLocation(value1 = "${friendlyURL}");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 	}
 
 	@priority = "4"
@@ -1391,8 +1007,7 @@ definition {
 
 		Portlet.gotoPortletOptions(
 			portletName = "Blogs",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		IFrame.selectDialogFrame();
 
@@ -1404,8 +1019,7 @@ definition {
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1416,13 +1030,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsConfiguration.selectScopeCP(
 			scopeDefault = "Default",
-			scopeSelection = "Blogs Page2"
-		);
+			scopeSelection = "Blogs Page2");
 
 		Portlet.changeDisplayStyle(displayStyle = "List");
 
@@ -1430,17 +1042,17 @@ definition {
 
 		BlogsEntry.viewEntryAuthorCP(
 			entryAuthorFullName = "Test Test",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		var key_entryTitle = "Blogs Entry Title";
 
-		AssertClick(locator1 = "Blogs#ENTRY_TABLE_TITLE", value1 = "Blogs Entry Title");
+		AssertClick(
+			locator1 = "Blogs#ENTRY_TABLE_TITLE",
+			value1 = "Blogs Entry Title");
 
 		BlogsEntry.viewEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1448,8 +1060,7 @@ definition {
 
 		Portlet.gotoPortletOptions(
 			portletName = "Blogs",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		IFrame.selectDialogFrame();
 
@@ -1461,8 +1072,7 @@ definition {
 
 		Portlet.gotoPortletOptions(
 			portletName = "Blogs",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		IFrame.selectDialogFrame();
 
@@ -1474,13 +1084,11 @@ definition {
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 	}
 
 	@priority = "3"
@@ -1493,8 +1101,7 @@ definition {
 
 		DMFolder.addPG(
 			dmFolderDescription = "DM Folder 1 Description",
-			dmFolderName = "DM Folder 1 Name"
-		);
+			dmFolderName = "DM Folder 1 Name");
 
 		DMPortlet.setDescriptiveView();
 
@@ -1502,38 +1109,33 @@ definition {
 
 		DMFolder.addSubfolderPG(
 			dmSubFolderDescription = "DM SubFolder 1 Description",
-			dmSubFolderName = "DM SubFolder 1 Name"
-		);
+			dmSubFolderName = "DM SubFolder 1 Name");
 
 		DMNavigator.gotoFolder(dmFolderName = "DM SubFolder 1 Name");
 
 		DMDocument.addPG(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Document_1.jpg",
-			dmDocumentTitle = "Document_1.jpg"
-		);
+			dmDocumentTitle = "Document_1.jpg");
 
 		Navigator.gotoPage(pageName = "Documents and Media Page");
 
 		DMFolder.addPG(
 			dmFolderDescription = "DM Folder 2 Description",
-			dmFolderName = "DM Folder 2 Name"
-		);
+			dmFolderName = "DM Folder 2 Name");
 
 		DMNavigator.gotoFolder(dmFolderName = "DM Folder 2 Name");
 
 		DMFolder.addSubfolderPG(
 			dmSubFolderDescription = "DM SubFolder 2 Description",
-			dmSubFolderName = "DM SubFolder 2 Name"
-		);
+			dmSubFolderName = "DM SubFolder 2 Name");
 
 		DMNavigator.gotoFolder(dmFolderName = "DM SubFolder 2 Name");
 
 		DMDocument.addPG(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Document_2.jpg",
-			dmDocumentTitle = "Document_2.jpg"
-		);
+			dmDocumentTitle = "Document_2.jpg");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1542,8 +1144,7 @@ definition {
 			dmSubFolderName = "DM SubFolder 1 Name",
 			entryContent = "Blogs Entry1 Content",
 			entryTitle = "Blogs Entry1 Title",
-			imageFileName = "Document_1.jpg"
-		);
+			imageFileName = "Document_1.jpg");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1552,15 +1153,13 @@ definition {
 			dmSubFolderName = "DM SubFolder 2 Name",
 			entryContent = "Blogs Entry2 Content",
 			entryTitle = "Blogs Entry2 Title",
-			imageFileName = "Document_2.jpg"
-		);
+			imageFileName = "Document_2.jpg");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry1 Content",
-			entryTitle = "Blogs Entry1 Title"
-		);
+			entryTitle = "Blogs Entry1 Title");
 
 		var key_uploadFileName = "Document_1";
 
@@ -1570,8 +1169,7 @@ definition {
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry2 Content",
-			entryTitle = "Blogs Entry2 Title"
-		);
+			entryTitle = "Blogs Entry2 Title");
 
 		var key_uploadFileName = "Document_2";
 
@@ -1585,8 +1183,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntryWithUploadedCoverImage(
 			coverImageName = "Document_1",
@@ -1594,8 +1191,7 @@ definition {
 			entrySubtitle = "Blogs Entry Subtitle",
 			entryTitle = "Blogs Entry Title",
 			navTab = "Documents and Media",
-			uploadFileName = "Document_1.jpg"
-		);
+			uploadFileName = "Document_1.jpg");
 
 		Pause(locator1 = "1000");
 
@@ -1605,21 +1201,18 @@ definition {
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMNavigator.gotoDocumentCP(dmDocumentTitle = "Document_1.jpg");
 
@@ -1633,32 +1226,27 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addWithCustomAbstract(
 			entryAbstractDescription = "Blogs Entry Custom Abstract",
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsEntry.viewAbstractDisplay(
 			entryAbstractDescription = "Blogs Entry Custom Abstract",
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsNavigator.gotoEntryWithAbstractPG(
 			entryAbstractDescription = "Blogs Entry Custom Abstract",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 	}
 
 	@priority = "4"
@@ -1668,32 +1256,27 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addWithDefaultAbstract(
 			entryAbstractDescription = "Blogs Entry Custom Abstract",
 			entryContent = "Liferay Portal provides an excellent platform for building web applications, websites, and portals, but it can additionally be used for a new category of web applications called social applications. The definition is simple: a social application is a web application that additionally leverages social identity, data, and features or services. In the left figure, the light blue squares represent a definition of a standard web application while the darker blue squares show the addition of social aspects.",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsEntry.viewAbstractDisplay(
 			entryAbstractDescription = "Liferay Portal provides an excellent platform for building web applications, websites, and portals, but it can additionally be used for a new category of web applications called social applications. The definition is simple: a social application is a web application that additionally leverages social identity, data, and features or services. In the left figure, the light blue squares...",
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsNavigator.gotoEntryWithAbstractPG(
 			entryAbstractDescription = "Liferay Portal provides an excellent platform for building web applications, websites, and portals, but it can additionally be used for a new category of web applications called social applications. The definition is simple: a social application is a web application that additionally leverages social identity, data, and features or services. In the left figure, the light blue squares...",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewEntry(
 			entryContent = "Liferay Portal provides an excellent platform for building web applications, websites, and portals, but it can additionally be used for a new category of web applications called social applications. The definition is simple: a social application is a web application that additionally leverages social identity, data, and features or services. In the left figure, the light blue squares represent a definition of a standard web application while the darker blue squares show the addition of social aspects.",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 	}
 
 	@priority = "3"
@@ -1710,8 +1293,7 @@ definition {
 
 		BlogsEntry.addEntryContent(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Panel.expandPanel(panelHeading = "Configuration");
 
@@ -1725,9 +1307,7 @@ definition {
 
 		Panel.expandPanel(panelHeading = "Configuration");
 
-		BlogsEntry.addCustomAbstract(
-			entryAbstractDescription = "Blogs Entry Abstract Description"
-		);
+		BlogsEntry.addCustomAbstract(entryAbstractDescription = "Blogs Entry Abstract Description");
 
 		PortletEntry.publish();
 
@@ -1749,42 +1329,50 @@ definition {
 
 		Navigator.gotoPage(pageName = "Blogs Aggregator Page");
 
-		AssertTextEquals(locator1 = "Portlet#H2_HEADER", value1 = "Blogs Aggregator");
+		AssertTextEquals(
+			locator1 = "Portlet#H2_HEADER",
+			value1 = "Blogs Aggregator");
 
 		var key_entryAbstractDescription = "Blogs Entry Abstract Description";
 		var key_entryTitle = "Blogs Entry Title";
 
-		AssertTextEquals(locator1 = "BlogsEntry#TITLE", value1 = "Blogs Entry Title");
+		AssertTextEquals(
+			locator1 = "BlogsEntry#TITLE",
+			value1 = "Blogs Entry Title");
 
 		AssertTextEquals(
 			locator1 = "BlogsEntry#CONTENT_ABSTRACT",
-			value1 = "Blogs Entry Abstract Description"
-		);
+			value1 = "Blogs Entry Abstract Description");
 
-		AssertClick(locator1 = "BlogsEntry#TITLE_LINK", value1 = "Blogs Entry Title");
+		AssertClick(
+			locator1 = "BlogsEntry#TITLE_LINK",
+			value1 = "Blogs Entry Title");
 
 		BlogsEntry.viewEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
-		User.loginPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 
 		Navigator.gotoPage(pageName = "Blogs Aggregator Page");
 
-		AssertTextEquals(locator1 = "Portlet#H2_HEADER", value1 = "Blogs Aggregator");
+		AssertTextEquals(
+			locator1 = "Portlet#H2_HEADER",
+			value1 = "Blogs Aggregator");
 
 		AssertTextEquals(
 			locator1 = "BlogsEntry#CONTENT_ABSTRACT",
-			value1 = "Blogs Entry Abstract Description"
-		);
+			value1 = "Blogs Entry Abstract Description");
 
-		AssertClick(locator1 = "BlogsEntry#TITLE_LINK", value1 = "Blogs Entry Title");
+		AssertClick(
+			locator1 = "BlogsEntry#TITLE_LINK",
+			value1 = "Blogs Entry Title");
 
 		BlogsEntry.viewEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 	}
 
 	@priority = "4"
@@ -1794,22 +1382,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Document_2.jpg",
-			dmDocumentTitle = "Document_2.jpg"
-		);
+			dmDocumentTitle = "Document_2.jpg");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsNavigator.gotoAddEntry();
 
@@ -1827,19 +1412,24 @@ definition {
 
 		SelectFrameTop(value1 = "relative=top");
 
-		AssertClick(locator1 = "ItemSelector#ADD_BUTTON", value1 = "Add");
+		AssertClick(
+			locator1 = "ItemSelector#ADD_BUTTON",
+			value1 = "Add");
 
-		AssertClick(locator1 = "Button#PUBLISH", value1 = "Publish");
+		AssertClick(
+			locator1 = "Button#PUBLISH",
+			value1 = "Publish");
 
-		AssertTextEquals(locator1 = "Portlet#HEADER", value1 = "Blogs");
+		AssertTextEquals(
+			locator1 = "Portlet#HEADER",
+			value1 = "Blogs");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMNavigator.gotoDocumentCP(dmDocumentTitle = "Document_2 (1).jpg");
 
@@ -1849,13 +1439,11 @@ definition {
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		BlogsEntry.viewInlineImage(uploadFileName = '''Document_2+%281%29.jpg''');
 	}
@@ -1867,8 +1455,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntryWithUploadedCoverImage(
 			coverImageName = "Document_1",
@@ -1876,8 +1463,7 @@ definition {
 			entrySubtitle = "Blogs Entry Subtitle",
 			entryTitle = "Blogs Entry Title",
 			navTab = "Upload Image",
-			uploadFileName = "Document_1.jpg"
-		);
+			uploadFileName = "Document_1.jpg");
 
 		Button.clickPublish();
 
@@ -1887,8 +1473,7 @@ definition {
 
 		BlogsEntry.viewEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 	}
 
 	@priority = "4"
@@ -1903,16 +1488,14 @@ definition {
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		BlogsEntry.viewEntryViaAPPG(
 			assetTitle = "Blogs Entry Title",
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1920,8 +1503,7 @@ definition {
 			entryContent = "Blogs Entry Content",
 			entryContentEdit = "Blogs Entry Content Draft",
 			entryTitle = "Blogs Entry Title",
-			entryTitleEdit = "Blogs Entry Title Draft"
-		);
+			entryTitleEdit = "Blogs Entry Title Draft");
 
 		Click(locator1 = "Icon#BACK");
 
@@ -1929,8 +1511,7 @@ definition {
 
 		BlogsEntry.viewPG(
 			entryContent = "Blogs Entry Content Draft",
-			entryTitle = "Blogs Entry Title Draft"
-		);
+			entryTitle = "Blogs Entry Title Draft");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
@@ -1944,22 +1525,19 @@ definition {
 			entryContent = "Blogs Entry Content Draft",
 			entryContentEdit = "Blogs Entry Content Edit",
 			entryTitle = "Blogs Entry Title Draft",
-			entryTitleEdit = "Blogs Entry Title Edit"
-		);
+			entryTitleEdit = "Blogs Entry Title Edit");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		BlogsEntry.viewEntryViaAPPG(
 			assetTitle = "Blogs Entry Title Edit",
 			entryContent = "Blogs Entry Content Edit",
-			entryTitle = "Blogs Entry Title Edit"
-		);
+			entryTitle = "Blogs Entry Title Edit");
 
 		BlogsEntry.viewNoEntryViaAPPG(
 			assetTitle = "Blogs Entry Title Draft",
 			entryContent = "Blogs Entry Content Draft",
-			entryTitle = "Blogs Entry Title Draft"
-		);
+			entryTitle = "Blogs Entry Title Draft");
 	}
 
 	@priority = "4"
@@ -1970,24 +1548,25 @@ definition {
 
 		Portlet.gotoPortletOptions(
 			portletName = "${portletName}",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		var key_portletName = "Blogs Aggregator";
 
-		AssertTextPresent(locator1 = "Portlet#TITLE", value1 = "Blogs Aggregator");
+		AssertTextPresent(
+			locator1 = "Portlet#TITLE",
+			value1 = "Blogs Aggregator");
 
 		IFrame.selectConfigurationFrame();
 
 		Navigator.gotoNavItem(navItem = "Setup");
 
-		AssertClick(locator1 = "Button#SELECT", value1 = "Select");
+		AssertClick(
+			locator1 = "Button#SELECT",
+			value1 = "Select");
 
 		SelectFrame(value1 = "relative=top");
 
-		SelectFrame(
-			locator1 = "UsersAndOrganizationsSelectOrganization#SELECT_ORGANIZATION_IFRAME"
-		);
+		SelectFrame(locator1 = "UsersAndOrganizationsSelectOrganization#SELECT_ORGANIZATION_IFRAME");
 
 		AssertElementPresent(locator1 = "Message#EMPTY_INFO");
 
@@ -2000,36 +1579,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		for (var orgName : list "Organization1 Name,Organization2 Name,Organization3 Name") {
-			Organization.addCP(orgName = "${orgName}", orgType = "Organization");
+			Organization.addCP(
+				orgName = "${orgName}",
+				orgType = "Organization");
 
 			ProductMenu.gotoPortlet(
 				category = "Users",
 				panel = "Control Panel",
-				portlet = "Users and Organizations"
-			);
+				portlet = "Users and Organizations");
 		}
 
 		UsersAndOrganizationsNavigator.gotoOrganizations();
 
 		Organization.searchCP(
 			orgName = "Organization3 Name",
-			searchTerm = "Organization3 Name"
-		);
+			searchTerm = "Organization3 Name");
 
 		Organization.selectParentOrganizationCP(
 			orgName = "Organization3 Name",
-			parentOrgName = "Organization1 Name"
-		);
+			parentOrgName = "Organization1 Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		UsersAndOrganizationsNavigator.gotoOrganizations();
 
@@ -2037,34 +1613,30 @@ definition {
 			orgName = "Organization1 Name",
 			parentOrgExist = "true",
 			parentOrgName = "Organization1 Name",
-			subOrgName = "Organization3 Name"
-		);
+			subOrgName = "Organization3 Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		UsersAndOrganizationsNavigator.gotoOrganizations();
 
 		Organization.viewParentOrganizationCP(
 			orgName = "Organization2 Name",
-			parentOrgExist = "false"
-		);
+			parentOrgExist = "false");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsAggregatorPortlet.viewParentOrganizationPG(
 			orgName = "Organization2 Name",
-			parentOrgName = ""
-		);
+			parentOrgName = "");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		BlogsAggregatorPortlet.viewParentOrganizationPG(
 			orgName = "Organization3 Name",
-			parentOrgName = "Organization1 Name"
-		);
+			parentOrgName = "Organization1 Name");
 	}
+
 }

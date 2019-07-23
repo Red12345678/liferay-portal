@@ -93,7 +93,7 @@ public class VerifyRole extends VerifyProcess {
 				// LPS-52675
 
 				if (_log.isDebugEnabled()) {
-					_log.debug(nsre);
+					_log.debug(nsre, nsre);
 				}
 			}
 
@@ -108,7 +108,7 @@ public class VerifyRole extends VerifyProcess {
 				// LPS-52675
 
 				if (_log.isDebugEnabled()) {
-					_log.debug(nsre);
+					_log.debug(nsre, nsre);
 				}
 			}
 
@@ -123,7 +123,7 @@ public class VerifyRole extends VerifyProcess {
 				// LPS-52675
 
 				if (_log.isDebugEnabled()) {
-					_log.debug(nsre);
+					_log.debug(nsre, nsre);
 				}
 			}
 		}

@@ -31,6 +31,9 @@ import com.liferay.portal.kernel.util.StringBundler;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.Collections;
@@ -225,6 +228,32 @@ public class JournalArticleImageModelImpl
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, JournalArticleImage>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			JournalArticleImage.class.getClassLoader(),
+			JournalArticleImage.class, ModelWrapper.class);
+
+		try {
+			Constructor<JournalArticleImage> constructor =
+				(Constructor<JournalArticleImage>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
 	}
 
 	private static final Map<String, Function<JournalArticleImage, Object>>
@@ -661,8 +690,12 @@ public class JournalArticleImageModelImpl
 	@Override
 	public JournalArticleImage toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (JournalArticleImage)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, JournalArticleImage>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -888,11 +921,12 @@ public class JournalArticleImageModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		JournalArticleImage.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		JournalArticleImage.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, JournalArticleImage>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private long _articleImageId;
 	private long _groupId;

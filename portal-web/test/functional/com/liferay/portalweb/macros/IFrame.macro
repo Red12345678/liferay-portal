@@ -1,8 +1,11 @@
 definition {
+
 	macro addCP {
 		IFrame.selectConfigurationFrame();
 
-		Type(locator1 = "TextInput#SOURCE_URL", value1 = "${sourceURL}");
+		Type(
+			locator1 = "TextInput#SOURCE_URL",
+			value1 = "${sourceURL}");
 
 		PortletEntry.save();
 
@@ -46,4 +49,5 @@ definition {
 	macro selectTopFrame {
 		SelectFrame(value1 = "relative=top");
 	}
+
 }

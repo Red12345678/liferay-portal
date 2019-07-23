@@ -123,7 +123,7 @@ public class FriendlyURLServlet extends HttpServlet {
 		}
 		catch (Exception e) {
 			if (_log.isWarnEnabled()) {
-				_log.warn(e);
+				_log.warn(e, e);
 			}
 
 			if (e instanceof NoSuchGroupException ||
@@ -189,11 +189,10 @@ public class FriendlyURLServlet extends HttpServlet {
 		if (lifecycle.equals("1")) {
 			return new LastPath(_friendlyURLPathPrefix, pathInfo);
 		}
-		else {
-			return new LastPath(
-				_friendlyURLPathPrefix, pathInfo,
-				HttpUtil.parameterMapToString(request.getParameterMap()));
-		}
+
+		return new LastPath(
+			_friendlyURLPathPrefix, pathInfo,
+			HttpUtil.parameterMapToString(request.getParameterMap()));
 	}
 
 	protected String getPathInfo(HttpServletRequest request) {
@@ -321,7 +320,7 @@ public class FriendlyURLServlet extends HttpServlet {
 
 			request.setAttribute(WebKeys.LAYOUT, layout);
 
-			Locale locale = PortalUtil.getLocale(request);
+			Locale locale = PortalUtil.getLocale(request, null, false);
 
 			String layoutFriendlyURLSeparatorCompositeFriendlyURL =
 				layoutFriendlyURLSeparatorComposite.getFriendlyURL();
@@ -479,9 +478,8 @@ public class FriendlyURLServlet extends HttpServlet {
 
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 
 		public String getPath() {

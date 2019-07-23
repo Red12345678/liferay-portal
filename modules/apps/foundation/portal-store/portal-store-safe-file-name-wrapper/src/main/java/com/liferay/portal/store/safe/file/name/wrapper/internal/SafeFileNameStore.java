@@ -420,13 +420,12 @@ public final class SafeFileNameStore implements Store {
 		String safeFileName = FileUtil.encodeSafeFileName(fileName);
 		String safeNewFileName = FileUtil.encodeSafeFileName(newFileName);
 
-		if (!safeFileName.equals(fileName)) {
-			if (_store.hasFile(
-					companyId, repositoryId, fileName,
-					DLFileEntryConstants.VERSION_DEFAULT)) {
+		if (!safeFileName.equals(fileName) &&
+			_store.hasFile(
+				companyId, repositoryId, fileName,
+				DLFileEntryConstants.VERSION_DEFAULT)) {
 
-				safeFileName = fileName;
-			}
+			safeFileName = fileName;
 		}
 
 		_store.updateFile(
@@ -495,14 +494,12 @@ public final class SafeFileNameStore implements Store {
 			String safeFileName)
 		throws PortalException {
 
-		if (!safeFileName.equals(fileName)) {
-			if (_store.hasFile(
-					companyId, repositoryId, fileName,
-					DLFileEntryConstants.VERSION_DEFAULT)) {
+		if (!safeFileName.equals(fileName) &&
+			_store.hasFile(
+				companyId, repositoryId, fileName,
+				DLFileEntryConstants.VERSION_DEFAULT)) {
 
-				_store.updateFile(
-					companyId, repositoryId, fileName, safeFileName);
-			}
+			_store.updateFile(companyId, repositoryId, fileName, safeFileName);
 		}
 	}
 

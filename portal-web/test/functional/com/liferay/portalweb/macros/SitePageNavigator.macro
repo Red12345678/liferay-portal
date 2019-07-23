@@ -1,4 +1,5 @@
 definition {
+
 	macro gotoAddPage {
 		ProductMenuHelper.expandPanel(panel = "Site Administration");
 
@@ -15,19 +16,17 @@ definition {
 					Click(locator1 = "SitePages#PUBLIC_PAGE_ELLIPSIS");
 
 					AssertClick.assertPartialTextClickAt(
+						key_menuItem = "Add Private Page",
 						locator1 = "MenuItem#ANY_MENU_ITEM",
-						value1 = "Add Private Page",
-						key_menuItem = "Add Private Page"
-					);
+						value1 = "Add Private Page");
 				}
 				else if (IsElementNotPresent(locator1 = "ProductMenu#PUBLIC_PAGES")) {
 					Click(locator1 = "SitePages#PRIVATE_PAGE_ELLIPSIS");
 
 					AssertClick.assertPartialTextClickAt(
+						key_menuItem = "Add Private Page",
 						locator1 = "MenuItem#ANY_MENU_ITEM",
-						value1 = "Add Private Page",
-						key_menuItem = "Add Private Page"
-					);
+						value1 = "Add Private Page");
 				}
 				else {
 					ProductMenu.gotoPrivatePages();
@@ -35,10 +34,9 @@ definition {
 					Click(locator1 = "SitePages#PRIVATE_PAGE_ELLIPSIS");
 
 					AssertClick.assertPartialTextClickAt(
+						key_menuItem = "Add Page",
 						locator1 = "MenuItem#ANY_MENU_ITEM",
-						value1 = "Add Page",
-						key_menuItem = "Add Page"
-					);
+						value1 = "Add Page");
 				}
 			}
 			else {
@@ -48,17 +46,15 @@ definition {
 
 				if (IsElementPresent(locator1 = "ProductMenu#PRIVATE_PAGES")) {
 					AssertClick.assertPartialTextClickAt(
+						key_menuItem = "Add Page",
 						locator1 = "MenuItem#ANY_MENU_ITEM",
-						value1 = "Add Page",
-						key_menuItem = "Add Page"
-					);
+						value1 = "Add Page");
 				}
 				else {
 					AssertClick.assertPartialTextClickAt(
+						key_menuItem = "Add Public Page",
 						locator1 = "MenuItem#ANY_MENU_ITEM",
-						value1 = "Add Public Page",
-						key_menuItem = "Add Public Page"
-					);
+						value1 = "Add Public Page");
 				}
 			}
 		}
@@ -84,28 +80,25 @@ definition {
 			Click(locator1 = "SitePages#PUBLIC_PAGE_ELLIPSIS");
 
 			AssertClick.assertPartialTextClickAt(
+				key_menuItem = "Configure",
 				locator1 = "MenuItem#ANY_MENU_ITEM",
-				value1 = "Configure",
-				key_menuItem = "Configure"
-			);
+				value1 = "Configure");
 		}
 		else if ("${page}" == "Private Pages") {
 			Click(locator1 = "SitePages#PRIVATE_PAGE_ELLIPSIS");
 
 			AssertClick.assertPartialTextClickAt(
+				key_menuItem = "Configure",
 				locator1 = "MenuItem#ANY_MENU_ITEM",
-				value1 = "Configure",
-				key_menuItem = "Configure"
-			);
+				value1 = "Configure");
 		}
 		else {
 			Click.mouseOverClick(locator1 = "SitePages#SPECIFIC_PAGE_ELLIPSIS");
 
 			AssertClick.assertPartialTextClickAt(
+				key_menuItem = "Configure Page",
 				locator1 = "MenuItem#ANY_MENU_ITEM",
-				value1 = "Configure Page",
-				key_menuItem = "Configure Page"
-			);
+				value1 = "Configure Page");
 		}
 	}
 
@@ -122,4 +115,5 @@ definition {
 			Click(locator1 = "ProductMenu#PRIVATE_PAGES");
 		}
 	}
+
 }

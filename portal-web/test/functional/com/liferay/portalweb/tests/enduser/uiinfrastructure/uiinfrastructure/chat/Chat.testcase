@@ -1,5 +1,6 @@
 @component-name = "portal-user-interface"
 definition {
+
 	property blacklist.portal.profile.names.remove = "com.liferay.chat.service,com.liferay.chat.web";
 	property osgi.app.includes = "chat";
 	property plugins.deployment.type = "osgi";
@@ -27,4 +28,5 @@ definition {
 
 		AssertVisible(locator1 = "Chat#CHAT_BAR_BUDDY_LIST");
 	}
+
 }

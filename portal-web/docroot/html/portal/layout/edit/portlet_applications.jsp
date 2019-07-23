@@ -20,18 +20,16 @@
 String copyLayoutIdPrefix = ParamUtil.getString(request, "copyLayoutIdPrefix");
 %>
 
-<aui:select id='<%= HtmlUtil.escapeAttribute(copyLayoutIdPrefix) + "copyLayoutId" %>' label="copy-from-page" name="copyLayoutId">
+<aui:select id='<%= HtmlUtil.escapeAttribute(copyLayoutIdPrefix) + "copyPlid" %>' label="copy-from-page" name="copyPlid">
 
 	<%
 	List<LayoutDescription> layoutDescriptions = (List<LayoutDescription>)request.getAttribute(WebKeys.LAYOUT_DESCRIPTIONS);
 
 	for (LayoutDescription layoutDescription : layoutDescriptions) {
-		Layout layoutDescriptionLayout = LayoutLocalServiceUtil.fetchLayout(layoutDescription.getPlid());
-
-		if (layoutDescriptionLayout != null) {
+		if (layoutDescription.getPlid() > 0) {
 	%>
 
-			<aui:option disabled="<%= (selLayout != null) && (selLayout.getPlid() == layoutDescriptionLayout.getPlid()) %>" label="<%= layoutDescription.getDisplayName() %>" value="<%= layoutDescriptionLayout.getLayoutId() %>" />
+			<aui:option disabled="<%= (selLayout != null) && (selLayout.getPlid() == layoutDescription.getPlid()) %>" label="<%= layoutDescription.getDisplayName() %>" value="<%= layoutDescription.getPlid() %>" />
 
 	<%
 		}

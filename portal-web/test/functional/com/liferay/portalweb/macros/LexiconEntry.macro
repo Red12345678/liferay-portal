@@ -1,4 +1,5 @@
 definition {
+
 	macro gotoAdd {
 		Click(locator1 = "Button#PLUS");
 	}
@@ -26,8 +27,7 @@ definition {
 
 		AssertClick(
 			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME_LINK",
-			value1 = "${rowEntry}"
-		);
+			value1 = "${rowEntry}");
 	}
 
 	macro gotoEntryMenuItem {
@@ -43,13 +43,17 @@ definition {
 	}
 
 	macro gotoEntryMenuItemNoWait {
-		Click(locator1 = "Icon#ROW_VERTICAL_ELLIPSIS", key_rowEntry = "${rowEntry}");
+		Click(
+			key_rowEntry = "${rowEntry}",
+			locator1 = "Icon#ROW_VERTICAL_ELLIPSIS");
 
 		MenuItem.click(menuItem = "${menuItem}");
 	}
 
 	macro gotoEntryMenuItemNoWaitNoError {
-		Click(locator1 = "Icon#ROW_VERTICAL_ELLIPSIS", key_rowEntry = "${rowEntry}");
+		Click(
+			key_rowEntry = "${rowEntry}",
+			locator1 = "Icon#ROW_VERTICAL_ELLIPSIS");
 
 		MenuItem.clickNoError(menuItem = "${menuItem}");
 	}
@@ -68,16 +72,15 @@ definition {
 
 	macro openEntryMenu {
 		Click.waitForMenuToggleJSClick(
-			locator1 = "Icon#ROW_VERTICAL_ELLIPSIS",
-			key_rowEntry = "${rowEntry}"
-		);
+			key_rowEntry = "${rowEntry}",
+			locator1 = "Icon#ROW_VERTICAL_ELLIPSIS");
 	}
 
 	macro viewEntryName {
 		AssertTextEquals(
+			key_rowEntry = "${rowEntry}",
 			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME",
-			value1 = "${rowEntry}",
-			key_rowEntry = "${rowEntry}"
-		);
+			value1 = "${rowEntry}");
 	}
+
 }

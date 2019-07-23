@@ -99,7 +99,7 @@ if (ratingsEntry != null) {
 									<div class="rating-input-container">
 										<label for="<%= ratingId %>"><liferay-ui:message arguments="<%= new Object[] {i, numberOfStars} %>" key='<%= (yourScoreStars == i) ? ((i == 1) ? "you-have-rated-this-x-star-out-of-x" : "you-have-rated-this-x-stars-out-of-x") : ((i == 1) ? "rate-this-x-star-out-of-x" : "rate-this-x-stars-out-of-x") %>' translateArguments="<%= false %>" /></label>
 
-										<input checked="<%= i == yourScoreStars %>" class="rating-input" id="<%= ratingId %>" name="<portlet:namespace />rating" type="radio" value="<%= i %>">
+										<input checked="<%= i == yourScoreStars %>" class="rating-input" id="<%= ratingId %>" name="<portlet:namespace />rating" type="radio" value="<%= i %>" />
 									</div>
 
 								<%
@@ -117,7 +117,7 @@ if (ratingsEntry != null) {
 							<liferay-ui:message key="average" />
 
 							(<%= totalEntries %> <liferay-ui:message key='<%= (totalEntries == 1) ? "vote" : "votes" %>' />)
-					</div>
+						</div>
 
 						<liferay-util:whitespace-remover>
 
@@ -200,7 +200,7 @@ if (ratingsEntry != null) {
 										String ratingId = PortalUtil.generateRandomKey(request, "taglib_ui_ratings_page_rating");
 										%>
 
-										<input class="rating-input" id="<%= ratingId %>" name="<portlet:namespace /><%= ratingIdPrefix %>" type="radio" value="up">
+										<input class="rating-input" id="<%= ratingId %>" name="<portlet:namespace /><%= ratingIdPrefix %>" type="radio" value="up" />
 
 										<c:if test="<%= type.equals(RatingsType.THUMBS.getValue()) %>">
 
@@ -208,7 +208,7 @@ if (ratingsEntry != null) {
 											ratingId = PortalUtil.generateRandomKey(request, "taglib_ui_ratings_page_rating");
 											%>
 
-											<input class="rating-input" id="<%= ratingId %>" name="<portlet:namespace /><%= ratingIdPrefix %>" type="radio" value="down">
+											<input class="rating-input" id="<%= ratingId %>" name="<portlet:namespace /><%= ratingIdPrefix %>" type="radio" value="down" />
 										</c:if>
 									</div>
 								</c:otherwise>

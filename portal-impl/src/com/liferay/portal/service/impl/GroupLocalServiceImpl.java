@@ -2171,9 +2171,8 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 			return search(
 				user.getCompanyId(), null, null, groupParams, start, end);
 		}
-		else {
-			return userPersistence.getGroups(userId, start, end);
-		}
+
+		return userPersistence.getGroups(userId, start, end);
 	}
 
 	/**
@@ -2363,9 +2362,8 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		if (groupPersistence.fetchByLiveGroupId(liveGroupId) != null) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -2400,9 +2398,8 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		if (groupFinder.countByG_U(groupId, userId, inherit) > 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -4136,12 +4133,10 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 			// Filter by active
 
-			if (active != null) {
-				if (active != isLiveGroupActive(group)) {
-					iterator.remove();
+			if ((active != null) && (active != isLiveGroupActive(group))) {
+				iterator.remove();
 
-					continue;
-				}
+				continue;
 			}
 
 			// Filter by excluded group IDs
@@ -4202,12 +4197,10 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 			// Filter by site
 
-			if (site != null) {
-				if (site != group.isSite()) {
-					iterator.remove();
+			if ((site != null) && (site != group.isSite())) {
+				iterator.remove();
 
-					continue;
-				}
+				continue;
 			}
 
 			// Filter by type and types
@@ -4355,11 +4348,10 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 			return groups;
 		}
-		else {
-			joinedGroups.retainAll(groups);
 
-			return joinedGroups;
-		}
+		joinedGroups.retainAll(groups);
+
+		return joinedGroups;
 	}
 
 	protected long[] getClassNameIds() {
@@ -4547,9 +4539,8 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected boolean isStaging(ServiceContext serviceContext) {

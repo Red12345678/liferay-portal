@@ -205,9 +205,8 @@ public class MimeTypesImplTest {
 
 			return _mimeTypes.getContentType(inputStream, fileName);
 		}
-		else {
-			return _mimeTypes.getContentType(fileName);
-		}
+
+		return _mimeTypes.getContentType(fileName);
 	}
 
 	protected InputStream getInputStream(String fileName) throws Exception {

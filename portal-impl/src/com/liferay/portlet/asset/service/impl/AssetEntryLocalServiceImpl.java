@@ -252,16 +252,27 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 
 	@Override
 	public int getEntriesCount(
+		long[] groupIds, long[] classNameIds, long[] classTypeIds,
+		String keywords, String userName, String title, String description,
+		Boolean listable, boolean advancedSearch, boolean andOperator) {
+
+		AssetEntryQuery assetEntryQuery = getAssetEntryQuery(
+			groupIds, classNameIds, classTypeIds, keywords, userName, title,
+			description, listable, advancedSearch, andOperator,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null, null, null, null);
+
+		return getEntriesCount(assetEntryQuery);
+	}
+
+	@Override
+	public int getEntriesCount(
 		long[] groupIds, long[] classNameIds, String keywords, String userName,
 		String title, String description, Boolean listable,
 		boolean advancedSearch, boolean andOperator) {
 
-		AssetEntryQuery assetEntryQuery = getAssetEntryQuery(
-			groupIds, classNameIds, keywords, userName, title, description,
-			listable, advancedSearch, andOperator, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null, null, null, null);
-
-		return getEntriesCount(assetEntryQuery);
+		return getEntriesCount(
+			groupIds, classNameIds, new long[0], keywords, userName, title,
+			description, listable, advancedSearch, andOperator);
 	}
 
 	@Override
@@ -315,11 +326,10 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 				if ((i + 1) >= links.size()) {
 					throw new NoSuchEntryException("{entryId=" + entryId + "}");
 				}
-				else {
-					AssetLink nextLink = links.get(i + 1);
 
-					return getEntry(nextLink.getEntryId2());
-				}
+				AssetLink nextLink = links.get(i + 1);
+
+				return getEntry(nextLink.getEntryId2());
 			}
 		}
 
@@ -354,11 +364,10 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 				if (i == 0) {
 					throw new NoSuchEntryException("{entryId=" + entryId + "}");
 				}
-				else {
-					AssetLink nextAssetLink = links.get(i - 1);
 
-					return getEntry(nextAssetLink.getEntryId2());
-				}
+				AssetLink nextAssetLink = links.get(i - 1);
+
+				return getEntry(nextAssetLink.getEntryId2());
 			}
 		}
 
@@ -600,9 +609,37 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 		long classTypeId, String keywords, boolean showNonindexable,
 		int[] statuses) {
 
-		return searchCount(
-			companyId, groupIds, userId, className, classTypeId, keywords,
-			keywords, keywords, null, null, showNonindexable, statuses, false);
+		try {
+			SearchContext searchContext = buildSearchContext(
+				companyId, groupIds, userId, classTypeId, keywords, null, null,
+				showNonindexable, statuses, false, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS);
+
+			return doSearchCount(companyId, className, searchContext);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+	}
+
+	@Override
+	public long searchCount(
+		long companyId, long[] groupIds, long userId, String className,
+		long classTypeId, String keywords, String assetCategoryIds,
+		String assetTagNames, boolean showInvisible, boolean showNonindexable,
+		int[] statuses, boolean andSearch) {
+
+		try {
+			SearchContext searchContext = buildSearchContext(
+				companyId, groupIds, userId, classTypeId, keywords,
+				assetCategoryIds, assetTagNames, showNonindexable, statuses,
+				andSearch, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			return doSearchCount(companyId, className, searchContext);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
 	}
 
 	@Override
@@ -613,37 +650,12 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 		boolean showNonindexable, int[] statuses, boolean andSearch) {
 
 		try {
-			Indexer<?> indexer = AssetSearcher.getInstance();
-
-			AssetSearcher assetSearcher = (AssetSearcher)indexer;
-
-			AssetEntryQuery assetEntryQuery = new AssetEntryQuery();
-
-			assetEntryQuery.setAttribute("showInvisible", showInvisible);
-
-			assetEntryQuery.setClassNameIds(
-				getClassNameIds(companyId, className));
-
-			_setAssetCategoryIds(
-				StringUtil.split(assetCategoryIds, 0L), andSearch,
-				assetEntryQuery);
-			_setAssetTagNames(
-				groupIds, StringUtil.split(assetTagNames), andSearch,
-				assetEntryQuery);
-
 			SearchContext searchContext = buildSearchContext(
 				companyId, groupIds, userId, classTypeId, userName, title,
 				description, assetCategoryIds, assetTagNames, showNonindexable,
 				statuses, andSearch, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-			QueryConfig queryConfig = searchContext.getQueryConfig();
-
-			queryConfig.setHighlightEnabled(false);
-			queryConfig.setScoreEnabled(false);
-
-			assetSearcher.setAssetEntryQuery(assetEntryQuery);
-
-			return assetSearcher.searchCount(searchContext);
+			return doSearchCount(companyId, className, searchContext);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -1224,6 +1236,35 @@ public class AssetEntryLocalServiceImpl extends AssetEntryLocalServiceBaseImpl {
 		assetSearcher.setAssetEntryQuery(assetEntryQuery);
 
 		return assetSearcher.search(searchContext);
+	}
+
+	protected long doSearchCount(
+			long companyId, String className, SearchContext searchContext)
+		throws Exception {
+
+		Indexer<?> indexer = AssetSearcher.getInstance();
+
+		AssetSearcher assetSearcher = (AssetSearcher)indexer;
+
+		AssetEntryQuery assetEntryQuery = new AssetEntryQuery();
+
+		assetEntryQuery.setClassNameIds(getClassNameIds(companyId, className));
+
+		_setAssetCategoryIds(
+			searchContext.getAssetCategoryIds(), searchContext.isAndSearch(),
+			assetEntryQuery);
+		_setAssetTagNames(
+			searchContext.getGroupIds(), searchContext.getAssetTagNames(),
+			searchContext.isAndSearch(), assetEntryQuery);
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setHighlightEnabled(false);
+		queryConfig.setScoreEnabled(false);
+
+		assetSearcher.setAssetEntryQuery(assetEntryQuery);
+
+		return assetSearcher.searchCount(searchContext);
 	}
 
 	protected AssetEntryQuery getAssetEntryQuery(

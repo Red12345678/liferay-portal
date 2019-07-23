@@ -149,14 +149,14 @@ public class MeetingsPortlet extends MVCPortlet {
 			PowwowParticipantLocalServiceUtil.fetchPowwowParticipant(
 				powwowParticipantId);
 
-		if (powwowMeetingId > 0) {
-			if (!hash.equals(PowwowUtil.getHash(powwowMeetingId))) {
-				jsonObject.put("success", Boolean.FALSE);
+		if ((powwowMeetingId > 0) &&
+			!hash.equals(PowwowUtil.getHash(powwowMeetingId))) {
 
-				writeJSON(actionRequest, actionResponse, jsonObject);
+			jsonObject.put("success", Boolean.FALSE);
 
-				return;
-			}
+			writeJSON(actionRequest, actionResponse, jsonObject);
+
+			return;
 		}
 
 		try {
@@ -170,13 +170,13 @@ public class MeetingsPortlet extends MVCPortlet {
 
 				name = ParamUtil.getString(actionRequest, "name");
 
-				if (powwowParticipant != null) {
-					if (!name.equals(powwowParticipant.getName())) {
-						powwowParticipant.setName(name);
+				if ((powwowParticipant != null) &&
+					!name.equals(powwowParticipant.getName())) {
 
-						PowwowParticipantLocalServiceUtil.
-							updatePowwowParticipant(powwowParticipant);
-					}
+					powwowParticipant.setName(name);
+
+					PowwowParticipantLocalServiceUtil.updatePowwowParticipant(
+						powwowParticipant);
 				}
 			}
 

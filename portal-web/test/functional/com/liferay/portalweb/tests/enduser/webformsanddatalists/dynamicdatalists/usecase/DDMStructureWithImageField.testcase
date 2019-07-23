@@ -1,5 +1,6 @@
 @component-name = "portal-web-forms-and-data-lists"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Dynamic Data Lists";
@@ -12,51 +13,44 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoManageStructures();
 
 		WebContentStructures.addCP(
 			structureDescription = "WC Structure Description",
-			structureName = "WC Structure Name"
-		);
+			structureName = "WC Structure Name");
 
 		DynamicDataMapping.addField(
 			field = "Image",
 			fieldFieldLabel = "Image",
-			fieldName = "image"
-		);
+			fieldName = "image");
 
 		WebContentStructures.saveCP(structureName = "WC Structure Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoManageTemplates();
 
 		WebContentTemplates.addCP(
 			templateDescription = "WC Template Description",
 			templateLanguage = "ftl",
-			templateName = "WC Template Name"
-		);
+			templateName = "WC Template Name");
 
 		WebContentTemplates.addStructure(
 			structureName = "WC Structure Name",
 			templateFieldNames = "Image",
-			templateLanguage = "ftl"
-		);
+			templateLanguage = "ftl");
 
 		DDLDataDefinition.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 	}
 
 	tearDown {
@@ -68,8 +62,7 @@ definition {
 		else {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "test@liferay.com",
-				userLoginFullName = "Test Test"
-			);
+				userLoginFullName = "Test Test");
 
 			Site.tearDownCP();
 		}
@@ -88,18 +81,18 @@ definition {
 
 		ItemSelector.uploadFile(
 			navTab = "Documents and Media",
-			uploadFileName = "Document_3.png"
-		);
+			uploadFileName = "Document_3.png");
 
 		FormFields.editTextAlt(
 			fieldName = "image",
-			fieldValue = "English (United States) Image Description"
-		);
+			fieldValue = "English (United States) Image Description");
 
 		for (var language : list "Spanish (Spain),Portuguese (Brazil)") {
 			DDLRecord.addTranslation(localizedLanguage = "${language}");
 
-			FormFields.editText(fieldName = "title", fieldValue = "${language} Title");
+			FormFields.editText(
+				fieldName = "title",
+				fieldValue = "${language} Title");
 
 			ItemSelector.gotoItemSelectorViaSelectButton();
 
@@ -107,19 +100,20 @@ definition {
 
 			FormFields.editTextAlt(
 				fieldName = "image",
-				fieldValue = "${language} Image Description"
-			);
+				fieldValue = "${language} Image Description");
 		}
 
 		for (var language : list "English (United States),Spanish (Spain),Portuguese (Brazil)") {
 			DDLRecord.selectTranslation(localizedLanguage = "${language}");
 
-			FormFields.viewTextValue(fieldName = "title", fieldValue = "${language} Title");
+			FormFields.viewTextValue(
+				fieldName = "title",
+				fieldValue = "${language} Title");
 
 			FormFields.viewTextValueAlt(
 				fieldName = "image",
-				fieldValue = "${language} Image Description"
-			);
+				fieldValue = "${language} Image Description");
 		}
 	}
+
 }

@@ -1,4 +1,5 @@
 definition {
+
 	macro getModuleID {
 		GogoShell.listModuleStatus(moduleName = "${moduleName}");
 
@@ -12,21 +13,33 @@ definition {
 	}
 
 	macro listModuleStatus {
-		Type(locator1 = "GogoShell#COMMAND_FIELD", value1 = "lb ${moduleName}");
+		Type(
+			locator1 = "GogoShell#COMMAND_FIELD",
+			value1 = "lb ${moduleName}");
 
-		AssertClick(locator1 = "GogoShell#EXECUTE_BUTTON", value1 = "Execute");
+		AssertClick(
+			locator1 = "GogoShell#EXECUTE_BUTTON",
+			value1 = "Execute");
 	}
 
 	macro startModule {
-		Type(locator1 = "GogoShell#COMMAND_FIELD", value1 = "start ${moduleID}");
+		Type(
+			locator1 = "GogoShell#COMMAND_FIELD",
+			value1 = "start ${moduleID}");
 
-		AssertClick(locator1 = "GogoShell#EXECUTE_BUTTON", value1 = "Execute");
+		AssertClick(
+			locator1 = "GogoShell#EXECUTE_BUTTON",
+			value1 = "Execute");
 	}
 
 	macro stopModule {
-		Type(locator1 = "GogoShell#COMMAND_FIELD", value1 = "stop ${moduleID}");
+		Type(
+			locator1 = "GogoShell#COMMAND_FIELD",
+			value1 = "stop ${moduleID}");
 
-		AssertClick(locator1 = "GogoShell#EXECUTE_BUTTON", value1 = "Execute");
+		AssertClick(
+			locator1 = "GogoShell#EXECUTE_BUTTON",
+			value1 = "Execute");
 	}
 
 	macro viewModuleStatus {
@@ -34,7 +47,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "GogoShell#OUTPUT_FIELD",
-			value1 = "${moduleStatus}"
-		);
+			value1 = "${moduleStatus}");
 	}
+
 }

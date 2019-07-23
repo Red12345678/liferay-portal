@@ -1938,9 +1938,8 @@ public class JournalArticleLocalServiceImpl
 		if (articleDisplay == null) {
 			return StringPool.BLANK;
 		}
-		else {
-			return articleDisplay.getContent();
-		}
+
+		return articleDisplay.getContent();
 	}
 
 	/**
@@ -1999,9 +1998,8 @@ public class JournalArticleLocalServiceImpl
 		if (articleDisplay == null) {
 			return StringPool.BLANK;
 		}
-		else {
-			return articleDisplay.getContent();
-		}
+
+		return articleDisplay.getContent();
 	}
 
 	/**
@@ -2712,11 +2710,10 @@ public class JournalArticleLocalServiceImpl
 			return journalArticlePersistence.findByC_V(
 				companyId, version, start, end, new ArticleIDComparator(true));
 		}
-		else {
-			return journalArticlePersistence.findByC_V_ST(
-				companyId, version, status, start, end,
-				new ArticleIDComparator(true));
-		}
+
+		return journalArticlePersistence.findByC_V_ST(
+			companyId, version, status, start, end,
+			new ArticleIDComparator(true));
 	}
 
 	/**
@@ -2750,10 +2747,9 @@ public class JournalArticleLocalServiceImpl
 			return journalArticlePersistence.findByCompanyId(
 				companyId, start, end, new ArticleIDComparator(true));
 		}
-		else {
-			return journalArticlePersistence.findByC_ST(
-				companyId, status, start, end, new ArticleIDComparator(true));
-		}
+
+		return journalArticlePersistence.findByC_ST(
+			companyId, status, start, end, new ArticleIDComparator(true));
 	}
 
 	/**
@@ -2787,10 +2783,9 @@ public class JournalArticleLocalServiceImpl
 		if (status == WorkflowConstants.STATUS_ANY) {
 			return journalArticlePersistence.countByC_V(companyId, version);
 		}
-		else {
-			return journalArticlePersistence.countByC_V_ST(
-				companyId, version, status);
-		}
+
+		return journalArticlePersistence.countByC_V_ST(
+			companyId, version, status);
 	}
 
 	/**
@@ -2808,9 +2803,8 @@ public class JournalArticleLocalServiceImpl
 		if (status == WorkflowConstants.STATUS_ANY) {
 			return journalArticlePersistence.countByCompanyId(companyId);
 		}
-		else {
-			return journalArticlePersistence.countByC_ST(companyId, status);
-		}
+
+		return journalArticlePersistence.countByC_ST(companyId, status);
 	}
 
 	/**
@@ -3481,9 +3475,8 @@ public class JournalArticleLocalServiceImpl
 		if (getLatestVersion(groupId, articleId) == version) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -3507,9 +3500,8 @@ public class JournalArticleLocalServiceImpl
 		if (getLatestVersion(groupId, articleId, status) == version) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -5027,6 +5019,9 @@ public class JournalArticleLocalServiceImpl
 						return;
 					}
 
+					indexableActionableDynamicQuery.setCompanyId(
+						article.getCompanyId());
+
 					com.liferay.portal.kernel.search.Document document =
 						indexer.getDocument(article);
 
@@ -6426,6 +6421,89 @@ public class JournalArticleLocalServiceImpl
 		return searchContext;
 	}
 
+	protected void checkArticlesByCompanyIdAndExpirationDate(
+			long companyId, Date expirationDate, Date nextExpirationDate)
+		throws PortalException {
+
+		IndexableActionableDynamicQuery indexableActionableDynamicQuery =
+			getIndexableActionableDynamicQuery();
+
+		Indexer<JournalArticle> indexer = IndexerRegistryUtil.getIndexer(
+			JournalArticle.class);
+
+		indexableActionableDynamicQuery.setAddCriteriaMethod(
+			dynamicQuery -> {
+				Property classNameIdProperty = PropertyFactoryUtil.forName(
+					"classNameId");
+
+				dynamicQuery.add(
+					classNameIdProperty.eq(
+						JournalArticleConstants.CLASSNAME_ID_DEFAULT));
+
+				Property expirationDateProperty = PropertyFactoryUtil.forName(
+					"expirationDate");
+
+				dynamicQuery.add(expirationDateProperty.le(nextExpirationDate));
+
+				Property statusProperty = PropertyFactoryUtil.forName("status");
+
+				dynamicQuery.add(
+					statusProperty.eq(WorkflowConstants.STATUS_APPROVED));
+			});
+		indexableActionableDynamicQuery.setCompanyId(companyId);
+		indexableActionableDynamicQuery.setPerformActionMethod(
+			(JournalArticle article) -> {
+				if (_log.isDebugEnabled()) {
+					_log.debug("Expiring article " + article.getId());
+				}
+
+				if (isExpireAllArticleVersions(companyId)) {
+					List<JournalArticle> currentArticles =
+						journalArticlePersistence.findByG_A(
+							article.getGroupId(), article.getArticleId(),
+							QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+							new ArticleVersionComparator(true));
+
+					for (JournalArticle currentArticle : currentArticles) {
+						if ((currentArticle.getExpirationDate() == null) ||
+							(currentArticle.getVersion() >
+								article.getVersion())) {
+
+							continue;
+						}
+
+						currentArticle.setExpirationDate(
+							article.getExpirationDate());
+						currentArticle.setStatus(
+							WorkflowConstants.STATUS_EXPIRED);
+
+						journalArticlePersistence.update(currentArticle);
+					}
+				}
+
+				article.setStatus(WorkflowConstants.STATUS_EXPIRED);
+
+				journalArticlePersistence.update(article);
+
+				updatePreviousApprovedArticle(article);
+
+				if (indexer != null) {
+					indexableActionableDynamicQuery.addDocuments(
+						indexer.getDocument(article));
+				}
+			});
+
+		if (indexer != null) {
+			indexableActionableDynamicQuery.setSearchEngineId(
+				indexer.getSearchEngineId());
+		}
+
+		indexableActionableDynamicQuery.setTransactionConfig(
+			DefaultActionableDynamicQuery.REQUIRES_NEW_TRANSACTION_CONFIG);
+
+		indexableActionableDynamicQuery.performActions();
+	}
+
 	protected void checkArticlesByDisplayDate(Date displayDate)
 		throws PortalException {
 
@@ -6503,82 +6581,10 @@ public class JournalArticleLocalServiceImpl
 					String.valueOf(WorkflowConstants.STATUS_APPROVED)));
 		}
 
-		IndexableActionableDynamicQuery indexableActionableDynamicQuery =
-			getIndexableActionableDynamicQuery();
-
-		Indexer<JournalArticle> indexer = IndexerRegistryUtil.getIndexer(
-			JournalArticle.class);
-
-		indexableActionableDynamicQuery.setAddCriteriaMethod(
-			dynamicQuery -> {
-				Property classNameIdProperty = PropertyFactoryUtil.forName(
-					"classNameId");
-
-				dynamicQuery.add(
-					classNameIdProperty.eq(
-						JournalArticleConstants.CLASSNAME_ID_DEFAULT));
-
-				Property expirationDateProperty = PropertyFactoryUtil.forName(
-					"expirationDate");
-
-				dynamicQuery.add(expirationDateProperty.le(nextExpirationDate));
-
-				Property statusProperty = PropertyFactoryUtil.forName("status");
-
-				dynamicQuery.add(
-					statusProperty.eq(WorkflowConstants.STATUS_APPROVED));
-			});
-		indexableActionableDynamicQuery.setPerformActionMethod(
-			(JournalArticle article) -> {
-				if (_log.isDebugEnabled()) {
-					_log.debug("Expiring article " + article.getId());
-				}
-
-				if (isExpireAllArticleVersions(article.getCompanyId())) {
-					List<JournalArticle> currentArticles =
-						journalArticlePersistence.findByG_A(
-							article.getGroupId(), article.getArticleId(),
-							QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-							new ArticleVersionComparator(true));
-
-					for (JournalArticle currentArticle : currentArticles) {
-						if ((currentArticle.getExpirationDate() == null) ||
-							(currentArticle.getVersion() >
-								article.getVersion())) {
-
-							continue;
-						}
-
-						currentArticle.setExpirationDate(
-							article.getExpirationDate());
-						currentArticle.setStatus(
-							WorkflowConstants.STATUS_EXPIRED);
-
-						journalArticlePersistence.update(currentArticle);
-					}
-				}
-
-				article.setStatus(WorkflowConstants.STATUS_EXPIRED);
-
-				journalArticlePersistence.update(article);
-
-				updatePreviousApprovedArticle(article);
-
-				if (indexer != null) {
-					indexableActionableDynamicQuery.addDocuments(
-						indexer.getDocument(article));
-				}
-			});
-
-		if (indexer != null) {
-			indexableActionableDynamicQuery.setSearchEngineId(
-				indexer.getSearchEngineId());
+		for (Company company : companyLocalService.getCompanies(false)) {
+			checkArticlesByCompanyIdAndExpirationDate(
+				company.getCompanyId(), expirationDate, nextExpirationDate);
 		}
-
-		indexableActionableDynamicQuery.setTransactionConfig(
-			DefaultActionableDynamicQuery.REQUIRES_NEW_TRANSACTION_CONFIG);
-
-		indexableActionableDynamicQuery.performActions();
 
 		if (_previousCheckDate == null) {
 			_previousCheckDate = new Date(
@@ -7530,10 +7536,9 @@ public class JournalArticleLocalServiceImpl
 				groupId, articleId, WorkflowConstants.STATUS_IN_TRASH,
 				orderByComparator);
 		}
-		else {
-			return journalArticlePersistence.findByG_A_ST_First(
-				groupId, articleId, status, orderByComparator);
-		}
+
+		return journalArticlePersistence.findByG_A_ST_First(
+			groupId, articleId, status, orderByComparator);
 	}
 
 	protected JournalGroupServiceConfiguration
@@ -8621,16 +8626,6 @@ public class JournalArticleLocalServiceImpl
 
 	@ServiceReference(type = JournalConverter.class)
 	protected JournalConverter journalConverter;
-
-	private long _getArticleCheckInterval() throws PortalException {
-		long companyId = CompanyThreadLocal.getCompanyId();
-
-		JournalServiceConfiguration journalServiceConfiguration =
-			configurationProvider.getCompanyConfiguration(
-				JournalServiceConfiguration.class, companyId);
-
-		return journalServiceConfiguration.checkInterval();
-	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		JournalArticleLocalServiceImpl.class);

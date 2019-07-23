@@ -42,6 +42,7 @@ import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalService;
 import com.liferay.portal.kernel.service.permission.PortletPermissionUtil;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.PrefsParamUtil;
@@ -49,7 +50,10 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -156,6 +160,18 @@ public class DDLFormDisplayContext {
 		return _recordSet;
 	}
 
+	public String getRecordSetDescription(Locale locale) {
+		DDLRecordSet recordSet = getRecordSet();
+
+		String description = recordSet.getDescription(locale, true);
+
+		if (Validator.isNull(description)) {
+			description = _getAvaliableValue(recordSet.getDescription());
+		}
+
+		return description;
+	}
+
 	public long getRecordSetId() {
 		if (_recordSetId != 0) {
 			return _recordSetId;
@@ -165,6 +181,18 @@ public class DDLFormDisplayContext {
 			_renderRequest.getPreferences(), _renderRequest, "recordSetId");
 
 		return _recordSetId;
+	}
+
+	public String getRecordSetName(Locale locale) {
+		DDLRecordSet recordSet = getRecordSet();
+
+		String name = recordSet.getName(locale, true);
+
+		if (Validator.isNull(name)) {
+			name = _getAvaliableValue(recordSet.getName());
+		}
+
+		return name;
 	}
 
 	public String getRedirectURL() throws PortalException {
@@ -330,9 +358,8 @@ public class DDLFormDisplayContext {
 			return LanguageUtil.get(
 				themeDisplay.getRequest(), "submit-for-publication");
 		}
-		else {
-			return LanguageUtil.get(themeDisplay.getRequest(), "submit");
-		}
+
+		return LanguageUtil.get(themeDisplay.getRequest(), "submit");
 	}
 
 	protected ThemeDisplay getThemeDisplay() {
@@ -411,6 +438,19 @@ public class DDLFormDisplayContext {
 		}
 
 		return true;
+	}
+
+	private String _getAvaliableValue(String xmlLocalized) {
+		Map<Locale, String> localizationMap =
+			LocalizationUtil.getLocalizationMap(xmlLocalized);
+
+		if (!localizationMap.isEmpty()) {
+			Collection<String> values = localizationMap.values();
+
+			return (String)values.toArray()[0];
+		}
+
+		return StringPool.BLANK;
 	}
 
 	private static final String _DDM_FORM_FIELD_NAME_CAPTCHA = "_CAPTCHA_";

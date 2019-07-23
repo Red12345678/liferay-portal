@@ -30,10 +30,8 @@ public class TestFullNameValidator implements FullNameValidator {
 	public boolean validate(
 		long companyId, String firstName, String middleName, String lastName) {
 
-		if (companyId == 1) {
-			if (firstName.equals("Brian")) {
-				return true;
-			}
+		if ((companyId == 1) && firstName.equals("Brian")) {
+			return true;
 		}
 
 		return false;

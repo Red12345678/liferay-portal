@@ -31,8 +31,6 @@ double nextVersion = diffVersionsInfo.getNextVersion();
 double previousVersion = diffVersionsInfo.getPreviousVersion();
 
 if (Validator.isNotNull(languageId)) {
-	portletURL.setParameter("languageId", languageId);
-
 	resourceURL.setParameter("languageId", languageId);
 }
 %>
@@ -71,6 +69,8 @@ if (Validator.isNotNull(languageId)) {
 
 										<%
 										PortletURL sourceURL = PortletURLUtil.clone(portletURL, renderResponse);
+
+										sourceURL.setParameter("languageId", languageId);
 
 										sourceURL.setParameter("targetVersion", String.valueOf(targetVersion));
 

@@ -123,9 +123,8 @@ public class BlogsEntryImpl extends BlogsEntryBaseImpl {
 		if (isApproved() && displayDate.before(new Date())) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override

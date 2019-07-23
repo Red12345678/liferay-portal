@@ -174,6 +174,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.InetAddressUtil;
 import com.liferay.portal.kernel.util.InheritableMap;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ListMergeable;
@@ -987,7 +988,8 @@ public class PortalImpl implements Portal {
 			}
 
 			try {
-				InetAddress inetAddress = InetAddress.getByName(domain);
+				InetAddress inetAddress = InetAddressUtil.getInetAddressByName(
+					domain);
 
 				String hostAddress = inetAddress.getHostAddress();
 
@@ -1030,27 +1032,26 @@ public class PortalImpl implements Portal {
 
 			return StringUtil.randomId();
 		}
-		else {
-			StringBundler sb = new StringBundler(5);
 
-			sb.append(DeterminateKeyGenerator.generate(input));
-			sb.append(StringPool.UNDERLINE);
-			sb.append(request.getAttribute(WebKeys.RENDER_PORTLET_COLUMN_ID));
-			sb.append(StringPool.UNDERLINE);
-			sb.append(request.getAttribute(WebKeys.RENDER_PORTLET_COLUMN_POS));
+		StringBundler sb = new StringBundler(5);
 
-			return JS.getSafeName(sb.toString());
-		}
+		sb.append(DeterminateKeyGenerator.generate(input));
+		sb.append(StringPool.UNDERLINE);
+		sb.append(request.getAttribute(WebKeys.RENDER_PORTLET_COLUMN_ID));
+		sb.append(StringPool.UNDERLINE);
+		sb.append(request.getAttribute(WebKeys.RENDER_PORTLET_COLUMN_POS));
+
+		return JS.getSafeName(sb.toString());
 	}
 
 	@Override
 	public String getAbsoluteURL(HttpServletRequest request, String url) {
 		String portalURL = getPortalURL(request);
 
-		if (url.charAt(0) == CharPool.SLASH) {
-			if (Validator.isNotNull(portalURL)) {
-				url = portalURL.concat(url);
-			}
+		if ((url.charAt(0) == CharPool.SLASH) &&
+			Validator.isNotNull(portalURL)) {
+
+			url = portalURL.concat(url);
 		}
 
 		if (!CookieKeys.hasSessionId(request) && url.startsWith(portalURL)) {
@@ -1491,9 +1492,8 @@ public class PortalImpl implements Portal {
 		if (secure) {
 			return getCDNHostHttps(companyId);
 		}
-		else {
-			return getCDNHostHttp(companyId);
-		}
+
+		return getCDNHostHttp(companyId);
 	}
 
 	@Override
@@ -2430,13 +2430,39 @@ public class PortalImpl implements Portal {
 
 	@Override
 	public String getForwardedHost(HttpServletRequest request) {
+		String serverName = request.getServerName();
+
 		if (!PropsValues.WEB_SERVER_FORWARDED_HOST_ENABLED) {
-			return request.getServerName();
+			return serverName;
 		}
 
-		return GetterUtil.get(
-			request.getHeader(PropsValues.WEB_SERVER_FORWARDED_HOST_HEADER),
-			request.getServerName());
+		String forwardedHost = request.getHeader(
+			PropsValues.WEB_SERVER_FORWARDED_HOST_HEADER);
+
+		if (Validator.isBlank(forwardedHost) ||
+			forwardedHost.equals(serverName)) {
+
+			return serverName;
+		}
+
+		if (_validPortalDomainCheckDisabled) {
+			if (!Validator.isHostName(forwardedHost)) {
+				if (_log.isWarnEnabled()) {
+					_log.warn("Invalid forwarded host: " + forwardedHost);
+				}
+
+				return serverName;
+			}
+		}
+		else if (!isValidPortalDomain(forwardedHost)) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("Invalid forwarded host: " + forwardedHost);
+			}
+
+			return serverName;
+		}
+
+		return forwardedHost;
 	}
 
 	@Override
@@ -4169,9 +4195,8 @@ public class PortalImpl implements Portal {
 			if (secure) {
 				return PropsValues.WEB_SERVER_HTTPS_PORT;
 			}
-			else {
-				return PropsValues.WEB_SERVER_HTTP_PORT;
-			}
+
+			return PropsValues.WEB_SERVER_HTTP_PORT;
 		}
 
 		return inetSocketAddress.getPort();
@@ -4524,9 +4549,8 @@ public class PortalImpl implements Portal {
 		if (liferayPortletConfig != null) {
 			return liferayPortletConfig.getPortletId();
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override
@@ -4538,9 +4562,8 @@ public class PortalImpl implements Portal {
 		if (liferayPortletConfig != null) {
 			return liferayPortletConfig.getPortletId();
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override
@@ -4737,9 +4760,8 @@ public class PortalImpl implements Portal {
 		if (PropsValues.AUTO_DEPLOY_CUSTOM_PORTLET_XML) {
 			return PORTLET_XML_FILE_NAME_CUSTOM;
 		}
-		else {
-			return PORTLET_XML_FILE_NAME_STANDARD;
-		}
+
+		return PORTLET_XML_FILE_NAME_STANDARD;
 	}
 
 	@Override
@@ -4923,9 +4945,8 @@ public class PortalImpl implements Portal {
 		if (layout == null) {
 			return 0;
 		}
-		else {
-			return layout.getGroupId();
-		}
+
+		return layout.getGroupId();
 	}
 
 	@Override
@@ -5903,9 +5924,8 @@ public class PortalImpl implements Portal {
 
 			return userIdObj.longValue();
 		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	@Override
@@ -6551,9 +6571,8 @@ public class PortalImpl implements Portal {
 		if (StringUtil.equalsIgnoreCase(method, HttpMethods.GET)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -6565,9 +6584,8 @@ public class PortalImpl implements Portal {
 		if (StringUtil.equalsIgnoreCase(method, HttpMethods.POST)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -6579,9 +6597,8 @@ public class PortalImpl implements Portal {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -6711,9 +6728,8 @@ public class PortalImpl implements Portal {
 		if (pos >= 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -7606,7 +7622,7 @@ public class PortalImpl implements Portal {
 	}
 
 	/**
-	 * @deprecated As of 7.0.0, with no direct replacement
+	 * @deprecated As of Wilberforce (7.0.x), with no direct replacement
 	 */
 	@Deprecated
 	protected String buildI18NPath(Locale locale) {
@@ -7712,12 +7728,12 @@ public class PortalImpl implements Portal {
 			LayoutTypePortlet layoutTypePortlet =
 				(LayoutTypePortlet)layout.getLayoutType();
 
-			if (layoutTypePortlet.hasPortletId(portletId, true)) {
-				if (getScopeGroupId(layout, portletId) == scopeGroupId) {
-					plid = layout.getPlid();
+			if (layoutTypePortlet.hasPortletId(portletId, true) &&
+				(getScopeGroupId(layout, portletId) == scopeGroupId)) {
 
-					break;
-				}
+				plid = layout.getPlid();
+
+				break;
 			}
 		}
 
@@ -8714,7 +8730,7 @@ public class PortalImpl implements Portal {
 						themeDisplay.getSiteGroupId()) &&
 					 (group.getClassPK() != themeDisplay.getUserId()))) {
 
-					if (group.isControlPanel()) {
+					if (group.isControlPanel() || controlPanel) {
 						virtualHostname = themeDisplay.getServerName();
 
 						if (Validator.isNull(virtualHostname) ||

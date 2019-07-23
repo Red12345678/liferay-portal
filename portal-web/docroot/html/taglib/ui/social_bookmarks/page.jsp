@@ -51,11 +51,15 @@ String randomNamespace = PortalUtil.generateRandomKey(request, "taglib_ui_social
 			</liferay-ui:icon-menu>
 
 			<aui:script use="liferay-social-bookmarks">
-				new Liferay.SocialBookmarks(
-					{
-						contentBox: '#<%= randomNamespace %>socialBookmarks'
-					}
-				);
+				var contentBoxNode = A.one('#<%= randomNamespace %>socialBookmarks');
+
+				if (contentBoxNode) {
+					new Liferay.SocialBookmarks(
+						{
+							contentBox: '#<%= randomNamespace %>socialBookmarks'
+						}
+					);
+				}
 			</aui:script>
 		</c:when>
 		<c:otherwise>

@@ -15,6 +15,7 @@
 package com.liferay.portal.kernel.lpkg;
 
 import com.liferay.portal.kernel.util.ReleaseInfo;
+import com.liferay.portal.kernel.util.StringUtil;
 
 /**
  * @author Shuyang Zhou
@@ -55,8 +56,8 @@ public class StaticLPKGResolver {
 		String staticLPKGBundleSymbolicNames = System.getProperty(
 			"static.lpkg.bundle.symbolic.names");
 
-		String[] staticLPKGBundleSymbolicNameArray =
-			staticLPKGBundleSymbolicNames.split(",");
+		String[] staticLPKGBundleSymbolicNameArray = StringUtil.split(
+			staticLPKGBundleSymbolicNames);
 
 		String name = ReleaseInfo.getName();
 

@@ -34,7 +34,7 @@ import com.liferay.product.navigation.control.menu.constants.ProductNavigationCo
 import com.liferay.product.navigation.product.menu.web.constants.ProductNavigationProductMenuPortletKeys;
 import com.liferay.product.navigation.product.menu.web.constants.ProductNavigationProductMenuWebKeys;
 import com.liferay.taglib.portletext.RuntimeTag;
-import com.liferay.taglib.util.BodyBottomTag;
+import com.liferay.taglib.servlet.PageContextFactoryUtil;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -50,7 +50,6 @@ import javax.portlet.WindowStateException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 
@@ -86,17 +85,8 @@ public class ProductMenuProductNavigationControlMenuEntry
 			HttpServletRequest request, HttpServletResponse response)
 		throws IOException {
 
-		BodyBottomTag bodyBottomTag = new BodyBottomTag();
-
-		bodyBottomTag.setOutputKey("productMenu");
-
-		try {
-			bodyBottomTag.doBodyTag(
-				request, response, this::_processBodyBottomContent);
-		}
-		catch (JspException je) {
-			throw new IOException(je);
-		}
+		_processBodyBottomContent(
+			PageContextFactoryUtil.create(request, response));
 
 		return true;
 	}

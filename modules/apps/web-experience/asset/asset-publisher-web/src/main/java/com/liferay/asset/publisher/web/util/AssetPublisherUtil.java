@@ -915,9 +915,8 @@ public class AssetPublisherUtil {
 		if (ArrayUtil.isNotEmpty(classNameIds)) {
 			return classNameIds;
 		}
-		else {
-			return availableClassNameIds;
-		}
+
+		return availableClassNameIds;
 	}
 
 	public static Long[] getClassTypeIds(
@@ -963,9 +962,8 @@ public class AssetPublisherUtil {
 		if (classTypeIds != null) {
 			return classTypeIds;
 		}
-		else {
-			return availableClassTypeIds;
-		}
+
+		return availableClassTypeIds;
 	}
 
 	public static Map<Locale, String> getEmailAssetEntryAddedBodyMap(
@@ -987,10 +985,9 @@ public class AssetPublisherUtil {
 		if (Validator.isNotNull(emailAssetEntryAddedEnabled)) {
 			return GetterUtil.getBoolean(emailAssetEntryAddedEnabled);
 		}
-		else {
-			return AssetPublisherWebConfigurationValues.
-				EMAIL_ASSET_ENTRY_ADDED_ENABLED;
-		}
+
+		return AssetPublisherWebConfigurationValues.
+			EMAIL_ASSET_ENTRY_ADDED_ENABLED;
 	}
 
 	public static Map<Locale, String> getEmailAssetEntryAddedSubjectMap(
@@ -1927,7 +1924,7 @@ public class AssetPublisherUtil {
 		}
 		catch (IOException ioe) {
 			if (_log.isWarnEnabled()) {
-				_log.warn(ioe);
+				_log.warn(ioe, ioe);
 			}
 		}
 

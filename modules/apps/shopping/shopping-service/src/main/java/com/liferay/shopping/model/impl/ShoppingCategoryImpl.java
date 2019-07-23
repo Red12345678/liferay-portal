@@ -28,9 +28,8 @@ public class ShoppingCategoryImpl extends ShoppingCategoryBaseImpl {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 }

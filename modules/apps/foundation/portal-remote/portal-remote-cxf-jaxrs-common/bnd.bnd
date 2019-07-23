@@ -1,6 +1,6 @@
 Bundle-Name: Liferay Portal Remote CXF JAX-RS Common
 Bundle-SymbolicName: com.liferay.portal.remote.cxf.jaxrs.common
-Bundle-Version: 3.1.7
+Bundle-Version: 3.1.9
 Fragment-Host: com.liferay.portal.remote.cxf.common
 Import-Package:\
 	!com.sun.*,\
@@ -61,17 +61,15 @@ Provide-Capability:\
 	org.apache.cxf.jaxrs.provider.aegis,\
 	org.apache.cxf.jaxrs.provider.atom,\
 	org.apache.cxf.jaxrs.provider.dom4j,\
-	org.apache.cxf.jaxrs.provider.json.utils,\
 	org.apache.cxf.jaxrs.provider.json,\
+	org.apache.cxf.jaxrs.provider.json.utils,\
 	org.apache.cxf.jaxrs.provider.jsonp,\
 	org.apache.cxf.jaxrs.provider.jsrjsonp,\
 	org.apache.cxf.jaxrs.provider.xmlbeans,\
-	org.apache.cxf.jaxrs.provider,\
 	org.apache.cxf.jaxrs.security,\
 	org.apache.cxf.jaxrs.servlet,\
 	org.apache.cxf.jaxrs.spring,\
+	org.apache.cxf.jaxrs.utils,\
 	org.apache.cxf.jaxrs.utils.multipart,\
 	org.apache.cxf.jaxrs.utils.schemas,\
-	org.apache.cxf.jaxrs.utils.schemas,\
-	org.apache.cxf.jaxrs.utils,\
 	org.apache.cxf.jaxrs.validation

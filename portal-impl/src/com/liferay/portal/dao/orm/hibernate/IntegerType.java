@@ -105,9 +105,8 @@ public class IntegerType implements CompositeUserType, Serializable {
 		if (value == null) {
 			return DEFAULT_VALUE;
 		}
-		else {
-			return value;
-		}
+
+		return value;
 	}
 
 	@Override

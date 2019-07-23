@@ -1,5 +1,6 @@
 @component-name = "portal-plugins-osgi"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property plugins.deployment.type = "osgi";
@@ -26,7 +27,7 @@ definition {
 
 		AntCommand.antCommand(
 			locator1 = "build-test.xml",
-			value1 = "remove-plugin -Dplugin.name=google-adsense-portlet"
-		);
+			value1 = "remove-plugin -Dplugin.name=google-adsense-portlet");
 	}
+
 }

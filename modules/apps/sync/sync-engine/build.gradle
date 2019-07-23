@@ -2,9 +2,9 @@ dependencies {
 	compileInclude fileTree(dir: "lib-ee", include: "*.jar")
 	compileInclude group: "ch.qos.logback", name: "logback-classic", version: "1.2.3"
 	compileInclude group: "ch.qos.logback", name: "logback-core", version: "1.2.3"
-	compileInclude group: "com.fasterxml.jackson.core", name: "jackson-annotations", version: "2.9.7"
-	compileInclude group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.9.7"
-	compileInclude group: "com.fasterxml.jackson.core", name: "jackson-databind", version: "2.9.7"
+	compileInclude group: "com.fasterxml.jackson.core", name: "jackson-annotations", version: "2.9.9"
+	compileInclude group: "com.fasterxml.jackson.core", name: "jackson-core", version: "2.9.9"
+	compileInclude group: "com.fasterxml.jackson.core", name: "jackson-databind", version: "2.9.9"
 	compileInclude group: "com.google.guava", name: "guava", version: "27.0-jre"
 	compileInclude group: "com.h2database", name: "h2", version: "1.4.196"
 	compileInclude group: "com.j256.ormlite", name: "ormlite-core", version: "5.1"

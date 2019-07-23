@@ -34,6 +34,9 @@ import com.liferay.twitter.model.FeedModel;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.Collections;
@@ -210,6 +213,31 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, Feed>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			Feed.class.getClassLoader(), Feed.class, ModelWrapper.class);
+
+		try {
+			Constructor<Feed> constructor =
+				(Constructor<Feed>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
 	}
 
 	private static final Map<String, Function<Feed, Object>>
@@ -590,8 +618,12 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 	@Override
 	public Feed toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (Feed)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, Feed>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -797,10 +829,12 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader = Feed.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		Feed.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, Feed>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private long _feedId;
 	private long _companyId;

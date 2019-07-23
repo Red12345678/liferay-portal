@@ -64,26 +64,25 @@ public class FileKeyUtil {
 
 				return Long.parseLong(fileKey);
 			}
-			else {
-				UserDefinedFileAttributeView userDefinedFileAttributeView =
-					Files.getFileAttributeView(
-						filePath, UserDefinedFileAttributeView.class);
 
-				List<String> list = userDefinedFileAttributeView.list();
+			UserDefinedFileAttributeView userDefinedFileAttributeView =
+				Files.getFileAttributeView(
+					filePath, UserDefinedFileAttributeView.class);
 
-				if (!list.contains("fileKey")) {
-					return -1;
-				}
+			List<String> list = userDefinedFileAttributeView.list();
 
-				ByteBuffer byteBuffer = ByteBuffer.allocate(20);
-
-				userDefinedFileAttributeView.read("fileKey", byteBuffer);
-
-				CharBuffer charBuffer = _CHARSET.decode(
-					(ByteBuffer)byteBuffer.flip());
-
-				return Long.parseLong(charBuffer.toString());
+			if (!list.contains("fileKey")) {
+				return -1;
 			}
+
+			ByteBuffer byteBuffer = ByteBuffer.allocate(20);
+
+			userDefinedFileAttributeView.read("fileKey", byteBuffer);
+
+			CharBuffer charBuffer = _CHARSET.decode(
+				(ByteBuffer)byteBuffer.flip());
+
+			return Long.parseLong(charBuffer.toString());
 		}
 		catch (Exception e) {
 			_logger.error(e.getMessage(), e);

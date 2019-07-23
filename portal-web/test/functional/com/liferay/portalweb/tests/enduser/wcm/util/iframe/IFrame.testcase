@@ -1,5 +1,6 @@
 @component-name = "portal-util-misc"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "IFrame Portlet";
@@ -30,7 +31,7 @@ definition {
 
 		Portlet.viewPG(
 			portletBody = "Please configure this portlet to make it visible to all users.",
-			portletName = "IFrame"
-		);
+			portletName = "IFrame");
 	}
+
 }

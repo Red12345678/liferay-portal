@@ -1,5 +1,6 @@
 @component-name = "portal-test-plugins"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Test Plugins";
@@ -27,7 +28,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "TestEventConsumer#EVENT_CONSUMER_PORTLET_BODY",
-			value1 = "PASSED"
-		);
+			value1 = "PASSED");
 	}
+
 }

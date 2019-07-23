@@ -92,9 +92,8 @@ public class DLFolderAssetRenderer
 
 			return "/document_library/asset/folder_" + template + ".jsp";
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override

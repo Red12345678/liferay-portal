@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property custom.properties = "default.layout.template.id=1_column";
 	property osgi.app.includes = "my-subscriptions";
 	property portal.release = "true";
@@ -45,8 +46,7 @@ definition {
 		Subscriptions.viewSubscription(
 			assetName = "Bookmarks Folder",
 			assetTitle = "Home",
-			assetType = "Bookmarks Folder"
-		);
+			assetType = "Bookmarks Folder");
 
 		Subscriptions.unsubscribeViaMySubscriptions();
 
@@ -58,4 +58,5 @@ definition {
 
 		Subscriptions.viewUnsubscribedViaInfoPanel();
 	}
+
 }

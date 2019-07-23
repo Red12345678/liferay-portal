@@ -1,5 +1,5 @@
 Bundle-Name: Liferay Wiki Web
 Bundle-SymbolicName: com.liferay.wiki.web
-Bundle-Version: 3.0.40
+Bundle-Version: 3.0.43
 Liferay-Releng-Module-Group-Title: Wiki
 Web-ContextPath: /wiki-web

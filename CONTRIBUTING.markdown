@@ -4,7 +4,7 @@ Liferay Portal is developed by its community consisting of users, enthusiasts, e
 
 Liferay Portal is known for its innovative top quality features. To maintain this reputation, all code changes are reviewed by a core set of project maintainers. We encourage you to join our [Slack Chat](https://communitychat.liferay.com/) and introduce yourself to the core maintainer(s) and engage them as you contribute to the areas they maintain.
 
-To get a deeper understanding of Liferay Portal in general, make sure to read Liferay’s official documentation on the [Liferay Developer Network](https://dev.liferay.com/develop/tutorials).  This documentation contains extensive explanations, examples, and reference material for you to consult time and time again.
+To get a deeper understanding of Liferay Portal in general, make sure to read Liferay's official documentation on the [Liferay Developer Network](https://dev.liferay.com/develop/tutorials).  This documentation contains extensive explanations, examples, and reference material for you to consult time and time again.
 
 For more information, visit the links listed in the Additional Resources section, below.
 
@@ -25,7 +25,7 @@ To build Liferay Portal from source do the following:
 
 * Fork liferay-portal repo on Github - [https://github.com/liferay/liferay-portal](https://github.com/liferay/liferay-portal)
 
-* Clone the forked repo’s master branch (or preferred branch) with no commit history:
+* Clone the forked repo's master branch (or preferred branch) with no commit history:
 
       git clone https://github.com/<github username>/liferay-portal --branch master --single-branch --depth 1
 
@@ -62,7 +62,7 @@ A module can be built from within liferay-portal without recompiling the whole p
 
 # Making Changes
 
-When making changes, it’s best to start off by creating a ticket in JIRA and referencing the ticket number from within any commits and pull requests.
+When making changes, it's best to start off by creating a ticket in JIRA and referencing the ticket number from within any commits and pull requests.
 
 ## JIRA
 
@@ -95,7 +95,7 @@ Submit your custom changes to Github using the following process:
 
 * Test your changes thoroughly! Consider the wide variety of operating systems, databases, application servers, and other related technologies Liferay Portal supports. Make sure your changes in one environment don't break something in another environment.
 
-* Before pushing your branch to your fork on Github it’s often a good idea to rebase on the updated version of upstream/master:
+* Before pushing your branch to your fork on Github it's often a good idea to rebase on the updated version of upstream/master:
 
       git fetch upstream
       git rebase upstream/master

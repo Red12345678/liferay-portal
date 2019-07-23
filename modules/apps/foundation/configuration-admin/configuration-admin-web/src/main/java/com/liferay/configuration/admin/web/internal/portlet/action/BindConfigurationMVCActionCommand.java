@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ResourceBundleLoader;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
@@ -51,6 +52,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javax.portlet.ActionRequest;
@@ -204,6 +206,10 @@ public class BindConfigurationMVCActionCommand implements MVCActionCommand {
 				String key = keys.nextElement();
 
 				Object value = properties.get(key);
+
+				if (Objects.equals(value, Portal.TEMP_OBFUSCATION_VALUE)) {
+					continue;
+				}
 
 				configuredProperties.put(key, value);
 			}

@@ -71,6 +71,8 @@ userGroupSearch.setTotal(userGroupsCount);
 List<UserGroup> userGroups = UserGroupLocalServiceUtil.search(company.getCompanyId(), searchTerms.getKeywords(), userGroupParams, userGroupSearch.getStart(), userGroupSearch.getEnd(), userGroupSearch.getOrderByComparator());
 
 userGroupSearch.setResults(userGroups);
+
+SiteMembershipsConfiguration siteMembershipsConfiguration = ConfigurationProviderUtil.getSystemConfiguration(SiteMembershipsConfiguration.class);
 %>
 
 <liferay-util:include page="/navigation_bar.jsp" servletContext="<%= application %>">
@@ -211,12 +213,31 @@ userGroupSearch.setResults(userGroups);
 	<aui:input name="tabs1" type="hidden" value="user-groups" />
 </aui:form>
 
-<portlet:actionURL name="editUserGroupGroupRole" var="editUserGroupGroupRoleURL" />
+<c:choose>
+	<c:when test="<%= siteMembershipsConfiguration.enableAssignUnassignUserGroupsRolesActions() %>">
+		<portlet:actionURL name="addUserGroupGroupRole" var="addUserGroupGroupRoleURL" />
 
-<aui:form action="<%= editUserGroupGroupRoleURL %>" cssClass="hide" name="editUserGroupGroupRoleFm">
-	<aui:input name="tabs1" type="hidden" value="user-groups" />
-	<aui:input name="userGroupId" type="hidden" />
-</aui:form>
+		<aui:form action="<%= addUserGroupGroupRoleURL %>" cssClass="hide" name="addUserGroupGroupRoleFm">
+			<aui:input name="tabs1" type="hidden" value="user-groups" />
+			<aui:input name="userGroupId" type="hidden" />
+		</aui:form>
+
+		<portlet:actionURL name="unassignUserGroupGroupRole" var="unassignUserGroupGroupRoleURL" />
+
+		<aui:form action="<%= unassignUserGroupGroupRoleURL %>" cssClass="hide" name="unassignUserGroupGroupRoleFm">
+			<aui:input name="tabs1" type="hidden" value="user-groups" />
+			<aui:input name="userGroupId" type="hidden" />
+		</aui:form>
+	</c:when>
+	<c:otherwise>
+		<portlet:actionURL name="editUserGroupGroupRole" var="editUserGroupGroupRoleURL" />
+
+		<aui:form action="<%= editUserGroupGroupRoleURL %>" cssClass="hide" name="editUserGroupGroupRoleFm">
+			<aui:input name="tabs1" type="hidden" value="user-groups" />
+			<aui:input name="userGroupId" type="hidden" />
+		</aui:form>
+	</c:otherwise>
+</c:choose>
 
 <c:if test="<%= hasAssignMembersPermission %>">
 	<liferay-frontend:add-menu>

@@ -1,4 +1,5 @@
 definition {
+
 	macro _editCP {
 		PortletEntry.inputName(name = "${teamName}");
 
@@ -6,15 +7,21 @@ definition {
 	}
 
 	macro _searchCP {
-		Type(locator1 = "TextInput#SEARCH", value1 = "${searchTerm}");
+		Type(
+			locator1 = "TextInput#SEARCH",
+			value1 = "${searchTerm}");
 
-		KeyPress(locator1 = "TextInput#SEARCH", value1 = "\RETURN");
+		KeyPress(
+			locator1 = "TextInput#SEARCH",
+			value1 = "\RETURN");
 	}
 
 	macro addCP {
 		LexiconEntry.gotoAdd();
 
-		Team._editCP(teamDescription = "${teamDescription}", teamName = "${teamName}");
+		Team._editCP(
+			teamDescription = "${teamDescription}",
+			teamName = "${teamName}");
 
 		PortletEntry.save();
 	}
@@ -27,9 +34,13 @@ definition {
 
 		Portlet.changeDisplayStyle(displayStyle = "List");
 
-		AssertTextEquals(locator1 = "SiteTeams#TEAM_TABLE_NAME", value1 = "${teamName}");
+		AssertTextEquals(
+			locator1 = "SiteTeams#TEAM_TABLE_NAME",
+			value1 = "${teamName}");
 
-		AssertClick(locator1 = "SiteTeams#TEAM_TABLE_NAME", value1 = "${teamName}");
+		AssertClick(
+			locator1 = "SiteTeams#TEAM_TABLE_NAME",
+			value1 = "${teamName}");
 
 		Navigator.gotoNavItem(navItem = "Users");
 
@@ -42,15 +53,16 @@ definition {
 		if ("${userNameIsNotFound}" == "true") {
 			AssertTextEquals(
 				locator1 = "Message#EMPTY_INFO",
-				value1 = "No users were found."
-			);
+				value1 = "No users were found.");
 		}
 		else {
 			Portlet.changeDisplayStyle(displayStyle = "Icon");
 
 			var key_cardText = "${userScreenName}";
 
-			AssertTextEquals(locator1 = "Card#SPECIFIC_TEXT", value1 = "${userScreenName}");
+			AssertTextEquals(
+				locator1 = "Card#SPECIFIC_TEXT",
+				value1 = "${userScreenName}");
 
 			Check(locator1 = "Card#SPECIFIC_CHECKBOX");
 
@@ -58,7 +70,9 @@ definition {
 
 			SelectFrameTop();
 
-			AssertClick(locator1 = "Button#ADD", value1 = "Add");
+			AssertClick(
+				locator1 = "Button#ADD",
+				value1 = "Add");
 
 			Alert.viewSuccessMessage();
 
@@ -75,9 +89,13 @@ definition {
 
 		Portlet.changeDisplayStyle(displayStyle = "List");
 
-		AssertTextEquals(locator1 = "SiteTeams#TEAM_TABLE_NAME", value1 = "${teamName}");
+		AssertTextEquals(
+			locator1 = "SiteTeams#TEAM_TABLE_NAME",
+			value1 = "${teamName}");
 
-		AssertClick(locator1 = "SiteTeams#TEAM_TABLE_NAME", value1 = "${teamName}");
+		AssertClick(
+			locator1 = "SiteTeams#TEAM_TABLE_NAME",
+			value1 = "${teamName}");
 
 		Navigator.gotoNavItem(navItem = "User Groups");
 
@@ -92,22 +110,22 @@ definition {
 		if ("${userGroupsNameIsNotAvailable}" == "true") {
 			AssertTextNotPresent(
 				locator1 = "SiteTeamsAssignMembers#USER_GROUPS_TABLE_NAME",
-				value1 = "${userGroupName}"
-			);
+				value1 = "${userGroupName}");
 		}
 		else {
 			Portlet.changeDisplayStyle(displayStyle = "Icon");
 
 			AssertTextEquals(
 				locator1 = "Card#SPECIFIC_LARGE_TEXT",
-				value1 = "${userGroupName}"
-			);
+				value1 = "${userGroupName}");
 
 			Check(locator1 = "Card#SPECIFIC_CHECKBOX");
 
 			SelectFrameTop();
 
-			AssertClick(locator1 = "Button#ADD", value1 = "Add");
+			AssertClick(
+				locator1 = "Button#ADD",
+				value1 = "Add");
 
 			Alert.viewSuccessMessage();
 		}
@@ -117,10 +135,9 @@ definition {
 
 	macro definePermissionPG {
 		Check(
-			locator1 = "Checkbox#TEAM_PERMISSIONS",
 			key_permissionDefinitionKey = "${permissionDefinitionKey}",
-			key_teamName = "${teamName}"
-		);
+			key_teamName = "${teamName}",
+			locator1 = "Checkbox#TEAM_PERMISSIONS");
 	}
 
 	macro deleteCP {
@@ -134,9 +151,7 @@ definition {
 
 		MenuItem.clickNoError(menuItem = "Delete");
 
-		Confirm(
-			value1 = "Are you sure you want to delete this? It will be deleted immediately."
-		);
+		Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 	}
@@ -144,12 +159,13 @@ definition {
 	macro editCP {
 		Portlet.changeDisplayStyle(displayStyle = "List");
 
-		LexiconEntry.gotoEntryMenuItem(menuItem = "Edit", rowEntry = "${teamName}");
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Edit",
+			rowEntry = "${teamName}");
 
 		Team._editCP(
 			teamDescription = "${teamDescriptionEdit}",
-			teamName = "${teamNameEdit}"
-		);
+			teamName = "${teamNameEdit}");
 
 		PortletEntry.save();
 	}
@@ -161,36 +177,28 @@ definition {
 
 		if ("${membershipType}" == "User") {
 			Check(
-				locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_CHECKBOX",
-				key_rowEntry = "${userFirstName} ${userLastName}"
-			);
+				key_rowEntry = "${userFirstName} ${userLastName}",
+				locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_CHECKBOX");
 		}
 		else if ("${membershipType}" == "User Group") {
 			Check(
-				locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_CHECKBOX",
-				key_rowEntry = "${userGroupName}"
-			);
+				key_rowEntry = "${userGroupName}",
+				locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_CHECKBOX");
 		}
 
 		ClickNoError(locator1 = "Icon#DELETE");
 
-		Confirm(
-			value1 = "Are you sure you want to delete this? It will be deleted immediately."
-		);
+		Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 	}
 
 	macro removePermissionPG {
-		Uncheck(
-			locator1 = "//tr[contains(.,'${teamName}')]/td/input[contains(@id,'${permissionDefinitionKey}')]"
-		);
+		Uncheck(locator1 = "//tr[contains(.,'${teamName}')]/td/input[contains(@id,'${permissionDefinitionKey}')]");
 
 		PortletEntry.save();
 
-		AssertNotChecked(
-			locator1 = "//tr[contains(.,'${teamName}')]/td/input[contains(@id,'${permissionDefinitionKey}')]"
-		);
+		AssertNotChecked(locator1 = "//tr[contains(.,'${teamName}')]/td/input[contains(@id,'${permissionDefinitionKey}')]");
 	}
 
 	macro searchCP {
@@ -203,31 +211,27 @@ definition {
 		}
 		else {
 			AssertElementPresent(
-				locator1 = "Card#SPECIFIC_LARGE_TEXT",
-				key_cardText = StringUtil.unquote("${searchTerm}")
-			);
+				key_cardText = StringUtil.unquote("${searchTerm}"),
+				locator1 = "Card#SPECIFIC_LARGE_TEXT");
 		}
 	}
 
 	macro tearDownCP {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ProductMenu.gotoSite(site = "${siteName}");
+		Navigator.openSiteURL(siteName = "${siteName}");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Teams"
-		);
+			portlet = "Site Teams");
 
 		if (IsElementNotPresent(locator1 = "Message#EMPTY_INFO")) {
 			Check.checkAll(locator1 = "Checkbox#SELECT_ALL");
 
 			ClickNoError(locator1 = "Icon#DELETE");
 
-			Confirm(
-				value1 = "Are you sure you want to delete this? It will be deleted immediately."
-			);
+			Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 			Alert.viewSuccessMessage();
 		}
@@ -238,12 +242,13 @@ definition {
 
 		Portlet.changeDisplayStyle(displayStyle = "List");
 
-		AssertTextEquals(locator1 = "SiteTeams#TEAM_TABLE_NAME", value1 = "${teamName}");
+		AssertTextEquals(
+			locator1 = "SiteTeams#TEAM_TABLE_NAME",
+			value1 = "${teamName}");
 
 		AssertTextEquals(
 			locator1 = "SiteTeams#TEAM_TABLE_DESCRIPTION",
-			value1 = "${teamDescription}"
-		);
+			value1 = "${teamDescription}");
 
 		AssertElementPresent(locator1 = "SiteTeams#TEAM_TABLE_ACTIONS");
 	}
@@ -253,13 +258,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Message#EMPTY_INFO",
-			value1 = "There are no site teams. You can add a site team by clicking the plus button on the bottom right corner."
-		);
+			value1 = "There are no site teams. You can add a site team by clicking the plus button on the bottom right corner.");
 
 		AssertTextNotPresent(
 			locator1 = "SiteTeams#TEAM_TABLE_NAME",
-			value1 = "${teamName}"
-		);
+			value1 = "${teamName}");
 	}
 
 	macro viewMemberCP {
@@ -269,17 +272,15 @@ definition {
 
 		if ("${membershipType}" == "User") {
 			AssertTextEquals.assertPartialText(
+				key_rowEntry = "${userFirstName} ${userLastName}",
 				locator1 = "ContentRow#ENTRY_CONTENT_ROW_1",
-				value1 = "${userFirstName} ${userLastName}",
-				key_rowEntry = "${userFirstName} ${userLastName}"
-			);
+				value1 = "${userFirstName} ${userLastName}");
 		}
 		else if ("${membershipType}" == "User Group") {
 			AssertTextEquals.assertPartialText(
+				key_rowEntry = "${userGroupName}",
 				locator1 = "ContentRow#ENTRY_CONTENT_ROW_1",
-				value1 = "${userGroupName}",
-				key_rowEntry = "${userGroupName}"
-			);
+				value1 = "${userGroupName}");
 		}
 	}
 
@@ -291,16 +292,15 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "Message#EMPTY_INFO",
-				value1 = "There are no members. You can add a member by clicking the plus button on the bottom right corner."
-			);
+				value1 = "There are no members. You can add a member by clicking the plus button on the bottom right corner.");
 		}
 	}
 
 	macro viewPermissionPG {
 		AssertChecked(
-			locator1 = "Checkbox#TEAM_PERMISSIONS",
 			key_permissionDefinitionKey = "${permissionDefinitionKey}",
-			key_teamName = "${teamName}"
-		);
+			key_teamName = "${teamName}",
+			locator1 = "Checkbox#TEAM_PERMISSIONS");
 	}
+
 }

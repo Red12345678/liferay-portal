@@ -1290,10 +1290,9 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		if (status == WorkflowConstants.STATUS_ANY) {
 			return wikiPagePersistence.findByN_H(nodeId, head, start, end, obc);
 		}
-		else {
-			return wikiPagePersistence.findByN_H_S(
-				nodeId, head, status, start, end, obc);
-		}
+
+		return wikiPagePersistence.findByN_H_S(
+			nodeId, head, status, start, end, obc);
 	}
 
 	@Override
@@ -1334,11 +1333,9 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 				userId, nodeId, status, start, end,
 				new PageCreateDateComparator(false));
 		}
-		else {
-			return wikiPagePersistence.findByN_S(
-				nodeId, status, start, end,
-				new PageCreateDateComparator(false));
-		}
+
+		return wikiPagePersistence.findByN_S(
+			nodeId, status, start, end, new PageCreateDateComparator(false));
 	}
 
 	@Override
@@ -1388,9 +1385,8 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 			return wikiPagePersistence.countByN_H_NotS(
 				nodeId, head, WorkflowConstants.STATUS_IN_TRASH);
 		}
-		else {
-			return wikiPagePersistence.countByN_H_S(nodeId, head, status);
-		}
+
+		return wikiPagePersistence.countByN_H_S(nodeId, head, status);
 	}
 
 	@Override
@@ -1403,9 +1399,8 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		if (userId > 0) {
 			return wikiPagePersistence.countByU_N_S(userId, nodeId, status);
 		}
-		else {
-			return wikiPagePersistence.countByN_S(nodeId, status);
-		}
+
+		return wikiPagePersistence.countByN_S(nodeId, status);
 	}
 
 	@Override
@@ -1489,9 +1484,8 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		if (count > 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -2386,18 +2380,16 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 				String.valueOf(page.getNodeId()), StringPool.SLASH,
 				URLCodec.encodeURL(WikiEscapeUtil.escapeName(page.getTitle())));
 		}
-		else {
-			PortletURL portletURL = PortalUtil.getControlPanelPortletURL(
-				request, WikiPortletKeys.WIKI_ADMIN,
-				PortletRequest.RENDER_PHASE);
 
-			portletURL.setParameter(
-				"mvcRenderCommandName", "/wiki/view_page_activities");
-			portletURL.setParameter("nodeId", String.valueOf(page.getNodeId()));
-			portletURL.setParameter("title", page.getTitle());
+		PortletURL portletURL = PortalUtil.getControlPanelPortletURL(
+			request, WikiPortletKeys.WIKI_ADMIN, PortletRequest.RENDER_PHASE);
 
-			return portletURL.toString();
-		}
+		portletURL.setParameter(
+			"mvcRenderCommandName", "/wiki/view_page_activities");
+		portletURL.setParameter("nodeId", String.valueOf(page.getNodeId()));
+		portletURL.setParameter("title", page.getTitle());
+
+		return portletURL.toString();
 	}
 
 	protected List<ObjectValuePair<Long, Integer>> getPageVersionStatuses(
@@ -2448,18 +2440,16 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceBaseImpl {
 		if (link != null) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected boolean isUsedTitle(long nodeId, String title) {
 		if (getPagesCount(nodeId, title) > 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected void moveDependentChildPagesFromTrash(

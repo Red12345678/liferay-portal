@@ -29,11 +29,10 @@ import com.liferay.portal.kernel.exception.NoSuchUserGroupException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.UserGroup;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.GroupPersistence;
 import com.liferay.portal.kernel.service.persistence.TeamPersistence;
 import com.liferay.portal.kernel.service.persistence.UserGroupPersistence;
@@ -5984,7 +5983,7 @@ public class UserGroupPersistenceImpl
 
 		userGroup.setUuid(uuid);
 
-		userGroup.setCompanyId(companyProvider.getCompanyId());
+		userGroup.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return userGroup;
 	}
@@ -6804,7 +6803,7 @@ public class UserGroupPersistenceImpl
 
 		if (userGroup == null) {
 			userGroupToGroupTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, groupPK);
+				CompanyThreadLocal.getCompanyId(), pk, groupPK);
 		}
 		else {
 			userGroupToGroupTableMapper.addTableMapping(
@@ -6824,7 +6823,7 @@ public class UserGroupPersistenceImpl
 
 		if (userGroup == null) {
 			userGroupToGroupTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, group.getPrimaryKey());
+				CompanyThreadLocal.getCompanyId(), pk, group.getPrimaryKey());
 		}
 		else {
 			userGroupToGroupTableMapper.addTableMapping(
@@ -6845,7 +6844,7 @@ public class UserGroupPersistenceImpl
 		UserGroup userGroup = fetchByPrimaryKey(pk);
 
 		if (userGroup == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = userGroup.getCompanyId();
@@ -6960,7 +6959,7 @@ public class UserGroupPersistenceImpl
 		UserGroup userGroup = fetchByPrimaryKey(pk);
 
 		if (userGroup == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = userGroup.getCompanyId();
@@ -7115,7 +7114,7 @@ public class UserGroupPersistenceImpl
 
 		if (userGroup == null) {
 			userGroupToTeamTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, teamPK);
+				CompanyThreadLocal.getCompanyId(), pk, teamPK);
 		}
 		else {
 			userGroupToTeamTableMapper.addTableMapping(
@@ -7135,7 +7134,7 @@ public class UserGroupPersistenceImpl
 
 		if (userGroup == null) {
 			userGroupToTeamTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, team.getPrimaryKey());
+				CompanyThreadLocal.getCompanyId(), pk, team.getPrimaryKey());
 		}
 		else {
 			userGroupToTeamTableMapper.addTableMapping(
@@ -7156,7 +7155,7 @@ public class UserGroupPersistenceImpl
 		UserGroup userGroup = fetchByPrimaryKey(pk);
 
 		if (userGroup == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = userGroup.getCompanyId();
@@ -7266,7 +7265,7 @@ public class UserGroupPersistenceImpl
 		UserGroup userGroup = fetchByPrimaryKey(pk);
 
 		if (userGroup == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = userGroup.getCompanyId();
@@ -7421,7 +7420,7 @@ public class UserGroupPersistenceImpl
 
 		if (userGroup == null) {
 			userGroupToUserTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, userPK);
+				CompanyThreadLocal.getCompanyId(), pk, userPK);
 		}
 		else {
 			userGroupToUserTableMapper.addTableMapping(
@@ -7441,7 +7440,7 @@ public class UserGroupPersistenceImpl
 
 		if (userGroup == null) {
 			userGroupToUserTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, user.getPrimaryKey());
+				CompanyThreadLocal.getCompanyId(), pk, user.getPrimaryKey());
 		}
 		else {
 			userGroupToUserTableMapper.addTableMapping(
@@ -7462,7 +7461,7 @@ public class UserGroupPersistenceImpl
 		UserGroup userGroup = fetchByPrimaryKey(pk);
 
 		if (userGroup == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = userGroup.getCompanyId();
@@ -7572,7 +7571,7 @@ public class UserGroupPersistenceImpl
 		UserGroup userGroup = fetchByPrimaryKey(pk);
 
 		if (userGroup == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = userGroup.getCompanyId();
@@ -7806,9 +7805,6 @@ public class UserGroupPersistenceImpl
 		TableMapperFactory.removeTableMapper("UserGroups_Teams");
 		TableMapperFactory.removeTableMapper("Users_UserGroups");
 	}
-
-	@BeanReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@BeanReference(type = GroupPersistence.class)
 	protected GroupPersistence groupPersistence;

@@ -399,8 +399,10 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 
 			boolean forkProcess = false;
 
+			TikaInputStream tikaInputStream = TikaInputStream.get(is);
+
 			if (PropsValues.TEXT_EXTRACTION_FORK_PROCESS_ENABLED) {
-				String mimeType = tika.detect(is);
+				String mimeType = tika.detect(tikaInputStream);
 
 				if (ArrayUtil.contains(
 						PropsValues.TEXT_EXTRACTION_FORK_PROCESS_MIME_TYPES,
@@ -419,7 +421,8 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 						try {
 							return processExecutor.execute(
 								PortalClassPathUtil.getPortalProcessConfig(),
-								new ExtractTextProcessCallable(getBytes(is)));
+								new ExtractTextProcessCallable(
+									getBytes(tikaInputStream)));
 						}
 						catch (Exception e) {
 							return ReflectionUtil.throwException(e);
@@ -432,8 +435,6 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 				text = future.get();
 			}
 			else {
-				TikaInputStream tikaInputStream = TikaInputStream.get(is);
-
 				if (!_isEmptyTikaInputStream(tikaInputStream)) {
 					UniversalEncodingDetector universalEncodingDetector =
 						new UniversalEncodingDetector();
@@ -612,9 +613,8 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		if (pos > 0) {
 			return StringUtil.toLowerCase(fileName.substring(pos + 1));
 		}
-		else {
-			return StringPool.BLANK;
-		}
+
+		return StringPool.BLANK;
 	}
 
 	@Override
@@ -709,9 +709,8 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 			if ((bufferIndex != length) || (bufferLength != -1)) {
 				return false;
 			}
-			else {
-				return true;
-			}
+
+			return true;
 		}
 		catch (Exception e) {
 			return false;
@@ -841,10 +840,9 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		if (raw) {
 			return s;
 		}
-		else {
-			return StringUtil.replace(
-				s, StringPool.RETURN_NEW_LINE, StringPool.NEW_LINE);
-		}
+
+		return StringUtil.replace(
+			s, StringPool.RETURN_NEW_LINE, StringPool.NEW_LINE);
 	}
 
 	@Override
@@ -894,9 +892,8 @@ public class FileImpl implements com.liferay.portal.kernel.util.File {
 		if (ext.length() > 0) {
 			return fileName.substring(0, fileName.length() - ext.length() - 1);
 		}
-		else {
-			return fileName;
-		}
+
+		return fileName;
 	}
 
 	@Override

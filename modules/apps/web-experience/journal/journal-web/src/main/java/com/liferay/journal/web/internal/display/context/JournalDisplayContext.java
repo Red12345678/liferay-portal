@@ -46,6 +46,9 @@ import com.liferay.message.boards.kernel.service.MBMessageLocalServiceUtil;
 import com.liferay.portal.kernel.bean.BeanParamUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
@@ -66,6 +69,7 @@ import com.liferay.portal.kernel.search.SearchContextFactory;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalServiceUtil;
+import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -174,6 +178,38 @@ public class JournalDisplayContext {
 		}
 
 		return availableLocales;
+	}
+
+	public List<Locale> getAvailableLocalesFromDDMFormValues(
+			String ddmFormValues)
+		throws PortalException {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(ddmFormValues);
+
+		JSONArray jsonArray = jsonObject.getJSONArray("availableLanguageIds");
+
+		if (jsonArray == null) {
+			return Collections.emptyList();
+		}
+
+		List<Locale> availableLocales = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			availableLocales.add(
+				LocaleUtil.fromLanguageId(jsonArray.getString(i)));
+		}
+
+		return availableLocales;
+	}
+
+	public String getBackURL() {
+		if (_backURL != null) {
+			return _backURL;
+		}
+
+		_backURL = ParamUtil.getString(_request, "backURL");
+
+		return _backURL;
 	}
 
 	public String[] getCharactersBlacklist() throws PortalException {
@@ -372,6 +408,14 @@ public class JournalDisplayContext {
 		_ddmTemplateKey = ParamUtil.getString(_request, "ddmTemplateKey");
 
 		return _ddmTemplateKey;
+	}
+
+	public String getDefaultLanguageIdFromDDMFormValues(String ddmFormValues)
+		throws PortalException {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(ddmFormValues);
+
+		return jsonObject.getString("defaultLanguageId");
 	}
 
 	public String getDisplayStyle() {
@@ -710,10 +754,12 @@ public class JournalDisplayContext {
 
 		articleSearchContainer.setRowChecker(entriesChecker);
 
-		EntriesMover entriesMover = new EntriesMover(
-			themeDisplay.getScopeGroupId());
+		if (!BrowserSnifferUtil.isMobile(_request)) {
+			EntriesMover entriesMover = new EntriesMover(
+				themeDisplay.getScopeGroupId());
 
-		articleSearchContainer.setRowMover(entriesMover);
+			articleSearchContainer.setRowMover(entriesMover);
+		}
 
 		if (isNavigationMine() || isNavigationRecent()) {
 			boolean includeOwner = true;
@@ -804,7 +850,7 @@ public class JournalDisplayContext {
 				Sort sort = null;
 
 				if (Objects.equals(getOrderByCol(), "display-date")) {
-					sort = new Sort("displayDate", Sort.LONG_TYPE, orderByAsc);
+					sort = new Sort("displayDate", Sort.LONG_TYPE, !orderByAsc);
 				}
 				else if (Objects.equals(getOrderByCol(), "id")) {
 					sort = new Sort(
@@ -813,7 +859,7 @@ public class JournalDisplayContext {
 				}
 				else if (Objects.equals(getOrderByCol(), "modified-date")) {
 					sort = new Sort(
-						Field.MODIFIED_DATE, Sort.LONG_TYPE, orderByAsc);
+						Field.MODIFIED_DATE, Sort.LONG_TYPE, !orderByAsc);
 				}
 
 				LinkedHashMap<String, Object> params = new LinkedHashMap<>();
@@ -1250,6 +1296,7 @@ public class JournalDisplayContext {
 
 	private JournalArticle _article;
 	private JournalArticleDisplay _articleDisplay;
+	private String _backURL;
 	private DDMFormValues _ddmFormValues;
 	private String _ddmStructureKey;
 	private String _ddmStructureName;

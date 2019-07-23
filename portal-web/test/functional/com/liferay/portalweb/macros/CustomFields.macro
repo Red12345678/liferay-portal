@@ -1,11 +1,11 @@
 definition {
+
 	macro addCP {
 		var key_resourceName = "${resourceName}";
 
 		AssertClick(
 			locator1 = "CustomFields#RESOURCE_TABLE_RESOURCE_LINK",
-			value1 = "${resourceName}"
-		);
+			value1 = "${resourceName}");
 
 		LexiconEntry.gotoAdd();
 
@@ -13,7 +13,9 @@ definition {
 
 		PortletEntry.inputName(name = "${customFieldKey}");
 
-		Select(locator1 = "Select#TYPE", value1 = "${customFieldType}");
+		Select(
+			locator1 = "Select#TYPE",
+			value1 = "${customFieldType}");
 
 		Button.clickSave();
 
@@ -21,8 +23,31 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "CustomFieldsEditResource#CUSTOM_FIELDS_TABLE_NAME",
-			value1 = "${customFieldName}"
-		);
+			value1 = "${customFieldName}");
+	}
+
+	macro deleteCP {
+		var key_resourceName = "${resourceName}";
+
+		AssertClick(
+			locator1 = "CustomFields#RESOURCE_TABLE_RESOURCE_LINK",
+			value1 = "${resourceName}");
+
+		var key_customFieldName = "${customFieldName}";
+
+		AssertVisible(locator1 = "CustomFieldsEditResource#CUSTOM_FIELDS_TABLE_NAME");
+
+		Pause(locator1 = "3000");
+
+		LexiconEntry.openEntryMenu(rowEntry = "${customFieldName}");
+
+		MenuItem.clickNoError(menuItem = "Delete");
+
+		Confirm.assertConfirmationNoWait(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
+
+		AssertElementPresent(locator1 = "Message#SUCCESS");
+
+		AssertElementNotPresent(locator1 = "CustomFieldsEditResource#CUSTOM_FIELDS_TABLE_NAME");
 	}
 
 	macro editCP {
@@ -30,8 +55,7 @@ definition {
 
 		AssertClick(
 			locator1 = "CustomFields#RESOURCE_TABLE_RESOURCE_LINK",
-			value1 = "${resourceName}"
-		);
+			value1 = "${resourceName}");
 
 		var key_customFieldName = "${customFieldName}";
 
@@ -45,7 +69,9 @@ definition {
 
 		if (isSet(defaultValue)) {
 			if ("${customFieldType}" == "True/False") {
-				Select(locator1 = "Select#DEFAULT_VALUE_SELECT", value1 = "${defaultValue}");
+				Select(
+					locator1 = "Select#DEFAULT_VALUE_SELECT",
+					value1 = "${defaultValue}");
 			}
 		}
 
@@ -56,8 +82,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		while (IsElementPresent(locator1 = "CustomFields#RESOURCE_TABLE_CUSTOM_FIELDS_LINK_GENERIC")) {
 			Click(locator1 = "CustomFields#RESOURCE_TABLE_CUSTOM_FIELDS_LINK_GENERIC");
@@ -65,14 +90,11 @@ definition {
 			while (IsElementPresent(locator1 = "CustomFieldsEditResource#CUSTOM_FIELDS_TABLE_ACTIONS_GENERIC")) {
 				AssertClick(
 					locator1 = "CustomFieldsEditResource#CUSTOM_FIELDS_TABLE_ACTIONS_GENERIC",
-					value1 = "Actions"
-				);
+					value1 = "Actions");
 
 				MenuItem.clickNoError(menuItem = "Delete");
 
-				Confirm(
-					value1 = "Are you sure you want to delete this? It will be deleted immediately."
-				);
+				Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 				Alert.viewSuccessMessage();
 			}
@@ -80,8 +102,8 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Configuration",
 				panel = "Control Panel",
-				portlet = "Custom Fields"
-			);
+				portlet = "Custom Fields");
 		}
 	}
+
 }

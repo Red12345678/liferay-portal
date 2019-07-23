@@ -210,6 +210,12 @@ boolean portletTitleBasedNavigation = GetterUtil.getBoolean(portletConfig.getIni
 
 									if (thread.getLastPostByUserId() != 0) {
 										messageUserName = HtmlUtil.escape(PortalUtil.getUserName(thread.getLastPostByUserId(), StringPool.BLANK));
+
+										if (Validator.isNull(messageUserName)) {
+											MBMessage lastThreadMessage = MBMessageLocalServiceUtil.getLastThreadMessage(thread.getThreadId(), thread.getStatus());
+
+											messageUserName = HtmlUtil.escape(lastThreadMessage.getUserName());
+										}
 									}
 
 									Date lastPostDate = thread.getLastPostDate();

@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Asset Publisher";
@@ -33,41 +34,37 @@ definition {
 	test AddWebContentPGViaAP {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ProductMenu.gotoSite(site = "${siteName}");
+		Navigator.openSiteURL(siteName = "${siteName}");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		WebContent.addPGViaAP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC Webcontent Title"
-		);
+			webContentTitle = "WC Webcontent Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		WebContent.viewPGViaAP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC Webcontent Title"
-		);
+			webContentTitle = "WC Webcontent Title");
 	}
 
 	@priority = "4"
 	test AddWebContentWithGlobalScopeViaCPToLiferayAP {
 		property test.name.skip.portal.instance = "PGAssetpublisherWebcontent#AddWebContentWithGlobalScopeViaCPToLiferayAP";
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		PortletEntry.publish();
 
@@ -81,196 +78,182 @@ definition {
 
 		AssetPublisherPortlet.configureSiteScopePG(
 			siteName = "Global",
-			siteScopeType = "Global"
-		);
+			siteScopeType = "Global");
 
 		Navigator.gotoPage(pageName = "Test Page 1");
 
 		AssetPublisherPortlet.configureSiteScopeRemoveSitePG(
 			siteName = "Liferay",
-			siteScopeType = "Current Site"
-		);
+			siteScopeType = "Current Site");
 
 		Navigator.gotoPage(pageName = "Test Page 1");
 
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "WC WebContent Content",
-			assetTitle = "WC WebContent Title"
-		);
+			assetTitle = "WC WebContent Title");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoEditCP(webContentTitle = "WC WebContent Title");
 
 		WebContent.editCP(
 			webContentContentEdit = "WC WebContent Content Edit",
 			webContentTitle = "WC WebContent Title",
-			webContentTitleEdit = "WC WebContent Title Edit"
-		);
+			webContentTitleEdit = "WC WebContent Title Edit");
 
 		Navigator.gotoPage(pageName = "Test Page 1");
 
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "WC WebContent Content Edit",
-			assetTitle = "WC WebContent Title Edit"
-		);
+			assetTitle = "WC WebContent Title Edit");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContent.deleteCP(
 			siteScopeName = "Global",
-			webContentTitle = "WC WebContent Title Edit"
-		);
+			webContentTitle = "WC WebContent Title Edit");
 
 		Navigator.gotoPage(pageName = "Test Page 1");
 
 		AssetPublisherPortlet.viewAssetNotPresentPG(
 			assetContent = "WC WebContent Content",
-			assetTitle = "WC WebContent Title"
-		);
+			assetTitle = "WC WebContent Title");
 
 		AssetPublisherPortlet.viewAssetNotPresentPG(
 			assetContent = "WC WebContent Content Edit",
-			assetTitle = "WC WebContent Title Edit"
-		);
+			assetTitle = "WC WebContent Title Edit");
 
 		AssetPublisherPortlet.viewReadMoreLinkNotPresentPG();
 	}
 
 	@priority = "4"
 	test AddWebContentWithGlobalScopeViaCPToSiteAP {
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		PortletEntry.publish();
 
 		WebContent.viewTitle(webContentTitle = "WC WebContent Title");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoEditCP(webContentTitle = "WC WebContent Title");
 
 		WebContent.viewCP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Test Page 1", siteName = "Site Name");
+		Page.add(
+			pageName = "Site Test Page 1",
+			siteName = "Site Name");
 
-		Navigator.gotoSitePage(pageName = "Site Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Test Page 1",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
 		AssetPublisherPortlet.configureSiteScopePG(
 			siteName = "Global",
-			siteScopeType = "Global"
-		);
+			siteScopeType = "Global");
 
-		Navigator.gotoSitePage(pageName = "Site Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Test Page 1",
+			siteName = "Site Name");
 
 		AssetPublisherPortlet.configureSiteScopeRemoveSitePG(
 			siteName = "Site Name",
-			siteScopeType = "Current Site"
-		);
+			siteScopeType = "Current Site");
 
-		Navigator.gotoSitePage(pageName = "Site Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Test Page 1",
+			siteName = "Site Name");
 
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "WC WebContent Content",
-			assetTitle = "WC WebContent Title"
-		);
+			assetTitle = "WC WebContent Title");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoEditCP(webContentTitle = "WC WebContent Title");
 
 		WebContent.editCP(
 			webContentContentEdit = "WC WebContent Content Edit",
 			webContentTitle = "WC WebContent Title",
-			webContentTitleEdit = "WC WebContent Title Edit"
-		);
+			webContentTitleEdit = "WC WebContent Title Edit");
 
-		Navigator.gotoSitePage(pageName = "Site Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Test Page 1",
+			siteName = "Site Name");
 
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "WC WebContent Content Edit",
-			assetTitle = "WC WebContent Title Edit"
-		);
+			assetTitle = "WC WebContent Title Edit");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContent.deleteCP(
 			siteScopeName = "Global",
-			webContentTitle = "WC WebContent Title Edit"
-		);
+			webContentTitle = "WC WebContent Title Edit");
 
-		Navigator.gotoSitePage(pageName = "Site Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Test Page 1",
+			siteName = "Site Name");
 
 		AssetPublisherPortlet.viewAssetNotPresentPG(
 			assetContent = "WC WebContent Content",
-			assetTitle = "WC WebContent Title"
-		);
+			assetTitle = "WC WebContent Title");
 
 		AssetPublisherPortlet.viewAssetNotPresentPG(
 			assetContent = "WC WebContent Content Edit",
-			assetTitle = "WC WebContent Title Edit"
-		);
+			assetTitle = "WC WebContent Title Edit");
 
 		AssetPublisherPortlet.viewReadMoreLinkNotPresentPG();
 	}
@@ -279,36 +262,32 @@ definition {
 	test AddWebContentWithStructureAndGlobalScopeViaCPToLiferayAP {
 		property test.name.skip.portal.instance = "PGAssetpublisherWebcontent#AddWebContentWithStructureAndGlobalScopeViaCPToLiferayAP";
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoManageStructures();
 
 		WebContentStructures.addCP(
 			structureDescription = "WC Structure Description",
-			structureName = "WC Structure Name"
-		);
+			structureName = "WC Structure Name");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		WebContentStructures.saveCP(structureName = "WC Structure Name");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoManageTemplates();
 
@@ -317,26 +296,23 @@ definition {
 			templateDescription = "WC Template Description",
 			templateFieldNames = "Text",
 			templateLanguage = "ftl",
-			templateName = "WC Template Name"
-		);
+			templateName = "WC Template Name");
 
 		WebContentTemplates.addStructure(
 			structureName = "WC Structure Name",
 			templateFieldNames = "Text",
-			templateLanguage = "ftl"
-		);
+			templateLanguage = "ftl");
 
 		DDLDataDefinition.save();
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddWithStructureCP(structureName = "WC Structure Name");
 
@@ -344,25 +320,22 @@ definition {
 			structureName = "WC Structure Name",
 			templateName = "WC Template Name",
 			webContentText = "WC WebContent Text",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		PortletEntry.publish();
 
 		WebContent.viewTitle(webContentTitle = "WC WebContent Title");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContent.viewWithStructureCP(
 			webContentText = "WC WebContent Text",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		Navigator.openURL();
 
@@ -372,56 +345,49 @@ definition {
 
 		AssetPublisherPortlet.configureSiteScopePG(
 			siteName = "Global",
-			siteScopeType = "Global"
-		);
+			siteScopeType = "Global");
 
 		Navigator.gotoPage(pageName = "Test Page 1");
 
 		AssetPublisherPortlet.configureSiteScopeRemoveSitePG(
 			siteName = "Liferay",
-			siteScopeType = "Current Site"
-		);
+			siteScopeType = "Current Site");
 
 		Navigator.gotoPage(pageName = "Test Page 1");
 
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "WC WebContent Text",
-			assetTitle = "WC WebContent Title"
-		);
+			assetTitle = "WC WebContent Title");
 	}
 
 	@priority = "3"
 	test AddWebContentWithStructureAndGlobalScopeViaCPToSiteAP {
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoManageStructures();
 
 		WebContentStructures.addCP(
 			structureDescription = "WC Structure Description",
-			structureName = "WC Structure Name"
-		);
+			structureName = "WC Structure Name");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		WebContentStructures.saveCP(structureName = "WC Structure Name");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoManageTemplates();
 
@@ -430,26 +396,23 @@ definition {
 			templateDescription = "WC Template Description",
 			templateFieldNames = "Text",
 			templateLanguage = "ftl",
-			templateName = "WC Template Name"
-		);
+			templateName = "WC Template Name");
 
 		WebContentTemplates.addStructure(
 			structureName = "WC Structure Name",
 			templateFieldNames = "Text",
-			templateLanguage = "ftl"
-		);
+			templateLanguage = "ftl");
 
 		DDLDataDefinition.save();
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddWithStructureCP(structureName = "WC Structure Name");
 
@@ -457,64 +420,64 @@ definition {
 			structureName = "WC Structure Name",
 			templateName = "WC Template Name",
 			webContentText = "WC WebContent Text",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		PortletEntry.publish();
 
 		WebContent.viewTitle(webContentTitle = "WC WebContent Title");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContent.viewWithStructureCP(
 			webContentText = "WC WebContent Text",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Test Page 1", siteName = "Site Name");
+		Page.add(
+			pageName = "Site Test Page 1",
+			siteName = "Site Name");
 
-		Navigator.gotoSitePage(pageName = "Site Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Test Page 1",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
 		AssetPublisherPortlet.configureSiteScopePG(
 			siteName = "Global",
-			siteScopeType = "Global"
-		);
+			siteScopeType = "Global");
 
-		Navigator.gotoSitePage(pageName = "Site Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Test Page 1",
+			siteName = "Site Name");
 
 		AssetPublisherPortlet.configureSiteScopeRemoveSitePG(
 			siteName = "Site Name",
-			siteScopeType = "Current Site"
-		);
+			siteScopeType = "Current Site");
 
-		Navigator.gotoSitePage(pageName = "Site Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Test Page 1",
+			siteName = "Site Name");
 
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "WC WebContent Text",
-			assetTitle = "WC WebContent Title"
-		);
+			assetTitle = "WC WebContent Title");
 	}
 
 	@priority = "4"
@@ -532,24 +495,21 @@ definition {
 		AssetPublisherPortlet.configureShowMetadataFieldsPG(
 			addMetadata = "true",
 			metadataFieldList = "Tags",
-			portletName = "Asset Publisher"
-		);
+			portletName = "Asset Publisher");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addWithTagCP(
 			tagNameList = "tag name",
 			webContentContent = "Web Content Content",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 
 		Navigator.gotoPage(pageName = "Tags Navigation Page");
 
@@ -558,8 +518,7 @@ definition {
 		AssetPublisherPortlet.viewPG(
 			assetContent = "Web Content Content",
 			assetTitle = "Web Content Title",
-			tagName = "tag name"
-		);
+			tagName = "tag name");
 	}
 
 	@priority = "4"
@@ -568,27 +527,23 @@ definition {
 
 		WebContent.addDraftPGViaAP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC Webcontent Title"
-		);
+			webContentTitle = "WC Webcontent Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoViewStatus(
 			webContentStatus = "Draft",
-			webContentTitle = "WC Webcontent Title"
-		);
+			webContentTitle = "WC Webcontent Title");
 
 		WebContent.viewStatus(
 			webContentContent = "WC WebContent Content",
 			webContentStatus = "Draft",
-			webContentTitle = "WC Webcontent Title"
-		);
+			webContentTitle = "WC Webcontent Title");
 	}
 
 	@description = "This is a use case for LPS-49853."
@@ -599,42 +554,36 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_WEB_CONTENT_GENERAL_PERMISSIONS_VIEW_CHECKBOX",
 			permissionDefinitionValue = "View",
 			roleName = "Guest",
-			siteNameScope = "Liferay"
-		);
+			siteNameScope = "Liferay");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_WEB_CONTENT_RESOURCE_PERMISSIONS_WEB_CONTENT_ARTICLE_VIEW_CHECKBOX",
 			permissionDefinitionValue = "View",
 			roleName = "Guest",
-			siteNameScope = "Liferay"
-		);
+			siteNameScope = "Liferay");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			viewableBy = "Site Members",
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		PortletEntry.publish();
 
@@ -642,15 +591,13 @@ definition {
 
 		AssetPublisherPortlet.configureAssetTypePG(
 			assetSubtype = "Any",
-			selectedAsset = "Web Content Article"
-		);
+			selectedAsset = "Web Content Article");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "WC WebContent Content",
-			assetTitle = "WC WebContent Title"
-		);
+			assetTitle = "WC WebContent Title");
 
 		User.logoutPG();
 
@@ -658,7 +605,7 @@ definition {
 
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "WC WebContent Content",
-			assetTitle = "WC WebContent Title"
-		);
+			assetTitle = "WC WebContent Title");
 	}
+
 }

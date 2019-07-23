@@ -43,7 +43,7 @@ if (step == 1) {
 	String keywords = ParamUtil.getString(request, "keywords");
 
 	if (Validator.isNull(keywords)) {
-		groups = selUser.getGroups();
+		groups = selUser.getSiteGroups();
 	}
 	else {
 		LinkedHashMap<String, Object> groupParams = new LinkedHashMap<>();
@@ -74,20 +74,6 @@ if (step == 2) {
 
 portletURL.setParameter("step", String.valueOf(step));
 %>
-
-<aui:nav-bar cssClass="collapse-basic-search" markupView="lexicon">
-	<aui:nav cssClass="navbar-nav">
-		<aui:nav-item label="site-roles" selected="<%= true %>" />
-	</aui:nav>
-
-	<aui:nav-bar-search>
-		<aui:form action="<%= portletURL.toString() %>" name="searchFm">
-			<liferay-ui:input-search
-				markupView="lexicon"
-			/>
-		</aui:form>
-	</aui:nav-bar-search>
-</aui:nav-bar>
 
 <liferay-frontend:management-bar>
 	<liferay-frontend:management-bar-buttons>

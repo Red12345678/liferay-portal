@@ -575,6 +575,17 @@ public class AssetEntryLocalServiceWrapper
 
 	@Override
 	public int getEntriesCount(
+		long[] groupIds, long[] classNameIds, long[] classTypeIds,
+		String keywords, String userName, String title, String description,
+		Boolean listable, boolean advancedSearch, boolean andOperator) {
+
+		return _assetEntryLocalService.getEntriesCount(
+			groupIds, classNameIds, classTypeIds, keywords, userName, title,
+			description, listable, advancedSearch, andOperator);
+	}
+
+	@Override
+	public int getEntriesCount(
 		long[] groupIds, long[] classNameIds, String keywords, String userName,
 		String title, String description, Boolean listable,
 		boolean advancedSearch, boolean andOperator) {
@@ -848,6 +859,19 @@ public class AssetEntryLocalServiceWrapper
 		return _assetEntryLocalService.searchCount(
 			companyId, groupIds, userId, className, classTypeId, keywords,
 			showNonindexable, statuses);
+	}
+
+	@Override
+	public long searchCount(
+		long companyId, long[] groupIds, long userId, String className,
+		long classTypeId, String keywords, String assetCategoryIds,
+		String assetTagNames, boolean showInvisible, boolean showNonindexable,
+		int[] statuses, boolean andSearch) {
+
+		return _assetEntryLocalService.searchCount(
+			companyId, groupIds, userId, className, classTypeId, keywords,
+			assetCategoryIds, assetTagNames, showInvisible, showNonindexable,
+			statuses, andSearch);
 	}
 
 	@Override

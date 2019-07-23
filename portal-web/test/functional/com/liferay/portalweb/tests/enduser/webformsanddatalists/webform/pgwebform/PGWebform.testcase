@@ -1,5 +1,6 @@
 @component-name = "portal-web-forms-and-data-lists"
 definition {
+
 	property osgi.app.includes = "web-form";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -34,28 +35,26 @@ definition {
 	test EditAndSendWebFormWithRequiredCheckbox {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
 		WebFormPortlet.configureSetupFormFieldsPG(
 			wfInformationDescription = "Please let us know what you think!",
-			wfInformationTitle = "Feed Back"
-		);
+			wfInformationTitle = "Feed Back");
 
-		WebFormPortlet.editField(wfFieldName = "Name", wfNewFieldName = "Your Name");
+		WebFormPortlet.editField(
+			wfFieldName = "Name",
+			wfNewFieldName = "Your Name");
 
 		WebFormPortlet.editField(
 			wfFieldName = "Rating",
 			wfFieldType = "Check Box",
-			wfNewFieldName = "Rate Us!"
-		);
+			wfNewFieldName = "Rate Us!");
 
 		WebFormPortlet.editField(
 			wfFieldName = "Comments",
-			wfNewFieldName = "Additional Comments"
-		);
+			wfNewFieldName = "Additional Comments");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -63,8 +62,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Please let us know what you think!",
-			wfInformationTitle = "Feed Back"
-		);
+			wfInformationTitle = "Feed Back");
 
 		WebForm.viewFormFieldText(wfFieldName = "Your Name");
 
@@ -72,14 +70,17 @@ definition {
 
 		WebForm.viewFormFieldTextBox(wfFieldName = "Additional Comments");
 
-		WebForm.populateFieldText(wfFieldName = "Your Name", wfFieldValue = "New Name");
+		WebForm.populateFieldText(
+			wfFieldName = "Your Name",
+			wfFieldValue = "New Name");
 
-		WebForm.populateFieldCheckBox(wfFieldName = "Rate Us!", wfFieldValue = "true");
+		WebForm.populateFieldCheckBox(
+			wfFieldName = "Rate Us!",
+			wfFieldValue = "true");
 
 		WebForm.populateFieldTextBox(
 			wfFieldName = "Additional Comments",
-			wfFieldValue = "Page Objects + Hashi = Poshi"
-		);
+			wfFieldValue = "Page Objects + Hashi = Poshi");
 
 		WebForm.sendPG();
 	}
@@ -90,8 +91,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldText(wfFieldName = "Name");
 
@@ -103,21 +103,20 @@ definition {
 
 		WebFormPortlet.configureSetupFormFieldsPG(
 			wfInformationDescription = "Please let us know what you think!",
-			wfInformationTitle = "Feed Back"
-		);
+			wfInformationTitle = "Feed Back");
 
-		WebFormPortlet.editField(wfFieldName = "Name", wfNewFieldName = "Your Name");
+		WebFormPortlet.editField(
+			wfFieldName = "Name",
+			wfNewFieldName = "Your Name");
 
 		WebFormPortlet.editField(
 			wfFieldName = "Rating",
 			wfFieldType = "Check Box",
-			wfNewFieldName = "Rate Us!"
-		);
+			wfNewFieldName = "Rate Us!");
 
 		WebFormPortlet.editField(
 			wfFieldName = "Comments",
-			wfNewFieldName = "Additional Comments"
-		);
+			wfNewFieldName = "Additional Comments");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -125,8 +124,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Please let us know what you think!",
-			wfInformationTitle = "Feed Back"
-		);
+			wfInformationTitle = "Feed Back");
 
 		WebForm.viewFormFieldText(wfFieldName = "Your Name");
 
@@ -134,8 +132,7 @@ definition {
 
 		WebForm.viewFormFieldTextBox(
 			wfFieldName = "Additional Comments",
-			wfFieldType = "Text Box"
-		);
+			wfFieldType = "Text Box");
 	}
 
 	@priority = "4"
@@ -144,8 +141,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldText(wfFieldName = "Name");
 
@@ -157,27 +153,25 @@ definition {
 
 		WebFormPortlet.configureSetupFormFieldsPG(
 			wfInformationDescription = "Please let us know what you think!",
-			wfInformationTitle = "Feed Back"
-		);
+			wfInformationTitle = "Feed Back");
 
-		WebFormPortlet.editField(wfFieldName = "Name", wfNewFieldName = "Test 1");
+		WebFormPortlet.editField(
+			wfFieldName = "Name",
+			wfNewFieldName = "Test 1");
 
 		WebFormPortlet.addField(
 			wfFieldName = "Name",
 			wfNewFieldName = "Test 2",
-			wfPreviousFieldName = "Test 1"
-		);
+			wfPreviousFieldName = "Test 1");
 
 		WebFormPortlet.editField(
 			wfFieldName = "Rating",
 			wfFieldType = "Check Box",
-			wfNewFieldName = "Rate Us!"
-		);
+			wfNewFieldName = "Rate Us!");
 
 		WebFormPortlet.editField(
 			wfFieldName = "Comments",
-			wfNewFieldName = "Additional Comments"
-		);
+			wfNewFieldName = "Additional Comments");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -185,52 +179,38 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Please let us know what you think!",
-			wfInformationTitle = "Feed Back"
-		);
+			wfInformationTitle = "Feed Back");
 
 		AssertTextEquals(
 			locator1 = "xpath=(//div[contains(@class,'form-group')]/label[contains(@for,'WebFormPortlet')])[1]",
-			value1 = "Test 1"
-		);
+			value1 = "Test 1");
 
-		AssertElementPresent(
-			locator1 = "xpath=(//fieldset/div/div[contains(@class,'form-group')]/input[@type='text'])[1]"
-		);
+		AssertElementPresent(locator1 = "xpath=(//fieldset/div/div[contains(@class,'form-group')]/input[@type='text'])[1]");
 
 		AssertTextEquals(
 			locator1 = "xpath=(//div[contains(@class,'form-group')]/label[contains(@for,'WebFormPortlet')])[2]",
-			value1 = "Test 2"
-		);
+			value1 = "Test 2");
 
-		AssertElementPresent(
-			locator1 = "xpath=(//fieldset/div/div[contains(@class,'form-group')]/input[@type='text'])[2]"
-		);
+		AssertElementPresent(locator1 = "xpath=(//fieldset/div/div[contains(@class,'form-group')]/input[@type='text'])[2]");
 
 		AssertTextEquals(
 			locator1 = "xpath=(//div[contains(@class,'form-group')]/label[contains(@for,'WebFormPortlet')])[3]",
-			value1 = "Rate Us!"
-		);
+			value1 = "Rate Us!");
 
-		AssertElementPresent(
-			locator1 = "//div[contains(@class,'checkbox')]//input[@type='checkbox']"
-		);
+		AssertElementPresent(locator1 = "//div[contains(@class,'checkbox')]//input[@type='checkbox']");
 
 		AssertTextEquals(
 			locator1 = "xpath=(//div[contains(@class,'form-group')]/label[contains(@for,'WebFormPortlet')])[4]",
-			value1 = "Additional Comments"
-		);
+			value1 = "Additional Comments");
 
-		AssertElementPresent(
-			locator1 = "//fieldset/div/div[contains(@class,'form-group')]/textarea"
-		);
+		AssertElementPresent(locator1 = "//fieldset/div/div[contains(@class,'form-group')]/textarea");
 	}
 
 	@priority = "3"
 	test EditWebFormAndViewOptionalCheckBoxField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -246,8 +226,7 @@ definition {
 			optional = "true",
 			wfFieldName = "New Item",
 			wfFieldType = "Check Box",
-			wfNewFieldName = "Test Check Box Field"
-		);
+			wfNewFieldName = "Test Check Box Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -255,8 +234,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldCheckBox(wfFieldName = "Test Check Box Field");
 
@@ -267,8 +245,7 @@ definition {
 	test EditWebFormAndViewOptionalOptionsField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -284,8 +261,7 @@ definition {
 			optional = "true",
 			wfFieldName = "New Item",
 			wfFieldType = "Options",
-			wfNewFieldName = "Test Options Field"
-		);
+			wfNewFieldName = "Test Options Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -293,8 +269,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldOptions(wfFieldName = "Test Options Field");
 
@@ -305,8 +280,7 @@ definition {
 	test EditWebFormAndViewOptionalRadioField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -323,8 +297,7 @@ definition {
 			optionsList = "1,2,3",
 			wfFieldName = "New Item",
 			wfFieldType = "Radio Buttons",
-			wfNewFieldName = "Test Radio Field"
-		);
+			wfNewFieldName = "Test Radio Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -332,13 +305,11 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldRadio(
 			optionsList = "1,2,3",
-			wfFieldName = "Test Radio Field"
-		);
+			wfFieldName = "Test Radio Field");
 
 		WebForm.sendPG();
 	}
@@ -347,8 +318,7 @@ definition {
 	test EditWebFormAndViewOptionalTextBoxField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -364,8 +334,7 @@ definition {
 			optional = "true",
 			wfFieldName = "New Item",
 			wfFieldType = "Text Box",
-			wfNewFieldName = "Test Text Box Field"
-		);
+			wfNewFieldName = "Test Text Box Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -373,8 +342,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldTextBox(wfFieldName = "Test Text Box Field");
 
@@ -385,8 +353,7 @@ definition {
 	test EditWebFormAndViewOptionalTextField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -402,8 +369,7 @@ definition {
 			optional = "true",
 			wfFieldName = "New Item",
 			wfFieldType = "Text",
-			wfNewFieldName = "Test Text Field"
-		);
+			wfNewFieldName = "Test Text Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -411,8 +377,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldText(wfFieldName = "Test Text Field");
 
@@ -423,8 +388,7 @@ definition {
 	test EditWebFormAndViewParagraphField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -439,19 +403,16 @@ definition {
 		WebFormPortlet.editField(
 			wfFieldName = "New Item",
 			wfFieldType = "Paragraph",
-			wfNewFieldName = "Test Paragraph Field"
-		);
+			wfNewFieldName = "Test Paragraph Field");
 
 		WebFormPortlet.editParagraphField(
 			wfNewFieldName = "Test Paragraph Field",
-			wfParagraphFieldText = "Hello Liferay. This is the Test Paragraph Field."
-		);
+			wfParagraphFieldText = "Hello Liferay. This is the Test Paragraph Field.");
 
 		WebFormPortlet.addField(
 			wfFieldType = "Text",
 			wfNewFieldName = "Test Text Field",
-			wfPreviousFieldName = "Test Paragraph Field"
-		);
+			wfPreviousFieldName = "Test Paragraph Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -459,19 +420,15 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
-		WebForm.viewFormFieldParagraph(
-			wfParagraphFieldText = "Hello Liferay. This is the Test Paragraph Field."
-		);
+		WebForm.viewFormFieldParagraph(wfParagraphFieldText = "Hello Liferay. This is the Test Paragraph Field.");
 
 		WebForm.viewFormFieldText(wfFieldName = "Test Text Field");
 
 		WebForm.populateFieldText(
 			wfFieldName = "Test Text Field",
-			wfFieldValue = "Welcome to Liferay."
-		);
+			wfFieldValue = "Welcome to Liferay.");
 
 		WebForm.sendPG();
 	}
@@ -480,8 +437,7 @@ definition {
 	test EditWebFormAndViewRequiredCheckBoxField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -496,8 +452,7 @@ definition {
 		WebFormPortlet.editField(
 			wfFieldName = "New Item",
 			wfFieldType = "Check Box",
-			wfNewFieldName = "Test Check Box Field"
-		);
+			wfNewFieldName = "Test Check Box Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -505,8 +460,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldCheckBox(wfFieldName = "Test Check Box Field");
 
@@ -514,8 +468,7 @@ definition {
 
 		WebForm.populateFieldCheckBox(
 			wfFieldName = "Test Check Box Field",
-			wfFieldValue = "true"
-		);
+			wfFieldValue = "true");
 
 		WebForm.sendPG();
 	}
@@ -524,8 +477,7 @@ definition {
 	test EditWebFormAndViewRequiredOptionsField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -540,8 +492,7 @@ definition {
 		WebFormPortlet.editField(
 			wfFieldName = "New Item",
 			wfFieldType = "Options",
-			wfNewFieldName = "Test Options Field"
-		);
+			wfNewFieldName = "Test Options Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -549,8 +500,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldOptions(wfFieldName = "Test Options Field");
 
@@ -562,8 +512,7 @@ definition {
 			optionsList = "1,2,3",
 			wfFieldName = "Test Options Field",
 			wfFieldType = "Options",
-			wfNewFieldName = "Test Options Field"
-		);
+			wfNewFieldName = "Test Options Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -578,8 +527,7 @@ definition {
 	test EditWebFormAndViewRequiredRadioField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -595,8 +543,7 @@ definition {
 			optionsList = "1,2,3",
 			wfFieldName = "New Item",
 			wfFieldType = "Radio Buttons",
-			wfNewFieldName = "Test Radio Field"
-		);
+			wfNewFieldName = "Test Radio Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -604,17 +551,17 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldRadio(
 			optionsList = "1,2,3",
-			wfFieldName = "Test Radio Field"
-		);
+			wfFieldName = "Test Radio Field");
 
 		WebForm.sendBlankPG();
 
-		WebForm.populateFieldRadio(wfFieldName = "Test Radio Field", wfFieldValue = "2");
+		WebForm.populateFieldRadio(
+			wfFieldName = "Test Radio Field",
+			wfFieldValue = "2");
 
 		WebForm.sendPG();
 	}
@@ -623,8 +570,7 @@ definition {
 	test EditWebFormAndViewRequiredTextBoxField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -639,8 +585,7 @@ definition {
 		WebFormPortlet.editField(
 			wfFieldName = "New Item",
 			wfFieldType = "Text Box",
-			wfNewFieldName = "Test Text Box Field"
-		);
+			wfNewFieldName = "Test Text Box Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -648,8 +593,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldTextBox(wfFieldName = "Test Text Box Field");
 
@@ -657,8 +601,7 @@ definition {
 
 		WebForm.populateFieldTextBox(
 			wfFieldName = "Test Text Box Field",
-			wfFieldValue = "Page Objects + Hashi = Poshi"
-		);
+			wfFieldValue = "Page Objects + Hashi = Poshi");
 
 		WebForm.sendPG();
 	}
@@ -667,8 +610,7 @@ definition {
 	test EditWebFormAndViewRequiredTextField {
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
@@ -683,8 +625,7 @@ definition {
 		WebFormPortlet.editField(
 			wfFieldName = "New Item",
 			wfFieldType = "Text",
-			wfNewFieldName = "Test Text Field"
-		);
+			wfNewFieldName = "Test Text Field");
 
 		WebFormPortlet.saveConfiguration();
 
@@ -692,8 +633,7 @@ definition {
 
 		WebForm.viewPG(
 			wfInformationDescription = "Your input is valuable to us. Please send us your suggestions.",
-			wfInformationTitle = "Suggestions"
-		);
+			wfInformationTitle = "Suggestions");
 
 		WebForm.viewFormFieldText(wfFieldName = "Test Text Field");
 
@@ -701,8 +641,7 @@ definition {
 
 		WebForm.populateFieldText(
 			wfFieldName = "Test Text Field",
-			wfFieldValue = "Hello"
-		);
+			wfFieldValue = "Hello");
 
 		WebForm.sendPG();
 	}
@@ -725,14 +664,17 @@ definition {
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
-		WebForm.populateFieldText(wfFieldName = "Name", wfFieldValue = "Test Test");
+		WebForm.populateFieldText(
+			wfFieldName = "Name",
+			wfFieldValue = "Test Test");
 
-		WebForm.populateFieldOptions(wfFieldName = "Rating", wfFieldValue = "Excellent");
+		WebForm.populateFieldOptions(
+			wfFieldName = "Rating",
+			wfFieldValue = "Excellent");
 
 		WebForm.populateFieldTextBox(
 			wfFieldName = "Comments",
-			wfFieldValue = "Page Objects + Hashi = Poshi"
-		);
+			wfFieldValue = "Page Objects + Hashi = Poshi");
 
 		WebForm.sendPG();
 
@@ -744,28 +686,28 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_INFO_MESSAGE",
-			value1 = "There is existing form data. Please export and delete it before making changes to the fields."
-		);
+			value1 = "There is existing form data. Please export and delete it before making changes to the fields.");
 
 		WebFormPortlet.viewEditableFieldNotPresent(wfFieldName = "Name");
 
-		WebFormPortlet.viewSubmittedField(wfFieldName = "Name", wfFieldType = "Text");
+		WebFormPortlet.viewSubmittedField(
+			wfFieldName = "Name",
+			wfFieldType = "Text");
 
 		WebFormPortlet.viewEditableFieldNotPresent(wfFieldName = "Rating");
 
 		WebFormPortlet.viewSubmittedField(
 			optionsList = "Excellent,Good,Satisfactory,Poor",
 			wfFieldName = "Rating",
-			wfFieldType = "Options"
-		);
+			wfFieldType = "Options");
 
 		WebFormPortlet.viewEditableFieldNotPresent(wfFieldName = "Comments");
 
 		WebFormPortlet.viewSubmittedField(
 			wfFieldName = "Comments",
-			wfFieldType = "Text Box"
-		);
+			wfFieldType = "Text Box");
 
 		SelectFrameTop(value1 = "relative=top");
 	}
+
 }

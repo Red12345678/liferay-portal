@@ -147,9 +147,8 @@ public class DDLFormViewRecordDisplayContext {
 
 			return formRecord.getDDLRecord();
 		}
-		else {
-			return (DDLRecord)record;
-		}
+
+		return (DDLRecord)record;
 	}
 
 	protected DDLRecordSet getRecordSet() throws PortalException {

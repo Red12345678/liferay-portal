@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property cmis.repository.type = "sharepoint2010";
 	property custom.properties = "session.store.password=true${line.separator}company.security.auth.type=screenName${line.separator}default.layout.template.id=1_column";
 	property dummy.socket.proxy.disabled = "true";
@@ -16,10 +17,11 @@ definition {
 
 		AntCommand(
 			locator1 = "build-test-sharepoint.xml",
-			value1 = "clean-sharepoint-repository -Dssh.host=${sharepointVMHostName}"
-		);
+			value1 = "clean-sharepoint-repository -Dssh.host=${sharepointVMHostName}");
 
-		User.loginPG(authenticationMethod = "By Screen Name", userScreenName = "test");
+		User.loginPG(
+			authenticationMethod = "By Screen Name",
+			userScreenName = "test");
 
 		Page.gotoMyAccount(portletName = "Account Settings");
 
@@ -29,38 +31,35 @@ definition {
 
 		User.editPasswordViaMyAccount(
 			currentPassword = "test",
-			newPassword = "password"
-		);
+			newPassword = "password");
 
 		User.logoutPG();
 
 		User.loginPG(
 			authenticationMethod = "By Screen Name",
 			password = "password",
-			userScreenName = "administrator"
-		);
+			userScreenName = "administrator");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Staging Test Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(siteName = "Site Name");
 	}
@@ -86,16 +85,14 @@ definition {
 
 			User.editPasswordViaMyAccount(
 				currentPassword = "password",
-				newPassword = "test"
-			);
+				newPassword = "test");
 
 			User.logoutPG();
 
 			User.loginPG(
 				authenticationMethod = "By Screen Name",
 				password = "test",
-				userScreenName = "test"
-			);
+				userScreenName = "test");
 		}
 	}
 
@@ -107,13 +104,11 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.addPG(
 			pageName = "Staging Test Page",
-			portletName = "Documents and Media"
-		);
+			portletName = "Documents and Media");
 
 		DMNavigator.gotoAddRepositoryPG();
 
@@ -122,29 +117,28 @@ definition {
 		DMRepository.addSharepoint(
 			dmRepositoryLibraryName = "Documents",
 			dmRepositoryName = "Sharepoint",
-			dmRepositorySiteURL = "http://${sharepointVMHostName}"
-		);
+			dmRepositorySiteURL = "http://${sharepointVMHostName}");
 
 		PortletEntry.save();
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.gotoPublishToLive();
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		DMPortlet.setDescriptiveView();
 
 		AssertTextEquals(
+			key_dmFolderName = "Sharepoint Repository Name",
 			locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_FOLDER_TITLE",
-			value1 = "Sharepoint Repository Name",
-			key_dmFolderName = "Sharepoint Repository Name"
-		);
+			value1 = "Sharepoint Repository Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -153,9 +147,9 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.deactivateStagingCP(siteName = "Site Name");
 	}
+
 }

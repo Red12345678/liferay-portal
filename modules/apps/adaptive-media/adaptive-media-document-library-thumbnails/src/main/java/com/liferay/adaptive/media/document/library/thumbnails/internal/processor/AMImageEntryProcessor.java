@@ -211,7 +211,7 @@ public class AMImageEntryProcessor implements DLProcessor, ImageProcessor {
 		}
 		catch (PortalException pe) {
 			if (_log.isWarnEnabled()) {
-				_log.warn(pe);
+				_log.warn(pe, pe);
 			}
 
 			return false;

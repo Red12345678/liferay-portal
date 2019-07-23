@@ -72,9 +72,8 @@ public class UpgradeProcessUtil {
 
 					return languageId;
 				}
-				else {
-					return LocaleUtil.toLanguageId(LocaleUtil.US);
-				}
+
+				return LocaleUtil.toLanguageId(LocaleUtil.US);
 			}
 		}
 	}

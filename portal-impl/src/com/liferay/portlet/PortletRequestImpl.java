@@ -340,14 +340,13 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		if (httpSes == null) {
 			return null;
 		}
-		else {
-			if (create) {
-				_session = new PortletSessionImpl(
-					_req.getSession(), _portletContext, _portletName, _plid);
-			}
 
-			return _ses;
-		}*/
+		if (create) {
+			_session = new PortletSessionImpl(
+				_req.getSession(), _portletContext, _portletName, _plid);
+		}
+
+		return _ses;*/
 
 		/*if ((_session == null) && create) {
 			_req.getSession(create);
@@ -509,9 +508,8 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		if (publicParameterMap == null) {
 			return Collections.emptyMap();
 		}
-		else {
-			return Collections.unmodifiableMap(publicParameterMap);
-		}
+
+		return Collections.unmodifiableMap(publicParameterMap);
 	}
 
 	@Override
@@ -530,9 +528,8 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		if (session == null) {
 			return StringPool.BLANK;
 		}
-		else {
-			return session.getId();
-		}
+
+		return session.getId();
 	}
 
 	@Override
@@ -618,10 +615,8 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		if ((portletMode == null) || Validator.isNull(portletMode.toString())) {
 			return true;
 		}
-		else {
-			return _portlet.hasPortletMode(
-				getResponseContentType(), portletMode);
-		}
+
+		return _portlet.hasPortletMode(getResponseContentType(), portletMode);
 	}
 
 	public boolean isPrivateRequestAttributes() {
@@ -663,10 +658,9 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 				return RoleLocalServiceUtil.hasUserRole(
 					_remoteUserId, companyId, roleLink, true);
 			}
-			else {
-				return RoleLocalServiceUtil.hasUserRole(
-					_remoteUserId, companyId, role, true);
-			}
+
+			return RoleLocalServiceUtil.hasUserRole(
+				_remoteUserId, companyId, role, true);
 		}
 		catch (Exception e) {
 			_log.error("Unable to check if a user is in role " + role, e);
@@ -732,12 +726,11 @@ public abstract class PortletRequestImpl implements LiferayPortletRequest {
 		Map<String, String[]> publicRenderParametersMap =
 			PublicRenderParametersPool.get(request, plid);
 
-		if (invokerPortlet != null) {
-			if (invokerPortlet.isStrutsPortlet() ||
-				invokerPortlet.isStrutsBridgePortlet()) {
+		if ((invokerPortlet != null) &&
+			(invokerPortlet.isStrutsPortlet() ||
+			 invokerPortlet.isStrutsBridgePortlet())) {
 
-				_strutsPortlet = true;
-			}
+			_strutsPortlet = true;
 		}
 
 		String portletNamespace = PortalUtil.getPortletNamespace(_portletName);

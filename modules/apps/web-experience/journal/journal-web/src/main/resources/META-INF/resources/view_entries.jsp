@@ -58,7 +58,7 @@ String searchContainerId = ParamUtil.getString(request, "searchContainerId");
 				Map<String, Object> rowData = new HashMap<String, Object>();
 
 				if (journalDisplayContext.isShowEditActions()) {
-					rowData.put("draggable", JournalArticlePermission.contains(permissionChecker, curArticle, ActionKeys.DELETE) || JournalArticlePermission.contains(permissionChecker, curArticle, ActionKeys.UPDATE));
+					rowData.put("draggable", !BrowserSnifferUtil.isMobile(request) && (JournalArticlePermission.contains(permissionChecker, curArticle, ActionKeys.DELETE) || JournalArticlePermission.contains(permissionChecker, curArticle, ActionKeys.UPDATE)));
 				}
 
 				rowData.put("title", HtmlUtil.escape(curArticle.getTitle(locale)));
@@ -240,7 +240,7 @@ String searchContainerId = ParamUtil.getString(request, "searchContainerId");
 				<%
 				Map<String, Object> rowData = new HashMap<String, Object>();
 
-				rowData.put("draggable", JournalFolderPermission.contains(permissionChecker, curFolder, ActionKeys.DELETE) || JournalFolderPermission.contains(permissionChecker, curFolder, ActionKeys.UPDATE));
+				rowData.put("draggable", !BrowserSnifferUtil.isMobile(request) && (JournalFolderPermission.contains(permissionChecker, curFolder, ActionKeys.DELETE) || JournalFolderPermission.contains(permissionChecker, curFolder, ActionKeys.UPDATE)));
 				rowData.put("folder", true);
 				rowData.put("folder-id", curFolder.getFolderId());
 				rowData.put("title", HtmlUtil.escape(curFolder.getName()));

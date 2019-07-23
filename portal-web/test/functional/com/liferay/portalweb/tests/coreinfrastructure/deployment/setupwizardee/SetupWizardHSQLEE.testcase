@@ -1,5 +1,6 @@
 @component-name = "portal-deployment-hypersonic-ee"
 definition {
+
 	property portal.acceptance = "true";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -22,10 +23,11 @@ definition {
 			databaseType = "DB2",
 			databaseUserName = PropsUtil.get("database.db2.username"),
 			jdbcDriverClassName = PropsUtil.get("database.db2.driver"),
-			jdbcURL = PropsUtil.get("database.db2.url")
-		);
+			jdbcURL = PropsUtil.get("database.db2.url"));
 
-		Smoke.viewWelcomePage(userFirstName = "Joe", userLastName = "Bloggs");
+		Smoke.viewWelcomePage(
+			userFirstName = "Joe",
+			userLastName = "Bloggs");
 
 		Smoke.runSmoke();
 	}
@@ -45,8 +47,7 @@ definition {
 			databaseType = "DB2",
 			databaseUserName = PropsUtil.get("database.db2.username"),
 			jdbcDriverClassName = PropsUtil.get("database.db2.driver"),
-			jdbcURL = PropsUtil.get("database.db2.url")
-		);
+			jdbcURL = PropsUtil.get("database.db2.url"));
 
 		Smoke.viewWelcomePage();
 
@@ -66,10 +67,11 @@ definition {
 			databaseType = "Oracle",
 			databaseUserName = PropsUtil.get("database.oracle.username"),
 			jdbcDriverClassName = PropsUtil.get("database.oracle.driver"),
-			jdbcURL = PropsUtil.get("database.oracle.url")
-		);
+			jdbcURL = PropsUtil.get("database.oracle.url"));
 
-		Smoke.viewWelcomePage(userFirstName = "Joe", userLastName = "Bloggs");
+		Smoke.viewWelcomePage(
+			userFirstName = "Joe",
+			userLastName = "Bloggs");
 
 		Smoke.runSmoke();
 	}
@@ -89,8 +91,7 @@ definition {
 			databaseType = "Oracle",
 			databaseUserName = PropsUtil.get("database.oracle.username"),
 			jdbcDriverClassName = PropsUtil.get("database.oracle.driver"),
-			jdbcURL = PropsUtil.get("database.oracle.url")
-		);
+			jdbcURL = PropsUtil.get("database.oracle.url"));
 
 		Smoke.viewWelcomePage();
 
@@ -110,10 +111,11 @@ definition {
 			databaseType = "Sybase",
 			databaseUserName = PropsUtil.get("database.sybase.username"),
 			jdbcDriverClassName = PropsUtil.get("database.sybase.driver"),
-			jdbcURL = PropsUtil.get("database.sybase.url")
-		);
+			jdbcURL = PropsUtil.get("database.sybase.url"));
 
-		Smoke.viewWelcomePage(userFirstName = "Joe", userLastName = "Bloggs");
+		Smoke.viewWelcomePage(
+			userFirstName = "Joe",
+			userLastName = "Bloggs");
 
 		Smoke.runSmoke();
 	}
@@ -133,11 +135,11 @@ definition {
 			databaseType = "Sybase",
 			databaseUserName = PropsUtil.get("database.sybase.username"),
 			jdbcDriverClassName = PropsUtil.get("database.sybase.driver"),
-			jdbcURL = PropsUtil.get("database.sybase.url")
-		);
+			jdbcURL = PropsUtil.get("database.sybase.url"));
 
 		Smoke.viewWelcomePage();
 
 		Smoke.runSmoke();
 	}
+
 }

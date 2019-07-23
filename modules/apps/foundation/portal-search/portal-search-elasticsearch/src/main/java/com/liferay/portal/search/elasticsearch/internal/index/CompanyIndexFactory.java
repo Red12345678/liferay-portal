@@ -37,7 +37,6 @@ import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRespon
 import org.elasticsearch.client.AdminClient;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.settings.Settings.Builder;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -172,7 +171,7 @@ public class CompanyIndexFactory implements IndexFactory {
 		return indicesExistsResponse.isExists();
 	}
 
-	protected void loadAdditionalIndexConfigurations(Builder builder) {
+	protected void loadAdditionalIndexConfigurations(Settings.Builder builder) {
 		if (Validator.isNull(_additionalIndexConfigurations)) {
 			return;
 		}

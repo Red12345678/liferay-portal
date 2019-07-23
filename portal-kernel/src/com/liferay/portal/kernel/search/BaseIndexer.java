@@ -97,7 +97,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 
@@ -897,7 +896,7 @@ public abstract class BaseIndexer<T> implements Indexer<T> {
 		Document document, String field, Locale siteDefaultLocale,
 		Map<Locale, String> map) {
 
-		for (Entry<Locale, String> entry : map.entrySet()) {
+		for (Map.Entry<Locale, String> entry : map.entrySet()) {
 			Locale locale = entry.getKey();
 
 			if (locale.equals(siteDefaultLocale)) {
@@ -1944,7 +1943,7 @@ public abstract class BaseIndexer<T> implements Indexer<T> {
 
 		BooleanFilter preFilterBooleanFilter = new BooleanFilter();
 
-		for (Entry<String, Indexer<?>> entry :
+		for (Map.Entry<String, Indexer<?>> entry :
 				entryClassNameIndexerMap.entrySet()) {
 
 			String entryClassName = entry.getKey();

@@ -743,12 +743,12 @@ public class AnnotationLocatorTest {
 		}
 	}
 
-	@Type(value = 5)
+	@Type(5)
 	private static class OriginClass
 		implements OriginInterface2, OriginInterface1 {
 
-		@Method(value = 5)
-		@Mix(value = 5)
+		@Method(5)
+		@Mix(5)
 		@Override
 		public void originMethod1() {
 		}
@@ -759,16 +759,16 @@ public class AnnotationLocatorTest {
 
 	}
 
-	@Mix(value = 2)
+	@Mix(2)
 	private static class SuperClass
 		extends OriginClass implements SuperInterface2, SuperInterface1 {
 
-		@Method(value = 2)
+		@Method(2)
 		@Override
 		public void originMethod2() {
 		}
 
-		@Method(value = 2)
+		@Method(2)
 		@Override
 		public void superMethod1() {
 		}
@@ -779,24 +779,24 @@ public class AnnotationLocatorTest {
 
 	}
 
-	@Type(value = 1)
+	@Type(1)
 	private static class TestClass
 		extends SuperClass implements TestInterface2, TestInterface1 {
 
-		@Method(value = 1)
-		@Mix(value = 1)
+		@Method(1)
+		@Mix(1)
 		@Override
 		public void originMethod1() {
 		}
 
-		@Method(value = 1)
-		@Mix(value = 1)
+		@Method(1)
+		@Mix(1)
 		@Override
 		public void superMethod2() {
 		}
 
-		@Method(value = 1)
-		@Mix(value = 1)
+		@Method(1)
+		@Mix(1)
 		@Override
 		public void testMethod1() {
 		}
@@ -823,24 +823,24 @@ public class AnnotationLocatorTest {
 
 	}
 
-	@Type(value = 9)
+	@Type(9)
 	private interface OriginInterface1 {
 
-		@Method(value = 9)
-		@Mix(value = 9)
+		@Method(9)
+		@Mix(9)
 		public void originMethod1();
 
 	}
 
-	@Mix(value = 8)
+	@Mix(8)
 	private interface OriginInterface2 extends OriginInterface1 {
 
-		@Method(value = 8)
+		@Method(8)
 		public void originMethod2();
 
 	}
 
-	@Mix(value = 7)
+	@Mix(7)
 	private interface SuperInterface1 extends OriginInterface1 {
 
 		@Method(value = 7)
@@ -848,7 +848,7 @@ public class AnnotationLocatorTest {
 
 	}
 
-	@Type(value = 6)
+	@Type(6)
 	private interface SuperInterface2 extends SuperInterface1 {
 
 		@Method(value = 6)
@@ -862,23 +862,23 @@ public class AnnotationLocatorTest {
 
 	}
 
-	@Type(value = 4)
+	@Type(4)
 	private interface TestInterface1 {
 
-		@Method(value = 4)
-		@Mix(value = 4)
+		@Method(4)
+		@Mix(4)
 		public void testMethod1();
 
 	}
 
-	@Mix(value = 3)
+	@Mix(3)
 	private interface TestInterface2 extends TestInterface1, SuperInterface2 {
 
-		@Method(value = 3)
+		@Method(3)
 		@Override
 		public void superMethod1();
 
-		@Method(value = 3)
+		@Method(3)
 		public void testMethod2();
 
 	}

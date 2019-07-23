@@ -1,5 +1,6 @@
 @component-name = "portal-user-interface"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "User Interface";
@@ -37,8 +38,7 @@ definition {
 			entrySubtitle = "Blogs Entry Subtitle",
 			entryTitle = "Blogs Entry Title",
 			navTab = "Upload Image",
-			uploadFileName = "Document_1.jpg"
-		);
+			uploadFileName = "Document_1.jpg");
 
 		Pause(locator1 = "10000");
 
@@ -60,12 +60,9 @@ definition {
 
 		BlogsNavigator.gotoEntryPG(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
-		AssertElementPresent(
-			locator1 = "//div[contains(@class,'entry-content')]/p/img[contains(@src,'Document_1.jpg')]"
-		);
+		AssertElementPresent(locator1 = "//div[contains(@class,'entry-content')]/p/img[contains(@src,'Document_1.jpg')]");
 	}
 
 	@priority = "4"
@@ -75,8 +72,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -88,9 +84,7 @@ definition {
 
 		Click(locator1 = "AlloyEditor#CONTENT_ADD_MENUBAR_IMAGE");
 
-		ItemSelector.addFromURL(
-			imageSourceURL = "https://raw.githubusercontent.com/liferay/liferay-portal/master/portal-web/test/functional/com/liferay/portalweb/dependencies/Document_1.jpg"
-		);
+		ItemSelector.addFromURL(imageSourceURL = "https://raw.githubusercontent.com/liferay/liferay-portal/master/portal-web/test/functional/com/liferay/portalweb/dependencies/Document_1.jpg");
 
 		PortletEntry.publish();
 
@@ -109,8 +103,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -136,14 +129,11 @@ definition {
 		WikiPage.addLocalizedFrontPagePG(
 			emptyPageMessage = "This page is empty. Edit it to add some text.",
 			successMessage = "Your request completed successfully.",
-			wikiPageContent = "Wiki Left to Right Content"
-		);
+			wikiPageContent = "Wiki Left to Right Content");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
-		WikiPage.viewLocalizedFrontPagePG(
-			wikiPageContent = "Wiki Left to Right Content"
-		);
+		WikiPage.viewLocalizedFrontPagePG(wikiPageContent = "Wiki Left to Right Content");
 	}
 
 	@priority = "4"
@@ -164,16 +154,15 @@ definition {
 			emptyPageMessage = "דף זה ריק. ערוך אותו על מנת להוסיף טקסט",
 			rtl = "true",
 			successMessage = "בקשתך עברה בהצלחה",
-			wikiPageContent = "Wiki Right to Left תוֹכֶן"
-		);
+			wikiPageContent = "Wiki Right to Left תוֹכֶן");
 
 		Navigator.gotoPage(pageName = "${pageName}");
 
 		WikiPage.viewLocalizedFrontPagePG(
 			rightToLeft = "true",
-			wikiPageContent = "Wiki Right to Left תוֹכֶן"
-		);
+			wikiPageContent = "Wiki Right to Left תוֹכֶן");
 
 		LanguagePortlet.selectLanguagePG(language = "English (United States)");
 	}
+
 }

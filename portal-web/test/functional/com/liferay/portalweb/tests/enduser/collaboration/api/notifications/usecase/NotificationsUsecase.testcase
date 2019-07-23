@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property custom.properties = "default.layout.template.id=1_column";
@@ -33,35 +34,32 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			password = "password",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		User.assignRegularRoleCP(roleName = "Administrator", userScreenName = "usersn");
+		User.assignRegularRoleCP(
+			roleName = "Administrator",
+			userScreenName = "usersn");
 
 		Page.add(pageName = "Blogs Page");
 
@@ -74,36 +72,41 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.addCP(siteName = "Community Site Name", siteType = "Community");
+		Site.addCP(
+			siteName = "Community Site Name",
+			siteType = "Community");
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Community Site Name");
 
 		Page.add(pageName = "Blank Page");
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Community Site Name");
 
 		Page.add(pageName = "Invite Members Page");
 
 		Navigator.gotoSitePage(
 			pageName = "Invite Members Page",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Portlet.addPG(portletName = "Invite Members");
 
 		Navigator.gotoSitePage(
 			pageName = "Invite Members Page",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		InviteMembers.inviteMembers(inviteUserFullName = "userfn userln");
 
 		User.logoutPG();
 
-		User.loginUserPG(password = "test", userEmailAddress = "userea@liferay.com");
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -111,18 +114,21 @@ definition {
 
 		User.logoutPG();
 
-		User.loginUserPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		User.logoutPG();
 
-		User.loginUserPG(password = "test", userEmailAddress = "userea@liferay.com");
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
 
 		Notifications.viewBadgeCount(notificationCount = "2");
 
@@ -131,16 +137,11 @@ definition {
 		Notifications.viewNewContent(
 			assetType = "Blogs Entry",
 			contentBody = "Blogs Entry Title",
-			user = "Test Test"
-		);
+			user = "Test Test");
 
-		Notifications.viewRequest(
-			requestsTitle = "Test Test invited you to join Community Site Name."
-		);
+		Notifications.viewRequest(requestsTitle = "Test Test invited you to join Community Site Name.");
 
-		Notifications.acceptRequest(
-			requestsTitle = "Test Test invited you to join Community Site Name."
-		);
+		Notifications.acceptRequest(requestsTitle = "Test Test invited you to join Community Site Name.");
 
 		Refresh();
 
@@ -150,7 +151,9 @@ definition {
 
 		User.logoutPG();
 
-		User.loginUserPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 	}
 
 	@priority = "3"
@@ -171,11 +174,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "My Account",
 			panel = "User",
-			portlet = "Notifications"
-		);
+			portlet = "Notifications");
 
 		Notifications.viewNoRequest();
 
 		Notifications.viewNoNotificationEntry();
 	}
+
 }

@@ -60,9 +60,8 @@ public class SyncSite extends StateAwareModel {
 		if (syncSite.getSyncSiteId() == syncSiteId) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean getActive() {

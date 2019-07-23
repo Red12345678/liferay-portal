@@ -74,9 +74,7 @@ import java.util.Set;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrQuery.SortClause;
-import org.apache.solr.client.solrj.SolrRequest.METHOD;
+import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FieldStatsInfo;
 import org.apache.solr.client.solrj.response.Group;
@@ -411,13 +409,13 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 
 			sortFieldNames.add(sortFieldName);
 
-			ORDER order = ORDER.asc;
+			SolrQuery.ORDER order = SolrQuery.ORDER.asc;
 
 			if (sort.isReverse() || sortFieldName.equals("score")) {
-				order = ORDER.desc;
+				order = SolrQuery.ORDER.desc;
 			}
 
-			solrQuery.addSort(new SortClause(sortFieldName, order));
+			solrQuery.addSort(new SolrQuery.SortClause(sortFieldName, order));
 		}
 	}
 
@@ -529,7 +527,7 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 
 		SolrClient solrClient = _solrClientManager.getSolrClient();
 
-		return solrClient.query(solrQuery, METHOD.POST);
+		return solrClient.query(solrQuery, SolrRequest.METHOD.POST);
 	}
 
 	protected String getSortFieldName(Sort sort, String scoreFieldName) {

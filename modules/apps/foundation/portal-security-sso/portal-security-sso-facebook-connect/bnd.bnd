@@ -1,4 +1,4 @@
 Bundle-Name: Liferay Portal Security SSO Facebook Connect
 Bundle-SymbolicName: com.liferay.portal.security.sso.facebook.connect
-Bundle-Version: 4.0.8
+Bundle-Version: 4.0.9
 Liferay-Releng-Module-Group-Title: Security Frameworks

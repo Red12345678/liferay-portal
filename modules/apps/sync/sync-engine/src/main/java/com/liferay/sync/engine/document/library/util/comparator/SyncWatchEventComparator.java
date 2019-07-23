@@ -35,9 +35,8 @@ public class SyncWatchEventComparator implements Comparator<SyncWatchEvent> {
 			if (fileType1.equals(SyncFile.TYPE_FOLDER)) {
 				return -1;
 			}
-			else {
-				return 1;
-			}
+
+			return 1;
 		}
 
 		String eventType1 = syncWatchEvent1.getEventType();

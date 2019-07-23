@@ -361,9 +361,8 @@ public class ActionUtil {
 
 				return getFirstVisiblePage(nodeId, portletRequest);
 			}
-			else {
-				throw nspe;
-			}
+
+			throw nspe;
 		}
 	}
 
@@ -409,9 +408,8 @@ public class ActionUtil {
 
 				return "/wiki/error.jsp";
 			}
-			else {
-				throw new PortletException(e);
-			}
+
+			throw new PortletException(e);
 		}
 
 		long categoryId = ParamUtil.getLong(renderRequest, "categoryId");
@@ -419,9 +417,8 @@ public class ActionUtil {
 		if (categoryId > 0) {
 			return "/wiki/view_categorized_pages.jsp";
 		}
-		else {
-			return defaultForward;
-		}
+
+		return defaultForward;
 	}
 
 }

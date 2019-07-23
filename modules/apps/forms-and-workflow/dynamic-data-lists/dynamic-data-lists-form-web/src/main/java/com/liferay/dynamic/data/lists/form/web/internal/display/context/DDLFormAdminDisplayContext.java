@@ -524,9 +524,8 @@ public class DDLFormAdminDisplayContext {
 
 			return formRecord.getDDLRecord();
 		}
-		else {
-			return (DDLRecord)record;
-		}
+
+		return (DDLRecord)record;
 	}
 
 	protected String getServletContextPath(Servlet servlet) {

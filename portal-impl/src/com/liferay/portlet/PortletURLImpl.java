@@ -236,9 +236,8 @@ public class PortletURLImpl
 		if (ArrayUtil.isNotEmpty(values)) {
 			return values[0];
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override
@@ -358,9 +357,8 @@ public class PortletURLImpl
 		if (_parametersIncludedInPath.contains(name)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -558,30 +556,29 @@ public class PortletURLImpl
 		if (params == null) {
 			throw new IllegalArgumentException();
 		}
-		else {
-			Map<String, String[]> newParams = new LinkedHashMap<>();
 
-			for (Map.Entry<String, String[]> entry : params.entrySet()) {
-				try {
-					String key = entry.getKey();
-					String[] value = entry.getValue();
+		Map<String, String[]> newParams = new LinkedHashMap<>();
 
-					if (key == null) {
-						throw new IllegalArgumentException();
-					}
-					else if (value == null) {
-						throw new IllegalArgumentException();
-					}
+		for (Map.Entry<String, String[]> entry : params.entrySet()) {
+			try {
+				String key = entry.getKey();
+				String[] value = entry.getValue();
 
-					newParams.put(key, value);
+				if (key == null) {
+					throw new IllegalArgumentException();
 				}
-				catch (ClassCastException cce) {
-					throw new IllegalArgumentException(cce);
+				else if (value == null) {
+					throw new IllegalArgumentException();
 				}
+
+				newParams.put(key, value);
 			}
-
-			_params = newParams;
+			catch (ClassCastException cce) {
+				throw new IllegalArgumentException(cce);
+			}
 		}
+
+		_params = newParams;
 
 		clearCache();
 	}
@@ -605,14 +602,11 @@ public class PortletURLImpl
 	public void setPortletMode(PortletMode portletMode)
 		throws PortletModeException {
 
-		if (_portletRequest != null) {
-			if (!_portlet.isUndeployedPortlet() &&
-				!_portlet.hasPortletMode(
-					_portletRequest.getResponseContentType(), portletMode)) {
+		if ((_portletRequest != null) && !_portlet.isUndeployedPortlet() &&
+			!_portlet.hasPortletMode(
+				_portletRequest.getResponseContentType(), portletMode)) {
 
-				throw new PortletModeException(
-					portletMode.toString(), portletMode);
-			}
+			throw new PortletModeException(portletMode.toString(), portletMode);
 		}
 
 		_portletModeString = portletMode.toString();
@@ -672,11 +666,10 @@ public class PortletURLImpl
 	public void setWindowState(WindowState windowState)
 		throws WindowStateException {
 
-		if (_portletRequest != null) {
-			if (!_portletRequest.isWindowStateAllowed(windowState)) {
-				throw new WindowStateException(
-					windowState.toString(), windowState);
-			}
+		if ((_portletRequest != null) &&
+			!_portletRequest.isWindowStateAllowed(windowState)) {
+
+			throw new WindowStateException(windowState.toString(), windowState);
 		}
 
 		if (LiferayWindowState.isWindowStatePreserved(
@@ -819,7 +812,7 @@ public class PortletURLImpl
 			}
 		}
 		catch (Exception e) {
-			_log.error(e);
+			_log.error(e, e);
 		}
 
 		Key key = _getKey();
@@ -1014,27 +1007,25 @@ public class PortletURLImpl
 			sb.append("=1");
 		}
 
-		if (PropsValues.PORTLET_URL_ANCHOR_ENABLE) {
-			if (_anchor && (_windowStateString != null) &&
-				!_windowStateString.equals(WindowState.MAXIMIZED.toString()) &&
-				!_windowStateString.equals(
-					LiferayWindowState.EXCLUSIVE.toString()) &&
-				!_windowStateString.equals(
-					LiferayWindowState.POP_UP.toString())) {
+		if (PropsValues.PORTLET_URL_ANCHOR_ENABLE && _anchor &&
+			(_windowStateString != null) &&
+			!_windowStateString.equals(WindowState.MAXIMIZED.toString()) &&
+			!_windowStateString.equals(
+				LiferayWindowState.EXCLUSIVE.toString()) &&
+			!_windowStateString.equals(LiferayWindowState.POP_UP.toString())) {
 
-				String lastString = sb.stringAt(sb.index() - 1);
+			String lastString = sb.stringAt(sb.index() - 1);
 
-				char lastChar = lastString.charAt(lastString.length() - 1);
+			char lastChar = lastString.charAt(lastString.length() - 1);
 
-				if ((lastChar != CharPool.AMPERSAND) &&
-					(lastChar != CharPool.QUESTION)) {
+			if ((lastChar != CharPool.AMPERSAND) &&
+				(lastChar != CharPool.QUESTION)) {
 
-					sb.append(StringPool.AMPERSAND);
-				}
-
-				sb.append("#p_");
-				sb.append(URLCodec.encodeURL(_portlet.getPortletId()));
+				sb.append(StringPool.AMPERSAND);
 			}
+
+			sb.append("#p_");
+			sb.append(URLCodec.encodeURL(_portlet.getPortletId()));
 		}
 
 		String lastString = sb.stringAt(sb.index() - 1);
@@ -1126,18 +1117,16 @@ public class PortletURLImpl
 			sb.append(StringPool.AMPERSAND);
 		}
 
-		if (PropsValues.PORTLET_URL_ANCHOR_ENABLE) {
-			if (_anchor && (_windowStateString != null) &&
-				!_windowStateString.equals(WindowState.MAXIMIZED.toString()) &&
-				!_windowStateString.equals(
-					LiferayWindowState.EXCLUSIVE.toString()) &&
-				!_windowStateString.equals(
-					LiferayWindowState.POP_UP.toString())) {
+		if (PropsValues.PORTLET_URL_ANCHOR_ENABLE && _anchor &&
+			(_windowStateString != null) &&
+			!_windowStateString.equals(WindowState.MAXIMIZED.toString()) &&
+			!_windowStateString.equals(
+				LiferayWindowState.EXCLUSIVE.toString()) &&
+			!_windowStateString.equals(LiferayWindowState.POP_UP.toString())) {
 
-				sb.append("wsrp-fragmentID=#p_");
-				sb.append(URLCodec.encodeURL(_portlet.getPortletId()));
-				sb.append(StringPool.AMPERSAND);
-			}
+			sb.append("wsrp-fragmentID=#p_");
+			sb.append(URLCodec.encodeURL(_portlet.getPortletId()));
+			sb.append(StringPool.AMPERSAND);
 		}
 
 		Map<String, String[]> renderParams = _params;
@@ -1231,9 +1220,8 @@ public class PortletURLImpl
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**

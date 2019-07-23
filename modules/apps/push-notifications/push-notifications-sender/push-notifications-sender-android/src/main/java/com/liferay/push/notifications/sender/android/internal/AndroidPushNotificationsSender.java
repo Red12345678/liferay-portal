@@ -16,7 +16,6 @@ package com.liferay.push.notifications.sender.android.internal;
 
 import com.google.android.gcm.server.Constants;
 import com.google.android.gcm.server.Message;
-import com.google.android.gcm.server.Message.Builder;
 import com.google.android.gcm.server.MulticastResult;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
@@ -94,7 +93,7 @@ public class AndroidPushNotificationsSender implements PushNotificationsSender {
 	}
 
 	protected Message buildMessage(JSONObject payloadJSONObject) {
-		Builder builder = new Builder();
+		Message.Builder builder = new Message.Builder();
 
 		builder.addData(
 			PushNotificationsConstants.KEY_PAYLOAD,
@@ -160,21 +159,18 @@ public class AndroidPushNotificationsSender implements PushNotificationsSender {
 
 			String errorCodeName = result.getErrorCodeName();
 
-			if (Validator.isNotNull(errorCodeName)) {
-				if (errorCodeName.equals(
-						Constants.ERROR_INVALID_REGISTRATION) ||
-					errorCodeName.equals(Constants.ERROR_MISMATCH_SENDER_ID) ||
-					errorCodeName.equals(Constants.ERROR_NOT_REGISTERED)) {
+			if (Validator.isNotNull(errorCodeName) &&
+				(errorCodeName.equals(Constants.ERROR_INVALID_REGISTRATION) ||
+				 errorCodeName.equals(Constants.ERROR_MISMATCH_SENDER_ID) ||
+				 errorCodeName.equals(Constants.ERROR_NOT_REGISTERED))) {
 
-					try {
-						_pushNotificationsDeviceLocalService.
-							deletePushNotificationsDevice(token);
-					}
-					catch (Exception e) {
-						if (_log.isWarnEnabled()) {
-							_log.warn(
-								"Unable to delete invalid token " + token);
-						}
+				try {
+					_pushNotificationsDeviceLocalService.
+						deletePushNotificationsDevice(token);
+				}
+				catch (Exception e) {
+					if (_log.isWarnEnabled()) {
+						_log.warn("Unable to delete invalid token " + token);
 					}
 				}
 			}

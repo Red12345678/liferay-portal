@@ -103,13 +103,11 @@ public class SocialBookmarkTag extends IncludeTag {
 			if (!displayStyle.equals("menu") && Validator.isNotNull(_jspPath)) {
 				return _jspPath;
 			}
-			else {
-				return _PAGE;
-			}
+
+			return _PAGE;
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	protected String getPostUrl() {

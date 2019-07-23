@@ -161,9 +161,8 @@ public class CMISFolder extends CMISModel implements Folder {
 		if (calendar != null) {
 			return calendar.getTime();
 		}
-		else {
-			return new Date();
-		}
+
+		return new Date();
 	}
 
 	@Override
@@ -208,9 +207,8 @@ public class CMISFolder extends CMISModel implements Folder {
 		if (calendar != null) {
 			return calendar.getTime();
 		}
-		else {
-			return new Date();
-		}
+
+		return new Date();
 	}
 
 	@Override
@@ -316,9 +314,8 @@ public class CMISFolder extends CMISModel implements Folder {
 		if (user == null) {
 			return 0;
 		}
-		else {
-			return user.getUserId();
-		}
+
+		return user.getUserId();
 	}
 
 	@Override
@@ -328,9 +325,8 @@ public class CMISFolder extends CMISModel implements Folder {
 		if (user == null) {
 			return StringPool.BLANK;
 		}
-		else {
-			return user.getFullName();
-		}
+
+		return user.getFullName();
 	}
 
 	@Override
@@ -386,9 +382,8 @@ public class CMISFolder extends CMISModel implements Folder {
 		if (getParentFolderId() == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override

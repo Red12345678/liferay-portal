@@ -71,9 +71,8 @@ public class SimpleCaptchaImpl implements Captcha {
 		if (!validateChallenge(request)) {
 			throw new CaptchaTextException();
 		}
-		else {
-			incrementCounter(request);
-		}
+
+		incrementCounter(request);
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("CAPTCHA text is valid");
@@ -89,9 +88,8 @@ public class SimpleCaptchaImpl implements Captcha {
 		if (!validateChallenge(portletRequest)) {
 			throw new CaptchaTextException();
 		}
-		else {
-			incrementCounter(portletRequest);
-		}
+
+		incrementCounter(portletRequest);
 
 		if (_log.isDebugEnabled()) {
 			_log.debug("CAPTCHA text is valid");
@@ -112,9 +110,8 @@ public class SimpleCaptchaImpl implements Captcha {
 		if (PropsValues.CAPTCHA_MAX_CHALLENGES >= 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -126,9 +123,8 @@ public class SimpleCaptchaImpl implements Captcha {
 		if (PropsValues.CAPTCHA_MAX_CHALLENGES >= 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override

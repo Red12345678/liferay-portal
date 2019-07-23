@@ -1,5 +1,6 @@
 @component-name = "portal-upgrades"
 definition {
+
 	property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
 	property database.types = "db2,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 	property portal.release = "true";
@@ -16,11 +17,37 @@ definition {
 	}
 
 	@priority = "5"
+	test ViewPortalSmokeArchive625 {
+		property data.archive.type = "data-archive-portal";
+		property database.types = "mariadb,mysql,postgresql";
+		property portal.upgrades = "true";
+		property portal.version = "6.2.5";
+		property test.assert.warning.exceptions = "true";
+
+		Upgrade.viewUpgrade();
+
+		Upgrade.searchForAssetsAfterUpgrade();
+	}
+
+	@priority = "5"
 	test ViewPortalSmokeArchive6130 {
 		property data.archive.type = "data-archive-portal";
 		property portal.upgrades = "true";
 		property portal.version = "6.1.30";
 		property test.assert.warning.exceptions = "true";
+
+		Upgrade.viewUpgrade();
+
+		Upgrade.searchForAssetsAfterUpgrade();
+	}
+
+	@priority = "5"
+	test ViewPortalSmokeArchive7010 {
+		property data.archive.type = "data-archive-portal";
+		property portal.upgrades = "true";
+		property portal.version = "7.0.10";
+		property test.assert.warning.exceptions = "true";
+		property test.run.environment = "EE";
 
 		Upgrade.viewUpgrade();
 
@@ -51,29 +78,4 @@ definition {
 		Upgrade.searchForAssetsAfterUpgrade();
 	}
 
-	@priority = "5"
-	test ViewPortalSmokeArchive625 {
-		property data.archive.type = "data-archive-portal";
-		property database.types = "mariadb,mysql,postgresql";
-		property portal.upgrades = "true";
-		property portal.version = "6.2.5";
-		property test.assert.warning.exceptions = "true";
-
-		Upgrade.viewUpgrade();
-
-		Upgrade.searchForAssetsAfterUpgrade();
-	}
-
-	@priority = "5"
-	test ViewPortalSmokeArchive7010 {
-		property data.archive.type = "data-archive-portal";
-		property portal.upgrades = "true";
-		property portal.version = "7.0.10";
-		property test.assert.warning.exceptions = "true";
-		property test.run.environment = "EE";
-
-		Upgrade.viewUpgrade();
-
-		Upgrade.searchForAssetsAfterUpgrade();
-	}
 }

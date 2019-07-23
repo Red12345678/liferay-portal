@@ -10,7 +10,7 @@
 <tbody>
 <tr>
 	<td>ADD_CHILD_PAGE</td>
-	<td>//a/span[contains(.,'Add Child Page')]</td>
+	<td>//a[contains(@class,'lfr-icon-item')]/span[contains(.,'Add Child Page')]</td>
 	<td></td>
 </tr>
 <tr>

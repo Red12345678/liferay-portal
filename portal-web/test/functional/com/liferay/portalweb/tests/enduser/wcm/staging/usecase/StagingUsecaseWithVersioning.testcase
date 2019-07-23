@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Staging";
@@ -12,36 +13,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Staging Test Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 	}
 
 	tearDown {
@@ -59,26 +57,22 @@ definition {
 	test DeleteChildPageFromVariationWhereNotEnabled {
 		Staging.addSitePagesVariationPG(
 			copySitePagesVariationName = "Main Variation",
-			sitePagesVariationName = "Summer"
-		);
+			sitePagesVariationName = "Summer");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Page.addChild(
 			page = "Public Pages",
 			pageName = "Staging Test Page",
 			siteChildPageName = "Page 1",
 			siteName = "Site Name",
-			siteScopeSelected = "true"
-		);
+			siteScopeSelected = "true");
 
 		Staging.changeSitePageVariationPG(
 			sitePagesVariationMenulistName = "Main Variation",
-			sitePagesVariationName = "Summer"
-		);
+			sitePagesVariationName = "Summer");
 
 		Staging.viewNotAvailableMenuItem(pageName = "Page 1");
 	}
@@ -87,42 +81,35 @@ definition {
 	test EnableAndDeleteSitePageVariationPage {
 		Staging.addSitePagesVariationPG(
 			copySitePagesVariationName = "Main Variation",
-			sitePagesVariationName = "Test Site Pages Variation"
-		);
+			sitePagesVariationName = "Test Site Pages Variation");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Test Page Name",
 			pageStaging = "true",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Test Page Name",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.markAsReadyForPublication();
 
 		Staging.changeSitePageVariationPG(
 			sitePagesVariationMenulistName = "Main Variation",
-			sitePagesVariationName = "Test Site Pages Variation"
-		);
+			sitePagesVariationName = "Test Site Pages Variation");
 
 		Staging.enablePageInSitePagesVariation(
 			pageName = "Test Page Name",
-			sitePagesVariationName = "Main Variation"
-		);
+			sitePagesVariationName = "Main Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Page.deletePG(pageName = "Test Page Name");
 	}
@@ -133,13 +120,11 @@ definition {
 		Page.add(
 			pageName = "Staging Test Page 2",
 			pageStaging = "true",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page 2",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Hello World");
 
@@ -151,8 +136,7 @@ definition {
 
 		Portlet.gotoPortletOptions(
 			portletName = "Hello World",
-			portletOption = "Look and Feel Configuration"
-		);
+			portletOption = "Look and Feel Configuration");
 
 		Portlet.configureCustomTitleViaLookandfeelPG(portletName = "Hello World");
 
@@ -160,8 +144,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page 2",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.viewSpecificPG(portletName = "Hello World Custom");
 
@@ -169,44 +152,38 @@ definition {
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page 2", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page 2",
+			siteName = "Site Name");
 
 		Portlet.viewNoSpecificPG(portletName = "Hello World Custom");
 	}
 
 	@priority = "3"
 	test PublishCustomPortletTitle {
-		Staging.addSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name"
-		);
+		Staging.addSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
-		Staging.viewSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name"
-		);
+		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Sites Directory");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.viewSpecificPG(portletName = "Sites Directory");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Look and Feel Configuration");
 
@@ -214,8 +191,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.viewSpecificPG(portletName = "Sites Directory Custom");
 
@@ -227,25 +203,27 @@ definition {
 
 		Staging.configurePublishToLive(
 			applicationName = "Sites Directory",
-			markAsReadyForPublication = "true"
-		);
+			markAsReadyForPublication = "true");
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		Portlet.viewNoSpecificPG(portletName = "Sites Directory");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.gotoPublishToLive();
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		Portlet.viewSpecificPG(portletName = "Sites Directory Custom");
 	}
@@ -255,15 +233,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -281,8 +257,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Main Variation");
 
@@ -300,8 +275,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.addPageVariationPG(pageVariationName = "Wednesday");
 
@@ -311,15 +285,13 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		AssertElementNotPresent(locator1 = "Staging#PAGE_VARIATION");
 
 		Staging.changePageVariationInHistory(
 			pageVariationName = "All Page Variations",
-			pageVariationNameMenulistName = "Wednesday"
-		);
+			pageVariationNameMenulistName = "Wednesday");
 
 		Staging.viewHistoryVersionPG(historyVersionName = "Wednesday");
 
@@ -331,12 +303,13 @@ definition {
 
 		ProductMenu.gotoLiveSite();
 
-		AssertElementPresent(locator1 = "Home#PORTLET", key_portletName = "YouTube");
+		AssertElementPresent(
+			key_portletName = "YouTube",
+			locator1 = "Home#PORTLET");
 
 		AssertElementPresent(
-			locator1 = "Home#PORTLET",
-			key_portletName = "Web Content Display"
-		);
+			key_portletName = "Web Content Display",
+			locator1 = "Home#PORTLET");
 	}
 
 	@priority = "4"
@@ -348,8 +321,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Main Variation");
 
@@ -367,8 +339,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.addSitePagesVariationPG(sitePagesVariationName = "Wednesday");
 
@@ -378,8 +349,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.markAsReadyForPublication();
 
@@ -389,12 +359,13 @@ definition {
 
 		ProductMenu.gotoLiveSite();
 
-		AssertElementPresent(locator1 = "Home#PORTLET", key_portletName = "YouTube");
+		AssertElementPresent(
+			key_portletName = "YouTube",
+			locator1 = "Home#PORTLET");
 
 		AssertElementPresent(
-			locator1 = "Home#PORTLET",
-			key_portletName = "Web Content Display"
-		);
+			key_portletName = "Web Content Display",
+			locator1 = "Home#PORTLET");
 	}
 
 	@priority = "3"
@@ -409,12 +380,13 @@ definition {
 
 		Navigator.gotoStagedView();
 
-		Page.changeLogoViaPageCP(logoFile = "Document_2.png", page = "Public Pages");
+		Page.changeLogoViaPageCP(
+			logoFile = "Document_2.png",
+			page = "Public Pages");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Page.viewCustomLogoPG();
 
@@ -428,20 +400,23 @@ definition {
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		Page.viewDefaultLogoPG();
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.gotoPublishToLive();
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		Page.viewCustomLogoPG();
 	}
@@ -452,34 +427,29 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Main Variation");
 
 		Staging.addSitePagesVariationPG(
 			copySitePagesVariationName = "Main Variation",
-			sitePagesVariationName = "Summer"
-		);
+			sitePagesVariationName = "Summer");
 
 		Staging.changeSitePageVariationPG(
 			sitePagesVariationMenulistName = "Main Variation",
-			sitePagesVariationName = "Summer"
-		);
+			sitePagesVariationName = "Summer");
 
 		Page.add(pageName = "Page 2");
 
 		Staging.mergeSitePagesVariation(
 			sitePagesVariationMergeName = "Summer",
-			sitePagesVariationName = "Main Variation"
-		);
+			sitePagesVariationName = "Main Variation");
 
 		Staging.markAsReadyForPublication();
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.markAsReadyForPublication();
 
@@ -489,9 +459,13 @@ definition {
 
 		ProductMenu.gotoLiveSite();
 
-		Navigator.gotoSitePage(pageName = "Page 2", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Page 2",
+			siteName = "Site Name");
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 	}
 
 	@priority = "4"
@@ -500,15 +474,13 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Main Variation");
 
 		Staging.addSitePagesVariationPG(
 			copySitePagesVariationName = "Main Variation",
-			sitePagesVariationName = "Summer"
-		);
+			sitePagesVariationName = "Summer");
 
 		Portlet.addPG(portletName = "Web Content Display");
 
@@ -516,51 +488,45 @@ definition {
 
 		Staging.changeSitePageVariationPG(
 			sitePagesVariationMenulistName = "Main Variation",
-			sitePagesVariationName = "Summer"
-		);
+			sitePagesVariationName = "Summer");
 
 		Page.add(pageName = "Page 2");
 
 		Staging.mergeSitePagesVariation(
 			sitePagesVariationMergeName = "Main Variation",
-			sitePagesVariationName = "Summer"
-		);
+			sitePagesVariationName = "Summer");
 
 		Staging.markAsReadyForPublication();
 
 		Staging.changeSitePageVariationPG(
 			sitePagesVariationMenulistName = "Summer",
-			sitePagesVariationName = "Main Variation"
-		);
+			sitePagesVariationName = "Main Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.changePageVariationPG(
 			pageVariationName = "Main Variation (Main Variation)",
-			pageVariationNameMenulistName = "Main Variation"
-		);
+			pageVariationNameMenulistName = "Main Variation");
 
-		Navigator.gotoStagedSitePage(pageName = "Page 2", siteName = "Site Name");
+		Navigator.gotoStagedSitePage(
+			pageName = "Page 2",
+			siteName = "Site Name");
 
 		Staging.enablePageInSitePagesVariation(
 			pageName = "Page 2",
-			sitePagesVariationName = "Summer"
-		);
+			sitePagesVariationName = "Summer");
 
 		Staging.markAsReadyForPublication();
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.changePageVariationPG(
 			pageVariationName = "Main Variation",
-			pageVariationNameMenulistName = "Main Variation (Main Variation)"
-		);
+			pageVariationNameMenulistName = "Main Variation (Main Variation)");
 
 		Staging.gotoPublishToLive();
 
@@ -568,24 +534,25 @@ definition {
 
 		ProductMenu.gotoLiveSite();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		AssertElementNotPresent(
-			locator1 = "Home#PORTLET",
-			key_portletName = "Web Content Display"
-		);
+			key_portletName = "Web Content Display",
+			locator1 = "Home#PORTLET");
 
-		Navigator.gotoSitePage(pageName = "Page 2", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Page 2",
+			siteName = "Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.changePageVariationPG(
 			pageVariationName = "Main Variation",
-			pageVariationNameMenulistName = "Main Variation"
-		);
+			pageVariationNameMenulistName = "Main Variation");
 
 		Staging.markAsReadyForPublication();
 
@@ -595,12 +562,13 @@ definition {
 
 		ProductMenu.gotoLiveSite();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		AssertElementPresent(
-			locator1 = "Home#PORTLET",
-			key_portletName = "Web Content Display"
-		);
+			key_portletName = "Web Content Display",
+			locator1 = "Home#PORTLET");
 	}
 
 	@priority = "4"
@@ -608,15 +576,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "Web Content Content",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 
 		PortletEntry.publish();
 
@@ -629,14 +595,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		Staging.viewPublishContentCountViaPortletStagingCP(
 			contentCount = "1",
 			contentInformation = "Web Content (1)",
-			stagingDateRange = "From Last Publish Date"
-		);
+			stagingDateRange = "From Last Publish Date");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -645,8 +609,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		Staging.publishToLiveNowViaPortletCP();
 
@@ -657,90 +620,86 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
-		Staging.viewNoPublishContentCountViaPortletStagingCP(
-			stagingDateRange = "From Last Publish Date"
-		);
+		Staging.viewNoPublishContentCountViaPortletStagingCP(stagingDateRange = "From Last Publish Date");
 	}
 
 	@priority = "4"
 	test StagingPublishLast {
+		property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
+		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
+		property environment.acceptance = "true";
+
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Main Variation");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "Web Content Content",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 
 		PortletEntry.publish();
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.gotoPublishToLive();
 
 		Staging.configurePublishToLive(
 			checkContentNameList = "Web Content",
-			contentDateRange = "Last"
-		);
+			contentDateRange = "Last");
 
 		AssertChecked(
+			checkboxName = "Web Content",
 			locator1 = "Checkbox#ANY_CHECKBOX",
-			value1 = "Web Content",
-			checkboxName = "Web Content"
-		);
+			value1 = "Web Content");
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
-		WebContent.viewTitle(onLive = "true", webContentTitle = "Web Content Title");
+		WebContent.viewTitle(
+			onLive = "true",
+			webContentTitle = "Web Content Title");
 	}
 
 	@priority = "5"
 	test StagingSiteVariationIncompletePage {
-		Staging.addSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name"
-		);
+		Staging.addSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Test Page Name",
 			pageStaging = "true",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
-		SitePageNavigator.gotoPages(page = "Public Pages", site = "Site Name");
+		SitePageNavigator.gotoPages(
+			page = "Public Pages",
+			site = "Site Name");
 
 		AssertElementPresent(locator1 = "Staging#STAGING_PUBLISH_TO_LIVE_BUTTON");
 
@@ -750,8 +709,7 @@ definition {
 
 		Staging.viewIncompletePageViaStagingPageVariation(
 			pageName = "Test Page Name",
-			sitePagesVariationName = "Main Variation"
-		);
+			sitePagesVariationName = "Main Variation");
 	}
 
 	@description = "This is a use case for LPS-87030."
@@ -760,22 +718,21 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Page Templates"
-		);
+			portlet = "Page Templates");
 
 		PageTemplate.addCP(
 			pageTemplateActive = "Yes",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		PageTemplate.configurePageTemplateLayout(
 			columnName = "1 Column",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		Navigator.openStagingSiteURL(siteName = "Site Name");
 
-		Page.add(pageName = "Test Page Name", pageTemplateName = "Page Template Name");
+		Page.add(
+			pageName = "Test Page Name",
+			pageTemplateName = "Page Template Name");
 
 		SitePageNavigator.gotoEditPage(page = "Test Page Name");
 
@@ -800,41 +757,35 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.viewHistoryVersionPG(historyVersion = "${historyVersion}");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Blogs");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.viewSpecificPG(portletName = "Blogs");
 
 		Staging.viewHistoryVersionPG(
 			historyVersion = "${historyVersion}",
-			modifiedVersion = "true"
-		);
+			modifiedVersion = "true");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.undoStagingPageVersioningPG();
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.viewNoSpecificPG(portletName = "Blogs");
 
@@ -842,25 +793,23 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.redoStagingPageVersioningPG();
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.viewSpecificPG(portletName = "Blogs");
 
 		Staging.viewHistoryVersionPG(
 			historyVersion = "${historyVersion}",
-			modifiedVersion = "true"
-		);
+			modifiedVersion = "true");
 
 		Staging.gotoPublishToLive();
 
 		Staging.publishToLive();
 	}
+
 }

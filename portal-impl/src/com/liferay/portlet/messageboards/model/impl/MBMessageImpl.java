@@ -235,9 +235,8 @@ public class MBMessageImpl extends MBMessageBaseImpl {
 		if (isDiscussion()) {
 			return MBDiscussion.class.getName();
 		}
-		else {
-			return MBMessage.class.getName();
-		}
+
+		return MBMessage.class.getName();
 	}
 
 	@Override
@@ -245,9 +244,8 @@ public class MBMessageImpl extends MBMessageBaseImpl {
 		if (getCategoryId() == MBCategoryConstants.DISCUSSION_CATEGORY_ID) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -257,9 +255,8 @@ public class MBMessageImpl extends MBMessageBaseImpl {
 		if (format.equals("bbcode")) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -274,9 +271,8 @@ public class MBMessageImpl extends MBMessageBaseImpl {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override

@@ -124,9 +124,8 @@ public class PortletContextImpl implements LiferayPortletContext {
 				new PortletRequestDispatcherImpl(
 					requestDispatcher, true, this));
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override
@@ -165,9 +164,8 @@ public class PortletContextImpl implements LiferayPortletContext {
 				new PortletRequestDispatcherImpl(
 					requestDispatcher, false, this, path));
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override

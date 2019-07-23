@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Wiki";
@@ -33,8 +34,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -46,17 +46,14 @@ definition {
 
 		WikiEntry.addPageTitle(wikiPageTitle = "MediaWiki Page Title");
 
-		WikiEntry.addMediaWikiDescription(
-			wikiPageContent = "&apos;&apos;MediaWiki Page Content&apos;&apos;"
-		);
+		WikiEntry.addMediaWikiDescription(wikiPageContent = "&apos;&apos;MediaWiki Page Content&apos;&apos;");
 
 		PortletEntry.publish();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -70,17 +67,14 @@ definition {
 
 		WikiEntry.addPageTitle(wikiPageTitle = "MediaWiki Child Page Title");
 
-		WikiEntry.addMediaWikiDescription(
-			wikiPageContent = "&apos;&apos;MediaWiki Child Page Content&apos;&apos;"
-		);
+		WikiEntry.addMediaWikiDescription(wikiPageContent = "&apos;&apos;MediaWiki Child Page Content&apos;&apos;");
 
 		PortletEntry.publish();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -88,8 +82,7 @@ definition {
 
 		WikiNavigator.gotoChildPageCP(
 			wikiChildPageContent = "MediaWiki Child Page Content",
-			wikiChildPageTitle = "MediaWiki Child Page Title"
-		);
+			wikiChildPageTitle = "MediaWiki Child Page Title");
 
 		WikiEntry.viewPageContentBody(wikiPageContent = "MediaWiki Child Page Content");
 	}
@@ -103,8 +96,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -112,16 +104,14 @@ definition {
 
 		WikiPage.addFrontPageCP(
 			wikiFrontPageContent = "Wiki FrontPage Content",
-			wikiNodeName = "Main"
-		);
+			wikiNodeName = "Main");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -130,8 +120,7 @@ definition {
 		WikiPage.viewFrontPageCP(
 			portletName = "Wiki",
 			wikiFrontPageContent = "Wiki FrontPage Content",
-			wikiNodeName = "Main"
-		);
+			wikiNodeName = "Main");
 	}
 
 	@priority = "4"
@@ -141,8 +130,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNode.addCP(wikiNodeName = "Wiki Node Name");
 
@@ -151,10 +139,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
-		WikiNode.viewCP(numberOfWikiPages = "0", wikiNodeName = "Wiki Node Name");
+		WikiNode.viewCP(
+			numberOfWikiPages = "0",
+			wikiNodeName = "Wiki Node Name");
 	}
 
 	@priority = "5"
@@ -164,8 +153,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNode.addCP(wikiNodeName = "Wiki Node Name");
 
@@ -174,8 +162,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Wiki Node Name");
 
@@ -183,25 +170,24 @@ definition {
 
 		WikiPage.addCP(
 			wikiPageContent = "Wiki Page Content",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
-		WikiNode.viewCP(numberOfWikiPages = "2", wikiNodeName = "Wiki Node Name");
+		WikiNode.viewCP(
+			numberOfWikiPages = "2",
+			wikiNodeName = "Wiki Node Name");
 
 		WikiNavigator.gotoCP(wikiPageTitle = "Wiki Page Title");
 
 		WikiPage.viewCP(
 			wikiPageContent = "Wiki Page Content",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 	}
 
 	@priority = "5"
@@ -211,16 +197,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "System Settings"
-		);
+			portlet = "System Settings");
 
 		SystemSettings.gotoCategory(category = "Collaboration");
 
 		SystemSettings.editConfiguration(configurationName = "Wiki Service");
 
-		PortalSettings.configureWikiService(counter = "12", editor = "ckeditor_creole");
+		PortalSettings.configureWikiService(
+			counter = "12",
+			editor = "ckeditor_creole");
 
-		PortalSettings.configureWikiService(counter = "13", editor = "creole");
+		PortalSettings.configureWikiService(
+			counter = "13",
+			editor = "creole");
 
 		PortletEntry.save();
 
@@ -229,8 +218,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -248,8 +236,7 @@ definition {
 
 		WikiPage.viewCP(
 			wikiPageContent = "CKEditor Wiki Page Content",
-			wikiPageTitle = "CKEditor Wiki Page Title"
-		);
+			wikiPageTitle = "CKEditor Wiki Page Title");
 	}
 
 	@priority = "4"
@@ -259,8 +246,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -268,16 +254,14 @@ definition {
 
 		WikiPage.addCP(
 			wikiPageContent = "Wiki Page Content",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -286,16 +270,14 @@ definition {
 		WikiPage.editPageCP(
 			wikiNodeName = "Main",
 			wikiPageContentEdit = "Wiki Page Content Edit",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -303,16 +285,14 @@ definition {
 
 		WikiPage.viewCP(
 			wikiPageContent = "Wiki Page Content Edit",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -323,8 +303,7 @@ definition {
 			wikiPageTitle = "Wiki Page Title",
 			wikiPageVersionDiff = "Edit",
 			wikiPageVersionNew = "1.1",
-			wikiPageVersionOld = "1.0"
-		);
+			wikiPageVersionOld = "1.0");
 	}
 
 	@priority = "5"
@@ -336,8 +315,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNode.addCP(wikiNodeName = "Wiki Node Name");
 
@@ -348,22 +326,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Recycle Bin"
-		);
+			portlet = "Recycle Bin");
 
 		RecycleBin.viewCP(
 			assetName = "Wiki Node Name",
 			assetType = "Wiki Node",
-			deleteUser = "Test Test"
-		);
+			deleteUser = "Test Test");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNode.viewMainNode(wikiNodeName = "Main");
 	}
@@ -378,8 +353,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNode.addCP(wikiNodeName = "Wiki Node Name");
 
@@ -387,18 +361,18 @@ definition {
 			wikiNodeDescription = "Wiki Node Description",
 			wikiNodeDescriptionEdit = "Wiki Node Description Edit",
 			wikiNodeName = "Wiki Node Name",
-			wikiNodeNameEdit = "Wiki Node Name Edit"
-		);
+			wikiNodeNameEdit = "Wiki Node Name Edit");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
-		WikiNode.viewCP(numberOfWikiPages = "0", wikiNodeName = "Wiki Node Name Edit");
+		WikiNode.viewCP(
+			numberOfWikiPages = "0",
+			wikiNodeName = "Wiki Node Name Edit");
 	}
 
 	@priority = "5"
@@ -409,37 +383,36 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Wiki", pageTemplateName = "Wiki", siteName = "Site Name");
+		Page.add(
+			pageName = "Wiki",
+			pageTemplateName = "Wiki",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		LAR.importPortlet(
 			larFileName = "space-history-wiki.lar",
-			uploadFrom = "dependencies"
-		);
+			uploadFrom = "dependencies");
 
-		Navigator.gotoSitePage(pageName = "Wiki", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Wiki",
+			siteName = "Site Name");
 
 		WikiNavigator.gotoPG(wikiPageTitle = "FrontPage");
 
-		WikiPage.viewFrontPagePG(
-			wikiPageContent = "Located in Provincetown, MA, S.P.A.C.E. (Space Program Academy of Continuing Education) was founded in February of 2063 by its current Board of Governors members—Dr. Edith Adams, Dr. Harold Vance, Antony Carelli, and Victoria Allen—as a fully-accredited, internationally-run school for students interested in pursuing a wide range of space-related careers. S.P.A.C.E. also serves as a research center for faculty. S.P.A.C.E.’s foundation came about largely as a result of skyrocketing interest in space-related careers and the limitations on The Space Program."
-		);
+		WikiPage.viewFrontPagePG(wikiPageContent = "Located in Provincetown, MA, S.P.A.C.E. (Space Program Academy of Continuing Education) was founded in February of 2063 by its current Board of Governors members—Dr. Edith Adams, Dr. Harold Vance, Antony Carelli, and Victoria Allen—as a fully-accredited, internationally-run school for students interested in pursuing a wide range of space-related careers. S.P.A.C.E. also serves as a research center for faculty. S.P.A.C.E.’s foundation came about largely as a result of skyrocketing interest in space-related careers and the limitations on The Space Program.");
 
 		for (var wikiPageTitle : list "FrontPage,Board of Governors,Dr. Edith Adams,The Space Program,Antony Carelli,Dr. Harold Vance,Victoria Allen,Dr. Asmund Grey") {
 			WikiNavigator.gotoAllPagesPG();
@@ -449,8 +422,7 @@ definition {
 
 		WikiPage.viewPG(
 			wikiPageContent = "Dr. Asmund Grey, first and current president of S.P.A.C.E., was born Asmund Andrew Grey March 22, 2029 to Drs. Albert and Anita Grey in Stratford-upon-Avon, England.",
-			wikiPageTitle = "Dr. Asmund Grey"
-		);
+			wikiPageTitle = "Dr. Asmund Grey");
 	}
 
 	@priority = "5"
@@ -460,38 +432,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
 		WikiPage.addCP(
 			wikiPageContent = "Wiki Page Content 1",
-			wikiPageTitle = "Wiki Page 1"
-		);
+			wikiPageTitle = "Wiki Page 1");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
 		WikiPage.addCP(
 			wikiPageContent = "Wiki Page Content 2",
-			wikiPageTitle = "Wiki Page 2"
-		);
+			wikiPageTitle = "Wiki Page 2");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -508,14 +475,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
-		WikiTable.viewEntry(draftStatus = "Approved", wikiPageTitle = "Wiki Page 1");
+		WikiTable.viewEntry(
+			draftStatus = "Approved",
+			wikiPageTitle = "Wiki Page 1");
 
-		WikiTable.viewEntry(draftStatus = "Approved", wikiPageTitle = "Wiki Page 2");
+		WikiTable.viewEntry(
+			draftStatus = "Approved",
+			wikiPageTitle = "Wiki Page 2");
 
 		WikiNavigator.gotoEntryViaPGTable(wikiPageTitle = "Wiki Page 1");
 
@@ -533,8 +503,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -542,32 +511,28 @@ definition {
 
 		WikiPage.addFrontPageCP(
 			wikiFrontPageContent = "Wiki FrontPage Content",
-			wikiNodeName = "Main"
-		);
+			wikiNodeName = "Main");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
 		WikiPage.moveToRecycleBinCP(
 			wikiFrontPageContent = "Wiki FrontPage Content",
 			wikiNodeName = "Main",
-			wikiPageTitle = "FrontPage"
-		);
+			wikiPageTitle = "FrontPage");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -575,8 +540,7 @@ definition {
 
 		WikiPage.viewFrontPageDefaultCP(
 			wikiFrontPageContent = "Wiki FrontPage Content",
-			wikiNodeName = "Main"
-		);
+			wikiNodeName = "Main");
 	}
 
 	@priority = "5"
@@ -586,23 +550,20 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
 		WikiPage.addCP(
 			wikiPageContent = "Wiki Page Content 1",
-			wikiPageTitle = "Wiki Page 1 Original"
-		);
+			wikiPageTitle = "Wiki Page 1 Original");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -615,15 +576,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
 		WikiPage.addCP(
 			wikiPageContent = "Wiki Page Content 1",
-			wikiPageTitle = "Wiki Page 1 Original"
-		);
+			wikiPageTitle = "Wiki Page 1 Original");
 
 		WaitForSPARefresh();
 
@@ -632,8 +591,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Recycle Bin"
-		);
+			portlet = "Recycle Bin");
 
 		WikiTable.restoreEntry(wikiPageTitle = "Wiki Page 1 Original");
 
@@ -650,20 +608,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
 		WikiTable.viewEntry(
 			draftStatus = "Approved",
-			wikiPageTitle = "Wiki Page 1 Restored"
-		);
+			wikiPageTitle = "Wiki Page 1 Restored");
 
 		WikiTable.viewEntry(
 			draftStatus = "Approved",
-			wikiPageTitle = "Wiki Page 1 Original"
-		);
+			wikiPageTitle = "Wiki Page 1 Original");
 
 		WikiNavigator.gotoEntryViaPGTable(wikiPageTitle = "Wiki Page 1 Restored");
 
@@ -677,23 +632,20 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
 		WikiPage.addCP(
 			wikiPageContent = "Wiki Page Content",
-			wikiPageTitle = "Wiki Page RSS"
-		);
+			wikiPageTitle = "Wiki Page RSS");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Wiki"
-		);
+			portlet = "Wiki");
 
 		WikiNavigator.gotoNode(wikiNodeName = "Main");
 
@@ -705,7 +657,7 @@ definition {
 			version = "1.0",
 			wikiNodeName = "Main",
 			wikiPageContent = "Wiki Page Content",
-			wikiPageTitle = "Wiki Page RSS"
-		);
+			wikiPageTitle = "Wiki Page RSS");
 	}
+
 }

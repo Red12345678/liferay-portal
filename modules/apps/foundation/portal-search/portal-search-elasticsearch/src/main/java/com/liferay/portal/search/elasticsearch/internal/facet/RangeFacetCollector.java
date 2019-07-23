@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import java.util.List;
 
 import org.elasticsearch.search.aggregations.bucket.range.Range;
-import org.elasticsearch.search.aggregations.bucket.range.Range.Bucket;
 
 /**
  * @author André de Oliveira
@@ -51,12 +50,12 @@ public class RangeFacetCollector implements FacetCollector {
 	}
 
 	protected TermCollectorHolder getTermCollectorHolder(Range range) {
-		List<? extends Bucket> buckets = range.getBuckets();
+		List<? extends Range.Bucket> buckets = range.getBuckets();
 
 		TermCollectorHolder termCollectorHolder = new TermCollectorHolder(
 			buckets.size());
 
-		for (Bucket bucket : buckets) {
+		for (Range.Bucket bucket : buckets) {
 			String key = StringUtil.replace(
 				bucket.getKeyAsString(), CharPool.DASH, _TO_STRING);
 

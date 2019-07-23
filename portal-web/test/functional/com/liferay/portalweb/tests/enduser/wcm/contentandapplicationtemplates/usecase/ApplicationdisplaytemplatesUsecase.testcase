@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Content and Application Templates";
@@ -13,18 +14,18 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Page.add(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 	}
 
 	tearDown {
@@ -36,8 +37,7 @@ definition {
 		else {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "test@liferay.com",
-				userLoginFullName = "Test Test"
-			);
+				userLoginFullName = "Test Test");
 
 			Site.tearDownCP();
 		}
@@ -47,40 +47,45 @@ definition {
 	test AddRSSADTViaPortletConfiguration {
 		property portal.acceptance = "true";
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "RSS Publisher");
 
 		Portlet.gotoPortletOptions(
 			portletName = "RSS Publisher",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		RSSPortlet.addFeed(
 			feedRowIndexNumber = "0",
 			feedTitle = "Latimes &gt; Technology News",
 			feedType = "file",
-			feedUrlLink = "rss2.0.xml"
-		);
+			feedUrlLink = "rss2.0.xml");
 
 		PortletEntry.save();
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.gotoPortletOptions(
 			portletName = "RSS Publisher",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		ApplicationDisplayTemplates.addManualViaRSS(siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		RSSPortlet.waitForRSSLoad();
 
 		ApplicationDisplayTemplates.selectPortletADT(templateName = "RSS Test ADT");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		RSSPortlet.waitForRSSLoad();
 
@@ -89,132 +94,149 @@ definition {
 
 	@priority = "3"
 	test AddRSSADTWithCorruptScript {
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "RSS Publisher");
 
 		Portlet.gotoPortletOptions(
 			portletName = "RSS Publisher",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		RSSPortlet.addFeed(
 			feedRowIndexNumber = "0",
 			feedTitle = "Latimes &gt; Technology News",
 			feedType = "file",
-			feedUrlLink = "rss2.0.xml"
-		);
+			feedUrlLink = "rss2.0.xml");
 
 		PortletEntry.save();
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.addPG(
 			adtFile = "adt_rss_navigation_corrupt.ftl",
 			adtType = "RSS",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.selectPortletADT(templateName = "RSS Test ADT");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		RSSPortlet.viewCorruptScript();
 	}
 
 	@priority = "3"
 	test AddRSSADTWithScript {
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "RSS Publisher");
 
 		Portlet.gotoPortletOptions(
 			portletName = "RSS Publisher",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		RSSPortlet.addFeed(
 			feedRowIndexNumber = "0",
 			feedTitle = "Technology",
 			feedType = "file",
-			feedUrlLink = "Technology.xml"
-		);
+			feedUrlLink = "Technology.xml");
 
 		PortletEntry.save();
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.addPG(
 			adtFile = "adt_rss_navigation.ftl",
 			adtType = "RSS",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.selectPortletADT(templateName = "RSS Test ADT");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		RSSPortlet.viewNavigationDisplayFeedTitle(
 			feedTitle = "Technology",
-			navigationNullADT = "true"
-		);
+			navigationNullADT = "true");
 	}
 
 	@priority = "3"
 	test ADTAssetPublisher {
 		Navigator.openSiteURL(siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		WebContent.addPGViaAP(
 			webContentContent = "WC Content",
-			webContentTitle = "WC Title"
-		);
+			webContentTitle = "WC Title");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.addPG(
 			adtFile = "adt_asset_publisher_rich_summary.ftl",
 			adtType = "Asset Publisher",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		AssetPublisherPortlet.configureFlagAllDisplaySettingsCheckboxes();
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		AssetPublisherPortlet.viewDefaultWithAllDisplaySettingsCheckboxesPG(
 			assetDescription = "WC Content",
-			assetTitle = "WC Title"
-		);
+			assetTitle = "WC Title");
 
-		ApplicationDisplayTemplates.selectPortletADT(
-			templateName = "Asset Publisher Test ADT"
-		);
+		ApplicationDisplayTemplates.selectPortletADT(templateName = "Asset Publisher Test ADT");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		AssetPublisherPortlet.viewCustomADTRichSummaryPG(
 			assetDescription = "WC Content",
-			assetTitle = "WC Title"
-		);
+			assetTitle = "WC Title");
 	}
 
 	@priority = "5"
 	test ADTBreadcrumb {
 		property portal.acceptance = "true";
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Breadcrumb");
 
@@ -222,12 +244,13 @@ definition {
 
 		Portlet.gotoPortletOptions(
 			portletName = "Breadcrumb",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		Breadcrumb.configureBreadcrumb(selectADTType = "Arrows");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Breadcrumb.viewADTApplied(breadcrumbADTType = "arrows");
 	}
@@ -236,83 +259,90 @@ definition {
 	test ADTCategoriesNavigation {
 		property portal.acceptance = "true";
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		for (var i : list "1,2") {
 			ProductMenu.gotoPortlet(
 				category = "Content",
 				panel = "Site Administration",
-				portlet = "Categories"
-			);
+				portlet = "Categories");
 
 			Vocabulary.addCP(vocabularyName = "Vocabulary Name ${i}");
 
 			Category.addCP(
 				categoryName = "Category Name ${i}",
-				vocabularyName = "Vocabulary Name ${i}"
-			);
+				vocabularyName = "Vocabulary Name ${i}");
 		}
 
 		Navigator.openSiteURL(siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Categories Navigation");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.addPG(
 			adtFile = "adt_categories_navigation_multi_column.ftl",
 			adtType = "Categories Navigation",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		CategoriesNavigationPortlet.viewDefaultPG(
 			categoryName = "Category Name 1",
-			vocabularyName = "Vocabulary Name 1"
-		);
+			vocabularyName = "Vocabulary Name 1");
 
 		CategoriesNavigationPortlet.viewDefaultPG(
 			categoryName = "Category Name 2",
-			vocabularyName = "Vocabulary Name 2"
-		);
+			vocabularyName = "Vocabulary Name 2");
 
-		ApplicationDisplayTemplates.selectPortletADT(
-			templateName = "Categories Navigation Test ADT"
-		);
+		ApplicationDisplayTemplates.selectPortletADT(templateName = "Categories Navigation Test ADT");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		CategoriesNavigationPortlet.viewCustomADTMultiColumnPG(
 			categoryName1 = "Category Name 1",
 			categoryName2 = "Category Name 2",
 			vocabularyName1 = "Vocabulary Name 1",
-			vocabularyName2 = "Vocabulary Name 2"
-		);
+			vocabularyName2 = "Vocabulary Name 2");
 	}
 
 	@priority = "3"
 	test ADTDMMediaGallery {
 		Navigator.openSiteURL(siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Media Gallery");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		MGPortlet.configureShowAllPG(pageName = "ADT Test Page");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		DMFolder.addPGViaMG(
 			mgFolderDescription = "DM Folder Description",
-			mgFolderName = "DM Folder Name"
-		);
+			mgFolderName = "DM Folder Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		DMFolder.gotoPGViaMG(mgFolderName = "DM Folder Name");
 
@@ -320,10 +350,11 @@ definition {
 			mgDocumentDescription = "DM Document Description",
 			mgDocumentFile = "Document_1.jpg",
 			mgDocumentTitle = "DM Document Title",
-			mgFolderName = "DM Folder Name"
-		);
+			mgFolderName = "DM Folder Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		DMFolder.gotoPGViaMG(mgFolderName = "DM Folder Name");
 
@@ -331,26 +362,28 @@ definition {
 			mgDocumentDescription = "DM Document Description 2",
 			mgDocumentFile = "Document_2.jpeg",
 			mgDocumentTitle = "DM Document Title 2",
-			mgFolderName = "DM Folder Name"
-		);
+			mgFolderName = "DM Folder Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.addPG(
 			adtFile = "adt_media_gallery_carousel.ftl",
 			adtType = "Documents and Media",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		MGPortlet.viewShowAllPG();
 
-		ApplicationDisplayTemplates.selectPortletADT(
-			templateName = "Documents and Media Test ADT"
-		);
+		ApplicationDisplayTemplates.selectPortletADT(templateName = "Documents and Media Test ADT");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		MGPortlet.viewCustomADTCarouselPG();
 	}
@@ -359,7 +392,9 @@ definition {
 	test ADTSiteMap {
 		Navigator.openSiteURL(siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Site Map");
 
@@ -372,75 +407,78 @@ definition {
 			pageName = "ADT Test Page",
 			siteChildPageName = "ADT Child Page Name",
 			siteName = "Test Site Name",
-			siteScopeSelected = "true"
-		);
+			siteScopeSelected = "true");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "ADT Test Page 2", siteName = "Test Site Name");
+		Page.add(
+			pageName = "ADT Test Page 2",
+			siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "ADT Test Page 3", siteName = "Test Site Name");
+		Page.add(
+			pageName = "ADT Test Page 3",
+			siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.addPG(
 			adtFile = "adt_sitemap_multi_column.ftl",
 			adtType = "Site Map",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		SiteMapPortlet.viewDefaultPG(
 			listChildPageName = "ADT Child Page Name",
-			listPageName = "ADT Test Page,ADT Test Page 2,ADT Test Page 3"
-		);
+			listPageName = "ADT Test Page,ADT Test Page 2,ADT Test Page 3");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.selectPortletADT(templateName = "Site Map Test ADT");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		SiteMapPortlet.viewCustomADTMultiColumnPG(
 			listChildPageName = "ADT Child Page Name",
-			listPageName = "ADT Test Page,ADT Test Page 2,ADT Test Page 3"
-		);
+			listPageName = "ADT Test Page,ADT Test Page 2,ADT Test Page 3");
 	}
 
 	@priority = "3"
 	test ADTStagingCategoriesNavigation {
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Categories"
-		);
+			portlet = "Categories");
 
 		for (var i : list "1,2") {
 			ProductMenu.gotoPortlet(
 				category = "Content",
 				panel = "Site Administration",
-				portlet = "Categories"
-			);
+				portlet = "Categories");
 
 			Vocabulary.addCP(vocabularyName = "Vocabulary Name ${i}");
 
 			Category.addCP(
 				categoryName = "Category Name ${i}",
-				vocabularyName = "Vocabulary Name ${i}"
-			);
+				vocabularyName = "Vocabulary Name ${i}");
 		}
 
 		Navigator.openSiteURL(siteName = "Test Site Name");
@@ -448,72 +486,62 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(siteName = "Test Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "ADT Test Page",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Categories Navigation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "ADT Test Page",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.addPG(
 			adtFile = "adt_categories_navigation_multi_column.ftl",
 			adtType = "Categories Navigation",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "ADT Test Page",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		CategoriesNavigationPortlet.viewDefaultPG(
 			categoryName = "Category Name 1",
-			vocabularyName = "Vocabulary Name 1"
-		);
+			vocabularyName = "Vocabulary Name 1");
 
 		CategoriesNavigationPortlet.viewDefaultPG(
 			categoryName = "Category Name 2",
-			vocabularyName = "Vocabulary Name 2"
-		);
+			vocabularyName = "Vocabulary Name 2");
 
-		ApplicationDisplayTemplates.selectPortletADT(
-			templateName = "Categories Navigation Test ADT"
-		);
+		ApplicationDisplayTemplates.selectPortletADT(templateName = "Categories Navigation Test ADT");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "ADT Test Page",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		CategoriesNavigationPortlet.viewCustomADTMultiColumnPG(
 			categoryName1 = "Category Name 1",
 			categoryName2 = "Category Name 2",
 			vocabularyName1 = "Vocabulary Name 1",
-			vocabularyName2 = "Vocabulary Name 2"
-		);
+			vocabularyName2 = "Vocabulary Name 2");
 
 		Staging.gotoPublishToLive();
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		CategoriesNavigationPortlet.viewCustomADTMultiColumnPG(
 			categoryName1 = "Category Name 1",
 			categoryName2 = "Category Name 2",
 			vocabularyName1 = "Vocabulary Name 1",
-			vocabularyName2 = "Vocabulary Name 2"
-		);
+			vocabularyName2 = "Vocabulary Name 2");
 	}
 
 	@priority = "5"
@@ -522,94 +550,95 @@ definition {
 
 		Navigator.openSiteURL(siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Tags Navigation");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Page.add(pageName = "Blogs Test Page");
 
 		Navigator.gotoSitePage(
 			pageName = "Blogs Test Page",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Blogs");
 
 		Navigator.gotoSitePage(
 			pageName = "Blogs Test Page",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		Blogs.addEntryWithTags(
 			entryContent = "Entry Content",
 			entryTitle = "Entry Title",
-			tagNameList = "tag name 1,tag name 2,tag name 3"
-		);
+			tagNameList = "tag name 1,tag name 2,tag name 3");
 
 		Navigator.gotoSitePage(
 			pageName = "Blogs Test Page",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		Blogs.addEntryWithTags(
 			entryContent = "Entry Content",
 			entryTitle = "Entry Title",
-			tagNameList = "tag name 2,tag name 3"
-		);
+			tagNameList = "tag name 2,tag name 3");
 
 		Navigator.gotoSitePage(
 			pageName = "Blogs Test Page",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		Blogs.addEntryWithTags(
 			entryContent = "Entry Content",
 			entryTitle = "Entry Title",
-			tagNameList = "tag name 3"
-		);
+			tagNameList = "tag name 3");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
-		TagsNavigationPortlet.viewDefaultPG(
-			tagNameList = "tag name 1,tag name 2,tag name 3"
-		);
+		TagsNavigationPortlet.viewDefaultPG(tagNameList = "tag name 1,tag name 2,tag name 3");
 
 		ApplicationDisplayTemplates.addPG(
 			adtFile = "adt_tags_color.ftl",
 			adtType = "Tags Navigation",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
-		ApplicationDisplayTemplates.selectPortletADT(
-			templateName = "Tags Navigation Test ADT"
-		);
+		ApplicationDisplayTemplates.selectPortletADT(templateName = "Tags Navigation Test ADT");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		TagsNavigationPortlet.viewADTColorByPopularityPG(
 			adtTagColor = "green",
-			tagName = "tag name 1"
-		);
+			tagName = "tag name 1");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		TagsNavigationPortlet.viewADTColorByPopularityPG(
 			adtTagColor = "orange",
-			tagName = "tag name 2"
-		);
+			tagName = "tag name 2");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		TagsNavigationPortlet.viewADTColorByPopularityPG(
 			adtTagColor = "red",
-			tagName = "tag name 3"
-		);
+			tagName = "tag name 3");
 	}
 
 	@description = "This case uses a workaround for LPS-68008"
@@ -617,11 +646,15 @@ definition {
 	test ADTWiki {
 		Navigator.openSiteURL(siteName = "Test Site Name");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Wiki");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		WikiPage.addFrontPagePG(wikiPageContent = "Test Wiki Content");
 
@@ -634,23 +667,25 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Application Display Template"
-		);
+			portlet = "Application Display Template");
 
 		ApplicationDisplayTemplates.addCP(
 			adtFile = "adt_wiki_social.ftl",
-			adtType = "Wiki"
-		);
+			adtType = "Wiki");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		ApplicationDisplayTemplates.selectPortletADT(
 			portletName = "Wiki",
-			templateName = "Wiki Test ADT"
-		);
+			templateName = "Wiki Test ADT");
 
-		Navigator.gotoSitePage(pageName = "ADT Test Page", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "ADT Test Page",
+			siteName = "Test Site Name");
 
 		WikiPage.viewCustomADTSocialPG(wikiPageContent = "Test Wiki Content");
 	}
+
 }

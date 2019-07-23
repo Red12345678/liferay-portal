@@ -1,5 +1,6 @@
 @component-name = "portal-plugins-osgi"
 definition {
+
 	property osgi.app.includes = "invitation";
 	property portal.upstream = "true";
 	property plugins.deployment.type = "osgi";
@@ -25,4 +26,5 @@ definition {
 
 		Portlet.addPG(portletName = "Invitation");
 	}
+
 }

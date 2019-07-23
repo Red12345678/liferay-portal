@@ -54,9 +54,8 @@ public class PACLConnectionHandler implements InvocationHandler {
 				if (proxy == arguments[0]) {
 					return true;
 				}
-				else {
-					return false;
-				}
+
+				return false;
 			}
 			else if (methodName.equals("hashCode")) {
 				return System.identityHashCode(proxy);
@@ -105,7 +104,7 @@ public class PACLConnectionHandler implements InvocationHandler {
 			interfaceClasses.add(PreparedStatement.class);
 		}
 
-		return interfaceClasses.toArray(new Class<?>[interfaceClasses.size()]);
+		return interfaceClasses.toArray(new Class<?>[0]);
 	}
 
 	private final Connection _connection;

@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Sitemap";
@@ -12,41 +13,35 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Site Page Name",
 			siteName = "Site Name",
-			sitePagePrivacy = "Private"
-		);
+			sitePagePrivacy = "Private");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.addChild(
 			page = "Private Pages",
 			pageName = "Site Page Name",
 			siteChildPageName = "Child Page Name",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 	}
 
 	tearDown {
@@ -68,7 +63,7 @@ definition {
 
 		SiteMapPortlet.viewDefaultPG(
 			listChildPageName = "Child Page Name",
-			listPageName = "Site Page Name"
-		);
+			listPageName = "Site Page Name");
 	}
+
 }

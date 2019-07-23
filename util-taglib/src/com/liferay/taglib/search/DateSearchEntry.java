@@ -78,9 +78,8 @@ public class DateSearchEntry extends TextSearchEntry {
 
 			return sb.toString();
 		}
-		else {
-			return StringPool.BLANK;
-		}
+
+		return StringPool.BLANK;
 	}
 
 	public void setDate(Date date) {

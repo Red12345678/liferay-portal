@@ -1,10 +1,11 @@
 definition {
+
 	macro subscribePG {
 		AssertClick(
 			locator1 = "Comments#SUBSCRIBE_TO_COMMENTS_LINK",
-			value1 = "Subscribe to Comments"
-		);
+			value1 = "Subscribe to Comments");
 
 		Alert.viewSuccessMessage();
 	}
+
 }

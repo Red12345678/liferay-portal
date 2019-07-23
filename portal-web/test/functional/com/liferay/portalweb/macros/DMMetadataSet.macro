@@ -1,12 +1,17 @@
 definition {
+
 	macro add {
 		DMMetadataSet.selectMetadataSetsFrame();
 
-		AssertTextEquals(locator1 = "Portlet#HEADER", value1 = "Metadata Sets");
+		AssertTextEquals(
+			locator1 = "Portlet#HEADER",
+			value1 = "Metadata Sets");
 
 		LexiconEntry.gotoAdd();
 
-		AssertTextEquals(locator1 = "Portlet#HEADER", value1 = "New Metadata Set");
+		AssertTextEquals(
+			locator1 = "Portlet#HEADER",
+			value1 = "New Metadata Set");
 
 		PortletEntry.inputName(name = "${metadataSetName}");
 
@@ -14,8 +19,7 @@ definition {
 			DMMetadataSet.addField(
 				field = "${dmMetadataSetFieldName}",
 				fieldFieldLabel = "${dmMetadataSetFieldName}",
-				fieldName = StringUtil.replace("${dmMetadataSetFieldName}", " ", "")
-			);
+				fieldName = StringUtil.replace("${dmMetadataSetFieldName}", " ", ""));
 		}
 	}
 
@@ -25,8 +29,7 @@ definition {
 		DragAndDrop(
 			locator1 = "DDMEditStructure#FIELDS_FIELD",
 			locator2 = "DDMEditStructure#FORM_BUILDER",
-			value1 = "${field}"
-		);
+			value1 = "${field}");
 
 		var key_fieldFieldLabel = "${field}";
 
@@ -36,37 +39,33 @@ definition {
 
 		Type(
 			locator1 = "DDMEditStructure#SETTINGS_CELL_EDITOR_FIELD",
-			value1 = "${fieldFieldLabel}"
-		);
+			value1 = "${fieldFieldLabel}");
 
 		AssertClick(
 			locator1 = "DDMEditStructure#SETTINGS_CELL_EDITOR_SAVE_BUTTON",
-			value1 = "Save"
-		);
+			value1 = "Save");
 
 		AssertTextEquals(
 			locator1 = "DDMEditStructure#SETTINGS_FIELD_LABEL",
-			value1 = "${fieldFieldLabel}"
-		);
+			value1 = "${fieldFieldLabel}");
 
 		DoubleClick(locator1 = "DDMEditStructure#SETTINGS_NAME");
 
 		Type(
 			locator1 = "DDMEditStructure#SETTINGS_CELL_EDITOR_FIELD",
-			value1 = "${fieldName}"
-		);
+			value1 = "${fieldName}");
 
 		AssertClick(
 			locator1 = "DDMEditStructure#SETTINGS_CELL_EDITOR_SAVE_BUTTON",
-			value1 = "Save"
-		);
+			value1 = "Save");
 
 		AssertTextEquals(
 			locator1 = "DDMEditStructure#SETTINGS_NAME",
-			value1 = "${fieldName}"
-		);
+			value1 = "${fieldName}");
 
-		AssertClick(locator1 = "DDMEditStructure#FIELDS_LINK", value1 = "Fields");
+		AssertClick(
+			locator1 = "DDMEditStructure#FIELDS_LINK",
+			value1 = "Fields");
 
 		Click(locator1 = "TextInput#NAME");
 	}
@@ -85,30 +84,31 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		LexiconEntry.gotoHeaderMenuItem(menuItem = "Metadata Sets");
 
 		DMMetadataSet.selectMetadataSetsFrame();
 
-		Type(locator1 = "NavBar#BASIC_SEARCH_FIELD", value1 = "DM");
+		Type(
+			locator1 = "NavBar#BASIC_SEARCH_FIELD",
+			value1 = "DM");
 
-		AssertClick(locator1 = "NavBar#BASIC_SEARCH_BUTTON", value1 = "Search");
+		AssertClick(
+			locator1 = "NavBar#BASIC_SEARCH_BUTTON",
+			value1 = "Search");
 
 		while (IsElementPresent(locator1 = "DocumentsAndMediaMetadataSets#METADATA_SETS_TABLE_ACTIONS_1")) {
 			AssertClick(
 				locator1 = "DocumentsAndMediaMetadataSets#METADATA_SETS_TABLE_ACTIONS_1",
-				value1 = "Actions"
-			);
+				value1 = "Actions");
 
 			MenuItem.clickNoError(menuItem = "Delete");
 
-			Confirm(
-				value1 = "Are you sure you want to delete this? It will be deleted immediately."
-			);
+			Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 			Alert.viewSuccessMessage();
 		}
 	}
+
 }

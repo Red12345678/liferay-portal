@@ -40,7 +40,7 @@ long recordSetId = ddlFormDisplayContext.getRecordSetId();
 					<%
 					DDLRecordSet recordSet = ddlFormDisplayContext.getRecordSet();
 
-					String name = recordSet.getName(locale);
+					String name = ddlFormDisplayContext.getRecordSetName(locale);
 					%>
 
 					<aui:form action="<%= addRecordActionURL %>" data-DDLRecordSetId="<%= recordSetId %>" data-DDLRecordSetName="<%= HtmlUtil.escapeAttribute(name) %>" method="post" name="fm">
@@ -100,7 +100,7 @@ long recordSetId = ddlFormDisplayContext.getRecordSetId();
 							<div class="container-fluid-1280">
 
 								<%
-								String description = recordSet.getDescription(locale);
+								String description = ddlFormDisplayContext.getRecordSetDescription(locale);
 								%>
 
 								<h1 class="ddl-form-name"><%= HtmlUtil.escape(name) %></h1>

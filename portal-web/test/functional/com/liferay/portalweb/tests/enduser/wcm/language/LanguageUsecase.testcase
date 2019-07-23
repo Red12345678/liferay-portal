@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Localization";
@@ -12,18 +13,18 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Test Page Name", siteName = "Site Name");
+		Page.add(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 	}
 
 	tearDown {
@@ -41,13 +42,12 @@ definition {
 	test AddWCWithMultipleTranslations {
 		property test.name.skip.portal.instance = "LanguageUsecase#AddWCWithMultipleTranslations";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -55,7 +55,9 @@ definition {
 
 		PortletEntry.publish();
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Language Selector");
 
@@ -65,7 +67,9 @@ definition {
 
 		WebContentDisplayPortlet.selectWebContent(webContentTitle = "WC Title");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		LanguagePortlet.selectLanguagePG(language = "Spanish (Spain)");
 
@@ -73,16 +77,15 @@ definition {
 
 		WebContent.viewPGViaWCD(webContentContent = "WC Contenido");
 
-		WebContentNavigator.gotoLocalizedEditPGViaWCD(
-			localizedPortletOption = "Editar contenido web"
-		);
+		WebContentNavigator.gotoLocalizedEditPGViaWCD(localizedPortletOption = "Editar contenido web");
 
 		WebContent.viewTranslationPGViaWCD(
 			localizedTitle = "WC Titulo",
-			webContentTranslationLanguage = "español (España)"
-		);
+			webContentTranslationLanguage = "español (España)");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Refresh();
 
@@ -92,16 +95,15 @@ definition {
 
 		WebContent.viewPGViaWCD(webContentContent = "WC Inhalt");
 
-		WebContentNavigator.gotoLocalizedEditPGViaWCD(
-			localizedPortletOption = "Webcontent bearbeiten"
-		);
+		WebContentNavigator.gotoLocalizedEditPGViaWCD(localizedPortletOption = "Webcontent bearbeiten");
 
 		WebContent.viewTranslationPGViaWCD(
 			localizedTitle = "WC Titel",
-			webContentTranslationLanguage = "Deutsch (Deutschland)"
-		);
+			webContentTranslationLanguage = "Deutsch (Deutschland)");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Refresh();
 
@@ -111,14 +113,11 @@ definition {
 
 		WebContent.viewPGViaWCD(webContentContent = "WC Pitoisuus");
 
-		WebContentNavigator.gotoLocalizedEditPGViaWCD(
-			localizedPortletOption = "Muokkaa web-sisältöä"
-		);
+		WebContentNavigator.gotoLocalizedEditPGViaWCD(localizedPortletOption = "Muokkaa web-sisältöä");
 
 		WebContent.viewTranslationPGViaWCD(
 			localizedTitle = "WC Otsikko",
-			webContentTranslationLanguage = "suomi (Suomi)"
-		);
+			webContentTranslationLanguage = "suomi (Suomi)");
 	}
 
 	@priority = "5"
@@ -126,28 +125,30 @@ definition {
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "LanguageUsecase#AddWCWithTranslation";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
-		WebContent.addCP(webContentContent = "WC Content", webContentTitle = "WC Title");
+		WebContent.addCP(
+			webContentContent = "WC Content",
+			webContentTitle = "WC Title");
 
 		WebContent.addTranslation(
 			localizedContent = "WC Contenido",
 			localizedLanguage = "Spanish (Spain)",
 			localizedTitle = "WC Titulo",
-			webContentTitle = "WC Title"
-		);
+			webContentTitle = "WC Title");
 
 		PortletEntry.publish();
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Language Selector");
 
@@ -157,7 +158,9 @@ definition {
 
 		WebContentDisplayPortlet.selectWebContent(webContentTitle = "WC Title");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -167,43 +170,40 @@ definition {
 
 		WebContent.viewPGViaWCD(webContentContent = "WC Contenido");
 
-		WebContentNavigator.gotoLocalizedEditPGViaWCD(
-			localizedPortletOption = "Editar contenido web"
-		);
+		WebContentNavigator.gotoLocalizedEditPGViaWCD(localizedPortletOption = "Editar contenido web");
 
 		WebContent.viewTranslationPGViaWCD(
 			localizedTitle = "WC Titulo",
-			webContentTranslationLanguage = "español (España)"
-		);
+			webContentTranslationLanguage = "español (España)");
 	}
 
 	@priority = "4"
 	test MoveCurrentLanguagesToAvailable {
 		property test.name.skip.portal.instance = "LanguageUsecase#MoveCurrentLanguagesToAvailable";
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Language Selector");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
 		LanguagePortlet.moveLanguagesToAvailable();
 
-		LanguagePortlet.moveLanguagesToCurrent(
-			currentLanguages = "English (United States),German (Germany),Spanish (Spain)"
-		);
+		LanguagePortlet.moveLanguagesToCurrent(currentLanguages = "English (United States),German (Germany),Spanish (Spain)");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
-		LanguagePortlet.viewLanguagesAbsent(
-			missingLanguages = "ARABIC,CHINESE,FRENCH,HUNGARIAN,JAPANESE,PORTUGUESE"
-		);
+		LanguagePortlet.viewLanguagesAbsent(missingLanguages = "ARABIC,CHINESE,FRENCH,HUNGARIAN,JAPANESE,PORTUGUESE");
 
-		LanguagePortlet.viewLanguagesPresent(
-			currentLanguages = "ENGLISH,GERMAN,SPANISH"
-		);
+		LanguagePortlet.viewLanguagesPresent(currentLanguages = "ENGLISH,GERMAN,SPANISH");
 	}
 
 	@priority = "4"
@@ -213,20 +213,16 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
-		PortalSettings.configureCurrentLanguagesCP(
-			defaultPortalLanguage = "Spanish (Spain)"
-		);
+		PortalSettings.configureCurrentLanguagesCP(defaultPortalLanguage = "Spanish (Spain)");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -237,27 +233,37 @@ definition {
 	test ViewDisplayOptionsViaLanguagePortlet {
 		property test.name.skip.portal.instance = "LanguageUsecase#ViewDisplayOptionsViaLanguagePortlet";
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Language Selector");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
 		LanguagePortlet.toggleDisplayTemplate(displayStyle = "Icon Menu");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		LanguagePortlet.viewDisplayTemplateIconMenu(language = "Deutsch");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
 		LanguagePortlet.toggleDisplayTemplate(displayStyle = "Long Text");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		LanguagePortlet.viewDisplayTemplateLongText(language = "suomi");
 
@@ -265,7 +271,9 @@ definition {
 
 		LanguagePortlet.toggleDisplayTemplate(displayStyle = "Select Box");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		LanguagePortlet.viewDisplayTemplateSelectBox(language = "English");
 
@@ -273,7 +281,9 @@ definition {
 
 		LanguagePortlet.toggleDisplayTemplate(displayStyle = "Short Text");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		LanguagePortlet.viewDisplayTemplateShortText(languageKey = "HU");
 	}
@@ -282,73 +292,65 @@ definition {
 	test ViewRemovedCurrentPortalLanguagesViaLanguagePortlet {
 		property test.name.skip.portal.instance = "LanguageUsecase#ViewRemovedCurrentPortalLanguagesViaLanguagePortlet";
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Language Selector");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
-		PortalSettings.configureCurrentLanguagesCP(
-			currentPortalLanguages = "Chinese (China),English (United States),French (France)"
-		);
+		PortalSettings.configureCurrentLanguagesCP(currentPortalLanguages = "Chinese (China),English (United States),French (France)");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
-		LanguagePortlet.viewLanguagesAbsent(
-			missingLanguages = "ARABIC,GERMAN,HUNGARIAN,JAPANESE,PORTUGUESE,SPANISH"
-		);
+		LanguagePortlet.viewLanguagesAbsent(missingLanguages = "ARABIC,GERMAN,HUNGARIAN,JAPANESE,PORTUGUESE,SPANISH");
 
-		LanguagePortlet.viewLanguagesPresent(
-			currentLanguages = "CHINESE,FRENCH,ENGLISH"
-		);
+		LanguagePortlet.viewLanguagesPresent(currentLanguages = "CHINESE,FRENCH,ENGLISH");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
-		LanguagePortlet.configureViewCurrentLanguages(
-			currentLanguages = "Chinese (China),French (France),English (United States)"
-		);
+		LanguagePortlet.configureViewCurrentLanguages(currentLanguages = "Chinese (China),French (France),English (United States)");
 	}
 
 	@priority = "4"
 	test ViewRemovedCurrentSiteLanguagesViaLanguagePortlet {
 		property test.name.skip.portal.instance = "LanguageUsecase#ViewRemovedCurrentSiteLanguagesViaLanguagePortlet";
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Language Selector");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		Site.configureCurrentLanguagesCP(
 			currentSiteLanguages = "English (United States),German (Germany),Spanish (Spain)",
 			defaultSiteLanguage = "English (United States)",
-			displaySettings = "Display Settings"
-		);
+			displaySettings = "Display Settings");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
-		LanguagePortlet.viewLanguagesAbsent(
-			missingLanguages = "CHINESE,FRENCH,HUNGARIAN,JAPANESE,PORTUGUESE"
-		);
+		LanguagePortlet.viewLanguagesAbsent(missingLanguages = "CHINESE,FRENCH,HUNGARIAN,JAPANESE,PORTUGUESE");
 
-		LanguagePortlet.viewLanguagesPresent(
-			currentLanguages = "ENGLISH,GERMAN,SPANISH"
-		);
+		LanguagePortlet.viewLanguagesPresent(currentLanguages = "ENGLISH,GERMAN,SPANISH");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
-		LanguagePortlet.configureViewCurrentLanguages(
-			currentLanguages = "English (United States),German (Germany),Spanish (Spain)"
-		);
+		LanguagePortlet.configureViewCurrentLanguages(currentLanguages = "English (United States),German (Germany),Spanish (Spain)");
 	}
+
 }

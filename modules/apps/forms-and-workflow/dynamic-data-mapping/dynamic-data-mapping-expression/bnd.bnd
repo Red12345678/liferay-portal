@@ -1,5 +1,5 @@
 Bundle-Name: Liferay Dynamic Data Mapping Expression
 Bundle-SymbolicName: com.liferay.dynamic.data.mapping.expression
-Bundle-Version: 2.1.5
+Bundle-Version: 2.1.8
 Export-Package: com.liferay.dynamic.data.mapping.expression
 Liferay-Releng-Module-Group-Title: Runtime

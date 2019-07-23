@@ -1,7 +1,13 @@
 definition {
-	macro findPG {
-		Type(locator1 = "TextInput#WORD", value1 = "${dictionaryWord}");
 
-		AssertClick(locator1 = "Button#FIND", value1 = "Find");
+	macro findPG {
+		Type(
+			locator1 = "TextInput#WORD",
+			value1 = "${dictionaryWord}");
+
+		AssertClick(
+			locator1 = "Button#FIND",
+			value1 = "Find");
 	}
+
 }

@@ -60,7 +60,7 @@ public class RecentDocumentsMessageListener extends BaseMessageListener {
 			if (_log.isDebugEnabled()) {
 				_log.debug(
 					"Skipping because the portal property " +
-						"\"dl.file.rank.enabled being\" is set to false");
+						"\"dl.file.rank.enabled\" is set to false");
 			}
 
 			return;
@@ -88,6 +88,18 @@ public class RecentDocumentsMessageListener extends BaseMessageListener {
 
 	@Deactivate
 	protected void deactivate() {
+		if (!GetterUtil.getBoolean(
+				_props.get(PropsKeys.DL_FILE_RANK_ENABLED))) {
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Skipping because the portal property " +
+						"\"dl.file.rank.enabled\" is set to false");
+			}
+
+			return;
+		}
+
 		_schedulerEngineHelper.unregister(this);
 	}
 

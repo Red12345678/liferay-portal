@@ -449,9 +449,8 @@ public class RepositoryProviderImpl implements RepositoryProvider {
 			if (dlFolder.isMountPoint()) {
 				return dlFolder.getGroupId();
 			}
-			else {
-				return dlFolder.getRepositoryId();
-			}
+
+			return dlFolder.getRepositoryId();
 		}
 
 		RepositoryEntry repositoryEntry =

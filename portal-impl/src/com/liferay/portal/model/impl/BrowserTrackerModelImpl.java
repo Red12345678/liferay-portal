@@ -34,6 +34,9 @@ import com.liferay.portal.kernel.util.StringBundler;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.Collections;
@@ -208,6 +211,32 @@ public class BrowserTrackerModelImpl
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, BrowserTracker>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			BrowserTracker.class.getClassLoader(), BrowserTracker.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<BrowserTracker> constructor =
+				(Constructor<BrowserTracker>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
 	}
 
 	private static final Map<String, Function<BrowserTracker, Object>>
@@ -436,8 +465,12 @@ public class BrowserTrackerModelImpl
 	@Override
 	public BrowserTracker toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (BrowserTracker)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, BrowserTracker>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -604,11 +637,12 @@ public class BrowserTrackerModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		BrowserTracker.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		BrowserTracker.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, BrowserTracker>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private long _mvccVersion;
 	private long _browserTrackerId;

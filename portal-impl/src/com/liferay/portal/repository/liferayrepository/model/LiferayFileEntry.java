@@ -469,9 +469,8 @@ public class LiferayFileEntry extends LiferayModel implements FileEntry {
 		if (_dlFileEntry.getGroupId() == _dlFileEntry.getRepositoryId()) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -586,9 +585,8 @@ public class LiferayFileEntry extends LiferayModel implements FileEntry {
 		if (isEscapedModel()) {
 			return this;
 		}
-		else {
-			return new LiferayFileEntry(_dlFileEntry.toEscapedModel(), true);
-		}
+
+		return new LiferayFileEntry(_dlFileEntry.toEscapedModel(), true);
 	}
 
 	@Override
@@ -601,9 +599,8 @@ public class LiferayFileEntry extends LiferayModel implements FileEntry {
 		if (isEscapedModel()) {
 			return new LiferayFileEntry(_dlFileEntry.toUnescapedModel(), true);
 		}
-		else {
-			return this;
-		}
+
+		return this;
 	}
 
 	protected Repository getRepository() {

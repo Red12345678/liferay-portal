@@ -109,58 +109,33 @@ boolean anonymousAccount = ParamUtil.getBoolean(request, "anonymousUser");
 
 		messageContainer.html(message).removeClass('hide');
 	}
-
-	<c:if test="<%= !company.isStrangers() && (user == null) %>">
-		<portlet:namespace />closeDialog();
-	</c:if>
 </aui:script>
 
 <aui:script sandbox="<%= true %>">
+	var parentWindow = window.opener ? window.opener.parent : window.parent;
+
 	var afterLogin;
 	var namespace;
 	var randomNamespace;
 
-	if (window.opener) {
-		namespace = window.opener.parent.namespace;
-		randomNamespace = window.opener.parent.randomNamespace;
+	namespace = parentWindow.namespace;
+	randomNamespace = parentWindow.randomNamespace;
 
-		afterLogin = window.opener.parent[randomNamespace + 'afterLogin'];
+	afterLogin = parentWindow[randomNamespace + 'afterLogin'];
 
-		if (typeof afterLogin == 'function') {
-			afterLogin('<%= HtmlUtil.escape(emailAddress) %>', <%= anonymousAccount %>);
+	if (typeof afterLogin === 'function') {
+		parentWindow.document.getElementsByName('p_auth')[0].value = '<%= AuthTokenUtil.getToken(request) %>';
+		afterLogin('<%= HtmlUtil.escapeJS(emailAddress) %>', <%= anonymousAccount %>);
 
-			if (<%= !anonymousAccount %>) {
-				window.opener.parent.Liferay.fire(
-					'closeWindow',
-					{
-						id: namespace + 'signInDialog'
-					}
-				);
-
-				window.close();
-			}
-		}
-		else {
-			window.opener.parent.location.href = '<%= HtmlUtil.escapeJS(themeDisplay.getURLSignIn()) %>';
+		if (<%= !anonymousAccount || !company.isStrangers() %>) {
+			window.<portlet:namespace />closeDialog(namespace);
 
 			window.close();
 		}
 	}
 	else {
-		namespace = window.parent.namespace;
-		randomNamespace = window.parent.randomNamespace;
+		window.opener.parent.location.href = '<%= HtmlUtil.escapeJS(themeDisplay.getURLSignIn()) %>';
 
-		afterLogin = window.parent[randomNamespace + 'afterLogin'];
-
-		afterLogin('<%= HtmlUtil.escape(emailAddress) %>', <%= anonymousAccount %>);
-
-		if (<%= !anonymousAccount %>) {
-			Liferay.fire(
-				'closeWindow',
-				{
-					id: namespace + 'signInDialog'
-				}
-			);
-		}
+		window.close();
 	}
 </aui:script>

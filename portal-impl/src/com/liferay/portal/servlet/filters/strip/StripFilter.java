@@ -92,9 +92,8 @@ public class StripFilter extends BasePortalFilter {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected String extractContent(CharBuffer charBuffer, int length) {
@@ -168,9 +167,8 @@ public class StripFilter extends BasePortalFilter {
 		if (request.getAttribute(SKIP_FILTER) != null) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected boolean isInclude(HttpServletRequest request) {
@@ -180,9 +178,8 @@ public class StripFilter extends BasePortalFilter {
 		if (uri == null) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	protected boolean isStrip(HttpServletRequest request) {
@@ -212,9 +209,8 @@ public class StripFilter extends BasePortalFilter {
 
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	protected boolean isStripContentType(String contentType) {
@@ -620,11 +616,10 @@ public class StripFilter extends BasePortalFilter {
 
 				continue;
 			}
-			else {
-				charBuffer.position(i);
 
-				break;
-			}
+			charBuffer.position(i);
+
+			break;
 		}
 
 		if (skipped && appendSeparator) {

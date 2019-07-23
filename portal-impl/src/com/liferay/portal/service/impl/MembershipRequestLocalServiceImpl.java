@@ -132,9 +132,8 @@ public class MembershipRequestLocalServiceImpl
 		if (membershipRequests.isEmpty()) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override

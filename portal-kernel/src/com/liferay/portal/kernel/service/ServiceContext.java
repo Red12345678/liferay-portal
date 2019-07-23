@@ -860,9 +860,8 @@ public class ServiceContext implements Cloneable, Serializable {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**
@@ -879,9 +878,8 @@ public class ServiceContext implements Cloneable, Serializable {
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isDeriveDefaultPermissions() {

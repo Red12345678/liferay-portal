@@ -361,9 +361,8 @@ public class HookHotDeployListener
 		if (_log.isDebugEnabled()) {
 			return true;
 		}
-		else {
-			return portalProperties.containsKey(key);
-		}
+
+		return portalProperties.containsKey(key);
 	}
 
 	protected void destroyCustomJspBag(
@@ -1887,8 +1886,7 @@ public class HookHotDeployListener
 		}
 
 		filter = (Filter)ProxyUtil.newProxyInstance(
-			portletClassLoader,
-			interfaces.toArray(new Class<?>[interfaces.size()]),
+			portletClassLoader, interfaces.toArray(new Class<?>[0]),
 			new ClassLoaderBeanHandler(filter, portletClassLoader));
 
 		return filter;
@@ -2588,9 +2586,8 @@ public class HookHotDeployListener
 			if (Validator.isNotNull(_servletContextName)) {
 				return true;
 			}
-			else {
-				return false;
-			}
+
+			return false;
 		}
 
 		@Override

@@ -1014,6 +1014,13 @@ public class PropsValues {
 	public static String DL_WEBDAV_SUBSTITUTION_CHAR = PropsUtil.get(
 		PropsKeys.DL_WEBDAV_SUBSTITUTION_CHAR);
 
+	public static final int DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS =
+		GetterUtil.getInteger(
+			PropsUtil.get(PropsKeys.DNS_SECURITY_ADDRESS_TIMEOUT_SECONDS));
+
+	public static final int DNS_SECURITY_THREAD_LIMIT = GetterUtil.getInteger(
+		PropsUtil.get(PropsKeys.DNS_SECURITY_THREAD_LIMIT));
+
 	public static final String[] DYNAMIC_RESOURCE_SERVLET_ALLOWED_PATHS =
 		PropsUtil.getArray(PropsKeys.DYNAMIC_RESOURCE_SERVLET_ALLOWED_PATHS);
 
@@ -1748,6 +1755,11 @@ public class PropsValues {
 		GetterUtil.getInteger(
 			PropsUtil.get(
 				PropsKeys.MODULE_FRAMEWORK_DYNAMIC_INSTALL_START_LEVEL));
+
+	public static final boolean MODULE_FRAMEWORK_EXPORT_PASSWORD_ATTRIBUTES =
+		GetterUtil.getBoolean(
+			PropsUtil.get(
+				PropsKeys.MODULE_FRAMEWORK_EXPORT_PASSWORD_ATTRIBUTES));
 
 	/**
 	 * @deprecated As of Judson (7.1.x), with no direct replacement

@@ -1,5 +1,6 @@
 @component-name = "portal-user-management-and-portal-configuration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Roles";
@@ -31,18 +32,20 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.addCP(roleName = "Roles Orgrole Name", roleType = "Organization");
+		Role.addCP(
+			roleName = "Roles Orgrole Name",
+			roleType = "Organization");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.viewCP(roleName = "Roles Orgrole Name", roleType = "Organization");
+		Role.viewCP(
+			roleName = "Roles Orgrole Name",
+			roleType = "Organization");
 	}
 
 	@priority = "4"
@@ -50,18 +53,18 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addCP(roleName = "Roles Regrole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.viewCP(roleName = "Roles Regrole Name", roleType = "Regular");
+		Role.viewCP(
+			roleName = "Roles Regrole Name",
+			roleType = "Regular");
 	}
 
 	@priority = "5"
@@ -71,46 +74,49 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.addCP(roleName = "Roles Siterole Name", roleType = "Site");
+		Role.addCP(
+			roleName = "Roles Siterole Name",
+			roleType = "Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.viewCP(roleName = "Roles Siterole Name", roleType = "Site");
+		Role.viewCP(
+			roleName = "Roles Siterole Name",
+			roleType = "Site");
 	}
 
 	@priority = "5"
 	test DeleteRegularRole {
+		property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
+		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
+		property environment.acceptance = "true";
 		property portal.acceptance = "true";
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addCP(roleName = "Roles Regrole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.deleteCP(roleName = "Roles Regrole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.viewDefaultCP(roleName = "Roles Regrole Name");
 	}
+
 }

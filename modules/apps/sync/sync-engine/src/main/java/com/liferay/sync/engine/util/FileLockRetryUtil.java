@@ -69,13 +69,11 @@ public class FileLockRetryUtil {
 
 				return true;
 			}
-			else {
-				fileChannel = FileChannel.open(
-					filePath, StandardOpenOption.READ,
-					StandardOpenOption.WRITE);
 
-				fileLock = FileUtil.getFileLock(fileChannel);
-			}
+			fileChannel = FileChannel.open(
+				filePath, StandardOpenOption.READ, StandardOpenOption.WRITE);
+
+			fileLock = FileUtil.getFileLock(fileChannel);
 
 			if (fileLock != null) {
 				pathCallable.call();

@@ -1,5 +1,5 @@
 Bundle-Name: Liferay IFrame Web
 Bundle-SymbolicName: com.liferay.iframe.web
-Bundle-Version: 1.0.26
+Bundle-Version: 1.0.29
 Liferay-Releng-Module-Group-Title: Publication Tools
 Web-ContextPath: /iframe-web

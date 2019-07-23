@@ -86,9 +86,8 @@ public class CalendarBookingAssetRenderer
 
 			return "/asset/" + template + ".jsp";
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override

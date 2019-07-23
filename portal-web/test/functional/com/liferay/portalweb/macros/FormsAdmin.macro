@@ -1,16 +1,14 @@
 definition {
+
 	var formDescription = "Created Form Description";
 	var formName = "Created Form Name";
 
 	macro deleteForm {
 		LexiconEntry.gotoEntryMenuItemNoError(
 			menuItem = "Delete",
-			rowEntry = "${formName}"
-		);
+			rowEntry = "${formName}");
 
-		Confirm(
-			value1 = "Are you sure you want to delete this? It will be deleted immediately."
-		);
+		Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 	}
@@ -18,24 +16,35 @@ definition {
 	macro editDataProvider {
 		FormFields.editText(
 			fieldName = "DataProviderPortlet_name",
-			fieldValue = "${name}"
-		);
+			fieldValue = "${name}");
 
-		FormFields.editText(fieldName = "$url", fieldValue = "${url}");
+		FormFields.editText(
+			fieldName = "$url",
+			fieldValue = "${url}");
 
-		FormFields.editText(fieldName = "$key", fieldValue = "${displayedAttribute}");
+		FormFields.editText(
+			fieldName = "$key",
+			fieldValue = "${displayedAttribute}");
 
-		FormFields.editText(fieldName = "$value", fieldValue = "${storedAttribute}");
+		FormFields.editText(
+			fieldName = "$value",
+			fieldValue = "${storedAttribute}");
 
-		FormFields.editText(fieldName = "$username", fieldValue = "${username}");
+		FormFields.editText(
+			fieldName = "$username",
+			fieldValue = "${username}");
 
 		var key_fieldName = "$password";
 
 		if (IsElementPresent(locator1 = "FormFields#PASSWORD_FIELD")) {
-			FormFields.editPassword(fieldName = "$password", fieldValue = "${password}");
+			FormFields.editPassword(
+				fieldName = "$password",
+				fieldValue = "${password}");
 		}
 		else {
-			FormFields.editText(fieldName = "$password", fieldValue = "${password}");
+			FormFields.editText(
+				fieldName = "$password",
+				fieldValue = "${password}");
 		}
 	}
 
@@ -50,7 +59,9 @@ definition {
 	}
 
 	macro searchFormEntry {
-		Type(locator1 = "NavBar#BASIC_SEARCH_FIELD", value1 = "${searchTerm}");
+		Type(
+			locator1 = "NavBar#BASIC_SEARCH_FIELD",
+			value1 = "${searchTerm}");
 
 		Click(locator1 = "Icon#BASIC_SEARCH");
 	}
@@ -59,9 +70,7 @@ definition {
 		while (IsElementPresent(locator1 = "Icon#BODY_VERTICAL_ELLIPSIS")) {
 			LexiconEntry.gotoEllipsisMenuItemNoError(menuItem = "Delete");
 
-			Confirm(
-				value1 = "Are you sure you want to delete this? It will be deleted immediately."
-			);
+			Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 			Alert.viewSuccessMessage();
 		}
@@ -80,8 +89,7 @@ definition {
 
 		FormFields.viewCheckboxLabel(
 			fieldLabel = "${fieldLabel}",
-			fieldName = "${fieldName}"
-		);
+			fieldName = "${fieldName}");
 
 		AssertElementPresent(locator1 = "FormFields#CHECKBOX");
 	}
@@ -91,14 +99,12 @@ definition {
 
 		FormFields.viewDateLabel(
 			fieldLabel = "${fieldLabel}",
-			fieldName = "${fieldName}"
-		);
+			fieldName = "${fieldName}");
 
 		FormFields.viewDateValue(
 			fieldLabel = "${fieldLabel}",
 			fieldName = "${fieldName}",
-			fieldValue = "${fieldValue}"
-		);
+			fieldValue = "${fieldValue}");
 	}
 
 	macro viewForm {
@@ -106,15 +112,13 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "FormsAdmin#FORMS_TABLE_NAME",
-			value1 = "${formName}"
-		);
+			value1 = "${formName}");
 
 		var key_formDescription = "${formDescription}";
 
 		AssertTextEquals(
 			locator1 = "FormsAdmin#FORMS_TABLE_DESCRIPTION",
-			value1 = "${formDescription}"
-		);
+			value1 = "${formDescription}");
 
 		var key_rowEntry = "${formName}";
 
@@ -128,8 +132,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "FormsAdmin#FORM_ENTRY_TABLE_ENTRY",
-			value1 = "${fieldValue}"
-		);
+			value1 = "${fieldValue}");
 	}
 
 	macro viewFormTableEntryNotPresent {
@@ -145,20 +148,17 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "${fieldLabel}",
-			fieldName = "${fieldName}"
-		);
+			fieldName = "${fieldName}");
 
 		FormFields.viewMultilineTextValue(
 			fieldName = "${fieldName}",
-			fieldValue = "${fieldValue}"
-		);
+			fieldValue = "${fieldValue}");
 	}
 
 	macro viewNoFormEntries {
 		AssertTextEquals(
 			locator1 = "Message#EMPTY_INFO",
-			value1 = "No entries were found."
-		);
+			value1 = "No entries were found.");
 	}
 
 	macro viewParagraphEntry {
@@ -166,8 +166,7 @@ definition {
 
 		FormFields.viewParagraphField(
 			fieldTitle = "${fieldTitle}",
-			fieldValue = "${fieldValue}"
-		);
+			fieldValue = "${fieldValue}");
 	}
 
 	macro viewRadioEntry {
@@ -175,13 +174,11 @@ definition {
 
 		FormFields.viewRadioLabel(
 			fieldLabel = "${fieldLabel}",
-			fieldName = "${fieldName}"
-		);
+			fieldName = "${fieldName}");
 
 		FormFields.viewRadioValue(
 			fieldName = "${fieldName}",
-			fieldValue = "${fieldValue}"
-		);
+			fieldValue = "${fieldValue}");
 	}
 
 	macro viewSelectEntry {
@@ -189,8 +186,7 @@ definition {
 
 		FormFields.viewSelectLabel(
 			fieldLabel = "${fieldLabel}",
-			fieldName = "${fieldName}"
-		);
+			fieldName = "${fieldName}");
 
 		FormFields.viewSelectValue(fieldName = "${fieldName}");
 	}
@@ -208,12 +204,11 @@ definition {
 
 		FormFields.viewTextLabel(
 			fieldLabel = "${fieldLabel}",
-			fieldName = "${fieldName}"
-		);
+			fieldName = "${fieldName}");
 
 		FormFields.viewTextValue(
 			fieldName = "${fieldName}",
-			fieldValue = "${fieldValue}"
-		);
+			fieldValue = "${fieldValue}");
 	}
+
 }

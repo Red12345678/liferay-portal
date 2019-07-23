@@ -127,12 +127,11 @@ public class JournalFolderPermission implements BaseModelPermissionChecker {
 			return JournalPermission.contains(
 				permissionChecker, groupId, actionId);
 		}
-		else {
-			JournalFolder folder = _journalFolderLocalService.getJournalFolder(
-				folderId);
 
-			return contains(permissionChecker, folder, actionId);
-		}
+		JournalFolder folder = _journalFolderLocalService.getJournalFolder(
+			folderId);
+
+		return contains(permissionChecker, folder, actionId);
 	}
 
 	@Override

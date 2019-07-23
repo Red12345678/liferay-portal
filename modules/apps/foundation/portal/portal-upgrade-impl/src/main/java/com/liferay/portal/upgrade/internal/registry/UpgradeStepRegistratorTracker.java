@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapDictionary;
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
-import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator.Registry;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -197,7 +196,8 @@ public class UpgradeStepRegistratorTracker {
 
 	}
 
-	private class UpgradeStepRegistry implements Registry {
+	private class UpgradeStepRegistry
+		implements UpgradeStepRegistrator.Registry {
 
 		@Override
 		public void register(

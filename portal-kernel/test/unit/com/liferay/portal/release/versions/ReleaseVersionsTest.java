@@ -14,14 +14,15 @@
 
 package com.liferay.portal.release.versions;
 
-import aQute.bnd.osgi.Constants;
 import aQute.bnd.version.Version;
 
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.io.unsync.UnsyncBufferedReader;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -37,8 +38,11 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
@@ -47,7 +51,6 @@ import java.util.regex.Pattern;
 
 import org.junit.Assert;
 import org.junit.Assume;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -55,146 +58,31 @@ import org.junit.Test;
  */
 public class ReleaseVersionsTest {
 
-	@BeforeClass
-	public static void setUpClass() {
-		_portalPath = Paths.get(System.getProperty("user.dir"));
-	}
-
 	@Test
 	public void testReleaseVersions() throws IOException {
 		Assume.assumeTrue(Validator.isNull(System.getenv("JENKINS_HOME")));
 
-		String otherDirName = System.getProperty(
-			"release.versions.test.other.dir");
+		List<String> portalDirNames = ListUtil.toList(
+			System.getProperty("user.dir"));
+
+		Collections.addAll(
+			portalDirNames,
+			StringUtil.split(
+				System.getProperty("release.versions.test.other.dir.names")));
 
 		Assert.assertTrue(
-			"Please set the property \"release.versions.test.other.dir\"",
-			Validator.isNotNull(otherDirName));
+			"Please set the property \"release.versions.test.other.dir.names\"",
+			portalDirNames.size() > 1);
 
-		final Path otherPath = Paths.get(otherDirName);
-
-		Assert.assertTrue(
-			otherPath + " is not a valid Git repository",
-			Files.exists(otherPath.resolve(".git")));
-
-		final boolean otherRelease = _isRelease(otherPath);
-
-		boolean differentTypes = false;
-
-		if (otherRelease != _isRelease(_portalPath)) {
-			differentTypes = true;
+		for (int i = 0; i < (portalDirNames.size() - 1); i++) {
+			_testReleaseVersions(
+				portalDirNames.get(i), portalDirNames.get(i + 1));
 		}
-
-		Assert.assertTrue(
-			StringBundler.concat(
-				String.valueOf(_portalPath), " and ", String.valueOf(otherPath),
-				" must be different types"),
-			differentTypes);
-
-		final Set<Path> ignorePaths = new HashSet<>(
-			Arrays.asList(_portalPath.resolve("modules/third-party")));
-
-		Path workingDirPropertiesPath = _portalPath.resolve(
-			"working.dir.properties");
-
-		if (Files.exists(workingDirPropertiesPath)) {
-			Properties properties = _loadProperties(workingDirPropertiesPath);
-
-			for (String name : properties.stringPropertyNames()) {
-				if (!name.startsWith("working.dir.checkout.private.apps.") ||
-					!name.endsWith(".dirs")) {
-
-					continue;
-				}
-
-				String[] dirNames = StringUtil.split(
-					properties.getProperty(name));
-
-				for (String dirName : dirNames) {
-					Path dirPath = _portalPath.resolve(dirName);
-
-					if (Files.exists(dirPath)) {
-						ignorePaths.add(dirPath);
-					}
-				}
-			}
-		}
-
-		Files.walkFileTree(
-			_portalPath,
-			new SimpleFileVisitor<Path>() {
-
-				@Override
-				public FileVisitResult preVisitDirectory(
-						Path dirPath, BasicFileAttributes basicFileAttributes)
-					throws IOException {
-
-					if (ignorePaths.contains(dirPath)) {
-						return FileVisitResult.SKIP_SUBTREE;
-					}
-
-					String dirName = String.valueOf(dirPath.getFileName());
-
-					if (Objects.equals(dirName, "node_modules")) {
-						return FileVisitResult.SKIP_SUBTREE;
-					}
-
-					Path versionPath = _getVersionPath(dirPath);
-
-					if (versionPath == null) {
-						return FileVisitResult.CONTINUE;
-					}
-
-					Path lfrbuildRelengIgnorePath = dirPath.resolve(
-						".lfrbuild-releng-ignore");
-
-					if (Files.exists(lfrbuildRelengIgnorePath)) {
-						return FileVisitResult.CONTINUE;
-					}
-
-					if (dirName.endsWith("-test") ||
-						dirName.endsWith("-test-api") ||
-						dirName.endsWith("-test-impl") ||
-						dirName.endsWith("-test-service")) {
-
-						return FileVisitResult.CONTINUE;
-					}
-
-					if (_isInGitRepoReadOnly(dirPath)) {
-						return FileVisitResult.CONTINUE;
-					}
-
-					Path versionRelativePath = _portalPath.relativize(
-						versionPath);
-
-					Path otherVersionPath = otherPath.resolve(
-						versionRelativePath);
-
-					if (Files.notExists(otherVersionPath)) {
-						if (_log.isInfoEnabled()) {
-							_log.info(
-								StringBundler.concat(
-									"Ignoring ",
-									String.valueOf(versionRelativePath),
-									" as it does not exist in ",
-									String.valueOf(otherPath)));
-						}
-
-						return FileVisitResult.SKIP_SUBTREE;
-					}
-
-					_checkReleaseVersion(
-						versionPath, otherVersionPath, otherRelease, dirPath);
-
-					return FileVisitResult.SKIP_SUBTREE;
-				}
-
-			});
 	}
 
-	private void _checkReleaseVersion(
-			Path versionPath, Path otherVersionPath, boolean otherRelease,
-			Path dirPath)
+	private String _checkReleaseVersion(
+			Path portalPath, Path otherPortalPath, Path versionPath,
+			Path otherVersionPath, Path dirPath)
 		throws IOException {
 
 		String fileName = String.valueOf(versionPath.getFileName());
@@ -207,9 +95,9 @@ public class ReleaseVersionsTest {
 			Properties otherBndProperties = _loadProperties(otherVersionPath);
 
 			String bundleSymbolicName = bndProperties.getProperty(
-				Constants.BUNDLE_SYMBOLICNAME);
+				"Bundle-SymbolicName");
 			String otherBundleSymbolicName = otherBndProperties.getProperty(
-				Constants.BUNDLE_SYMBOLICNAME);
+				"Bundle-SymbolicName");
 
 			Assert.assertEquals(bundleSymbolicName, otherBundleSymbolicName);
 
@@ -233,96 +121,90 @@ public class ReleaseVersionsTest {
 			}
 
 			if ((otherVersionPathPair == null) || (versionPathPair == null)) {
-				return;
+				return null;
 			}
 		}
 
-		ObjectValuePair<Version, Path> masterVersionPair = otherVersionPathPair;
-		ObjectValuePair<Version, Path> releaseVersionPair = versionPathPair;
+		Version releaseVersion = otherVersionPathPair.getKey();
 
-		if (otherRelease) {
-			masterVersionPair = versionPathPair;
-			releaseVersionPair = otherVersionPathPair;
+		if (releaseVersion.equals(new Version(1, 0, 0))) {
+			return null;
 		}
 
-		Version masterVersion = masterVersionPair.getKey();
-		Version releaseVersion = releaseVersionPair.getKey();
+		Version masterVersion = versionPathPair.getKey();
 
-		int delta = 0;
+		if ((masterVersion.getMajor() == (releaseVersion.getMajor() + 1)) ||
+			(masterVersion.equals(releaseVersion) &&
+			 (masterVersion.getMinor() == 0) &&
+			 (masterVersion.getMicro() == 0))) {
 
-		for (int i = 0; i < 3; i++) {
-			int masterVersionPart = masterVersion.get(i);
-			int releaseVersionPart = releaseVersion.get(i);
+			return null;
+		}
 
-			if (masterVersionPart != releaseVersionPart) {
-				delta = masterVersionPart - releaseVersionPart;
+		StringBundler sb = new StringBundler(21);
 
-				break;
+		sb.append("The version for ");
+		sb.append(portalPath.relativize(dirPath));
+		sb.append(" on the '");
+		sb.append(portalPath.getFileName());
+		sb.append("' branch (");
+		sb.append(masterVersion);
+		sb.append(", defined in ");
+
+		Path masterVersionPath = versionPathPair.getValue();
+
+		sb.append(masterVersionPath.getFileName());
+
+		sb.append(") must be 1 major version greater than the '");
+		sb.append(otherPortalPath.getFileName());
+		sb.append("' branch (");
+		sb.append(releaseVersion);
+		sb.append(", defined in ");
+
+		Path releaseVersionPath = otherVersionPathPair.getValue();
+
+		sb.append(releaseVersionPath.getFileName());
+
+		sb.append("). Please ");
+
+		Path updateVersionPath = null;
+
+		Path gitRepoPath = _getParentFile(dirPath, ".gitrepo");
+
+		if (gitRepoPath != null) {
+			String gitRepo = _read(gitRepoPath);
+
+			if (!gitRepo.contains("mode = pull")) {
+				gitRepoPath = null;
 			}
 		}
 
-		if ((delta != 0) && (delta != 1)) {
-			StringBundler sb = new StringBundler(17);
+		if (gitRepoPath != null) {
+			updateVersionPath = gitRepoPath.getParent();
 
-			sb.append("Difference in version for ");
-			sb.append(_portalPath.relativize(dirPath));
-			sb.append(" between master (");
-			sb.append(masterVersion);
-			sb.append(", defined in ");
+			updateVersionPath = updateVersionPath.getParent();
 
-			Path masterVersionPath = masterVersionPair.getValue();
-
-			sb.append(masterVersionPath.getFileName());
-
-			sb.append(") and release (");
-			sb.append(releaseVersion);
-			sb.append(", defined in ");
-
-			Path releaseVersionPath = releaseVersionPair.getValue();
-
-			sb.append(releaseVersionPath.getFileName());
-
-			sb.append(") branches is not allowed. Please ");
-
-			Path updateVersionPath = null;
-
-			Path gitRepoPath = _getParentFile(dirPath, ".gitrepo");
-
-			if (gitRepoPath != null) {
-				String gitRepo = _read(gitRepoPath);
-
-				if (!gitRepo.contains("mode = pull")) {
-					gitRepoPath = null;
-				}
-			}
-
-			if (gitRepoPath != null) {
-				updateVersionPath = gitRepoPath.getParent();
-
-				updateVersionPath = updateVersionPath.getParent();
-
-				updateVersionPath = updateVersionPath.resolve(
-					_getVersionOverrideFileName(dirPath));
-			}
-			else {
-				updateVersionPath = dirPath.resolve(fileName);
-			}
-
-			if (Files.exists(updateVersionPath)) {
-				sb.append("update");
-			}
-			else {
-				sb.append("add");
-			}
-
-			sb.append(" the version to ");
-			sb.append(releaseVersion);
-			sb.append(" in ");
-			sb.append(_portalPath.relativize(updateVersionPath));
-			sb.append(" for the master branch.");
-
-			Assert.fail(sb.toString());
+			updateVersionPath = updateVersionPath.resolve(
+				_getVersionOverrideFileName(dirPath));
 		}
+		else {
+			updateVersionPath = dirPath.resolve(fileName);
+		}
+
+		if (Files.exists(updateVersionPath)) {
+			sb.append("update");
+		}
+		else {
+			sb.append("add");
+		}
+
+		sb.append(" the version to ");
+		sb.append(new Version(releaseVersion.getMajor() + 1, 0, 0));
+		sb.append(" in ");
+		sb.append(portalPath.relativize(updateVersionPath));
+		sb.append(" for the 'master' branch.");
+
+		return sb.toString();
 	}
 
 	private boolean _contains(Path path, String... strings) throws IOException {
@@ -386,8 +268,7 @@ public class ReleaseVersionsTest {
 		if (versionOverridePath != null) {
 			Properties versionOverrides = _loadProperties(versionOverridePath);
 
-			String version = versionOverrides.getProperty(
-				Constants.BUNDLE_VERSION);
+			String version = versionOverrides.getProperty("Bundle-Version");
 
 			if (Validator.isNotNull(version)) {
 				return new ObjectValuePair<>(
@@ -395,7 +276,7 @@ public class ReleaseVersionsTest {
 			}
 		}
 
-		String version = bndProperties.getProperty(Constants.BUNDLE_VERSION);
+		String version = bndProperties.getProperty("Bundle-Version");
 
 		return new ObjectValuePair<>(Version.parseVersion(version), bndBndPath);
 	}
@@ -436,14 +317,6 @@ public class ReleaseVersionsTest {
 		return false;
 	}
 
-	private boolean _isRelease(Path path) {
-		if (Files.exists(path.resolve("modules/.releng"))) {
-			return true;
-		}
-
-		return false;
-	}
-
 	private Properties _loadProperties(Path path) throws IOException {
 		Properties properties = new Properties();
 
@@ -458,12 +331,146 @@ public class ReleaseVersionsTest {
 		return new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
 	}
 
+	private void _testReleaseVersions(
+			String portalDirName, String otherPortalDirName)
+		throws IOException {
+
+		Path otherPortalPath = Paths.get(otherPortalDirName);
+
+		Assert.assertTrue(
+			otherPortalPath + " is not a valid Git repository",
+			Files.exists(otherPortalPath.resolve(".git")));
+
+		Path portalPath = Paths.get(portalDirName);
+
+		if (_log.isInfoEnabled()) {
+			_log.info(
+				StringBundler.concat(
+					"Comparing branch '", portalPath.getFileName(),
+					"' against branch '", otherPortalPath.getFileName(), "'"));
+		}
+
+		Set<Path> ignorePaths = new HashSet<>(
+			Arrays.asList(portalPath.resolve("modules/third-party")));
+
+		Path workingDirPropertiesPath = portalPath.resolve(
+			"working.dir.properties");
+
+		if (Files.exists(workingDirPropertiesPath)) {
+			Properties properties = _loadProperties(workingDirPropertiesPath);
+
+			for (String name : properties.stringPropertyNames()) {
+				if (!name.startsWith("working.dir.checkout.private.apps.") ||
+					!name.endsWith(".dirs")) {
+
+					continue;
+				}
+
+				String[] dirNames = StringUtil.split(
+					properties.getProperty(name));
+
+				for (String dirName : dirNames) {
+					Path dirPath = portalPath.resolve(dirName);
+
+					if (Files.exists(dirPath)) {
+						ignorePaths.add(dirPath);
+					}
+				}
+			}
+		}
+
+		List<String> messages = new ArrayList<>();
+
+		Files.walkFileTree(
+			portalPath,
+			new SimpleFileVisitor<Path>() {
+
+				@Override
+				public FileVisitResult preVisitDirectory(
+						Path dirPath, BasicFileAttributes basicFileAttributes)
+					throws IOException {
+
+					if (ignorePaths.contains(dirPath)) {
+						return FileVisitResult.SKIP_SUBTREE;
+					}
+
+					String dirName = String.valueOf(dirPath.getFileName());
+
+					if (Objects.equals(dirName, "node_modules")) {
+						return FileVisitResult.SKIP_SUBTREE;
+					}
+
+					Path versionPath = _getVersionPath(dirPath);
+
+					if (versionPath == null) {
+						return FileVisitResult.CONTINUE;
+					}
+
+					Path lfrbuildRelengIgnorePath = dirPath.resolve(
+						".lfrbuild-releng-ignore");
+
+					if (Files.exists(lfrbuildRelengIgnorePath)) {
+						return FileVisitResult.CONTINUE;
+					}
+
+					if (dirName.endsWith("-test") ||
+						dirName.endsWith("-test-api") ||
+						dirName.endsWith("-test-impl") ||
+						dirName.endsWith("-test-service")) {
+
+						return FileVisitResult.CONTINUE;
+					}
+
+					if (_isInGitRepoReadOnly(dirPath)) {
+						return FileVisitResult.CONTINUE;
+					}
+
+					Path versionRelativePath = portalPath.relativize(
+						versionPath);
+
+					Path otherVersionPath = otherPortalPath.resolve(
+						versionRelativePath);
+
+					if (Files.notExists(otherVersionPath)) {
+						if (_log.isInfoEnabled()) {
+							_log.info(
+								StringBundler.concat(
+									"Ignoring ", versionRelativePath,
+									" as it does not exist in ",
+									otherPortalPath));
+						}
+
+						return FileVisitResult.SKIP_SUBTREE;
+					}
+
+					String message = _checkReleaseVersion(
+						portalPath, otherPortalPath, versionPath,
+						otherVersionPath, dirPath);
+
+					if (message != null) {
+						messages.add(message);
+					}
+
+					return FileVisitResult.SKIP_SUBTREE;
+				}
+
+			});
+
+		StringBundler sb = new StringBundler(messages.size() * 2);
+
+		for (String message : messages) {
+			sb.append(message);
+			sb.append(StringPool.NEW_LINE);
+		}
+
+		Assert.assertTrue(sb.toString(), messages.isEmpty());
+	}
+
 	private static final String _GIT_REPO_FILE_NAME = ".gitrepo";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		ReleaseVersionsTest.class);
 
-	private static Path _portalPath;
 	private static final Pattern _versionPattern = Pattern.compile(
 		"\"version\": \"(\\w+\\.\\w+\\.\\w+)\"");
 

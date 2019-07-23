@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Administration";
@@ -26,42 +27,40 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.addBlankCP(parentSiteName = "Site Name", siteName = "Child SiteName");
+		Site.addBlankCP(
+			parentSiteName = "Site Name",
+			siteName = "Child SiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(
 			parentSiteName = "Child SiteName",
-			siteName = "Child Child SiteName"
-		);
+			siteName = "Child Child SiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.viewChildCP(childSiteName = "Child SiteName", siteName = "Site Name");
+		Site.viewChildCP(
+			childSiteName = "Child SiteName",
+			siteName = "Site Name");
 
 		Site.viewChildCP(
 			childSiteName = "Child Child SiteName",
-			siteName = "Child SiteName"
-		);
+			siteName = "Child SiteName");
 	}
 
 	@priority = "5"
@@ -71,26 +70,27 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.addBlankCP(parentSiteName = "Site Name", siteName = "Child SiteName");
+		Site.addBlankCP(
+			parentSiteName = "Site Name",
+			siteName = "Child SiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.viewChildCP(childSiteName = "Child SiteName", siteName = "Site Name");
+		Site.viewChildCP(
+			childSiteName = "Child SiteName",
+			siteName = "Site Name");
 	}
 
 	@priority = "3"
@@ -98,8 +98,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
@@ -112,21 +111,18 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		Site.addVirtualHostsURLCP(
 			publicPageVirtualHostURL = "www.able.com",
-			publicVirtualHosts = "true"
-		);
+			publicVirtualHosts = "true");
 
 		Navigator.openSpecificURL(url = "http://www.able.com:8080/test-public-page");
 
 		Site.viewVirtualHostsURLPG(
 			pageName = "Test Public Page",
 			siteName = "Site Name",
-			sitePageURL = "http://www.able.com:8080/test-public-page"
-		);
+			sitePageURL = "http://www.able.com:8080/test-public-page");
 	}
 
 	@description = "Ensure that the super admin can add a Blank Site"
@@ -135,16 +131,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.viewCP(siteName = "Site Name");
 	}
@@ -154,48 +148,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site1 Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.viewCP(siteName = "Site1 Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addCommunityCP(siteName = "Site2 Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.viewCP(siteName = "Site2 Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addIntranetCP(siteName = "Site3 Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.viewCP(siteName = "Site3 Name");
 	}
@@ -205,16 +193,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name,");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.viewCP(siteName = "Site Name,");
 	}
@@ -224,18 +210,18 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.viewCannotAdd(siteName = "Site Name", siteNameInvalid = "Duplicate");
+		Site.viewCannotAdd(
+			siteName = "Site Name",
+			siteNameInvalid = "Duplicate");
 	}
 
 	@priority = "3"
@@ -244,10 +230,11 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Sites",
 				panel = "Control Panel",
-				portlet = "Sites"
-			);
+				portlet = "Sites");
 
-			Site.viewCannotAdd(siteName = "${siteName}", siteNameInvalid = "Invalid");
+			Site.viewCannotAdd(
+				siteName = "${siteName}",
+				siteNameInvalid = "Invalid");
 		}
 	}
 
@@ -256,10 +243,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.viewCannotAdd(siteName = " ", siteNameInvalid = "Null");
+		Site.viewCannotAdd(
+			siteName = " ",
+			siteNameInvalid = "Null");
 	}
 
 	@priority = "5"
@@ -267,16 +255,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.deleteCP(siteName = "Site Name");
 	}
@@ -286,8 +272,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
@@ -296,16 +281,16 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
-		Site.editCP(siteName = "Site Name", siteNameEdit = "Site Name Edit");
+		Site.editCP(
+			siteName = "Site Name",
+			siteNameEdit = "Site Name Edit");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.viewCP(siteName = "Site Name Edit");
 	}
@@ -317,8 +302,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
@@ -329,20 +313,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Test Private Page",
 			siteName = "Site Name",
-			sitePagePrivacy = "Private"
-		);
+			sitePagePrivacy = "Private");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		Site.editFriendlyURLCP(siteFriendlyURLEdit = "alpha");
 
@@ -351,16 +332,14 @@ definition {
 		Site.viewSiteFriendlyURLPG(
 			pageName = "Public Page",
 			siteName = "Site Name",
-			sitePageURL = "${portalURL}/web/alpha"
-		);
+			sitePageURL = "${portalURL}/web/alpha");
 
 		Navigator.openPrivateSiteURL(siteName = "alpha");
 
 		Site.viewSiteFriendlyURLPG(
 			pageName = "Private Page",
 			siteName = "Site Name",
-			sitePageURL = "${portalURL}/group/alpha"
-		);
+			sitePageURL = "${portalURL}/group/alpha");
 	}
 
 	@priority = "3"
@@ -370,8 +349,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
@@ -384,18 +362,18 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		Site.editFriendlyURLCP(
 			friendlyURLInvalid = "true",
 			siteFriendlyURL = "/site-name",
-			siteFriendlyURLEdit = "/alpha/alpha"
-		);
+			siteFriendlyURLEdit = "/alpha/alpha");
 
 		SitePageNavigator.gotoPages(page = "Public Pages");
 
-		Page.viewFriendlyURL(pageName = "Site Page", siteFriendlyURL = "/site-name");
+		Page.viewFriendlyURL(
+			pageName = "Site Page",
+			siteFriendlyURL = "/site-name");
 	}
 
 	@priority = "5"
@@ -403,16 +381,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.searchCP(siteName = "Site Name");
 	}
@@ -422,8 +398,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addCommunityCP(siteName = "Site Name");
 
@@ -432,13 +407,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		Site.selectParentSite(
 			chooseButtonAvailable = "false",
-			parentSiteName = "Site Name"
-		);
+			parentSiteName = "Site Name");
 	}
 
 	@priority = "3"
@@ -446,22 +419,24 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.addCommunityCP(siteName = "Site Name", uncheckPropagation = "true");
+		Site.addCommunityCP(
+			siteName = "Site Name",
+			uncheckPropagation = "true");
 
 		ProductMenu.gotoSite(site = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(siteName = "Site Name");
 
-		Navigator.gotoStagedSitePage(pageName = "Home", siteName = "Site Name");
+		Navigator.gotoStagedSitePage(
+			pageName = "Home",
+			siteName = "Site Name");
 
 		Staging.viewStagingLocalLivePG();
 
@@ -470,13 +445,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Site Settings"
-		);
+			portlet = "Site Settings");
 
 		Site.selectParentSite(
 			chooseButtonAvailable = "false",
-			parentSiteName = "Site Name"
-		);
+			parentSiteName = "Site Name");
 	}
 
 	@priority = "4"
@@ -484,78 +457,83 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Page", siteName = "Site Name");
-
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites"
-		);
-
-		Site.addBlankCP(parentSiteName = "Site Name", siteName = "Child SiteName");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
+
+		Site.addBlankCP(
+			parentSiteName = "Site Name",
+			siteName = "Child SiteName");
+
+		ProductMenu.gotoPortlet(
+			category = "Sites",
+			panel = "Control Panel",
+			portlet = "Sites");
 
 		Site.searchInputCP(siteName = "Child SiteName");
 
-		Page.add(pageName = "Site Page", siteName = "Child SiteName");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Child SiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(
 			parentSiteName = "Child SiteName",
-			siteName = "Child ChildSiteName"
-		);
+			siteName = "Child ChildSiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.searchInputCP(siteName = "Child ChildSiteName");
 
-		Page.add(pageName = "Site Page", siteName = "Child ChildSiteName");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Child ChildSiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.viewChildCP(childSiteName = "Child SiteName", siteName = "Site Name");
+		Site.viewChildCP(
+			childSiteName = "Child SiteName",
+			siteName = "Site Name");
 
 		Site.viewChildCP(
 			childSiteName = "Child ChildSiteName",
-			siteName = "Child SiteName"
-		);
+			siteName = "Child SiteName");
 
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Child SiteName");
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Child SiteName");
 
 		Portlet.addPG(portletName = "Sites Directory");
 
 		SitesDirectory.configureSetupPG(directorySites = "Parent Level");
 
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Child SiteName");
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Child SiteName");
 
 		SitesDirectory.viewDescriptivePG(siteName = "Site Name");
 	}
@@ -565,133 +543,102 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Page", siteName = "Site Name");
-
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites"
-		);
-
-		Site.addBlankCP(parentSiteName = "Site Name", siteName = "Child Site1Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
+
+		Site.addBlankCP(
+			parentSiteName = "Site Name",
+			siteName = "Child Site1Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Sites",
+			panel = "Control Panel",
+			portlet = "Sites");
 
 		Site.searchInputCP(siteName = "Child Site1Name");
 
-		Page.add(pageName = "Site Page", siteName = "Child Site1Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Child Site1Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(
 			parentSiteName = "Child Site1Name",
-			siteName = "Child ChildSite1Name"
-		);
+			siteName = "Child ChildSite1Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.searchInputCP(siteName = "Child ChildSite1Name");
 
-		Page.add(pageName = "Site Page", siteName = "Child ChildSite1Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Child ChildSite1Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(
 			parentSiteName = "Child Site1Name",
-			siteName = "Child ChildSite2Name"
-		);
+			siteName = "Child ChildSite2Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.searchInputCP(siteName = "Child ChildSite2Name");
 
-		Page.add(pageName = "Site Page", siteName = "Child ChildSite2Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Child ChildSite2Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Site.addBlankCP(parentSiteName = "Site Name", siteName = "Child Site2Name");
+		Site.addBlankCP(
+			parentSiteName = "Site Name",
+			siteName = "Child Site2Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.searchInputCP(siteName = "Child Site2Name");
 
-		Page.add(pageName = "Site Page", siteName = "Child Site2Name");
-
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Child Site1Name");
-
-		Portlet.addPG(portletName = "Sites Directory");
-
-		SitesDirectory.configureSetupPG(directorySites = "Top Level");
-
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Child Site1Name");
-
-		SitesDirectory.viewDescriptivePG(siteName = "Site Name");
-
-		SitesDirectory.configureSetupPG(directorySites = "Parent Level");
-
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Child Site1Name");
-
-		SitesDirectory.viewDescriptivePG(siteName = "Site Name");
-
-		SitesDirectory.configureSetupPG(directorySites = "Siblings");
-
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Child Site1Name");
-
-		SitesDirectory.viewDescriptivePG(siteName = "Child Site1Name");
-
-		SitesDirectory.viewDescriptivePG(siteName = "Child Site2Name");
-
-		SitesDirectory.configureSetupPG(directorySites = "Children");
-
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Child Site1Name");
-
-		SitesDirectory.viewDescriptivePG(siteName = "Child ChildSite1Name");
-
-		SitesDirectory.viewDescriptivePG(siteName = "Child ChildSite2Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Child Site2Name");
 
 		Navigator.gotoSitePage(
 			pageName = "Site Page",
-			siteName = "Child ChildSite1Name"
-		);
+			siteName = "Child Site1Name");
 
 		Portlet.addPG(portletName = "Sites Directory");
 
@@ -699,8 +646,7 @@ definition {
 
 		Navigator.gotoSitePage(
 			pageName = "Site Page",
-			siteName = "Child ChildSite1Name"
-		);
+			siteName = "Child Site1Name");
 
 		SitesDirectory.viewDescriptivePG(siteName = "Site Name");
 
@@ -708,8 +654,49 @@ definition {
 
 		Navigator.gotoSitePage(
 			pageName = "Site Page",
-			siteName = "Child ChildSite1Name"
-		);
+			siteName = "Child Site1Name");
+
+		SitesDirectory.viewDescriptivePG(siteName = "Site Name");
+
+		SitesDirectory.configureSetupPG(directorySites = "Siblings");
+
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Child Site1Name");
+
+		SitesDirectory.viewDescriptivePG(siteName = "Child Site1Name");
+
+		SitesDirectory.viewDescriptivePG(siteName = "Child Site2Name");
+
+		SitesDirectory.configureSetupPG(directorySites = "Children");
+
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Child Site1Name");
+
+		SitesDirectory.viewDescriptivePG(siteName = "Child ChildSite1Name");
+
+		SitesDirectory.viewDescriptivePG(siteName = "Child ChildSite2Name");
+
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Child ChildSite1Name");
+
+		Portlet.addPG(portletName = "Sites Directory");
+
+		SitesDirectory.configureSetupPG(directorySites = "Top Level");
+
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Child ChildSite1Name");
+
+		SitesDirectory.viewDescriptivePG(siteName = "Site Name");
+
+		SitesDirectory.configureSetupPG(directorySites = "Parent Level");
+
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Child ChildSite1Name");
 
 		SitesDirectory.viewDescriptivePG(siteName = "Child Site1Name");
 
@@ -719,8 +706,7 @@ definition {
 
 		Navigator.gotoSitePage(
 			pageName = "Site Page",
-			siteName = "Child ChildSite1Name"
-		);
+			siteName = "Child ChildSite1Name");
 
 		SitesDirectory.viewDescriptivePG(siteName = "Child ChildSite1Name");
 
@@ -730,12 +716,11 @@ definition {
 
 		Navigator.gotoSitePage(
 			pageName = "Site Page",
-			siteName = "Child ChildSite1Name"
-		);
+			siteName = "Child ChildSite1Name");
 
 		AssertTextEquals(
 			locator1 = "Message#EMPTY_INFO",
-			value1 = "No sites were found."
-		);
+			value1 = "No sites were found.");
 	}
+
 }

@@ -34,6 +34,9 @@ import com.liferay.portal.workflow.kaleo.model.KaleoInstanceTokenModel;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.Collections;
@@ -236,6 +239,32 @@ public class KaleoInstanceTokenModelImpl
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, KaleoInstanceToken>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			KaleoInstanceToken.class.getClassLoader(), KaleoInstanceToken.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<KaleoInstanceToken> constructor =
+				(Constructor<KaleoInstanceToken>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
 	}
 
 	private static final Map<String, Function<KaleoInstanceToken, Object>>
@@ -908,8 +937,12 @@ public class KaleoInstanceTokenModelImpl
 	@Override
 	public KaleoInstanceToken toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (KaleoInstanceToken)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, KaleoInstanceToken>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -1191,11 +1224,12 @@ public class KaleoInstanceTokenModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		KaleoInstanceToken.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		KaleoInstanceToken.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, KaleoInstanceToken>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private long _kaleoInstanceTokenId;
 	private long _groupId;

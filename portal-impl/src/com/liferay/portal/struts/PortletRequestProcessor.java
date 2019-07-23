@@ -144,19 +144,18 @@ public class PortletRequestProcessor extends TilesRequestProcessor {
 				JavaConstants.JAVAX_PORTLET_CONFIG);
 
 		try {
-			if (portletAction.isCheckMethodOnProcessAction()) {
-				if (!PortalUtil.isMethodPost(actionRequest)) {
-					String currentURL = PortalUtil.getCurrentURL(actionRequest);
+			if (portletAction.isCheckMethodOnProcessAction() &&
+				!PortalUtil.isMethodPost(actionRequest)) {
 
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							"This URL can only be invoked using POST: " +
-								currentURL);
-					}
+				String currentURL = PortalUtil.getCurrentURL(actionRequest);
 
-					throw new PrincipalException.MustBeInvokedUsingPost(
-						currentURL);
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"This URL can only be invoked using POST: " +
+							currentURL);
 				}
+
+				throw new PrincipalException.MustBeInvokedUsingPost(currentURL);
 			}
 
 			portletAction.processAction(
@@ -376,9 +375,8 @@ public class PortletRequestProcessor extends TilesRequestProcessor {
 			if (cause instanceof ServletException) {
 				throw (ServletException)cause;
 			}
-			else {
-				_log.error(cause, cause);
-			}
+
+			_log.error(cause, cause);
 		}
 	}
 
@@ -449,10 +447,9 @@ public class PortletRequestProcessor extends TilesRequestProcessor {
 			return processException(
 				request, response, e, actionForm, actionMapping);
 		}
-		else {
-			return super.processActionPerform(
-				request, response, action, actionForm, actionMapping);
-		}
+
+		return super.processActionPerform(
+			request, response, action, actionForm, actionMapping);
 	}
 
 	@Override

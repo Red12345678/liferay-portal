@@ -202,20 +202,19 @@ public class VerifyResourcePermissions extends VerifyProcess {
 		Contact contact = ContactLocalServiceUtil.fetchContact(
 			user.getContactId());
 
-		if ((contact != null) && (ownerId != contact.getUserId())) {
-			if (resourcePermission == null) {
-				resourcePermission =
-					ResourcePermissionLocalServiceUtil.fetchResourcePermission(
-						companyId, modelName,
-						ResourceConstants.SCOPE_INDIVIDUAL,
-						String.valueOf(primKey), role.getRoleId());
+		if ((contact != null) && (ownerId != contact.getUserId()) &&
+			(resourcePermission == null)) {
 
-				if (resourcePermission != null) {
-					resourcePermission.setOwnerId(contact.getUserId());
+			resourcePermission =
+				ResourcePermissionLocalServiceUtil.fetchResourcePermission(
+					companyId, modelName, ResourceConstants.SCOPE_INDIVIDUAL,
+					String.valueOf(primKey), role.getRoleId());
 
-					ResourcePermissionLocalServiceUtil.updateResourcePermission(
-						resourcePermission);
-				}
+			if (resourcePermission != null) {
+				resourcePermission.setOwnerId(contact.getUserId());
+
+				ResourcePermissionLocalServiceUtil.updateResourcePermission(
+					resourcePermission);
 			}
 		}
 	}

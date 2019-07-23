@@ -25,7 +25,6 @@ import com.xuggle.ferry.RefCounted;
 import com.xuggle.xuggler.Global;
 import com.xuggle.xuggler.IAudioResampler;
 import com.xuggle.xuggler.IAudioSamples;
-import com.xuggle.xuggler.IAudioSamples.Format;
 import com.xuggle.xuggler.ICodec;
 import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IContainerFormat;
@@ -129,8 +128,10 @@ public abstract class LiferayConverter {
 
 		IAudioResampler iAudioResampler = null;
 
-		Format inputSampleFormat = inputIStreamCoder.getSampleFormat();
-		Format outputSampleFormat = outputIStreamCoder.getSampleFormat();
+		IAudioSamples.Format inputSampleFormat =
+			inputIStreamCoder.getSampleFormat();
+		IAudioSamples.Format outputSampleFormat =
+			outputIStreamCoder.getSampleFormat();
 
 		if ((inputIStreamCoder.getChannels() ==
 				outputIStreamCoder.getChannels()) &&
@@ -210,9 +211,8 @@ public abstract class LiferayConverter {
 					throw new RuntimeException(
 						"Unable to decode audio stream " + streamIndex);
 				}
-				else {
-					stopDecoding = true;
-				}
+
+				stopDecoding = true;
 			}
 
 			updateAudioTimeStamp(inputIAudioSample, timeStampOffset);
@@ -456,15 +456,17 @@ public abstract class LiferayConverter {
 		return null;
 	}
 
-	protected Format getAudioSampleFormat(
-		ICodec outputICodec, Format originalSampleFormat) {
+	protected IAudioSamples.Format getAudioSampleFormat(
+		ICodec outputICodec, IAudioSamples.Format originalSampleFormat) {
 
-		Format sampleFormat = null;
+		IAudioSamples.Format sampleFormat = null;
 
-		List<Format> supportedSampleFormats =
+		List<IAudioSamples.Format> supportedSampleFormats =
 			outputICodec.getSupportedAudioSampleFormats();
 
-		for (Format supportedSampleFormat : supportedSampleFormats) {
+		for (IAudioSamples.Format supportedSampleFormat :
+				supportedSampleFormats) {
+
 			sampleFormat = supportedSampleFormat;
 
 			if (supportedSampleFormat == originalSampleFormat) {
@@ -486,10 +488,10 @@ public abstract class LiferayConverter {
 
 		ICodec.ID iCodecID = outputICodec.getID();
 
-		if (iCodecID.equals(ICodec.ID.CODEC_ID_VORBIS)) {
-			if (originalBitRate < 64000) {
-				return 64000;
-			}
+		if (iCodecID.equals(ICodec.ID.CODEC_ID_VORBIS) &&
+			(originalBitRate < 64000)) {
+
+			return 64000;
 		}
 
 		return originalBitRate;
@@ -637,9 +639,8 @@ public abstract class LiferayConverter {
 			if (writeContainer) {
 				throw new RuntimeException("Unable to open output URL");
 			}
-			else {
-				throw new RuntimeException("Unable to open input URL");
-			}
+
+			throw new RuntimeException("Unable to open input URL");
 		}
 	}
 
@@ -713,7 +714,7 @@ public abstract class LiferayConverter {
 
 		outputIStreamCoder.setGlobalQuality(0);
 
-		Format sampleFormat = inputIStreamCoder.getSampleFormat();
+		IAudioSamples.Format sampleFormat = inputIStreamCoder.getSampleFormat();
 
 		if (_log.isInfoEnabled()) {
 			_log.info(

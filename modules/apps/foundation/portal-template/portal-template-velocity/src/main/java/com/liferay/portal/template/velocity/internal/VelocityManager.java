@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.util.ReflectionUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.template.BaseSingleTemplateManager;
-import com.liferay.portal.template.RestrictedTemplate;
 import com.liferay.portal.template.TemplateContextHelper;
 import com.liferay.portal.template.velocity.configuration.VelocityEngineConfiguration;
 import com.liferay.taglib.util.VelocityTaglib;
@@ -279,18 +278,11 @@ public class VelocityManager extends BaseSingleTemplateManager {
 		TemplateResource errorTemplateResource, boolean restricted,
 		Map<String, Object> helperUtilities, boolean privileged) {
 
-		Template template = new VelocityTemplate(
+		return new VelocityTemplate(
 			templateResource, errorTemplateResource, helperUtilities,
 			_velocityEngine, templateContextHelper,
 			_velocityEngineConfiguration.resourceModificationCheckInterval(),
-			privileged);
-
-		if (restricted) {
-			template = new RestrictedTemplate(
-				template, templateContextHelper.getRestrictedVariables());
-		}
-
-		return template;
+			privileged, restricted);
 	}
 
 	private static volatile VelocityEngineConfiguration

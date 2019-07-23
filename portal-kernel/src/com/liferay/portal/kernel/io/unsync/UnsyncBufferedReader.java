@@ -175,9 +175,8 @@ public class UnsyncBufferedReader extends Reader {
 				if ((sb != null) && (sb.index() > 0)) {
 					return sb.toString();
 				}
-				else {
-					return null;
-				}
+
+				return null;
 			}
 
 			boolean hasLineBreak = false;
@@ -208,12 +207,11 @@ public class UnsyncBufferedReader extends Reader {
 			if (hasLineBreak) {
 				index++;
 
-				if (lineEndChar == CharPool.RETURN) {
-					if ((index < buffer.length) &&
-						(buffer[index] == CharPool.NEW_LINE)) {
+				if ((lineEndChar == CharPool.RETURN) &&
+					(index < buffer.length) &&
+					(buffer[index] == CharPool.NEW_LINE)) {
 
-						index++;
-					}
+					index++;
 				}
 
 				if (sb == null) {
@@ -282,17 +280,15 @@ public class UnsyncBufferedReader extends Reader {
 
 				return reader.skip(skip);
 			}
-			else {
 
-				// Mark required, save the skipped data
+			// Mark required, save the skipped data
 
-				fillInBuffer();
+			fillInBuffer();
 
-				available = firstInvalidIndex - index;
+			available = firstInvalidIndex - index;
 
-				if (available <= 0) {
-					return 0;
-				}
+			if (available <= 0) {
+				return 0;
 			}
 		}
 
@@ -379,18 +375,16 @@ public class UnsyncBufferedReader extends Reader {
 
 				return reader.read(chars, offset, length);
 			}
-			else {
 
-				// Mark is required, has to read through the buffer to remember
-				// data
+			// Mark is required, has to read through the buffer to remember
+			// data
 
-				fillInBuffer();
+			fillInBuffer();
 
-				available = firstInvalidIndex - index;
+			available = firstInvalidIndex - index;
 
-				if (available <= 0) {
-					return -1;
-				}
+			if (available <= 0) {
+				return -1;
 			}
 		}
 

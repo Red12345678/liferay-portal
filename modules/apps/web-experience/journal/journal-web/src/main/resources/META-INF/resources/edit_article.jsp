@@ -21,7 +21,7 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 String portletResource = ParamUtil.getString(request, "portletResource");
 
-long referringPlid = ParamUtil.getLong(request, "referringPlid");
+long refererPlid = ParamUtil.getLong(request, "refererPlid");
 String referringPortletResource = ParamUtil.getString(request, "referringPortletResource");
 
 boolean changeStructure = GetterUtil.getBoolean(ParamUtil.getString(request, "changeStructure"));
@@ -40,6 +40,8 @@ String articleId = BeanParamUtil.getString(article, request, "articleId");
 double version = BeanParamUtil.getDouble(article, request, "version", JournalArticleConstants.VERSION_DEFAULT);
 
 String ddmStructureKey = ParamUtil.getString(request, "ddmStructureKey");
+
+String requestDDMFormValues = ParamUtil.getString(request, "ddmFormValues");
 
 if (Validator.isNull(ddmStructureKey) && (article != null)) {
 	ddmStructureKey = article.getDDMStructureKey();
@@ -99,6 +101,10 @@ if (article != null) {
 	}
 
 	defaultLanguageId = articleDefaultLanguageId;
+}
+
+if (Validator.isNotNull(requestDDMFormValues)) {
+	defaultLanguageId = journalDisplayContext.getDefaultLanguageIdFromDDMFormValues(requestDDMFormValues);
 }
 
 if (editingDDMStructureDefaultValues) {
@@ -167,7 +173,7 @@ request.setAttribute("edit_article.jsp-changeStructure", changeStructure);
 	<aui:input name="hideDefaultSuccessMessage" type="hidden" value="<%= classNameId == PortalUtil.getClassNameId(DDMStructure.class) %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="portletResource" type="hidden" value="<%= portletResource %>" />
-	<aui:input name="referringPlid" type="hidden" value="<%= referringPlid %>" />
+	<aui:input name="refererPlid" type="hidden" value="<%= refererPlid %>" />
 	<aui:input name="referringPortletResource" type="hidden" value="<%= referringPortletResource %>" />
 	<aui:input name="groupId" type="hidden" value="<%= groupId %>" />
 	<aui:input name="privateLayout" type="hidden" value="<%= layout.isPrivateLayout() %>" />
@@ -188,11 +194,16 @@ request.setAttribute("edit_article.jsp-changeStructure", changeStructure);
 
 	Set<Locale> availableLocalesSet = new HashSet<>();
 
-	availableLocalesSet.add(LocaleUtil.fromLanguageId(defaultLanguageId));
-	availableLocalesSet.addAll(journalDisplayContext.getAvailableArticleLocales());
+	if (Validator.isNotNull(requestDDMFormValues)) {
+		availableLocalesSet.addAll(journalDisplayContext.getAvailableLocalesFromDDMFormValues(requestDDMFormValues));
+	}
+	else {
+		availableLocalesSet.add(LocaleUtil.fromLanguageId(defaultLanguageId));
+		availableLocalesSet.addAll(journalDisplayContext.getAvailableArticleLocales());
 
-	if (ddmFormValues != null) {
-		availableLocalesSet.addAll(ddmFormValues.getAvailableLocales());
+		if (ddmFormValues != null) {
+			availableLocalesSet.addAll(ddmFormValues.getAvailableLocales());
+		}
 	}
 
 	Locale[] availableLocales = availableLocalesSet.toArray(new Locale[0]);

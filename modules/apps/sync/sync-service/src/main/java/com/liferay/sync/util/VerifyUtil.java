@@ -78,13 +78,11 @@ public class VerifyUtil {
 	}
 
 	protected void logCount(long count, long totalCount, String name) {
-		if (_log.isDebugEnabled()) {
-			if ((count % 1000) == 0) {
-				_log.debug(
-					StringBundler.concat(
-						"Verified ", String.valueOf(count), "/",
-						String.valueOf(totalCount), " ", name));
-			}
+		if (_log.isDebugEnabled() && ((count % 1000) == 0)) {
+			_log.debug(
+				StringBundler.concat(
+					"Verified ", String.valueOf(count), "/",
+					String.valueOf(totalCount), " ", name));
 		}
 	}
 

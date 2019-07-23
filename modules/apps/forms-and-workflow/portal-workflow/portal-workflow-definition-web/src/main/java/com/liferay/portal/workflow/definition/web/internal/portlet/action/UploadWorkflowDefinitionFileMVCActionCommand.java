@@ -91,7 +91,7 @@ public class UploadWorkflowDefinitionFileMVCActionCommand
 				actionRequest, actionResponse, jsonObject);
 		}
 		catch (Exception e) {
-			_log.error(e);
+			_log.error(e, e);
 		}
 		finally {
 			StreamUtil.cleanUp(inputStream);

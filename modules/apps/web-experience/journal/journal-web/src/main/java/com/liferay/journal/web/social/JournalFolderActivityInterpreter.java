@@ -77,9 +77,8 @@ public class JournalFolderActivityInterpreter
 			if (Validator.isNull(groupName)) {
 				return "activity-journal-folder-move-to-trash";
 			}
-			else {
-				return "activity-journal-folder-move-to-trash-in";
-			}
+
+			return "activity-journal-folder-move-to-trash-in";
 		}
 		else if (activityType ==
 					SocialActivityConstants.TYPE_RESTORE_FROM_TRASH) {
@@ -87,9 +86,8 @@ public class JournalFolderActivityInterpreter
 			if (Validator.isNull(groupName)) {
 				return "activity-journal-folder-restore-from-trash";
 			}
-			else {
-				return "activity-journal-folder-restore-from-trash-in";
-			}
+
+			return "activity-journal-folder-restore-from-trash-in";
 		}
 
 		return null;

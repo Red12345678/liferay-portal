@@ -182,9 +182,8 @@ public class LiferayFolder extends LiferayModel implements Folder {
 		if (dlParentFolder == null) {
 			return null;
 		}
-		else {
-			return new LiferayFolder(dlParentFolder);
-		}
+
+		return new LiferayFolder(dlParentFolder);
 	}
 
 	@Override
@@ -252,9 +251,8 @@ public class LiferayFolder extends LiferayModel implements Folder {
 		if (_dlFolder.getGroupId() == _dlFolder.getRepositoryId()) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -282,9 +280,8 @@ public class LiferayFolder extends LiferayModel implements Folder {
 		if (isMountPoint()) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override
@@ -292,9 +289,8 @@ public class LiferayFolder extends LiferayModel implements Folder {
 		if (isMountPoint()) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override
@@ -302,9 +298,8 @@ public class LiferayFolder extends LiferayModel implements Folder {
 		if (isMountPoint()) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override
@@ -312,9 +307,8 @@ public class LiferayFolder extends LiferayModel implements Folder {
 		if (isMountPoint()) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override
@@ -322,9 +316,8 @@ public class LiferayFolder extends LiferayModel implements Folder {
 		if (isMountPoint()) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override
@@ -332,9 +325,8 @@ public class LiferayFolder extends LiferayModel implements Folder {
 		if (isMountPoint()) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override
@@ -396,9 +388,8 @@ public class LiferayFolder extends LiferayModel implements Folder {
 		if (isEscapedModel()) {
 			return this;
 		}
-		else {
-			return new LiferayFolder(_dlFolder.toEscapedModel(), true);
-		}
+
+		return new LiferayFolder(_dlFolder.toEscapedModel(), true);
 	}
 
 	@Override
@@ -411,9 +402,8 @@ public class LiferayFolder extends LiferayModel implements Folder {
 		if (isEscapedModel()) {
 			return new LiferayFolder(_dlFolder.toUnescapedModel(), true);
 		}
-		else {
-			return this;
-		}
+
+		return this;
 	}
 
 	private final DLFolder _dlFolder;

@@ -325,12 +325,11 @@ public abstract class BaseOpenSearchImpl implements OpenSearch {
 				start, totalPages, previousPage, nextPage, title, searchPath,
 				themeDisplay);
 		}
-		else {
-			return addSearchResultsAtom(
-				doc, queryTerms, keywords, startPage, itemsPerPage, total,
-				start, totalPages, previousPage, nextPage, title, searchPath,
-				themeDisplay);
-		}
+
+		return addSearchResultsAtom(
+			doc, queryTerms, keywords, startPage, itemsPerPage, total, start,
+			totalPages, previousPage, nextPage, title, searchPath,
+			themeDisplay);
 	}
 
 	protected Object[] addSearchResultsAtom(
@@ -550,10 +549,8 @@ public abstract class BaseOpenSearchImpl implements OpenSearch {
 				layoutGroupId, scopeGroupId, true, portletId);
 		}
 
-		if (plid == 0) {
-			if (layout != null) {
-				plid = layout.getPlid();
-			}
+		if ((plid == 0) && (layout != null)) {
+			plid = layout.getPlid();
 		}
 
 		return plid;

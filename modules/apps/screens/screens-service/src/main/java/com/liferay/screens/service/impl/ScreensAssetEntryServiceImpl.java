@@ -129,30 +129,27 @@ public class ScreensAssetEntryServiceImpl
 
 				return toJSONArray(assetEntries, locale);
 			}
-			else {
-				return JSONFactoryUtil.createJSONArray();
-			}
+
+			return JSONFactoryUtil.createJSONArray();
 		}
-		else {
-			try {
-				PermissionChecker permissionChecker =
-					PermissionCheckerFactoryUtil.create(getUser());
 
-				List<AssetEntry> assetEntries =
-					AssetPublisherUtil.getAssetEntries(
-						null, portletPreferences, permissionChecker,
-						new long[] {groupId}, false, false, false);
+		try {
+			PermissionChecker permissionChecker =
+				PermissionCheckerFactoryUtil.create(getUser());
 
-				assetEntries = filterAssetEntries(assetEntries);
+			List<AssetEntry> assetEntries = AssetPublisherUtil.getAssetEntries(
+				null, portletPreferences, permissionChecker,
+				new long[] {groupId}, false, false, false);
 
-				return toJSONArray(assetEntries, locale);
-			}
-			catch (PortalException | SystemException e) {
-				throw e;
-			}
-			catch (Exception e) {
-				throw new PortalException(e);
-			}
+			assetEntries = filterAssetEntries(assetEntries);
+
+			return toJSONArray(assetEntries, locale);
+		}
+		catch (PortalException | SystemException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			throw new PortalException(e);
 		}
 	}
 

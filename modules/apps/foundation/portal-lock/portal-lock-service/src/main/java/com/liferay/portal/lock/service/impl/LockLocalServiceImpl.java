@@ -59,12 +59,10 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 	public Lock fetchLock(String className, String key) {
 		Lock lock = lockPersistence.fetchByC_K(className, key);
 
-		if (lock != null) {
-			if (lock.isExpired()) {
-				expireLock(lock);
+		if ((lock != null) && lock.isExpired()) {
+			expireLock(lock);
 
-				lock = null;
-			}
+			lock = null;
 		}
 
 		return lock;
@@ -121,9 +119,8 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 		if ((lock != null) && (lock.getUserId() == userId)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -138,9 +135,8 @@ public class LockLocalServiceImpl extends LockLocalServiceBaseImpl {
 		if (lock == null) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override

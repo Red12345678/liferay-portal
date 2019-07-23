@@ -140,9 +140,8 @@ public class SyncFile extends StateAwareModel {
 		if (syncFile.getSyncFileId() == syncFileId) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public String getChangeLog() {

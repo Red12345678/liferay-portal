@@ -299,10 +299,10 @@ public class WebServerServlet extends HttpServlet {
 					sendPortletFileEntry(request, response, pathArray);
 				}
 				else {
-					if (PropsValues.WEB_SERVER_SERVLET_CHECK_IMAGE_GALLERY) {
-						if (isLegacyImageGalleryImageId(request, response)) {
-							return;
-						}
+					if (PropsValues.WEB_SERVER_SERVLET_CHECK_IMAGE_GALLERY &&
+						isLegacyImageGalleryImageId(request, response)) {
+
+						return;
 					}
 
 					Image image = getImage(request, true);
@@ -560,14 +560,12 @@ public class WebServerServlet extends HttpServlet {
 			}
 		}
 
-		if (getDefault) {
-			if (image == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn("Get a default image for " + imageId);
-				}
-
-				image = getDefaultImage(request, imageId);
+		if (getDefault && (image == null)) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("Get a default image for " + imageId);
 			}
+
+			image = getDefaultImage(request, imageId);
 		}
 
 		return image;
@@ -973,10 +971,10 @@ public class WebServerServlet extends HttpServlet {
 
 		String version = ParamUtil.getString(request, "version");
 
-		if (Validator.isNull(version)) {
-			if (Validator.isNotNull(fileEntry.getVersion())) {
-				version = fileEntry.getVersion();
-			}
+		if (Validator.isNull(version) &&
+			Validator.isNotNull(fileEntry.getVersion())) {
+
+			version = fileEntry.getVersion();
 		}
 
 		String tempFileId = DLUtil.getTempFileId(

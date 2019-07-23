@@ -22,7 +22,6 @@ import com.liferay.exportimport.kernel.lifecycle.BaseExportImportLifecycleListen
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleListener;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.util.MapUtil;
-import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -57,7 +56,7 @@ public class CascadeFileEntryTypesExportImportLifecycleListener
 
 		DLFolder parentFolder = dlFolder.getParentFolder();
 
-		if (Validator.isNull(parentFolder) ||
+		if ((parentFolder == null) ||
 			!_importedFolderIds.containsValue(parentFolder.getFolderId())) {
 
 			return dlFolder;
@@ -110,7 +109,7 @@ public class CascadeFileEntryTypesExportImportLifecycleListener
 
 			DLFolder rootFolder = getProcessableRootFolder(dlFolder);
 
-			if (Validator.isNotNull(rootFolder)) {
+			if (rootFolder != null) {
 				_dlFileEntryTypeLocalService.cascadeFileEntryTypes(
 					rootFolder.getUserId(), rootFolder);
 			}

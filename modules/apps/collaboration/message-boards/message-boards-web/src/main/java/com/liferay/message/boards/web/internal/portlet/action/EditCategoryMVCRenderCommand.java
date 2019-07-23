@@ -19,8 +19,12 @@ import com.liferay.message.boards.kernel.model.MBCategory;
 import com.liferay.message.boards.web.constants.MBPortletKeys;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portlet.messageboards.service.permission.MBCategoryPermission;
 
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
@@ -48,6 +52,18 @@ public class EditCategoryMVCRenderCommand implements MVCRenderCommand {
 
 		try {
 			MBCategory category = ActionUtil.getCategory(renderRequest);
+
+			if (category != null) {
+				ThemeDisplay themeDisplay =
+					(ThemeDisplay)renderRequest.getAttribute(
+						WebKeys.THEME_DISPLAY);
+
+				PermissionChecker permissionChecker =
+					themeDisplay.getPermissionChecker();
+
+				MBCategoryPermission.check(
+					permissionChecker, category, ActionKeys.UPDATE);
+			}
 
 			renderRequest.setAttribute(
 				WebKeys.MESSAGE_BOARDS_CATEGORY, category);

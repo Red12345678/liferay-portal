@@ -1,5 +1,6 @@
 @component-name = "portal-security"
 definition {
+
 	property captcha.max.challenges = "0";
 	property portal.upstream = "true";
 	property test.assert.warning.exceptions = "true";
@@ -41,15 +42,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Server Administration"
-		);
+			portlet = "Server Administration");
 
 		Navigator.gotoNavItem(navItem = "CAPTCHA");
 
 		ServerAdministration.enableRecaptcha(
 			privateKey = "${recaptchaPrivateKey}",
-			publicKey = "${recaptchaPublicKey}"
-		);
+			publicKey = "${recaptchaPublicKey}");
 
 		User.logoutPG();
 
@@ -57,4 +56,5 @@ definition {
 
 		User.viewCaptchaPG(captchaType = "recaptcha");
 	}
+
 }

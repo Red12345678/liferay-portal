@@ -52,9 +52,8 @@ public class JournalContentConfigurationUtil {
 		if (!isSingleMenu()) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isSingleMenu() {
@@ -80,9 +79,8 @@ public class JournalContentConfigurationUtil {
 		if ("single-menu-application".equals(menuStyle)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	public boolean isSingleMenuContent() {
@@ -91,9 +89,8 @@ public class JournalContentConfigurationUtil {
 		if ("single-menu-content".equals(menuStyle)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Reference(unbind = "-")

@@ -1,5 +1,6 @@
 @component-name = "portal-business-productivity-ee"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property test.run.environment = "EE";
@@ -13,13 +14,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Workflow Definition"
-		);
+			portlet = "Workflow Definition");
 
 		Workflow.uploadDefinition(
 			workflowDefinitionFile = "workflow_definition_xss.xml",
-			workflowDefinitionTitle = '''<script>alert(123);</script>'''
-		);
+			workflowDefinitionTitle = '''<script>alert(123);</script>''');
 
 		Navigator.openURL();
 
@@ -28,8 +27,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 	}
 
 	tearDown {
@@ -53,6 +51,8 @@ definition {
 
 	@priority = "4"
 	test AddProcess {
+		property test.name.skip.portal.instance = "KaleoFormsXSS#AddProcess";
+
 		KaleoFormsAdmin.addProcess();
 
 		AssertAlertNotPresent();
@@ -67,28 +67,24 @@ definition {
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "New Kaleo Field Set",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "New Kaleo Field Set",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
@@ -102,14 +98,15 @@ definition {
 
 		AssertHTMLSourceTextPresent(value1 = "${escapedScript}");
 
-		LexiconEntry.gotoEntryMenuItem(menuItem = "Choose", rowEntry = "alert");
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Choose",
+			rowEntry = "alert");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "StartNode"
-		);
+			workflowTask = "StartNode");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -117,11 +114,11 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "StartNode"
-		);
+			workflowTask = "StartNode");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
 		KaleoFormsAdmin.saveProcess(kfProcessName = "Kaleo Forms Process");
 	}
+
 }

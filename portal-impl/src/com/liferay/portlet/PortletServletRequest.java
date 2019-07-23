@@ -93,45 +93,40 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 			if (_named) {
 				return null;
 			}
-			else {
-				return _portletRequest.getContextPath();
-			}
+
+			return _portletRequest.getContextPath();
 		}
 
 		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_PATH_INFO)) {
 			if (_named) {
 				return null;
 			}
-			else {
-				return _pathInfo;
-			}
+
+			return _pathInfo;
 		}
 
 		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_QUERY_STRING)) {
 			if (_named) {
 				return null;
 			}
-			else {
-				return _queryString;
-			}
+
+			return _queryString;
 		}
 
 		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_REQUEST_URI)) {
 			if (_named) {
 				return null;
 			}
-			else {
-				return _requestURI;
-			}
+
+			return _requestURI;
 		}
 
 		if (name.equals(JavaConstants.JAVAX_SERVLET_FORWARD_SERVLET_PATH)) {
 			if (_named) {
 				return null;
 			}
-			else {
-				return _servletPath;
-			}
+
+			return _servletPath;
 		}
 
 		return _request.getAttribute(name);
@@ -154,9 +149,8 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 
 			return _request.getCharacterEncoding();
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override
@@ -166,9 +160,8 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 
 			return _request.getContentLength();
 		}
-		else {
-			return 0;
-		}
+
+		return 0;
 	}
 
 	@Override
@@ -178,9 +171,8 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 
 			return _request.getContentType();
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override
@@ -231,9 +223,8 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 
 			return new ServletInputStreamAdapter(portletInputStream);
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override
@@ -346,9 +337,8 @@ public class PortletServletRequest extends HttpServletRequestWrapper {
 
 			return clientDataRequest.getReader();
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	/**

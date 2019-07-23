@@ -102,15 +102,13 @@ public class ByteArrayFileInputStream extends InputStream {
 			if (index < data.length) {
 				return data[index++] & 0xff;
 			}
-			else {
-				return -1;
-			}
-		}
-		else {
-			initFileInputStream();
 
-			return fileInputStream.read();
+			return -1;
 		}
+
+		initFileInputStream();
+
+		return fileInputStream.read();
 	}
 
 	@Override

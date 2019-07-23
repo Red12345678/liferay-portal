@@ -166,9 +166,8 @@ public class Atom {
 		if (StringUtil.equalsIgnoreCase(type, Atom.CMOV)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected int patchCo64Atom(int index) {

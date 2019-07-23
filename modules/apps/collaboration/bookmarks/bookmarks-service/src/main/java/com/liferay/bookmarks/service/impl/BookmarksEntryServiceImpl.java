@@ -89,10 +89,9 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 			return bookmarksEntryPersistence.filterCountByG_F_NotS(
 				groupId, folderId, WorkflowConstants.STATUS_IN_TRASH);
 		}
-		else {
-			return bookmarksEntryPersistence.filterCountByG_F_S(
-				groupId, folderId, status);
-		}
+
+		return bookmarksEntryPersistence.filterCountByG_F_S(
+			groupId, folderId, status);
 	}
 
 	@Override
@@ -140,11 +139,10 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 					groupId, WorkflowConstants.STATUS_IN_TRASH, start, end,
 					new EntryModifiedDateComparator());
 			}
-			else {
-				return bookmarksEntryPersistence.filterFindByG_U_NotS(
-					groupId, userId, WorkflowConstants.STATUS_IN_TRASH, start,
-					end, new EntryModifiedDateComparator());
-			}
+
+			return bookmarksEntryPersistence.filterFindByG_U_NotS(
+				groupId, userId, WorkflowConstants.STATUS_IN_TRASH, start, end,
+				new EntryModifiedDateComparator());
 		}
 
 		List<Long> folderIds = bookmarksFolderService.getFolderIds(
@@ -190,10 +188,9 @@ public class BookmarksEntryServiceImpl extends BookmarksEntryServiceBaseImpl {
 				return bookmarksEntryPersistence.filterCountByG_NotS(
 					groupId, WorkflowConstants.STATUS_IN_TRASH);
 			}
-			else {
-				return bookmarksEntryPersistence.filterCountByG_U_NotS(
-					groupId, userId, WorkflowConstants.STATUS_IN_TRASH);
-			}
+
+			return bookmarksEntryPersistence.filterCountByG_U_NotS(
+				groupId, userId, WorkflowConstants.STATUS_IN_TRASH);
 		}
 
 		List<Long> folderIds = bookmarksFolderService.getFolderIds(

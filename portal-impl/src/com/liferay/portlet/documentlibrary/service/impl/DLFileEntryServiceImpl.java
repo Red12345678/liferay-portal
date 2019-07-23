@@ -388,22 +388,20 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			return dlFileEntryFinder.filterCountByG_F(
 				groupId, folderIds, queryDefinition);
 		}
-		else {
-			int start = 0;
-			int end = PropsValues.SQL_DATA_MAX_PARAMETERS;
 
-			int filesCount = dlFileEntryFinder.filterCountByG_F(
-				groupId, folderIds.subList(start, end), queryDefinition);
+		int start = 0;
+		int end = PropsValues.SQL_DATA_MAX_PARAMETERS;
 
-			List<Long> sublist = folderIds.subList(start, end);
+		int filesCount = dlFileEntryFinder.filterCountByG_F(
+			groupId, folderIds.subList(start, end), queryDefinition);
 
-			sublist.clear();
+		List<Long> sublist = folderIds.subList(start, end);
 
-			filesCount += getFoldersFileEntriesCount(
-				groupId, folderIds, status);
+		sublist.clear();
 
-			return filesCount;
-		}
+		filesCount += getFoldersFileEntriesCount(groupId, folderIds, status);
+
+		return filesCount;
 	}
 
 	@Override

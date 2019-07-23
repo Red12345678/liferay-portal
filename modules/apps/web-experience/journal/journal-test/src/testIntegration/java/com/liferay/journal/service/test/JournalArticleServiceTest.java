@@ -638,9 +638,8 @@ public class JournalArticleServiceTest {
 		if (articles.isEmpty()) {
 			return addArticles(count, _keyword);
 		}
-		else {
-			createArticlesWithKeyword(count);
-		}
+
+		createArticlesWithKeyword(count);
 
 		return null;
 	}

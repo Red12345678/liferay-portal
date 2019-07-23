@@ -195,9 +195,8 @@ public class WikiEngineRenderer {
 		if (wikiEngine != null) {
 			return wikiEngine.getFormatLabel(locale);
 		}
-		else {
-			return StringPool.BLANK;
-		}
+
+		return StringPool.BLANK;
 	}
 
 	public Collection<String> getFormats() {

@@ -43,9 +43,8 @@ public class BrowserSnifferImpl implements BrowserSniffer {
 		if ((acceptEncoding != null) && acceptEncoding.contains("gzip")) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override

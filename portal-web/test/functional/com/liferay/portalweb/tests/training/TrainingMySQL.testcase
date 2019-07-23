@@ -157,7 +157,7 @@ definition {
 			);
 		}
 
-		ProductMenu.gotoSite(site = "College of Agricultural Science");
+		Navigator.openSiteURL(siteName = "College of Agricultural Science");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
@@ -168,7 +168,7 @@ definition {
 		Site.assignUserGroupAsMemberCP(userGroupName = "Agricultural Science");
 
 		for (var siteName : list "Accounting,Business Administration") {
-			ProductMenu.gotoSite(site = "${siteName}");
+			Navigator.openSiteURL(siteName = "${siteName}");
 
 			ProductMenu.gotoPortlet(
 				category = "Members",
@@ -179,7 +179,7 @@ definition {
 			Site.assignUserGroupAsMemberCP(userGroupName = "Business: ${siteName}");
 		}
 
-		ProductMenu.gotoSite(site = "Department of Aeronautics");
+		Navigator.openSiteURL(siteName = "Department of Aeronautics");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
@@ -191,7 +191,7 @@ definition {
 			userGroupName = "Engineering: Aerospace Engineering: Aeronautics"
 		);
 
-		ProductMenu.gotoSite(site = "Department of Astronautics");
+		Navigator.openSiteURL(siteName = "Department of Astronautics");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
@@ -204,7 +204,7 @@ definition {
 		);
 
 		for (var siteName : list "Civil Engineering,Computer Engineering,Electrical Engineering,Mechanical Engineering") {
-			ProductMenu.gotoSite(site = "${siteName}");
+			Navigator.openSiteURL(siteName = "${siteName}");
 
 			ProductMenu.gotoPortlet(
 				category = "Members",
@@ -542,7 +542,7 @@ definition {
 			userLoginFullName = "userfn userln"
 		);
 
-		ProductMenu.gotoSite(site = "College of Engineering");
+		Navigator.openSiteURL(siteName = "College of Engineering");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
@@ -565,7 +565,7 @@ definition {
 			userLoginFullName = "userfn userln"
 		);
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		Page.add(
 			pageName = "Colleges",
@@ -645,7 +645,7 @@ definition {
 			);
 		}
 
-		ProductMenu.gotoSite(site = "College of Business");
+		Navigator.openSiteURL(siteName = "College of Business");
 
 		Page.add(
 			pageName = "Departments",
@@ -673,7 +673,7 @@ definition {
 			);
 		}
 
-		ProductMenu.gotoSite(site = "College of Engineering");
+		Navigator.openSiteURL(siteName = "College of Engineering");
 
 		Page.add(
 			pageName = "Departments",
@@ -737,7 +737,7 @@ definition {
 
 		Portlet.viewPG(portletName = "Blogs");
 
-		ProductMenu.gotoSite(site = "College of Engineering");
+		Navigator.openSiteURL(siteName = "College of Engineering");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -867,7 +867,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
@@ -922,7 +922,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -937,7 +937,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -959,7 +959,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -985,7 +985,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1000,7 +1000,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1018,7 +1018,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1036,7 +1036,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1073,7 +1073,7 @@ definition {
 			userName = "userfn userln"
 		);
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1117,7 +1117,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteURL(siteName = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1233,7 +1233,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteURL(siteName = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1306,7 +1306,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteURL(siteName = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1344,7 +1344,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteURL(siteName = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1371,7 +1371,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1385,7 +1385,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
@@ -1498,7 +1498,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Board of Governors");
+		Navigator.openSiteURL(siteName = "Board of Governors");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1548,7 +1548,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Board of Governors");
+		Navigator.openSiteURL(siteName = "Board of Governors");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1736,7 +1736,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Spacecraft Fuel Alternatives 327");
+		Navigator.openSiteURL(siteName = "Spacecraft Fuel Alternatives 327");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1890,7 +1890,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1912,7 +1912,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1927,7 +1927,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1945,7 +1945,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1970,7 +1970,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2003,7 +2003,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2015,7 +2015,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		Search.searchPG(searchTerm = "moon rocks");
 
@@ -2033,7 +2033,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2045,7 +2045,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2060,7 +2060,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2076,7 +2076,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2092,7 +2092,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2107,7 +2107,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Moon Rocks 101");
+		Navigator.openSiteURL(siteName = "Moon Rocks 101");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2156,7 +2156,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Spacecraft Fuel Alternatives 327");
+		Navigator.openSiteURL(siteName = "Spacecraft Fuel Alternatives 327");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2168,7 +2168,7 @@ How to Present:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Spacecraft Fuel Alternatives 327");
+		Navigator.openSiteURL(siteName = "Spacecraft Fuel Alternatives 327");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2206,7 +2206,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Spacecraft Fuel Alternatives 327");
+		Navigator.openSiteURL(siteName = "Spacecraft Fuel Alternatives 327");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2222,7 +2222,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Spacecraft Fuel Alternatives 327");
+		Navigator.openSiteURL(siteName = "Spacecraft Fuel Alternatives 327");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2240,7 +2240,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2270,7 +2270,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2302,7 +2302,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
@@ -2317,7 +2317,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoStagingSite();
 
@@ -2331,7 +2331,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoStagingSite();
 
@@ -2339,7 +2339,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoStagingSite();
 
@@ -2356,7 +2356,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoStagingSite();
 
@@ -2370,7 +2370,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoStagingSite();
 
@@ -2383,7 +2383,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoStagingSite();
 
@@ -2401,7 +2401,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoStagingSite();
 
@@ -2590,7 +2590,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2642,7 +2642,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2666,7 +2666,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2683,7 +2683,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3275,7 +3275,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Board of Governors");
+		Navigator.openSiteURL(siteName = "Board of Governors");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3308,7 +3308,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Board of Governors");
+		Navigator.openSiteURL(siteName = "Board of Governors");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3360,7 +3360,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3372,7 +3372,7 @@ Brainstorming:
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3505,7 +3505,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
@@ -3520,7 +3520,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -3534,7 +3534,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -3542,7 +3542,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -3552,7 +3552,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -3562,7 +3562,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -3572,7 +3572,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -3582,7 +3582,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -3607,7 +3607,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -3625,7 +3625,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -3791,7 +3791,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 			userLoginFullName = "userfn userln"
 		);
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		Portlet.deletePG(portletName = "Mock LDAP");
 
@@ -3827,7 +3827,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -3940,7 +3940,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 			orgType = "Organization"
 		);
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
@@ -3970,7 +3970,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
@@ -3984,7 +3984,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPrivatePages();
 
@@ -3999,7 +3999,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -4025,7 +4025,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -4040,7 +4040,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -4122,7 +4122,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -4154,7 +4154,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -4172,7 +4172,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "S.P.A.C.E");
+		Navigator.openSiteURL(siteName = "S.P.A.C.E");
 
 		ProductMenu.gotoStagingSite();
 
@@ -4182,7 +4182,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
@@ -4197,7 +4197,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoStagingSite();
 
@@ -4214,7 +4214,7 @@ Lead Text: Attention, incoming students: New Student Orientation begins at 2:00 
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Human Resources");
+		Navigator.openSiteURL(siteName = "Human Resources");
 
 		ProductMenu.gotoStagingSite();
 

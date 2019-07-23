@@ -19,7 +19,6 @@ import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.db.DBType;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.test.rule.PACLTestRule;
-import com.liferay.portal.test.rule.PACLTestRule.PACLTestRuleThreadLocal;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,12 +43,12 @@ public class SQLTest {
 
 	@BeforeClass
 	public static void setUpClass() {
-		PACLTestRuleThreadLocal.setDummyDataSourceEnabled(true);
+		PACLTestRule.PACLTestRuleThreadLocal.setDummyDataSourceEnabled(true);
 	}
 
 	@AfterClass
 	public static void tearDownClass() {
-		PACLTestRuleThreadLocal.setDummyDataSourceEnabled(false);
+		PACLTestRule.PACLTestRuleThreadLocal.setDummyDataSourceEnabled(false);
 	}
 
 	@Test

@@ -1,5 +1,6 @@
 @component-name = "portal-knowledge-base"
 definition {
+
 	property custom.properties = "default.layout.template.id=1_column";
 	property osgi.app.includes = "knowledge-base";
 	property plugins.deployment.type = "osgi";
@@ -49,20 +50,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.addChildPGViaKBDisplay(
 			kbArticleContent = "Child Article Content",
-			kbArticleTitle = "Child Article Title"
-		);
+			kbArticleTitle = "Child Article Title");
 
 		Pause(locator1 = "5000");
 
@@ -71,8 +69,7 @@ definition {
 		KBArticle.viewChildArticlePG(
 			kbArticleTitle = "Knowledge Base Article Title",
 			kbChildArticleContent = "Child Article Content",
-			kbChildArticleTitle = "Child Article Title"
-		);
+			kbChildArticleTitle = "Child Article Title");
 	}
 
 	@priority = "3"
@@ -82,14 +79,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "",
 			kbArticleInvalidContent = "true",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
@@ -103,33 +98,28 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewPG(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		KBArticleSuggestion.addPG(
 			kbArticleTitle = "Knowledge Base Article Title",
-			kbSuggestionBody = "Knowledge Base Article Suggestion"
-		);
+			kbSuggestionBody = "Knowledge Base Article Suggestion");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticleSuggestion.viewPG(
 			kbSuggestionBody = "Knowledge Base Article Suggestion",
 			kbSuggestionUserName = "Test Test",
-			status = "New"
-		);
+			status = "New");
 	}
 
 	@priority = "3"
@@ -139,19 +129,15 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCPWithInvalidTitle(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = ""
-		);
+			kbArticleTitle = "");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
-		KBArticle.viewNoPGViaKBDisplay(
-			kbArticleTitle = "Knowledge Base Article Content"
-		);
+		KBArticle.viewNoPGViaKBDisplay(kbArticleTitle = "Knowledge Base Article Content");
 	}
 
 	@priority = "4"
@@ -161,42 +147,35 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		for (var articleCount : list "1,2") {
 			KBArticle.addCP(
 				kbArticleContent = "Knowledge Base Article${articleCount} Content",
-				kbArticleTitle = "Knowledge Base Article${articleCount} Title"
-			);
+				kbArticleTitle = "Knowledge Base Article${articleCount} Title");
 		}
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
-		KBArticle.gotoKBArticleViaKBDisplayHierarchyNavigationPG(
-			kbArticleTitle = "Knowledge Base Article1 Title"
-		);
+		KBArticle.gotoKBArticleViaKBDisplayHierarchyNavigationPG(kbArticleTitle = "Knowledge Base Article1 Title");
 
 		for (var suggestionCount : list "1,2,3") {
 			KBArticleSuggestion.addPG(
 				kbArticleTitle = "Knowledge Base Article1 Title",
-				kbSuggestionBody = "Knowledge Base Article1 Suggestion${suggestionCount}"
-			);
+				kbSuggestionBody = "Knowledge Base Article1 Suggestion${suggestionCount}");
 		}
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "KnowledgeBase#LINK_THERE_ARE_SUGGESTIONS",
-			value1 = "There are 3 suggestions. (3 Pending)"
-		);
+			value1 = "There are 3 suggestions. (3 Pending)");
 
 		for (var suggestionCount : list "1,2,3") {
 			KBArticleSuggestion.viewPG(
 				kbSuggestionBody = "Knowledge Base Article1 Suggestion${suggestionCount}",
 				kbSuggestionUserName = "Test Test",
-				status = "New"
-			);
+				status = "New");
 		}
 	}
 
@@ -207,28 +186,24 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.addChildPGViaKBDisplay(
 			cancel = "true",
 			kbArticleContent = "Child Article Content",
-			kbArticleTitle = "Child Article Title"
-		);
+			kbArticleTitle = "Child Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewPG(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		AssertElementNotPresent(locator1 = "KnowledgeBase#HIERARCHY_NAVIGATION_CHILD");
 	}
@@ -240,44 +215,34 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content Parent",
-			kbArticleTitle = "Knowledge Base Article Title Parent"
-		);
+			kbArticleTitle = "Knowledge Base Article Title Parent");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content Child",
-			kbArticleTitle = "Knowledge Base Article Title Child"
-		);
+			kbArticleTitle = "Knowledge Base Article Title Child");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
-		KBArticle.gotoKBArticleViaKBDisplayHierarchyNavigationPG(
-			kbArticleTitle = "Knowledge Base Article Title Child"
-		);
+		KBArticle.gotoKBArticleViaKBDisplayHierarchyNavigationPG(kbArticleTitle = "Knowledge Base Article Title Child");
 
-		KBArticle.moveArticleViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Title Child"
-		);
+		KBArticle.moveArticleViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Title Child");
 
 		SelectFrame(locator1 = "KnowledgeBaseSelectParent#IFRAME");
 
 		AssertElementPresent(locator1 = "KnowledgeBaseSelectParent#BREADCRUMB_HOME");
 
-		AssertElementNotPresent(
-			locator1 = "//ul[contains(@class,'breadcrumb')]//a[contains(.,'Home')]/following-sibling::ul[contains(@class,'breadcrumb')]"
-		);
+		AssertElementNotPresent(locator1 = "//ul[contains(@class,'breadcrumb')]//a[contains(.,'Home')]/following-sibling::ul[contains(@class,'breadcrumb')]");
 	}
 
 	@priority = "4"
@@ -287,20 +252,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.addChildPGViaKBDisplay(
 			kbArticleContent = "Child Article Content",
-			kbArticleTitle = "Child Article Title"
-		);
+			kbArticleTitle = "Child Article Title");
 
 		Pause(locator1 = "5000");
 
@@ -309,8 +271,7 @@ definition {
 		KBArticle.viewChildArticlePG(
 			kbArticleTitle = "Knowledge Base Article Title",
 			kbChildArticleContent = "Child Article Content",
-			kbChildArticleTitle = "Child Article Title"
-		);
+			kbChildArticleTitle = "Child Article Title");
 
 		KBArticle.deletePG();
 	}
@@ -322,13 +283,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
@@ -344,36 +303,28 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Parent Content 1",
-			kbArticleTitle = "Knowledge Base Article Parent Title 1"
-		);
+			kbArticleTitle = "Knowledge Base Article Parent Title 1");
 
 		KBArticle.addChildArticleViaKBAdmin(
 			kbArticleTitle = "Knowledge Base Article Parent Title 1",
 			kbChildArticleContent = "Knowledge Base Article Parent Title 1 Child Content 1",
-			kbChildArticleTitle = "Knowledge Base Article Parent Title 1 Child 1"
-		);
+			kbChildArticleTitle = "Knowledge Base Article Parent Title 1 Child 1");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
-		KBArticle.viewParentArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title"
-		);
+		KBArticle.viewParentArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title");
 
-		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title 1"
-		);
+		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title 1");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.editPGViaKBDisplay(
 			kbArticleContentEdit = "Knowledge Base Article Parent Content Edited 1",
-			kbArticleTitleEdit = "Knowledge Base Article Parent Title Edited 1"
-		);
+			kbArticleTitleEdit = "Knowledge Base Article Parent Title Edited 1");
 
 		Pause(locator1 = "5000");
 
@@ -381,25 +332,19 @@ definition {
 
 		KBArticle.gotoKBChildArticleViaKBDisplayHierarchyNavigationPG(
 			kbArticleTitle = "Knowledge Base Article Parent Title Edited 1",
-			kbChildArticleTitle = "Knowledge Base Article Parent Title 1 Child 1"
-		);
+			kbChildArticleTitle = "Knowledge Base Article Parent Title 1 Child 1");
 
 		KBArticle.editPGViaKBDisplay(
 			kbArticleContentEdit = "Knowledge Base Child Article Content Edited 1",
-			kbArticleTitleEdit = "Knowledge Base Article Parent Title Edited 1 Child 1"
-		);
+			kbArticleTitleEdit = "Knowledge Base Article Parent Title Edited 1 Child 1");
 
 		Pause(locator1 = "5000");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
-		KBArticle.viewParentArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title Edited"
-		);
+		KBArticle.viewParentArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title Edited");
 
-		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title Edited 1"
-		);
+		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title Edited 1");
 	}
 
 	@priority = "4"
@@ -409,28 +354,24 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.editPGViaKBDisplay(
 			kbArticleContentEdit = "Knowledge Base Article Content Edit",
 			kbArticleTitle = "Knowledge Base Article Title",
-			kbArticleTitleEdit = "Knowledge Base Article Title Edit"
-		);
+			kbArticleTitleEdit = "Knowledge Base Article Title Edit");
 
 		Pause(locator1 = "5000");
 
@@ -438,8 +379,7 @@ definition {
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content Edit",
-			kbArticleTitle = "Knowledge Base Article Title Edit"
-		);
+			kbArticleTitle = "Knowledge Base Article Title Edit");
 	}
 
 	@priority = "4"
@@ -449,13 +389,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
@@ -464,16 +402,14 @@ definition {
 		KBArticle.configureKBDisplaySettingsPG(
 			history = "false",
 			print = "false",
-			subscribe = "false"
-		);
+			subscribe = "false");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewKBDisplayPG(
 			history = "false",
 			print = "false",
-			subscribe = "false"
-		);
+			subscribe = "false");
 	}
 
 	@priority = "4"
@@ -483,21 +419,18 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.rateArticlePG(
 			articleVoteCount = "1",
 			kbArticleTitle = "Knowledge Base Article Title",
-			rateUp = "true"
-		);
+			rateUp = "true");
 	}
 
 	@priority = "4"
@@ -507,48 +440,34 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Parent Content 1",
-			kbArticleTitle = "Knowledge Base Article Parent Title 1"
-		);
+			kbArticleTitle = "Knowledge Base Article Parent Title 1");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Parent Content 1 Child 1",
-			kbArticleTitle = "Knowledge Base Article Parent Title 1 Child 1"
-		);
+			kbArticleTitle = "Knowledge Base Article Parent Title 1 Child 1");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
-		KBArticle.gotoKBArticleViaKBDisplayHierarchyNavigationPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title 1 Child 1"
-		);
+		KBArticle.gotoKBArticleViaKBDisplayHierarchyNavigationPG(kbArticleTitle = "Knowledge Base Article Parent Title 1 Child 1");
 
-		KBArticle.moveArticleViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title 1 Child 1"
-		);
+		KBArticle.moveArticleViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title 1 Child 1");
 
-		KBArticle.selectParentViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title 1"
-		);
+		KBArticle.selectParentViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title 1");
 
-		KBArticle.viewParentArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title"
-		);
+		KBArticle.viewParentArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title");
 
-		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title 1"
-		);
+		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title 1");
 	}
 
 	@priority = "4"
@@ -558,27 +477,23 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "KB Article Content",
-			kbArticleTitle = "KB Article Title"
-		);
+			kbArticleTitle = "KB Article Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.editCP(
 			kbArticleContentEdit = "KB Article Content Edit",
 			kbArticleTitle = "KB Article Title",
-			kbArticleTitleEdit = "KB Article Title Edit"
-		);
+			kbArticleTitleEdit = "KB Article Title Edit");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
@@ -587,8 +502,7 @@ definition {
 			kbArticleContentAddedDiff = "Edit",
 			kbArticleVersionNew = "2",
 			kbArticleVersionOld = "1",
-			viewNoXMLInTitle = "true"
-		);
+			viewNoXMLInTitle = "true");
 	}
 
 	@priority = "4"
@@ -598,55 +512,46 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article1 Content",
-			kbArticleTitle = "Knowledge Base Article1 Title"
-		);
+			kbArticleTitle = "Knowledge Base Article1 Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticleSuggestion.addPG(
 			kbArticleTitle = "Knowledge Base Article1 Title",
-			kbSuggestionBody = "Knowledge Base Article1 Suggestion"
-		);
+			kbSuggestionBody = "Knowledge Base Article1 Suggestion");
 
 		KBArticle.gotoSuggestionsNavigationPG();
 
 		KBArticleSuggestion.gotoSuggestionStatusNew(
 			kbSuggestionBody = "Knowledge Base Article1 Suggestion",
-			suggestionCount = "1"
-		);
+			suggestionCount = "1");
 
 		KBArticleSuggestion.viewPG(
 			kbSuggestionBody = "Knowledge Base Article1 Suggestion",
 			kbSuggestionUserName = "Test Test",
-			status = "New"
-		);
+			status = "New");
 
 		KBArticleSuggestion.moveToInProgressStatus(
 			kbArticleTitle = "Knowledge Base Article1 Title",
-			kbSuggestionBody = "Knowledge Base Article1 Suggestion"
-		);
+			kbSuggestionBody = "Knowledge Base Article1 Suggestion");
 
 		KBArticleSuggestion.viewPG(
 			kbSuggestionBody = "Knowledge Base Article1 Suggestion",
 			kbSuggestionUserName = "Test Test",
-			status = "In Progress"
-		);
+			status = "In Progress");
 
 		KBArticleSuggestion.moveToResolvedStatus(
 			kbArticleTitle = "Knowledge Base Article1 Title",
-			kbSuggestionBody = "Knowledge Base Article1 Suggestion"
-		);
+			kbSuggestionBody = "Knowledge Base Article1 Suggestion");
 
 		KBArticleSuggestion.viewPG(
 			kbSuggestionBody = "Knowledge Base Article1 Suggestion",
 			kbSuggestionUserName = "Test Test",
-			status = "Resolved"
-		);
+			status = "Resolved");
 	}
 
 	@priority = "4"
@@ -656,18 +561,15 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article2 Content",
-			kbArticleTitle = "Knowledge Base Article2 Title"
-		);
+			kbArticleTitle = "Knowledge Base Article2 Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
@@ -679,8 +581,7 @@ definition {
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article2 Content",
-			kbArticleTitle = "Knowledge Base Article2 Title"
-		);
+			kbArticleTitle = "Knowledge Base Article2 Title");
 	}
 
 	@priority = "3"
@@ -690,60 +591,63 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		for (var kbCount : list "1,2,3") {
 			KBArticle.addCP(
 				kbArticleContent = "Knowledge Base Article Content ${kbCount}",
-				kbArticleTitle = "Knowledge Base Article Title ${kbCount}"
-			);
+				kbArticleTitle = "Knowledge Base Article Title ${kbCount}");
 		}
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content 1",
-			kbArticleTitle = "Knowledge Base Article Title 1"
-		);
+			kbArticleTitle = "Knowledge Base Article Title 1");
 
-		KBArticle.viewNavigationLinksPG(next = "true", previous = "false");
+		KBArticle.viewNavigationLinksPG(
+			next = "true",
+			previous = "false");
 
 		Click(locator1 = "KnowledgeBaseArticle#NEXT");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content 2",
-			kbArticleTitle = "Knowledge Base Article Title 2"
-		);
+			kbArticleTitle = "Knowledge Base Article Title 2");
 
-		KBArticle.viewNavigationLinksPG(next = "true", previous = "true");
+		KBArticle.viewNavigationLinksPG(
+			next = "true",
+			previous = "true");
 
 		Click(locator1 = "KnowledgeBaseArticle#NEXT");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content 3",
-			kbArticleTitle = "Knowledge Base Article Title 3"
-		);
+			kbArticleTitle = "Knowledge Base Article Title 3");
 
-		KBArticle.viewNavigationLinksPG(next = "false", previous = "true");
+		KBArticle.viewNavigationLinksPG(
+			next = "false",
+			previous = "true");
 
 		Click(locator1 = "KnowledgeBaseArticle#PREVIOUS");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content 2",
-			kbArticleTitle = "Knowledge Base Article Title 2"
-		);
+			kbArticleTitle = "Knowledge Base Article Title 2");
 
-		KBArticle.viewNavigationLinksPG(next = "true", previous = "true");
+		KBArticle.viewNavigationLinksPG(
+			next = "true",
+			previous = "true");
 
 		Click(locator1 = "KnowledgeBaseArticle#PREVIOUS");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content 1",
-			kbArticleTitle = "Knowledge Base Article Title 1"
-		);
+			kbArticleTitle = "Knowledge Base Article Title 1");
 
-		KBArticle.viewNavigationLinksPG(next = "true", previous = "false");
+		KBArticle.viewNavigationLinksPG(
+			next = "true",
+			previous = "false");
 	}
 
 	@priority = "4"
@@ -753,19 +657,16 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article2 Content",
 			kbArticleFriendlyURL = "Friendly Universal Resource Locator",
-			kbArticleTitle = "Knowledge Base Article2 Title"
-		);
+			kbArticleTitle = "Knowledge Base Article2 Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
@@ -777,8 +678,7 @@ definition {
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article2 Content",
-			kbArticleTitle = "Knowledge Base Article2 Title"
-		);
+			kbArticleTitle = "Knowledge Base Article2 Title");
 	}
 
 	@priority = "3"
@@ -788,44 +688,38 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
 			kbArticleRelatedAssetTitle = "Blogs Entry Title",
 			kbArticleRelatedAssetType = "Blogs Entry",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content",
 			kbArticleRelatedAssetTitle = "Blogs Entry Title",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		var kbArticleRelatedAssetTitle = "Blogs Entry Title";
 		var key_kbArticleRelatedAssetTitle = "${kbArticleRelatedAssetTitle}";
 
 		AssertClick.assertTextClickAt(
 			locator1 = "AssetRelatedAssets#KB_RELATED_ASSETS_LINKS",
-			value1 = "${kbArticleRelatedAssetTitle}"
-		);
+			value1 = "${kbArticleRelatedAssetTitle}");
 
 		KBArticle.viewBlogsEntryRelatedAsset();
 	}
@@ -839,36 +733,34 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Navigator.gotoNavTab(navTab = "Social");
 
-		Select(locator1 = "Select#KNOWLEDGE_BASE_RATING", value1 = "Stars");
+		Select(
+			locator1 = "Select#KNOWLEDGE_BASE_RATING",
+			value1 = "Stars");
 
-		AssertClickNoError(locator1 = "Button#SAVE", value1 = "Save");
+		AssertClickNoError(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
-		Confirm(
-			value1 = "Existing ratings data values will be adapted to match the new ratings type even though it may not be accurate. Do you want to continue?"
-		);
+		Confirm(value1 = "Existing ratings data values will be adapted to match the new ratings type even though it may not be accurate. Do you want to continue?");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
@@ -876,9 +768,7 @@ definition {
 
 		KBArticle.viewArticle1StarRatingPG();
 
-		KBArticle.rateArticleFrom1StarTo5Star(
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+		KBArticle.rateArticleFrom1StarTo5Star(kbArticleTitle = "Knowledge Base Article Title");
 
 		KBArticle.viewArticle5StarRatingPG();
 	}
@@ -890,78 +780,59 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		for (var articleCount : list "1,2,3") {
 			KBArticle.addCP(
 				kbArticleContent = "Knowledge Base Article Parent Content ${articleCount}",
-				kbArticleTitle = "Knowledge Base Article Parent Title ${articleCount}"
-			);
+				kbArticleTitle = "Knowledge Base Article Parent Title ${articleCount}");
 		}
 
 		for (var articleCount : list "1,2,3") {
 			KBArticle.addChildArticleViaKBAdmin(
 				kbArticleTitle = "Knowledge Base Article Parent Title 1",
 				kbChildArticleContent = "Knowledge Base Article Parent Content 1 Child ${articleCount}",
-				kbChildArticleTitle = "Knowledge Base Article Parent Title 1 Child ${articleCount}"
-			);
+				kbChildArticleTitle = "Knowledge Base Article Parent Title 1 Child ${articleCount}");
 		}
 
 		KBArticle.addChildArticleViaKBAdmin(
 			kbArticleTitle = "Knowledge Base Article Parent Title 2",
 			kbChildArticleContent = "Knowledge Base Article Parent Content 2 Child 1",
-			kbChildArticleTitle = "Knowledge Base Article Parent Title 2 Child 1"
-		);
+			kbChildArticleTitle = "Knowledge Base Article Parent Title 2 Child 1");
 
 		KBArticle.addChildArticleViaKBAdmin(
 			kbArticleTitle = "Knowledge Base Article Parent Title 2",
 			kbChildArticleContent = "Knowledge Base Article Parent Content 2 Child 2",
-			kbChildArticleTitle = "Knowledge Base Article Parent Title 2 Child 2"
-		);
+			kbChildArticleTitle = "Knowledge Base Article Parent Title 2 Child 2");
 
 		KBArticle.addChildArticleViaKBAdmin(
 			kbArticleTitle = "Knowledge Base Article Parent Title 3",
 			kbChildArticleContent = "Knowledge Base Article Parent Content 3 Child 1",
-			kbChildArticleTitle = "Knowledge Base Article Parent Title 3 Child 1"
-		);
+			kbChildArticleTitle = "Knowledge Base Article Parent Title 3 Child 1");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
-		KBArticle.gotoKBArticleViaKBDisplayHierarchyNavigationPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title 1"
-		);
+		KBArticle.gotoKBArticleViaKBDisplayHierarchyNavigationPG(kbArticleTitle = "Knowledge Base Article Parent Title 1");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Parent Content 1",
-			kbArticleTitle = "Knowledge Base Article Parent Title 1"
-		);
+			kbArticleTitle = "Knowledge Base Article Parent Title 1");
 
-		KBArticle.viewParentArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title"
-		);
+		KBArticle.viewParentArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title");
 
-		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title 1"
-		);
+		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title 1");
 
-		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title 2"
-		);
+		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title 2");
 
-		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title 3"
-		);
+		KBArticle.viewChildArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title 3");
 
 		KBArticle.gotoKBChildArticleViaKBDisplayHierarchyNavigationPG(
 			kbArticleTitle = "Knowledge Base Article Parent Title 2",
-			kbChildArticleTitle = "Knowledge Base Article Parent Title 2 Child 2"
-		);
+			kbChildArticleTitle = "Knowledge Base Article Parent Title 2 Child 2");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Parent Content 2 Child 2",
-			kbArticleTitle = "Knowledge Base Article Parent Title 2 Child 2"
-		);
+			kbArticleTitle = "Knowledge Base Article Parent Title 2 Child 2");
 	}
 
 	@priority = "4"
@@ -975,20 +846,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 	}
 
 	@priority = "4"
@@ -1000,42 +868,39 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		KBArticle.rateArticlePG(
 			articleVoteCount = "1",
 			kbArticleTitle = "Knowledge Base Article Title",
-			rateUp = "true"
-		);
+			rateUp = "true");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Navigator.gotoNavTab(navTab = "Social");
 
-		Select(locator1 = "Select#KNOWLEDGE_BASE_RATING", value1 = "Stars");
+		Select(
+			locator1 = "Select#KNOWLEDGE_BASE_RATING",
+			value1 = "Stars");
 
-		AssertClickNoError(locator1 = "Button#SAVE", value1 = "Save");
+		AssertClickNoError(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
-		Confirm(
-			value1 = "Existing ratings data values will be adapted to match the new ratings type even though it may not be accurate. Do you want to continue?"
-		);
+		Confirm(value1 = "Existing ratings data values will be adapted to match the new ratings type even though it may not be accurate. Do you want to continue?");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
@@ -1044,25 +909,25 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Instance Settings"
-		);
+			portlet = "Instance Settings");
 
 		Navigator.gotoNavTab(navTab = "Social");
 
-		Select(locator1 = "Select#KNOWLEDGE_BASE_RATING", value1 = "Thumbs");
+		Select(
+			locator1 = "Select#KNOWLEDGE_BASE_RATING",
+			value1 = "Thumbs");
 
-		AssertClickNoError(locator1 = "Button#SAVE", value1 = "Save");
+		AssertClickNoError(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
-		Confirm(
-			value1 = "Existing ratings data values will be adapted to match the new ratings type even though it may not be accurate. Do you want to continue?"
-		);
+		Confirm(value1 = "Existing ratings data values will be adapted to match the new ratings type even though it may not be accurate. Do you want to continue?");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticle.rateArticlePG(
 			articleVoteCount = "1",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 	}
 
 	@priority = "3"
@@ -1072,28 +937,24 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
 			kbArticleFriendlyURL = "Title",
 			kbArticleTitle = '''><img onerror="alert('xss')" src="xx" /><''',
-			specialCharacters = "true"
-		);
+			specialCharacters = "true");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
@@ -1101,8 +962,7 @@ definition {
 
 		KBArticle.viewViaKBDisplayPG(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = '''><img onerror="alert('xss')" src="xx" /><'''
-		);
+			kbArticleTitle = '''><img onerror="alert('xss')" src="xx" /><''');
 	}
 
 	@priority = "4"
@@ -1112,30 +972,24 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Parent Content 1",
-			kbArticleTitle = "Knowledge Base Article Parent Title 1"
-		);
+			kbArticleTitle = "Knowledge Base Article Parent Title 1");
 
 		KBArticle.addChildArticleViaKBAdmin(
 			kbArticleTitle = "Knowledge Base Article Parent Title 1",
 			kbChildArticleContent = "This is a child article. Lengthy articles are no longer summarized on the KB Display portlet, and the Read More link has been deprecated. To access a child article, one must click on the parent article and then click on the child page link found either: under the article navigation, or under the parent article entry.",
-			kbChildArticleTitle = "Knowledge Base Article Parent Title 1 Child 1"
-		);
+			kbChildArticleTitle = "Knowledge Base Article Parent Title 1 Child 1");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
-		KBArticle.viewParentArticleHierarchyViaKBDisplayPG(
-			kbArticleTitle = "Knowledge Base Article Parent Title"
-		);
+		KBArticle.viewParentArticleHierarchyViaKBDisplayPG(kbArticleTitle = "Knowledge Base Article Parent Title");
 
 		KBArticle.viewViaNextLinkPG(
 			kbArticleContent = "This is a child article. Lengthy articles are no longer summarized on the KB Display portlet, and the Read More link has been deprecated. To access a child article, one must click on the parent article and then click on the child page link found either: under the article navigation, or under the parent article entry.",
-			kbArticleTitle = "Knowledge Base Article Parent Title 1 Child 1"
-		);
+			kbArticleTitle = "Knowledge Base Article Parent Title 1 Child 1");
 	}
 
 	@priority = "3"
@@ -1145,34 +999,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Knowledge Base"
-		);
+			portlet = "Knowledge Base");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
 		KBArticleSuggestion.addPG(
 			kbArticleTitle = "Knowledge Base Article Title",
-			kbSuggestionBody = "Knowledge Base Article Suggestion"
-		);
+			kbSuggestionBody = "Knowledge Base Article Suggestion");
 
 		Refresh();
 
 		KBArticleSuggestion.viewPG(
 			kbSuggestionBody = "Knowledge Base Article Suggestion",
 			kbSuggestionUserName = "Test Test",
-			status = "New"
-		);
+			status = "New");
 
 		KBArticleSuggestion.viewNoDuplicatePG(
 			kbSuggestionBody = "Knowledge Base Article Suggestion",
 			kbSuggestionUserName = "Test Test",
 			kbThereAreSuggestionsLink = "There is one suggestion. (1 Pending)",
-			status = "New"
-		);
+			status = "New");
 	}
+
 }

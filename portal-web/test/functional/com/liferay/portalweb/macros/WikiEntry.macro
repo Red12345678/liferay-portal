@@ -1,33 +1,35 @@
 definition {
+
 	macro addMediaWikiDescription {
-		Type(locator1 = "TextArea#WEB_EDITOR", value1 = "${wikiPageContent}");
+		Type(
+			locator1 = "TextArea#WEB_EDITOR",
+			value1 = "${wikiPageContent}");
 	}
 
 	macro addPageTitle {
 		Type.typeEditor(
 			locator1 = "AlloyEditor#TITLE_FIELD",
-			value1 = "${wikiPageTitle}"
-		);
+			value1 = "${wikiPageTitle}");
 	}
 
 	macro cancel {
-		AssertClick(locator1 = "Button#CANCEL", value1 = "Cancel");
+		AssertClick(
+			locator1 = "Button#CANCEL",
+			value1 = "Cancel");
 	}
 
 	macro confirmHTML {
-		Confirm(
-			value1 = "You may lose some formatting when switching from Creole to HTML. Do you want to continue?"
-		);
+		Confirm(value1 = "You may lose some formatting when switching from Creole to HTML. Do you want to continue?");
 	}
 
 	macro confirmMediaWiki {
-		Confirm(
-			value1 = "You may lose some formatting when switching from Creole to MediaWiki. Do you want to continue?"
-		);
+		Confirm(value1 = "You may lose some formatting when switching from Creole to MediaWiki. Do you want to continue?");
 	}
 
 	macro saveAsDraft {
-		AssertClick(locator1 = "Button#SAVE", value1 = "Save as Draft");
+		AssertClick(
+			locator1 = "Button#SAVE",
+			value1 = "Save as Draft");
 
 		Alert.viewSuccessMessage();
 	}
@@ -38,19 +40,19 @@ definition {
 
 			SelectNoError(
 				locator1 = "Wiki#ADD_PAGE_FORMAT_DROPDOWN",
-				value1 = "${pageFormat}"
-			);
+				value1 = "${pageFormat}");
 		}
 		else if (IsVisible(locator1 = "Wiki#ADD_PAGE_FORMAT_DROPDOWN")) {
 			SelectNoError(
 				locator1 = "Wiki#ADD_PAGE_FORMAT_DROPDOWN",
-				value1 = "${pageFormat}"
-			);
+				value1 = "${pageFormat}");
 		}
 	}
 
 	macro viewPageContentBody {
-		AssertTextEquals(locator1 = "WikiEntry#BODY", value1 = "${wikiPageContent}");
+		AssertTextEquals(
+			locator1 = "WikiEntry#BODY",
+			value1 = "${wikiPageContent}");
 	}
 
 	macro viewPageFormat {
@@ -60,7 +62,7 @@ definition {
 
 		AssertSelectedLabel(
 			locator1 = "Wiki#ADD_PAGE_FORMAT_DROPDOWN",
-			value1 = "${pageFormat}"
-		);
+			value1 = "${pageFormat}");
 	}
+
 }

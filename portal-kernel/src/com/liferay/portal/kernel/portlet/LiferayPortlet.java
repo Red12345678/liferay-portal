@@ -14,6 +14,7 @@
 
 package com.liferay.portal.kernel.portlet;
 
+import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -104,13 +105,11 @@ public class LiferayPortlet extends GenericPortlet {
 			if (!SessionMessages.contains(
 					actionRequest,
 					portletId.concat(
-						SessionMessages.KEY_SUFFIX_FORCE_SEND_REDIRECT))) {
+						SessionMessages.KEY_SUFFIX_FORCE_SEND_REDIRECT)) &&
+				(isEmptySessionMessages(actionRequest) ||
+				 isAlwaysSendRedirect())) {
 
-				if (isEmptySessionMessages(actionRequest) ||
-					isAlwaysSendRedirect()) {
-
-					sendRedirect(actionRequest, actionResponse);
-				}
+				sendRedirect(actionRequest, actionResponse);
 			}
 
 			if (isAddSuccessMessage(actionRequest)) {
@@ -203,9 +202,8 @@ public class LiferayPortlet extends GenericPortlet {
 			if (cause != null) {
 				throw new PortletException(cause);
 			}
-			else {
-				throw new PortletException(ite);
-			}
+
+			throw new PortletException(ite);
 		}
 		catch (Exception e) {
 			throw new PortletException(e);
@@ -249,9 +247,8 @@ public class LiferayPortlet extends GenericPortlet {
 			if (cause != null) {
 				throw new PortletException(cause);
 			}
-			else {
-				throw new PortletException(ite);
-			}
+
+			throw new PortletException(ite);
 		}
 		catch (Exception e) {
 			throw new PortletException(e);
@@ -643,7 +640,7 @@ public class LiferayPortlet extends GenericPortlet {
 
 		response.setContentType(getJSONContentType(portletRequest));
 
-		ServletResponseUtil.write(response, jsonObj.toString());
+		ServletResponseUtil.write(response, _toXSSSafeJSON(jsonObj.toString()));
 
 		response.flushBuffer();
 	}
@@ -655,7 +652,8 @@ public class LiferayPortlet extends GenericPortlet {
 
 		mimeResponse.setContentType(getJSONContentType(portletRequest));
 
-		PortletResponseUtil.write(mimeResponse, jsonObj.toString());
+		PortletResponseUtil.write(
+			mimeResponse, _toXSSSafeJSON(jsonObj.toString()));
 
 		mimeResponse.flushBuffer();
 	}
@@ -663,6 +661,10 @@ public class LiferayPortlet extends GenericPortlet {
 	protected boolean addProcessActionSuccessMessage;
 	protected boolean alwaysSendRedirect;
 	protected Set<String> validPaths;
+
+	private String _toXSSSafeJSON(String json) {
+		return StringUtil.replace(json, CharPool.LESS_THAN, "\\u003c");
+	}
 
 	private static final String[] _IGNORED_SESSION_MESSAGE_SUFFIXES = {
 		SessionMessages.KEY_SUFFIX_DELETE_SUCCESS_DATA,

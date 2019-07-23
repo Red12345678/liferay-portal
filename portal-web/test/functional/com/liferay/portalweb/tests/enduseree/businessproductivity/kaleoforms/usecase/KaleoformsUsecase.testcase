@@ -1,5 +1,6 @@
 @component-name = "portal-business-productivity-ee"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property test.run.environment = "EE";
@@ -36,9 +37,7 @@ definition {
 
 			Page.tearDownPG();
 
-			Workflow.tearDownSpecificWorkflowDefinition(
-				workflowDefinitionTitle = "Edited Workflow Definition"
-			);
+			Workflow.tearDownSpecificWorkflowDefinition(workflowDefinitionTitle = "Edited Workflow Definition");
 
 			Workflow.tearDownWorkflowDefinitionsViaWorkflowCP();
 
@@ -55,49 +54,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -105,8 +97,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -115,8 +106,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -127,15 +117,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test"
-		);
+			kfProcessFieldData = "Test");
 
 		PortletEntry.save();
 
@@ -145,8 +133,7 @@ definition {
 
 		Workflow.viewTaskAssignedToMyRolesDetails(
 			workflowAssetTitle = "Kaleo Forms Process",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 	}
 
 	@priority = "3"
@@ -156,49 +143,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Review Task Form");
 
@@ -208,15 +188,13 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Review Task Form");
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.viewFormsNotPresent();
 
@@ -226,8 +204,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -236,8 +213,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -248,15 +224,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Kaleo Text Field"
-		);
+			kfProcessFieldData = "Kaleo Text Field");
 
 		AssertElementNotPresent(locator1 = "DDLEditRecord#SEPARATOR_FIELD");
 
@@ -267,14 +241,12 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 	}
 
 	@description = "This is a use case for LPS-26982."
@@ -283,55 +255,47 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text1",
-			fieldName = "Text1"
-		);
+			fieldName = "Text1");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text2",
-			fieldName = "Text2"
-		);
+			fieldName = "Text2");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -339,15 +303,13 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Review Task Form");
 
@@ -357,8 +319,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Review Task Form");
 
@@ -368,13 +329,11 @@ definition {
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text1",
-			kfProcessFieldData = "Test for Review"
-		);
+			kfProcessFieldData = "Test for Review");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text2",
-			kfProcessFieldData = "Test Hidden from Review"
-		);
+			kfProcessFieldData = "Test Hidden from Review");
 
 		PortletEntry.save();
 
@@ -383,21 +342,18 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.viewTaskAssignedToMeDetails(
 			workflowAssetContent = "Text1",
 			workflowAssetTitle = "Kaleo Forms Process",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.gotoPreviewEdit();
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text1",
-			kfProcessFieldData = "Test 1 EDIT"
-		);
+			kfProcessFieldData = "Test 1 EDIT");
 
 		var key_fieldName = "${Text2}";
 
@@ -410,28 +366,24 @@ definition {
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcessRecord(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test 1 EDIT",
-			kfStatus = "Approved"
-		);
+			kfStatus = "Approved");
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test Hidden from Review",
-			kfStatus = "Approved"
-		);
+			kfStatus = "Approved");
 	}
 
 	@priority = "4"
@@ -441,49 +393,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process 1 Description",
-			kfProcessName = "Kaleo Forms 1 Process"
-		);
+			kfProcessName = "Kaleo Forms 1 Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms 1 Process"
-		);
+			kfProcessName = "Kaleo Forms 1 Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms 1 Process"
-		);
+			kfProcessName = "Kaleo Forms 1 Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms 1 Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms 1 Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -491,8 +436,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms 1 Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -501,8 +445,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms 1 Process");
 
@@ -510,29 +453,25 @@ definition {
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process 2 Description",
-			kfProcessName = "Kaleo Forms 2 Process"
-		);
+			kfProcessName = "Kaleo Forms 2 Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms 2 Process"
-		);
+			kfProcessName = "Kaleo Forms 2 Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms 2 Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms 2 Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		DynamicDataMapping.selectDynamicDataMappingFrame();
 
@@ -543,8 +482,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms 2 Process");
 
@@ -555,30 +493,26 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms 1 Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test 1"
-		);
+			kfProcessFieldData = "Test 1");
 
 		PortletEntry.save();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms 2 Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test 2"
-		);
+			kfProcessFieldData = "Test 2");
 
 		PortletEntry.save();
 
@@ -587,8 +521,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.deleteProcess(kfProcessName = "Kaleo Forms 1 Process");
 
@@ -599,8 +532,7 @@ definition {
 		Workflow.viewPendingTasks(
 			workflowAssetTitle = "Kaleo Forms 2 Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 	}
 
 	@priority = "4"
@@ -608,150 +540,130 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addCP(roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_GENERAL_PERMISSIONS_ACTION_CHECKBOX",
 			permissionDefinitionValue = "Action",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "KaleoRegRole Name"
-		);
+			roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_RESOURCE_PERMISSIONS_KALEO_FORMS_PROCESS_ACTION_CHECKBOX",
 			permissionDefinitionValue = "Action",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "KaleoRegRole Name"
-		);
+			roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_RESOURCE_PERMISSIONS_KALEO_FORMS_ACTION_CHECKBOX",
 			permissionDefinitionValue = "Action",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "KaleoRegRole Name"
-		);
+			roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_RESOURCE_PERMISSIONS_KALEO_FORMS_FIELD_SETS_ACTION_CHECKBOX",
 			permissionDefinitionValue = "Action",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "KaleoRegRole Name"
-		);
+			roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.assignRegRoleCP(roleName = "KaleoRegRole Name", userScreenName = "usersn");
+		Role.assignRegRoleCP(
+			roleName = "KaleoRegRole Name",
+			userScreenName = "usersn");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Predefined Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -759,8 +671,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -769,15 +680,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 	}
 
 	@priority = "5"
@@ -787,114 +696,97 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_GENERAL_PERMISSIONS_VIEW",
 			permissionDefinitionValue = "View",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "Portal Content Reviewer"
-		);
+			roleName = "Portal Content Reviewer");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_RESOURCE_PERMISSIONS_KALEO_FORMS_PROCESS_UPDATE",
 			permissionDefinitionValue = "Update",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "Portal Content Reviewer"
-		);
+			roleName = "Portal Content Reviewer");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.assignRegRoleCP(
 			roleName = "Portal Content Reviewer",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Predefined Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -902,8 +794,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -912,8 +803,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -924,15 +814,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Submitted"
-		);
+			kfProcessFieldData = "Test Submitted");
 
 		PortletEntry.save();
 
@@ -941,27 +829,23 @@ definition {
 		Workflow.viewTaskAssignedToMyRoles(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -970,13 +854,11 @@ definition {
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 	}
 
 	@priority = "4"
@@ -984,114 +866,97 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_GENERAL_PERMISSIONS_VIEW",
 			permissionDefinitionValue = "View",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "Portal Content Reviewer"
-		);
+			roleName = "Portal Content Reviewer");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_RESOURCE_PERMISSIONS_KALEO_FORMS_PROCESS_COMPLETE_FORM",
 			permissionDefinitionValue = "Complete Form",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "Portal Content Reviewer"
-		);
+			roleName = "Portal Content Reviewer");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.assignRegRoleCP(
 			roleName = "Portal Content Reviewer",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Predefined Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -1099,8 +964,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -1109,8 +973,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -1121,15 +984,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Submitted"
-		);
+			kfProcessFieldData = "Test Submitted");
 
 		PortletEntry.save();
 
@@ -1140,45 +1001,37 @@ definition {
 		Workflow.viewPendingTasks(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.assignByDetails(user = "userfn userln");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
 		WorkflowAsset.previewViewContent(
 			fieldLabel = "Text",
-			fieldValue = "Test Submitted"
-		);
+			fieldValue = "Test Submitted");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 	}
 
 	@priority = "5"
@@ -1188,114 +1041,97 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_GENERAL_PERMISSIONS_VIEW",
 			permissionDefinitionValue = "View",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "Portal Content Reviewer"
-		);
+			roleName = "Portal Content Reviewer");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_RESOURCE_PERMISSIONS_KALEO_FORMS_PROCESS_UPDATE",
 			permissionDefinitionValue = "Update",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "Portal Content Reviewer"
-		);
+			roleName = "Portal Content Reviewer");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.assignRegRoleCP(
 			roleName = "Portal Content Reviewer",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Predefined Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -1303,8 +1139,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -1313,8 +1148,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -1325,15 +1159,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Submitted"
-		);
+			kfProcessFieldData = "Test Submitted");
 
 		PortletEntry.save();
 
@@ -1342,27 +1174,23 @@ definition {
 		Workflow.viewTaskAssignedToMyRoles(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.rejectTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -1371,13 +1199,11 @@ definition {
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 	}
 
 	@priority = "4"
@@ -1389,162 +1215,142 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addCP(roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_GENERAL_PERMISSIONS_ACCESS_IN_SITE_ADMINISTRATION",
 			permissionDefinitionValue = "Access in Site Administration",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "KaleoRegRole Name"
-		);
+			roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_RESOURCE_PERMISSIONS_KALEO_FORMS_PROCESS_SUBMIT",
 			permissionDefinitionValue = "Submit",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "KaleoRegRole Name"
-		);
+			roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_RESOURCE_PERMISSIONS_KALEO_FORMS_PROCESS_VIEW",
 			permissionDefinitionValue = "View",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "KaleoRegRole Name"
-		);
+			roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		User.editUserSiteCP(siteName = "${siteName}", userScreenName = "usersn");
+		User.editUserSiteCP(
+			siteName = "${siteName}",
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.assignSiteRoleCP(
 			siteRoleName = "Site Content Reviewer",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.assignRegRoleCP(roleName = "KaleoRegRole Name", userScreenName = "usersn");
+		Role.assignRegRoleCP(
+			roleName = "KaleoRegRole Name",
+			userScreenName = "usersn");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Predefined Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -1552,8 +1358,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -1562,15 +1367,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -1579,15 +1382,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Submitted"
-		);
+			kfProcessFieldData = "Test Submitted");
 
 		PortletEntry.save();
 
@@ -1598,13 +1399,11 @@ definition {
 		Workflow.viewPendingTasks(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 	}
 
 	@priority = "3"
@@ -1612,71 +1411,62 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addCP(roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN_GENERAL_PERMISSIONS_VIEW",
 			permissionDefinitionValue = "View",
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_KALEO_FORMS_ADMIN",
 			permissionNavigationValue = "Kaleo Forms Admin",
-			roleName = "KaleoRegRole Name"
-		);
+			roleName = "KaleoRegRole Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.assignRegRoleCP(roleName = "KaleoRegRole Name", userScreenName = "usersn");
+		Role.assignRegRoleCP(
+			roleName = "KaleoRegRole Name",
+			userScreenName = "usersn");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -1684,8 +1474,7 @@ definition {
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 	}
 
 	@description = "This is a use case for LPS-52709."
@@ -1696,49 +1485,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -1746,8 +1528,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -1762,15 +1543,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test 1"
-		);
+			kfProcessFieldData = "Test 1");
 
 		PortletEntry.save();
 
@@ -1779,21 +1558,18 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.viewTaskAssignedToMeDetails(
 			workflowAssetContent = "Test 1",
 			workflowAssetTitle = "Kaleo Forms Process",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.gotoPreviewEdit();
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test 1 EDIT"
-		);
+			kfProcessFieldData = "Test 1 EDIT");
 
 		PortletEntry.save();
 
@@ -1802,21 +1578,18 @@ definition {
 		Workflow.viewTaskAssignedToMeDetails(
 			workflowAssetContent = "Test 1 EDIT",
 			workflowAssetTitle = "Kaleo Forms Process",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test 2"
-		);
+			kfProcessFieldData = "Test 2");
 
 		PortletEntry.save();
 
@@ -1825,21 +1598,18 @@ definition {
 		Workflow.assignToMeTaskByDetails(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.viewSecondAssetEntryContent(
 			fieldLabel = "Text",
 			fieldValue = "Test 2",
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+			workflowAssetTitle = "Kaleo Forms Process");
 
 		Workflow.gotoPreviewEdit();
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test 2 EDIT"
-		);
+			kfProcessFieldData = "Test 2 EDIT");
 
 		PortletEntry.save();
 
@@ -1848,23 +1618,20 @@ definition {
 		Workflow.viewSecondAssetEntryContent(
 			fieldLabel = "Text",
 			fieldValue = "Test 2 EDIT",
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+			workflowAssetTitle = "Kaleo Forms Process");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewTaskAssignedToMeDetails(
 			workflowAssetContent = "Test 1 EDIT",
 			workflowAssetTitle = "Kaleo Forms Process",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.gotoPreviewEdit();
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test 1 EDIT new edit"
-		);
+			kfProcessFieldData = "Test 1 EDIT new edit");
 
 		PortletEntry.save();
 
@@ -1873,23 +1640,20 @@ definition {
 		Workflow.viewTaskAssignedToMeDetails(
 			workflowAssetContent = "Test 1 EDIT new edit",
 			workflowAssetTitle = "Kaleo Forms Process",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewSecondAssetEntryContent(
 			fieldLabel = "Text",
 			fieldValue = "Test 2 EDIT",
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+			workflowAssetTitle = "Kaleo Forms Process");
 
 		Workflow.gotoPreviewEdit();
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test 2 EDIT new edit"
-		);
+			kfProcessFieldData = "Test 2 EDIT new edit");
 
 		PortletEntry.save();
 
@@ -1898,8 +1662,7 @@ definition {
 		Workflow.viewSecondAssetEntryContent(
 			fieldLabel = "Text",
 			fieldValue = "Test 2 EDIT new edit",
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+			workflowAssetTitle = "Kaleo Forms Process");
 	}
 
 	@priority = "3"
@@ -1909,61 +1672,52 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		DynamicDataMapping.addField(
 			field = "Text Box",
 			fieldFieldLabel = "Text Box",
-			fieldName = "TextBox"
-		);
+			fieldName = "TextBox");
 
 		DynamicDataMapping.addField(
 			field = "Select",
 			fieldFieldLabel = "Select",
-			fieldName = "Select"
-		);
+			fieldName = "Select");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -1971,15 +1725,13 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Review Task Form");
 
@@ -1989,8 +1741,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Review Task Form");
 
@@ -1999,8 +1750,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -2011,40 +1761,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Description"
-		);
+			kfProcessFieldData = "Test Description");
 
 		KaleoFormsAdmin.populateFieldTextBox(
 			fieldName = "TextBox",
-			kfProcessFieldData = "Test Box Description"
-		);
+			kfProcessFieldData = "Test Box Description");
 
 		KaleoFormsAdmin.populateFieldSelect(
 			fieldName = "Select",
-			kfProcessFieldData = "option 2"
-		);
+			kfProcessFieldData = "option 2");
 
 		AssertTextEquals(
 			locator1 = "//div[contains(@class,'field-wrapper')][1]//label",
-			value1 = "Text"
-		);
+			value1 = "Text");
 
 		AssertTextEquals(
 			locator1 = "//div[contains(@class,'field-wrapper')][2]//label",
-			value1 = "Text Box"
-		);
+			value1 = "Text Box");
 
 		AssertTextEquals(
 			locator1 = "//div[contains(@class,'field-wrapper')][3]//label",
-			value1 = "Select"
-		);
+			value1 = "Select");
 
 		PortletEntry.save();
 
@@ -2053,27 +1796,24 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewPendingTasks(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
 		WorkflowAsset.previewViewContent(
 			fieldLabel = "Text",
-			fieldValue = "Test Description"
-		);
+			fieldValue = "Test Description");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Select", fieldValue = "option 2");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Select",
+			fieldValue = "option 2");
 
 		WorkflowAsset.previewViewContentFieldNotPresent(fieldLabel = "Text Box");
 
@@ -2082,39 +1822,34 @@ definition {
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
 		WorkflowAsset.previewViewContent(
 			fieldLabel = "Text",
-			fieldValue = "Test Description"
-		);
+			fieldValue = "Test Description");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Select", fieldValue = "option 2");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Select",
+			fieldValue = "option 2");
 
 		WorkflowAsset.previewViewContentFieldNotPresent(fieldLabel = "Text Box");
 
 		AssertTextEquals(
 			locator1 = "//div[contains(@class,'field-wrapper')][1]//label",
-			value1 = "Text"
-		);
+			value1 = "Text");
 
 		AssertTextEquals(
 			locator1 = "//div[contains(@class,'field-wrapper')][2]//label",
-			value1 = "Select"
-		);
+			value1 = "Select");
 	}
 
 	@priority = "5"
@@ -2126,49 +1861,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -2176,8 +1904,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -2186,8 +1913,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -2198,59 +1924,50 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test"
-		);
+			kfProcessFieldData = "Test");
 
 		PortletEntry.save();
 
 		Page.gotoMyAccount(portletName = "Notifications");
 
-		WorkflowAsset.viewNotification(
-			contentBody = "Test Test sent you a Process for review in the workflow."
-		);
+		WorkflowAsset.viewNotification(contentBody = "Test Test sent you a Process for review in the workflow.");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "Notifications");
 
-		WorkflowAsset.viewNotification(
-			contentBody = "Test Test sent you a Process for review in the workflow."
-		);
+		WorkflowAsset.viewNotification(contentBody = "Test Test sent you a Process for review in the workflow.");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Text", fieldValue = "Test");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Text",
+			fieldValue = "Test");
 	}
 
 	@priority = "4"
@@ -2260,49 +1977,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -2310,8 +2020,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -2320,128 +2029,112 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Text Data"
-		);
+			kfProcessFieldData = "Text Data");
 
 		PortletEntry.save();
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Text Data",
-			kfStatus = "Pending"
-		);
+			kfStatus = "Pending");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcessRecord(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Text Data",
-			kfStatus = "Approved"
-		);
+			kfStatus = "Approved");
 	}
 
 	@priority = "4"
 	test CompleteProcessWithEditedSingleApproverWorkflow {
+		property test.name.skip.portal.instance = "KaleoformsUsecase#CompleteProcessWithEditedSingleApproverWorkflow";
+
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.editWorkflow(
 			kfProcessName = "Kaleo Forms Process",
 			workflowDefinitionTitle = "Single Approver",
-			workflowDefinitionTitleEdit = "Edited Workflow Definition"
-		);
+			workflowDefinitionTitleEdit = "Edited Workflow Definition");
 
 		KaleoDesigner.selectNode(nodeNodeLabel = "update");
 
 		KaleoDesigner.deleteNode(nodeNodeLabel = "update");
 
-		KaleoFormsAdmin.publishWorkflow(
-			workflowDefinitionTitleEdit = "Edited Workflow Definition"
-		);
+		KaleoFormsAdmin.publishWorkflow(workflowDefinitionTitleEdit = "Edited Workflow Definition");
 
 		KaleoFormsAdmin.chooseWorkflow(
 			edit = "true",
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Edited Workflow Definition"
-		);
+			workflowDefinitionTitle = "Edited Workflow Definition");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -2449,20 +2142,20 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
-		KaleoFormsAdmin.viewTaskNotPresent(kfFormName = " ", workflowTask = "update");
+		KaleoFormsAdmin.viewTaskNotPresent(
+			kfFormName = " ",
+			workflowTask = "update");
 
 		KaleoFormsAdmin.saveProcess(kfProcessName = "Kaleo Forms Process");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -2473,15 +2166,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test"
-		);
+			kfProcessFieldData = "Test");
 
 		PortletEntry.save();
 
@@ -2490,105 +2181,92 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.viewCannotRejectTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Text", fieldValue = "Test");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Text",
+			fieldValue = "Test");
 	}
 
 	@priority = "5"
 	test CompleteProcessWithUploadedDefinition {
 		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "KaleoformsUsecase#CompleteProcessWithUploadedDefinition";
 		property testray.component.names = "Training";
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Workflow Definition"
-		);
+			portlet = "Workflow Definition");
 
 		Workflow.uploadDefinition(
 			workflowDefinitionFile = "workflow_definition_1.xml",
-			workflowDefinitionTitle = "Uploaded Definition"
-		);
+			workflowDefinitionTitle = "Uploaded Definition");
 
 		Workflow.viewDefinition(
 			workflowDefinitionName = "Uploaded Definition",
 			workflowDefinitionTitle = "Uploaded Definition",
-			workflowDefinitionVersionNumber = "1"
-		);
+			workflowDefinitionVersionNumber = "1");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Process Description",
-			kfProcessName = "Kaleo Forms Process Predefined"
-		);
+			kfProcessName = "Kaleo Forms Process Predefined");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process Predefined"
-		);
+			kfProcessName = "Kaleo Forms Process Predefined");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process Predefined",
-			workflowDefinitionTitle = "Uploaded Definition"
-		);
+			workflowDefinitionTitle = "Uploaded Definition");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process Predefined",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -2596,8 +2274,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process Predefined",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -2606,8 +2283,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process Predefined");
 
@@ -2618,17 +2294,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
-		KaleoFormsAdmin.submitNewProcess(
-			kfProcessName = "Kaleo Forms Process Predefined"
-		);
+		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process Predefined");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Kaleo Text Field"
-		);
+			kfProcessFieldData = "Kaleo Text Field");
 
 		PortletEntry.save();
 
@@ -2637,31 +2309,25 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process Predefined",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process Predefined",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process Predefined",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process Predefined"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process Predefined");
 
 		WorkflowAsset.previewViewContent(
 			fieldLabel = "Text",
-			fieldValue = "Kaleo Text Field"
-		);
+			fieldValue = "Kaleo Text Field");
 	}
 
 	@priority = "4"
@@ -2671,49 +2337,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -2721,8 +2380,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -2731,8 +2389,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -2743,15 +2400,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -2760,16 +2415,14 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.editProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -2777,8 +2430,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Edited Create Task Form");
 
@@ -2786,8 +2438,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Edited Create Task Form");
 
@@ -2796,8 +2447,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -2806,22 +2456,20 @@ definition {
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Text", fieldValue = "Test Data");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Text",
+			fieldValue = "Test Data");
 	}
 
 	@priority = "3"
@@ -2831,49 +2479,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -2881,29 +2522,25 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Review Task Form");
 
 		DynamicDataMapping.addFieldFormTemplateSpecific(
 			field = "Fieldset",
-			fieldFieldLabel = "Fieldset"
-		);
+			fieldFieldLabel = "Fieldset");
 
 		KaleoFormsAdmin.saveForm(workflowTask = "review");
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Review Task Form");
 
@@ -2912,8 +2549,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -2924,15 +2560,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -2941,8 +2575,7 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -2950,8 +2583,7 @@ definition {
 			workflowAssetContent = "Test Data",
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		WorkflowAsset.viewFormTemplateLabel(workflowFormsTemplateLabel = "Fieldset");
 
@@ -2960,8 +2592,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.editProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -2969,8 +2600,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.addForm(kfFormName = "New Review Task Form");
 
@@ -2978,8 +2608,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "New Review Task Form");
 
@@ -2993,28 +2622,25 @@ definition {
 			workflowAssetContent = "Test Data",
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Text", fieldValue = "Test Data");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Text",
+			fieldValue = "Test Data");
 	}
 
 	@priority = "3"
@@ -3024,49 +2650,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -3074,8 +2693,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -3084,8 +2702,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -3096,15 +2713,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -3113,22 +2728,19 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.editProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -3136,16 +2748,14 @@ definition {
 
 		KaleoFormsAdmin.editFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfFieldSetNameEdit = "${kfFieldSetName} Edit"
-		);
+			kfFieldSetNameEdit = "${kfFieldSetName} Edit");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName} Edit",
 			kfPendingForm = "true",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.gotoProgressStep(kfProgressName = "Forms");
 
@@ -3154,8 +2764,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 	}
@@ -3167,49 +2776,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -3217,8 +2819,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -3227,8 +2828,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -3240,35 +2840,30 @@ definition {
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName} Edit",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Date",
 			fieldFieldLabel = "Date",
-			fieldName = "Date"
-		);
+			fieldName = "Date");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName} Edit",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -3276,8 +2871,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -3286,20 +2880,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessFieldSet(
 			kfFieldSetName = "${kfFieldSetName} Edit",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -3308,15 +2899,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldDate(
 			fieldName = "Date",
-			kfProcessFieldData = "04/17/2017"
-		);
+			kfProcessFieldData = "04/17/2017");
 
 		PortletEntry.save();
 
@@ -3325,28 +2914,25 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Date", fieldValue = "4/17/17");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Date",
+			fieldValue = "4/17/17");
 	}
 
 	@priority = "3"
@@ -3356,49 +2942,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -3406,8 +2985,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -3416,8 +2994,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -3428,15 +3005,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -3445,30 +3020,26 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.editProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.editProcessDetails(
 			kfPendingForm = "true",
 			kfProcessDescriptionEdit = "Kaleo Forms Process Description Edited",
-			kfProcessNameEdit = "Kaleo Forms Process Edited"
-		);
+			kfProcessNameEdit = "Kaleo Forms Process Edited");
 
 		KaleoFormsAdmin.gotoProgressStep(kfProgressName = "Forms");
 
@@ -3477,8 +3048,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process Edited");
 
@@ -3487,14 +3057,13 @@ definition {
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process Edited",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process Edited"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process Edited");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Text", fieldValue = "Test Data");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Text",
+			fieldValue = "Test Data");
 	}
 
 	@priority = "3"
@@ -3504,49 +3073,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -3554,8 +3116,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -3564,8 +3125,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -3576,15 +3136,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -3593,24 +3151,21 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.editProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.editProcessDetails(
 			kfPendingForm = "true",
 			kfProcessDescriptionEdit = "Kaleo Forms Process Description Edited",
-			kfProcessNameEdit = "Kaleo Forms Process Edited"
-		);
+			kfProcessNameEdit = "Kaleo Forms Process Edited");
 
 		KaleoFormsAdmin.gotoProgressStep(kfProgressName = "Forms");
 
@@ -3619,8 +3174,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process Edited");
 
@@ -3629,36 +3183,34 @@ definition {
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process Edited",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process Edited",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process Edited"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process Edited");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Text", fieldValue = "Test Data");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Text",
+			fieldValue = "Test Data");
 	}
 
 	@priority = "4"
 	test EditProcessWorkflowAfterFormSubmission {
+		property test.name.skip.portal.instance = "KaleoformsUsecase#EditProcessWorkflowAfterFormSubmission";
+
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Workflow Definition"
-		);
+			portlet = "Workflow Definition");
 
 		Workflow.uploadDefinition(
 			workflowDefinitionFile = "workflow_definition_1.xml",
-			workflowDefinitionTitle = "Uploaded Definition"
-		);
+			workflowDefinitionTitle = "Uploaded Definition");
 
 		Workflow.viewDefinition(workflowDefinitionName = "Uploaded Definition");
 
@@ -3667,49 +3219,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -3717,8 +3262,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -3727,8 +3271,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -3739,15 +3282,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Kaleo Text Field"
-		);
+			kfProcessFieldData = "Kaleo Text Field");
 
 		PortletEntry.save();
 
@@ -3756,16 +3297,14 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.editProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -3775,37 +3314,32 @@ definition {
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName} Edit",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Date",
 			fieldFieldLabel = "Date",
-			fieldName = "Date"
-		);
+			fieldName = "Date");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName} Edit",
 			kfPendingForm = "true",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfPendingForm = "true",
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Uploaded Definition"
-		);
+			workflowDefinitionTitle = "Uploaded Definition");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -3813,8 +3347,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -3823,8 +3356,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -3835,16 +3367,16 @@ definition {
 
 	@priority = "4"
 	test EditProcessWorkflowBeforeFormSubmission {
+		property test.name.skip.portal.instance = "KaleoformsUsecase#EditProcessWorkflowBeforeFormSubmission";
+
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Workflow Definition"
-		);
+			portlet = "Workflow Definition");
 
 		Workflow.uploadDefinition(
 			workflowDefinitionFile = "workflow_definition_1.xml",
-			workflowDefinitionTitle = "Uploaded Definition"
-		);
+			workflowDefinitionTitle = "Uploaded Definition");
 
 		Workflow.viewDefinition(workflowDefinitionName = "Uploaded Definition");
 
@@ -3853,49 +3385,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -3903,8 +3428,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -3913,8 +3437,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -3926,35 +3449,30 @@ definition {
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName} Edit",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Date",
 			fieldFieldLabel = "Date",
-			fieldName = "Date"
-		);
+			fieldName = "Date");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName} Edit",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Uploaded Definition"
-		);
+			workflowDefinitionTitle = "Uploaded Definition");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -3962,8 +3480,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -3972,20 +3489,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessFieldSet(
 			kfFieldSetName = "${kfFieldSetName} Edit",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -3994,15 +3508,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldDate(
 			fieldName = "Date",
-			kfProcessFieldData = "04/01/2017"
-		);
+			kfProcessFieldData = "04/01/2017");
 
 		PortletEntry.save();
 
@@ -4011,28 +3523,25 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Date", fieldValue = "4/1/17");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Date",
+			fieldValue = "4/1/17");
 	}
 
 	@priority = "3"
@@ -4042,55 +3551,47 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		DynamicDataMapping.addField(
 			field = "Date",
 			fieldFieldLabel = "Date",
-			fieldName = "Date"
-		);
+			fieldName = "Date");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -4098,15 +3599,13 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Review Task Form");
 
@@ -4116,8 +3615,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Review Task Form");
 
@@ -4126,8 +3624,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -4138,20 +3635,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Kaleo Text Field"
-		);
+			kfProcessFieldData = "Kaleo Text Field");
 
 		KaleoFormsAdmin.populateFieldDate(
 			fieldName = "Date",
-			kfProcessFieldData = "04/01/2017"
-		);
+			kfProcessFieldData = "04/01/2017");
 
 		PortletEntry.save();
 
@@ -4160,21 +3654,18 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.viewPendingTasks(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.gotoTaskDetails(workflowAssetTitle = "Kaleo Forms Process");
 
 		WorkflowAsset.previewViewContent(
 			fieldLabel = "Text",
-			fieldValue = "Kaleo Text Field"
-		);
+			fieldValue = "Kaleo Text Field");
 
 		WorkflowAsset.previewViewContentFieldNotPresent(fieldLabel = "Date");
 
@@ -4183,8 +3674,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.editProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -4203,55 +3693,52 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.deleteForm(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfFormName = "Review Task Form"
-		);
+			kfFormName = "Review Task Form");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewPendingTasks(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.gotoTaskDetails(workflowAssetTitle = "Kaleo Forms Process");
 
 		WorkflowAsset.previewViewContent(
 			fieldLabel = "Text",
-			fieldValue = "Kaleo Text Field"
-		);
+			fieldValue = "Kaleo Text Field");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Date", fieldValue = "4/1/17");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Date",
+			fieldValue = "4/1/17");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.gotoTaskDetails(workflowAssetTitle = "Kaleo Forms Process");
 
 		WorkflowAsset.previewViewContent(
 			fieldLabel = "Text",
-			fieldValue = "Kaleo Text Field"
-		);
+			fieldValue = "Kaleo Text Field");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Date", fieldValue = "4/1/17");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Date",
+			fieldValue = "4/1/17");
 	}
 
 	@priority = "3"
@@ -4261,49 +3748,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -4311,8 +3791,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -4321,8 +3800,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -4333,15 +3811,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Kaleo Text Field"
-		);
+			kfProcessFieldData = "Kaleo Text Field");
 
 		PortletEntry.save();
 
@@ -4350,25 +3826,20 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewPendingTasks(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
 		WorkflowAsset.previewViewContent(
 			fieldLabel = "Text",
-			fieldValue = "Kaleo Text Field"
-		);
+			fieldValue = "Kaleo Text Field");
 	}
 
 	@priority = "4"
@@ -4378,55 +3849,47 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		DynamicDataMapping.addField(
 			field = "Date",
 			fieldFieldLabel = "Date",
-			fieldName = "Date"
-		);
+			fieldName = "Date");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -4434,15 +3897,13 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Review Task Form");
 
@@ -4452,8 +3913,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "review"
-		);
+			workflowTask = "review");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Review Task Form");
 
@@ -4462,8 +3922,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -4474,20 +3933,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Kaleo Text Field"
-		);
+			kfProcessFieldData = "Kaleo Text Field");
 
 		KaleoFormsAdmin.populateFieldDate(
 			fieldName = "Date",
-			kfProcessFieldData = "04/01/2017"
-		);
+			kfProcessFieldData = "04/01/2017");
 
 		PortletEntry.save();
 
@@ -4496,8 +3952,7 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -4505,17 +3960,13 @@ definition {
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
 			workflowDefinition = "Single Approver",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
 		WorkflowAsset.previewViewContent(
 			fieldLabel = "Text",
-			fieldValue = "Kaleo Text Field"
-		);
+			fieldValue = "Kaleo Text Field");
 
 		WorkflowAsset.previewViewContentFieldNotPresent(fieldLabel = "Date");
 
@@ -4524,25 +3975,20 @@ definition {
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
 		WorkflowAsset.previewViewContent(
 			fieldLabel = "Text",
-			fieldValue = "Kaleo Text Field"
-		);
+			fieldValue = "Kaleo Text Field");
 
 		WorkflowAsset.previewViewContentFieldNotPresent(fieldLabel = "Date");
 	}
@@ -4554,49 +4000,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -4604,8 +4043,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -4614,8 +4052,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -4626,15 +4063,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test"
-		);
+			kfProcessFieldData = "Test");
 
 		PortletEntry.save();
 
@@ -4643,36 +4078,31 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.rejectTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewPendingTasks(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Update"
-		);
+			workflowTask = "Update");
 
 		Workflow.resubmitTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Update"
-		);
+			workflowTask = "Update");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 	}
 
 	@priority = "4"
@@ -4682,49 +4112,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -4732,8 +4155,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -4742,8 +4164,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -4754,51 +4175,41 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test"
-		);
+			kfProcessFieldData = "Test");
 
 		PortletEntry.save();
 
 		Page.gotoMyAccount(portletName = "Notifications");
 
-		WorkflowAsset.viewNotification(
-			contentBody = "Test Test sent you a Process for review in the workflow."
-		);
+		WorkflowAsset.viewNotification(contentBody = "Test Test sent you a Process for review in the workflow.");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "Notifications");
 
-		WorkflowAsset.viewNotification(
-			contentBody = "Test Test sent you a Process for review in the workflow."
-		);
+		WorkflowAsset.viewNotification(contentBody = "Test Test sent you a Process for review in the workflow.");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.rejectTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "Notifications");
 
-		WorkflowAsset.viewNotification(
-			contentBody = "Your submission was rejected by Test Test, please modify and resubmit."
-		);
+		WorkflowAsset.viewNotification(contentBody = "Your submission was rejected by Test Test, please modify and resubmit.");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -4806,30 +4217,25 @@ definition {
 			workflowAssetContent = "Test",
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Update"
-		);
+			workflowTask = "Update");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.resubmitTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Update"
-		);
+			workflowTask = "Update");
 
 		Page.gotoMyAccount(portletName = "Notifications");
 
-		WorkflowAsset.viewNotification(
-			contentBody = "Test Test sent you a Process for review in the workflow."
-		);
+		WorkflowAsset.viewNotification(contentBody = "Test Test sent you a Process for review in the workflow.");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 	}
 
 	@priority = "4"
@@ -4839,49 +4245,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -4889,8 +4288,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -4899,8 +4297,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -4911,15 +4308,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test"
-		);
+			kfProcessFieldData = "Test");
 
 		PortletEntry.save();
 
@@ -4929,23 +4324,20 @@ definition {
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
 			workflowDueDateTime = "05:30 PM",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.updateDueDateAssignedToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
 			workflowDueDateTime = "04:30 PM",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 	}
 
 	@priority = "5"
@@ -4955,49 +4347,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -5005,8 +4390,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -5015,8 +4399,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -5031,15 +4414,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -5048,30 +4429,26 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcessRecord(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test Data",
-			kfStatus = "Approved"
-		);
+			kfStatus = "Approved");
 	}
 
 	@priority = "3"
@@ -5081,49 +4458,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -5131,8 +4501,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -5141,8 +4510,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -5153,39 +4521,35 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.assignRegRoleCP(roleName = "Administrator", userScreenName = "usersn");
+		Role.assignRegRoleCP(
+			roleName = "Administrator",
+			userScreenName = "usersn");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -5194,52 +4558,45 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcessRecord(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "userfn userln",
 			kfProcessFieldData = "Test Data",
-			kfStatus = "Approved"
-		);
+			kfStatus = "Approved");
 	}
 
 	@priority = "4"
@@ -5249,49 +4606,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -5299,8 +4649,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -5309,8 +4658,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -5325,15 +4673,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -5342,24 +4688,21 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcessRecord(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test Data",
-			kfStatus = "Pending"
-		);
+			kfStatus = "Pending");
 	}
 
 	@description = "This is a use case for LPS-51098."
@@ -5370,49 +4713,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -5420,8 +4756,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -5430,8 +4765,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -5442,71 +4776,64 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test"
-		);
+			kfProcessFieldData = "Test");
 
 		PortletEntry.save();
 
 		Page.gotoMyAccount(portletName = "Notifications");
 
-		WorkflowAsset.viewNotification(
-			contentBody = "Test Test sent you a Process for review in the workflow."
-		);
+		WorkflowAsset.viewNotification(contentBody = "Test Test sent you a Process for review in the workflow.");
 
 		Navigator.openURL();
 
 		Notifications.viewBadgeCount(notificationCount = "1");
 
-		WorkflowAsset.gotoViaNotification(assetType = "Process", user = "Test Test");
+		WorkflowAsset.gotoViaNotification(
+			assetType = "Process",
+			user = "Test Test");
 
 		Workflow.viewTaskHeaderTitle(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "Notifications");
 
-		WorkflowAsset.viewNotification(
-			contentBody = "Test Test sent you a Process for review in the workflow."
-		);
+		WorkflowAsset.viewNotification(contentBody = "Test Test sent you a Process for review in the workflow.");
 
-		WorkflowAsset.gotoViaNotification(assetType = "Process", user = "Test Test");
+		WorkflowAsset.gotoViaNotification(
+			assetType = "Process",
+			user = "Test Test");
 
 		Workflow.viewTaskHeaderTitle(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 	}
 
 	@priority = "3"
@@ -5516,49 +4843,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -5566,8 +4886,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -5576,8 +4895,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -5592,15 +4910,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -5609,27 +4925,23 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -5638,22 +4950,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcessRecord(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test Data",
-			kfStatus = "Pending"
-		);
+			kfStatus = "Pending");
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test Data",
-			kfStatus = "Approved"
-		);
+			kfStatus = "Approved");
 	}
 
 	@description = "This is a use case for LPS-48995."
@@ -5664,49 +4973,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "Field Set Data Definition",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "Field Set Data Definition",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -5720,8 +5022,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		DynamicDataMapping.selectDynamicDataMappingFrame();
 
@@ -5735,49 +5036,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -5785,8 +5079,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -5795,8 +5088,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -5807,15 +5099,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test"
-		);
+			kfProcessFieldData = "Test");
 
 		PortletEntry.save();
 
@@ -5827,15 +5117,13 @@ definition {
 			workflowAssetType = "${workflowAssetType}",
 			workflowDueDateTime = "05:30 PM",
 			workflowTask = "Review",
-			workflowTaskwAssetType = "Kaleo Forms Process"
-		);
+			workflowTaskwAssetType = "Kaleo Forms Process");
 
 		Workflow.assignToMeTaskByActions(
 			workflowActivityComment = "Assign process to Test Test.",
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -5844,21 +5132,18 @@ definition {
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
 			workflowDueDateTime = "04:30 PM",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.rejectTaskByActions(
 			workflowActivityComment = "Please make changes and resubmit.",
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.resubmitTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Update"
-		);
+			workflowTask = "Update");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -5866,8 +5151,7 @@ definition {
 			workflowActivityComment = "Assign process to Test Test again.",
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
@@ -5875,29 +5159,26 @@ definition {
 			workflowActivityComment = "Process is approved.",
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Workflow.gotoCompletedTaskAssignedToMePreview(
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+		Workflow.gotoCompletedTaskAssignedToMePreview(workflowAssetTitle = "Kaleo Forms Process");
 
-		WorkflowAsset.previewViewContent(fieldLabel = "Text", fieldValue = "Test");
+		WorkflowAsset.previewViewContent(
+			fieldLabel = "Text",
+			fieldValue = "Test");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow._viewActivities(
 			workflowActivityComment = "Test Test completed the task review. Process is approved.",
-			workflowAssetTitle = "Kaleo Forms Process"
-		);
+			workflowAssetTitle = "Kaleo Forms Process");
 	}
 
 	@priority = "4"
@@ -5907,49 +5188,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -5957,8 +5231,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -5967,8 +5240,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -5983,15 +5255,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -6000,30 +5270,26 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.rejectTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcessRecord(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test Data",
-			kfStatus = "Pending"
-		);
+			kfStatus = "Pending");
 	}
 
 	@priority = "4"
@@ -6033,49 +5299,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -6083,8 +5342,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -6093,8 +5351,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -6109,15 +5366,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Data"
-		);
+			kfProcessFieldData = "Test Data");
 
 		PortletEntry.save();
 
@@ -6126,16 +5381,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcessRecord(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Test Data",
-			kfStatus = "Pending"
-		);
+			kfStatus = "Pending");
 	}
 
 	@description = "This is a use case for LPS-65977."
@@ -6146,49 +5399,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Predefined Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -6196,8 +5442,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -6206,23 +5451,20 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Submitted"
-		);
+			kfProcessFieldData = "Test Submitted");
 
 		PortletEntry.save();
 
@@ -6231,8 +5473,7 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow._gotoPendingFilter();
 
@@ -6249,21 +5490,18 @@ definition {
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test Second Submitted"
-		);
+			kfProcessFieldData = "Test Second Submitted");
 
 		PortletEntry.save();
 
@@ -6272,8 +5510,7 @@ definition {
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow._gotoPendingFilter();
 
@@ -6293,49 +5530,42 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.addProcess();
 
 		KaleoFormsAdmin.addProcessDetails(
 			kfProcessDescription = "Kaleo Forms Process Description",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.addFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "${kfProcessName}"
-		);
+			kfProcessName = "${kfProcessName}");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		KaleoFormsAdmin.saveFieldSet();
 
 		KaleoFormsAdmin.chooseFieldSet(
 			kfFieldSetName = "${kfFieldSetName}",
-			kfProcessName = "Kaleo Forms Process"
-		);
+			kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.chooseWorkflow(
 			kfProcessName = "Kaleo Forms Process",
-			workflowDefinitionTitle = "Single Approver"
-		);
+			workflowDefinitionTitle = "Single Approver");
 
 		KaleoFormsAdmin.next();
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.addForm(kfFormName = "Created Task Form");
 
@@ -6343,8 +5573,7 @@ definition {
 
 		KaleoFormsAdmin.assignForm(
 			kfProcessName = "Kaleo Forms Process",
-			workflowTask = "create"
-		);
+			workflowTask = "create");
 
 		KaleoFormsAdmin.chooseForm(kfFormName = "Created Task Form");
 
@@ -6353,8 +5582,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.viewProcess(kfProcessName = "Kaleo Forms Process");
 
@@ -6365,15 +5593,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Kaleo Forms Admin"
-		);
+			portlet = "Kaleo Forms Admin");
 
 		KaleoFormsAdmin.submitNewProcess(kfProcessName = "Kaleo Forms Process");
 
 		KaleoFormsAdmin.populateFieldText(
 			fieldName = "Text",
-			kfProcessFieldData = "Test"
-		);
+			kfProcessFieldData = "Test");
 
 		PortletEntry.save();
 
@@ -6383,7 +5609,7 @@ definition {
 			workflowAssetTitle = "Kaleo Forms Process",
 			workflowAssetType = "${workflowAssetType}",
 			workflowDefinition = "Single Approver",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 	}
+
 }

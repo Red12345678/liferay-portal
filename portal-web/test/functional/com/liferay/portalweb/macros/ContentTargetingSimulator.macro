@@ -1,4 +1,5 @@
 definition {
+
 	macro configureUserSegmentSimulator {
 		if (isSet(configureUserSegmentMatched)) {
 			for (var userSegmentMatched : list "${configureUserSegmentMatched}") {
@@ -33,8 +34,8 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "CTSimulator#USER_SEGMENT_NOT_MATCHED",
-				value1 = "${userSegment}"
-			);
+				value1 = "${userSegment}");
 		}
 	}
+
 }

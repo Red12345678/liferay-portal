@@ -1,5 +1,6 @@
 @default = "paste"
 definition {
+
 	function ckEditorPaste {
 		WaitForSPARefresh();
 
@@ -37,4 +38,5 @@ definition {
 
 		selenium.assertLiferayErrors();
 	}
+
 }

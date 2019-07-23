@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Blogs";
@@ -12,24 +13,23 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Staging Blogs Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Staging Blogs Page",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(siteName = "Site Name");
 	}
@@ -50,35 +50,30 @@ definition {
 	test PublishEntryWithDeletedSmallImage {
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Blogs Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsNavigator.gotoAddEntry();
 
 		BlogsEntry.addEntryContent(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Panel.expandPanel(panelHeading = "Configuration");
 
 		BlogsEntry.addSmallImage(
 			navTab = "Upload Image",
-			uploadFileName = "Document_3.jpg"
-		);
+			uploadFileName = "Document_3.jpg");
 
 		PortletEntry.publish();
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Blogs Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.gotoPublishToLive();
 
@@ -89,26 +84,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Portlet.changeDisplayStyle(displayStyle = "Descriptive");
 
 		AssertElementPresent(
-			locator1 = "Blogs#DESCRIPTIVE_VIEW_ENTRY_TITLE",
-			key_entryTitle = "Blogs Entry Title"
-		);
+			key_entryTitle = "Blogs Entry Title",
+			locator1 = "Blogs#DESCRIPTIVE_VIEW_ENTRY_TITLE");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Blogs Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsNavigator.gotoEditCP(entryTitle = "Blogs Entry Title");
 
@@ -120,8 +111,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Blogs Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.gotoPublishToLive();
 
@@ -129,58 +119,268 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Blogs Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		BlogsNavigator.gotoEditCP(entryTitle = "Blogs Entry Title");
 
 		AssertElementNotPresent(
-			locator1 = "BlogsEntry#SMALL_IMAGE",
-			key_smallImage = "Document_3.jpg"
-		);
+			key_smallImage = "Document_3.jpg",
+			locator1 = "BlogsEntry#SMALL_IMAGE");
 
 		AssertTextEquals(
 			locator1 = "Button#SELECT_FILE_SMALL_IMAGE",
-			value1 = "Select File"
-		);
+			value1 = "Select File");
 
 		ProductMenu.gotoLiveSite();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Portlet.changeDisplayStyle(displayStyle = "Descriptive");
 
 		AssertElementPresent(
-			locator1 = "Blogs#DESCRIPTIVE_VIEW_ENTRY_TITLE",
-			key_entryTitle = "Blogs Entry Title"
-		);
+			key_entryTitle = "Blogs Entry Title",
+			locator1 = "Blogs#DESCRIPTIVE_VIEW_ENTRY_TITLE");
 
 		AssertClick(
+			key_navItem = "Images",
 			locator1 = "NavBar#NAV_BAR_GENERAL",
-			value1 = "Images",
-			key_navItem = "Images"
-		);
+			value1 = "Images");
 
 		Portlet.changeDisplayStyle(displayStyle = "Descriptive");
 
 		AssertElementPresent(
-			locator1 = "ControlMenuAddPanel#CONTENT_TITLE",
-			key_assetTitle = "Document_3.jpg"
-		);
+			key_assetTitle = "Document_3.jpg",
+			locator1 = "ControlMenuAddPanel#CONTENT_TITLE");
 
 		AssertElementNotPresent(
-			locator1 = "ControlMenuAddPanel#CONTENT_TITLE",
-			key_assetTitle = "Document_3 (1).jpg"
-		);
+			key_assetTitle = "Document_3 (1).jpg",
+			locator1 = "ControlMenuAddPanel#CONTENT_TITLE");
 	}
+
+	@priority = "3"
+	test StagingBlogsCP {
+		ProductMenu.gotoPortlet(
+			category = "Content",
+			panel = "Site Administration",
+			portlet = "Blogs");
+
+		Blogs.addEntry(
+			entryContent = "Blogs Entry Content",
+			entryTitle = "Blogs Entry Title");
+
+		Navigator.openSiteURL(siteName = "Site Name");
+
+		Navigator.gotoStagedView();
+
+		Staging.gotoPublishToLive();
+
+		Staging.publishToLive();
+	}
+
+	@priority = "3"
+	test StagingBlogsPG {
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Blogs Page",
+			siteName = "Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Sites",
+			panel = "Control Panel",
+			portlet = "Sites");
+
+		Page.add(
+			pageName = "Blogs Page 1",
+			pageStaging = "true",
+			siteName = "Site Name");
+
+		Portlet.addPG(portletName = "Blogs");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Blogs Page 1",
+			siteName = "Site Name");
+
+		Portlet.addPG(portletName = "Blogs Aggregator");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Blogs Page 1",
+			siteName = "Site Name");
+
+		Portlet.addPG(portletName = "Recent Bloggers");
+
+		ProductMenu.gotoPortlet(
+			category = "Sites",
+			panel = "Control Panel",
+			portlet = "Sites");
+
+		Page.add(
+			pageName = "Blogs Page 2",
+			pageStaging = "true",
+			siteName = "Site Name");
+
+		Portlet.addPG(portletName = "Blogs");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Blogs Page 1",
+			siteName = "Site Name");
+
+		Blogs.addEntry(
+			entryContent = "Blogs Entry Content 1",
+			entryTitle = "Blogs Entry Title 1");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Blogs Page 1",
+			siteName = "Site Name");
+
+		RecentBloggers.viewPG(
+			entryAuthor = "Test Test",
+			postCount = "1");
+
+		BlogsAggregatorPortlet.viewBlogsEntryViaBAPortletPG(viewEntryTitle = "Blogs Entry Title 1");
+
+		BlogsEntry.viewPG(
+			entryContent = "Blogs Entry Content 1",
+			entryTitle = "Blogs Entry Title 1");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Blogs Page",
+			siteName = "Site Name");
+
+		Staging.gotoPublishToLive();
+
+		Staging.configurePublishToLive(checkPageName = "Blogs Page 1");
+
+		Staging.publishToLive();
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Blogs Page 1",
+			siteName = "Site Name");
+
+		RecentBloggers.viewPG(
+			entryAuthor = "Test Test",
+			postCount = "1");
+
+		BlogsAggregatorPortlet.viewBlogsEntryViaBAPortletPG(viewEntryTitle = "Blogs Entry Title 1");
+
+		BlogsNavigator.gotoEntryPG(
+			entryContent = "Blogs Entry Content 1",
+			entryTitle = "Blogs Entry Title 1");
+
+		BlogsEntry.viewPG(
+			entryContent = "Blogs Entry Content 1",
+			entryTitle = "Blogs Entry Title 1");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Blogs Page 2",
+			siteName = "Site Name");
+
+		BlogsConfiguration.configureScopePG(scopeSelection = "Blogs Page 2 (Create New)");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Blogs Page 2",
+			siteName = "Site Name");
+
+		Blogs.addEntry(
+			entryContent = "Blogs Entry Content 2",
+			entryTitle = "Blogs Entry Title 2");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Blogs Page 1",
+			siteName = "Site Name");
+
+		BlogsAggregatorPortlet.viewBlogsEntryViaBAPortletPG(viewEntryTitle = "Blogs Entry Title 1,Blogs Entry Title 2");
+
+		BlogsAggregatorPortlet.configureSelectionMethod(selectionMethod = "Scope");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Blogs Page 1",
+			siteName = "Site Name");
+
+		BlogsAggregatorPortlet.viewBlogsEntryViaBAPortletPG(
+			viewEntryTitle = "Blogs Entry Title 1",
+			viewNoEntryTitle = "Blogs Entry Title 2");
+
+		SitePageNavigator.gotoPages(
+			page = "Public Pages",
+			site = "Site Name");
+
+		Staging.gotoPublishToLive();
+
+		Staging.configurePublishToLive(
+			checkPageName = "Blogs Page 2",
+			contentDateRange = "All");
+
+		Staging.publishToLive();
+
+		Navigator.gotoSitePage(
+			pageName = "Blogs Page 2",
+			siteName = "Site Name");
+
+		BlogsNavigator.gotoEntryPG(
+			entryContent = "Blogs Entry Content 2",
+			entryTitle = "Blogs Entry Title 2");
+
+		BlogsEntry.viewPG(
+			entryContent = "Blogs Entry Content 2",
+			entryTitle = "Blogs Entry Title 2");
+
+		Navigator.gotoSitePage(
+			pageName = "Blogs Page 1",
+			siteName = "Site Name");
+
+		BlogsAggregatorPortlet.viewBlogsEntryViaBAPortletPG(
+			viewEntryTitle = "Blogs Entry Title 1",
+			viewNoEntryTitle = "Blogs Entry Title 2");
+	}
+
+	@priority = "3"
+	test StagingBlogsWithScheduledPublishing {
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Blogs Page",
+			siteName = "Site Name");
+
+		Portlet.addPG(portletName = "Blogs");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Blogs Page",
+			siteName = "Site Name");
+
+		BlogsNavigator.gotoAddEntry();
+
+		BlogsEntry.addEntryContent(
+			entryContent = "Blogs Entry Content",
+			entryTitle = "Blogs Entry Title");
+
+		Panel.expandPanel(panelHeading = "Configuration");
+
+		BlogsEntry.scheduleBlogEntry();
+
+		PortletEntry.publish();
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Staging Blogs Page",
+			siteName = "Site Name");
+
+		Navigator.gotoNavItem(navItem = "Not Published (1)");
+
+		Staging.gotoPublishToLive();
+
+		Staging.configurePublishToLive(checkPageName = "Staging Blogs Page");
+
+		Staging.publishToLive();
+
+		Navigator.gotoSitePage(
+			pageName = "Staging Blogs Page",
+			siteName = "Site Name");
+
+		Blogs.viewNoEntryCP();
+	}
+
 }

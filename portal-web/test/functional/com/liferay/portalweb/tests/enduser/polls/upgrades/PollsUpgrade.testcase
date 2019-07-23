@@ -1,5 +1,6 @@
 @component-name = "portal-upgrades"
 definition {
+
 	property database.types = "db2,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -12,6 +13,15 @@ definition {
 		Smoke.viewWelcomePage();
 
 		Upgrade.reindexSearches();
+	}
+
+	@priority = "5"
+	test ViewPollsArchive625 {
+		property data.archive.type = "data-archive-polls";
+		property database.types = "mariadb,mysql,postgresql";
+		property portal.version = "6.2.5";
+
+		Upgrade.viewPolls();
 	}
 
 	@priority = "5"
@@ -30,12 +40,4 @@ definition {
 		Upgrade.viewPolls();
 	}
 
-	@priority = "5"
-	test ViewPollsArchive625 {
-		property data.archive.type = "data-archive-polls";
-		property database.types = "mariadb,mysql,postgresql";
-		property portal.version = "6.2.5";
-
-		Upgrade.viewPolls();
-	}
 }

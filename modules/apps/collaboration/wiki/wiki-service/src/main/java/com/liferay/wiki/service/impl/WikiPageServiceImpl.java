@@ -421,17 +421,16 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 		if (!pages.isEmpty()) {
 			return pages.get(0);
 		}
-		else {
-			StringBundler sb = new StringBundler(5);
 
-			sb.append("{nodeId=");
-			sb.append(nodeId);
-			sb.append(", title=");
-			sb.append(title);
-			sb.append("}");
+		StringBundler sb = new StringBundler(5);
 
-			throw new NoSuchPageException(sb.toString());
-		}
+		sb.append("{nodeId=");
+		sb.append(nodeId);
+		sb.append(", title=");
+		sb.append(title);
+		sb.append("}");
+
+		throw new NoSuchPageException(sb.toString());
 	}
 
 	@Override
@@ -481,10 +480,9 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			return wikiPagePersistence.filterFindByG_N_H(
 				groupId, nodeId, head, start, end, obc);
 		}
-		else {
-			return wikiPagePersistence.filterFindByG_N_H_S(
-				groupId, nodeId, head, status, start, end, obc);
-		}
+
+		return wikiPagePersistence.filterFindByG_N_H_S(
+			groupId, nodeId, head, status, start, end, obc);
 	}
 
 	@Override
@@ -522,11 +520,10 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 				groupId, userId, nodeId, status, start, end,
 				new PageCreateDateComparator(false));
 		}
-		else {
-			return wikiPagePersistence.filterFindByG_N_S(
-				groupId, nodeId, status, start, end,
-				new PageCreateDateComparator(false));
-		}
+
+		return wikiPagePersistence.filterFindByG_N_S(
+			groupId, nodeId, status, start, end,
+			new PageCreateDateComparator(false));
 	}
 
 	@Override
@@ -567,10 +564,8 @@ public class WikiPageServiceImpl extends WikiPageServiceBaseImpl {
 			return wikiPagePersistence.filterCountByG_U_N_S(
 				groupId, userId, nodeId, status);
 		}
-		else {
-			return wikiPagePersistence.filterCountByG_N_S(
-				groupId, nodeId, status);
-		}
+
+		return wikiPagePersistence.filterCountByG_N_S(groupId, nodeId, status);
 	}
 
 	@Override

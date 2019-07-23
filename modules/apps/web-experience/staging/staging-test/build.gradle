@@ -1,12 +1,7 @@
-copyLibs {
-	enabled = true
-}
-
 dependencies {
-	compileOnly project(":apps:web-experience:journal:journal-test")
-
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.arquillian.extension.junit.bridge", version: "1.0.17"
 	testIntegrationCompile group: "com.liferay", name: "com.liferay.journal.api", version: "2.0.0"
 	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "default"
 	testIntegrationCompile group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "default"
+	testIntegrationCompile project(":apps:web-experience:journal:journal-test-util")
 }

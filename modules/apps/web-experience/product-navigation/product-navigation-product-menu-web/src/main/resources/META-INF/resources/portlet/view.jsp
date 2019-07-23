@@ -77,7 +77,7 @@ String productMenuState = SessionClicks.get(request, ProductNavigationProductMen
 	}
 
 	<c:if test="<%= productMenuDisplayContext.hasUserPanelCategory() %>">
-		Liferay.on(
+		var openUserMenuEventHandle = Liferay.on(
 			'ProductMenu:openUserMenu',
 			function(event) {
 				var userCollapseSelector = '#<portlet:namespace /><%= AUIUtil.normalizeId(PanelCategoryKeys.USER) %>Collapse';
@@ -127,5 +127,17 @@ String productMenuState = SessionClicks.get(request, ProductNavigationProductMen
 				}
 			}
 		);
+
+		var clearProductNavigationProductMenuHandles = Liferay.on(
+			'destroyPortlet',
+			function(event) {
+				if (event.portletId === '<%= portletDisplay.getId() %>') {
+					openUserMenuEventHandle.detach();
+
+					clearProductNavigationProductMenuHandles.detach();
+				}
+			}
+		);
+
 	</c:if>
 </aui:script>

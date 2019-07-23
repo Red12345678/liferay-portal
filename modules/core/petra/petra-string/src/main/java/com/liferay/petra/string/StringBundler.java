@@ -34,6 +34,21 @@ import java.lang.ref.SoftReference;
  */
 public class StringBundler implements Serializable {
 
+	public static String concat(Object... objects) {
+		String[] strings = new String[objects.length];
+
+		for (int i = 0; i < objects.length; i++) {
+			if (objects[i] == null) {
+				strings[i] = StringPool.NULL;
+			}
+			else {
+				strings[i] = String.valueOf(objects[i]);
+			}
+		}
+
+		return _toString(strings, strings.length);
+	}
+
 	public static String concat(String... strings) {
 		for (int i = 0; i < strings.length; i++) {
 			if (strings[i] == null) {
@@ -82,9 +97,8 @@ public class StringBundler implements Serializable {
 		if (b) {
 			return append(StringPool.TRUE);
 		}
-		else {
-			return append(StringPool.FALSE);
-		}
+
+		return append(StringPool.FALSE);
 	}
 
 	public StringBundler append(char c) {
@@ -95,9 +109,8 @@ public class StringBundler implements Serializable {
 		if (chars == null) {
 			return append("null");
 		}
-		else {
-			return append(new String(chars));
-		}
+
+		return append(new String(chars));
 	}
 
 	public StringBundler append(double d) {

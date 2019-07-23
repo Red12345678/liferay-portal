@@ -55,9 +55,8 @@ public class DefaultWorkflowDefinition
 		if (_title == null) {
 			return StringPool.BLANK;
 		}
-		else {
-			return _title;
-		}
+
+		return _title;
 	}
 
 	@Override

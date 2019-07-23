@@ -117,9 +117,8 @@ public class DefaultMessageBus implements ManagedServiceFactory, MessageBus {
 		if ((destination != null) && destination.isRegistered()) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override

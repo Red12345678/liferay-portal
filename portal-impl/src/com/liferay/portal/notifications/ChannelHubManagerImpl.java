@@ -185,10 +185,8 @@ public class ChannelHubManagerImpl implements ChannelHubManager {
 			synchronized (_channelHubs) {
 				channelHub = _channelHubs.get(companyId);
 
-				if (channelHub == null) {
-					if (createIfAbsent) {
-						channelHub = createChannelHub(companyId);
-					}
+				if ((channelHub == null) && createIfAbsent) {
+					channelHub = createChannelHub(companyId);
 				}
 			}
 		}

@@ -8,5 +8,5 @@ dependencies {
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.0.0"
 	compileOnly group: "org.apache.felix", name: "org.apache.felix.gogo.runtime", version: "0.10.0"
 	compileOnly group: "org.glassfish", name: "javax.servlet", version: "3.2-b06"
-	compileOnly group: "org.osgi", name: "org.osgi.core", version: "5.0.0"
+	compileOnly group: "org.osgi", name: "osgi.core", version: "5.0.0"
 }

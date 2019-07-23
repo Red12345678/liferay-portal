@@ -1,5 +1,6 @@
 @component-name = "portal-business-productivity-ee"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property test.run.environment = "EE";
@@ -17,12 +18,9 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Kaleo Designer"
-		);
+			portlet = "Kaleo Designer");
 
-		KaleoDesigner.editWorkflowDefinitionViaKDCP(
-			workflowDefinitionTitle = "Single Approver"
-		);
+		KaleoDesigner.editWorkflowDefinitionViaKDCP(workflowDefinitionTitle = "Single Approver");
 	}
 
 	tearDown {
@@ -48,18 +46,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Kaleo Designer"
-		);
+			portlet = "Kaleo Designer");
 
 		KaleoDesigner.viewTableDefinitionPublishedViaKDCP(
 			workflowDefinitionName = "Single Approver",
 			workflowDefinitionTitle = "Edited Workflow Definition",
-			workflowDefinitionVersionNumber = "2"
-		);
+			workflowDefinitionVersionNumber = "2");
 
-		KaleoDesigner.editWorkflowDefinitionViaKDCP(
-			workflowDefinitionTitle = "Edited Workflow Definition"
-		);
+		KaleoDesigner.editWorkflowDefinitionViaKDCP(workflowDefinitionTitle = "Edited Workflow Definition");
 
 		KaleoDesigner.viewNodeNotPresent(nodeNodeLabel = "update");
 	}
@@ -68,15 +62,16 @@ definition {
 	test ViewInvalidSourceXMLNotRemainsAfterTabSwitch {
 		property test.name.skip.portal.instance = "KaleoDesignerEditSingleApprover#ViewInvalidSourceXMLNotRemainsAfterTabSwitch";
 
-		KaleoDesigner.editSourceXML(kdSourceXML = "INVALID", line = "6");
+		KaleoDesigner.editSourceXML(
+			kdSourceXML = "INVALID",
+			line = "6");
 
 		KaleoDesigner.viewViewTab();
 
 		KaleoDesigner.viewSourceXMLLine(
 			invalid = "true",
 			kdSourceXML = "INVALID",
-			line = "6"
-		);
+			line = "6");
 	}
 
 	@description = "This is a use case for LPS-46657."
@@ -91,8 +86,7 @@ definition {
 			nodeNotificationsName = "Review Notification",
 			nodeNotificationsRecipientType = "Role Type",
 			roleName = "Administrator",
-			roleType = "Regular"
-		);
+			roleType = "Regular");
 
 		KaleoDesigner.viewSourceXMLTab();
 
@@ -104,8 +98,7 @@ definition {
 			nodeNotificationsName = "Review Notification",
 			nodeNotificationsRecipientType = "Role Type",
 			roleName = "Administrator",
-			roleType = "Regular"
-		);
+			roleType = "Regular");
 	}
 
 	@description = "This is a use case for LPS-46605."
@@ -117,7 +110,7 @@ definition {
 
 		KaleoDesigner.viewNodeNotifications(
 			nodeNotificationsName = "Review Notification",
-			nodeNotificationsType = "User Notification"
-		);
+			nodeNotificationsType = "User Notification");
 	}
+
 }

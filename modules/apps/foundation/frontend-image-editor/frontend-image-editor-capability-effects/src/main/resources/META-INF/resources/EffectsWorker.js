@@ -14,7 +14,7 @@ onmessage = function(event) {
 	var effect = event.data.effect;
 	var controlPoints = getControlPoints(effect);
 
-	if (controlPoints) {
+	if (controlPoints) {
 		var dataLength = imageData.data.length;
 
 		if (dataLength) {

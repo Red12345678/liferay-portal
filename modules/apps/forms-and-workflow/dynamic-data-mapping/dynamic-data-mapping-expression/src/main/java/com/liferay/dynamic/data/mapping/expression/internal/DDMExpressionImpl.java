@@ -182,20 +182,18 @@ public class DDMExpressionImpl<T> implements DDMExpression<T> {
 		if (doubleValue.isNaN() || doubleValue.isInfinite()) {
 			throw new DDMExpressionException.NumberExceedsSupportedRange();
 		}
-		else {
-			variableValue = variableValue.trim();
 
-			setVariableValue(variableName, new BigDecimal(variableValue));
-		}
+		variableValue = variableValue.trim();
+
+		setVariableValue(variableName, new BigDecimal(variableValue));
 	}
 
 	protected Boolean decodeBoolean(BigDecimal bigDecimal) {
 		if (bigDecimal.equals(BigDecimal.ONE)) {
 			return Boolean.TRUE;
 		}
-		else {
-			return Boolean.FALSE;
-		}
+
+		return Boolean.FALSE;
 	}
 
 	protected String decodeString(BigDecimal bigDecimal) {
@@ -300,7 +298,11 @@ public class DDMExpressionImpl<T> implements DDMExpression<T> {
 
 	protected Double parseDoubleValue(String value) {
 		try {
-			return Double.parseDouble(value);
+			if (value.matches(_FLOAT_REGEXP)) {
+				return Double.parseDouble(value);
+			}
+
+			throw new NumberFormatException();
 		}
 		catch (NumberFormatException nfe) {
 			return null;
@@ -656,6 +658,8 @@ public class DDMExpressionImpl<T> implements DDMExpression<T> {
 			return decodeString(result);
 		}
 	}
+
+	private static final String _FLOAT_REGEXP = "^([+-]?\\d*\\.?\\d*)$";
 
 	private final Class<?> _expressionClass;
 	private final String _expressionString;

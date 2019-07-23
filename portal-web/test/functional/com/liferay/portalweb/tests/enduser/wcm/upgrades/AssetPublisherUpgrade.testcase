@@ -1,5 +1,6 @@
 @component-name = "portal-upgrades"
 definition {
+
 	property database.types = "db2,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -14,6 +15,16 @@ definition {
 		Upgrade.reindexSearches();
 	}
 
+	@description = "This is a use case for LPS-78284."
+	@priority = "5"
+	test ViewAssetPublisherArchive625 {
+		property data.archive.type = "data-archive-asset-publisher";
+		property database.types = "mariadb,mysql,postgresql";
+		property portal.version = "6.2.5";
+
+		Upgrade.viewAssetPublisher();
+	}
+
 	@priority = "5"
 	test ViewAssetPublisherArchive621015 {
 		property data.archive.type = "data-archive-asset-publisher";
@@ -22,6 +33,7 @@ definition {
 		Upgrade.viewAssetPublisher();
 	}
 
+	@description = "This is a use case for LPS-78284."
 	@priority = "5"
 	test ViewAssetPublisherArchive621021 {
 		property data.archive.type = "data-archive-asset-publisher";
@@ -31,12 +43,4 @@ definition {
 		Upgrade.viewAssetPublisher();
 	}
 
-	@priority = "5"
-	test ViewAssetPublisherArchive625 {
-		property data.archive.type = "data-archive-asset-publisher";
-		property database.types = "mariadb,mysql,postgresql";
-		property portal.version = "6.2.5";
-
-		Upgrade.viewAssetPublisher();
-	}
 }

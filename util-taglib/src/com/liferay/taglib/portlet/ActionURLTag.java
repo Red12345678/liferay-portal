@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.taglib.util.ParamAndPropertyAncestorTagImpl;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.portlet.ActionRequest;
@@ -165,7 +164,7 @@ public class ActionURLTag extends ParamAndPropertyAncestorTagImpl {
 		}
 
 		if (parameterMap != null) {
-			for (Entry<String, String[]> entry : parameterMap.entrySet()) {
+			for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
 				liferayPortletURL.setParameter(
 					entry.getKey(), entry.getValue(), false);
 			}

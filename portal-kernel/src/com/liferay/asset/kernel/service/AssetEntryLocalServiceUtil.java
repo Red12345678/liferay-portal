@@ -524,6 +524,16 @@ public class AssetEntryLocalServiceUtil {
 	}
 
 	public static int getEntriesCount(
+		long[] groupIds, long[] classNameIds, long[] classTypeIds,
+		String keywords, String userName, String title, String description,
+		Boolean listable, boolean advancedSearch, boolean andOperator) {
+
+		return getService().getEntriesCount(
+			groupIds, classNameIds, classTypeIds, keywords, userName, title,
+			description, listable, advancedSearch, andOperator);
+	}
+
+	public static int getEntriesCount(
 		long[] groupIds, long[] classNameIds, String keywords, String userName,
 		String title, String description, Boolean listable,
 		boolean advancedSearch, boolean andOperator) {
@@ -768,6 +778,18 @@ public class AssetEntryLocalServiceUtil {
 		return getService().searchCount(
 			companyId, groupIds, userId, className, classTypeId, keywords,
 			showNonindexable, statuses);
+	}
+
+	public static long searchCount(
+		long companyId, long[] groupIds, long userId, String className,
+		long classTypeId, String keywords, String assetCategoryIds,
+		String assetTagNames, boolean showInvisible, boolean showNonindexable,
+		int[] statuses, boolean andSearch) {
+
+		return getService().searchCount(
+			companyId, groupIds, userId, className, classTypeId, keywords,
+			assetCategoryIds, assetTagNames, showInvisible, showNonindexable,
+			statuses, andSearch);
 	}
 
 	public static long searchCount(

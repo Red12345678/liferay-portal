@@ -57,9 +57,8 @@ public class PACLStatementHandler implements InvocationHandler {
 				if (proxy == arguments[0]) {
 					return true;
 				}
-				else {
-					return false;
-				}
+
+				return false;
 			}
 			else if (methodName.equals("hashCode")) {
 				return System.identityHashCode(proxy);

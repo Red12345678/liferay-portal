@@ -25,7 +25,6 @@ import com.liferay.portal.kernel.test.rule.CodeCoverageAssertor;
 import com.liferay.portal.kernel.test.util.PropsTestUtil;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.TransactionAttribute;
-import com.liferay.portal.kernel.transaction.TransactionAttribute.Builder;
 import com.liferay.portal.kernel.transaction.TransactionLifecycleListener;
 import com.liferay.portal.kernel.transaction.TransactionStatus;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -278,7 +277,8 @@ public class TransactionalPortalCacheTest {
 		TransactionLifecycleListener transactionLifecycleListener =
 			TransactionalPortalCacheHelper.TRANSACTION_LIFECYCLE_LISTENER;
 
-		Builder builder = new Builder();
+		TransactionAttribute.Builder builder =
+			new TransactionAttribute.Builder();
 
 		TransactionAttribute transactionAttribute = builder.build();
 
@@ -897,7 +897,8 @@ public class TransactionalPortalCacheTest {
 
 		// Start parent transaction
 
-		Builder parentBuilder = new Builder();
+		TransactionAttribute.Builder parentBuilder =
+			new TransactionAttribute.Builder();
 
 		TransactionAttribute parentTransactionAttribute = parentBuilder.build();
 
@@ -911,7 +912,8 @@ public class TransactionalPortalCacheTest {
 
 		// Start child transaction with barrier
 
-		Builder childBuilder = new Builder();
+		TransactionAttribute.Builder childBuilder =
+			new TransactionAttribute.Builder();
 
 		childBuilder.setPropagation(propagation);
 
@@ -927,7 +929,8 @@ public class TransactionalPortalCacheTest {
 
 		// Start grandchild transaction
 
-		Builder grandchildBuilder = new Builder();
+		TransactionAttribute.Builder grandchildBuilder =
+			new TransactionAttribute.Builder();
 
 		TransactionAttribute grandchildTransactionAttribute =
 			grandchildBuilder.build();
@@ -1002,7 +1005,8 @@ public class TransactionalPortalCacheTest {
 
 		// Start parent transaction
 
-		Builder parentBuilder = new Builder();
+		TransactionAttribute.Builder parentBuilder =
+			new TransactionAttribute.Builder();
 
 		TransactionAttribute parentTransactionAttribute = parentBuilder.build();
 
@@ -1016,7 +1020,8 @@ public class TransactionalPortalCacheTest {
 
 		// Start child transaction
 
-		Builder childBuilder = new Builder();
+		TransactionAttribute.Builder childBuilder =
+			new TransactionAttribute.Builder();
 
 		childBuilder.setPropagation(propagation);
 

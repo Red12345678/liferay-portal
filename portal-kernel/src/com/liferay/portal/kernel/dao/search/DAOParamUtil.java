@@ -77,9 +77,8 @@ public class DAOParamUtil {
 
 			return isoFormat.format(cal.getTime());
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	public static String getISODate(
@@ -110,9 +109,8 @@ public class DAOParamUtil {
 
 			return isoFormat.format(cal.getTime());
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	public static long getLong(HttpServletRequest request, String param) {
@@ -137,9 +135,8 @@ public class DAOParamUtil {
 		if (Validator.isNull(value)) {
 			return null;
 		}
-		else {
-			return value;
-		}
+
+		return value;
 	}
 
 	public static String getString(
@@ -150,9 +147,8 @@ public class DAOParamUtil {
 		if (Validator.isNull(value)) {
 			return null;
 		}
-		else {
-			return value;
-		}
+
+		return value;
 	}
 
 }

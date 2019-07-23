@@ -79,7 +79,7 @@ definition {
 			roleType = "Site"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -182,7 +182,7 @@ definition {
 				userScreenName = "usersn${number}"
 			);
 
-			ProductMenu.gotoSite(site = "Site Name");
+			Navigator.openSiteURL(siteName = "Site Name");
 
 			ProductMenu.gotoPortlet(
 				category = "Members",
@@ -212,7 +212,7 @@ definition {
 
 		User.loginPG(password = "test", userEmailAddress = "user1@liferay.com");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -244,7 +244,7 @@ definition {
 
 		User.loginPG(password = "test", userEmailAddress = "user2@liferay.com");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -282,7 +282,7 @@ definition {
 			roleName = "Regular Role Name"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -324,7 +324,7 @@ definition {
 
 		User.loginPG(password = "test", userEmailAddress = "user1@liferay.com");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -339,7 +339,7 @@ definition {
 			webContentTitleEdit = "WC WebContent Title Edit"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -520,13 +520,13 @@ definition {
 
 		Site.addBlankCP(siteName = "Test Site Name");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteLanding(siteURLKey = "Test Site Name");
 
 		SitePageNavigator.gotoPages(page = "Public Pages");
 
 		Page.add(pageName = "Web Content Display Page");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -549,7 +549,7 @@ definition {
 
 		WebContentStructures.saveCP(structureName = "WC Structure Name");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -578,11 +578,11 @@ definition {
 
 		SelectFrameTop();
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Web Content Display");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		WebContent.addStructuredPGViaWCD(
 			structureName = "WC Structure Name",
@@ -607,13 +607,13 @@ definition {
 
 		Site.addBlankCP(siteName = "Test Site Name");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteLanding(siteURLKey = "Test Site Name");
 
 		SitePageNavigator.gotoPages(page = "Public Pages");
 
 		Page.add(pageName = "Web Content Display Page");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -636,7 +636,7 @@ definition {
 
 		WebContentStructures.saveCP(structureName = "WC Structure Name");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -664,11 +664,11 @@ definition {
 
 		SelectFrameTop();
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Web Content Display");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		WebContent.addStructuredPGViaWCD(
 			structureName = "WC Structure Name",
@@ -991,7 +991,7 @@ definition {
 			WebContentStructures.viewCP(structureName = "${structureName}");
 		}
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1135,7 +1135,7 @@ definition {
 
 	@priority = "4"
 	test AddWebContentViaWCDWithGlobalStructureAndLocalTemplate {
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1204,7 +1204,7 @@ definition {
 
 	@priority = "3"
 	test AddWebContentWithGlobalStructureAndEditedDefaultValues {
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1232,7 +1232,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1259,7 +1259,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1488,7 +1488,7 @@ definition {
 
 	@priority = "4"
 	test EditArticleMadeFromGlobalStructure {
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1511,7 +1511,7 @@ definition {
 
 		WebContentStructures.saveCP(structureName = "Global WC Structure Name");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1654,7 +1654,7 @@ definition {
 
 	@priority = "4"
 	test EditGlobalWebContentTemplate {
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1677,7 +1677,7 @@ definition {
 
 		WebContentStructures.saveCP(structureName = "Global WC Structure Name");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1922,7 +1922,7 @@ definition {
 
 		WebContent.expireSpecificVersionCP(webContentTitle = "WC WebContent Title Edit");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		WebContent.viewPGViaWCD(webContentContent = "WC WebContent Content");
 	}
@@ -1992,7 +1992,7 @@ definition {
 
 		Site.addBlankCP(siteName = "Site Name");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2007,7 +2007,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2051,7 +2051,7 @@ definition {
 
 		Site.addBlankCP(siteName = "S.P.A.C.E.");
 
-		Navigator.openSiteURL(siteName = "S.P.A.C.E.");
+		Navigator.openSiteLanding(siteURLKey = "S.P.A.C.E.");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2074,7 +2074,7 @@ definition {
 			uploadFrom = "dependencies"
 		);
 
-		Navigator.openSiteURL(siteName = "S.P.A.C.E.");
+		Navigator.openSiteLanding(siteURLKey = "S.P.A.C.E.");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2358,7 +2358,7 @@ definition {
 
 		Site.addBlankCP(parentSiteName = "Site Name", siteName = "Child SiteName");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteLanding(siteURLKey = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2404,7 +2404,7 @@ definition {
 
 		DDLDataDefinition.save();
 
-		ProductMenu.gotoSite(site = "Child SiteName");
+		Navigator.openSiteLanding(siteURLKey = "Child SiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2534,7 +2534,7 @@ definition {
 
 	@priority = "3"
 	test ViewGlobalStructureViaAddMenuInLiferaySite {
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteLanding(siteURLKey = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",

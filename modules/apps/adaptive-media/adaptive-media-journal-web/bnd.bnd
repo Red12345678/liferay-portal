@@ -1,5 +1,5 @@
 Bundle-Name: Liferay Adaptive Media Journal Web
 Bundle-SymbolicName: com.liferay.adaptive.media.journal.web
-Bundle-Version: 1.0.6
+Bundle-Version: 1.0.7
 Liferay-Releng-Module-Group-Title: Adaptive Media
 -dsannotations-options: inherit

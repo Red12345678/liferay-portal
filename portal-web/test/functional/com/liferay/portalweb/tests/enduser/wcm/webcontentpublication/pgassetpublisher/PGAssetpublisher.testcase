@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Asset Publisher";
@@ -75,14 +76,15 @@ definition {
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
-		Portlet.addDuplicatePG(portletCount = "3", portletName = "Asset Publisher");
+		Portlet.addDuplicatePG(
+			portletCount = "3",
+			portletName = "Asset Publisher");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		Portlet.viewDuplicatePG(
 			portletName = "Asset Publisher",
-			totalPortletCount = "4"
-		);
+			totalPortletCount = "4");
 	}
 
 	@description = "This is a use case for LPS-47619 and LPS-67326."
@@ -97,24 +99,21 @@ definition {
 
 		Blogs.addViaAP(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		BlogsEntry.viewEntryViaAPPG(
 			assetTitle = "Blogs Entry Title",
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		Bookmark.addBookmarkViaAP(
 			bookmarkDescription = "Test Bookmark Description",
 			bookmarkName = "Test Bookmark Name",
-			bookmarkURL = "https://www.liferay.com"
-		);
+			bookmarkURL = "https://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
@@ -128,39 +127,34 @@ definition {
 
 		CalendarEvent.viewViaAssetPublisher(
 			calendarName = "${siteName}",
-			eventTitle = "Calendar Event Title"
-		);
+			eventTitle = "Calendar Event Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		DMDocument.addPGViaAPWithValidationPosition(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Document_1.doc",
-			dmDocumentTitle = "DM Document Title"
-		);
+			dmDocumentTitle = "DM Document Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		DMDocument.viewPGViaAP(
 			dmDocumentDescription = "DM Document Description",
-			dmDocumentTitle = "DM Document Title"
-		);
+			dmDocumentTitle = "DM Document Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Dynamic Data Lists"
-		);
+			portlet = "Dynamic Data Lists");
 
 		DDLDataDefinition.addCP(ddlDataDefinitionName = "Data Definition");
 
 		DynamicDataMapping.addField(
 			field = "Text",
 			fieldFieldLabel = "Text",
-			fieldName = "Text"
-		);
+			fieldName = "Text");
 
 		DDLDataDefinition.save();
 
@@ -169,8 +163,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Dynamic Data Lists"
-		);
+			portlet = "Dynamic Data Lists");
 
 		DDLList.addCP(ddlListName = "List Name");
 
@@ -180,40 +173,37 @@ definition {
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
-		DDLRecord.addPGViaAP(ddlRecordFieldData = "Text Field", fieldName = "Text");
+		DDLRecord.addPGViaAP(
+			ddlRecordFieldData = "Text Field",
+			fieldName = "Text");
 
 		DDLRecord.viewPGViaAP(
 			ddlListName = "New Data Definition for List: List Name",
-			ddlRecordFieldData = "Text Field"
-		);
+			ddlRecordFieldData = "Text Field");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		KBArticle.addPGViaAP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		KBArticle.viewPGViaAP(
 			kbArticleContent = "Knowledge Base Article Content",
-			kbArticleTitle = "Knowledge Base Article Title"
-		);
+			kbArticleTitle = "Knowledge Base Article Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		WebContent.addPGViaAP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC Webcontent Title"
-		);
+			webContentTitle = "WC Webcontent Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		WebContent.viewPGViaAP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC Webcontent Title"
-		);
+			webContentTitle = "WC Webcontent Title");
 
 		for (var portletName : list "Blogs,Bookmarks,Calendar,Documents and Media,Dynamic Data Lists Display,Knowledge Base Article,Web Content Display") {
 			Navigator.gotoPage(pageName = "Asset Publisher Page");
@@ -234,8 +224,7 @@ definition {
 
 		BookmarksFolder.addPG(
 			folderDescription = "Test Folder Description",
-			folderName = "Test Folder Name"
-		);
+			folderName = "Test Folder Name");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
@@ -243,8 +232,7 @@ definition {
 			bookmarkDescription = "Test Bookmark Description",
 			bookmarkFolderName = "Test Folder Name",
 			bookmarkName = "Test Bookmark Name",
-			bookmarkURL = "https://www.liferay.com"
-		);
+			bookmarkURL = "https://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
@@ -263,40 +251,32 @@ definition {
 
 		BookmarksFolder.addPG(
 			folderDescription = "Test Folder Description",
-			folderName = "Test Folder Name"
-		);
+			folderName = "Test Folder Name");
 
 		Navigator.gotoPage(pageName = "Bookmarks Page");
 
 		Bookmark.addPG(
 			bookmarkDescription = "Test Bookmark Description",
 			bookmarkName = "Test Bookmark Name",
-			bookmarkURL = "https://www.liferay.com"
-		);
+			bookmarkURL = "https://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		Portlet.gotoPortletOptions(
 			portletName = "Asset Publisher",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
-		AssetPublisherPortlet.configureDisplayTemplatePG(
-			displayTemplate = "Full Content"
-		);
+		AssetPublisherPortlet.configureDisplayTemplatePG(displayTemplate = "Full Content");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
-		AssetPublisherPortlet.viewConfigureAPDisplayTemplateFullContentBookmarksPG(
-			assetTitle = "Test Bookmark Name"
-		);
+		AssetPublisherPortlet.viewConfigureAPDisplayTemplateFullContentBookmarksPG(assetTitle = "Test Bookmark Name");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		Portlet.gotoPortletOptions(
 			portletName = "Asset Publisher",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		AssetPublisherPortlet.configureDisplayTemplatePG(displayTemplate = "Table");
 
@@ -305,15 +285,13 @@ definition {
 		AssetPublisherPortlet.viewConfigureAPDisplayTemplateTableBookmarksPG(
 			assetTitle = "Test Bookmark Name",
 			bookmarkDescription = "Test Bookmark Description",
-			bookmarkName = "Test Bookmark Name"
-		);
+			bookmarkName = "Test Bookmark Name");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		Portlet.gotoPortletOptions(
 			portletName = "Asset Publisher",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		AssetPublisherPortlet.configureDisplayTemplatePG(displayTemplate = "Title List");
 
@@ -322,46 +300,38 @@ definition {
 		AssetPublisherPortlet.viewConfigureAPDisplayTemplateTitleListBookmarksPG(
 			assetTitle = "Test Bookmark Name",
 			bookmarkDescription = "Test Bookmark Description",
-			bookmarkName = "Test Bookmark Name"
-		);
+			bookmarkName = "Test Bookmark Name");
 	}
 
 	@priority = "4"
 	test ConfigureAPPortletEnableRatings {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ProductMenu.gotoSite(site = "${siteName}");
+		Navigator.openSiteURL(siteName = "${siteName}");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.configureFlaggableDisplaySettingsPG(
 			enableRatings = "true",
-			portletName = "Asset Publisher"
-		);
+			portletName = "Asset Publisher");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
-		AssetPublisherPortlet.viewConfigureFlaggableDisplaySettingsPG(
-			enableRatings = "true"
-		);
+		AssetPublisherPortlet.viewConfigureFlaggableDisplaySettingsPG(enableRatings = "true");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		WebContent.addPGViaAP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		Portlet.gotoPortletOptions(
 			portletName = "Asset Publisher",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
-		AssetPublisherPortlet.configureDisplayTemplatePG(
-			displayTemplate = "Full Content"
-		);
+		AssetPublisherPortlet.configureDisplayTemplatePG(displayTemplate = "Full Content");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
@@ -369,8 +339,7 @@ definition {
 
 		Navigator.gotoPage(
 			assetTitle = "WC WebContent Title",
-			pageName = "Asset Publisher Page"
-		);
+			pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.viewAssetRatingPG(rating = "4");
 
@@ -386,8 +355,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Test Site");
 
@@ -403,8 +371,7 @@ definition {
 
 		AssetPublisherPortlet.viewMultipleSiteScopesAddDropdowns(
 			siteName1 = "${siteName}",
-			siteName2 = "Test Site"
-		);
+			siteName2 = "Test Site");
 	}
 
 	@priority = "4"
@@ -415,8 +382,7 @@ definition {
 
 		AssetPublisherPortlet.viewSelectedPG(
 			selectedAsset = "Blogs Entry",
-			selectedAssetConfiguration = "Blogs Entry"
-		);
+			selectedAssetConfiguration = "Blogs Entry");
 	}
 
 	@priority = "4"
@@ -427,8 +393,7 @@ definition {
 
 		AssetPublisherPortlet.viewSelectedPG(
 			selectedAsset = "Bookmarks Entry",
-			selectedAssetConfiguration = "Bookmarks Entry"
-		);
+			selectedAssetConfiguration = "Bookmarks Entry");
 	}
 
 	@priority = "4"
@@ -439,8 +404,7 @@ definition {
 
 		AssetPublisherPortlet.viewSelectedPG(
 			selectedAsset = "Basic Document",
-			selectedAssetConfiguration = "Document"
-		);
+			selectedAssetConfiguration = "Document");
 	}
 
 	@priority = "5"
@@ -453,22 +417,18 @@ definition {
 
 		AssetPublisherPortlet.viewSelectedPG(
 			selectedAsset = "Basic Web Content",
-			selectedAssetConfiguration = "Web Content Article"
-		);
+			selectedAssetConfiguration = "Web Content Article");
 	}
 
 	@priority = "4"
 	test ConfigureAPPortletSetAsDefault {
 		AssetPublisherPortlet.configureFlaggableDisplaySettingsPG(
 			portletName = "Asset Publisher",
-			setAsDefaultPage = "true"
-		);
+			setAsDefaultPage = "true");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
-		AssetPublisherPortlet.viewConfigureFlaggableDisplaySettingsPG(
-			setAsDefaultPage = "true"
-		);
+		AssetPublisherPortlet.viewConfigureFlaggableDisplaySettingsPG(setAsDefaultPage = "true");
 	}
 
 	@priority = "4"
@@ -483,41 +443,32 @@ definition {
 
 		BookmarksFolder.addPG(
 			folderDescription = "Test Folder Description",
-			folderName = "Test Folder Name"
-		);
+			folderName = "Test Folder Name");
 
 		Navigator.gotoPage(pageName = "Bookmarks Page");
 
 		Bookmark.addPG(
 			bookmarkDescription = "Test Bookmark Description",
 			bookmarkName = "Test Bookmark Name",
-			bookmarkURL = "https://www.liferay.com"
-		);
+			bookmarkURL = "https://www.liferay.com");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
-		AssetPublisherPortlet.configureAPSelectMoreThanOnePG(
-			selectContent = "Bookmarks Entry"
-		);
+		AssetPublisherPortlet.configureAPSelectMoreThanOnePG(selectContent = "Bookmarks Entry");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
-		AssetPublisherPortlet.viewConfigureAPMoveToAvailablePG(
-			assetTitle = "Test Bookmark Name"
-		);
+		AssetPublisherPortlet.viewConfigureAPMoveToAvailablePG(assetTitle = "Test Bookmark Name");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.configureAPSelectMoreThanOnePG(
 			moveSelected = "true",
-			selectContent = "Bookmarks Entry"
-		);
+			selectContent = "Bookmarks Entry");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
-		AssetPublisherPortlet.viewConfigureAPMoveToSelectedPG(
-			assetTitle = "Test Bookmark Name"
-		);
+		AssetPublisherPortlet.viewConfigureAPMoveToSelectedPG(assetTitle = "Test Bookmark Name");
 	}
 
 	@priority = "4"
@@ -544,8 +495,7 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Content",
 				panel = "Site Administration",
-				portlet = "Tags"
-			);
+				portlet = "Tags");
 
 			Tag.addCP(tagName = "${tagName}");
 		}
@@ -555,53 +505,44 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addWithTagCP(
 			tagNameList = "first tag,second tag",
 			webContentContent = "Web Content Content",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentFile = "Document_1.txt",
 			dmDocumentTitle = "DM Document Title",
-			tagNameList = "first tag"
-		);
+			tagNameList = "first tag");
 
 		Navigator.gotoPage(pageName = "Tags Navigation Page");
 
 		TagsNavigationPortlet.clickTagView(
 			tagAssetCount = "first tag (2)",
-			tagName = "first tag"
-		);
+			tagName = "first tag");
 
-		AssetPublisherPortlet.viewTagFocusPG(
-			assetTitleList = "DM Document Title,Web Content Title"
-		);
+		AssetPublisherPortlet.viewTagFocusPG(assetTitleList = "DM Document Title,Web Content Title");
 
 		Navigator.gotoPage(pageName = "Tags Navigation Page");
 
 		TagsNavigationPortlet.clickTagView(
 			tagAssetCount = "second tag (1)",
-			tagName = "second tag"
-		);
+			tagName = "second tag");
 
 		AssetPublisherPortlet.viewTagFocusPG(
 			assetTitleList = "Web Content Title",
-			nonTaggedAsset = "DM Document Title"
-		);
+			nonTaggedAsset = "DM Document Title");
 	}
 
 	@priority = "4"
@@ -609,8 +550,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
@@ -625,51 +565,44 @@ definition {
 
 		AssetPublisherPortlet.configureAssetDisplayOrderPG(
 			fieldNameOrder = "Modified Date",
-			sortOrder = "Descending"
-		);
+			sortOrder = "Descending");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		WebContent.addPGViaAP(
 			webContentContent = "WebContent Content 1",
-			webContentTitle = "WebContent Title 1"
-		);
+			webContentTitle = "WebContent Title 1");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		WebContent.addPGViaAP(
 			webContentContent = "WebContent Content 2",
-			webContentTitle = "WebContent Title 2"
-		);
+			webContentTitle = "WebContent Title 2");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		WebContent.addPGViaAP(
 			webContentContent = "WebContent Content 3",
-			webContentTitle = "WebContent Title 3"
-		);
+			webContentTitle = "WebContent Title 3");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.viewMultipleAssetOrderPGViaAP(
 			assetTitle1 = "WebContent Title 3",
 			assetTitle2 = "WebContent Title 2",
-			assetTitle3 = "WebContent Title 1"
-		);
+			assetTitle3 = "WebContent Title 1");
 
 		WebContent.editPGViaAP(
 			assetTitle = "WebContent Title 1",
 			webContentContentEdit = "WebContent Content 1 Edit",
-			webContentTitleEdit = "WebContent Title 1 Edit"
-		);
+			webContentTitleEdit = "WebContent Title 1 Edit");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.viewMultipleAssetOrderPGViaAP(
 			assetTitle1 = "WebContent Title 1 Edit",
 			assetTitle2 = "WebContent Title 3",
-			assetTitle3 = "WebContent Title 2"
-		);
+			assetTitle3 = "WebContent Title 2");
 	}
 
 	@priority = "4"
@@ -678,15 +611,13 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Content",
 				panel = "Site Administration",
-				portlet = "Web Content"
-			);
+				portlet = "Web Content");
 
 			WebContentNavigator.gotoAddCP();
 
 			WebContent.addCP(
 				webContentContent = "WC WebContent Content",
-				webContentTitle = "WC Priority ${i} Title"
-			);
+				webContentTitle = "WC Priority ${i} Title");
 
 			WebContent.addPriority(priority = "${i}");
 
@@ -697,69 +628,57 @@ definition {
 
 		AssetPublisherPortlet.viewDisplayOrderPG(
 			assetTitle = "WC Priority 3 Title",
-			rowNumber = "1"
-		);
+			rowNumber = "1");
 
 		AssetPublisherPortlet.viewDisplayOrderPG(
 			assetTitle = "WC Priority 5 Title",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		AssetPublisherPortlet.viewDisplayOrderPG(
 			assetTitle = "WC Priority 1 Title",
-			rowNumber = "3"
-		);
+			rowNumber = "3");
 
 		AssetPublisherPortlet.configureAssetTypePG(
 			assetSubtype = "Any",
-			selectedAsset = "Web Content Article"
-		);
+			selectedAsset = "Web Content Article");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.configureAssetDisplayOrderPG(
 			fieldNameOrder = "Priority",
-			sortOrder = "Ascending"
-		);
+			sortOrder = "Ascending");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.viewDisplayOrderPG(
 			assetTitle = "WC Priority 1 Title",
-			rowNumber = "1"
-		);
+			rowNumber = "1");
 
 		AssetPublisherPortlet.viewDisplayOrderPG(
 			assetTitle = "WC Priority 3 Title",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		AssetPublisherPortlet.viewDisplayOrderPG(
 			assetTitle = "WC Priority 5 Title",
-			rowNumber = "3"
-		);
+			rowNumber = "3");
 
 		AssetPublisherPortlet.configureAssetDisplayOrderPG(
 			fieldNameOrder = "Priority",
-			sortOrder = "Descending"
-		);
+			sortOrder = "Descending");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.viewDisplayOrderPG(
 			assetTitle = "WC Priority 5 Title",
-			rowNumber = "1"
-		);
+			rowNumber = "1");
 
 		AssetPublisherPortlet.viewDisplayOrderPG(
 			assetTitle = "WC Priority 3 Title",
-			rowNumber = "2"
-		);
+			rowNumber = "2");
 
 		AssetPublisherPortlet.viewDisplayOrderPG(
 			assetTitle = "WC Priority 1 Title",
-			rowNumber = "3"
-		);
+			rowNumber = "3");
 	}
 
 	@priority = "3"
@@ -768,22 +687,19 @@ definition {
 
 		AssetPublisherPortlet.configureAssetTypePG(
 			assetSubtype = "Any",
-			selectedAsset = "Web Content Article"
-		);
+			selectedAsset = "Web Content Article");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.configureAssetDisplayOrderPG(
 			fieldNameOrder = "Publish Date",
-			sortOrder = "Descending"
-		);
+			sortOrder = "Descending");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		WebContent.addPGViaAP(
 			webContentContent = "WebContent Content 1",
-			webContentTitle = "WebContent Title 1"
-		);
+			webContentTitle = "WebContent Title 1");
 
 		Pause(locator1 = "65000");
 
@@ -791,8 +707,7 @@ definition {
 
 		WebContent.addPGViaAP(
 			webContentContent = "WebContent Content 2",
-			webContentTitle = "WebContent Title 2"
-		);
+			webContentTitle = "WebContent Title 2");
 
 		Pause(locator1 = "65000");
 
@@ -800,16 +715,14 @@ definition {
 
 		WebContent.addPGViaAP(
 			webContentContent = "WebContent Content 3",
-			webContentTitle = "WebContent Title 3"
-		);
+			webContentTitle = "WebContent Title 3");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
 		AssetPublisherPortlet.viewMultipleAssetOrderPGViaAP(
 			assetTitle1 = "WebContent Title 3",
 			assetTitle2 = "WebContent Title 2",
-			assetTitle3 = "WebContent Title 1"
-		);
+			assetTitle3 = "WebContent Title 1");
 	}
 
 	@priority = "5"
@@ -821,15 +734,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		PortletEntry.publish();
 
@@ -839,9 +750,7 @@ definition {
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
-		AssetPublisherPortlet.saveConfigurationTemplatePG(
-			configurationName = "AP Manual Display"
-		);
+		AssetPublisherPortlet.saveConfigurationTemplatePG(configurationName = "AP Manual Display");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
@@ -851,9 +760,7 @@ definition {
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
-		AssetPublisherPortlet.restoreConfigurationTemplatePG(
-			configurationName = "AP Manual Display"
-		);
+		AssetPublisherPortlet.restoreConfigurationTemplatePG(configurationName = "AP Manual Display");
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
@@ -863,8 +770,7 @@ definition {
 
 		Navigator.gotoPage(pageName = "Asset Publisher Page");
 
-		AssetPublisherPortlet.deleteConfigurationTemplatePG(
-			configurationName = "AP Manual Display"
-		);
+		AssetPublisherPortlet.deleteConfigurationTemplatePG(configurationName = "AP Manual Display");
 	}
+
 }

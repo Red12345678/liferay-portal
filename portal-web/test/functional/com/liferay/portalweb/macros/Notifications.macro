@@ -1,13 +1,15 @@
 definition {
+
 	macro acceptRequest {
 		var key_requestsTitle = "${requestsTitle}";
 
 		AssertTextEquals(
 			locator1 = "Notifications#NOTIFICATIONS_TITLE",
-			value1 = "${requestsTitle}"
-		);
+			value1 = "${requestsTitle}");
 
-		AssertClick(locator1 = "Button#CONFIRM", value1 = "Confirm");
+		AssertClick(
+			locator1 = "Button#CONFIRM",
+			value1 = "Confirm");
 	}
 
 	macro deleteNotification {
@@ -25,16 +27,14 @@ definition {
 
 		Click(locator1 = "Dropdown#FILTER");
 
-		AssertClick(locator1 = "Dropdown#FILTER_VALUES", value1 = "${filterValue}");
+		AssertClick(
+			locator1 = "Dropdown#FILTER_VALUES",
+			value1 = "${filterValue}");
 	}
 
 	macro gotoNotifications {
 		if (IsElementPresent(locator1 = "Notifications#USER_BAR_BADGE_COUNT")) {
 			Click(locator1 = "Notifications#USER_BAR_BADGE_COUNT");
-		}
-
-		if (IsElementPresent(locator1 = "Notifications#PROFILE_BADGE_COUNT")) {
-			Click(locator1 = "Notifications#PROFILE_BADGE_COUNT");
 		}
 
 		if (IsElementPresent(locator1 = "Notifications#MY_ACCOUNT_BADGE_COUNT")) {
@@ -52,24 +52,20 @@ definition {
 
 	macro gotoNotificationsEntry {
 		AssertClick(
+			key_notificationsWorkflowTitle = "${notificationsWorkflowTitle}",
 			locator1 = "Notifications#NOTIFICATIONS_WORKFLOW_TITLE",
-			value1 = "${notificationsWorkflowTitle}",
-			key_notificationsWorkflowTitle = "${notificationsWorkflowTitle}"
-		);
+			value1 = "${notificationsWorkflowTitle}");
 	}
 
 	macro navigateToContent {
 		AssertClick.assertPartialTextClickAt(
+			key_contentBody = "${contentBody}",
 			locator1 = "Notifications#NOTIFICATIONS_CONTENT",
-			value1 = "${contentBody}",
-			key_contentBody = "${contentBody}"
-		);
+			value1 = "${contentBody}");
 	}
 
 	macro reviewViaNotificationsEntry {
-		Notifications.gotoNotificationsEntry(
-			notificationsWorkflowTitle = "${notificationsWorkflowTitle}"
-		);
+		Notifications.gotoNotificationsEntry(notificationsWorkflowTitle = "${notificationsWorkflowTitle}");
 
 		Click(locator1 = "Icon#BODY_VERTICAL_ELLIPSIS");
 
@@ -88,13 +84,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "My Account",
 			panel = "User",
-			portlet = "Notifications"
-		);
+			portlet = "Notifications");
 
 		var key_contentBody = "${contentBody}";
 
 		if (IsElementPresent(locator1 = "Notifications#NOTIFICATIONS_CONTENT")) {
-			AssertClick(locator1 = "Notifications#MARK_AS_READ", value1 = "Mark as Read");
+			AssertClick(
+				locator1 = "Notifications#MARK_AS_READ",
+				value1 = "Mark as Read");
 		}
 	}
 
@@ -102,46 +99,34 @@ definition {
 		if (IsElementPresent(locator1 = "Notifications#USER_BAR_BADGE_COUNT")) {
 			AssertTextEquals(
 				locator1 = "Notifications#USER_BAR_BADGE_COUNT",
-				value1 = "${notificationCount}"
-			);
-		}
-
-		if (IsElementPresent(locator1 = "Notifications#PROFILE_BADGE_COUNT")) {
-			AssertTextEquals(
-				locator1 = "Notifications#PROFILE_BADGE_COUNT",
-				value1 = "${notificationCount}"
-			);
+				value1 = "${notificationCount}");
 		}
 
 		if (IsElementPresent(locator1 = "Notifications#MY_ACCOUNT_BADGE_COUNT")) {
 			AssertTextEquals(
 				locator1 = "Notifications#MY_ACCOUNT_BADGE_COUNT",
-				value1 = "${notificationCount}"
-			);
+				value1 = "${notificationCount}");
 		}
 
 		if (IsElementPresent(locator1 = "Notifications#NOTIFICATIONS_BADGE_COUNT")) {
 			if (IsElementPresent.isVisible(locator1 = "Notifications#NOTIFICATIONS_BADGE_COUNT")) {
 				AssertTextEquals(
 					locator1 = "Notifications#NOTIFICATIONS_BADGE_COUNT",
-					value1 = "${notificationCount}"
-				);
+					value1 = "${notificationCount}");
 			}
 		}
 
 		if (IsElementPresent(locator1 = "Notifications#USER_NAVIGATION_BAR_BADGE_COUNT")) {
 			AssertTextEquals(
 				locator1 = "Notifications#USER_NAVIGATION_BAR_BADGE_COUNT",
-				value1 = "${notificationCount}"
-			);
+				value1 = "${notificationCount}");
 		}
 	}
 
 	macro viewDefaultContent {
 		AssertTextEquals(
 			locator1 = "Message#EMPTY_INFO",
-			value1 = "You do not have any notifications."
-		);
+			value1 = "You do not have any notifications.");
 	}
 
 	macro viewNewComment {
@@ -150,13 +135,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Notifications#NOTIFICATIONS_TITLE",
-			value1 = "${user} added a new ${assetType} to ${content}."
-		);
+			value1 = "${user} added a new ${assetType} to ${content}.");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Notifications#NOTIFICATIONS_CONTENT",
-			value1 = "${contentBody}"
-		);
+			value1 = "${contentBody}");
 	}
 
 	macro viewNewContent {
@@ -165,28 +148,24 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Notifications#NOTIFICATIONS_TITLE",
-			value1 = "${user} added a new ${assetType}."
-		);
+			value1 = "${user} added a new ${assetType}.");
 
 		AssertTextEquals(
 			locator1 = "Notifications#NOTIFICATIONS_CONTENT",
-			value1 = "${contentBody}"
-		);
+			value1 = "${contentBody}");
 	}
 
 	macro viewNoNotificationEntry {
 		AssertElementNotPresent(locator1 = "Notifications#USER_BAR_BADGE_COUNT");
 
-		AssertElementNotPresent(
-			locator1 = "Notifications#NOTIFICATIONS_CONTENT_GENERIC"
-		);
+		AssertElementNotPresent(locator1 = "Notifications#NOTIFICATIONS_CONTENT_GENERIC");
 
 		AssertElementNotPresent(locator1 = "Notifications#NOTIFICATIONS_TITLE");
 	}
 
 	macro viewNoNotifications {
 		if ("${activePanel}" == "Profile") {
-			AssertElementNotPresent(locator1 = "Notifications#PROFILE_BADGE_COUNT");
+			AssertElementNotPresent(locator1 = "Notifications#USER_NAVIGATION_BAR_BADGE_COUNT");
 		}
 
 		if ("${activePanel}" == "My Account") {
@@ -209,8 +188,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Notifications#NOTIFICATIONS_TITLE",
-			value1 = "${requestsTitle}"
-		);
+			value1 = "${requestsTitle}");
 	}
 
 	macro viewUpdatedContent {
@@ -219,12 +197,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Notifications#NOTIFICATIONS_TITLE",
-			value1 = "${user} updated a ${assetType}."
-		);
+			value1 = "${user} updated a ${assetType}.");
 
 		AssertTextEquals(
 			locator1 = "Notifications#NOTIFICATIONS_CONTENT",
-			value1 = "${contentBody}"
-		);
+			value1 = "${contentBody}");
 	}
+
 }

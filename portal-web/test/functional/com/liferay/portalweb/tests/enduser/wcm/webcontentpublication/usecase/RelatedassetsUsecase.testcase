@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Related Assets";
@@ -23,31 +24,29 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Test Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Test Page",
+			siteName = "Site Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -56,15 +55,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Categories"
-		);
+			portlet = "Categories");
 
 		Vocabulary.addCP(vocabularyName = "Vocabulary Name");
 
 		Category.addCP(
 			categoryName = "Category Name",
-			vocabularyName = "Vocabulary Name"
-		);
+			vocabularyName = "Vocabulary Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -73,15 +70,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "Web Content Content 1",
-			webContentTitle = "Web Content Title 1"
-		);
+			webContentTitle = "Web Content Title 1");
 
 		PortletEntry.publish();
 
@@ -92,8 +87,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -101,15 +95,13 @@ definition {
 			categoryName = "Category Name",
 			vocabularyName = "Vocabulary Name",
 			webContentContent = "Web Content Content 2",
-			webContentTitle = "Web Content Title 2"
-		);
+			webContentTitle = "Web Content Title 2");
 
 		WebContentNavigator.gotoEditCP(webContentTitle = "Web Content Title 2");
 
 		WebContent.viewCategorizationCategoryCP(
 			categoryNameList = "Category Name",
-			vocabularyName = "Vocabulary Name"
-		);
+			vocabularyName = "Vocabulary Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -118,8 +110,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoEditCP(webContentTitle = "Web Content Title 2");
 
@@ -127,43 +118,37 @@ definition {
 			assetTitle = "Web Content Title 1",
 			assetType = "Basic Web Content",
 			siteName = "Site Name",
-			webContentTitle = "Web Content Title 2"
-		);
+			webContentTitle = "Web Content Title 2");
 
 		Navigator.openStagingSiteURL(siteName = "Site Name");
 
-		Page.add(pageName = "Private Page Name", sitePagePrivacy = "Private");
+		Page.add(
+			pageName = "Private Page Name",
+			sitePagePrivacy = "Private");
 
 		Navigator.gotoPrivateStagedSitePage(
 			pageName = "Private Page Name",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
 		AssetPublisherPortlet.configureManualAssetSelectionPG(
 			assetTitle = "Web Content Title 1",
-			assetType = "Basic Web Content"
-		);
+			assetType = "Basic Web Content");
 
 		Navigator.gotoPrivateStagedSitePage(
 			pageName = "Private Page Name",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(
 			portletName = "Asset Publisher",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
-		AssetPublisherPortlet.configureDisplayTemplatePG(
-			displayTemplate = "Full Content"
-		);
+		AssetPublisherPortlet.configureDisplayTemplatePG(displayTemplate = "Full Content");
 
 		Navigator.gotoPrivateStagedSitePage(
 			pageName = "Private Page Name",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Related Assets");
 
@@ -171,8 +156,7 @@ definition {
 
 		Navigator.gotoPrivateStagedSitePage(
 			pageName = "Private Page Name",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		RelatedAssets.viewPG(assetTitle = "Web Content Title 2");
 	}
@@ -183,65 +167,59 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Test Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Test Page",
+			siteName = "Site Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
-		ProductMenu.gotoSite(site = "Global");
+		Navigator.openSiteURL(siteName = "Global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "Web Content Content 1",
-			webContentTitle = "Web Content Title 1"
-		);
+			webContentTitle = "Web Content Title 1");
 
 		PortletEntry.publish();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoStagingSite();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "Web Content Content 2",
-			webContentTitle = "Web Content Title 2"
-		);
+			webContentTitle = "Web Content Title 2");
 
 		PortletEntry.publish();
 
@@ -250,31 +228,29 @@ definition {
 		WebContent.addExistingRelatedAssetCP(
 			assetTitle = "Web Content Title 1",
 			assetType = "Basic Web Content",
-			siteName = "Global",
 			scopeSite = "Global",
-			webContentTitle = "Web Content Title 2"
-		);
+			siteName = "Global",
+			webContentTitle = "Web Content Title 2");
 
-		Navigator.gotoStagedSitePage(pageName = "Test Page", siteName = "Site Name");
+		Navigator.gotoStagedSitePage(
+			pageName = "Test Page",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
 		AssetPublisherPortlet.viewAssetDetailsPG(
 			assetContent = "Web Content Content 2",
-			assetTitle = "Web Content Title 2"
-		);
+			assetTitle = "Web Content Title 2");
 
 		AssertTextEquals(
 			locator1 = "Relatedassets#ASSET_TITLE_1",
-			value1 = "Web Content Title 1"
-		);
+			value1 = "Web Content Title 1");
 
 		Staging.gotoPublishToLive();
 
 		Staging.configurePublishToLive(
 			checkContentNameList = "Web Content",
-			checkPageName = "Test Page"
-		);
+			checkPageName = "Test Page");
 
 		Staging.publishToLive();
 
@@ -282,13 +258,11 @@ definition {
 
 		AssetPublisherPortlet.viewAssetDetailsPG(
 			assetContent = "Web Content Content 2",
-			assetTitle = "Web Content Title 2"
-		);
+			assetTitle = "Web Content Title 2");
 
 		AssertTextEquals(
 			locator1 = "Relatedassets#ASSET_TITLE_1",
-			value1 = "Web Content Title 1"
-		);
+			value1 = "Web Content Title 1");
 	}
 
 	@priority = "3"
@@ -296,49 +270,59 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Test Page 1", siteName = "Site Name");
+		Page.add(
+			pageName = "Test Page 1",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Test Page 2", siteName = "Site Name");
+		Page.add(
+			pageName = "Test Page 2",
+			siteName = "Site Name");
 
-		Navigator.gotoSitePage(pageName = "Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page 1",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Web Content Display");
 
-		Navigator.gotoSitePage(pageName = "Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page 1",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
-		Navigator.gotoSitePage(pageName = "Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page 1",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Related Assets");
 
-		Navigator.gotoSitePage(pageName = "Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page 1",
+			siteName = "Site Name");
 
 		WebContent.addPGViaWCD(
 			webContentContent = "Web Content Content",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 
 		WebContent.viewPGViaWCD(webContentContent = "Web Content Content");
 
-		Navigator.gotoSitePage(pageName = "Test Page 2", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page 2",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Blogs");
 
@@ -347,71 +331,61 @@ definition {
 			assetType = "Basic Web Content",
 			entryAddRelatedAsset = "true",
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Bookmarks"
-		);
+			portlet = "Bookmarks");
 
 		BookmarksFolder.addCP(
 			folderDescription = "Bookmarks Folder Description",
-			folderName = "Bookmarks Folder Name"
-		);
+			folderName = "Bookmarks Folder Name");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMFolder.addCP(
 			dmFolderDescription = "DM Folder Description",
-			dmFolderName = "DM Folder Name"
-		);
+			dmFolderName = "DM Folder Name");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentFolder.addCP(
 			folderDescription = "WC Folder Description",
-			folderName = "WC Folder Name"
-		);
+			folderName = "WC Folder Name");
 
-		Navigator.gotoSitePage(pageName = "Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page 1",
+			siteName = "Site Name");
 
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "Blogs Entry Content",
-			assetTitle = "Blogs Entry Title"
-		);
+			assetTitle = "Blogs Entry Title");
 
 		AssetPublisherPortlet.viewAssetPG(
 			assetContent = "Web Content Content",
-			assetTitle = "Web Content Title"
-		);
+			assetTitle = "Web Content Title");
 
-		RelatedAssets.viewNoPG(
-			assetTitleList = "Blogs Entry Title,Web Content Title,DM Folder Name,WC Folder Name,Bookmarks Folder Name"
-		);
+		RelatedAssets.viewNoPG(assetTitleList = "Blogs Entry Title,Web Content Title,DM Folder Name,WC Folder Name,Bookmarks Folder Name");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoEditCP(webContentTitle = "Web Content Title");
 
@@ -420,16 +394,17 @@ definition {
 			assetType = "Blogs Entry",
 			siteName = "Site Name",
 			siteURL = "true",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 
-		Navigator.gotoSitePage(pageName = "Test Page 1", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page 1",
+			siteName = "Site Name");
 
 		AssetPublisherPortlet.viewAssetDetailsPG(
 			assetContent = "Blogs Entry Content",
-			assetTitle = "Blogs Entry Title"
-		);
+			assetTitle = "Blogs Entry Title");
 
 		RelatedAssets.viewPG(assetTitle = "Web Content Title");
 	}
+
 }

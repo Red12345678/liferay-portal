@@ -1,4 +1,5 @@
 definition {
+
 	macro _selectCalendarSettingsIframe {
 		SelectFrame(locator1 = "IFrame#DIALOG");
 	}
@@ -6,8 +7,7 @@ definition {
 	macro _selectPermissionsIframe {
 		AssertTextEquals(
 			locator1 = "CalendarPermissions#PERMISSIONS_TITLE",
-			value1 = "Permissions"
-		);
+			value1 = "Permissions");
 
 		SelectFrame(locator1 = "IFrame#DIALOG");
 	}
@@ -24,14 +24,12 @@ definition {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 		Click(
-			locator1 = "Calendar#CURRENT_SITE_CALENDARS_MENULIST_ARROW",
-			key_siteName = "${siteName}"
-		);
+			key_siteName = "${siteName}",
+			locator1 = "Calendar#CURRENT_SITE_CALENDARS_MENULIST_ARROW");
 
 		AssertClick(
 			locator1 = "Calendar#CURRENT_SITE_CALENDARS_MENULIST_ADD_CALENDAR",
-			value1 = "Add Calendar"
-		);
+			value1 = "Add Calendar");
 
 		CalendarNavigator._selectCalendarSettingsIframe();
 	}
@@ -39,7 +37,9 @@ definition {
 	macro gotoAddEvent {
 		CalendarNavigator.gotoView(viewType = "Week");
 
-		AssertClick(locator1 = "Calendar#ADD_EVENT_BUTTON", value1 = "Add Event");
+		AssertClick(
+			locator1 = "Calendar#ADD_EVENT_BUTTON",
+			value1 = "Add Event");
 
 		CalendarEvent.selectEventIframe();
 
@@ -60,14 +60,12 @@ definition {
 
 	macro gotoAddEventViaMyCalendars {
 		Click(
-			locator1 = "Calendar#MY_CALENDARS_CALENDAR_PRIMARY_MENULIST_ARROW",
-			key_user = "${user}"
-		);
+			key_user = "${user}",
+			locator1 = "Calendar#MY_CALENDARS_CALENDAR_PRIMARY_MENULIST_ARROW");
 
 		AssertClick(
 			locator1 = "Calendar#OTHER_CALENDARS_CALENDAR_MENULIST_ADD_EVENT",
-			value1 = "Add Event"
-		);
+			value1 = "Add Event");
 
 		CalendarEvent.selectEventIframe();
 
@@ -79,8 +77,7 @@ definition {
 
 		AssertClick(
 			locator1 = "Calendar#CURRENT_SITE_CALENDARS_MENULIST_ADD_CALENDAR",
-			value1 = "Add Calendar"
-		);
+			value1 = "Add Calendar");
 
 		CalendarNavigator._selectCalendarSettingsIframe();
 	}
@@ -90,17 +87,17 @@ definition {
 
 		AssertClick(
 			locator1 = "CalendarResources#ADD_RESOURCE_BUTTON",
-			value1 = "Add Resource"
-		);
+			value1 = "Add Resource");
 
-		AssertTextEquals(locator1 = "Portlet#HEADER_TITLE", value1 = "New Resource");
+		AssertTextEquals(
+			locator1 = "Portlet#HEADER_TITLE",
+			value1 = "New Resource");
 	}
 
 	macro gotoConfiguration {
 		Portlet.gotoPortletOptions(
 			portletName = "Calendar",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		SelectFrame(locator1 = "CalendarConfiguration#CALENDAR_CONFIGURATION_IFRAME");
 	}
@@ -109,14 +106,12 @@ definition {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 		Click(
-			locator1 = "Calendar#CURRENT_SITE_CALENDARS_MENULIST_ARROW",
-			key_siteName = "${siteName}"
-		);
+			key_siteName = "${siteName}",
+			locator1 = "Calendar#CURRENT_SITE_CALENDARS_MENULIST_ARROW");
 
 		AssertClick(
 			locator1 = "Calendar#CURRENT_SITE_CALENDARS_MENULIST_MANAGE_CALENDAR",
-			value1 = "Manage Calendars"
-		);
+			value1 = "Manage Calendars");
 	}
 
 	macro gotoEditEvent {
@@ -134,18 +129,15 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "CalendarResources#RESOURCE_TABLE_NAME",
-			value1 = "${calendarResourceName}"
-		);
+			value1 = "${calendarResourceName}");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "${calendarResourceName}"
-		);
+			rowEntry = "${calendarResourceName}");
 
 		AssertTextEquals(
 			locator1 = "Portlet#HEADER_TITLE",
-			value1 = "${calendarResourceName}"
-		);
+			value1 = "${calendarResourceName}");
 	}
 
 	macro gotoEventDetails {
@@ -178,8 +170,7 @@ definition {
 
 		AssertClick(
 			locator1 = "Calendar#CURRENT_SITE_CALENDARS_MENULIST_MANAGE_CALENDAR",
-			value1 = "Manage Calendars"
-		);
+			value1 = "Manage Calendars");
 	}
 
 	macro gotoNextDay {
@@ -199,12 +190,13 @@ definition {
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "View Calendars",
-			rowEntry = "${calendarResourceName}"
-		);
+			rowEntry = "${calendarResourceName}");
 	}
 
 	macro gotoResources {
-		AssertClick(locator1 = "Calendar#NAVIGATION_RESOURCES", value1 = "Resources");
+		AssertClick(
+			locator1 = "Calendar#NAVIGATION_RESOURCES",
+			value1 = "Resources");
 	}
 
 	macro gotoSpecificBusyDayViaSmallCalendar {
@@ -216,34 +208,44 @@ definition {
 	}
 
 	macro gotoToday {
-		AssertClick(locator1 = "Calendar#VIEW_TODAY_BUTTON", value1 = "Today");
+		AssertClick(
+			locator1 = "Calendar#VIEW_TODAY_BUTTON",
+			value1 = "Today");
 	}
 
 	macro gotoView {
 		if ("${viewType}" == "Day") {
 			if (IsElementNotPresent(locator1 = "Calendar#VIEW_DAY_BUTTON_ACTIVE")) {
-				AssertClick(locator1 = "Calendar#VIEW_DAY_BUTTON", value1 = "${viewType}");
+				AssertClick(
+					locator1 = "Calendar#VIEW_DAY_BUTTON",
+					value1 = "${viewType}");
 			}
 
 			AssertElementPresent(locator1 = "CalendarDayView#SCHEDULER_VIEW_DAY");
 		}
 		else if ("${viewType}" == "Week") {
 			if (IsElementNotPresent(locator1 = "Calendar#VIEW_WEEK_BUTTON_ACTIVE")) {
-				AssertClick(locator1 = "Calendar#VIEW_WEEK_BUTTON", value1 = "${viewType}");
+				AssertClick(
+					locator1 = "Calendar#VIEW_WEEK_BUTTON",
+					value1 = "${viewType}");
 			}
 
 			AssertElementPresent(locator1 = "Calendar#SCHEDULER_VIEW_WEEK");
 		}
 		else if ("${viewType}" == "Month") {
 			if (IsElementNotPresent(locator1 = "Calendar#VIEW_MONTH_BUTTON_ACTIVE")) {
-				AssertClick(locator1 = "Calendar#VIEW_MONTH_BUTTON", value1 = "${viewType}");
+				AssertClick(
+					locator1 = "Calendar#VIEW_MONTH_BUTTON",
+					value1 = "${viewType}");
 			}
 
 			AssertElementPresent(locator1 = "CalendarMonthView#SCHEDULER_VIEW_MONTH");
 		}
 		else if ("${viewType}" == "Agenda") {
 			if (IsElementNotPresent(locator1 = "Calendar#VIEW_AGENDA_BUTTON_ACTIVE")) {
-				AssertClick(locator1 = "Calendar#VIEW_AGENDA_BUTTON", value1 = "${viewType}");
+				AssertClick(
+					locator1 = "Calendar#VIEW_AGENDA_BUTTON",
+					value1 = "${viewType}");
 			}
 
 			AssertElementPresent(locator1 = "CalendarAgendaView#SCHEDULER_VIEW_AGENDA");
@@ -251,4 +253,5 @@ definition {
 
 		Pause(locator1 = "3000");
 	}
+
 }

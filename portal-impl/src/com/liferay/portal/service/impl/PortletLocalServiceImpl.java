@@ -106,7 +106,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
@@ -679,9 +678,8 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 		if (portlet == null) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override
@@ -765,7 +763,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 
 			// Remove portlets that should not be included
 
-			Set<Entry<String, Portlet>> entrySet = _portletsMap.entrySet();
+			Set<Map.Entry<String, Portlet>> entrySet = _portletsMap.entrySet();
 
 			Iterator<Map.Entry<String, Portlet>> portletPoolsItr =
 				entrySet.iterator();
@@ -1012,7 +1010,7 @@ public class PortletLocalServiceImpl extends PortletLocalServiceBaseImpl {
 	public void visitPortlets(long companyId, Consumer<Portlet> consumer) {
 		Map<String, Portlet> portletsMap = getPortletsMap(companyId);
 
-		for (Entry<String, Portlet> entry : portletsMap.entrySet()) {
+		for (Map.Entry<String, Portlet> entry : portletsMap.entrySet()) {
 			consumer.accept(entry.getValue());
 		}
 	}

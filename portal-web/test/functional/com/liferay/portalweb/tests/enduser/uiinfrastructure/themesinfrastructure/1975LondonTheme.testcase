@@ -1,7 +1,6 @@
 @component-name = "portal-user-interface"
 definition {
-	property osgi.app.includes = "frontend-theme-1975-london";
-	property plugins.deployment.type = "osgi";
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "User Interface";
@@ -24,33 +23,32 @@ definition {
 	test AddThemeSite {
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "1975LondonTheme#AddThemeSite";
+		property theme.file.name = "1975-london-theme.war";
 		var themeContainsResources = PropsUtil.get("theme.contains.resources");
 
 		if ("${themeContainsResources}" == "true") {
 			ProductMenu.gotoPortlet(
 				category = "Sites",
 				panel = "Control Panel",
-				portlet = "Sites"
-			);
+				portlet = "Sites");
 
 			Site.addSiteTemplateCP(
 				siteName = "1975 London Theme Site",
-				siteTemplateName = "1975 London Theme"
-			);
+				siteTemplateName = "1975 London Theme");
 
-			ProductMenu.gotoSite(site = "1975 London Theme Site");
+			Navigator.openSiteURL(siteName = "1975 London Theme Site");
+
+			ProductMenu.gotoPublicPages();
 
 			AssertClick(
-				locator1 = "Home#PAGE",
-				value1 = "HOME",
-				key_pageName = "home"
-			);
+				key_page = "home",
+				locator1 = "ProductMenu#PAGES",
+				value1 = "home");
 
 			AssertTextEquals(
+				key_title = "We love Music",
 				locator1 = "Header#H3_TITLE",
-				value1 = "We love Music",
-				key_title = "We love Music"
-			);
+				value1 = "We love Music");
 		}
 		else {
 			var appName = "1975-london-theme";
@@ -58,17 +56,18 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Apps",
 				panel = "Control Panel",
-				portlet = "App Manager"
-			);
+				portlet = "App Manager");
 
-			Type(locator1 = "TextInput#SEARCH", value1 = "${appName}");
+			Type(
+				locator1 = "TextInput#SEARCH",
+				value1 = "${appName}");
 
 			Click(locator1 = "Icon#BASIC_SEARCH");
 
 			AssertVisible(
-				locator1 = "ListGroupItem#ITEM_NAME_LINK",
-				key_itemName = "1975-london-theme"
-			);
+				key_itemName = "1975-london-theme",
+				locator1 = "ListGroupItem#ITEM_NAME_LINK");
 		}
 	}
+
 }

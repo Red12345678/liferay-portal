@@ -787,14 +787,13 @@ public class DLFileEntryLocalServiceImpl
 				throw new InvalidFileVersionException(
 					"Unable to delete an unapproved file version");
 			}
-			else {
-				int count = dlFileVersionPersistence.countByF_S(
-					fileEntryId, WorkflowConstants.STATUS_APPROVED);
 
-				if (count <= 1) {
-					throw new InvalidFileVersionException(
-						"Unable to delete the only approved file version");
-				}
+			int count = dlFileVersionPersistence.countByF_S(
+				fileEntryId, WorkflowConstants.STATUS_APPROVED);
+
+			if (count <= 1) {
+				throw new InvalidFileVersionException(
+					"Unable to delete the only approved file version");
 			}
 
 			dlFileVersionPersistence.remove(dlFileVersion);
@@ -1341,10 +1340,9 @@ public class DLFileEntryLocalServiceImpl
 			return dlFileEntryPersistence.findByGroupId(
 				groupId, start, end, obc);
 		}
-		else {
-			return dlFileEntryPersistence.findByG_U(
-				groupId, userId, start, end, obc);
-		}
+
+		return dlFileEntryPersistence.findByG_U(
+			groupId, userId, start, end, obc);
 	}
 
 	@Override
@@ -1384,25 +1382,22 @@ public class DLFileEntryLocalServiceImpl
 				return dlFileEntryFinder.findByG_F(
 					groupId, folderIds, queryDefinition);
 			}
-			else {
-				return dlFileEntryFinder.findByG_U_F(
-					groupId, userId, folderIds, queryDefinition);
-			}
-		}
-		else {
-			List<Long> repositoryIds = new ArrayList<>();
 
-			repositoryIds.add(repositoryId);
-
-			if (userId <= 0) {
-				return dlFileEntryFinder.findByG_R_F(
-					groupId, repositoryIds, folderIds, queryDefinition);
-			}
-			else {
-				return dlFileEntryFinder.findByG_U_R_F(
-					groupId, userId, repositoryIds, folderIds, queryDefinition);
-			}
+			return dlFileEntryFinder.findByG_U_F(
+				groupId, userId, folderIds, queryDefinition);
 		}
+
+		List<Long> repositoryIds = new ArrayList<>();
+
+		repositoryIds.add(repositoryId);
+
+		if (userId <= 0) {
+			return dlFileEntryFinder.findByG_R_F(
+				groupId, repositoryIds, folderIds, queryDefinition);
+		}
+
+		return dlFileEntryFinder.findByG_U_R_F(
+			groupId, userId, repositoryIds, folderIds, queryDefinition);
 	}
 
 	@Override
@@ -1415,9 +1410,8 @@ public class DLFileEntryLocalServiceImpl
 		if (userId <= 0) {
 			return dlFileEntryPersistence.countByGroupId(groupId);
 		}
-		else {
-			return dlFileEntryPersistence.countByG_U(groupId, userId);
-		}
+
+		return dlFileEntryPersistence.countByG_U(groupId, userId);
 	}
 
 	@Override
@@ -1485,9 +1479,8 @@ public class DLFileEntryLocalServiceImpl
 		if (dlFileEntryFinder.countByExtraSettings() > 0) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override
@@ -2082,9 +2075,8 @@ public class DLFileEntryLocalServiceImpl
 
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	@Override

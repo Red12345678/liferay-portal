@@ -1,4 +1,5 @@
 definition {
+
 	macro addField {
 		var key_wfPreviousFieldName = "${wfPreviousFieldName}";
 
@@ -9,24 +10,26 @@ definition {
 			optionsList = "${optionsList}",
 			wfFieldName = "New Item",
 			wfFieldType = "${wfFieldType}",
-			wfNewFieldName = "${wfNewFieldName}"
-		);
+			wfNewFieldName = "${wfNewFieldName}");
 	}
 
 	macro configureSetupFormFieldsPG {
 		Portlet.gotoPortletOptions(
 			portletName = "${portletName}",
-			portletOption = "Configuration"
-		);
+			portletOption = "Configuration");
 
 		SelectFrame(locator1 = "WebFormConfiguration#CONFIGURATION_IFRAME");
 
 		if (isSet(wfInformationTitle)) {
-			Type(locator1 = "TextInput#TITLE", value1 = "${wfInformationTitle}");
+			Type(
+				locator1 = "TextInput#TITLE",
+				value1 = "${wfInformationTitle}");
 		}
 
 		if (isSet(wfInformationDescription)) {
-			Type(locator1 = "TextArea#DESCRIPTION", value1 = "${wfInformationDescription}");
+			Type(
+				locator1 = "TextArea#DESCRIPTION",
+				value1 = "${wfInformationDescription}");
 		}
 	}
 
@@ -35,9 +38,7 @@ definition {
 
 		var key_wfFieldName = "${wfFieldName}";
 
-		DoubleClick(
-			locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_DELETE_ROW_BUTTON"
-		);
+		DoubleClick(locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_DELETE_ROW_BUTTON");
 
 		WebFormPortlet.viewEditableFieldNotVisibleCmd(wfFieldName = "${wfFieldName}");
 	}
@@ -48,14 +49,12 @@ definition {
 		if ("${wfFieldName}" == "New Item") {
 			Type(
 				locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_NAME_FIELD_NEW",
-				value1 = "${wfNewFieldName}"
-			);
+				value1 = "${wfNewFieldName}");
 		}
 		else {
 			Type(
 				locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_NAME_FIELD",
-				value1 = "${wfNewFieldName}"
-			);
+				value1 = "${wfNewFieldName}");
 		}
 
 		Click(locator1 = "Button#BROWSE");
@@ -65,8 +64,7 @@ definition {
 
 			Select(
 				locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_TYPE_SELECT",
-				value1 = "${wfFieldType}"
-			);
+				value1 = "${wfFieldType}");
 		}
 
 		if ((("${wfFieldType}" == "Options") || ("${wfFieldType}" == "Radio Buttons")) && (isSet(optionsList))) {
@@ -74,8 +72,7 @@ definition {
 
 			Type(
 				locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_OPTIONS_FIELD",
-				value1 = "${optionsList}"
-			);
+				value1 = "${optionsList}");
 		}
 
 		if ("${optional}" == "true") {
@@ -90,12 +87,13 @@ definition {
 
 		Type(
 			locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_PARAGRAPH_FIELD",
-			value1 = "${wfParagraphFieldText}"
-		);
+			value1 = "${wfParagraphFieldText}");
 	}
 
 	macro saveConfiguration {
-		AssertClick(locator1 = "Button#SAVE", value1 = "Save");
+		AssertClick(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
 		Alert.viewSuccessMessage();
 
@@ -105,17 +103,13 @@ definition {
 	macro viewEditableField {
 		var key_wfFieldName = "${wfFieldName}";
 
-		AssertElementPresent(
-			locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_NAME_FIELD"
-		);
+		AssertElementPresent(locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_NAME_FIELD");
 	}
 
 	macro viewEditableFieldNotPresent {
 		var key_wfFieldName = "${wfFieldName}";
 
-		AssertElementNotPresent(
-			locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_NAME_EDITABLE_FIELD"
-		);
+		AssertElementNotPresent(locator1 = "WebFormConfiguration#SETUP_FORM_FIELDS_NAME_EDITABLE_FIELD");
 	}
 
 	macro viewEditableFieldNotVisibleCmd {
@@ -129,13 +123,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WebFormConfiguration#SETUP_FORM_POPULATED_FIELDS_FIELD_TITLE",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		AssertTextEquals(
 			locator1 = "WebFormConfiguration#SETUP_FORM_POPULATED_FIELDS_FIELD_NAME",
-			value1 = "${wfFieldName}"
-		);
+			value1 = "${wfFieldName}");
 
 		if ("${wfFieldType}" == "Text Box") {
 			var key_wfFieldType = "textarea";
@@ -143,29 +135,25 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "WebFormConfiguration#SETUP_FORM_POPULATED_FIELDS_FIELD_TYPE",
-				value1 = "${wfFieldType}"
-			);
+				value1 = "${wfFieldType}");
 		}
 		else {
 			var key_wfFieldType = "${wfFieldType}";
 
 			AssertTextEquals(
 				locator1 = "WebFormConfiguration#SETUP_FORM_POPULATED_FIELDS_FIELD_TYPE",
-				value1 = "${wfFieldType}"
-			);
+				value1 = "${wfFieldType}");
 		}
 
 		if ("${optional}" == "true") {
 			AssertTextEquals(
 				locator1 = "WebFormConfiguration#SETUP_FORM_POPULATED_FIELDS_FIELD_OPTIONAL",
-				value1 = "Yes"
-			);
+				value1 = "Yes");
 		}
 		else {
 			AssertTextEquals(
 				locator1 = "WebFormConfiguration#SETUP_FORM_POPULATED_FIELDS_FIELD_OPTIONAL",
-				value1 = "No"
-			);
+				value1 = "No");
 		}
 
 		if (isSet(optionsList)) {
@@ -173,8 +161,8 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "WebFormConfiguration#SETUP_FORM_POPULATED_FIELDS_FIELD_OPTIONS",
-				value1 = "${optionsList}"
-			);
+				value1 = "${optionsList}");
 		}
 	}
+
 }

@@ -61,7 +61,7 @@ public abstract class BaseDDMFormFieldTypesDynamicInclude
 		}
 		catch (PortalException pe) {
 			if (_log.isDebugEnabled()) {
-				_log.debug(pe);
+				_log.debug(pe, pe);
 			}
 		}
 
@@ -83,7 +83,7 @@ public abstract class BaseDDMFormFieldTypesDynamicInclude
 			}
 			catch (IOException ioe) {
 				if (_log.isDebugEnabled()) {
-					_log.debug(ioe);
+					_log.debug(ioe, ioe);
 				}
 
 				return StringPool.BLANK;

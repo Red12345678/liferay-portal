@@ -1,5 +1,6 @@
 @component-name = "portal-util-misc"
 definition {
+
 	property osgi.app.includes = "amazon-rankings";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -31,7 +32,7 @@ definition {
 
 		Portlet.viewPG(
 			portletBody = "Please contact the administrator to configure an Amazon license.",
-			portletName = "Amazon Rankings"
-		);
+			portletName = "Amazon Rankings");
 	}
+
 }

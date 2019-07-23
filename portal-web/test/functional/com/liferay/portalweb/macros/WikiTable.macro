@@ -1,4 +1,5 @@
 definition {
+
 	macro deleteEntry {
 		Click(locator1 = "Icon#DISPLAY_STYLE_LIST");
 
@@ -22,13 +23,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "WikiTable#ALL_PAGES_WIKI_PAGE_TITLE",
-			value1 = "${wikiPageTitle}"
-		);
+			value1 = "${wikiPageTitle}");
 
 		AssertTextEquals(
 			locator1 = "WikiTable#ALL_PAGES_STATUS",
-			value1 = "${draftStatus}"
-		);
+			value1 = "${draftStatus}");
 	}
 
 	macro viewNoEntry {
@@ -36,4 +35,5 @@ definition {
 
 		AssertElementNotPresent(locator1 = "WikiTable#ALL_PAGES_WIKI_PAGE_TITLE");
 	}
+
 }

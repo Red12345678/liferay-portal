@@ -107,9 +107,8 @@ public class WebDAVUtil {
 		if (value.equals("0")) {
 			return 0;
 		}
-		else {
-			return -1;
-		}
+
+		return -1;
 	}
 
 	public static String getDestination(
@@ -281,9 +280,8 @@ public class WebDAVUtil {
 		if (pathArray.length <= 2) {
 			return StringPool.BLANK;
 		}
-		else {
-			return pathArray[pathArray.length - 1];
-		}
+
+		return pathArray[pathArray.length - 1];
 	}
 
 	public static WebDAVStorage getStorage(String token) {
@@ -440,9 +438,8 @@ public class WebDAVUtil {
 
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	private static final String _TIME_PREFIX = "Second-";

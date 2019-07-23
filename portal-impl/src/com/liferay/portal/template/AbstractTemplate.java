@@ -34,10 +34,26 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class AbstractTemplate implements Template {
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 *             #AbstractTemplate(TemplateResource, Map,
+	 *             TemplateContextHelper, String, boolean)}}
+	 */
+	@Deprecated
 	public AbstractTemplate(
 		TemplateResource errorTemplateResource, Map<String, Object> context,
 		TemplateContextHelper templateContextHelper,
 		String templateManagerName) {
+
+		this(
+			errorTemplateResource, context, templateContextHelper,
+			templateManagerName, false);
+	}
+
+	public AbstractTemplate(
+		TemplateResource errorTemplateResource, Map<String, Object> context,
+		TemplateContextHelper templateContextHelper, String templateManagerName,
+		boolean restricted) {
 
 		if (templateContextHelper == null) {
 			throw new IllegalArgumentException(
@@ -59,6 +75,7 @@ public abstract class AbstractTemplate implements Template {
 		}
 
 		_templateContextHelper = templateContextHelper;
+		_restricted = restricted;
 	}
 
 	@Override
@@ -127,6 +144,15 @@ public abstract class AbstractTemplate implements Template {
 			return null;
 		}
 
+		if (_restricted) {
+			Set<String> restrictedVariables =
+				_templateContextHelper.getRestrictedVariables();
+
+			if (restrictedVariables.contains(key)) {
+				return null;
+			}
+		}
+
 		return context.put(key, value);
 	}
 
@@ -190,6 +216,7 @@ public abstract class AbstractTemplate implements Template {
 	protected Map<String, Object> context;
 	protected TemplateResource errorTemplateResource;
 
+	private final boolean _restricted;
 	private final TemplateContextHelper _templateContextHelper;
 
 }

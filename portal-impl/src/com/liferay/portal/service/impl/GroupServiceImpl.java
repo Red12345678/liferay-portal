@@ -686,19 +686,18 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 			};
 		}
 
-		if (ArrayUtil.contains(classNames, User.class.getName())) {
-			if (PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED ||
-				PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED) {
+		if (ArrayUtil.contains(classNames, User.class.getName()) &&
+			(PropsValues.LAYOUT_USER_PRIVATE_LAYOUTS_ENABLED ||
+			 PropsValues.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED)) {
 
-				userSiteGroups.add(user.getGroup());
+			userSiteGroups.add(user.getGroup());
 
-				if (userSiteGroups.size() == max) {
-					if (checkPermissions) {
-						return filterGroups(new ArrayList<>(userSiteGroups));
-					}
-
-					return new ArrayList<>(userSiteGroups);
+			if (userSiteGroups.size() == max) {
+				if (checkPermissions) {
+					return filterGroups(new ArrayList<>(userSiteGroups));
 				}
+
+				return new ArrayList<>(userSiteGroups);
 			}
 		}
 
@@ -726,18 +725,15 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 			if (ArrayUtil.contains(classNames, Group.class.getName())) {
 				for (Group group : userBag.getUserGroups()) {
 					if (groupLocalService.isLiveGroupActive(group) &&
-						group.isSite()) {
+						group.isSite() && userSiteGroups.add(group) &&
+						(userSiteGroups.size() == max)) {
 
-						if (userSiteGroups.add(group) &&
-							(userSiteGroups.size() == max)) {
-
-							if (checkPermissions) {
-								return filterGroups(
-									new ArrayList<>(userSiteGroups));
-							}
-
-							return new ArrayList<>(userSiteGroups);
+						if (checkPermissions) {
+							return filterGroups(
+								new ArrayList<>(userSiteGroups));
 						}
+
+						return new ArrayList<>(userSiteGroups);
 					}
 				}
 			}
@@ -745,18 +741,15 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 			if (ArrayUtil.contains(classNames, Organization.class.getName())) {
 				for (Group group : userBag.getUserOrgGroups()) {
 					if (groupLocalService.isLiveGroupActive(group) &&
-						group.isSite()) {
+						group.isSite() && userSiteGroups.add(group) &&
+						(userSiteGroups.size() == max)) {
 
-						if (userSiteGroups.add(group) &&
-							(userSiteGroups.size() == max)) {
-
-							if (checkPermissions) {
-								return filterGroups(
-									new ArrayList<>(userSiteGroups));
-							}
-
-							return new ArrayList<>(userSiteGroups);
+						if (checkPermissions) {
+							return filterGroups(
+								new ArrayList<>(userSiteGroups));
 						}
+
+						return new ArrayList<>(userSiteGroups);
 					}
 				}
 			}
@@ -1075,12 +1068,11 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 
 			return group;
 		}
-		else {
-			return groupLocalService.updateGroup(
-				groupId, parentGroupId, nameMap, descriptionMap, type,
-				manualMembership, membershipRestriction, friendlyURL,
-				inheritContent, active, serviceContext);
-		}
+
+		return groupLocalService.updateGroup(
+			groupId, parentGroupId, nameMap, descriptionMap, type,
+			manualMembership, membershipRestriction, friendlyURL,
+			inheritContent, active, serviceContext);
 	}
 
 	/**
@@ -1162,9 +1154,8 @@ public class GroupServiceImpl extends GroupServiceBaseImpl {
 
 			return group;
 		}
-		else {
-			return groupLocalService.updateGroup(groupId, typeSettings);
-		}
+
+		return groupLocalService.updateGroup(groupId, typeSettings);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Pages Administration";
@@ -48,29 +49,25 @@ definition {
 			Page.add(
 				pageName = "${portlet} Full Page Application",
 				portlet = "${portlet}",
-				sitePageType = "Full Page Application"
-			);
+				sitePageType = "Full Page Application");
 
 			if ("${portlet}" == "Dynamic Data Lists Form") {
 				AssertTextEquals(
+					key_portletTitleName = "Form",
 					locator1 = "Home#PAGE_COLUMN_PORTLET_COLUMN_1_PORTLET_TITLE",
-					value1 = "Form",
-					key_portletTitleName = "Form"
-				);
+					value1 = "Form");
 			}
 			else if ("${portlet}" == "RSS") {
 				AssertTextEquals(
+					key_portletTitleName = "RSS Publisher",
 					locator1 = "Home#PAGE_COLUMN_PORTLET_COLUMN_1_PORTLET_TITLE",
-					value1 = "RSS Publisher",
-					key_portletTitleName = "RSS Publisher"
-				);
+					value1 = "RSS Publisher");
 			}
 			else {
 				AssertTextEquals(
+					key_portletTitleName = "${portlet}",
 					locator1 = "Home#PAGE_COLUMN_PORTLET_COLUMN_1_PORTLET_TITLE",
-					value1 = "${portlet}",
-					key_portletTitleName = "${portlet}"
-				);
+					value1 = "${portlet}");
 			}
 
 			AssertElementNotPresent(locator1 = "ControlMenu#ADD");
@@ -101,36 +98,36 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		for (var childPageName : list "Site Child Page 1,Site Child Page 2,Site Child Page 3") {
 			ProductMenu.gotoPortlet(
 				category = "Sites",
 				panel = "Control Panel",
-				portlet = "Sites"
-			);
+				portlet = "Sites");
 
 			Page.addChild(
 				page = "Public Pages",
 				pageName = "Site Page",
 				siteChildPageName = "${childPageName}",
-				siteName = "Site Name"
-			);
+				siteName = "Site Name");
 		}
 
 		for (var childPageName : list "Site Child Page 1,Site Child Page 2,Site Child Page 3") {
-			Navigator.gotoSitePage(pageName = "Site Page", siteName = "Site Name");
+			Navigator.gotoSitePage(
+				pageName = "Site Page",
+				siteName = "Site Name");
 
 			Page.viewChildPage(pageName = "${childPageName}");
 		}
@@ -143,40 +140,34 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Site Page",
 			siteName = "Site Name",
-			sitePagePrivacy = "Private"
-		);
+			sitePagePrivacy = "Private");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.addChild(
 			page = "Private Pages",
 			pageName = "Site Page",
 			siteChildPageName = "Site Child Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Site Page",
-			url = "${portalURL}/group/site-name/site-child-page"
-		);
+			url = "${portalURL}/group/site-name/site-child-page");
 
 		ProductMenu.gotoPrivatePages();
 
@@ -190,27 +181,23 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Site Page",
 			siteName = "Site Name",
-			sitePagePrivacy = "Private"
-		);
+			sitePagePrivacy = "Private");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Site Page",
-			url = "${portalURL}/group/site-name/site-page"
-		);
+			url = "${portalURL}/group/site-name/site-page");
 
 		Page.view(pageName = "Site Page");
 	}
@@ -222,35 +209,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Blogs Page",
 			siteName = "Site Name",
-			sitePagePrivacy = "Private"
-		);
+			sitePagePrivacy = "Private");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Blogs Page",
-			url = "${portalURL}/group/site-name"
-		);
+			url = "${portalURL}/group/site-name");
 
 		Portlet.addPG(
 			pageAccess = "Private",
 			pageName = "Blogs Page",
 			portletName = "Blogs",
 			siteName = "Site Name",
-			siteURL = "true"
-		);
+			siteURL = "true");
 	}
 
 	@priority = "4"
@@ -258,38 +240,35 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.addChild(
 			page = "Public Pages",
 			pageName = "Site Page",
 			siteChildPageName = "Site Child Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		var portalURL = PropsUtil.get("portal.url");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Site Page",
-			url = "${portalURL}/web/site-name/site-child-page"
-		);
+			url = "${portalURL}/web/site-name/site-child-page");
 
 		Page.viewChildPage(pageName = "Site Child Page");
 	}
@@ -301,25 +280,24 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		var portalURL = PropsUtil.get("portal.url");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Site Page",
-			url = "${portalURL}/web/site-name/site-page"
-		);
+			url = "${portalURL}/web/site-name/site-page");
 
 		Page.view(pageName = "Site Page");
 	}
@@ -329,20 +307,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Blogs Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Blogs Page",
+			siteName = "Site Name");
 
-		Navigator.gotoSitePage(pageName = "Blogs Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Blogs Page",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Blogs");
 	}
@@ -448,28 +428,31 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Blog Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Blog Page",
+			siteName = "Site Name");
 
-		Navigator.gotoSitePage(pageName = "Blog Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Blog Page",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Blogs");
 
@@ -477,8 +460,7 @@ definition {
 
 		Page.copyApplicationsFromPageToPage(
 			pageName = "Blog Page",
-			pageNameCopy = "Site Page"
-		);
+			pageNameCopy = "Site Page");
 	}
 
 	@priority = "5"
@@ -488,8 +470,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
@@ -499,14 +480,12 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Sites",
 				panel = "Control Panel",
-				portlet = "Sites"
-			);
+				portlet = "Sites");
 
 			Page.add(
 				page = "Public Pages",
 				pageName = "${pageName}",
-				siteName = "Site Name"
-			);
+				siteName = "Site Name");
 		}
 
 		Page.deletePG(pageName = "Site Page 2");
@@ -547,29 +526,32 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Site Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		SitePageNavigator.gotoEditPage(page = "Site Page");
 
-		Page.editSelectPageType(page = "Site Page", pageType = "Embedded");
+		Page.editSelectPageType(
+			page = "Site Page",
+			pageType = "Embedded");
 
 		Navigator.gotoSpecificURLPage(
 			pageName = "Site Page",
-			url = "${portalURL}/web/site-name"
-		);
+			url = "${portalURL}/web/site-name");
 
 		Page.viewEmbeddedPagePG();
 	}
@@ -579,24 +561,23 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Page.add(
 			pageName = "Site Page",
 			pageTemplateName = "Blog",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
-		Navigator.gotoSitePage(pageName = "Site Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Site Name");
 
 		Blogs.viewControlsPG();
 	}
@@ -606,50 +587,45 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addCommunityCP(siteName = "Site Name");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
-		User.firstLoginPG(password = "test", userEmailAddress = "userea@liferay.com");
+		User.firstLoginPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -657,21 +633,31 @@ definition {
 			pageName = "Home",
 			siteName = "Site Name",
 			siteTemplate = "Community",
-			siteURL = "true"
-		);
+			siteURL = "true");
 
-		User.firstLoginPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.firstLoginPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Blogs");
 
-		User.firstLoginPG(password = "test", userEmailAddress = "userea@liferay.com");
+		User.firstLoginPG(
+			password = "test",
+			userEmailAddress = "userea@liferay.com");
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Site Name");
 
 		SiteTemplates.viewNoInfoMessage();
 
-		User.firstLoginPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.firstLoginPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 	}
+
 }

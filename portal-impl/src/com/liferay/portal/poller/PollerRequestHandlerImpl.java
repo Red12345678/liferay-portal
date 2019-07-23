@@ -117,9 +117,8 @@ public class PollerRequestHandlerImpl
 		if (receiveRequest) {
 			return createPollerResponseHeader(pollerHeader);
 		}
-		else {
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override
@@ -353,9 +352,8 @@ public class PollerRequestHandlerImpl
 		if ((path != null) && path.endsWith(_PATH_RECEIVE)) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	protected boolean isValidPollerHeader(PollerHeader pollerHeader) {

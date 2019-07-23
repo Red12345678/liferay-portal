@@ -126,6 +126,7 @@ definition {
 
 	@priority = "3"
 	test AddJoinXORNodeEditNameAndDesciptionAndDeleteViaViewTab {
+
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
@@ -150,6 +151,7 @@ definition {
 
 	@priority = "5"
 	test AddJoinXORWorkflowDefinitionViaViewTab {
+		property test.name.skip.portal.instance = "Kaleodesigner#AddJoinXORWorkflowDefinitionViaViewTab";
 		property portal.acceptance = "true";
 		property testray.component.names = "Training";
 
@@ -248,6 +250,7 @@ definition {
 	@priority = "5"
 	test AddNewWorkflowDefinitionViaViewTab {
 		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "Kaleodesigner#AddNewWorkflowDefinitionViaViewTab";
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -713,6 +716,8 @@ definition {
 	@description = "This is a use case for LPS-71924."
 	@priority = "5"
 	test PublishDefaultWorkflowDefinition {
+		property test.name.skip.portal.instance = "Kaleodesigner#PublishDefaultWorkflowDefinition";
+
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
@@ -734,6 +739,8 @@ definition {
 	@description = "This is a use case for LPS-43214 and LPS-50269."
 	@priority = "3"
 	test PublishFromSourceTabAndViewNameChange {
+		property test.name.skip.portal.instance = "Kaleodesigner#PublishFromSourceTabAndViewNameChange";
+
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
@@ -1110,6 +1117,8 @@ definition {
 	@description = "This is a use case for LPS-76517."
 	@priority = "3"
 	test PublishWorkflowDefinitionWithNoNameLineAndViewErrorMessage {
+		property test.name.skip.portal.instance = "Kaleodesigner#PublishWorkflowDefinitionWithNoNameLineAndViewErrorMessage";
+
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
@@ -1378,6 +1387,8 @@ definition {
 
 	@priority = "4"
 	test ViewAndPublishWorkflowDefinitionDraftViaKDCP {
+		property test.name.skip.portal.instance = "Kaleodesigner#ViewAndPublishWorkflowDefinitionDraftViaKDCP";
+
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",

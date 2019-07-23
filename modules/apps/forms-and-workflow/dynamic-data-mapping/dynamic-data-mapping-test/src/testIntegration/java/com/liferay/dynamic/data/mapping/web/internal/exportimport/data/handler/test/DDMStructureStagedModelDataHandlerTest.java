@@ -30,14 +30,21 @@ import com.liferay.dynamic.data.mapping.test.util.DDMFormTestUtil;
 import com.liferay.dynamic.data.mapping.test.util.DDMFormValuesTestUtil;
 import com.liferay.dynamic.data.mapping.test.util.DDMStructureTestUtil;
 import com.liferay.dynamic.data.mapping.util.DDMFormFactory;
+import com.liferay.exportimport.kernel.configuration.ExportImportConfigurationParameterMapFactory;
+import com.liferay.exportimport.kernel.lar.ExportImportHelperUtil;
 import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
+import com.liferay.exportimport.kernel.lar.PortletDataHandlerKeys;
 import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerUtil;
+import com.liferay.exportimport.kernel.lar.UserIdStrategy;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.StagedModel;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
+import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.rule.Sync;
 import com.liferay.portal.kernel.test.rule.SynchronousDestinationTestRule;
 import com.liferay.portal.kernel.test.util.CompanyTestUtil;
@@ -46,6 +53,7 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.lar.test.BaseStagedModelDataHandlerTestCase;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.registry.Registry;
@@ -101,6 +109,65 @@ public class DDMStructureStagedModelDataHandlerTest
 
 		CompanyTestUtil.resetCompanyLocales(
 			TestPropsValues.getCompanyId(), _availableLocales, _defaultLocale);
+	}
+
+	@Test
+	public void testImportStructureToGlobalSite() throws Exception {
+		long companyId = stagingGroup.getCompanyId();
+
+		Company company = CompanyLocalServiceUtil.getCompany(companyId);
+
+		Group companyGroup = company.getGroup();
+
+		DDMStructure structure = DDMStructureTestUtil.addStructure(
+			companyGroup.getGroupId(), _CLASS_NAME);
+
+		initExport(companyGroup);
+
+		try {
+			ExportImportThreadLocal.setPortletExportInProcess(true);
+
+			StagedModelDataHandlerUtil.exportStagedModel(
+				portletDataContext, structure);
+		}
+		finally {
+			ExportImportThreadLocal.setPortletExportInProcess(false);
+		}
+
+		_targetCompany = CompanyTestUtil.addCompany();
+
+		initImport(companyGroup, _targetCompany.getGroup());
+
+		Map<String, String[]> parameterMap =
+			ExportImportConfigurationParameterMapFactory.buildParameterMap();
+
+		String userIdStrategyString = MapUtil.getString(
+			parameterMap, PortletDataHandlerKeys.USER_ID_STRATEGY);
+
+		UserIdStrategy userIdStrategy =
+			ExportImportHelperUtil.getUserIdStrategy(
+				TestPropsValues.getUserId(), userIdStrategyString);
+
+		portletDataContext.setUserIdStrategy(userIdStrategy);
+
+		StagedModel exportedStagedModel = readExportedStagedModel(structure);
+
+		Assert.assertNotNull(exportedStagedModel);
+
+		try {
+			ExportImportThreadLocal.setPortletImportInProcess(true);
+
+			StagedModelDataHandlerUtil.importStagedModel(
+				portletDataContext, exportedStagedModel);
+		}
+		finally {
+			ExportImportThreadLocal.setPortletImportInProcess(false);
+		}
+
+		StagedModel importedStagedModel = getStagedModel(
+			exportedStagedModel.getUuid(), _targetCompany.getGroup());
+
+		Assert.assertNotNull(importedStagedModel);
 	}
 
 	@Test
@@ -497,5 +564,8 @@ public class DDMStructureStagedModelDataHandlerTest
 
 	private DDMDataProvider _ddmDataProvider;
 	private DDMFormValuesJSONDeserializer _ddmFormValuesJSONDeserializer;
+
+	@DeleteAfterTestRun
+	private Company _targetCompany;
 
 }

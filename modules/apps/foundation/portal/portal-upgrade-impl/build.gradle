@@ -11,5 +11,5 @@ dependencies {
 	compileOnly group: "com.liferay", name: "com.liferay.portal.upgrade.api", version: "1.0.0"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "2.49.0"
 	compileOnly group: "org.apache.felix", name: "org.apache.felix.gogo.runtime", version: "0.10.0"
-	compileOnly group: "org.osgi", name: "org.osgi.core", version: "5.0.0"
+	compileOnly group: "org.osgi", name: "osgi.core", version: "5.0.0"
 }

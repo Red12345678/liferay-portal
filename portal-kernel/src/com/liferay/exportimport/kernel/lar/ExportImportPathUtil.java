@@ -285,12 +285,11 @@ public class ExportImportPathUtil {
 				stagedModelType.getClassName(), stagedModel.getPrimaryKeyObj(),
 				dependentFileName);
 		}
-		else {
-			return getModelPath(
-				PATH_PREFIX_COMPANY, stagedModel.getCompanyId(),
-				stagedModelType.getClassName(), stagedModel.getPrimaryKeyObj(),
-				dependentFileName);
-		}
+
+		return getModelPath(
+			PATH_PREFIX_COMPANY, stagedModel.getCompanyId(),
+			stagedModelType.getClassName(), stagedModel.getPrimaryKeyObj(),
+			dependentFileName);
 	}
 
 	public static String getPortletDataPath(

@@ -1,19 +1,18 @@
 definition {
+
 	macro addCP {
 		var key_categoryName = "${categoryName}";
 		var key_vocabularyName = "${vocabularyName}";
 
 		AssertClick(
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "${vocabularyName}"
-		);
+			value1 = "${vocabularyName}");
 
 		Pause(locator1 = "1000");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Add Subcategory",
-			rowEntry = "${categoryName}"
-		);
+			rowEntry = "${categoryName}");
 
 		PortletEntry.inputTitle(title = "${subcategoryName}");
 
@@ -26,15 +25,13 @@ definition {
 
 	macro addDuplicateCP {
 		AssertClick(
+			key_vocabularyName = "${vocabularyName}",
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "${vocabularyName}",
-			key_vocabularyName = "${vocabularyName}"
-		);
+			value1 = "${vocabularyName}");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Add Subcategory",
-			rowEntry = "${categoryName}"
-		);
+			rowEntry = "${categoryName}");
 
 		PortletEntry.inputTitle(title = "${subcategoryName}");
 
@@ -44,21 +41,18 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Message#ERROR_2",
-			value1 = "Please enter a unique name."
-		);
+			value1 = "Please enter a unique name.");
 	}
 
 	macro addWithPropertyCP {
 		AssertClick(
+			key_vocabularyName = "${vocabularyName}",
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "${vocabularyName}",
-			key_vocabularyName = "${vocabularyName}"
-		);
+			value1 = "${vocabularyName}");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Add Subcategory",
-			rowEntry = "${categoryName}"
-		);
+			rowEntry = "${categoryName}");
 
 		PortletEntry.inputTitle(title = "${subcategoryName}");
 
@@ -66,13 +60,11 @@ definition {
 
 		Type(
 			locator1 = "CategoriesEditCategory#PROPERTIES_KEY_FIELD_1",
-			value1 = "${propertiesKeyField}"
-		);
+			value1 = "${propertiesKeyField}");
 
 		Type(
 			locator1 = "CategoriesEditCategory#PROPERTIES_VALUE_FIELD_1",
-			value1 = "${propertiesValueField}"
-		);
+			value1 = "${propertiesValueField}");
 
 		PortletEntry.save();
 	}
@@ -82,15 +74,13 @@ definition {
 
 		AssertClick(
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "${vocabularyName}"
-		);
+			value1 = "${vocabularyName}");
 
 		var key_categoryName = "${categoryName}";
 
 		AssertClick(
 			locator1 = "Categories#CATEGORY_ENTRY_LINK",
-			value1 = "${categoryName}"
-		);
+			value1 = "${categoryName}");
 
 		var key_subcategoryName = "${subcategoryName}";
 
@@ -98,9 +88,7 @@ definition {
 
 		ClickNoError(locator1 = "Icon#DELETE");
 
-		Confirm(
-			value1 = "Are you sure you want to delete this? It will be deleted immediately."
-		);
+		Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 
@@ -109,25 +97,20 @@ definition {
 
 	macro deleteViaMenuCP {
 		AssertClick(
+			key_vocabularyName = "${vocabularyName}",
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "${vocabularyName}",
-			key_vocabularyName = "${vocabularyName}"
-		);
+			value1 = "${vocabularyName}");
 
 		AssertClick(
+			key_categoryName = "${categoryName}",
 			locator1 = "Categories#CATEGORY_ENTRY_LINK",
-			value1 = "${categoryName}",
-			key_categoryName = "${categoryName}"
-		);
+			value1 = "${categoryName}");
 
 		LexiconEntry.gotoEntryMenuItemNoError(
 			menuItem = "Delete",
-			rowEntry = "${subcategoryName}"
-		);
+			rowEntry = "${subcategoryName}");
 
-		Confirm(
-			value1 = "Are you sure you want to delete this? It will be deleted immediately."
-		);
+		Confirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 
@@ -136,21 +119,18 @@ definition {
 
 	macro editCP {
 		AssertClick(
+			key_vocabularyName = "${vocabularyName}",
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "${vocabularyName}",
-			key_vocabularyName = "${vocabularyName}"
-		);
+			value1 = "${vocabularyName}");
 
 		AssertClick(
+			key_categoryName = "${categoryName}",
 			locator1 = "Categories#CATEGORY_ENTRY_LINK",
-			value1 = "${categoryName}",
-			key_categoryName = "${categoryName}"
-		);
+			value1 = "${categoryName}");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "${subcategoryName}"
-		);
+			rowEntry = "${subcategoryName}");
 
 		PortletEntry.inputTitle(title = "${subcategoryNameEdit}");
 
@@ -163,32 +143,29 @@ definition {
 
 		AssertClick(
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "${vocabularyName}"
-		);
+			value1 = "${vocabularyName}");
 
 		AssertClick(
 			locator1 = "Categories#CATEGORY_ENTRY_LINK",
-			value1 = "${categoryName}"
-		);
+			value1 = "${categoryName}");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Move",
-			rowEntry = "${subcategoryName}"
-		);
+			rowEntry = "${subcategoryName}");
 
 		Click(locator1 = "CategoriesEditSubcategory#CATEGORY_SELECT_BUTTON");
 
 		var key_categoryName = "${categoryNameMove}";
 
-		Click(
-			locator1 = "CategoriesEditSubcategory#MOVE_CATEGORIES_CATEGORY_CHECK_ICON"
-		);
+		Click(locator1 = "CategoriesEditSubcategory#MOVE_CATEGORIES_CATEGORY_CHECK_ICON");
 
 		MouseOver(locator1 = "Icon#CLOSE");
 
 		Click.clickAt(locator1 = "Icon#CLOSE");
 
-		AssertClick(locator1 = "Button#MOVE", value1 = "Move");
+		AssertClick(
+			locator1 = "Button#MOVE",
+			value1 = "Move");
 
 		Alert.viewSuccessMessage();
 	}
@@ -199,46 +176,42 @@ definition {
 
 		AssertClick(
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "${vocabularyName}"
-		);
+			value1 = "${vocabularyName}");
 
 		Click(locator1 = "Categories#CATEGORY_ENTRY_LINK");
 
 		var key_subcategoryName = "${subcategoryName}";
 
-		Type(locator1 = "TextInput#SEARCH", value1 = "${subcategorySearchEntry}");
+		Type(
+			locator1 = "TextInput#SEARCH",
+			value1 = "${subcategorySearchEntry}");
 
 		Click(locator1 = "Icon#BASIC_SEARCH");
 	}
 
 	macro viewCategoryPropertyCP {
 		AssertClick(
+			key_vocabularyName = "${vocabularyName}",
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "${vocabularyName}",
-			key_vocabularyName = "${vocabularyName}"
-		);
+			value1 = "${vocabularyName}");
 
 		Click(
-			locator1 = "Categories#CATEGORY_ENTRY_LINK",
-			key_categoryName = "${categoryName}"
-		);
+			key_categoryName = "${categoryName}",
+			locator1 = "Categories#CATEGORY_ENTRY_LINK");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "${subcategoryName}"
-		);
+			rowEntry = "${subcategoryName}");
 
 		Panel.expandPanel(panelHeading = "Properties");
 
 		AssertTextEquals(
 			locator1 = "CategoriesEditCategory#PROPERTIES_KEY_FIELD_1",
-			value1 = "${propertiesKeyField}"
-		);
+			value1 = "${propertiesKeyField}");
 
 		AssertTextEquals(
 			locator1 = "CategoriesEditCategory#PROPERTIES_VALUE_FIELD_1",
-			value1 = "${propertiesValueField}"
-		);
+			value1 = "${propertiesValueField}");
 	}
 
 	macro viewCP {
@@ -247,20 +220,17 @@ definition {
 
 		AssertClick(
 			locator1 = "Categories#VOCABULARY_ENTRY_LINK",
-			value1 = "${vocabularyName}"
-		);
+			value1 = "${vocabularyName}");
 
 		AssertClick(
 			locator1 = "Categories#CATEGORY_ENTRY_LINK",
-			value1 = "${categoryName}"
-		);
+			value1 = "${categoryName}");
 
 		var key_subcategoryName = "${subcategoryName}";
 
 		AssertTextEquals(
 			locator1 = "Categories#SUBCATEGORY_ENTRY",
-			value1 = "${subcategoryName}"
-		);
+			value1 = "${subcategoryName}");
 	}
 
 	macro viewSearchResultsCP {
@@ -270,8 +240,7 @@ definition {
 
 				AssertTextEquals(
 					locator1 = "Categories#SUBCATEGORY_ENTRY",
-					value1 = "${subcategoryName}"
-				);
+					value1 = "${subcategoryName}");
 			}
 		}
 
@@ -281,16 +250,15 @@ definition {
 
 				AssertTextEquals(
 					locator1 = "Categories#SUBCATEGORY_ENTRY_DESCRIPTION",
-					value1 = "${subcategoryDescription}"
-				);
+					value1 = "${subcategoryDescription}");
 			}
 		}
 
 		if ("${nullResult}" == "true") {
 			AssertTextEquals(
 				locator1 = "Message#EMPTY_INFO",
-				value1 = "There are no categories."
-			);
+				value1 = "There are no categories.");
 		}
 	}
+
 }

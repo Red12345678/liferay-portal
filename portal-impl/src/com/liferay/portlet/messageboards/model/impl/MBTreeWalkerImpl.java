@@ -158,9 +158,8 @@ public class MBTreeWalkerImpl implements MBTreeWalker {
 		if (_messageIdsMap.containsKey(messageIdObj)) {
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	@Override

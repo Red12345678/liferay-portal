@@ -1,5 +1,6 @@
 @component-name = "portal-search"
 definition {
+
 	property portal.release = "true";
 	property portal.suite.search.engine = "elasticsearch2,elasticsearch6,solr";
 	property portal.upstream = "true";
@@ -47,13 +48,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -62,64 +61,56 @@ definition {
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Blogs Entry Content");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Blogs Title");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Blogs Content");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Blogs");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Entry");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Content");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Title");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Blogs1");
 
@@ -127,8 +118,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "Blogs1"
-		);
+			searchTerm = "Blogs1");
 
 		Search.searchPG(searchTerm = "Entry1");
 
@@ -136,8 +126,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "Entry1"
-		);
+			searchTerm = "Entry1");
 
 		Search.searchPG(searchTerm = "Content1");
 
@@ -145,8 +134,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "Content1"
-		);
+			searchTerm = "Content1");
 
 		Search.searchPG(searchTerm = "Title1");
 
@@ -154,8 +142,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "Title1"
-		);
+			searchTerm = "Title1");
 	}
 
 	@priority = "4"
@@ -165,30 +152,26 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Categories"
-		);
+			portlet = "Categories");
 
 		Vocabulary.addCP(vocabularyName = "Vocabulary Name");
 
 		Category.addCP(
 			categoryName = "Category Name",
-			vocabularyName = "Vocabulary Name"
-		);
+			vocabularyName = "Vocabulary Name");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntryWithCategory(
 			categoryName = "Category Name",
 			entryContent = "Blogs Entry Content",
 			entryTitle = "Blogs Entry Title",
-			vocabularyName = "Vocabulary Name"
-		);
+			vocabularyName = "Vocabulary Name");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -197,24 +180,21 @@ definition {
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Category");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Name");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "Category1");
 
@@ -222,8 +202,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "Category1"
-		);
+			searchTerm = "Category1");
 
 		Search.searchPG(searchTerm = "Name1");
 
@@ -231,8 +210,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "Name1"
-		);
+			searchTerm = "Name1");
 	}
 
 	@ignore = "true"
@@ -243,30 +221,26 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Categories"
-		);
+			portlet = "Categories");
 
 		Vocabulary.addCP(vocabularyName = "Vocabulary Name");
 
 		Category.addCP(
 			categoryName = "Category Name",
-			vocabularyName = "Vocabulary Name"
-		);
+			vocabularyName = "Vocabulary Name");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntryWithCategory(
 			categoryName = "Category Name",
 			entryContent = "Blogs Entry Content",
 			entryTitle = "Blogs Entry Title",
-			vocabularyName = "Vocabulary Name"
-		);
+			vocabularyName = "Vocabulary Name");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -275,24 +249,21 @@ definition {
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Category&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Name&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Category Name1&quot;");
 
@@ -300,8 +271,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;Category Name1&quot;"
-		);
+			searchTerm = "&quot;Category Name1&quot;");
 
 		Search.searchPG(searchTerm = "&quot;Category1&quot;");
 
@@ -309,8 +279,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;Category1&quot;"
-		);
+			searchTerm = "&quot;Category1&quot;");
 
 		Search.searchPG(searchTerm = "&quot;Name1&quot;");
 
@@ -318,8 +287,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;Name1&quot;"
-		);
+			searchTerm = "&quot;Name1&quot;");
 	}
 
 	@priority = "4"
@@ -329,13 +297,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title"
-		);
+			entryTitle = "Blogs Entry Title");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -344,72 +310,63 @@ definition {
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Entry Title&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Title&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Blogs Entry Content&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Blogs Entry&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Blogs&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Entry Content&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Entry&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Content&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;Blogs Content&quot;");
 
@@ -417,8 +374,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;Blogs Content&quot;"
-		);
+			searchTerm = "&quot;Blogs Content&quot;");
 
 		Search.searchPG(searchTerm = "&quot;Blogs1&quot;");
 
@@ -426,8 +382,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;Blogs1&quot;"
-		);
+			searchTerm = "&quot;Blogs1&quot;");
 
 		Search.searchPG(searchTerm = "&quot;Entry1&quot;");
 
@@ -435,8 +390,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;Entry1&quot;"
-		);
+			searchTerm = "&quot;Entry1&quot;");
 
 		Search.searchPG(searchTerm = "&quot;Title1&quot;");
 
@@ -444,8 +398,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;Title1&quot;"
-		);
+			searchTerm = "&quot;Title1&quot;");
 
 		Search.searchPG(searchTerm = "&quot;Content1&quot;");
 
@@ -453,8 +406,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;Content1&quot;"
-		);
+			searchTerm = "&quot;Content1&quot;");
 
 		Search.searchPG(searchTerm = "&quot;Blogs Entry Title1&quot;");
 
@@ -462,8 +414,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;Blogs Entry Title1&quot;"
-		);
+			searchTerm = "&quot;Blogs Entry Title1&quot;");
 
 		Search.searchPG(searchTerm = "&quot;Blogs Entry Content1&quot;");
 
@@ -471,8 +422,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;Blogs Entry Content1&quot;"
-		);
+			searchTerm = "&quot;Blogs Entry Content1&quot;");
 	}
 
 	@priority = "4"
@@ -482,14 +432,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntryWithTag(
 			entryContent = "Blogs Entry Content",
 			entryTitle = "Blogs Entry Title",
-			tagName = "tag name"
-		);
+			tagName = "tag name");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -498,24 +446,21 @@ definition {
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "tag");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "name");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "tag1");
 
@@ -523,8 +468,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "tag1"
-		);
+			searchTerm = "tag1");
 
 		Search.searchPG(searchTerm = "name1");
 
@@ -532,8 +476,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "name1"
-		);
+			searchTerm = "name1");
 	}
 
 	@priority = "4"
@@ -543,14 +486,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Blogs"
-		);
+			portlet = "Blogs");
 
 		Blogs.addEntryWithTag(
 			entryContent = "Blogs Entry Content",
 			entryTitle = "Blogs Entry Title",
-			tagName = "tag name"
-		);
+			tagName = "tag name");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -559,24 +500,21 @@ definition {
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;tag&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;name&quot;");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
-			searchAssetType = "Blogs Entry"
-		);
+			searchAssetType = "Blogs Entry");
 
 		Search.searchPG(searchTerm = "&quot;tag name1&quot;");
 
@@ -584,8 +522,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;tag name1&quot;"
-		);
+			searchTerm = "&quot;tag name1&quot;");
 
 		Search.searchPG(searchTerm = "&quot;tag1&quot;");
 
@@ -593,8 +530,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;tag1&quot;"
-		);
+			searchTerm = "&quot;tag1&quot;");
 
 		Search.searchPG(searchTerm = "&quot;name1&quot;");
 
@@ -602,8 +538,7 @@ definition {
 			searchAssetSummary = "Blogs Entry Content",
 			searchAssetTitle = "Blogs Entry Title",
 			searchNoResults = "true",
-			searchTerm = "&quot;name1&quot;"
-		);
+			searchTerm = "&quot;name1&quot;");
 	}
 
 	@priority = "5"
@@ -616,16 +551,14 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Document_1.txt",
 			dmDocumentSize = "0k",
 			dmDocumentTitle = "DM Document Title",
-			tagNameList = "moon rocks"
-		);
+			tagNameList = "moon rocks");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -633,88 +566,76 @@ definition {
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "DM Document Title",
-			searchAssetType = "Document"
-		);
+			searchAssetType = "Document");
 
 		Search.searchPG(searchTerm = "DM");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "DM Document Title",
-			searchAssetType = "Document"
-		);
+			searchAssetType = "Document");
 
 		Search.searchPG(searchTerm = "Document");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "DM Document Title",
-			searchAssetType = "Document"
-		);
+			searchAssetType = "Document");
 
 		Search.searchPG(searchTerm = "Title");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "DM Document Title",
-			searchAssetType = "Document"
-		);
+			searchAssetType = "Document");
 
 		Search.searchPG(searchTerm = "DM Document");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "DM Document Title",
-			searchAssetType = "Document"
-		);
+			searchAssetType = "Document");
 
 		Search.searchPG(searchTerm = "DM Title");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "DM Document Title",
-			searchAssetType = "Document"
-		);
+			searchAssetType = "Document");
 
 		Search.searchPG(searchTerm = "Document Title");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "DM Document Title",
-			searchAssetType = "Document"
-		);
+			searchAssetType = "Document");
 
 		Search.searchPG(searchTerm = "moon rocks");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "DM Document Title",
-			searchAssetType = "Document"
-		);
+			searchAssetType = "Document");
 
 		Search.addTagFacet(tagName = "moon rocks");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "DM Document Title",
-			searchAssetType = "Document"
-		);
+			searchAssetType = "Document");
 
 		Search.searchPG(searchTerm = "DM1");
 
 		Search.viewSearchNoPG(
 			searchAssetTitle = "DM Document Title",
 			searchNoResults = "true",
-			searchTerm = "DM1"
-		);
+			searchTerm = "DM1");
 
 		Search.searchPG(searchTerm = "Document1");
 
 		Search.viewSearchNoPG(
 			searchAssetTitle = "DM Document Title",
 			searchNoResults = "true",
-			searchTerm = "Document1"
-		);
+			searchTerm = "Document1");
 
 		Search.searchPG(searchTerm = "Title1");
 
 		Search.viewSearchNoPG(
 			searchAssetTitle = "DM Document Title",
 			searchNoResults = "true",
-			searchTerm = "Title1"
-		);
+			searchTerm = "Title1");
 	}
 
 	@priority = "4"
@@ -729,8 +650,7 @@ definition {
 
 		MessageboardsThread.addPG(
 			threadBody = "MB Thread Message Body",
-			threadSubject = "MB Thread Message Subject"
-		);
+			threadSubject = "MB Thread Message Subject");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -739,56 +659,49 @@ definition {
 		Search.viewSearchResultPG(
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
-			searchAssetType = "Message Boards Message"
-		);
+			searchAssetType = "Message Boards Message");
 
 		Search.searchPG(searchTerm = "MB Thread Message Body");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
-			searchAssetType = "Message Boards Message"
-		);
+			searchAssetType = "Message Boards Message");
 
 		Search.searchPG(searchTerm = "MB");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
-			searchAssetType = "Message Boards Message"
-		);
+			searchAssetType = "Message Boards Message");
 
 		Search.searchPG(searchTerm = "Thread");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
-			searchAssetType = "Message Boards Message"
-		);
+			searchAssetType = "Message Boards Message");
 
 		Search.searchPG(searchTerm = "Message");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
-			searchAssetType = "Message Boards Message"
-		);
+			searchAssetType = "Message Boards Message");
 
 		Search.searchPG(searchTerm = "Subject");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
-			searchAssetType = "Message Boards Message"
-		);
+			searchAssetType = "Message Boards Message");
 
 		Search.searchPG(searchTerm = "Body");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
-			searchAssetType = "Message Boards Message"
-		);
+			searchAssetType = "Message Boards Message");
 
 		Search.searchPG(searchTerm = "MB1");
 
@@ -796,8 +709,7 @@ definition {
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
 			searchNoResults = "true",
-			searchTerm = "MB1"
-		);
+			searchTerm = "MB1");
 
 		Search.searchPG(searchTerm = "Thread1");
 
@@ -805,8 +717,7 @@ definition {
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
 			searchNoResults = "true",
-			searchTerm = "Thread1"
-		);
+			searchTerm = "Thread1");
 
 		Search.searchPG(searchTerm = "Message1");
 
@@ -814,8 +725,7 @@ definition {
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
 			searchNoResults = "true",
-			searchTerm = "Message1"
-		);
+			searchTerm = "Message1");
 
 		Search.searchPG(searchTerm = "Subject1");
 
@@ -823,8 +733,7 @@ definition {
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
 			searchNoResults = "true",
-			searchTerm = "Subject1"
-		);
+			searchTerm = "Subject1");
 
 		Search.searchPG(searchTerm = "Body1");
 
@@ -832,8 +741,7 @@ definition {
 			searchAssetSummary = "MB Thread Message Body",
 			searchAssetTitle = "MB Thread Message Subject",
 			searchNoResults = "true",
-			searchTerm = "Body1"
-		);
+			searchTerm = "Body1");
 	}
 
 	@priority = "4"
@@ -843,23 +751,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		User.editUserSiteCP(siteName = "${siteName}", userScreenName = "usersn");
+		User.editUserSiteCP(
+			siteName = "${siteName}",
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -867,29 +774,25 @@ definition {
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "userfn userln",
-			searchAssetType = "User"
-		);
+			searchAssetType = "User");
 
 		Search.searchPG(searchTerm = "userfn");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "userfn userln",
-			searchAssetType = "User"
-		);
+			searchAssetType = "User");
 
 		Search.searchPG(searchTerm = "userln");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "userfn userln",
-			searchAssetType = "User"
-		);
+			searchAssetType = "User");
 
 		Search.searchPG(searchTerm = "usersn");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "userfn userln",
-			searchAssetType = "User"
-		);
+			searchAssetType = "User");
 
 		Search.searchPG(searchTerm = "userfn1");
 
@@ -900,16 +803,14 @@ definition {
 		Search.viewSearchNoPG(
 			searchAssetTitle = "userfn userln",
 			searchNoResults = "true",
-			searchTerm = "userln1"
-		);
+			searchTerm = "userln1");
 
 		Search.searchPG(searchTerm = "usersn1");
 
 		Search.viewSearchNoPG(
 			searchAssetTitle = "userfn userln",
 			searchNoResults = "true",
-			searchTerm = "usersn1"
-		);
+			searchTerm = "usersn1");
 	}
 
 	@priority = "4"
@@ -919,23 +820,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		User.editUserSiteCP(siteName = "${siteName}", userScreenName = "usersn");
+		User.editUserSiteCP(
+			siteName = "${siteName}",
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -943,15 +843,13 @@ definition {
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "userfn userln",
-			searchAssetType = "User"
-		);
+			searchAssetType = "User");
 
 		Search.searchPG(searchTerm = "userf*");
 
 		Search.viewSearchResultPG(
 			searchAssetTitle = "userfn userln",
-			searchAssetType = "User"
-		);
+			searchAssetType = "User");
 	}
 
 	@priority = "4"
@@ -961,15 +859,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC WebContent Title"
-		);
+			webContentTitle = "WC WebContent Title");
 
 		PortletEntry.publish();
 
@@ -982,48 +878,42 @@ definition {
 		Search.viewSearchResultPG(
 			searchAssetSummary = "WC WebContent Content",
 			searchAssetTitle = "WC WebContent Title",
-			searchAssetType = "Web Content Article"
-		);
+			searchAssetType = "Web Content Article");
 
 		Search.searchPG(searchTerm = "WC WebContent Content");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "WC WebContent Content",
 			searchAssetTitle = "WC WebContent Title",
-			searchAssetType = "Web Content Article"
-		);
+			searchAssetType = "Web Content Article");
 
 		Search.searchPG(searchTerm = "WC");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "WC WebContent Content",
 			searchAssetTitle = "WC WebContent Title",
-			searchAssetType = "Web Content Article"
-		);
+			searchAssetType = "Web Content Article");
 
 		Search.searchPG(searchTerm = "WebContent");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "WC WebContent Content",
 			searchAssetTitle = "WC WebContent Title",
-			searchAssetType = "Web Content Article"
-		);
+			searchAssetType = "Web Content Article");
 
 		Search.searchPG(searchTerm = "Title");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "WC WebContent Content",
 			searchAssetTitle = "WC WebContent Title",
-			searchAssetType = "Web Content Article"
-		);
+			searchAssetType = "Web Content Article");
 
 		Search.searchPG(searchTerm = "Content");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "WC WebContent Content",
 			searchAssetTitle = "WC WebContent Title",
-			searchAssetType = "Web Content Article"
-		);
+			searchAssetType = "Web Content Article");
 
 		Search.searchPG(searchTerm = "WC1");
 
@@ -1031,8 +921,7 @@ definition {
 			searchAssetSummary = "WC WebContent Content",
 			searchAssetTitle = "WC WebContent Title",
 			searchNoResults = "true",
-			searchTerm = "WC1"
-		);
+			searchTerm = "WC1");
 
 		Search.searchPG(searchTerm = "WebContent1");
 
@@ -1040,8 +929,7 @@ definition {
 			searchAssetSummary = "WC WebContent Content",
 			searchAssetTitle = "WC WebContent Title",
 			searchNoResults = "true",
-			searchTerm = "WebContent1"
-		);
+			searchTerm = "WebContent1");
 
 		Search.searchPG(searchTerm = "Title1");
 
@@ -1049,8 +937,7 @@ definition {
 			searchAssetSummary = "WC WebContent Content",
 			searchAssetTitle = "WC WebContent Title",
 			searchNoResults = "true",
-			searchTerm = "Title1"
-		);
+			searchTerm = "Title1");
 
 		Search.searchPG(searchTerm = "Content1");
 
@@ -1058,8 +945,7 @@ definition {
 			searchAssetSummary = "WC WebContent Content",
 			searchAssetTitle = "WC WebContent Title",
 			searchNoResults = "true",
-			searchTerm = "Content1"
-		);
+			searchTerm = "Content1");
 	}
 
 	@priority = "4"
@@ -1077,8 +963,7 @@ definition {
 		WikiPage.addPG(
 			pageName = "Wiki Test Page",
 			wikiPageContent = "Wiki Page Content",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 
 		Navigator.gotoPage(pageName = "Test Page");
 
@@ -1087,48 +972,42 @@ definition {
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Wiki Page Content",
 			searchAssetTitle = "Wiki Page Title",
-			searchAssetType = "Wiki Page"
-		);
+			searchAssetType = "Wiki Page");
 
 		Search.searchPG(searchTerm = "Wiki Page Content");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Wiki Page Content",
 			searchAssetTitle = "Wiki Page Title",
-			searchAssetType = "Wiki Page"
-		);
+			searchAssetType = "Wiki Page");
 
 		Search.searchPG(searchTerm = "Wiki");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Wiki Page Content",
 			searchAssetTitle = "Wiki Page Title",
-			searchAssetType = "Wiki Page"
-		);
+			searchAssetType = "Wiki Page");
 
 		Search.searchPG(searchTerm = "Page");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Wiki Page Content",
 			searchAssetTitle = "Wiki Page Title",
-			searchAssetType = "Wiki Page"
-		);
+			searchAssetType = "Wiki Page");
 
 		Search.searchPG(searchTerm = "Title");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Wiki Page Content",
 			searchAssetTitle = "Wiki Page Title",
-			searchAssetType = "Wiki Page"
-		);
+			searchAssetType = "Wiki Page");
 
 		Search.searchPG(searchTerm = "Content");
 
 		Search.viewSearchResultPG(
 			searchAssetSummary = "Wiki Page Content",
 			searchAssetTitle = "Wiki Page Title",
-			searchAssetType = "Wiki Page"
-		);
+			searchAssetType = "Wiki Page");
 
 		Search.searchPG(searchTerm = "Wiki1");
 
@@ -1136,8 +1015,7 @@ definition {
 			searchAssetSummary = "Wiki Page Content",
 			searchAssetTitle = "Wiki Page Title",
 			searchNoResults = "true",
-			searchTerm = "Wiki1"
-		);
+			searchTerm = "Wiki1");
 
 		Search.searchPG(searchTerm = "Page1");
 
@@ -1145,8 +1023,7 @@ definition {
 			searchAssetSummary = "Wiki Page Content",
 			searchAssetTitle = "Wiki Page Title",
 			searchNoResults = "true",
-			searchTerm = "Page1"
-		);
+			searchTerm = "Page1");
 
 		Search.searchPG(searchTerm = "Title1");
 
@@ -1154,8 +1031,7 @@ definition {
 			searchAssetSummary = "Wiki Page Content",
 			searchAssetTitle = "Wiki Page Title",
 			searchNoResults = "true",
-			searchTerm = "Title1"
-		);
+			searchTerm = "Title1");
 
 		Search.searchPG(searchTerm = "Content1");
 
@@ -1163,7 +1039,7 @@ definition {
 			searchAssetSummary = "Wiki Page Content",
 			searchAssetTitle = "Wiki Page Title",
 			searchNoResults = "true",
-			searchTerm = "Content1"
-		);
+			searchTerm = "Content1");
 	}
+
 }

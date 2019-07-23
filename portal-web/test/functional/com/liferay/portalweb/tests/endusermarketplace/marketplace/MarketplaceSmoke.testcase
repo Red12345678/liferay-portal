@@ -1,5 +1,6 @@
 @component-name = "marketplace"
 definition {
+
 	property marketplace.app.acceptance = "true";
 	property testray.main.component.name = "Marketplace";
 
@@ -31,4 +32,5 @@ definition {
 	test MarketplaceSmoke {
 		Marketplace.smoke();
 	}
+
 }

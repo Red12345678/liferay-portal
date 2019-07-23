@@ -1,5 +1,6 @@
 @component-name = "portal-social-networking"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property custom.properties = "default.layout.template.id=1_column";
@@ -46,24 +47,23 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
 			userMiddleName = "usermn",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		User.editUserSiteCP(siteName = "${siteName}", userScreenName = "usersn");
+		User.editUserSiteCP(
+			siteName = "${siteName}",
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "My Sites Directory Page");
 
@@ -72,8 +72,7 @@ definition {
 			searchTerm = "userfn",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "My Sites Directory Page");
 
@@ -83,8 +82,7 @@ definition {
 			searchTerm = "userfn1",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "My Sites Directory Page");
 
@@ -93,8 +91,7 @@ definition {
 			searchTerm = "usermn",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "My Sites Directory Page");
 
@@ -104,8 +101,7 @@ definition {
 			searchTerm = "usermn1",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "My Sites Directory Page");
 
@@ -114,8 +110,7 @@ definition {
 			searchTerm = "userln",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "My Sites Directory Page");
 
@@ -125,8 +120,7 @@ definition {
 			searchTerm = "userln1",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "My Sites Directory Page");
 
@@ -135,8 +129,7 @@ definition {
 			searchTerm = "usersn",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "My Sites Directory Page");
 
@@ -146,8 +139,7 @@ definition {
 			searchTerm = "usersn1",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "My Sites Directory Page");
 
@@ -156,8 +148,7 @@ definition {
 			searchTerm = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.gotoPage(pageName = "My Sites Directory Page");
 
@@ -167,7 +158,7 @@ definition {
 			searchTerm = "userea@liferay.com1",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 	}
+
 }

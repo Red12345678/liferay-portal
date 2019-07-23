@@ -1,4 +1,5 @@
 definition {
+
 	macro gotoPermissionSectionViaDropdown {
 		var key_navItem = "${contentTitle}";
 
@@ -7,8 +8,7 @@ definition {
 
 			AssertClick(
 				locator1 = "RolesPermissionsNavigation#PERMISSIONS_NAVITEM",
-				value1 = "${sectionTitle}"
-			);
+				value1 = "${sectionTitle}");
 		}
 
 		if (IsNotVisible(locator1 = "RolesPermissionsNavigation#${permissionName}")) {
@@ -16,10 +16,10 @@ definition {
 
 			AssertClick(
 				locator1 = "RolesPermissionsNavigation#PERMISSIONS_NAVITEM",
-				value1 = "${contentTitle}"
-			);
+				value1 = "${contentTitle}");
 		}
 
 		Click(locator1 = "RolesPermissionsNavigation#${permissionName}");
 	}
+
 }

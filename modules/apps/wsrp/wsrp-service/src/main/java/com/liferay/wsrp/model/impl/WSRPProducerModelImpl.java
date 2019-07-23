@@ -33,6 +33,9 @@ import com.liferay.wsrp.model.WSRPProducerModel;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.Collections;
@@ -219,6 +222,32 @@ public class WSRPProducerModelImpl
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, WSRPProducer>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			WSRPProducer.class.getClassLoader(), WSRPProducer.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<WSRPProducer> constructor =
+				(Constructor<WSRPProducer>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
 	}
 
 	private static final Map<String, Function<WSRPProducer, Object>>
@@ -639,8 +668,12 @@ public class WSRPProducerModelImpl
 	@Override
 	public WSRPProducer toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (WSRPProducer)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, WSRPProducer>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -873,11 +906,12 @@ public class WSRPProducerModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		WSRPProducer.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		WSRPProducer.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, WSRPProducer>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private String _uuid;
 	private String _originalUuid;

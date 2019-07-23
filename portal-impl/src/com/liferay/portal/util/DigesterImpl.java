@@ -62,9 +62,8 @@ public class DigesterImpl implements Digester {
 		if (_BASE_64) {
 			return digestBase64(algorithm, byteBuffer);
 		}
-		else {
-			return digestHex(algorithm, byteBuffer);
-		}
+
+		return digestHex(algorithm, byteBuffer);
 	}
 
 	@Override
@@ -72,9 +71,8 @@ public class DigesterImpl implements Digester {
 		if (_BASE_64) {
 			return digestBase64(algorithm, inputStream);
 		}
-		else {
-			return digestHex(algorithm, inputStream);
-		}
+
+		return digestHex(algorithm, inputStream);
 	}
 
 	@Override
@@ -82,9 +80,8 @@ public class DigesterImpl implements Digester {
 		if (_BASE_64) {
 			return digestBase64(algorithm, text);
 		}
-		else {
-			return digestHex(algorithm, text);
-		}
+
+		return digestHex(algorithm, text);
 	}
 
 	@Override

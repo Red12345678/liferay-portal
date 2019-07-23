@@ -71,9 +71,8 @@ public class JSONWebServiceServiceAction extends JSONServiceAction {
 			if (returnObj != null) {
 				return getReturnValue(returnObj);
 			}
-			else {
-				return JSONFactoryUtil.getNullJSON();
-			}
+
+			return JSONFactoryUtil.getNullJSON();
 		}
 		catch (Exception e) {
 			int status = 0;

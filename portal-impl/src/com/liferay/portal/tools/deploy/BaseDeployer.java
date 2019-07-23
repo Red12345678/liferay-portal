@@ -1314,9 +1314,8 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 				DeployUtil.getResourcePath(
 					tempDirPaths, "ignore-filters-web.xml"));
 		}
-		else {
-			return StringPool.BLANK;
-		}
+
+		return StringPool.BLANK;
 	}
 
 	public String getInvokerFilterContent() {
@@ -1590,9 +1589,8 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 				DeployUtil.getResourcePath(
 					tempDirPaths, "speed-filters-web.xml"));
 		}
-		else {
-			return StringPool.BLANK;
-		}
+
+		return StringPool.BLANK;
 	}
 
 	public boolean isJEEDeploymentEnabled() {
@@ -1802,13 +1800,12 @@ public class BaseDeployer implements AutoDeployer, Deployer {
 				return PluginPackageUtil.readPluginPackageProperties(
 					displayName, properties);
 			}
-			else {
-				String xml = StringUtil.read(is);
 
-				xml = XMLUtil.fixProlog(xml);
+			String xml = StringUtil.read(is);
 
-				return PluginPackageUtil.readPluginPackageXml(xml);
-			}
+			xml = XMLUtil.fixProlog(xml);
+
+			return PluginPackageUtil.readPluginPackageXml(xml);
 		}
 		catch (Exception e) {
 			_log.error(file.getPath() + ": " + e.toString(), e);

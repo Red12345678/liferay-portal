@@ -145,18 +145,15 @@ public class MBMessageActivityInterpreter
 				if (Validator.isNull(groupName)) {
 					return "activity-message-boards-message-add-message";
 				}
-				else {
-					return "activity-message-boards-message-add-message-in";
-				}
+
+				return "activity-message-boards-message-add-message-in";
 			}
-			else {
-				if (Validator.isNull(groupName)) {
-					return "activity-message-boards-message-reply-message";
-				}
-				else {
-					return "activity-message-boards-message-reply-message-in";
-				}
+
+			if (Validator.isNull(groupName)) {
+				return "activity-message-boards-message-reply-message";
 			}
+
+			return "activity-message-boards-message-reply-message-in";
 		}
 		else if ((activityType == MBActivityKeys.REPLY_MESSAGE) &&
 				 (receiverUserId > 0)) {
@@ -164,9 +161,8 @@ public class MBMessageActivityInterpreter
 			if (Validator.isNull(groupName)) {
 				return "activity-message-boards-message-reply-message";
 			}
-			else {
-				return "activity-message-boards-message-reply-message-in";
-			}
+
+			return "activity-message-boards-message-reply-message-in";
 		}
 
 		return null;

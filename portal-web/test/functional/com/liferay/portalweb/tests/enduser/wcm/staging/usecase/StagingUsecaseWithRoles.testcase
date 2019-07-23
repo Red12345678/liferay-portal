@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Staging";
@@ -13,18 +14,18 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
-		Page.add(pageName = "Staging Test Page", siteName = "Site Name");
+		Page.add(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 	}
 
 	tearDown {
@@ -36,8 +37,7 @@ definition {
 		else {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "test@liferay.com",
-				userLoginFullName = "Test Test"
-			);
+				userLoginFullName = "Test Test");
 
 			User.deactivateCP(userFirstName = "userfn");
 
@@ -56,24 +56,21 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addStagingAdminRole();
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionCmdCP(
 			permissionDefinitionKey = "SITE_ADMIN_APPLICATIONS_DOCUMENTS_AND_MEDIA_RESOURCE_PERMISSIONS_DOCUMENT_ACTION_CHECKBOX",
@@ -81,83 +78,70 @@ definition {
 			permissionNavigationKey = "SITE_ADMIN_CONTENT_DOCUMENTS_AND_MEDIA",
 			permissionNavigationValue = "Documents and Media",
 			roleName = "Staging Admin",
-			roleType = "Site"
-		);
+			roleType = "Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			password = "password",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignSiteRoleCP(
 			resourceName = "userfn userln",
-			roleName = "Staging Admin"
-		);
+			roleName = "Staging Admin");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Documents and Media");
 
 		DMDocument.addPG(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Document_1.doc",
-			dmDocumentTitle = "DM Document Title"
-		);
+			dmDocumentTitle = "DM Document Title");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.gotoPublishToLive();
 
@@ -165,11 +149,15 @@ definition {
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		DMPortlet.viewDefaultPG();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -177,17 +165,17 @@ definition {
 
 		Staging.configurePublishToLive(
 			checkContentNameList = "Documents and Media",
-			contentDateRange = "All"
-		);
+			contentDateRange = "All");
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Staging Test Page", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Staging Test Page",
+			siteName = "Site Name");
 
 		DMDocument.viewPG(
 			dmDocumentDescription = "DM Document Description",
-			dmDocumentTitle = "DM Document Title"
-		);
+			dmDocumentTitle = "DM Document Title");
 	}
 
 	@priority = "4"
@@ -195,59 +183,50 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addCommunityCP(
 			siteName = "Community Site Name",
-			uncheckPropagation = "true"
-		);
+			uncheckPropagation = "true");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addStagingAdminRole();
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			password = "password",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -256,14 +235,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -272,20 +249,19 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignSiteRoleCP(
 			resourceName = "userfn userln",
-			roleName = "Staging Admin"
-		);
+			roleName = "Staging Admin");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Community Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -301,8 +277,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.undoStagingPageVersioningPG();
 
@@ -312,8 +287,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.redoStagingPageVersioningPG();
 
@@ -323,8 +297,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.gotoPublishToLive();
 
@@ -332,8 +305,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		SitePageNavigator.gotoEditPage(page = "Home");
 
@@ -345,59 +317,50 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addCommunityCP(
 			siteName = "Community Site Name",
-			uncheckPropagation = "true"
-		);
+			uncheckPropagation = "true");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addStagingAdminRole();
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			password = "password",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -406,14 +369,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -422,89 +383,73 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignSiteRoleCP(
 			resourceName = "userfn userln",
-			roleName = "Staging Admin"
-		);
+			roleName = "Staging Admin");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.editSitePageVariationPG(sitePagesVariationName = "Main Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
-		Staging.viewEditedSitePagesVariationPG(
-			sitePagesVariationName = "Main Variation Edit"
-		);
+		Staging.viewEditedSitePagesVariationPG(sitePagesVariationName = "Main Variation Edit");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.addSitePagesVariationPG(
 			copySitePagesVariationName = "Main Variation Edit",
-			sitePagesVariationName = "Christmas Variation"
-		);
+			sitePagesVariationName = "Christmas Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Christmas Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Page.view(pageName = "Home");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Wiki",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Page.view(pageName = "Wiki");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Page.add(pageName = "Test Page Name");
 
 		Staging.changeSitePageVariationPG(
 			sitePagesVariationMenulistName = "Main Variation Edit",
-			sitePagesVariationName = "Christmas Variation"
-		);
+			sitePagesVariationName = "Christmas Variation");
 
 		Staging.enablePageInSitePagesVariation(
 			pageName = "Test Page Name",
-			sitePagesVariationName = "Main Variation Edit"
-		);
+			sitePagesVariationName = "Main Variation Edit");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Main Variation Edit");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Test Page Name",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Page.view(pageName = "Test Page Name");
 
@@ -512,22 +457,19 @@ definition {
 
 		Staging.changeSitePageVariationPG(
 			sitePagesVariationMenulistName = "Christmas Variation",
-			sitePagesVariationName = "Main Variation Edit"
-		);
+			sitePagesVariationName = "Main Variation Edit");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Christmas Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Page.view(pageName = "Home");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Test Page Name",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.gotoPublishToLive();
 
@@ -535,37 +477,33 @@ definition {
 
 		Navigator.gotoSitePage(
 			pageName = "Test Page Name",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.viewStagingLocalLiveVariationMessagePG(
 			pageName = "Test Page Name",
-			sitePagesVariationName = "Christmas Variation"
-		);
+			sitePagesVariationName = "Christmas Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Test Page Name",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.addSitePagesVariationPG(
 			copySitePagesVariationName = "None (Empty Site Pages Variation)",
-			sitePagesVariationName = "Empty Variation"
-		);
+			sitePagesVariationName = "Empty Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
-		Page.add(pageName = "Empty Page Name", siteScopeSelected = "true");
+		Page.add(
+			pageName = "Empty Page Name",
+			siteScopeSelected = "true");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Empty Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Empty Page Name",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.gotoPublishToLive();
 
@@ -573,28 +511,23 @@ definition {
 
 		Navigator.gotoSitePage(
 			pageName = "Empty Page Name",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.viewStagingLocalLiveVariationMessagePG(
 			pageName = "Empty Page Name",
-			sitePagesVariationName = "Empty Variation"
-		);
+			sitePagesVariationName = "Empty Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Empty Page Name",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.mergeSitePagesVariation(
 			sitePagesVariationMergeName = "Christmas Variation",
-			sitePagesVariationName = "Empty Variation"
-		);
+			sitePagesVariationName = "Empty Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Empty Variation");
 
@@ -602,8 +535,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Wiki",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Empty Variation");
 
@@ -611,8 +543,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Test Page Name",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Empty Variation");
 
@@ -624,59 +555,50 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addCommunityCP(
 			siteName = "Community Site Name",
-			uncheckPropagation = "true"
-		);
+			uncheckPropagation = "true");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addStagingAdminRole();
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			password = "password",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -685,14 +607,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -701,40 +621,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignSiteRoleCP(
 			resourceName = "userfn userln",
-			roleName = "Staging Admin"
-		);
+			roleName = "Staging Admin");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.addSitePagesVariationPG(
 			copySitePagesVariationName = "Main Variation",
-			sitePagesVariationName = "New Variation"
-		);
+			sitePagesVariationName = "New Variation");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Page.deletePG(pageName = "Wiki");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.gotoPublishToLive();
 
@@ -742,28 +655,41 @@ definition {
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Community Site Name");
 
-		AssertTextNotPresent(locator1 = "Home#PAGE_2", value1 = "Wiki");
+		AssertTextNotPresent(
+			locator1 = "Home#PAGE_2",
+			value1 = "Wiki");
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Community Site Name");
 
-		Page.add(pageName = "New Page Name", pageStaging = "true");
+		Page.add(
+			pageName = "New Page Name",
+			pageStaging = "true");
 
 		Staging.schedulePublishToLivePG(scheduleTitleName = "Staging Schedule Title");
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Community Site Name");
 
 		AssertTextNotPresent(
 			locator1 = "Home#PAGE_2_GUEST_VIEW",
-			value1 = "New Page Name"
-		);
+			value1 = "New Page Name");
 
 		Pause(locator1 = "120000");
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Community Site Name");
 
-		AssertTextEquals(locator1 = "Home#PAGE_2_GUEST_VIEW", value1 = "New Page Name");
+		AssertTextEquals(
+			locator1 = "Home#PAGE_2_GUEST_VIEW",
+			value1 = "New Page Name");
 	}
 
 	@priority = "4"
@@ -771,26 +697,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addCommunityCP(
 			siteName = "Community Site Name",
-			uncheckPropagation = "true"
-		);
+			uncheckPropagation = "true");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -799,92 +721,81 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow Configuration"
-		);
+			portlet = "Workflow Configuration");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver (Version 1)",
-			workflowResourceValue = "Page Revision"
-		);
+			workflowResourceValue = "Page Revision");
 
-		ProductMenu.gotoSite(site = "Community Site Name");
+		Navigator.openSiteURL(siteName = "Community Site Name");
 
 		Navigator.gotoStagedView();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
-		Workflow.configureWorkflowViaFolderInfo(
-			workflowDefinition = "Single Approver (Version 1)"
-		);
+		Workflow.configureWorkflowViaFolderInfo(workflowDefinition = "Single Approver (Version 1)");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.addCP(roleName = "Staging Admin", roleType = "Site");
+		Role.addCP(
+			roleName = "Staging Admin",
+			roleType = "Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionsCP(
 			permissionDefinitionKeys = "SITE_ADMIN_PAGES_SITE_PAGES_GENERAL_PERMISSIONS_ACTION_CHECKBOX,SITE_ADMIN_PAGES_SITE_PAGES_RESOURCE_PERMISSIONS_SITE_ACTION_CHECKBOX,SITE_ADMIN_PAGES_SITE_PAGES_RESOURCE_PERMISSIONS_PAGE_ACTION_CHECKBOX,SITE_ADMIN_PAGES_SITE_PAGES_RESOURCE_PERMISSIONS_PAGE_VARIATION_ACTION_CHECKBOX,SITE_ADMIN_PAGES_SITE_PAGES_RESOURCE_PERMISSIONS_SITE_PAGES_VARIATION_ACTION_CHECKBOX",
 			roleName = "Staging Admin",
-			roleType = "Site"
-		);
+			roleType = "Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.addCP(roleName = "Content Creator", roleType = "Site");
+		Role.addCP(
+			roleName = "Content Creator",
+			roleType = "Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.definePermissionsCP(
 			permissionDefinitionKeys = "SITE_ADMIN_CONTENT_WEB_CONTENT_GENERAL_PERMISSIONS_ACTION_CHECKBOX,SITE_ADMIN_CONTENT_WEB_CONTENT_RESOURCE_PERMISSIONS_WEB_CONTENT_ACTION_CHECKBOX,SITE_ADMIN_CONTENT_WEB_CONTENT_RESOURCE_PERMISSIONS_WEB_CONTENT_FOLDER_ACTION_CHECKBOX,SITE_ADMIN_CONTENT_WEB_CONTENT_RESOURCE_PERMISSIONS_WEB_CONTENT_ARTICLE_ACTION_CHECKBOX,SITE_ADMIN_CONTENT_WEB_CONTENT_RESOURCE_PERMISSIONS_WEB_CONTENT_FEED_ACTION_CHECKBOX,SITE_ADMIN_APPLICATIONS_WEB_CONTENT_DISPLAY_APPLICATIONS_PERMISSIONS_ACTION_CHECKBOX,",
 			roleName = "Content Creator",
-			roleType = "Site"
-		);
+			roleType = "Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "contentcreator@liferay.com",
 			userFirstName = "userfncreator",
 			userLastName = "creator",
-			userScreenName = "contentcreator"
-		);
+			userScreenName = "contentcreator");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			password = "password",
 			userEmailAddress = "contentcreator@liferay.com",
-			userScreenName = "contentcreator"
-		);
+			userScreenName = "contentcreator");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -893,14 +804,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfncreator",
 			userLastName = "creator",
-			userScreenName = "contentcreator"
-		);
+			userScreenName = "contentcreator");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -909,13 +818,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignSiteRoleCP(
 			resourceName = "userfncreator creator",
-			roleName = "Content Creator"
-		);
+			roleName = "Content Creator");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -924,38 +831,32 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignSiteRoleCP(
 			resourceName = "userfncreator creator",
-			roleName = "Staging Admin"
-		);
+			roleName = "Staging Admin");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "contentapprover@liferay.com",
 			userFirstName = "userfnapprover",
 			userLastName = "approver",
-			userScreenName = "contentapprover"
-		);
+			userScreenName = "contentapprover");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			password = "password",
 			userEmailAddress = "contentapprover@liferay.com",
-			userScreenName = "contentapprover"
-		);
+			userScreenName = "contentapprover");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -964,14 +865,12 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfnapprover",
 			userLastName = "approver",
-			userScreenName = "contentapprover"
-		);
+			userScreenName = "contentapprover");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
@@ -980,128 +879,111 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignSiteRoleCP(
 			resourceName = "userfnapprover approver",
-			roleName = "Site Content Reviewer"
-		);
+			roleName = "Site Content Reviewer");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "contentcreator@liferay.com",
-			userLoginFullName = "userfncreator creator"
-		);
+			userLoginFullName = "userfncreator creator");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Portlet.addPG(portletName = "Web Content Display");
 
 		WebContent.addWithWorkflowPGViaWCD(
 			webContentContent = "Web Content Content",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "contentapprover@liferay.com",
-			userLoginFullName = "userfnapprover approver"
-		);
+			userLoginFullName = "userfnapprover approver");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Web Content Title",
 			workflowAssetType = "Web Content Article",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Web Content Title",
 			workflowAssetType = "Web Content Article",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Community Site Name");
 
 		AssertElementNotPresent(
-			locator1 = "Portlet#TITLE",
-			key_portletName = "Web Content Display"
-		);
+			key_portletName = "Web Content Display",
+			locator1 = "Portlet#TITLE");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "contentcreator@liferay.com",
-			userLoginFullName = "userfncreator creator"
-		);
+			userLoginFullName = "userfncreator creator");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Staging.submitForPublicationPageRevision();
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "contentapprover@liferay.com",
-			userLoginFullName = "userfnapprover approver"
-		);
+			userLoginFullName = "userfnapprover approver");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Home",
 			workflowAssetType = "Page Revision",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Home",
 			workflowAssetType = "Page Revision",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "contentcreator@liferay.com",
-			userLoginFullName = "userfncreator creator"
-		);
+			userLoginFullName = "userfncreator creator");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
-		Staging.viewStagingWorkflowStatusPG(
-			stagingWorkflowStatus = "Ready for Publication"
-		);
+		Staging.viewStagingWorkflowStatusPG(stagingWorkflowStatus = "Ready for Publication");
 
 		Staging.gotoPublishToLive();
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Community Site Name");
 
 		WebContent.viewPGViaWCD(webContentContent = "Web Content Content");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "contentapprover@liferay.com",
-			userLoginFullName = "userfnapprover approver"
-		);
+			userLoginFullName = "userfnapprover approver");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Home",
 			workflowAssetType = "Page Revision",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.viewCompletedTask(
 			workflowAssetTitle = "Web Content Title",
 			workflowAssetType = "Web Content Article",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 	}
 
 	@priority = "5"
@@ -1109,132 +991,105 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addCommunityCP(
 			siteName = "Community Site Name",
-			uncheckPropagation = "true"
-		);
+			uncheckPropagation = "true");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
 		Role.addStagingAdminRole();
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			password = "password",
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignUserAsMemberCP(
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Members",
 			panel = "Site Administration",
-			portlet = "Site Memberships"
-		);
+			portlet = "Site Memberships");
 
 		Site.assignSiteRoleCP(
 			resourceName = "userfn userln",
-			roleName = "Staging Admin"
-		);
+			roleName = "Staging Admin");
 
 		Navigator.openSiteURL(siteName = "Community Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
-		Staging.addSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name 1"
-		);
+		Staging.addSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name 1");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
-		Staging.viewSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name 1"
-		);
+		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name 1");
 
-		Staging.addSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name 2"
-		);
+		Staging.addSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name 2");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
-		Staging.viewSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name 2"
-		);
+		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name 2");
 
 		Staging.changeSitePageVariationPG(
 			sitePagesVariationMenulistName = "Main Variation",
-			sitePagesVariationName = "Site Pages Variation Name 2"
-		);
+			sitePagesVariationName = "Site Pages Variation Name 2");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Home",
-			siteName = "Community Site Name"
-		);
+			siteName = "Community Site Name");
 
 		Portlet.addPG(portletName = "Navigation Menu");
 
@@ -1242,11 +1097,13 @@ definition {
 
 		ProductMenuHelper.openProductMenu();
 
-		SitePageNavigator.gotoPages(page = "Public Pages", site = "Community Site Name");
+		SitePageNavigator.gotoPages(
+			page = "Public Pages",
+			site = "Community Site Name");
 
 		Page.deletePG(pageName = "Wiki");
 
-		ProductMenu.gotoSite(site = "Community Site Name");
+		Navigator.openSiteURL(siteName = "Community Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -1256,12 +1113,17 @@ definition {
 
 		Staging.publishToLive();
 
-		Navigator.gotoSitePage(pageName = "Home", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Home",
+			siteName = "Community Site Name");
 
 		Portlet.viewPG(portletName = "Navigation Menu");
 
-		Navigator.gotoSitePage(pageName = "Wiki", siteName = "Community Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Wiki",
+			siteName = "Community Site Name");
 
 		Portlet.viewPG(portletName = "Wiki");
 	}
+
 }

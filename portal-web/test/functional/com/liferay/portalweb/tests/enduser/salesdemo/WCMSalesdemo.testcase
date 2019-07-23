@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Web Content Display";
@@ -30,8 +31,7 @@ definition {
 		Page.add(
 			columnName = "1 Column",
 			pageName = "IFrame Page",
-			sitePageType = "Empty Page"
-		);
+			sitePageType = "Empty Page");
 
 		Navigator.gotoPage(pageName = "IFrame Page");
 
@@ -47,8 +47,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Embedded#EMBEDDED_TEXT_UPDATED",
-			value1 = "updated"
-		);
+			value1 = "updated");
 	}
 
 	@priority = "4"
@@ -58,15 +57,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "DHS Content",
-			webContentTitle = "DHS Title"
-		);
+			webContentTitle = "DHS Title");
 
 		PortletEntry.publish();
 
@@ -78,49 +75,44 @@ definition {
 
 		Navigator.gotoPage(pageName = "Welcome");
 
-		Content.addPG(assetTitle = "DHS Title", webContentContent = "DHS Content");
+		Content.addPG(
+			assetTitle = "DHS Title",
+			webContentContent = "DHS Content");
 
 		WebContent.viewPGViaWCD(
 			webContentContent = "DHS Content",
-			webContentTitle = "DHS Title"
-		);
+			webContentTitle = "DHS Title");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		WebContent.viewNoEditWCViaWCD();
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
 			userLoginFullName = "Test Test",
-			webContentContent = "DHS Content"
-		);
+			webContentContent = "DHS Content");
 
 		Page.add(pageName = "Sales Page");
 
@@ -132,4 +124,5 @@ definition {
 
 		MobileDevice.previewPG(deviceType = "smartphone");
 	}
+
 }

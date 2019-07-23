@@ -1,4 +1,5 @@
 definition {
+
 	var userFirstName = "Test";
 	var userLastName = "Test";
 
@@ -9,24 +10,21 @@ definition {
 			nodePort = "${nodePort}",
 			pageName = "Test Page1",
 			pageTemplateName = "${pageTemplateName}",
-			sitePageType = "${pageType}"
-		);
+			sitePageType = "${pageType}");
 
 		Page.add(
 			defaultURL = "${defaultURL}",
 			nodePort = "${nodePort}",
 			pageName = "Test Page2",
 			pageTemplateName = "${pageTemplateName}",
-			sitePageType = "${pageType}"
-		);
+			sitePageType = "${pageType}");
 
 		Page.add(
 			defaultURL = "${defaultURL}",
 			nodePort = "${nodePort}",
 			pageName = "Test Page3",
 			pageTemplateName = "${pageTemplateName}",
-			sitePageType = "${pageType}"
-		);
+			sitePageType = "${pageType}");
 
 		var pageName = "Test Page1";
 		var portletBody = "Welcome to Liferay";
@@ -35,17 +33,23 @@ definition {
 		task ("Add a '${portletName}' portlet to the page named '${pageName}'") {
 			Navigator.gotoPage(pageName = "${pageName}");
 
-			Portlet.addPG(i = "${i}", portletName = "${portletName}");
+			Portlet.addPG(
+				i = "${i}",
+				portletName = "${portletName}");
 
 			Portlet.viewTitle(portletName = "${portletName}");
 
-			Portlet.viewBody(portletBody = "${portletBody}", portletName = "${portletName}");
+			Portlet.viewBody(
+				portletBody = "${portletBody}",
+				portletName = "${portletName}");
 
 			Navigator.gotoPage(pageName = "${pageName}");
 
 			Portlet.viewTitle(portletName = "${portletName}");
 
-			Portlet.viewBody(portletBody = "${portletBody}", portletName = "${portletName}");
+			Portlet.viewBody(
+				portletBody = "${portletBody}",
+				portletName = "${portletName}");
 		}
 
 		var portlet = "Web Content";
@@ -56,8 +60,7 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Content",
 				panel = "Site Administration",
-				portlet = "${portlet}"
-			);
+				portlet = "${portlet}");
 
 			SiteAdmin.viewPortletTitle(portletTitle = "${portlet}");
 		}
@@ -72,8 +75,7 @@ definition {
 
 			WebContent.addCP(
 				webContentContent = "${webContentContent}",
-				webContentTitle = "${webContentTitle}"
-			);
+				webContentTitle = "${webContentTitle}");
 
 			PortletEntry.publish();
 
@@ -85,12 +87,11 @@ definition {
 	macro viewWelcomePage {
 		AssertTextEquals.assertText(
 			locator1 = "HelloWorld#PORTLET_TITLE",
-			value1 = "Hello World"
-		);
+			value1 = "Hello World");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "HelloWorld#PORTLET_CONTENT",
-			value1 = "Welcome to Liferay"
-		);
+			value1 = "Welcome to Liferay");
 	}
+
 }

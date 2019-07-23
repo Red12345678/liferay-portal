@@ -102,9 +102,8 @@ public abstract class BaseAppDisplay implements AppDisplay {
 
 			return false;
 		}
-		else {
-			return true;
-		}
+
+		return true;
 	}
 
 	private final List<Bundle> _bundles = new ArrayList<>();

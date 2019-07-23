@@ -244,7 +244,7 @@ public class AssetCategoriesDisplayContext {
 		long scopeGroupId = themeDisplay.getScopeGroupId();
 
 		if (Validator.isNotNull(getKeywords())) {
-			Sort sort = new Sort("createDate", Sort.LONG_TYPE, orderByAsc);
+			Sort sort = new Sort("createDate", Sort.LONG_TYPE, !orderByAsc);
 
 			AssetCategoryDisplay assetCategoryDisplay =
 				AssetCategoryServiceUtil.searchCategoriesDisplay(
@@ -472,7 +472,7 @@ public class AssetCategoriesDisplayContext {
 		long scopeGroupId = themeDisplay.getScopeGroupId();
 
 		if (Validator.isNotNull(keywords)) {
-			Sort sort = new Sort("createDate", Sort.LONG_TYPE, orderByAsc);
+			Sort sort = new Sort("createDate", Sort.LONG_TYPE, !orderByAsc);
 
 			AssetVocabularyDisplay assetVocabularyDisplay =
 				AssetVocabularyServiceUtil.searchVocabulariesDisplay(

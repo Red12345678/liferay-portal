@@ -1,5 +1,6 @@
 @component-name = "portal-workflow"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Workflow";
@@ -16,13 +17,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow Configuration"
-		);
+			portlet = "Workflow Configuration");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver (Version 1)",
-			workflowResourceValue = "Comments"
-		);
+			workflowResourceValue = "Comments");
 
 		Page.add(pageName = "Page Comments Page");
 
@@ -54,53 +53,45 @@ definition {
 
 		PageComment.addWithWorkflowPG(
 			commentAuthor = "Test Test (You)",
-			commentBody = "Page Comment Comment"
-		);
+			commentBody = "Page Comment Comment");
 
 		Navigator.gotoPage(pageName = "Page Comments Page");
 
 		PageComment.viewWithWorkflowPG(
 			commentAuthor = "Test Test (You)",
 			commentBody = "Page Comment Comment",
-			commentStatus = "Pending (Review)"
-		);
+			commentStatus = "Pending (Review)");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Page Comment Comment",
 			workflowAssetType = "Comments",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.gotoPage(pageName = "Page Comments Page");
 
 		PageComment.viewWithWorkflowPG(
 			commentAuthor = "Test Test (You)",
 			commentBody = "Page Comment Comment",
-			commentStatus = "Pending (Review)"
-		);
+			commentStatus = "Pending (Review)");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "Page Comment Comment",
 			workflowAssetType = "Comments",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.gotoPage(pageName = "Page Comments Page");
 
 		PageComment.viewPG(
 			commentAuthor = "Test Test (You)",
-			commentBody = "Page Comment Comment"
-		);
+			commentBody = "Page Comment Comment");
 
 		Page.gotoMyAccount(portletName = "My Submissions");
 
-		Workflow.gotoViewCompletedAssetViaMySubmissions(
-			workflowAssetTitle = "Page Comment Comment"
-		);
+		Workflow.gotoViewCompletedAssetViaMySubmissions(workflowAssetTitle = "Page Comment Comment");
 
 		PageComment.viewAsWorkflowAsset(commentBody = "Page Comment Comment");
 	}
@@ -112,16 +103,14 @@ definition {
 
 		PageComment.addWithWorkflowPG(
 			commentAuthor = "Test Test (You)",
-			commentBody = "Page Comment Comment"
-		);
+			commentBody = "Page Comment Comment");
 
 		Navigator.gotoPage(pageName = "Page Comments Page");
 
 		PageComment.viewWithWorkflowPG(
 			commentAuthor = "Test Test (You)",
 			commentBody = "Page Comment Comment",
-			commentStatus = "Pending (Review)"
-		);
+			commentStatus = "Pending (Review)");
 
 		Page.gotoMyAccount(portletName = "My Submissions");
 
@@ -129,8 +118,7 @@ definition {
 			workflowAssetTitle = "Page Comment Comment",
 			workflowAssetType = "Comments",
 			workflowDefinition = "Single Approver",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		PageComment.tearDownPG(pageName = "Page Comments Page");
 
@@ -146,30 +134,26 @@ definition {
 
 		PageComment.addWithWorkflowPG(
 			commentAuthor = "Test Test (You)",
-			commentBody = "Page Comment Comment"
-		);
+			commentBody = "Page Comment Comment");
 
 		Navigator.gotoPage(pageName = "Page Comments Page");
 
 		PageComment.viewWithWorkflowPG(
 			commentAuthor = "Test Test (You)",
 			commentBody = "Page Comment Comment",
-			commentStatus = "Pending (Review)"
-		);
+			commentStatus = "Pending (Review)");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Page Comment Comment",
 			workflowAssetType = "Comments",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.viewTaskAssignedToMeDetails(
 			workflowAssetContent = "Page Comment Comment",
 			workflowAssetTitle = "Page Comment Comment",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.gotoPreviewEdit();
 
@@ -182,8 +166,7 @@ definition {
 		Workflow.viewTaskAssignedToMeDetails(
 			workflowAssetContent = "EDIT Comment",
 			workflowAssetTitle = "EDIT Comment",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 	}
 
 	@priority = "4"
@@ -192,46 +175,41 @@ definition {
 
 		PageComment.addWithWorkflowPG(
 			commentAuthor = "Test Test (You)",
-			commentBody = "Page Comment Comment"
-		);
+			commentBody = "Page Comment Comment");
 
 		Navigator.gotoPage(pageName = "Page Comments Page");
 
 		PageComment.viewWithWorkflowPG(
 			commentAuthor = "Test Test (You)",
 			commentBody = "Page Comment Comment",
-			commentStatus = "Pending (Review)"
-		);
+			commentStatus = "Pending (Review)");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "Page Comment Comment",
 			workflowAssetType = "Comments",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.rejectTaskByActions(
 			workflowAssetTitle = "Page Comment Comment",
 			workflowAssetType = "Comments",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Page.gotoMyAccount(portletName = "My Workflow Tasks");
 
 		Workflow.viewRejectedTask(
 			workflowAssetTitle = "Page Comment Comment",
-			workflowAssetType = "Comments"
-		);
+			workflowAssetType = "Comments");
 
 		Navigator.gotoPage(pageName = "Page Comments Page");
 
 		PageComment.viewWithWorkflowPG(
 			commentAuthor = "Test Test (You)",
 			commentBody = "Page Comment Comment",
-			commentStatus = "Pending (Update)"
-		);
+			commentStatus = "Pending (Update)");
 	}
+
 }
