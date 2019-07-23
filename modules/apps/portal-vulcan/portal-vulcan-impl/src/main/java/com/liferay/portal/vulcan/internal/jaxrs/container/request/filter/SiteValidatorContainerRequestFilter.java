@@ -40,7 +40,7 @@ public class SiteValidatorContainerRequestFilter
 	}
 
 	@Override
-	public void filter(ContainerRequestContext requestContext) {
+	public void filter(ContainerRequestContext containerRequestContext) {
 		MultivaluedMap<String, String> multivaluedMap =
 			_uriInfo.getPathParameters();
 

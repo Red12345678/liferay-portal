@@ -19,6 +19,8 @@ import com.liferay.data.engine.rest.dto.v1_0.DataLayoutPermission;
 import com.liferay.data.engine.rest.resource.v1_0.DataLayoutResource;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
@@ -30,11 +32,13 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Generated;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import javax.validation.constraints.NotNull;
 
@@ -63,8 +67,10 @@ public abstract class BaseDataLayoutResourceImpl implements DataLayoutResource {
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "dataDefinitionId"),
+			@Parameter(in = ParameterIn.QUERY, name = "keywords"),
 			@Parameter(in = ParameterIn.QUERY, name = "page"),
-			@Parameter(in = ParameterIn.QUERY, name = "pageSize")
+			@Parameter(in = ParameterIn.QUERY, name = "pageSize"),
+			@Parameter(in = ParameterIn.QUERY, name = "sort")
 		}
 	)
 	@Path("/data-definitions/{dataDefinitionId}/data-layouts")
@@ -73,7 +79,8 @@ public abstract class BaseDataLayoutResourceImpl implements DataLayoutResource {
 	public Page<DataLayout> getDataDefinitionDataLayoutsPage(
 			@NotNull @Parameter(hidden = true) @PathParam("dataDefinitionId")
 				Long dataDefinitionId,
-			@Context Pagination pagination)
+			@Parameter(hidden = true) @QueryParam("keywords") String keywords,
+			@Context Pagination pagination, @Context Sort[] sorts)
 		throws Exception {
 
 		return Page.of(Collections.emptyList());
@@ -171,8 +178,10 @@ public abstract class BaseDataLayoutResourceImpl implements DataLayoutResource {
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "siteId"),
+			@Parameter(in = ParameterIn.QUERY, name = "keywords"),
 			@Parameter(in = ParameterIn.QUERY, name = "page"),
-			@Parameter(in = ParameterIn.QUERY, name = "pageSize")
+			@Parameter(in = ParameterIn.QUERY, name = "pageSize"),
+			@Parameter(in = ParameterIn.QUERY, name = "sort")
 		}
 	)
 	@Path("/sites/{siteId}/data-layout")
@@ -180,7 +189,8 @@ public abstract class BaseDataLayoutResourceImpl implements DataLayoutResource {
 	@Tags(value = {@Tag(name = "DataLayout")})
 	public Page<DataLayout> getSiteDataLayoutPage(
 			@NotNull @Parameter(hidden = true) @PathParam("siteId") Long siteId,
-			@Context Pagination pagination)
+			@Parameter(hidden = true) @QueryParam("keywords") String keywords,
+			@Context Pagination pagination, @Context Sort[] sorts)
 		throws Exception {
 
 		return Page.of(Collections.emptyList());
@@ -206,8 +216,52 @@ public abstract class BaseDataLayoutResourceImpl implements DataLayoutResource {
 		throws Exception {
 	}
 
+	@Override
+	@GET
+	@Parameters(
+		value = {
+			@Parameter(in = ParameterIn.PATH, name = "siteId"),
+			@Parameter(in = ParameterIn.PATH, name = "dataLayoutKey")
+		}
+	)
+	@Path("/sites/{siteId}/data-layouts/{dataLayoutKey}")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "DataLayout")})
+	public DataLayout getSiteDataLayout(
+			@NotNull @Parameter(hidden = true) @PathParam("siteId") Long siteId,
+			@NotNull @Parameter(hidden = true) @PathParam("dataLayoutKey")
+				String dataLayoutKey)
+		throws Exception {
+
+		return new DataLayout();
+	}
+
+	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {
+		this.contextAcceptLanguage = contextAcceptLanguage;
+	}
+
 	public void setContextCompany(Company contextCompany) {
 		this.contextCompany = contextCompany;
+	}
+
+	public void setContextHttpServletRequest(
+		HttpServletRequest contextHttpServletRequest) {
+
+		this.contextHttpServletRequest = contextHttpServletRequest;
+	}
+
+	public void setContextHttpServletResponse(
+		HttpServletResponse contextHttpServletResponse) {
+
+		this.contextHttpServletResponse = contextHttpServletResponse;
+	}
+
+	public void setContextUriInfo(UriInfo contextUriInfo) {
+		this.contextUriInfo = contextUriInfo;
+	}
+
+	public void setContextUser(User contextUser) {
+		this.contextUser = contextUser;
 	}
 
 	protected void preparePatch(
@@ -215,7 +269,7 @@ public abstract class BaseDataLayoutResourceImpl implements DataLayoutResource {
 	}
 
 	protected <T, R> List<R> transform(
-		Collection<T> collection,
+		java.util.Collection<T> collection,
 		UnsafeFunction<T, R, Exception> unsafeFunction) {
 
 		return TransformUtil.transform(collection, unsafeFunction);
@@ -229,7 +283,7 @@ public abstract class BaseDataLayoutResourceImpl implements DataLayoutResource {
 	}
 
 	protected <T, R> R[] transformToArray(
-		Collection<T> collection,
+		java.util.Collection<T> collection,
 		UnsafeFunction<T, R, Exception> unsafeFunction, Class<?> clazz) {
 
 		return TransformUtil.transformToArray(
@@ -242,13 +296,11 @@ public abstract class BaseDataLayoutResourceImpl implements DataLayoutResource {
 		return TransformUtil.transformToList(array, unsafeFunction);
 	}
 
-	@Context
 	protected AcceptLanguage contextAcceptLanguage;
-
-	@Context
 	protected Company contextCompany;
-
-	@Context
+	protected HttpServletRequest contextHttpServletRequest;
+	protected HttpServletResponse contextHttpServletResponse;
 	protected UriInfo contextUriInfo;
+	protected User contextUser;
 
 }

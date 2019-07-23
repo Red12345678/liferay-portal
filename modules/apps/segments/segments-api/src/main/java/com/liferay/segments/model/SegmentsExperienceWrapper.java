@@ -55,6 +55,7 @@ public class SegmentsExperienceWrapper
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("segmentsEntryId", getSegmentsEntryId());
+		attributes.put("segmentsExperienceKey", getSegmentsExperienceKey());
 		attributes.put("classNameId", getClassNameId());
 		attributes.put("classPK", getClassPK());
 		attributes.put("name", getName());
@@ -120,6 +121,13 @@ public class SegmentsExperienceWrapper
 
 		if (segmentsEntryId != null) {
 			setSegmentsEntryId(segmentsEntryId);
+		}
+
+		String segmentsExperienceKey = (String)attributes.get(
+			"segmentsExperienceKey");
+
+		if (segmentsExperienceKey != null) {
+			setSegmentsExperienceKey(segmentsExperienceKey);
 		}
 
 		Long classNameId = (Long)attributes.get("classNameId");
@@ -373,6 +381,16 @@ public class SegmentsExperienceWrapper
 	@Override
 	public long getSegmentsExperienceId() {
 		return model.getSegmentsExperienceId();
+	}
+
+	/**
+	 * Returns the segments experience key of this segments experience.
+	 *
+	 * @return the segments experience key of this segments experience
+	 */
+	@Override
+	public String getSegmentsExperienceKey() {
+		return model.getSegmentsExperienceKey();
 	}
 
 	/**
@@ -631,6 +649,16 @@ public class SegmentsExperienceWrapper
 	@Override
 	public void setSegmentsExperienceId(long segmentsExperienceId) {
 		model.setSegmentsExperienceId(segmentsExperienceId);
+	}
+
+	/**
+	 * Sets the segments experience key of this segments experience.
+	 *
+	 * @param segmentsExperienceKey the segments experience key of this segments experience
+	 */
+	@Override
+	public void setSegmentsExperienceKey(String segmentsExperienceKey) {
+		model.setSegmentsExperienceKey(segmentsExperienceKey);
 	}
 
 	/**

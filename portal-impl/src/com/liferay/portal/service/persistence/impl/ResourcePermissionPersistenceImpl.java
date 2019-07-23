@@ -15,7 +15,6 @@
 package com.liferay.portal.service.persistence.impl;
 
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -28,8 +27,7 @@ import com.liferay.portal.kernel.exception.NoSuchResourcePermissionException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.ResourcePermission;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.persistence.ResourcePermissionPersistence;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -44,7 +42,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -1153,9 +1150,7 @@ public class ResourcePermissionPersistenceImpl
 			scopes = new int[0];
 		}
 		else if (scopes.length > 1) {
-			scopes = ArrayUtil.unique(scopes);
-
-			Arrays.sort(scopes);
+			scopes = ArrayUtil.sortedUnique(scopes);
 		}
 
 		if (scopes.length == 1) {
@@ -1345,9 +1340,7 @@ public class ResourcePermissionPersistenceImpl
 			scopes = new int[0];
 		}
 		else if (scopes.length > 1) {
-			scopes = ArrayUtil.unique(scopes);
-
-			Arrays.sort(scopes);
+			scopes = ArrayUtil.sortedUnique(scopes);
 		}
 
 		Object[] finderArgs = new Object[] {StringUtil.merge(scopes)};
@@ -4647,9 +4640,7 @@ public class ResourcePermissionPersistenceImpl
 			roleIds = new long[0];
 		}
 		else if (roleIds.length > 1) {
-			roleIds = ArrayUtil.unique(roleIds);
-
-			Arrays.sort(roleIds);
+			roleIds = ArrayUtil.sortedUnique(roleIds);
 		}
 
 		if (roleIds.length == 1) {
@@ -5204,9 +5195,7 @@ public class ResourcePermissionPersistenceImpl
 			roleIds = new long[0];
 		}
 		else if (roleIds.length > 1) {
-			roleIds = ArrayUtil.unique(roleIds);
-
-			Arrays.sort(roleIds);
+			roleIds = ArrayUtil.sortedUnique(roleIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -6099,9 +6088,7 @@ public class ResourcePermissionPersistenceImpl
 			roleIds = new long[0];
 		}
 		else if (roleIds.length > 1) {
-			roleIds = ArrayUtil.unique(roleIds);
-
-			Arrays.sort(roleIds);
+			roleIds = ArrayUtil.sortedUnique(roleIds);
 		}
 
 		if (roleIds.length == 1) {
@@ -6445,9 +6432,7 @@ public class ResourcePermissionPersistenceImpl
 			roleIds = new long[0];
 		}
 		else if (roleIds.length > 1) {
-			roleIds = ArrayUtil.unique(roleIds);
-
-			Arrays.sort(roleIds);
+			roleIds = ArrayUtil.sortedUnique(roleIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -6772,7 +6757,7 @@ public class ResourcePermissionPersistenceImpl
 		resourcePermission.setNew(true);
 		resourcePermission.setPrimaryKey(resourcePermissionId);
 
-		resourcePermission.setCompanyId(companyProvider.getCompanyId());
+		resourcePermission.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return resourcePermission;
 	}
@@ -7824,9 +7809,6 @@ public class ResourcePermissionPersistenceImpl
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
-	@BeanReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	private static final String _SQL_SELECT_RESOURCEPERMISSION =
 		"SELECT resourcePermission FROM ResourcePermission resourcePermission";

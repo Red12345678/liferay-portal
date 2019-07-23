@@ -15,7 +15,6 @@
 package com.liferay.tasks.service.persistence.impl;
 
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -27,11 +26,10 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -47,7 +45,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -5888,9 +5885,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		if (statuses.length == 1) {
@@ -6096,9 +6091,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		Object[] finderArgs = new Object[] {userId, StringUtil.merge(statuses)};
@@ -6728,9 +6721,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		if (statuses.length == 1) {
@@ -6938,9 +6929,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -7938,9 +7927,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -8124,9 +8111,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		if (statuses.length == 1) {
@@ -8346,9 +8331,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -8493,9 +8476,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -9498,9 +9479,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -9685,9 +9664,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		if (statuses.length == 1) {
@@ -9908,9 +9885,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -10059,9 +10034,7 @@ public class TasksEntryPersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -10232,7 +10205,7 @@ public class TasksEntryPersistenceImpl
 		tasksEntry.setNew(true);
 		tasksEntry.setPrimaryKey(tasksEntryId);
 
-		tasksEntry.setCompanyId(companyProvider.getCompanyId());
+		tasksEntry.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return tasksEntry;
 	}
@@ -11371,9 +11344,6 @@ public class TasksEntryPersistenceImpl
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
-	@BeanReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	private static final String _SQL_SELECT_TASKSENTRY =
 		"SELECT tasksEntry FROM TasksEntry tasksEntry";

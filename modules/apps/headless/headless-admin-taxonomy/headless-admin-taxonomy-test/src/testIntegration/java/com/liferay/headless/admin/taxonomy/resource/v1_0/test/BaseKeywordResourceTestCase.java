@@ -14,61 +14,56 @@
 
 package com.liferay.headless.admin.taxonomy.resource.v1_0.test;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
 import com.liferay.headless.admin.taxonomy.client.dto.v1_0.Keyword;
+import com.liferay.headless.admin.taxonomy.client.http.HttpInvoker;
 import com.liferay.headless.admin.taxonomy.client.pagination.Page;
+import com.liferay.headless.admin.taxonomy.client.pagination.Pagination;
+import com.liferay.headless.admin.taxonomy.client.resource.v1_0.KeywordResource;
 import com.liferay.headless.admin.taxonomy.client.serdes.v1_0.KeywordSerDes;
-import com.liferay.headless.admin.taxonomy.resource.v1_0.KeywordResource;
+import com.liferay.petra.function.UnsafeTriConsumer;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.Base64;
-import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.Http;
-import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.odata.entity.EntityField;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.resource.EntityModelResource;
 
 import java.lang.reflect.InvocationTargetException;
-
-import java.net.URL;
+import java.lang.reflect.Method;
 
 import java.text.DateFormat;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
 import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -104,10 +99,17 @@ public abstract class BaseKeywordResourceTestCase {
 	public void setUp() throws Exception {
 		irrelevantGroup = GroupTestUtil.addGroup();
 		testGroup = GroupTestUtil.addGroup();
-		testLocale = LocaleUtil.getDefault();
 
-		_resourceURL = new URL(
-			"http://localhost:8080/o/headless-admin-taxonomy/v1.0");
+		testCompany = CompanyLocalServiceUtil.getCompany(
+			testGroup.getCompanyId());
+
+		_keywordResource.setContextCompany(testCompany);
+
+		KeywordResource.Builder builder = KeywordResource.builder();
+
+		keywordResource = builder.locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	@After
@@ -121,10 +123,16 @@ public abstract class BaseKeywordResourceTestCase {
 		ObjectMapper objectMapper = new ObjectMapper() {
 			{
 				configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+				configure(
+					SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
 				enable(SerializationFeature.INDENT_OUTPUT);
 				setDateFormat(new ISO8601DateFormat());
 				setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 				setSerializationInclusion(JsonInclude.Include.NON_NULL);
+				setVisibility(
+					PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+				setVisibility(
+					PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE);
 			}
 		};
 
@@ -142,9 +150,15 @@ public abstract class BaseKeywordResourceTestCase {
 		ObjectMapper objectMapper = new ObjectMapper() {
 			{
 				configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+				configure(
+					SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
 				setDateFormat(new ISO8601DateFormat());
 				setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 				setSerializationInclusion(JsonInclude.Include.NON_NULL);
+				setVisibility(
+					PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+				setVisibility(
+					PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE);
 			}
 		};
 
@@ -158,107 +172,54 @@ public abstract class BaseKeywordResourceTestCase {
 	}
 
 	@Test
+	public void testEscapeRegexInStringFields() throws Exception {
+		String regex = "^[0-9]+(\\.[0-9]{1,2})\"?";
+
+		Keyword keyword = randomKeyword();
+
+		keyword.setName(regex);
+
+		String json = KeywordSerDes.toJSON(keyword);
+
+		Assert.assertFalse(json.contains(regex));
+
+		keyword = KeywordSerDes.toDTO(json);
+
+		Assert.assertEquals(regex, keyword.getName());
+	}
+
+	@Test
 	public void testDeleteKeyword() throws Exception {
 		Keyword keyword = testDeleteKeyword_addKeyword();
 
-		assertResponseCode(204, invokeDeleteKeywordResponse(keyword.getId()));
+		assertHttpResponseStatusCode(
+			204, keywordResource.deleteKeywordHttpResponse(keyword.getId()));
 
-		assertResponseCode(404, invokeGetKeywordResponse(keyword.getId()));
+		assertHttpResponseStatusCode(
+			404, keywordResource.getKeywordHttpResponse(keyword.getId()));
 
-		assertResponseCode(404, invokeGetKeywordResponse(0L));
+		assertHttpResponseStatusCode(
+			404, keywordResource.getKeywordHttpResponse(0L));
 	}
 
 	protected Keyword testDeleteKeyword_addKeyword() throws Exception {
-		return invokePostSiteKeyword(testGroup.getGroupId(), randomKeyword());
-	}
-
-	protected void invokeDeleteKeyword(Long keywordId) throws Exception {
-		Http.Options options = _createHttpOptions();
-
-		options.setDelete(true);
-
-		String location =
-			_resourceURL + _toPath("/keywords/{keywordId}", keywordId);
-
-		options.setLocation(location);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-	}
-
-	protected Http.Response invokeDeleteKeywordResponse(Long keywordId)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		options.setDelete(true);
-
-		String location =
-			_resourceURL + _toPath("/keywords/{keywordId}", keywordId);
-
-		options.setLocation(location);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
+		return keywordResource.postSiteKeyword(
+			testGroup.getGroupId(), randomKeyword());
 	}
 
 	@Test
 	public void testGetKeyword() throws Exception {
 		Keyword postKeyword = testGetKeyword_addKeyword();
 
-		Keyword getKeyword = invokeGetKeyword(postKeyword.getId());
+		Keyword getKeyword = keywordResource.getKeyword(postKeyword.getId());
 
 		assertEquals(postKeyword, getKeyword);
 		assertValid(getKeyword);
 	}
 
 	protected Keyword testGetKeyword_addKeyword() throws Exception {
-		return invokePostSiteKeyword(testGroup.getGroupId(), randomKeyword());
-	}
-
-	protected Keyword invokeGetKeyword(Long keywordId) throws Exception {
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL + _toPath("/keywords/{keywordId}", keywordId);
-
-		options.setLocation(location);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		try {
-			return KeywordSerDes.toDTO(string);
-		}
-		catch (Exception e) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to process HTTP response: " + string, e);
-			}
-
-			throw e;
-		}
-	}
-
-	protected Http.Response invokeGetKeywordResponse(Long keywordId)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL + _toPath("/keywords/{keywordId}", keywordId);
-
-		options.setLocation(location);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
+		return keywordResource.postSiteKeyword(
+			testGroup.getGroupId(), randomKeyword());
 	}
 
 	@Test
@@ -267,80 +228,31 @@ public abstract class BaseKeywordResourceTestCase {
 
 		Keyword randomKeyword = randomKeyword();
 
-		Keyword putKeyword = invokePutKeyword(
+		Keyword putKeyword = keywordResource.putKeyword(
 			postKeyword.getId(), randomKeyword);
 
 		assertEquals(randomKeyword, putKeyword);
 		assertValid(putKeyword);
 
-		Keyword getKeyword = invokeGetKeyword(putKeyword.getId());
+		Keyword getKeyword = keywordResource.getKeyword(putKeyword.getId());
 
 		assertEquals(randomKeyword, getKeyword);
 		assertValid(getKeyword);
 	}
 
 	protected Keyword testPutKeyword_addKeyword() throws Exception {
-		return invokePostSiteKeyword(testGroup.getGroupId(), randomKeyword());
-	}
-
-	protected Keyword invokePutKeyword(Long keywordId, Keyword keyword)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		options.setBody(
-			KeywordSerDes.toJSON(keyword), ContentTypes.APPLICATION_JSON,
-			StringPool.UTF8);
-
-		String location =
-			_resourceURL + _toPath("/keywords/{keywordId}", keywordId);
-
-		options.setLocation(location);
-
-		options.setPut(true);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		try {
-			return KeywordSerDes.toDTO(string);
-		}
-		catch (Exception e) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to process HTTP response: " + string, e);
-			}
-
-			throw e;
-		}
-	}
-
-	protected Http.Response invokePutKeywordResponse(
-			Long keywordId, Keyword keyword)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		options.setBody(
-			KeywordSerDes.toJSON(keyword), ContentTypes.APPLICATION_JSON,
-			StringPool.UTF8);
-
-		String location =
-			_resourceURL + _toPath("/keywords/{keywordId}", keywordId);
-
-		options.setLocation(location);
-
-		options.setPut(true);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
+		return keywordResource.postSiteKeyword(
+			testGroup.getGroupId(), randomKeyword());
 	}
 
 	@Test
 	public void testGetSiteKeywordsPage() throws Exception {
+		Page<Keyword> page = keywordResource.getSiteKeywordsPage(
+			testGetSiteKeywordsPage_getSiteId(), RandomTestUtil.randomString(),
+			null, Pagination.of(1, 2), null);
+
+		Assert.assertEquals(0, page.getTotalCount());
+
 		Long siteId = testGetSiteKeywordsPage_getSiteId();
 		Long irrelevantSiteId = testGetSiteKeywordsPage_getIrrelevantSiteId();
 
@@ -348,7 +260,7 @@ public abstract class BaseKeywordResourceTestCase {
 			Keyword irrelevantKeyword = testGetSiteKeywordsPage_addKeyword(
 				irrelevantSiteId, randomIrrelevantKeyword());
 
-			Page<Keyword> page = invokeGetSiteKeywordsPage(
+			page = keywordResource.getSiteKeywordsPage(
 				irrelevantSiteId, null, null, Pagination.of(1, 2), null);
 
 			Assert.assertEquals(1, page.getTotalCount());
@@ -365,7 +277,7 @@ public abstract class BaseKeywordResourceTestCase {
 		Keyword keyword2 = testGetSiteKeywordsPage_addKeyword(
 			siteId, randomKeyword());
 
-		Page<Keyword> page = invokeGetSiteKeywordsPage(
+		page = keywordResource.getSiteKeywordsPage(
 			siteId, null, null, Pagination.of(1, 2), null);
 
 		Assert.assertEquals(2, page.getTotalCount());
@@ -373,6 +285,10 @@ public abstract class BaseKeywordResourceTestCase {
 		assertEqualsIgnoringOrder(
 			Arrays.asList(keyword1, keyword2), (List<Keyword>)page.getItems());
 		assertValid(page);
+
+		keywordResource.deleteKeyword(keyword1.getId());
+
+		keywordResource.deleteKeyword(keyword2.getId());
 	}
 
 	@Test
@@ -393,7 +309,7 @@ public abstract class BaseKeywordResourceTestCase {
 		keyword1 = testGetSiteKeywordsPage_addKeyword(siteId, keyword1);
 
 		for (EntityField entityField : entityFields) {
-			Page<Keyword> page = invokeGetSiteKeywordsPage(
+			Page<Keyword> page = keywordResource.getSiteKeywordsPage(
 				siteId, null, getFilterString(entityField, "between", keyword1),
 				Pagination.of(1, 2), null);
 
@@ -424,7 +340,7 @@ public abstract class BaseKeywordResourceTestCase {
 			siteId, randomKeyword());
 
 		for (EntityField entityField : entityFields) {
-			Page<Keyword> page = invokeGetSiteKeywordsPage(
+			Page<Keyword> page = keywordResource.getSiteKeywordsPage(
 				siteId, null, getFilterString(entityField, "eq", keyword1),
 				Pagination.of(1, 2), null);
 
@@ -447,14 +363,14 @@ public abstract class BaseKeywordResourceTestCase {
 		Keyword keyword3 = testGetSiteKeywordsPage_addKeyword(
 			siteId, randomKeyword());
 
-		Page<Keyword> page1 = invokeGetSiteKeywordsPage(
+		Page<Keyword> page1 = keywordResource.getSiteKeywordsPage(
 			siteId, null, null, Pagination.of(1, 2), null);
 
 		List<Keyword> keywords1 = (List<Keyword>)page1.getItems();
 
 		Assert.assertEquals(keywords1.toString(), 2, keywords1.size());
 
-		Page<Keyword> page2 = invokeGetSiteKeywordsPage(
+		Page<Keyword> page2 = keywordResource.getSiteKeywordsPage(
 			siteId, null, null, Pagination.of(2, 2), null);
 
 		Assert.assertEquals(3, page2.getTotalCount());
@@ -463,63 +379,72 @@ public abstract class BaseKeywordResourceTestCase {
 
 		Assert.assertEquals(keywords2.toString(), 1, keywords2.size());
 
+		Page<Keyword> page3 = keywordResource.getSiteKeywordsPage(
+			siteId, null, null, Pagination.of(1, 3), null);
+
 		assertEqualsIgnoringOrder(
 			Arrays.asList(keyword1, keyword2, keyword3),
-			new ArrayList<Keyword>() {
-				{
-					addAll(keywords1);
-					addAll(keywords2);
-				}
-			});
+			(List<Keyword>)page3.getItems());
 	}
 
 	@Test
 	public void testGetSiteKeywordsPageWithSortDateTime() throws Exception {
-		List<EntityField> entityFields = getEntityFields(
-			EntityField.Type.DATE_TIME);
+		testGetSiteKeywordsPageWithSort(
+			EntityField.Type.DATE_TIME,
+			(entityField, keyword1, keyword2) -> {
+				BeanUtils.setProperty(
+					keyword1, entityField.getName(),
+					DateUtils.addMinutes(new Date(), -2));
+			});
+	}
 
-		if (entityFields.isEmpty()) {
-			return;
-		}
-
-		Long siteId = testGetSiteKeywordsPage_getSiteId();
-
-		Keyword keyword1 = randomKeyword();
-		Keyword keyword2 = randomKeyword();
-
-		for (EntityField entityField : entityFields) {
-			BeanUtils.setProperty(
-				keyword1, entityField.getName(),
-				DateUtils.addMinutes(new Date(), -2));
-		}
-
-		keyword1 = testGetSiteKeywordsPage_addKeyword(siteId, keyword1);
-
-		keyword2 = testGetSiteKeywordsPage_addKeyword(siteId, keyword2);
-
-		for (EntityField entityField : entityFields) {
-			Page<Keyword> ascPage = invokeGetSiteKeywordsPage(
-				siteId, null, null, Pagination.of(1, 2),
-				entityField.getName() + ":asc");
-
-			assertEquals(
-				Arrays.asList(keyword1, keyword2),
-				(List<Keyword>)ascPage.getItems());
-
-			Page<Keyword> descPage = invokeGetSiteKeywordsPage(
-				siteId, null, null, Pagination.of(1, 2),
-				entityField.getName() + ":desc");
-
-			assertEquals(
-				Arrays.asList(keyword2, keyword1),
-				(List<Keyword>)descPage.getItems());
-		}
+	@Test
+	public void testGetSiteKeywordsPageWithSortInteger() throws Exception {
+		testGetSiteKeywordsPageWithSort(
+			EntityField.Type.INTEGER,
+			(entityField, keyword1, keyword2) -> {
+				BeanUtils.setProperty(keyword1, entityField.getName(), 0);
+				BeanUtils.setProperty(keyword2, entityField.getName(), 1);
+			});
 	}
 
 	@Test
 	public void testGetSiteKeywordsPageWithSortString() throws Exception {
-		List<EntityField> entityFields = getEntityFields(
-			EntityField.Type.STRING);
+		testGetSiteKeywordsPageWithSort(
+			EntityField.Type.STRING,
+			(entityField, keyword1, keyword2) -> {
+				Class clazz = keyword1.getClass();
+
+				Method method = clazz.getMethod(
+					"get" +
+						StringUtil.upperCaseFirstLetter(entityField.getName()));
+
+				Class<?> returnType = method.getReturnType();
+
+				if (returnType.isAssignableFrom(Map.class)) {
+					BeanUtils.setProperty(
+						keyword1, entityField.getName(),
+						Collections.singletonMap("Aaa", "Aaa"));
+					BeanUtils.setProperty(
+						keyword2, entityField.getName(),
+						Collections.singletonMap("Bbb", "Bbb"));
+				}
+				else {
+					BeanUtils.setProperty(
+						keyword1, entityField.getName(), "Aaa");
+					BeanUtils.setProperty(
+						keyword2, entityField.getName(), "Bbb");
+				}
+			});
+	}
+
+	protected void testGetSiteKeywordsPageWithSort(
+			EntityField.Type type,
+			UnsafeTriConsumer<EntityField, Keyword, Keyword, Exception>
+				unsafeTriConsumer)
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(type);
 
 		if (entityFields.isEmpty()) {
 			return;
@@ -531,8 +456,7 @@ public abstract class BaseKeywordResourceTestCase {
 		Keyword keyword2 = randomKeyword();
 
 		for (EntityField entityField : entityFields) {
-			BeanUtils.setProperty(keyword1, entityField.getName(), "Aaa");
-			BeanUtils.setProperty(keyword2, entityField.getName(), "Bbb");
+			unsafeTriConsumer.accept(entityField, keyword1, keyword2);
 		}
 
 		keyword1 = testGetSiteKeywordsPage_addKeyword(siteId, keyword1);
@@ -540,7 +464,7 @@ public abstract class BaseKeywordResourceTestCase {
 		keyword2 = testGetSiteKeywordsPage_addKeyword(siteId, keyword2);
 
 		for (EntityField entityField : entityFields) {
-			Page<Keyword> ascPage = invokeGetSiteKeywordsPage(
+			Page<Keyword> ascPage = keywordResource.getSiteKeywordsPage(
 				siteId, null, null, Pagination.of(1, 2),
 				entityField.getName() + ":asc");
 
@@ -548,7 +472,7 @@ public abstract class BaseKeywordResourceTestCase {
 				Arrays.asList(keyword1, keyword2),
 				(List<Keyword>)ascPage.getItems());
 
-			Page<Keyword> descPage = invokeGetSiteKeywordsPage(
+			Page<Keyword> descPage = keywordResource.getSiteKeywordsPage(
 				siteId, null, null, Pagination.of(1, 2),
 				entityField.getName() + ":desc");
 
@@ -562,7 +486,7 @@ public abstract class BaseKeywordResourceTestCase {
 			Long siteId, Keyword keyword)
 		throws Exception {
 
-		return invokePostSiteKeyword(siteId, keyword);
+		return keywordResource.postSiteKeyword(siteId, keyword);
 	}
 
 	protected Long testGetSiteKeywordsPage_getSiteId() throws Exception {
@@ -573,82 +497,6 @@ public abstract class BaseKeywordResourceTestCase {
 		throws Exception {
 
 		return irrelevantGroup.getGroupId();
-	}
-
-	protected Page<Keyword> invokeGetSiteKeywordsPage(
-			Long siteId, String search, String filterString,
-			Pagination pagination, String sortString)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL + _toPath("/sites/{siteId}/keywords", siteId);
-
-		if (search != null) {
-			location = HttpUtil.addParameter(location, "search", search);
-		}
-
-		if (filterString != null) {
-			location = HttpUtil.addParameter(location, "filter", filterString);
-		}
-
-		if (pagination != null) {
-			location = HttpUtil.addParameter(
-				location, "page", pagination.getPage());
-			location = HttpUtil.addParameter(
-				location, "pageSize", pagination.getPageSize());
-		}
-
-		if (sortString != null) {
-			location = HttpUtil.addParameter(location, "sort", sortString);
-		}
-
-		options.setLocation(location);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		return Page.of(string, KeywordSerDes::toDTO);
-	}
-
-	protected Http.Response invokeGetSiteKeywordsPageResponse(
-			Long siteId, String search, String filterString,
-			Pagination pagination, String sortString)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL + _toPath("/sites/{siteId}/keywords", siteId);
-
-		if (search != null) {
-			location = HttpUtil.addParameter(location, "search", search);
-		}
-
-		if (filterString != null) {
-			location = HttpUtil.addParameter(location, "filter", filterString);
-		}
-
-		if (pagination != null) {
-			location = HttpUtil.addParameter(
-				location, "page", pagination.getPage());
-			location = HttpUtil.addParameter(
-				location, "pageSize", pagination.getPageSize());
-		}
-
-		if (sortString != null) {
-			location = HttpUtil.addParameter(location, "sort", sortString);
-		}
-
-		options.setLocation(location);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
 	}
 
 	@Test
@@ -664,71 +512,16 @@ public abstract class BaseKeywordResourceTestCase {
 	protected Keyword testPostSiteKeyword_addKeyword(Keyword keyword)
 		throws Exception {
 
-		return invokePostSiteKeyword(
+		return keywordResource.postSiteKeyword(
 			testGetSiteKeywordsPage_getSiteId(), keyword);
 	}
 
-	protected Keyword invokePostSiteKeyword(Long siteId, Keyword keyword)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		options.setBody(
-			KeywordSerDes.toJSON(keyword), ContentTypes.APPLICATION_JSON,
-			StringPool.UTF8);
-
-		String location =
-			_resourceURL + _toPath("/sites/{siteId}/keywords", siteId);
-
-		options.setLocation(location);
-
-		options.setPost(true);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		try {
-			return KeywordSerDes.toDTO(string);
-		}
-		catch (Exception e) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to process HTTP response: " + string, e);
-			}
-
-			throw e;
-		}
-	}
-
-	protected Http.Response invokePostSiteKeywordResponse(
-			Long siteId, Keyword keyword)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		options.setBody(
-			KeywordSerDes.toJSON(keyword), ContentTypes.APPLICATION_JSON,
-			StringPool.UTF8);
-
-		String location =
-			_resourceURL + _toPath("/sites/{siteId}/keywords", siteId);
-
-		options.setLocation(location);
-
-		options.setPost(true);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
-	}
-
-	protected void assertResponseCode(
-		int expectedResponseCode, Http.Response actualResponse) {
+	protected void assertHttpResponseStatusCode(
+		int expectedHttpResponseStatusCode,
+		HttpInvoker.HttpResponse actualHttpResponse) {
 
 		Assert.assertEquals(
-			expectedResponseCode, actualResponse.getResponseCode());
+			expectedHttpResponseStatusCode, actualHttpResponse.getStatusCode());
 	}
 
 	protected void assertEquals(Keyword keyword1, Keyword keyword2) {
@@ -830,7 +623,7 @@ public abstract class BaseKeywordResourceTestCase {
 	protected void assertValid(Page<Keyword> page) {
 		boolean valid = false;
 
-		Collection<Keyword> keywords = page.getItems();
+		java.util.Collection<Keyword> keywords = page.getItems();
 
 		int size = keywords.size();
 
@@ -845,6 +638,10 @@ public abstract class BaseKeywordResourceTestCase {
 	}
 
 	protected String[] getAdditionalAssertFieldNames() {
+		return new String[0];
+	}
+
+	protected String[] getIgnoredEntityFieldNames() {
 		return new String[0];
 	}
 
@@ -930,7 +727,9 @@ public abstract class BaseKeywordResourceTestCase {
 		return true;
 	}
 
-	protected Collection<EntityField> getEntityFields() throws Exception {
+	protected java.util.Collection<EntityField> getEntityFields()
+		throws Exception {
+
 		if (!(_keywordResource instanceof EntityModelResource)) {
 			throw new UnsupportedOperationException(
 				"Resource is not an instance of EntityModelResource");
@@ -951,12 +750,15 @@ public abstract class BaseKeywordResourceTestCase {
 	protected List<EntityField> getEntityFields(EntityField.Type type)
 		throws Exception {
 
-		Collection<EntityField> entityFields = getEntityFields();
+		java.util.Collection<EntityField> entityFields = getEntityFields();
 
 		Stream<EntityField> stream = entityFields.stream();
 
 		return stream.filter(
-			entityField -> Objects.equals(entityField.getType(), type)
+			entityField ->
+				Objects.equals(entityField.getType(), type) &&
+				!ArrayUtil.contains(
+					getIgnoredEntityFieldNames(), entityField.getName())
 		).collect(
 			Collectors.toList()
 		);
@@ -1093,77 +895,10 @@ public abstract class BaseKeywordResourceTestCase {
 		return randomKeyword();
 	}
 
+	protected KeywordResource keywordResource;
 	protected Group irrelevantGroup;
-	protected String testContentType = "application/json";
+	protected Company testCompany;
 	protected Group testGroup;
-	protected Locale testLocale;
-	protected String testUserNameAndPassword = "test@liferay.com:test";
-
-	private Http.Options _createHttpOptions() {
-		Http.Options options = new Http.Options();
-
-		options.addHeader("Accept", "application/json");
-		options.addHeader(
-			"Accept-Language", LocaleUtil.toW3cLanguageId(testLocale));
-
-		String encodedTestUserNameAndPassword = Base64.encode(
-			testUserNameAndPassword.getBytes());
-
-		options.addHeader(
-			"Authorization", "Basic " + encodedTestUserNameAndPassword);
-
-		options.addHeader("Content-Type", testContentType);
-
-		return options;
-	}
-
-	private String _toJSON(Map<String, String> map) {
-		if (map == null) {
-			return "null";
-		}
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{");
-
-		Set<Map.Entry<String, String>> set = map.entrySet();
-
-		Iterator<Map.Entry<String, String>> iterator = set.iterator();
-
-		while (iterator.hasNext()) {
-			Map.Entry<String, String> entry = iterator.next();
-
-			sb.append("\"" + entry.getKey() + "\": ");
-
-			if (entry.getValue() == null) {
-				sb.append("null");
-			}
-			else {
-				sb.append("\"" + entry.getValue() + "\"");
-			}
-
-			if (iterator.hasNext()) {
-				sb.append(", ");
-			}
-		}
-
-		sb.append("}");
-
-		return sb.toString();
-	}
-
-	private String _toPath(String template, Object... values) {
-		if (ArrayUtil.isEmpty(values)) {
-			return template;
-		}
-
-		for (int i = 0; i < values.length; i++) {
-			template = template.replaceFirst(
-				"\\{.*?\\}", String.valueOf(values[i]));
-		}
-
-		return template;
-	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BaseKeywordResourceTestCase.class);
@@ -1183,8 +918,7 @@ public abstract class BaseKeywordResourceTestCase {
 	private static DateFormat _dateFormat;
 
 	@Inject
-	private KeywordResource _keywordResource;
-
-	private URL _resourceURL;
+	private com.liferay.headless.admin.taxonomy.resource.v1_0.KeywordResource
+		_keywordResource;
 
 }

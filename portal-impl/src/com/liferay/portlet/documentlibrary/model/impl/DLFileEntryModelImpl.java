@@ -41,6 +41,9 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.ArrayList;
@@ -79,20 +82,21 @@ public class DLFileEntryModelImpl
 	public static final String TABLE_NAME = "DLFileEntry";
 
 	public static final Object[][] TABLE_COLUMNS = {
-		{"uuid_", Types.VARCHAR}, {"fileEntryId", Types.BIGINT},
-		{"groupId", Types.BIGINT}, {"companyId", Types.BIGINT},
-		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
-		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
-		{"classNameId", Types.BIGINT}, {"classPK", Types.BIGINT},
-		{"repositoryId", Types.BIGINT}, {"folderId", Types.BIGINT},
-		{"treePath", Types.VARCHAR}, {"name", Types.VARCHAR},
-		{"fileName", Types.VARCHAR}, {"extension", Types.VARCHAR},
-		{"mimeType", Types.VARCHAR}, {"title", Types.VARCHAR},
-		{"description", Types.VARCHAR}, {"extraSettings", Types.CLOB},
-		{"fileEntryTypeId", Types.BIGINT}, {"version", Types.VARCHAR},
-		{"size_", Types.BIGINT}, {"readCount", Types.INTEGER},
-		{"smallImageId", Types.BIGINT}, {"largeImageId", Types.BIGINT},
-		{"custom1ImageId", Types.BIGINT}, {"custom2ImageId", Types.BIGINT},
+		{"mvccVersion", Types.BIGINT}, {"uuid_", Types.VARCHAR},
+		{"fileEntryId", Types.BIGINT}, {"groupId", Types.BIGINT},
+		{"companyId", Types.BIGINT}, {"userId", Types.BIGINT},
+		{"userName", Types.VARCHAR}, {"createDate", Types.TIMESTAMP},
+		{"modifiedDate", Types.TIMESTAMP}, {"classNameId", Types.BIGINT},
+		{"classPK", Types.BIGINT}, {"repositoryId", Types.BIGINT},
+		{"folderId", Types.BIGINT}, {"treePath", Types.VARCHAR},
+		{"name", Types.VARCHAR}, {"fileName", Types.VARCHAR},
+		{"extension", Types.VARCHAR}, {"mimeType", Types.VARCHAR},
+		{"title", Types.VARCHAR}, {"description", Types.VARCHAR},
+		{"extraSettings", Types.CLOB}, {"fileEntryTypeId", Types.BIGINT},
+		{"version", Types.VARCHAR}, {"size_", Types.BIGINT},
+		{"readCount", Types.INTEGER}, {"smallImageId", Types.BIGINT},
+		{"largeImageId", Types.BIGINT}, {"custom1ImageId", Types.BIGINT},
+		{"custom2ImageId", Types.BIGINT},
 		{"manualCheckInRequired", Types.BOOLEAN},
 		{"lastPublishDate", Types.TIMESTAMP}
 	};
@@ -101,6 +105,7 @@ public class DLFileEntryModelImpl
 		new HashMap<String, Integer>();
 
 	static {
+		TABLE_COLUMNS_MAP.put("mvccVersion", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("uuid_", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("fileEntryId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("groupId", Types.BIGINT);
@@ -134,7 +139,7 @@ public class DLFileEntryModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table DLFileEntry (uuid_ VARCHAR(75) null,fileEntryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,classPK LONG,repositoryId LONG,folderId LONG,treePath STRING null,name VARCHAR(255) null,fileName VARCHAR(255) null,extension VARCHAR(75) null,mimeType VARCHAR(75) null,title VARCHAR(255) null,description STRING null,extraSettings TEXT null,fileEntryTypeId LONG,version VARCHAR(75) null,size_ LONG,readCount INTEGER,smallImageId LONG,largeImageId LONG,custom1ImageId LONG,custom2ImageId LONG,manualCheckInRequired BOOLEAN,lastPublishDate DATE null)";
+		"create table DLFileEntry (mvccVersion LONG default 0 not null,uuid_ VARCHAR(75) null,fileEntryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,classPK LONG,repositoryId LONG,folderId LONG,treePath STRING null,name VARCHAR(255) null,fileName VARCHAR(255) null,extension VARCHAR(75) null,mimeType VARCHAR(75) null,title VARCHAR(255) null,description STRING null,extraSettings TEXT null,fileEntryTypeId LONG,version VARCHAR(75) null,size_ LONG,readCount INTEGER,smallImageId LONG,largeImageId LONG,custom1ImageId LONG,custom2ImageId LONG,manualCheckInRequired BOOLEAN,lastPublishDate DATE null)";
 
 	public static final String TABLE_SQL_DROP = "drop table DLFileEntry";
 
@@ -208,6 +213,7 @@ public class DLFileEntryModelImpl
 
 		DLFileEntry model = new DLFileEntryImpl();
 
+		model.setMvccVersion(soapModel.getMvccVersion());
 		model.setUuid(soapModel.getUuid());
 		model.setFileEntryId(soapModel.getFileEntryId());
 		model.setGroupId(soapModel.getGroupId());
@@ -355,6 +361,32 @@ public class DLFileEntryModelImpl
 		return _attributeSetterBiConsumers;
 	}
 
+	private static Function<InvocationHandler, DLFileEntry>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			DLFileEntry.class.getClassLoader(), DLFileEntry.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<DLFileEntry> constructor =
+				(Constructor<DLFileEntry>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
+	}
+
 	private static final Map<String, Function<DLFileEntry, Object>>
 		_attributeGetterFunctions;
 	private static final Map<String, BiConsumer<DLFileEntry, Object>>
@@ -366,6 +398,11 @@ public class DLFileEntryModelImpl
 		Map<String, BiConsumer<DLFileEntry, ?>> attributeSetterBiConsumers =
 			new LinkedHashMap<String, BiConsumer<DLFileEntry, ?>>();
 
+		attributeGetterFunctions.put(
+			"mvccVersion", DLFileEntry::getMvccVersion);
+		attributeSetterBiConsumers.put(
+			"mvccVersion",
+			(BiConsumer<DLFileEntry, Long>)DLFileEntry::setMvccVersion);
 		attributeGetterFunctions.put("uuid", DLFileEntry::getUuid);
 		attributeSetterBiConsumers.put(
 			"uuid", (BiConsumer<DLFileEntry, String>)DLFileEntry::setUuid);
@@ -498,6 +535,17 @@ public class DLFileEntryModelImpl
 			attributeGetterFunctions);
 		_attributeSetterBiConsumers = Collections.unmodifiableMap(
 			(Map)attributeSetterBiConsumers);
+	}
+
+	@JSON
+	@Override
+	public long getMvccVersion() {
+		return _mvccVersion;
+	}
+
+	@Override
+	public void setMvccVersion(long mvccVersion) {
+		_mvccVersion = mvccVersion;
 	}
 
 	@JSON
@@ -1280,8 +1328,12 @@ public class DLFileEntryModelImpl
 	@Override
 	public DLFileEntry toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (DLFileEntry)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, DLFileEntry>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -1292,6 +1344,7 @@ public class DLFileEntryModelImpl
 	public Object clone() {
 		DLFileEntryImpl dlFileEntryImpl = new DLFileEntryImpl();
 
+		dlFileEntryImpl.setMvccVersion(getMvccVersion());
 		dlFileEntryImpl.setUuid(getUuid());
 		dlFileEntryImpl.setFileEntryId(getFileEntryId());
 		dlFileEntryImpl.setGroupId(getGroupId());
@@ -1462,6 +1515,8 @@ public class DLFileEntryModelImpl
 	public CacheModel<DLFileEntry> toCacheModel() {
 		DLFileEntryCacheModel dlFileEntryCacheModel =
 			new DLFileEntryCacheModel();
+
+		dlFileEntryCacheModel.mvccVersion = getMvccVersion();
 
 		dlFileEntryCacheModel.uuid = getUuid();
 
@@ -1676,12 +1731,14 @@ public class DLFileEntryModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		DLFileEntry.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		DLFileEntry.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
 
+		private static final Function<InvocationHandler, DLFileEntry>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
+
+	private long _mvccVersion;
 	private String _uuid;
 	private String _originalUuid;
 	private long _fileEntryId;

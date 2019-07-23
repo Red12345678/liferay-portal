@@ -161,13 +161,13 @@ public class DLFileEntryModelPreFilterContributor
 	protected void addHiddenFilter(
 		BooleanFilter booleanFilter, SearchContext searchContext) {
 
-		if (ArrayUtil.isEmpty(searchContext.getFolderIds()) ||
-			ArrayUtil.contains(
-				searchContext.getFolderIds(),
-				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID)) {
+		if ((ArrayUtil.isEmpty(searchContext.getFolderIds()) ||
+			 ArrayUtil.contains(
+				 searchContext.getFolderIds(),
+				 DLFolderConstants.DEFAULT_PARENT_FOLDER_ID)) &&
+			!searchContext.isIncludeAttachments()) {
 
-			booleanFilter.addRequiredTerm(
-				Field.HIDDEN, searchContext.isIncludeAttachments());
+			booleanFilter.addRequiredTerm(Field.HIDDEN, false);
 		}
 	}
 

@@ -181,22 +181,13 @@ public class JournalContentPortlet extends MVCPortlet {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		renderRequest.setAttribute(
 			JournalWebKeys.JOURNAL_CONTENT, _journalContent);
 
 		try {
-			JournalContentDisplayContext journalContentDisplayContext =
-				JournalContentDisplayContext.create(
-					renderRequest, renderResponse,
-					themeDisplay.getPortletDisplay(), _CLASS_NAME_ID,
-					_ddmTemplateModelResourcePermission);
-
-			renderRequest.setAttribute(
-				JournalContentWebKeys.JOURNAL_CONTENT_DISPLAY_CONTEXT,
-				journalContentDisplayContext);
+			JournalContentDisplayContext.create(
+				renderRequest, renderResponse, _CLASS_NAME_ID,
+				_ddmTemplateModelResourcePermission);
 		}
 		catch (PortalException pe) {
 			if (_log.isDebugEnabled()) {
@@ -247,23 +238,13 @@ public class JournalContentPortlet extends MVCPortlet {
 			}
 		}
 		else {
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)resourceRequest.getAttribute(
-					WebKeys.THEME_DISPLAY);
-
 			resourceRequest.setAttribute(
 				JournalWebKeys.JOURNAL_CONTENT, _journalContent);
 
 			try {
-				JournalContentDisplayContext journalContentDisplayContext =
-					JournalContentDisplayContext.create(
-						resourceRequest, resourceResponse,
-						themeDisplay.getPortletDisplay(), _CLASS_NAME_ID,
-						_ddmTemplateModelResourcePermission);
-
-				resourceRequest.setAttribute(
-					JournalContentWebKeys.JOURNAL_CONTENT_DISPLAY_CONTEXT,
-					journalContentDisplayContext);
+				JournalContentDisplayContext.create(
+					resourceRequest, resourceResponse, _CLASS_NAME_ID,
+					_ddmTemplateModelResourcePermission);
 			}
 			catch (PortalException pe) {
 				if (_log.isDebugEnabled()) {

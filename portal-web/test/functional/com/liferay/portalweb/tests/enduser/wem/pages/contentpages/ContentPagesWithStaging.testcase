@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Content Pages";
@@ -158,7 +159,7 @@ definition {
 	@description = "Edits made to existing content pages should not appear in the live site until after published."
 	@priority = "5"
 	test PublishEditedContentPage {
-		property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
+		property app.server.types = "jboss,tcserver,tomcat,weblogic,websphere,wildfly";
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 		property environment.acceptance = "false";
 		property portal.acceptance = "false";
@@ -280,4 +281,5 @@ definition {
 				locator1 = "Fragment#FRAGMENT");
 		}
 	}
+
 }

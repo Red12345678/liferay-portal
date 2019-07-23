@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-plugin-mail',
 	function(A) {
@@ -16,7 +30,9 @@ AUI.add(
 				instance.contentContainer = A.one('#contentContainer');
 				instance.foldersContainer = A.one('#foldersContainer');
 				instance.mailContainer = A.one('#mailContainer');
-				instance.manageFoldersContainer = A.one('#manageFoldersContainer');
+				instance.manageFoldersContainer = A.one(
+					'#manageFoldersContainer'
+				);
 				instance.messageContainer = A.one('#messageContainer');
 				instance.messagesContainer = A.one('#messagesContainer');
 
@@ -28,29 +44,30 @@ AUI.add(
 
 				instance.loadAccount(instance.accountId, instance.folderId);
 
-				Liferay.on('closePortlet', instance._pollStopMessages, instance);
+				Liferay.on(
+					'closePortlet',
+					instance._pollStopMessages,
+					instance
+				);
 			},
 
 			addAccount: function() {
 				var instance = this;
 
-				instance.dialog = Liferay.Util.Window.getWindow(
-					{
-						dialog: {
-							centered: true,
-							cssClass: 'mail-dialog',
-							destroyOnClose: true,
-							modal: true,
-							width: 600
-						},
-						title: Liferay.Language.get('add-account')
-					}
-				).plug(
-					A.Plugin.IO,
-					{
+				instance.dialog = Liferay.Util.Window.getWindow({
+					dialog: {
+						centered: true,
+						cssClass: 'mail-dialog',
+						destroyOnClose: true,
+						modal: true,
+						width: 600
+					},
+					title: Liferay.Language.get('add-account')
+				})
+					.plug(A.Plugin.IO, {
 						uri: themeDisplay.getLayoutURL() + '/-/mail/add_account'
-					}
-				).render();
+					})
+					.render();
 			},
 
 			checkMessages: function(folderId) {
@@ -63,27 +80,34 @@ AUI.add(
 				A.io.request(
 					themeDisplay.getLayoutURL() + '/-/mail/check_messages',
 					{
-						data: Liferay.Util.ns(
-							instance.namespace,
-							{
-								accountId: instance.accountId,
-								folderId: folderId
-							}
-						),
+						data: Liferay.Util.ns(instance.namespace, {
+							accountId: instance.accountId,
+							folderId: folderId
+						}),
 						dataType: 'JSON',
 						method: 'POST',
 						on: {
 							success: function(event, id, obj) {
 								var responseData = this.get('responseData');
 
-								if (responseData.status != 'success' || responseData.value == 'false') {
+								if (
+									responseData.status != 'success' ||
+									responseData.value == 'false'
+								) {
 									return;
 								}
 
 								instance.loadFolders(instance.accountId);
 
 								if (instance.folderId == folderId) {
-									instance.loadMessages(folderId, instance.pageNumber, instance.orderByField, instance.orderByType, instance.keywords, true);
+									instance.loadMessages(
+										folderId,
+										instance.pageNumber,
+										instance.orderByField,
+										instance.orderByType,
+										instance.keywords,
+										true
+									);
 								}
 							}
 						}
@@ -94,30 +118,44 @@ AUI.add(
 			deleteMessages: function(messageIds) {
 				var instance = this;
 
-				instance.setStatus('info', Liferay.Language.get('deleting-messages'));
+				instance.setStatus(
+					'info',
+					Liferay.Language.get('deleting-messages')
+				);
 
 				A.io.request(
 					themeDisplay.getLayoutURL() + '/-/mail/delete_messages',
 					{
-						data: Liferay.Util.ns(
-							instance.namespace,
-							{
-								messageIds: messageIds
-							}
-						),
+						data: Liferay.Util.ns(instance.namespace, {
+							messageIds: messageIds
+						}),
 						dataType: 'JSON',
 						method: 'POST',
 						on: {
 							failure: function(event, id, obj) {
-								instance.setStatus('error', Liferay.Language.get('unable-to-connect-with-mail-server'));
+								instance.setStatus(
+									'error',
+									Liferay.Language.get(
+										'unable-to-connect-with-mail-server'
+									)
+								);
 							},
 							success: function(event, id, obj) {
 								var responseData = this.get('responseData');
 
-								instance.setStatus(responseData.status, responseData.message);
+								instance.setStatus(
+									responseData.status,
+									responseData.message
+								);
 
 								if (responseData.status == 'success') {
-									instance.loadMessages(instance.folderId, instance.pageNumber, instance.orderByField, instance.orderByType, instance.keywords);
+									instance.loadMessages(
+										instance.folderId,
+										instance.pageNumber,
+										instance.orderByField,
+										instance.orderByType,
+										instance.keywords
+									);
 								}
 							}
 						}
@@ -128,59 +166,68 @@ AUI.add(
 			editAccount: function(accountId) {
 				var instance = this;
 
-				instance.dialog = Liferay.Util.Window.getWindow(
-					{
-						dialog: {
-							centered: true,
-							cssClass: 'mail-dialog',
-							destroyOnClose: true,
-							modal: true,
-							width: 600
-						},
-						title: Liferay.Language.get('edit-account')
-					}
-				).plug(
-					A.Plugin.IO,
-					{
-						data: Liferay.Util.ns(
-							instance.namespace,
-							{
-								accountId: accountId
-							}
-						),
-						uri: themeDisplay.getLayoutURL() + '/-/mail/edit_account'
-					}
-				).render();
+				instance.dialog = Liferay.Util.Window.getWindow({
+					dialog: {
+						centered: true,
+						cssClass: 'mail-dialog',
+						destroyOnClose: true,
+						modal: true,
+						width: 600
+					},
+					title: Liferay.Language.get('edit-account')
+				})
+					.plug(A.Plugin.IO, {
+						data: Liferay.Util.ns(instance.namespace, {
+							accountId: accountId
+						}),
+						uri:
+							themeDisplay.getLayoutURL() + '/-/mail/edit_account'
+					})
+					.render();
 			},
 
 			flagMessages: function(flag, value, messageIds) {
 				var instance = this;
 
-				instance.setStatus('info', Liferay.Language.get('flagging-messages'));
+				instance.setStatus(
+					'info',
+					Liferay.Language.get('flagging-messages')
+				);
 
 				A.io.request(
 					themeDisplay.getLayoutURL() + '/-/mail/flag_messages',
 					{
-						data: Liferay.Util.ns(
-							instance.namespace,
-							{
-								flag: flag,
-								messageIds: messageIds,
-								value: value
-							}
-						),
+						data: Liferay.Util.ns(instance.namespace, {
+							flag: flag,
+							messageIds: messageIds,
+							value: value
+						}),
 						dataType: 'JSON',
 						method: 'POST',
 						on: {
 							failure: function(event, id, obj) {
-								instance.setStatus('error', Liferay.Language.get('unable-to-connect-with-mail-server'));
+								instance.setStatus(
+									'error',
+									Liferay.Language.get(
+										'unable-to-connect-with-mail-server'
+									)
+								);
 							},
 							success: function(event, id, obj) {
 								var responseData = this.get('responseData');
 
-								instance.setStatus(responseData.status, responseData.message);
+								instance.setStatus(
+									responseData.status,
+									responseData.message
+								);
 
-								instance.loadMessages(instance.folderId, instance.pageNumber, instance.orderByField, instance.orderByType, instance.keywords);
+								instance.loadMessages(
+									instance.folderId,
+									instance.pageNumber,
+									instance.orderByField,
+									instance.orderByType,
+									instance.keywords
+								);
 							}
 						}
 					}
@@ -195,17 +242,19 @@ AUI.add(
 				A.io.request(
 					themeDisplay.getLayoutURL() + '/-/mail/password_saved',
 					{
-						data: Liferay.Util.ns(
-							instance.namespace,
-							{
-								accountId: accountId,
-								inboxFolderId: inboxFolderId
-							}
-						),
+						data: Liferay.Util.ns(instance.namespace, {
+							accountId: accountId,
+							inboxFolderId: inboxFolderId
+						}),
 						method: 'POST',
 						on: {
 							failure: function(event, id, obj) {
-								instance.setStatus('error', Liferay.Language.get('unable-to-connect-with-mail-server'));
+								instance.setStatus(
+									'error',
+									Liferay.Language.get(
+										'unable-to-connect-with-mail-server'
+									)
+								);
 							},
 							success: function(event, id, obj) {
 								var responseData = this.get('responseData');
@@ -215,10 +264,18 @@ AUI.add(
 									instance.inboxFolderId = inboxFolderId;
 
 									instance.loadFolders(accountId);
-									instance.loadMessages(inboxFolderId, 1, 'sentDate', 'desc', '');
-								}
-								else {
-									instance.passwordPrompt(accountId, inboxFolderId);
+									instance.loadMessages(
+										inboxFolderId,
+										1,
+										'sentDate',
+										'desc',
+										''
+									);
+								} else {
+									instance.passwordPrompt(
+										accountId,
+										inboxFolderId
+									);
 								}
 							}
 						}
@@ -233,33 +290,32 @@ AUI.add(
 
 				instance.accountsContainer.io.set(
 					'data',
-					Liferay.Util.ns(
-						instance.namespace,
-						{
-							accountId: accountId
-						}
-					)
+					Liferay.Util.ns(instance.namespace, {
+						accountId: accountId
+					})
 				);
 
 				instance.accountsContainer.io.start();
 			},
 
-			loadCompose: function(accountId, messageId, messageType, replyMessageId) {
+			loadCompose: function(
+				accountId,
+				messageId,
+				messageType,
+				replyMessageId
+			) {
 				var instance = this;
 
 				instance._displayContainer(instance.composeContainer);
 
 				instance.composeContainer.io.set(
 					'data',
-					Liferay.Util.ns(
-						instance.namespace,
-						{
-							accountId: accountId,
-							messageId: messageId,
-							messageType: messageType,
-							replyMessageId: replyMessageId
-						}
-					)
+					Liferay.Util.ns(instance.namespace, {
+						accountId: accountId,
+						messageId: messageId,
+						messageType: messageType,
+						replyMessageId: replyMessageId
+					})
 				);
 
 				instance.composeContainer.io.start();
@@ -273,12 +329,9 @@ AUI.add(
 
 					instance.foldersContainer.io.set(
 						'data',
-						Liferay.Util.ns(
-							instance.namespace,
-							{
-								accountId: accountId
-							}
-						)
+						Liferay.Util.ns(instance.namespace, {
+							accountId: accountId
+						})
 					);
 
 					instance.foldersContainer.io.start();
@@ -294,18 +347,21 @@ AUI.add(
 
 				instance.manageFoldersContainer.io.set(
 					'data',
-					Liferay.Util.ns(
-						instance.namespace,
-						{
-							accountId: accountId
-						}
-					)
+					Liferay.Util.ns(instance.namespace, {
+						accountId: accountId
+					})
 				);
 
 				instance.manageFoldersContainer.io.start();
 			},
 
-			loadMessage: function(folderId, messageNumber, orderByField, orderByType, keywords) {
+			loadMessage: function(
+				folderId,
+				messageNumber,
+				orderByField,
+				orderByType,
+				keywords
+			) {
 				var instance = this;
 
 				instance.folderId = folderId;
@@ -317,22 +373,26 @@ AUI.add(
 
 				instance.messageContainer.io.set(
 					'data',
-					Liferay.Util.ns(
-						instance.namespace,
-						{
-							folderId: folderId,
-							keywords: keywords,
-							messageNumber: messageNumber,
-							orderByField: orderByField,
-							orderByType: orderByType
-						}
-					)
+					Liferay.Util.ns(instance.namespace, {
+						folderId: folderId,
+						keywords: keywords,
+						messageNumber: messageNumber,
+						orderByField: orderByField,
+						orderByType: orderByType
+					})
 				);
 
 				instance.messageContainer.io.start();
 			},
 
-			loadMessages: function(folderId, pageNumber, orderByField, orderByType, keywords, autoLoad) {
+			loadMessages: function(
+				folderId,
+				pageNumber,
+				orderByField,
+				orderByType,
+				keywords,
+				autoLoad
+			) {
 				var instance = this;
 
 				instance.folderId = folderId;
@@ -343,8 +403,7 @@ AUI.add(
 
 				if (autoLoad) {
 					instance.messagesContainer.io.set('showLoading', false);
-				}
-				else {
+				} else {
 					instance._displayContainer(instance.messagesContainer);
 
 					if (pageNumber == 1) {
@@ -354,16 +413,13 @@ AUI.add(
 
 				instance.messagesContainer.io.set(
 					'data',
-					Liferay.Util.ns(
-						instance.namespace,
-						{
-							folderId: folderId,
-							keywords: keywords,
-							orderByField: orderByField,
-							orderByType: orderByType,
-							pageNumber: pageNumber
-						}
-					)
+					Liferay.Util.ns(instance.namespace, {
+						folderId: folderId,
+						keywords: keywords,
+						orderByField: orderByField,
+						orderByType: orderByType,
+						pageNumber: pageNumber
+					})
 				);
 
 				instance.messagesContainer.io.start();
@@ -374,31 +430,45 @@ AUI.add(
 			moveMessages: function(folderId, messageIds) {
 				var instance = this;
 
-				instance.setStatus('info', Liferay.Language.get('moving-messages'));
+				instance.setStatus(
+					'info',
+					Liferay.Language.get('moving-messages')
+				);
 
 				A.io.request(
 					themeDisplay.getLayoutURL() + '/-/mail/move_messages',
 					{
-						data: Liferay.Util.ns(
-							instance.namespace,
-							{
-								folderId: folderId,
-								messageIds: messageIds
-							}
-						),
+						data: Liferay.Util.ns(instance.namespace, {
+							folderId: folderId,
+							messageIds: messageIds
+						}),
 						dataType: 'JSON',
 						method: 'POST',
 						on: {
 							failure: function(event, id, obj) {
-								instance.setStatus('error', Liferay.Language.get('unable-to-connect-with-mail-server'));
+								instance.setStatus(
+									'error',
+									Liferay.Language.get(
+										'unable-to-connect-with-mail-server'
+									)
+								);
 							},
 							success: function(event, id, obj) {
 								var responseData = this.get('responseData');
 
-								instance.setStatus(responseData.status, responseData.message);
+								instance.setStatus(
+									responseData.status,
+									responseData.message
+								);
 
 								instance.loadFolders(instance.accountId);
-								instance.loadMessages(instance.folderId, instance.pageNumber, instance.orderByField, instance.orderByType, instance.keywords);
+								instance.loadMessages(
+									instance.folderId,
+									instance.pageNumber,
+									instance.orderByField,
+									instance.orderByType,
+									instance.keywords
+								);
 							}
 						}
 					}
@@ -408,30 +478,26 @@ AUI.add(
 			passwordPrompt: function(accountId, inboxFolderId) {
 				var instance = this;
 
-				instance.dialog = Liferay.Util.Window.getWindow(
-					{
-						dialog: {
-							centered: true,
-							cssClass: 'mail-dialog',
-							destroyOnClose: true,
-							modal: true,
-							width: 600
-						},
-						title: Liferay.Language.get('password')
-					}
-				).plug(
-					A.Plugin.IO,
-					{
-						data: Liferay.Util.ns(
-							instance.namespace,
-							{
-								accountId: accountId,
-								inboxFolderId: inboxFolderId
-							}
-						),
-						uri: themeDisplay.getLayoutURL() + '/-/mail/password_prompt'
-					}
-				).render();
+				instance.dialog = Liferay.Util.Window.getWindow({
+					dialog: {
+						centered: true,
+						cssClass: 'mail-dialog',
+						destroyOnClose: true,
+						modal: true,
+						width: 600
+					},
+					title: Liferay.Language.get('password')
+				})
+					.plug(A.Plugin.IO, {
+						data: Liferay.Util.ns(instance.namespace, {
+							accountId: accountId,
+							inboxFolderId: inboxFolderId
+						}),
+						uri:
+							themeDisplay.getLayoutURL() +
+							'/-/mail/password_prompt'
+					})
+					.render();
 			},
 
 			reset: function() {
@@ -462,119 +528,110 @@ AUI.add(
 			setStatus: function(type, message, indefinite) {
 				var instance = this;
 
-				var statusContainers = A.all('.mail-status').html('<table style="margin: 0 auto;"><tr><td>&nbsp;</td><td><span class="alert message alert-' + type + '">' + message + '</span></td><td>&nbsp;</td></tr></table>');
+				var statusContainers = A.all('.mail-status').html(
+					'<table style="margin: 0 auto;"><tr><td>&nbsp;</td><td><span class="alert message alert-' +
+						type +
+						'">' +
+						message +
+						'</span></td><td>&nbsp;</td></tr></table>'
+				);
 
 				var status = statusContainers.all('table');
 
 				if (!indefinite) {
-					setTimeout(
-						function() {
-							status.remove();
-						},
-						5000
-					);
+					setTimeout(function() {
+						status.remove();
+					}, 5000);
 				}
 			},
 
 			_assignEvents: function() {
 				var instance = this;
 
-				instance.accountsContainer.plug(
-					A.Plugin.IO,
-					{
-						autoLoad: true,
-						data: Liferay.Util.ns(
-							instance.namespace,
-							{
-								accountId: instance.accountId
-							}
-						),
-						method: 'POST',
-						showLoading: false,
-						uri: themeDisplay.getLayoutURL() + '/-/mail/view_accounts'
-					}
-				);
+				instance.accountsContainer.plug(A.Plugin.IO, {
+					autoLoad: true,
+					data: Liferay.Util.ns(instance.namespace, {
+						accountId: instance.accountId
+					}),
+					method: 'POST',
+					showLoading: false,
+					uri: themeDisplay.getLayoutURL() + '/-/mail/view_accounts'
+				});
 
-				instance.composeContainer.plug(
-					A.Plugin.IO,
-					{
-						autoLoad: false,
-						method: 'POST',
-						on: {
-							success: function(event) {
-								try {
-									window[instance.namespace + 'editor'] = null;
+				instance.composeContainer.plug(A.Plugin.IO, {
+					autoLoad: false,
+					method: 'POST',
+					on: {
+						success: function(event) {
+							try {
+								window[instance.namespace + 'editor'] = null;
 
-									delete window[instance.namespace + 'editor'];
-								}
-								catch (e) {
-								}
-							}
-						},
-						uri: themeDisplay.getLayoutURL() + '/-/mail/compose'
-					}
-				);
+								delete window[instance.namespace + 'editor'];
+							} catch (e) {}
+						}
+					},
+					uri: themeDisplay.getLayoutURL() + '/-/mail/compose'
+				});
 
-				instance.foldersContainer.plug(
-					A.Plugin.IO,
-					{
-						autoLoad: false,
-						method: 'POST',
-						showLoading: false,
-						uri: themeDisplay.getLayoutURL() + '/-/mail/view_folders'
-					}
-				);
+				instance.foldersContainer.plug(A.Plugin.IO, {
+					autoLoad: false,
+					method: 'POST',
+					showLoading: false,
+					uri: themeDisplay.getLayoutURL() + '/-/mail/view_folders'
+				});
 
-				instance.messageContainer.plug(
-					A.Plugin.IO,
-					{
-						after: {
-							success: function() {
-								instance.loadFolders(instance.accountId);
-							}
-						},
-						autoLoad: false,
-						method: 'POST',
-						uri: themeDisplay.getLayoutURL() + '/-/mail/view_message'
-					}
-				);
+				instance.messageContainer.plug(A.Plugin.IO, {
+					after: {
+						success: function() {
+							instance.loadFolders(instance.accountId);
+						}
+					},
+					autoLoad: false,
+					method: 'POST',
+					uri: themeDisplay.getLayoutURL() + '/-/mail/view_message'
+				});
 
-				instance.messagesContainer.plug(
-					A.Plugin.IO,
-					{
-						after: {
-							success: function() {
-								instance.messagesContainer.all('.flag-messages').on(
-									'click',
-									function(event) {
-										var messageIds = instance._getSelectedMessageIds();
+				instance.messagesContainer.plug(A.Plugin.IO, {
+					after: {
+						success: function() {
+							instance.messagesContainer
+								.all('.flag-messages')
+								.on('click', function(event) {
+									var messageIds = instance._getSelectedMessageIds();
 
-										var currentTarget = event.currentTarget;
+									var currentTarget = event.currentTarget;
 
-										var flagToggle = currentTarget.getData('flagToggle');
-										var flagType = currentTarget.getData('flagType');
+									var flagToggle = currentTarget.getData(
+										'flagToggle'
+									);
+									var flagType = currentTarget.getData(
+										'flagType'
+									);
 
-										instance.flagMessages(flagType, flagToggle, messageIds);
-									}
-								);
+									instance.flagMessages(
+										flagType,
+										flagToggle,
+										messageIds
+									);
+								});
 
-								instance.messagesContainer.all('.move-messages').on(
-									'click',
-									function(event) {
-										var folderId = event.currentTarget.getData('folderId');
+							instance.messagesContainer
+								.all('.move-messages')
+								.on('click', function(event) {
+									var folderId = event.currentTarget.getData(
+										'folderId'
+									);
 
-										var messageIds = instance._getSelectedMessageIds();
+									var messageIds = instance._getSelectedMessageIds();
 
-										instance.moveMessages(folderId, messageIds);
-									}
-								);
-							}
-						},
-						autoLoad: false,
-						method: 'POST',
-						uri: themeDisplay.getLayoutURL() + '/-/mail/view_messages'
-					}
-				);
+									instance.moveMessages(folderId, messageIds);
+								});
+						}
+					},
+					autoLoad: false,
+					method: 'POST',
+					uri: themeDisplay.getLayoutURL() + '/-/mail/view_messages'
+				});
 
 				instance.accountsContainer.delegate(
 					'click',
@@ -593,7 +650,9 @@ AUI.add(
 				instance.composeContainer.delegate(
 					'click',
 					function(event) {
-						var messageId = event.currentTarget.getData('messageId');
+						var messageId = event.currentTarget.getData(
+							'messageId'
+						);
 
 						instance.deleteMessages([messageId]);
 					},
@@ -614,7 +673,13 @@ AUI.add(
 							var orderByField = link.getData('orderByField');
 							var orderByType = link.getData('orderByType');
 
-							instance.loadMessage(folderId, messageNumber, orderByField, orderByType, keywords);
+							instance.loadMessage(
+								folderId,
+								messageNumber,
+								orderByField,
+								orderByType,
+								keywords
+							);
 						}
 					},
 					'.message-link'
@@ -627,7 +692,12 @@ AUI.add(
 
 						var messageId = link.getData('messageId');
 
-						instance.loadCompose(instance.accountId, messageId, 'edit', 0);
+						instance.loadCompose(
+							instance.accountId,
+							messageId,
+							'edit',
+							0
+						);
 					},
 					'.draft-link'
 				);
@@ -662,7 +732,13 @@ AUI.add(
 							var orderByType = link.getData('orderByType');
 							var pageNumber = link.getData('pageNumber');
 
-							instance.loadMessages(folderId, pageNumber, orderByField, orderByType, keywords);
+							instance.loadMessages(
+								folderId,
+								pageNumber,
+								orderByField,
+								orderByType,
+								keywords
+							);
 						}
 					},
 					'.messages-link'
@@ -681,24 +757,28 @@ AUI.add(
 						var messageType = link.getData('messageType');
 						var replyMessageId = link.getData('replyMessageId');
 
-						instance.loadCompose(instance.accountId, messageId, messageType, replyMessageId);
+						instance.loadCompose(
+							instance.accountId,
+							messageId,
+							messageType,
+							replyMessageId
+						);
 					},
 					'.compose-message'
 				);
 
-				instance.manageFoldersContainer.plug(
-					A.Plugin.IO,
-					{
-						autoLoad: false,
-						method: 'POST',
-						uri: themeDisplay.getLayoutURL() + '/-/mail/manage_folders'
-					}
-				);
+				instance.manageFoldersContainer.plug(A.Plugin.IO, {
+					autoLoad: false,
+					method: 'POST',
+					uri: themeDisplay.getLayoutURL() + '/-/mail/manage_folders'
+				});
 
 				instance.messageContainer.delegate(
 					'click',
 					function(event) {
-						var messageId = event.currentTarget.getData('messageId');
+						var messageId = event.currentTarget.getData(
+							'messageId'
+						);
 
 						instance.deleteMessages([messageId]);
 					},
@@ -718,9 +798,18 @@ AUI.add(
 				instance.messagesContainer.delegate(
 					'click',
 					function(event) {
-						var keywords = event.currentTarget.ancestor('.search-messages').one('input').val();
+						var keywords = event.currentTarget
+							.ancestor('.search-messages')
+							.one('input')
+							.val();
 
-						instance.loadMessages(instance.folderId, 1, instance.orderByField, instance.orderByType, keywords);
+						instance.loadMessages(
+							instance.folderId,
+							1,
+							instance.orderByField,
+							instance.orderByType,
+							keywords
+						);
 					},
 					'.search-messages button'
 				);
@@ -734,7 +823,13 @@ AUI.add(
 
 						var keywords = event.currentTarget.val();
 
-						instance.loadMessages(instance.folderId, 1, instance.orderByField, instance.orderByType, keywords);
+						instance.loadMessages(
+							instance.folderId,
+							1,
+							instance.orderByField,
+							instance.orderByType,
+							keywords
+						);
 					},
 					'.search-messages input'
 				);
@@ -742,11 +837,11 @@ AUI.add(
 				instance.messagesContainer.delegate(
 					'click',
 					function(event) {
-						instance.messagesContainer.all('input[type=checkbox]').each(
-							function(item, index, collection) {
+						instance.messagesContainer
+							.all('input[type=checkbox]')
+							.each(function(item, index, collection) {
 								item.set('checked', true);
-							}
-						);
+							});
 					},
 					'.select-all'
 				);
@@ -754,11 +849,11 @@ AUI.add(
 				instance.messagesContainer.delegate(
 					'click',
 					function(event) {
-						instance.messagesContainer.all('input[type=checkbox]').each(
-							function(item, index, collection) {
+						instance.messagesContainer
+							.all('input[type=checkbox]')
+							.each(function(item, index, collection) {
 								item.set('checked', false);
-							}
-						);
+							});
 					},
 					'.select-none'
 				);
@@ -782,15 +877,15 @@ AUI.add(
 
 				var messageIds = [];
 
-				instance.messagesContainer.all('input[type=checkbox]').each(
-					function(item, index, collection) {
+				instance.messagesContainer
+					.all('input[type=checkbox]')
+					.each(function(item, index, collection) {
 						var messageId = item.getAttribute('messageId');
 
 						if (messageId && item.get('checked')) {
 							messageIds.push(messageId);
 						}
-					}
-				);
+					});
 
 				return messageIds;
 			},
@@ -803,7 +898,6 @@ AUI.add(
 				if (dialog) {
 					dialog.hide();
 				}
-
 			},
 
 			_pollCheckMessages: function() {
@@ -817,7 +911,10 @@ AUI.add(
 					clearTimeout(instance.timeoutMessages);
 				}
 
-				instance.timeoutMessages = setTimeout(A.bind('_pollCheckMessages', instance), instance._pollInterval);
+				instance.timeoutMessages = setTimeout(
+					A.bind('_pollCheckMessages', instance),
+					instance._pollInterval
+				);
 			},
 
 			_pollStopMessages: function() {
@@ -838,6 +935,11 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-datatype', 'aui-io-deprecated', 'liferay-util-window']
+		requires: [
+			'aui-base',
+			'aui-datatype',
+			'aui-io-deprecated',
+			'liferay-util-window'
+		]
 	}
 );

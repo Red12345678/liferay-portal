@@ -26,7 +26,7 @@ if (Validator.isNotNull(title)) {
 }
 %>
 
-<portlet:actionURL name="restoreTrashEntries" var="restoreTrashEntriesURL" />
+<portlet:actionURL name="/journal/restore_trash_entries" var="restoreTrashEntriesURL" />
 
 <liferay-trash:undo
 	portletURL="<%= restoreTrashEntriesURL %>"
@@ -49,7 +49,9 @@ if (Validator.isNotNull(title)) {
 
 <div class="closed container-fluid-1280 sidenav-container sidenav-right" id="<portlet:namespace />infoPanelId">
 	<c:if test="<%= journalDisplayContext.isShowInfoButton() %>">
-		<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="/journal/info_panel" var="sidebarPanelURL" />
+		<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="/journal/info_panel" var="sidebarPanelURL">
+			<portlet:param name="folderId" value="<%= String.valueOf(journalDisplayContext.getFolderId()) %>" />
+		</liferay-portlet:resourceURL>
 
 		<liferay-frontend:sidebar-panel
 			resourceURL="<%= sidebarPanelURL %>"

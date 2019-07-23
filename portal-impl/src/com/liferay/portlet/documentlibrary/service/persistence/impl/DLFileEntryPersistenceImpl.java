@@ -18,7 +18,6 @@ import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.service.persistence.DLFileEntryPersistence;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -30,11 +29,10 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -50,7 +48,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -8303,9 +8300,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -8478,9 +8473,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		if (folderIds.length == 1) {
@@ -8687,9 +8680,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -8824,9 +8815,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -10958,9 +10947,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -11144,9 +11131,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		if (folderIds.length == 1) {
@@ -11367,9 +11352,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -11514,9 +11497,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -13332,9 +13313,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -13523,9 +13502,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		if (folderIds.length == 1) {
@@ -13753,9 +13730,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -13906,9 +13881,7 @@ public class DLFileEntryPersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -14915,7 +14888,7 @@ public class DLFileEntryPersistenceImpl
 
 		dlFileEntry.setUuid(uuid);
 
-		dlFileEntry.setCompanyId(companyProvider.getCompanyId());
+		dlFileEntry.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return dlFileEntry;
 	}
@@ -16495,9 +16468,6 @@ public class DLFileEntryPersistenceImpl
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
-	@BeanReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	private static final String _SQL_SELECT_DLFILEENTRY =
 		"SELECT dlFileEntry FROM DLFileEntry dlFileEntry";

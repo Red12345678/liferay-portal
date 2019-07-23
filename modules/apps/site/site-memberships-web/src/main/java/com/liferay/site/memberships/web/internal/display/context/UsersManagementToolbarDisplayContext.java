@@ -21,6 +21,7 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.LabelItemList;
 import com.liferay.petra.string.StringPool;
+import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.Role;
@@ -34,6 +35,7 @@ import com.liferay.portal.kernel.service.permission.GroupPermissionUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -80,7 +82,7 @@ public class UsersManagementToolbarDisplayContext
 				try {
 					if (GroupPermissionUtil.contains(
 							themeDisplay.getPermissionChecker(),
-							themeDisplay.getScopeGroupId(),
+							_usersDisplayContext.getGroupId(),
 							ActionKeys.ASSIGN_USER_ROLES)) {
 
 						add(
@@ -155,22 +157,32 @@ public class UsersManagementToolbarDisplayContext
 	}
 
 	public String getAvailableActions(User user) throws PortalException {
+		List<String> availableActions = new ArrayList<>();
+
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
 		if (GroupPermissionUtil.contains(
 				themeDisplay.getPermissionChecker(),
-				themeDisplay.getScopeGroupId(), ActionKeys.ASSIGN_MEMBERS) &&
+				_usersDisplayContext.getGroupId(), ActionKeys.ASSIGN_MEMBERS) &&
 			!SiteMembershipPolicyUtil.isMembershipProtected(
 				themeDisplay.getPermissionChecker(), user.getUserId(),
-				themeDisplay.getScopeGroupId()) &&
+				_usersDisplayContext.getGroupId()) &&
 			!SiteMembershipPolicyUtil.isMembershipRequired(
-				user.getUserId(), themeDisplay.getScopeGroupId())) {
+				user.getUserId(), _usersDisplayContext.getGroupId())) {
 
-			return "deleteSelectedUsers";
+			availableActions.add("deleteSelectedUsers");
 		}
 
-		return StringPool.BLANK;
+		if (GroupPermissionUtil.contains(
+				themeDisplay.getPermissionChecker(),
+				themeDisplay.getSiteGroupIdOrLiveGroupId(),
+				ActionKeys.ASSIGN_USER_ROLES)) {
+
+			availableActions.add("selectSiteRole");
+		}
+
+		return StringUtil.merge(availableActions, StringPool.COMMA);
 	}
 
 	@Override
@@ -232,10 +244,8 @@ public class UsersManagementToolbarDisplayContext
 			{
 				if (role != null) {
 					add(
-						labelItem -> {
-							labelItem.setLabel(
-								role.getTitle(themeDisplay.getLocale()));
-						});
+						labelItem -> labelItem.setLabel(
+							role.getTitle(themeDisplay.getLocale())));
 				}
 			}
 		};

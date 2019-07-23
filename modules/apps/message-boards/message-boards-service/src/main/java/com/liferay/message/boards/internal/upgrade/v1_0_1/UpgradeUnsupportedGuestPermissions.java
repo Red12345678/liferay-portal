@@ -25,7 +25,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.ResourceAction;
 import com.liferay.portal.kernel.model.ResourcePermission;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.ResourceActionLocalService;
 import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
@@ -113,9 +113,8 @@ public class UpgradeUnsupportedGuestPermissions implements UpgradeStep {
 					RestrictionsFactoryUtil.eq("name", resourceName)));
 
 			actionableDynamicQuery.setPerformActionMethod(
-				(ResourcePermission resourcePermission) -> {
-					_removeResourceAction(resourcePermission, resourceAction);
-				});
+				(ResourcePermission resourcePermission) ->
+					_removeResourceAction(resourcePermission, resourceAction));
 
 			actionableDynamicQuery.performActions();
 		}

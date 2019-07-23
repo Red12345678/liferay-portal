@@ -1,4 +1,5 @@
 definition {
+
 	macro addArticleCP {
 		WebContentNavigator.gotoAddCP();
 
@@ -218,9 +219,11 @@ definition {
 			webContentTitle = "${webContentTitle}");
 
 		if (isSet(templateName)) {
-			WebContent.selectTemplateCP(
-				structureName = "Basic Web Content",
-				templateName = "${templateName}");
+			if (IsTextNotEqual(locator1 = "WCEditWebContent#SELECTED_TEMPLATE", value1 = "${templateName}")) {
+				WebContent.selectTemplateCP(
+					structureName = "Basic Web Content",
+					templateName = "${templateName}");
+			}
 		}
 
 		Button.clickPublish();
@@ -236,6 +239,8 @@ definition {
 
 	macro addStructuredPGViaWCD {
 		WebContentNavigator.gotoAddPGViaWCD(structureName = "${structureName}");
+
+		AssertVisible(locator1 = "WCEditWebContent#SIDEBAR");
 
 		PortletEntry.inputTitle(title = "${webContentTitle}");
 
@@ -254,9 +259,11 @@ definition {
 		}
 
 		if (isSet(templateName)) {
-			WebContent.selectTemplateCP(
-				structureName = "${structureName}",
-				templateName = "${templateName}");
+			if (IsTextNotEqual(locator1 = "WCEditWebContent#SELECTED_TEMPLATE", value1 = "${templateName}")) {
+				WebContent.selectTemplateCP(
+					structureName = "${structureName}",
+					templateName = "${templateName}");
+			}
 		}
 
 		Click(locator1 = "Button#PUBLISH");
@@ -288,6 +295,8 @@ definition {
 	}
 
 	macro addViaCKEditor {
+		AssertVisible(locator1 = "WCEditWebContent#SIDEBAR");
+
 		PortletEntry.inputTitle(title = "${webContentTitle}");
 
 		Type.typeCKEditorWaitForCKEditor(
@@ -373,9 +382,11 @@ definition {
 			value1 = "${webContentContent}");
 
 		if (isSet(templateName)) {
-			WebContent.selectTemplateCP(
-				structureName = "${structureName}",
-				templateName = "${templateName}");
+			if (IsTextNotEqual(locator1 = "WCEditWebContent#SELECTED_TEMPLATE", value1 = "${templateName}")) {
+				WebContent.selectTemplateCP(
+					structureName = "${structureName}",
+					templateName = "${templateName}");
+			}
 		}
 
 		Click(locator1 = "Button#PUBLISH");
@@ -465,8 +476,20 @@ definition {
 
 		if (isSet(webContentDocumentsAndMedia)) {
 			AssertClick(
-				locator1 = "Button#DOCUMENTS_AND_MEDIA",
+				key_fieldName = "${fieldName}",
+				locator1 = "Button#SELECT_CONTENT",
+				value1 = "Select");
+
+			SelectFrame(locator1 = "IFrame#DIALOG");
+
+			AssertClick(
+				key_dmDocumentTitle = "${webContentDocumentsAndMedia}",
+				locator1 = "WC#ICON_DOCUMENT_TITLE",
 				value1 = "${webContentDocumentsAndMedia}");
+
+			SelectFrameTop(value1 = "relative=top");
+
+			Click(locator1 = "Button#ADD");
 		}
 
 		if (isSet(webContentHTML)) {
@@ -523,7 +546,7 @@ definition {
 		if (isSet(webContentSelectWCFile)) {
 			AssertClick(
 				key_fieldName = "${fieldName}",
-				locator1 = "Button#LINK_TO_PAGE_SELECT_PAGE",
+				locator1 = "Button#SELECT_CONTENT",
 				value1 = "Select");
 
 			SelectFrame(locator1 = "IFrame#DIALOG");
@@ -583,9 +606,11 @@ definition {
 		}
 
 		if (isSet(templateName)) {
-			WebContent.selectTemplateCP(
-				structureName = "${structureName}",
-				templateName = "${templateName}");
+			if (IsTextNotEqual(locator1 = "WCEditWebContent#SELECTED_TEMPLATE", value1 = "${templateName}")) {
+				WebContent.selectTemplateCP(
+					structureName = "${structureName}",
+					templateName = "${templateName}");
+			}
 		}
 
 		if ("${saveAsDraft}" == "true") {
@@ -741,9 +766,10 @@ definition {
 				value1 = "Draft");
 		}
 		else {
-			if("${changeListEnabled}" == "true") {
+			if ("${changeListEnabled}" == "true") {
 				Button.clickPublishToChangeList();
-			} else {
+			}
+			else {
 				PortletEntry.publish();
 			}
 			LexiconEntry.changeDisplayStyle(displayStyle = "list");
@@ -836,12 +862,17 @@ definition {
 				navTab = "Web Content Images",
 				uploadFileName = "${webContentImage}");
 		}
+		var iFrameDialog = "IFrame#DIALOG";
 
-		SelectFrame(locator1 = "IFrame#DIALOG");
+		if (IsElementPresent(locator1 = "${iFrameDialog}")) {
+			SelectFrame(locator1 = "${iFrameDialog}");
+		}
 
 		PortletEntry.save();
 
-		IFrame.closeFrame();
+		if (IsElementPresent(locator1 = "${iFrameDialog}")) {
+			IFrame.closeFrame();
+		}
 	}
 
 	macro editNullCP {
@@ -896,7 +927,7 @@ definition {
 		else {
 			AssertTextEquals(
 				locator1 = "WCD#WEB_CONTENT_CONTENT",
-				value1 = "content: ${webContentContentEdit}");
+				value1 = "${webContentContentEdit}");
 		}
 	}
 
@@ -1069,6 +1100,10 @@ definition {
 		AssertConfirm(value1 = "Are you sure you want to move this to the Recycle Bin?");
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
+
+		AssertElementNotPresent(
+			key_webContentTitle = "${key_webContentTitle}",
+			locator1 = "WC#ENTRY_LIST_TITLE");
 	}
 
 	macro moveToRecycleBinViaDeleteIconCP {
@@ -1084,7 +1119,9 @@ definition {
 	}
 
 	macro openWebContentAdmin {
-		Navigator.openWithAppendToBaseURL(urlAppend = "group/${siteURLKey}/~/control_panel/manage?p_p_id=com_liferay_journal_web_portlet_JournalPortlet");
+		Navigator.openWithAppendToBaseURL(
+			baseURL = "${baseURL}",
+			urlAppend = "group/${siteURLKey}/~/control_panel/manage?p_p_id=com_liferay_journal_web_portlet_JournalPortlet");
 	}
 
 	macro paginateRelatedAssets {
@@ -1221,6 +1258,8 @@ definition {
 	}
 
 	macro subscribeToCurrentFolderCP {
+		Pause(locator1 = "3000");
+
 		Click.clickAt(locator1 = "Icon#INFO");
 
 		Pause(locator1 = "1000");
@@ -2019,4 +2058,5 @@ definition {
 			locator1 = "AlloyEditor#EDITOR",
 			value1 = "${webContentContent}");
 	}
+
 }

@@ -96,6 +96,13 @@ public interface FragmentEntryService extends BaseService {
 			ServiceContext serviceContext)
 		throws PortalException;
 
+	public FragmentEntry addFragmentEntry(
+			long groupId, long fragmentCollectionId, String fragmentEntryKey,
+			String name, String css, String html, String js,
+			String configuration, long previewFileEntryId, int type, int status,
+			ServiceContext serviceContext)
+		throws PortalException;
+
 	public FragmentEntry copyFragmentEntry(
 			long groupId, long fragmentEntryId, long fragmentCollectionId,
 			ServiceContext serviceContext)
@@ -193,14 +200,37 @@ public interface FragmentEntryService extends BaseService {
 	public FragmentEntry updateFragmentEntry(long fragmentEntryId, String name)
 		throws PortalException;
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #updateFragmentEntry(long, String, String, String,
+	 String, String, int)}
+	 */
+	@Deprecated
 	public FragmentEntry updateFragmentEntry(
 			long fragmentEntryId, String name, String css, String html,
 			String js, int status)
 		throws PortalException;
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #updateFragmentEntry(long, String, String, String,
+	 String, String, long, int)}
+	 */
+	@Deprecated
 	public FragmentEntry updateFragmentEntry(
 			long fragmentEntryId, String name, String css, String html,
 			String js, long previewFileEntryId, int status)
+		throws PortalException;
+
+	public FragmentEntry updateFragmentEntry(
+			long fragmentEntryId, String name, String css, String html,
+			String js, String configuration, int status)
+		throws PortalException;
+
+	public FragmentEntry updateFragmentEntry(
+			long fragmentEntryId, String name, String css, String html,
+			String js, String configuration, long previewFileEntryId,
+			int status)
 		throws PortalException;
 
 }

@@ -95,7 +95,7 @@ WikiPagesManagementToolbarDisplayContext wikiPagesManagementToolbarDisplayContex
 	searchActionURL="<%= String.valueOf(wikiPagesManagementToolbarDisplayContext.getSearchActionURL()) %>"
 	searchContainerId="wikiPages"
 	selectable="<%= wikiPagesManagementToolbarDisplayContext.isSelectable() %>"
-	showInfoButton="<%= true %>"
+	showInfoButton="<%= wikiPagesManagementToolbarDisplayContext.isShowInfoButton() %>"
 	showSearch="<%= wikiPagesManagementToolbarDisplayContext.isShowSearch() %>"
 	sortingOrder="<%= wikiPagesManagementToolbarDisplayContext.getSortingOrder() %>"
 	sortingURL="<%= String.valueOf(wikiPagesManagementToolbarDisplayContext.getSortingURL()) %>"
@@ -174,7 +174,7 @@ WikiPagesManagementToolbarDisplayContext wikiPagesManagementToolbarDisplayContex
 					<%
 					Map<String, Object> rowData = new HashMap<>();
 
-					rowData.put("actions", String.join(StringPool.COMMA, wikiPagesManagementToolbarDisplayContext.getAvailableActionDropdownItems(curPage)));
+					rowData.put("actions", StringUtil.merge(wikiPagesManagementToolbarDisplayContext.getAvailableActions(curPage)));
 
 					row.setData(rowData);
 

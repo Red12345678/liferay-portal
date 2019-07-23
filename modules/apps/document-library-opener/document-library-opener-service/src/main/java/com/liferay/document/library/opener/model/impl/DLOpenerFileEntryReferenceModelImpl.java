@@ -27,9 +27,13 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.impl.BaseModelImpl;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 
 import java.io.Serializable;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
 
 import java.sql.Types;
 
@@ -71,8 +75,8 @@ public class DLOpenerFileEntryReferenceModelImpl
 		{"groupId", Types.BIGINT}, {"companyId", Types.BIGINT},
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
-		{"referenceKey", Types.VARCHAR}, {"fileEntryId", Types.BIGINT},
-		{"type_", Types.INTEGER}
+		{"referenceKey", Types.VARCHAR}, {"referenceType", Types.VARCHAR},
+		{"fileEntryId", Types.BIGINT}, {"type_", Types.INTEGER}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -87,12 +91,13 @@ public class DLOpenerFileEntryReferenceModelImpl
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("referenceKey", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("referenceType", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("fileEntryId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("type_", Types.INTEGER);
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table DLOpenerFileEntryReference (dlOpenerFileEntryReferenceId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,referenceKey VARCHAR(75) null,fileEntryId LONG,type_ INTEGER)";
+		"create table DLOpenerFileEntryReference (dlOpenerFileEntryReferenceId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,referenceKey VARCHAR(75) null,referenceType VARCHAR(75) null,fileEntryId LONG,type_ INTEGER)";
 
 	public static final String TABLE_SQL_DROP =
 		"drop table DLOpenerFileEntryReference";
@@ -111,7 +116,9 @@ public class DLOpenerFileEntryReferenceModelImpl
 
 	public static final long FILEENTRYID_COLUMN_BITMASK = 1L;
 
-	public static final long DLOPENERFILEENTRYREFERENCEID_COLUMN_BITMASK = 2L;
+	public static final long REFERENCETYPE_COLUMN_BITMASK = 2L;
+
+	public static final long DLOPENERFILEENTRYREFERENCEID_COLUMN_BITMASK = 4L;
 
 	public static void setEntityCacheEnabled(boolean entityCacheEnabled) {
 		_entityCacheEnabled = entityCacheEnabled;
@@ -211,6 +218,32 @@ public class DLOpenerFileEntryReferenceModelImpl
 		return _attributeSetterBiConsumers;
 	}
 
+	private static Function<InvocationHandler, DLOpenerFileEntryReference>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			DLOpenerFileEntryReference.class.getClassLoader(),
+			DLOpenerFileEntryReference.class, ModelWrapper.class);
+
+		try {
+			Constructor<DLOpenerFileEntryReference> constructor =
+				(Constructor<DLOpenerFileEntryReference>)
+					proxyClass.getConstructor(InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
+	}
+
 	private static final Map
 		<String, Function<DLOpenerFileEntryReference, Object>>
 			_attributeGetterFunctions;
@@ -277,6 +310,12 @@ public class DLOpenerFileEntryReferenceModelImpl
 			"referenceKey",
 			(BiConsumer<DLOpenerFileEntryReference, String>)
 				DLOpenerFileEntryReference::setReferenceKey);
+		attributeGetterFunctions.put(
+			"referenceType", DLOpenerFileEntryReference::getReferenceType);
+		attributeSetterBiConsumers.put(
+			"referenceType",
+			(BiConsumer<DLOpenerFileEntryReference, String>)
+				DLOpenerFileEntryReference::setReferenceType);
 		attributeGetterFunctions.put(
 			"fileEntryId", DLOpenerFileEntryReference::getFileEntryId);
 		attributeSetterBiConsumers.put(
@@ -411,6 +450,31 @@ public class DLOpenerFileEntryReferenceModelImpl
 	}
 
 	@Override
+	public String getReferenceType() {
+		if (_referenceType == null) {
+			return "";
+		}
+		else {
+			return _referenceType;
+		}
+	}
+
+	@Override
+	public void setReferenceType(String referenceType) {
+		_columnBitmask |= REFERENCETYPE_COLUMN_BITMASK;
+
+		if (_originalReferenceType == null) {
+			_originalReferenceType = _referenceType;
+		}
+
+		_referenceType = referenceType;
+	}
+
+	public String getOriginalReferenceType() {
+		return GetterUtil.getString(_originalReferenceType);
+	}
+
+	@Override
 	public long getFileEntryId() {
 		return _fileEntryId;
 	}
@@ -463,10 +527,13 @@ public class DLOpenerFileEntryReferenceModelImpl
 	@Override
 	public DLOpenerFileEntryReference toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel =
-				(DLOpenerFileEntryReference)ProxyUtil.newProxyInstance(
-					_classLoader, _escapedModelInterfaces,
-					new AutoEscapeBeanHandler(this));
+			Function<InvocationHandler, DLOpenerFileEntryReference>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
+				new AutoEscapeBeanHandler(this));
 		}
 
 		return _escapedModel;
@@ -486,6 +553,7 @@ public class DLOpenerFileEntryReferenceModelImpl
 		dlOpenerFileEntryReferenceImpl.setCreateDate(getCreateDate());
 		dlOpenerFileEntryReferenceImpl.setModifiedDate(getModifiedDate());
 		dlOpenerFileEntryReferenceImpl.setReferenceKey(getReferenceKey());
+		dlOpenerFileEntryReferenceImpl.setReferenceType(getReferenceType());
 		dlOpenerFileEntryReferenceImpl.setFileEntryId(getFileEntryId());
 		dlOpenerFileEntryReferenceImpl.setType(getType());
 
@@ -556,6 +624,9 @@ public class DLOpenerFileEntryReferenceModelImpl
 
 		dlOpenerFileEntryReferenceModelImpl._setModifiedDate = false;
 
+		dlOpenerFileEntryReferenceModelImpl._originalReferenceType =
+			dlOpenerFileEntryReferenceModelImpl._referenceType;
+
 		dlOpenerFileEntryReferenceModelImpl._originalFileEntryId =
 			dlOpenerFileEntryReferenceModelImpl._fileEntryId;
 
@@ -613,6 +684,15 @@ public class DLOpenerFileEntryReferenceModelImpl
 
 		if ((referenceKey != null) && (referenceKey.length() == 0)) {
 			dlOpenerFileEntryReferenceCacheModel.referenceKey = null;
+		}
+
+		dlOpenerFileEntryReferenceCacheModel.referenceType = getReferenceType();
+
+		String referenceType =
+			dlOpenerFileEntryReferenceCacheModel.referenceType;
+
+		if ((referenceType != null) && (referenceType.length() == 0)) {
+			dlOpenerFileEntryReferenceCacheModel.referenceType = null;
 		}
 
 		dlOpenerFileEntryReferenceCacheModel.fileEntryId = getFileEntryId();
@@ -689,11 +769,15 @@ public class DLOpenerFileEntryReferenceModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		DLOpenerFileEntryReference.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		DLOpenerFileEntryReference.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function
+			<InvocationHandler, DLOpenerFileEntryReference>
+				_escapedModelProxyProviderFunction =
+					_getProxyProviderFunction();
+
+	}
+
 	private static boolean _entityCacheEnabled;
 	private static boolean _finderCacheEnabled;
 
@@ -706,6 +790,8 @@ public class DLOpenerFileEntryReferenceModelImpl
 	private Date _modifiedDate;
 	private boolean _setModifiedDate;
 	private String _referenceKey;
+	private String _referenceType;
+	private String _originalReferenceType;
 	private long _fileEntryId;
 	private long _originalFileEntryId;
 	private boolean _setOriginalFileEntryId;

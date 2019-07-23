@@ -56,7 +56,7 @@ import org.osgi.util.tracker.BundleTracker;
  */
 @Component(
 	configurationPid = "com.liferay.portal.cluster.multiple.configuration.ClusterExecutorConfiguration",
-	immediate = true, service = ClusterChannelFactory.class
+	enabled = false, immediate = true, service = ClusterChannelFactory.class
 )
 public class JGroupsClusterChannelFactory implements ClusterChannelFactory {
 
@@ -87,12 +87,6 @@ public class JGroupsClusterChannelFactory implements ClusterChannelFactory {
 
 		_clusterExecutorConfiguration = ConfigurableUtil.createConfigurable(
 			ClusterExecutorConfiguration.class, properties);
-
-		if (!GetterUtil.getBoolean(
-				_props.get(PropsKeys.CLUSTER_LINK_ENABLED))) {
-
-			return;
-		}
 
 		initSystemProperties(
 			_props.getArray(PropsKeys.CLUSTER_LINK_CHANNEL_SYSTEM_PROPERTIES));
@@ -191,13 +185,11 @@ public class JGroupsClusterChannelFactory implements ClusterChannelFactory {
 		}
 
 		if (_log.isInfoEnabled()) {
-			String hostAddress = _bindInetAddress.getHostAddress();
-			String name = _bindNetworkInterface.getName();
-
 			_log.info(
 				StringBundler.concat(
-					"Setting JGroups outgoing IP address to ", hostAddress,
-					" and interface to ", name));
+					"Setting JGroups outgoing IP address to ",
+					_bindInetAddress.getHostAddress(), " and interface to ",
+					_bindNetworkInterface.getName()));
 		}
 	}
 

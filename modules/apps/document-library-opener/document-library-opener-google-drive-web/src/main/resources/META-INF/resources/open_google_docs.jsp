@@ -28,7 +28,8 @@ String googleDocsRedirect = ParamUtil.getString(request, "googleDocsRedirect");
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta content="initial-scale=1.0, width=device-width" name="viewport">
+		<meta content="initial-scale=1.0, width=device-width" name="viewport" />
+
 		<link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getCDNDynamicResourcesHost() + PortalWebResourcesUtil.getContextPath(PortalWebResourceConstants.RESOURCE_TYPE_CSS) + "/main.css", cssLastModifiedTime)) %>" id="liferayPortalCSS" rel="stylesheet" type="text/css" />
 		<link class="lfr-css-file" href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, themeDisplay.getPathThemeCss() + "/clay.css")) %>" id="liferayAUICSS" rel="stylesheet" type="text/css" />
 		<link href="<%= HtmlUtil.escapeAttribute(PortalUtil.getStaticResourceURL(request, StringBundler.concat(themeDisplay.getCDNBaseURL(), PortalUtil.getPathProxy(), application.getContextPath(), "/css/google_docs.css"))) %>" id="liferayGoogleDriveCSS" rel="stylesheet" type="text/css" />
@@ -39,7 +40,7 @@ String googleDocsRedirect = ParamUtil.getString(request, "googleDocsRedirect");
 			<div class="autofit-col autofit-col-expand">
 				<div class="autofit-section">
 					<portlet:actionURL name="/document_library/edit_in_google_docs" var="checkInURL">
-						<portlet:param name="<%= Constants.CMD %>" value="<%= DLOpenerGoogleDriveWebConstants.GOOGLE_DRIVE_CHECKIN %>" />
+						<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.CHECKIN %>" />
 						<portlet:param name="redirect" value="<%= googleDocsRedirect %>" />
 						<portlet:param name="fileEntryId" value="<%= String.valueOf(dlOpenerGoogleDriveFileReference.getFileEntryId()) %>" />
 					</portlet:actionURL>
@@ -58,7 +59,7 @@ String googleDocsRedirect = ParamUtil.getString(request, "googleDocsRedirect");
 
 			<div class="autofit-col">
 				<portlet:actionURL name="/document_library/edit_in_google_docs" var="cancelCheckoutURL">
-					<portlet:param name="<%= Constants.CMD %>" value="<%= DLOpenerGoogleDriveWebConstants.GOOGLE_DRIVE_CANCEL_CHECKOUT %>" />
+					<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.CANCEL_CHECKOUT %>" />
 					<portlet:param name="redirect" value="<%= googleDocsRedirect %>" />
 					<portlet:param name="fileEntryId" value="<%= String.valueOf(dlOpenerGoogleDriveFileReference.getFileEntryId()) %>" />
 				</portlet:actionURL>

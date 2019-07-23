@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Staging";
@@ -203,7 +204,7 @@ definition {
 			userLastName = "userlnoa",
 			userScreenName = "usersnoa");
 
-		Navigator.openSiteURL(siteName = "Staging Organization Name");
+		ProductMenu.gotoSite(site = "Staging Organization Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
@@ -212,7 +213,7 @@ definition {
 
 		Staging.activateStagingCP(siteName = "Staging Organization Name");
 
-		Navigator.openSiteURL(siteName = "Staging Organization Name");
+		ProductMenu.gotoSite(site = "Staging Organization Name");
 
 		Navigator.gotoStagedView();
 
@@ -346,4 +347,5 @@ definition {
 			roleTitle = "Organization User",
 			roleType = "Organization");
 	}
+
 }

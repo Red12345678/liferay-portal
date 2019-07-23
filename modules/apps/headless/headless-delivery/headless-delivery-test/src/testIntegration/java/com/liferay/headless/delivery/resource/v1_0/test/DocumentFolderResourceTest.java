@@ -38,11 +38,17 @@ public class DocumentFolderResourceTest
 	}
 
 	@Override
+	protected String[] getIgnoredEntityFieldNames() {
+		return new String[] {"creatorId"};
+	}
+
+	@Override
 	protected DocumentFolder testGetDocumentFolder_addDocumentFolder()
 		throws Exception {
 
-		DocumentFolder postDocumentFolder = invokePostSiteDocumentFolder(
-			testGroup.getGroupId(), randomDocumentFolder());
+		DocumentFolder postDocumentFolder =
+			documentFolderResource.postSiteDocumentFolder(
+				testGroup.getGroupId(), randomDocumentFolder());
 
 		Assert.assertEquals(
 			Integer.valueOf(0), postDocumentFolder.getNumberOfDocuments());
@@ -53,8 +59,9 @@ public class DocumentFolderResourceTest
 			StringPool.BLANK, RandomTestUtil.randomString(10), true,
 			new ServiceContext());
 
-		DocumentFolder getDocumentFolder = invokeGetDocumentFolder(
-			postDocumentFolder.getId());
+		DocumentFolder getDocumentFolder =
+			documentFolderResource.getDocumentFolder(
+				postDocumentFolder.getId());
 
 		Assert.assertEquals(
 			Integer.valueOf(1), getDocumentFolder.getNumberOfDocuments());
@@ -67,8 +74,9 @@ public class DocumentFolderResourceTest
 			testGetDocumentFolderDocumentFoldersPage_getParentDocumentFolderId()
 		throws Exception {
 
-		DocumentFolder documentFolder = invokePostSiteDocumentFolder(
-			testGroup.getGroupId(), randomDocumentFolder());
+		DocumentFolder documentFolder =
+			documentFolderResource.postSiteDocumentFolder(
+				testGroup.getGroupId(), randomDocumentFolder());
 
 		return documentFolder.getId();
 	}

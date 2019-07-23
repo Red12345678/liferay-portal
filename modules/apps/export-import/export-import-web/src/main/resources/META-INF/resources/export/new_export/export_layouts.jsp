@@ -88,6 +88,15 @@ portletDisplay.setURLBack(backURL);
 renderResponse.setTitle(!configuredExport ? LanguageUtil.get(request, "new-custom-export") : LanguageUtil.format(request, "new-export-based-on-x", exportImportConfiguration.getName(), false));
 %>
 
+<c:if test="<%= StagingUtil.isChangeTrackingEnabled(company.getCompanyId()) %>">
+	<liferay-staging:alert
+		dismissible="<%= true %>"
+		type="WARNING"
+	>
+		<liferay-ui:message key='<%= LanguageUtil.get(request, "export-import-change-lists-warning") %>' />
+	</liferay-staging:alert>
+</c:if>
+
 <div class="container-fluid-1280">
 	<portlet:actionURL name="editExportConfiguration" var="restoreTrashEntriesURL">
 		<portlet:param name="mvcRenderCommandName" value="exportLayouts" />
@@ -142,6 +151,11 @@ renderResponse.setTitle(!configuredExport ? LanguageUtil.get(request, "new-custo
 					</c:choose>
 				</aui:fieldset>
 
+				<liferay-staging:deletions
+					cmd="<%= Constants.EXPORT %>"
+					exportImportConfigurationId="<%= exportImportConfigurationId %>"
+				/>
+
 				<c:if test="<%= !group.isLayoutPrototype() && !group.isCompany() %>">
 					<liferay-staging:select-pages
 						action="<%= Constants.EXPORT %>"
@@ -158,11 +172,6 @@ renderResponse.setTitle(!configuredExport ? LanguageUtil.get(request, "new-custo
 					disableInputs="<%= configuredExport %>"
 					exportImportConfigurationId="<%= exportImportConfigurationId %>"
 					type="<%= Constants.EXPORT %>"
-				/>
-
-				<liferay-staging:deletions
-					cmd="<%= Constants.EXPORT %>"
-					exportImportConfigurationId="<%= exportImportConfigurationId %>"
 				/>
 
 				<liferay-staging:permissions
@@ -276,4 +285,14 @@ renderResponse.setTitle(!configuredExport ? LanguageUtil.get(request, "new-custo
 	Liferay.Util.toggleRadio('<portlet:namespace />rangeAll', '', ['<portlet:namespace />startEndDate', '<portlet:namespace />rangeLastInputs']);
 	Liferay.Util.toggleRadio('<portlet:namespace />rangeDateRange', '<portlet:namespace />startEndDate', '<portlet:namespace />rangeLastInputs');
 	Liferay.Util.toggleRadio('<portlet:namespace />rangeLast', '<portlet:namespace />rangeLastInputs', ['<portlet:namespace />startEndDate']);
+
+	<c:if test="<%= StagingUtil.isChangeTrackingEnabled(company.getCompanyId()) %>">
+		var form = document.<portlet:namespace />fm1;
+
+		var formElements = form.elements;
+
+		for (var i = 0; i < formElements.length; ++i) {
+			formElements[i].disabled = true;
+		}
+	</c:if>
 </aui:script>

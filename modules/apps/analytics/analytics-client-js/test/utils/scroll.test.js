@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {ScrollTracker} from '../../src/utils/scroll';
 import {expect} from 'chai';
 
@@ -20,7 +34,8 @@ const getPage = () => {
 
 	const page = document.createElement('div');
 	page.style.width = '600px';
-	page.innerHTML = divElement + divElement + blogElement + divElement + divElement;
+	page.innerHTML =
+		divElement + divElement + blogElement + divElement + divElement;
 
 	document.body.appendChild(page);
 
@@ -66,7 +81,10 @@ describe('getDepth from a element', () => {
 		const {top, bottom} = blogElementNode.getBoundingClientRect();
 
 		expect(top <= 0 && bottom > 0).to.equal(true);
-		expect(scroll.getDepth(blogElementNode) >=0 && scroll.getDepth(blogElementNode) <= 100).to.equal(true);
+		expect(
+			scroll.getDepth(blogElementNode) >= 0 &&
+				scroll.getDepth(blogElementNode) <= 100
+		).to.equal(true);
 
 		page.innerHTML = '';
 

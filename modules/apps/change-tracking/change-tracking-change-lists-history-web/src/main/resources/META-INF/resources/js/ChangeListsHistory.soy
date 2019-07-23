@@ -14,11 +14,11 @@
 	]>}
 	{@param? loaded: bool}
 
-	<div id="change-list-history">
+	<div id="change-list-history" {if not $processEntries or length($processEntries) == 0}class="container-fluid-1280"{/if} >
 		{if not $loaded}
 			{call .loading /}
 		{else}
-			{if $processEntries}
+			{if $processEntries and length($processEntries) > 0}
 				{foreach $processEntry in $processEntries}
 
 					{let $cardState: ($processEntry.state == 'published') ? 'border-left-green' : (($processEntry.state == 'in-progress') ? 'border-left-orange' : 'border-left-red') /}
@@ -40,6 +40,13 @@
 						{param userPortraitURL: '' /}
 					{/call}
 				{/foreach}
+			{else}
+				<div class="no-left-padding sheet taglib-empty-result-message">
+					<div class="taglib-empty-result-message-header"></div>
+					<div class="sheet-text text-center">
+						{msg desc=""}no-processes-were-found{/msg}
+					</div>
+				</div>
 			{/if}
 		{/if}
 	</div>

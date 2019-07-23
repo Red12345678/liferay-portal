@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Display Pages";
@@ -67,9 +68,19 @@ definition {
 		}
 	}
 
-	@description = "This is a test for LPS-86191. A user can configure the page settings for each individual display page. This test will test 'Show Header' and 'Show Footer'."
+	@description = "This is a test for LPS-86191. A user can configure the page settings for each individual display page. This test will test 'Show Header' and 'Show Footer'. This test has been extended to also cover LPS-96438."
 	@priority = "4"
 	test ConfigureDisplayPageShowHeaderAndFooter {
+		task ("Add a couple pages to the site so the navigation menu will appear in the display page template header") {
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Test Page 1");
+
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Test Page 2");
+		}
+
 		task ("Add a web content that uses the display page") {
 			WebContent.openWebContentAdmin(siteURLKey = "test-site-name");
 
@@ -90,9 +101,23 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/w/webcontent-title");
 		}
 
-		task ("Assert the page header and footer appear") {
+		task ("Assert the page header which contains the site logo, search bar, and navigation menu appears") {
 			AssertVisible(locator1 = "Home#DEFAULT_LOGO");
 
+			AssertVisible(
+				key_infoMessage = "This search bar is not visible to users yet.",
+				locator1 = "Message#INFO_SPECIFIC");
+
+			AssertVisible(
+				key_pageName = "Test Page 1",
+				locator1 = "Home#PAGE");
+
+			AssertVisible(
+				key_pageName = "Test Page 2",
+				locator1 = "Home#PAGE");
+		}
+
+		task ("Assert the web content article content appears") {
 			AssertVisible(
 				key_content = "Webcontent Title",
 				key_fragmentClass = "header",
@@ -104,7 +129,9 @@ definition {
 				key_fragmentClass = "rich-text",
 				key_position = "2",
 				locator1 = "Fragment#FRAGMENT");
+		}
 
+		task ("Assert the page footer appears") {
 			AssertVisible(locator1 = "Home#FOOTER");
 		}
 
@@ -134,9 +161,23 @@ definition {
 			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/w/webcontent-title");
 		}
 
-		task ("Assert the page header and footer do not appear") {
+		task ("Assert the page header which contains the site logo, search bar, and navigation menu does not appear") {
 			AssertElementNotPresent(locator1 = "Home#DEFAULT_LOGO");
 
+			AssertElementNotPresent(
+				key_infoMessage = "This search bar is not visible to users yet.",
+				locator1 = "Message#INFO_SPECIFIC");
+
+			AssertElementNotPresent(
+				key_pageName = "Test Page 1",
+				locator1 = "Home#PAGE");
+
+			AssertElementNotPresent(
+				key_pageName = "Test Page 2",
+				locator1 = "Home#PAGE");
+		}
+
+		task ("Assert the web content article content still appears") {
 			AssertVisible(
 				key_content = "Webcontent Title",
 				key_fragmentClass = "header",
@@ -148,7 +189,9 @@ definition {
 				key_fragmentClass = "rich-text",
 				key_position = "2",
 				locator1 = "Fragment#FRAGMENT");
+		}
 
+		task ("Assert the page footer does not appear") {
 			AssertElementNotPresent(locator1 = "Home#FOOTER");
 		}
 	}
@@ -480,6 +523,110 @@ definition {
 		}
 	}
 
+	@description = "This is a test for LPS-96438. Guests should be able to view web content articles through display page templates."
+	@priority = "5"
+	test ViewDisplayPageAsGuest {
+		task ("Add a couple pages to the site so the navigation menu will appear in the display page template header") {
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Test Page 1");
+
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Test Page 2");
+		}
+
+		task ("Add a destination page for the Search Bar widget so it will appear to a guest user") {
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Search");
+
+			JSONLayout.addWidgetToPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Search",
+				widgetName = "Search Results");
+
+			JSONLayout.addWidgetToPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Search",
+				widgetName = "Type Facet");
+		}
+
+		task ("Mark the display page as default") {
+			DisplayPageTemplatesAdmin.markDisplayPageAsDefault(displayPageName = "Display Page Name");
+		}
+
+		task ("Add a web content article") {
+			WebContent.openWebContentAdmin(siteURLKey = "test-site-name");
+
+			WebContentNavigator.gotoAddCP();
+
+			WebContent.addCP(
+				webContentContent = "Webcontent Content",
+				webContentTitle = "Webcontent Title");
+		}
+
+		task ("Assert the display page is selected by default") {
+			Panel.expandPanel(panel = "Display Page Template");
+
+			AssertSelectedLabel(
+				locator1 = "WCEditWebContent#DISPLAY_PAGE_SELECT",
+				value1 = "Default Display Page Template");
+
+			AssertTextEquals(
+				locator1 = "WCEditWebContent#DISPLAY_PAGE_DEFAULT_SELECTION",
+				value1 = "Display Page Name");
+		}
+
+		task ("Publish the web content article") {
+			PortletEntry.publish();
+		}
+
+		task ("Logout of portal") {
+			User.logoutPG();
+		}
+
+		task ("View the web content article through its friendly URL") {
+			Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/w/webcontent-title");
+		}
+
+		task ("Assert the page header which contains the site logo, search bar, and navigation menu appears") {
+			AssertVisible(locator1 = "Home#DEFAULT_LOGO");
+
+			AssertVisible(locator1 = "TextInput#SEARCH");
+
+			AssertVisible(
+				key_pageName = "Test Page 1",
+				locator1 = "Home#PAGE");
+
+			AssertVisible(
+				key_pageName = "Test Page 2",
+				locator1 = "Home#PAGE");
+
+			AssertVisible(
+				key_pageName = "Search",
+				locator1 = "Home#PAGE");
+		}
+
+		task ("Assert the web content article content appears") {
+			AssertVisible(
+				key_content = "Webcontent Title",
+				key_fragmentClass = "header",
+				key_position = "1",
+				locator1 = "Fragment#FRAGMENT");
+
+			AssertVisible(
+				key_content = "Webcontent Content",
+				key_fragmentClass = "rich-text",
+				key_position = "2",
+				locator1 = "Fragment#FRAGMENT");
+		}
+
+		task ("Assert the page footer appears") {
+			AssertVisible(locator1 = "Home#FOOTER");
+		}
+	}
+
 	@description = "When a display page is marked as default, associated assets will be displayed through the display page by default without need for additional configuration."
 	@priority = "5"
 	test ViewDisplayPageMarkedAsDefault {
@@ -603,20 +750,23 @@ definition {
 		}
 
 		task ("Add a widget page to the site") {
-			SitePages.openPagesAdmin(siteURLKey = "test-site-name");
-
-			SitePages.addPublicPage(pageName = "Site Page Name");
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Site Page Name");
 		}
 
 		task ("Add an Asset Publisher Widget to the widget page") {
+			JSONLayout.addWidgetToPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Site Page Name",
+				widgetName = "Asset Publisher");
+		}
+
+		task ("View the web content article through the Asset Publisher widget") {
 			Navigator.gotoSitePage(
 				pageName = "Site Page Name",
 				siteName = "Test Site Name");
 
-			Portlet.addPG(portletName = "Asset Publisher");
-		}
-
-		task ("View the web content article through the Asset Publisher widget") {
 			AssertTextEquals(
 				key_assetTitle = "Webcontent Title",
 				locator1 = "AP#ASSET_ABSTRACT_TITLE",
@@ -789,20 +939,23 @@ definition {
 		}
 
 		task ("Add a widget page to the site") {
-			SitePages.openPagesAdmin(siteURLKey = "test-site-name");
-
-			SitePages.addPublicPage(pageName = "Site Page Name");
+			JSONLayout.addPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Site Page Name");
 		}
 
 		task ("Add an Asset Publisher Widget to the page") {
+			JSONLayout.addWidgetToPublicLayout(
+				groupName = "Test Site Name",
+				layoutName = "Site Page Name",
+				widgetName = "Asset Publisher");
+		}
+
+		task ("View the web content article through the Asset Publisher widget") {
 			Navigator.gotoSitePage(
 				pageName = "Site Page Name",
 				siteName = "Test Site Name");
 
-			Portlet.addPG(portletName = "Asset Publisher");
-		}
-
-		task ("View the web content article through the Asset Publisher widget") {
 			AssertTextEquals(
 				key_assetTitle = "Webcontent Title",
 				locator1 = "AP#ASSET_ABSTRACT_TITLE",
@@ -834,4 +987,5 @@ definition {
 				locator1 = "Fragment#FRAGMENT");
 		}
 	}
+
 }

@@ -139,7 +139,7 @@
 			<finder-column name="value" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="ClusterGroup" remote-service="false">
+	<entity deprecated="true" local-service="true" name="ClusterGroup" remote-service="false">
 
 		<!-- PK fields -->
 
@@ -197,9 +197,12 @@
 		<reference entity="PortalPreferences" package-path="com.liferay.portal" />
 		<reference entity="Portlet" package-path="com.liferay.portal" />
 		<reference entity="Role" package-path="com.liferay.portal" />
+		<reference entity="SystemEvent" package-path="com.liferay.portal" />
 		<reference entity="User" package-path="com.liferay.portal" />
 		<reference entity="UserGroup" package-path="com.liferay.portal" />
 		<reference entity="VirtualHost" package-path="com.liferay.portal" />
+		<reference entity="ExpandoColumn" package-path="com.liferay.portlet.expando" />
+		<reference entity="ExpandoTable" package-path="com.liferay.portlet.expando" />
 	</entity>
 	<entity local-service="true" name="Contact" remote-service="true">
 
@@ -583,7 +586,7 @@
 			<finder-column comparator="&lt;" name="size" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="Layout" remote-service="true" uad-application-name="Layout" uad-dir-path="../modules/apps/layout/layout-uad/src/main/java" uad-package-path="com.liferay.layout" uuid="true" versioned="true">
+	<entity local-service="true" name="Layout" remote-service="true" uad-application-name="Layout" uad-dir-path="../modules/apps/layout/layout-uad/src/main/java" uad-package-path="com.liferay.layout" uuid="true">
 
 		<!-- PK fields -->
 
@@ -1012,7 +1015,7 @@
 		<reference entity="User" package-path="com.liferay.portal" />
 		<reference entity="WorkflowInstanceLink" package-path="com.liferay.portal" />
 	</entity>
-	<entity local-service="true" name="LayoutSet" remote-service="true" versioned="true">
+	<entity local-service="true" name="LayoutSet" remote-service="true">
 
 		<!-- PK fields -->
 
@@ -3408,6 +3411,11 @@
 
 		<!-- Finder methods -->
 
+		<finder name="G_C_C" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="companyId" />
+			<finder-column name="classNameId" />
+		</finder>
 		<finder name="G_C_C_C" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="companyId" />
@@ -3449,6 +3457,7 @@
 		<exception>GroupFriendlyURL</exception>
 		<exception>GroupInheritContent</exception>
 		<exception>GroupKey</exception>
+		<exception>GroupName</exception>
 		<exception>GroupParent</exception>
 		<exception>ImageResolution</exception>
 		<exception>ImageType</exception>

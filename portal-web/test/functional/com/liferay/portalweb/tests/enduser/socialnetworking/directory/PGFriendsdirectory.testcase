@@ -1,5 +1,6 @@
 @component-name = "portal-social-networking"
 definition {
+
 	property dummy.socket.proxy.disabled = "true";
 	property osgi.app.includes = "social-networking";
 	property portal.upstream = "true";
@@ -64,7 +65,7 @@ definition {
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
 
-		User.addCP(
+		JSONUser.addUser(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
@@ -98,10 +99,6 @@ definition {
 			pageName = "Friends Request Page",
 			privacy = "Public Pages",
 			sitePageType = "Widget Page");
-
-		Navigator.gotoPage(pageName = "Friends Directory Page");
-
-		ProductMenuHelper.openProductMenu();
 
 		Navigator.gotoPersonalSite();
 
@@ -242,4 +239,5 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 	}
+
 }

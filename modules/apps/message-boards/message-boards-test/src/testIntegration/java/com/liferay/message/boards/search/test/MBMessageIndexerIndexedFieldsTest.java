@@ -50,7 +50,6 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,19 +76,16 @@ public class MBMessageIndexerIndexedFieldsTest {
 		setUpMBMessageFixture();
 	}
 
-	@Ignore
 	@Test
 	public void testIndexedFields() throws Exception {
 		Locale locale = LocaleUtil.JAPAN;
 
-		String title = "新規";
+		String searchTerm = "新規";
 
 		mbMessageFixture.updateDisplaySettings(locale);
 
 		MBMessage mbMessage = mbMessageFixture.createMBMessageWithCategory(
-			title, _user.getUserId());
-
-		String searchTerm = mbMessage.getSubject();
+			searchTerm);
 
 		Document document = mbMessageIndexerFixture.searchOnlyOne(
 			searchTerm, locale);

@@ -84,7 +84,6 @@ import java.nio.charset.StandardCharsets;
 
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -94,6 +93,7 @@ import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.gradle.api.Action;
 import org.gradle.api.GradleException;
@@ -563,10 +563,12 @@ public class LiferayOSGiPlugin implements Plugin<Project> {
 
 						SourceDirectorySet allSource = sourceSet.getAllSource();
 
+						Set<File> srcDirs = allSource.getSrcDirs();
+
+						Stream<File> stream = srcDirs.stream();
+
 						FileCollection sourceDirs = project.files(
-							allSource.getSrcDirs(
-							).stream(
-							).filter(
+							stream.filter(
 								File::exists
 							).collect(
 								Collectors.toList()
@@ -646,13 +648,25 @@ public class LiferayOSGiPlugin implements Plugin<Project> {
 				}
 
 				private Map<String, String> _getProperties(Project project) {
-					Map<String, String> properties = new HashMap<>();
+					LiferayOSGiExtension liferayOSGiExtension =
+						GradleUtil.getExtension(
+							project, LiferayOSGiExtension.class);
 
-					Map<String, Object> instructions =
-						BndBuilderUtil.getInstructions(project);
+					Map<String, String> properties = GradleUtil.toStringMap(
+						liferayOSGiExtension.getBundleDefaultInstructions());
 
-					instructions.forEach(
-						(k, v) -> properties.put(k, GradleUtil.toString(v)));
+					Map<String, ?> projectProperties = project.getProperties();
+
+					for (Map.Entry<String, ?> entry :
+							projectProperties.entrySet()) {
+
+						String key = entry.getKey();
+
+						if (Character.isLowerCase(key.charAt(0))) {
+							properties.put(
+								key, GradleUtil.toString(entry.getValue()));
+						}
+					}
 
 					properties.remove(Constants.DONOTCOPY);
 					properties.remove(
@@ -943,14 +957,15 @@ public class LiferayOSGiPlugin implements Plugin<Project> {
 		SourceSet sourceSet = GradleUtil.getSourceSet(
 			project, SourceSet.MAIN_SOURCE_SET_NAME);
 
-		SourceSetOutput sourceSetOutput = sourceSet.getOutput();
-
-		File classesDir = new File(docrootDir, "WEB-INF/classes");
-
-		sourceSetOutput.setClassesDir(classesDir);
-		sourceSetOutput.setResourcesDir(classesDir);
+		File javaClassesDir = new File(docrootDir, "WEB-INF/classes");
 
 		SourceDirectorySet javaSourceDirectorySet = sourceSet.getJava();
+
+		javaSourceDirectorySet.setOutputDir(javaClassesDir);
+
+		SourceSetOutput sourceSetOutput = sourceSet.getOutput();
+
+		sourceSetOutput.setResourcesDir(javaClassesDir);
 
 		File srcDir = new File(docrootDir, "WEB-INF/src");
 
@@ -1040,7 +1055,7 @@ public class LiferayOSGiPlugin implements Plugin<Project> {
 		delete.dependsOn(closure);
 	}
 
-	private void _configureTaskJar(Project project) {
+	private void _configureTaskJar(final Project project) {
 		Jar jar = (Jar)GradleUtil.getTask(project, JavaPlugin.JAR_TASK_NAME);
 
 		jar.doFirst(
@@ -1051,18 +1066,21 @@ public class LiferayOSGiPlugin implements Plugin<Project> {
 					Map<String, Object> instructions =
 						BndBuilderUtil.getInstructions(project);
 
+					instructions.forEach(
+						(k, v) -> instructions.put(k, GradleUtil.toString(v)));
+
 					Map<String, ?> projectProperties = project.getProperties();
 
 					for (Map.Entry<String, ?> entry :
 							projectProperties.entrySet()) {
 
 						String key = entry.getKey();
+						Object value = entry.getValue();
 
 						Matcher matcher = _keyRegex.matcher(key);
 
-						if (matcher.matches()) {
-							instructions.put(
-								key, GradleUtil.toString(entry.getValue()));
+						if (matcher.matches() && (value instanceof String)) {
+							instructions.put(key, entry.getValue());
 						}
 					}
 

@@ -1,4 +1,5 @@
 definition {
+
 	var assetType = "Document";
 	var dmDocumentTypeName = "File Upload";
 
@@ -29,6 +30,14 @@ definition {
 					locator1 = "TextInput#FILE",
 					value1 = "${dmDocumentFile}");
 			}
+		}
+
+		if (isSet(customFieldText)) {
+			Panel.expandPanel(panel = "Custom Fields");
+
+			Type(
+				locator1 = "TextInput#CUSTOM_FIELD",
+				value1 = "${customFieldText}");
 		}
 
 		if (isSet(tagNameList)) {
@@ -73,8 +82,8 @@ definition {
 		IFrame.selectModalFrame();
 
 		AssertClick(
-			locator1 = "SitesSelectSite#CHOOSE_BUTTON",
-			value1 = "Choose");
+			locator1 = "SitesSelectSite#SELECT_BUTTON",
+			value1 = "Select");
 
 		SelectFrameTop(value1 = "relative=top");
 
@@ -143,6 +152,22 @@ definition {
 				value1 = "${booleanField}");
 		}
 
+		if (isSet(webcontentField)) {
+			AssertClick(
+				key_fieldName = "WebContent",
+				locator1 = "Button#SELECT_CONTENT",
+				value1 = "Select");
+
+			SelectFrame(locator1 = "IFrame#DIALOG");
+
+			AssertClick(
+				key_webContentTitle = "${webcontentField}",
+				locator1 = "Link#WEB_CONTENT_ARTICLE",
+				value1 = "${webcontentField}");
+
+			SelectFrame(value1 = "relative=top");
+		}
+
 		AssertClick(
 			locator1 = "Button#PUBLISH",
 			value1 = "Publish");
@@ -208,9 +233,7 @@ definition {
 			for (var dmDocumentFile : list "${dmDocumentFileList}") {
 				var key_dmDocumentFile = "${dmDocumentFile}";
 
-				AssertClick(
-					locator1 = "Button#SELECT_FILES",
-					value1 = "Select Files");
+				AssertElementPresent(locator1 = "Button#SELECT_FILES");
 
 				if ("${uploadTempFile}" == "true") {
 					SikuliUploadTempFile(
@@ -478,6 +501,38 @@ definition {
 		}
 
 		LexiconEntry.gotoEllipsisMenuItem(menuItem = "Checkin");
+
+		if (IsElementPresent(locator1 = "Radio#MAJOR_VERSION")) {
+			if ("${revision}" == "Major") {
+				Click(locator1 = "Radio#MAJOR_VERSION");
+			}
+			else if ("${revision}" == "Minor") {
+				Click(locator1 = "Radio#MINOR_VERSION");
+			}
+			else if ("${revision}" == "Current") {
+				Click(locator1 = "Radio#CURRENT_VERSION");
+			}
+
+			if (isSet(changeLog)) {
+				Type(
+					locator1 = "TextArea#CHANGE_LOG",
+					value1 = "${changeLog}");
+			}
+
+			Click(locator1 = "Button#SAVE");
+		}
+
+		Alert.viewSuccessMessage();
+	}
+
+	macro checkinManagementBar {
+		var key_dmDocumentTitle = "${dmDocumentTitle}";
+
+		Check(locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_CHECKBOX");
+
+		Click(locator1 = "Icon#VERTICAL_ELLIPSIS_BUTTON");
+
+		MenuItem.click(menuItem = "Checkin");
 
 		if (IsElementPresent(locator1 = "Radio#MAJOR_VERSION")) {
 			if ("${revision}" == "Major") {
@@ -885,7 +940,7 @@ definition {
 
 		KeyPress(
 			locator1 = "DocumentsAndMedia#EDIT_TAGS_FIELD",
-			value1 = "\RETURN");
+			value1 = ",");
 
 		Button.clickSave();
 
@@ -899,7 +954,7 @@ definition {
 
 		SelectFrame(locator1 = "DocumentsAndMedia#CONFIGURATION_IFRAME");
 
-		WaitForElementPresent(locator1 = "Checkbox#SHOW_ACTIONS_CHECKBOX");
+		AssertElementPresent.pauseAssertVisible(locator1 = "Checkbox#SHOW_ACTIONS_CHECKBOX");
 
 		Check(locator1 = "Checkbox#SHOW_ACTIONS_CHECKBOX");
 
@@ -929,7 +984,7 @@ definition {
 		DMDocument.expandInfo();
 
 		var portalURL = PropsUtil.get("portal.url");
-		var dmLatestVersionURL = selenium.getAttribute("//input[contains(@class,'lfr-input-resource')]@value");
+		var dmLatestVersionURL = selenium.getAttribute("//input[contains(@id,'urlInput')]@value");
 		var dmDocumentURL = StringUtil.extractLast("${dmLatestVersionURL}", "${portalURL}");
 
 		echo("## * Document URL: ${dmDocumentURL}");
@@ -968,16 +1023,18 @@ definition {
 					value1 = "Home");
 			}
 
+			var key_text = "Select This Folder";
+
 			AssertClick(
-				locator1 = "Button#CHOOSE_THIS_FOLDER",
-				value1 = "Choose This Folder");
+				locator1 = "Button#ANY",
+				value1 = "Select This Folder");
 		}
 		else {
 			var key_dmFolderName = "${dmFolderName}";
 
 			AssertClick(
-				locator1 = "DocumentsAndMedia#CHOOSE_FOLDER_BUTTON",
-				value1 = "Choose");
+				locator1 = "DocumentsAndMedia#SELECT_FOLDER_BUTTON",
+				value1 = "Select");
 		}
 
 		SelectFrame(locator1 = "relative=top");
@@ -1005,7 +1062,7 @@ definition {
 
 		var key_dmFolderName = "${dmFolderName}";
 
-		if (IsElementNotPresent(locator1 = "DocumentsAndMediaSelectFolder#CHOOSE_BUTTON")) {
+		if (IsElementPresent(locator1 = "//div[contains(@class,'portlet-body')]//form//ol[contains(@class,'breadcrumb')]//a[contains(.,'Home')]")) {
 			AssertClick(
 				key_breadcrumbName = "Home",
 				locator1 = "BreadcrumbPortlet#BREADCRUMB_FOLDER",
@@ -1013,8 +1070,8 @@ definition {
 		}
 
 		AssertClick(
-			locator1 = "DocumentsAndMediaSelectFolder#CHOOSE_BUTTON",
-			value1 = "Choose");
+			locator1 = "DocumentsAndMediaSelectFolder#SELECT_BUTTON",
+			value1 = "Select");
 
 		SelectFrameTop();
 
@@ -1068,8 +1125,8 @@ definition {
 			value1 = "${dmSubFolderName}");
 
 		AssertClick(
-			locator1 = "DocumentsAndMediaSelectFolder#CHOOSE_BUTTON",
-			value1 = "Choose");
+			locator1 = "DocumentsAndMediaSelectFolder#SELECT_BUTTON",
+			value1 = "Select");
 
 		SelectFrame(locator1 = "relative=top");
 
@@ -1142,15 +1199,15 @@ definition {
 	macro sharePG {
 		IFrame.selectModalFrame();
 
-		Type(
-			locator1 = "DocumentsAndMediaShare#INVITE_TO_COLLABORATE_INPUT",
+		Type.sendKeys(
+			locator1 = "Sharing#MODAL_INVITE_TO_COLLABORATE_INPUT",
 			value1 = "${userEmailAddress}");
 
-		Click(locator1 = "DocumentsAndMediaShare#INVITE_TO_COLLABORATE_DROPDOWN");
+		Click(locator1 = "Sharing#MODAL_INVITE_TO_COLLABORATE_DROPDOWN");
 
 		var key_userName = "${userName}";
 
-		AssertElementPresent(locator1 = "DocumentsAndMediaShare#INVITE_TO_COLLABORATE_TAG");
+		AssertElementPresent(locator1 = "Sharing#MODAL_INVITE_TO_COLLABORATE_TAG");
 
 		if (isSet(shareable)) {
 			FormFields.enableCheckbox(fieldName = "shareable");
@@ -1186,10 +1243,10 @@ definition {
 		IFrame.selectModalFrame();
 
 		Type(
-			locator1 = "DocumentsAndMediaShare#INVITE_TO_COLLABORATE_INPUT",
+			locator1 = "Sharing#MODAL_INVITE_TO_COLLABORATE_INPUT",
 			value1 = "${userEmailAddress}");
 
-		AssertElementNotPresent(locator1 = "DocumentsAndMediaShare#INVITE_TO_COLLABORATE_DROPDOWN");
+		AssertElementNotPresent(locator1 = "Sharing#MODAL_INVITE_TO_COLLABORATE_DROPDOWN");
 	}
 
 	macro tearDownCP {
@@ -1241,8 +1298,6 @@ definition {
 		AssertElementPresent(locator1 = "Icon#ANGLE_LEFT_BACK");
 
 		DMDocument.viewDocumentToolbarCmdPG();
-
-		Click(locator1 = "Icon#INFO");
 
 		DMDocument.viewDocumentAuthorCmdPG(dmDocumentAuthor = "${dmDocumentAuthor}");
 
@@ -1354,6 +1409,16 @@ definition {
 				locator1 = "DocumentsAndMediaDocument#DOCUMENT_DETAILS_SIZE",
 				value1 = "${dmDocumentSize}");
 		}
+
+		if (isSet(customFieldName)) {
+			AssertTextEquals(
+				locator1 = "DocumentsAndMediaDocument#CUSTOM_FIELD_NAME",
+				value1 = "${customFieldName}");
+
+			AssertTextEquals(
+				locator1 = "DocumentsAndMediaDocument#CUSTOM_FIELD_VALUE",
+				value1 = "${customFieldValue}");
+		}
 	}
 
 	macro viewCPStatus {
@@ -1463,6 +1528,24 @@ definition {
 		AssertTextEquals(
 			locator1 = "Button#SUBSCRIBE",
 			value1 = "Subscribe");
+	}
+
+	macro viewDocumentNoCustomFieldCP {
+		var key_dmDocumentTitle = "${dmDocumentTitle}";
+
+		AssertTextEquals(
+			locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_TITLE",
+			value1 = "${dmDocumentTitle}");
+
+		DMDocument.expandInfo();
+
+		AssertTextNotPresent(
+			locator1 = "DocumentsAndMediaDocument#CUSTOM_FIELD_NAME",
+			value1 = "${customFieldName}");
+
+		AssertTextNotPresent(
+			locator1 = "DocumentsAndMediaDocument#CUSTOM_FIELD_VALUE",
+			value1 = "${customFieldValue}");
 	}
 
 	macro viewDocumentTitleCmdPG {
@@ -1702,6 +1785,47 @@ definition {
 		AssertClick(
 			locator1 = "DocumentsAndMedia#DESCRIPTIVE_LIST_DOCUMENT_TITLE",
 			value1 = "${dmDocumentTitle}");
+
+		DMDocument.expandInfo();
+
+		DMDocument.viewDocumentTitleCmdPG(dmDocumentTitle = "${dmDocumentTitle}");
+
+		if ("${dmRepositoryName}" == "true") {
+			AssertElementNotPresent(locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_RATING");
+		}
+		else {
+			AssertElementPresent(locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_RATING");
+		}
+
+		if (isSet(dmDocumentDescription)) {
+			var key_dmDocumentDescription = "${dmDocumentDescription}";
+
+			ScrollWebElementIntoView(locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_DESCRIPTION");
+
+			AssertTextEquals(
+				locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_DESCRIPTION",
+				value1 = "${dmDocumentDescription}");
+		}
+
+		if ("${dmDocumentFileType}" == "Image") {
+			AssertElementPresent(locator1 = "DocumentsAndMediaDocument#DOCUMENT_DETAILS_IMAGE_PREVIEW");
+		}
+
+		if (isSet(tagNameList)) {
+			for (var tagName : list "${tagNameList}") {
+				AssertTextEquals.assertPartialText(
+					locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_TAGS",
+					value1 = "${tagName}");
+			}
+		}
+
+		if (isSet(categoryName)) {
+			var key_categoryName = "${categoryName}";
+
+			AssertTextEquals(
+				locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_CATEGORIES",
+				value1 = "${categoryName}");
+		}
 	}
 
 	macro viewPGDetails {
@@ -1723,13 +1847,15 @@ definition {
 			locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_TITLE",
 			value1 = "${dmDocumentTitle}");
 
-		Click(locator1 = "Icon#INFO");
+		DMDocument.expandInfo();
 
 		AssertTextEquals(
 			locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_RELATED_ASSETS_TITLE",
 			value1 = "${assetTitle}");
 
-		AssertElementPresent(locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_THUMBNAIL");
+		// LRCI-276
+
+		// AssertElementPresent(locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_THUMBNAIL");
 
 		AssertTextEquals(
 			locator1 = "DocumentsAndMediaDocument#DOCUMENT_INFO_UPLOADED_BY",
@@ -1958,4 +2084,5 @@ definition {
 				value1 = "${tagName}");
 		}
 	}
+
 }

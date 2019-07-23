@@ -42,6 +42,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.segments.constants.SegmentsConstants;
 import com.liferay.segments.exception.RequiredSegmentsEntryException;
 import com.liferay.segments.exception.SegmentsEntryKeyException;
+import com.liferay.segments.exception.SegmentsEntryNameException;
 import com.liferay.segments.model.SegmentsEntry;
 import com.liferay.segments.service.base.SegmentsEntryLocalServiceBaseImpl;
 
@@ -81,7 +82,8 @@ public class SegmentsEntryLocalServiceImpl
 			segmentsEntryKey = StringUtil.toUpperCase(segmentsEntryKey.trim());
 		}
 
-		validate(0, groupId, segmentsEntryKey);
+		validateKey(0, groupId, segmentsEntryKey);
+		validateName(groupId, nameMap);
 
 		long segmentsEntryId = counterLocalService.increment();
 
@@ -160,9 +162,10 @@ public class SegmentsEntryLocalServiceImpl
 		// Segments entry
 
 		if (!GroupThreadLocal.isDeleteInProcess()) {
-			if (segmentsExperiencePersistence.countBySegmentsEntryId(
-					segmentsEntry.getSegmentsEntryId()) > 0) {
+			int count = segmentsExperiencePersistence.countBySegmentsEntryId(
+				segmentsEntry.getSegmentsEntryId());
 
+			if (count > 0) {
 				throw new RequiredSegmentsEntryException.
 					MustNotDeleteSegmentsEntryReferencedBySegmentsExperiences(
 						segmentsEntry.getSegmentsEntryId());
@@ -243,6 +246,17 @@ public class SegmentsEntryLocalServiceImpl
 	}
 
 	@Override
+	public List<SegmentsEntry> getSegmentsEntries(
+		long groupId, boolean active, String source, String type, int start,
+		int end, OrderByComparator<SegmentsEntry> orderByComparator) {
+
+		return segmentsEntryPersistence.findByG_A_S_T(
+			ArrayUtil.append(
+				PortalUtil.getAncestorSiteGroupIds(groupId), groupId),
+			active, source, type, start, end, orderByComparator);
+	}
+
+	@Override
 	public List<SegmentsEntry> getSegmentsEntriesBySource(
 		String source, int start, int end,
 		OrderByComparator<SegmentsEntry> orderByComparator) {
@@ -314,7 +328,10 @@ public class SegmentsEntryLocalServiceImpl
 
 		segmentsEntryKey = StringUtil.toUpperCase(segmentsEntryKey.trim());
 
-		validate(segmentsEntryId, segmentsEntry.getGroupId(), segmentsEntryKey);
+		validateKey(
+			segmentsEntryId, segmentsEntry.getGroupId(), segmentsEntryKey);
+
+		validateName(segmentsEntry.getGroupId(), nameMap);
 
 		segmentsEntry.setSegmentsEntryKey(segmentsEntryKey);
 
@@ -406,7 +423,7 @@ public class SegmentsEntryLocalServiceImpl
 		return segmentsEntries;
 	}
 
-	protected void validate(
+	protected void validateKey(
 			long segmentsEntryId, long groupId, String segmentsEntryKey)
 		throws PortalException {
 
@@ -417,6 +434,17 @@ public class SegmentsEntryLocalServiceImpl
 			(segmentsEntry.getSegmentsEntryId() != segmentsEntryId)) {
 
 			throw new SegmentsEntryKeyException();
+		}
+	}
+
+	protected void validateName(long groupId, Map<Locale, String> nameMap)
+		throws PortalException {
+
+		Locale defaultLocale = PortalUtil.getSiteDefaultLocale(groupId);
+
+		if (nameMap.isEmpty() || Validator.isNull(nameMap.get(defaultLocale))) {
+			throw new SegmentsEntryNameException(
+				"Name is null for locale " + defaultLocale.getDisplayName());
 		}
 	}
 

@@ -20,10 +20,11 @@ import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.document.library.kernel.service.DLAppServiceWrapper;
 import com.liferay.document.library.kernel.util.DLValidator;
 import com.liferay.document.library.opener.constants.DLOpenerFileEntryReferenceConstants;
+import com.liferay.document.library.opener.constants.DLOpenerMimeTypes;
 import com.liferay.document.library.opener.google.drive.DLOpenerGoogleDriveFileReference;
 import com.liferay.document.library.opener.google.drive.DLOpenerGoogleDriveManager;
-import com.liferay.document.library.opener.google.drive.constants.DLOpenerGoogleDriveMimeTypes;
 import com.liferay.document.library.opener.google.drive.upload.UniqueFileEntryTitleProvider;
+import com.liferay.document.library.opener.google.drive.web.internal.constants.DLOpenerGoogleDriveConstants;
 import com.liferay.document.library.opener.model.DLOpenerFileEntryReference;
 import com.liferay.document.library.opener.service.DLOpenerFileEntryReferenceLocalService;
 import com.liferay.petra.string.StringPool;
@@ -71,7 +72,10 @@ public class DLOpenerGoogleDriveDLAppServiceWrapper
 
 			DLOpenerFileEntryReference dlOpenerFileEntryReference =
 				_dlOpenerFileEntryReferenceLocalService.
-					getDLOpenerFileEntryReference(fileEntry);
+					getDLOpenerFileEntryReference(
+						DLOpenerGoogleDriveConstants.
+							GOOGLE_DRIVE_REFERENCE_TYPE,
+						fileEntry);
 
 			_dlOpenerGoogleDriveManager.delete(_getUserId(), fileEntry);
 
@@ -108,7 +112,9 @@ public class DLOpenerGoogleDriveDLAppServiceWrapper
 
 		DLOpenerFileEntryReference dlOpenerFileEntryReference =
 			_dlOpenerFileEntryReferenceLocalService.
-				fetchDLOpenerFileEntryReference(fileEntry);
+				fetchDLOpenerFileEntryReference(
+					DLOpenerGoogleDriveConstants.GOOGLE_DRIVE_REFERENCE_TYPE,
+					fileEntry);
 
 		if (dlOpenerFileEntryReference.getType() ==
 				DLOpenerFileEntryReferenceConstants.TYPE_NEW) {
@@ -173,7 +179,7 @@ public class DLOpenerGoogleDriveDLAppServiceWrapper
 		try {
 			String sourceFileName = title;
 
-			sourceFileName += DLOpenerGoogleDriveMimeTypes.getMimeTypeExtension(
+			sourceFileName += DLOpenerMimeTypes.getMimeTypeExtension(
 				fileEntry.getMimeType());
 
 			updateFileEntry(
@@ -183,13 +189,11 @@ public class DLOpenerGoogleDriveDLAppServiceWrapper
 				serviceContext);
 		}
 		finally {
-			if (file != null) {
-				if (!file.delete()) {
-					if (_log.isDebugEnabled()) {
-						_log.debug(
-							"Unable to delete temporary file " +
-								file.getAbsolutePath());
-					}
+			if ((file != null) && !file.delete()) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(
+						"Unable to delete temporary file " +
+							file.getAbsolutePath());
 				}
 			}
 		}

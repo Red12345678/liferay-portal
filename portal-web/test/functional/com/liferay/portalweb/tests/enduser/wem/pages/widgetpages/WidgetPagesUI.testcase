@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Pages Administration";
@@ -75,4 +76,23 @@ definition {
 			pageName = "Site Child Page",
 			privacy = "Public Pages");
 	}
+
+	@priority = "5"
+	test AddThenDeleteWidgetFromPage {
+		property portal.acceptance = "true";
+		property testray.component.names = "Web Content Display,Training";
+
+		JSONLayout.addPublicLayout(
+			groupName = "Test Site Name",
+			layoutName = "Site Page");
+
+		Navigator.gotoSitePage(
+			pageName = "Site Page",
+			siteName = "Test Site Name");
+
+		Portlet.addPG(portletName = "Web Content Display");
+
+		Portlet.deletePG(portletName = "Web Content Display");
+	}
+
 }

@@ -77,28 +77,16 @@ if (fileEntryTypeId >= 0) {
 	dlFileEntryType = DLFileEntryTypeLocalServiceUtil.getFileEntryType(fileEntryTypeId);
 }
 
-DLVersionNumberIncrease dlVersionNumberIncrease = DLVersionNumberIncrease.valueOf(ParamUtil.getString(request, "versionIncrease"), DLVersionNumberIncrease.AUTOMATIC);
+DLVersionNumberIncrease dlVersionNumberIncrease = DLVersionNumberIncrease.valueOf(request.getParameter("versionIncrease"), DLVersionNumberIncrease.AUTOMATIC);
 boolean updateVersionDetails = ParamUtil.getBoolean(request, "updateVersionDetails");
 
-long assetClassPK = 0;
-
-if ((fileVersion != null) && !fileVersion.isApproved() && Validator.isNotNull(fileVersion.getVersion()) && !fileVersion.getVersion().equals(DLFileEntryConstants.VERSION_DEFAULT)) {
-	assetClassPK = fileVersion.getFileVersionId();
-}
-else if (fileEntry != null) {
-	assetClassPK = fileEntry.getFileEntryId();
-}
+long assetClassPK = DLAssetHelperUtil.getAssetClassPK(fileEntry, fileVersion);
 
 boolean checkedOut = false;
-boolean hasLock = false;
 boolean pending = false;
-
-com.liferay.portal.kernel.lock.Lock lock = null;
 
 if (fileEntry != null) {
 	checkedOut = fileEntry.isCheckedOut();
-	hasLock = fileEntry.hasLock();
-	lock = fileEntry.getLock();
 	pending = fileVersion.isPending();
 }
 
@@ -155,6 +143,13 @@ if (portletTitleBasedNavigation) {
 
 <div <%= portletTitleBasedNavigation ? "class=\"container-fluid-1280\"" : StringPool.BLANK %>>
 	<c:if test="<%= checkedOut %>">
+
+		<%
+		boolean hasLock = fileEntry.hasLock();
+
+		Lock lock = fileEntry.getLock();
+		%>
+
 		<c:choose>
 			<c:when test="<%= hasLock %>">
 				<div class="alert alert-success">
@@ -461,6 +456,7 @@ if (portletTitleBasedNavigation) {
 					<liferay-asset:select-asset-display-page
 						classNameId="<%= PortalUtil.getClassNameId(DLFileEntry.class) %>"
 						classPK="<%= (fileEntry != null) ? fileEntry.getFileEntryId() : 0 %>"
+						classTypeId="<%= fileEntryTypeId %>"
 						groupId="<%= scopeGroupId %>"
 						showPortletLayouts="<%= true %>"
 						showViewInContextLink="<%= true %>"
@@ -552,7 +548,12 @@ if (portletTitleBasedNavigation) {
 </div>
 
 <c:if test="<%= (fileEntry != null) && checkedOut && dlAdminDisplayContext.isVersioningStrategyOverridable() %>">
-	<%@ include file="/document_library/version_details.jspf" %>
+
+	<%
+	request.setAttribute("edit_file_entry.jsp-checkedOut", checkedOut);
+	%>
+
+	<liferay-util:include page="/document_library/version_details.jsp" servletContext="<%= application %>" />
 </c:if>
 
 <script>

@@ -38,6 +38,12 @@ public interface PropsKeys {
 
 	public static final String ADMIN_EMAIL_FROM_NAME = "admin.email.from.name";
 
+	public static final String ADMIN_EMAIL_PASSWORD_CHANGED_BODY =
+		"admin.email.password.changed.body";
+
+	public static final String ADMIN_EMAIL_PASSWORD_CHANGED_SUBJECT =
+		"admin.email.password.changed.subject";
+
 	public static final String ADMIN_EMAIL_PASSWORD_RESET_BODY =
 		"admin.email.password.reset.body";
 
@@ -58,6 +64,9 @@ public interface PropsKeys {
 
 	public static final String ADMIN_EMAIL_USER_ADDED_NO_PASSWORD_BODY =
 		"admin.email.user.added.no.password.body";
+
+	public static final String ADMIN_EMAIL_USER_ADDED_RESET_PASSWORD_BODY =
+		"admin.email.user.added.reset.password.body";
 
 	public static final String ADMIN_EMAIL_USER_ADDED_SUBJECT =
 		"admin.email.user.added.subject";
@@ -325,9 +334,17 @@ public interface PropsKeys {
 		BLOGS_ENTRY_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED =
 			"blogs.entry.previous.and.next.navigation.enabled";
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String BLOGS_IMAGE_EXTENSIONS =
 		"blogs.image.extensions";
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String BLOGS_IMAGE_MAX_SIZE = "blogs.image.max.size";
 
 	public static final String BLOGS_LINKBACK_EXCERPT_LENGTH =
@@ -377,6 +394,10 @@ public interface PropsKeys {
 	public static final String BUFFERED_INCREMENT_THREADPOOL_MAX_SIZE =
 		"buffered.increment.threadpool.max.size";
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String CACHE_CLEAR_ON_CONTEXT_INITIALIZATION =
 		"cache.clear.on.context.initialization";
 
@@ -1657,6 +1678,10 @@ public interface PropsKeys {
 	public static final String JSONWS_WEB_SERVICE_INVALID_HTTP_METHODS =
 		"jsonws.web.service.invalid.http.methods";
 
+	public static final String
+		JSONWS_WEB_SERVICE_PARAMETER_TYPE_WHITELIST_CLASS_NAMES =
+			"jsonws.web.service.parameter.type.whitelist.class.names";
+
 	public static final String JSONWS_WEB_SERVICE_PATHS_EXCLUDES =
 		"jsonws.web.service.paths.excludes";
 
@@ -1855,6 +1880,10 @@ public interface PropsKeys {
 	public static final String LIFERAY_WEB_PORTAL_DIR =
 		"liferay.web.portal.dir";
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String LIVE_USERS_ENABLED = "live.users.enabled";
 
 	public static final String LOCALE_DEFAULT_REQUEST =
@@ -2259,6 +2288,10 @@ public interface PropsKeys {
 	public static final String
 		MODULE_FRAMEWORK_WEB_GENERATOR_JSP_COMPILER_DEPENDENCIES =
 			"module.framework.web.generator.jsp.compiler.dependencies";
+
+	public static final String
+		MODULE_FRAMEWORK_WEB_SERVLET_ANNOTATION_SCANNING_BLACKLIST =
+			"module.framework.web.servlet.annotation.scanning.blacklist";
 
 	public static final String MULTI_VALUE_MAP = "multi.value.map.";
 
@@ -3103,15 +3136,31 @@ public interface PropsKeys {
 	public static final String SESSION_TIMEOUT_WARNING =
 		"session.timeout.warning";
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String SESSION_TRACKER_FRIENDLY_PATHS_ENABLED =
 		"session.tracker.friendly.paths.enabled";
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String SESSION_TRACKER_IGNORE_PATHS =
 		"session.tracker.ignore.paths";
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String SESSION_TRACKER_MEMORY_ENABLED =
 		"session.tracker.memory.enabled";
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final String SESSION_TRACKER_PERSISTENCE_ENABLED =
 		"session.tracker.persistence.enabled";
 
@@ -3322,6 +3371,8 @@ public interface PropsKeys {
 	@Deprecated
 	public static final String SPRING_PORTLET_CONFIGS =
 		"spring.portlet.configs";
+
+	public static final String SPRITE_ENABLED = "sprite.enabled";
 
 	public static final String SPRITE_FILE_NAME = "sprite.file.name";
 

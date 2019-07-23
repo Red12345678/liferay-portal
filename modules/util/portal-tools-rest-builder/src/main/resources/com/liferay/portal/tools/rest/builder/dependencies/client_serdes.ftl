@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -206,7 +205,9 @@ public class ${schemaName}SerDes {
 	private static String _escape(Object object) {
 		String string = String.valueOf(object);
 
-		return string.replaceAll("\"", "\\\\\"");
+		string = string.replace("\\", "\\\\");
+
+		return string.replace("\"", "\\\"");
 	}
 
 	private static String _toJSON(Map<String, ?> map) {
@@ -273,6 +274,8 @@ public class ${schemaName}SerDes {
 							toDate((String)jsonParserFieldValue)
 						<#elseif stringUtil.equals(propertyType, "Date[]")>
 							toDates((Object[])jsonParserFieldValue)
+						<#elseif stringUtil.equals(propertyType, "Double")>
+							Double.valueOf((String)jsonParserFieldValue)
 						<#elseif stringUtil.equals(propertyType, "Integer")>
 							Integer.valueOf((String)jsonParserFieldValue)
 						<#elseif stringUtil.equals(propertyType, "Integer[]")>
@@ -282,7 +285,7 @@ public class ${schemaName}SerDes {
 						<#elseif stringUtil.equals(propertyType, "Long[]")>
 							toLongs((Object[])jsonParserFieldValue)
 						<#elseif stringUtil.startsWith(propertyType, "Map<")>
-							${schemaName}SerDes.toMap((String)jsonParserFieldValue)
+							(Map)${schemaName}SerDes.toMap((String)jsonParserFieldValue)
 						<#elseif stringUtil.equals(propertyType, "Number")>
 							Integer.valueOf((String)jsonParserFieldValue)
 						<#elseif stringUtil.equals(propertyType, "Number[]")>

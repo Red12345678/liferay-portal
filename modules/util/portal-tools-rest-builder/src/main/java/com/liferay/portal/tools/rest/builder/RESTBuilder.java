@@ -193,7 +193,7 @@ public class RESTBuilder {
 				Schema schema = entry.getValue();
 				String schemaName = entry.getKey();
 
-				_putSchema(context, schema, schemaName);
+				_putSchema(context, schema, schemaName, new HashSet<>());
 
 				_createDTOFile(context, escapedVersion, schemaName);
 
@@ -207,7 +207,8 @@ public class RESTBuilder {
 			for (Map.Entry<String, Schema> entry :
 					globalEnumSchemas.entrySet()) {
 
-				_putSchema(context, entry.getValue(), entry.getKey());
+				_putSchema(
+					context, entry.getValue(), entry.getKey(), new HashSet<>());
 
 				_createEnumFile(context, escapedVersion, entry.getKey());
 
@@ -232,7 +233,9 @@ public class RESTBuilder {
 
 				Schema schema = entry.getValue();
 
-				_putSchema(context, schema, schemaName);
+				_putSchema(
+					context, schema, schemaName,
+					_getRelatedSchemaNames(allSchemas, javaMethodSignatures));
 
 				_createBaseResourceImplFile(
 					context, escapedVersion, schemaName);
@@ -248,8 +251,11 @@ public class RESTBuilder {
 				}
 
 				if (Validator.isNotNull(_configYAML.getTestDir())) {
+					_createBaseGraphQLTestCaseFile(
+						context, escapedVersion, schemaName);
 					_createBaseResourceTestCaseFile(
 						context, escapedVersion, schemaName);
+					_createGraphQLTestFile(context, escapedVersion, schemaName);
 					_createResourceTestFile(
 						context, escapedVersion, schemaName);
 				}
@@ -327,6 +333,36 @@ public class RESTBuilder {
 			file,
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "application", context));
+	}
+
+	private void _createBaseGraphQLTestCaseFile(
+			Map<String, Object> context, String escapedVersion,
+			String schemaName)
+		throws Exception {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(_configYAML.getTestDir());
+		sb.append("/");
+
+		String apiPackagePath = _configYAML.getApiPackagePath();
+
+		sb.append(apiPackagePath.replace('.', '/'));
+
+		sb.append("/graphql/");
+		sb.append(escapedVersion);
+		sb.append("/test/Base");
+		sb.append(schemaName);
+		sb.append("GraphQLTestCase.java");
+
+		File file = new File(sb.toString());
+
+		_files.add(file);
+
+		FileUtil.write(
+			file,
+			FreeMarkerUtil.processTemplate(
+				_copyrightFile, "base_graphql_test_case", context));
 	}
 
 	private void _createBaseResourceImplFile(
@@ -766,6 +802,40 @@ public class RESTBuilder {
 			file,
 			FreeMarkerUtil.processTemplate(
 				_copyrightFile, "graphql_servlet_data", context));
+	}
+
+	private void _createGraphQLTestFile(
+			Map<String, Object> context, String escapedVersion,
+			String schemaName)
+		throws Exception {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(_configYAML.getTestDir());
+		sb.append("/");
+
+		String apiPackagePath = _configYAML.getApiPackagePath();
+
+		sb.append(apiPackagePath.replace('.', '/'));
+
+		sb.append("/graphql/");
+		sb.append(escapedVersion);
+		sb.append("/test/");
+		sb.append(schemaName);
+		sb.append("GraphQLTest.java");
+
+		File file = new File(sb.toString());
+
+		_files.add(file);
+
+		if (file.exists()) {
+			return;
+		}
+
+		FileUtil.write(
+			file,
+			FreeMarkerUtil.processTemplate(
+				_copyrightFile, "graphql_test", context));
 	}
 
 	private void _createOpenAPIResourceFile(
@@ -1322,8 +1392,34 @@ public class RESTBuilder {
 		return operations;
 	}
 
+	private Set<String> _getRelatedSchemaNames(
+		Map<String, Schema> schemas,
+		List<JavaMethodSignature> javaMethodSignatures) {
+
+		Set<String> relatedSchemaNames = new HashSet<>();
+
+		for (JavaMethodSignature javaMethodSignature : javaMethodSignatures) {
+			String returnType = javaMethodSignature.getReturnType();
+
+			String[] returnTypeParts = returnType.split("\\.");
+
+			if (returnTypeParts.length > 0) {
+				String string = returnTypeParts[returnTypeParts.length - 1];
+
+				if (!string.equals(javaMethodSignature.getSchemaName()) &&
+					schemas.containsKey(string)) {
+
+					relatedSchemaNames.add(string);
+				}
+			}
+		}
+
+		return relatedSchemaNames;
+	}
+
 	private void _putSchema(
-		Map<String, Object> context, Schema schema, String schemaName) {
+		Map<String, Object> context, Schema schema, String schemaName,
+		Set<String> relatedSchemaNames) {
 
 		context.put("schema", schema);
 		context.put("schemaName", schemaName);
@@ -1336,10 +1432,12 @@ public class RESTBuilder {
 		context.put("schemaVarName", schemaVarName);
 		context.put(
 			"schemaVarNames", TextFormatter.formatPlural(schemaVarName));
+
+		context.put("relatedSchemaNames", relatedSchemaNames);
 	}
 
-	private void _validate(String s) {
-		OpenAPIYAML openAPIYAML = YAMLUtil.loadOpenAPIYAML(s);
+	private void _validate(String string) {
+		OpenAPIYAML openAPIYAML = YAMLUtil.loadOpenAPIYAML(string);
 
 		Components components = openAPIYAML.getComponents();
 
@@ -1360,6 +1458,7 @@ public class RESTBuilder {
 				Schema propertySchema = entry2.getValue();
 
 				if (Objects.equals(propertySchema.getType(), "number") &&
+					!Objects.equals(propertySchema.getFormat(), "bigdecimal") &&
 					!Objects.equals(propertySchema.getFormat(), "double") &&
 					!Objects.equals(propertySchema.getFormat(), "float")) {
 

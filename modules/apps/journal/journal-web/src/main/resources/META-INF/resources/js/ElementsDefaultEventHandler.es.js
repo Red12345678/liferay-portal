@@ -1,9 +1,23 @@
-import DefaultEventHandler from 'frontend-js-web/liferay/DefaultEventHandler.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import {DefaultEventHandler} from 'frontend-js-web';
 import {Config} from 'metal-state';
 
 class ElementsDefaultEventHandler extends DefaultEventHandler {
 	compareVersions(itemData) {
-		let namespace = this.namespace;
+		const namespace = this.namespace;
 
 		Liferay.Util.selectEntity(
 			{
@@ -20,8 +34,14 @@ class ElementsDefaultEventHandler extends DefaultEventHandler {
 			function(event) {
 				let uri = itemData.redirectURL;
 
-				uri = Liferay.Util.addParams(namespace + 'sourceVersion=' + event.sourceversion, uri);
-				uri = Liferay.Util.addParams(namespace + 'targetVersion=' + event.targetversion, uri);
+				uri = Liferay.Util.addParams(
+					namespace + 'sourceVersion=' + event.sourceversion,
+					uri
+				);
+				uri = Liferay.Util.addParams(
+					namespace + 'targetVersion=' + event.targetversion,
+					uri
+				);
 
 				location.href = uri;
 			}
@@ -33,10 +53,14 @@ class ElementsDefaultEventHandler extends DefaultEventHandler {
 	}
 
 	delete(itemData) {
-		let message = Liferay.Language.get('are-you-sure-you-want-to-delete-this');
+		let message = Liferay.Language.get(
+			'are-you-sure-you-want-to-delete-this'
+		);
 
 		if (this.trashEnabled) {
-			message = Liferay.Language.get('are-you-sure-you-want-to-move-this-to-the-recycle-bin');
+			message = Liferay.Language.get(
+				'are-you-sure-you-want-to-move-this-to-the-recycle-bin'
+			);
 		}
 
 		if (confirm(message)) {
@@ -49,33 +73,41 @@ class ElementsDefaultEventHandler extends DefaultEventHandler {
 	}
 
 	permissions(itemData) {
-		Liferay.Util.openWindow(
-			{
-				dialog: {
-					destroyOnHide: true,
-					modal: true
-				},
-				dialogIframe: {
-					bodyCssClass: 'dialog-with-footer'
-				},
-				title: Liferay.Language.get('permissions'),
-				uri: itemData.permissionsURL
-			}
-		);
+		Liferay.Util.openWindow({
+			dialog: {
+				destroyOnHide: true,
+				modal: true
+			},
+			dialogIframe: {
+				bodyCssClass: 'dialog-with-footer'
+			},
+			title: Liferay.Language.get('permissions'),
+			uri: itemData.permissionsURL
+		});
 	}
 
 	preview(itemData) {
-		Liferay.fire(
-			'previewArticle',
-			{
-				title: itemData.title,
-				uri: itemData.previewURL
-			}
-		);
+		Liferay.Util.openWindow({
+			dialog: {
+				destroyOnHide: true,
+				modal: true
+			},
+			dialogIframe: {
+				bodyCssClass: 'dialog-with-footer'
+			},
+			title: itemData.title,
+			uri: itemData.previewURL
+		});
 	}
 
 	publishToLive(itemData) {
-		if (confirm(Liferay.Language.get('are-you-sure-you-want-to-publish-the-selected-web-content'))) {
+		if (
+			confirm(
+				Liferay.Language.get(
+					'are-you-sure-you-want-to-publish-the-selected-web-content'
+				)
+			)
+		) {
 			this._send(itemData.publishArticleURL);
 		}
 	}

@@ -184,6 +184,12 @@ public class DDLRecordSetLocalServiceUtil {
 		return getService().deleteDDLRecordSet(recordSetId);
 	}
 
+	public static void deleteDDMStructureRecordSets(long ddmStructureId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		getService().deleteDDMStructureRecordSets(ddmStructureId);
+	}
+
 	/**
 	 * @throws PortalException
 	 */
@@ -477,6 +483,13 @@ public class DDLRecordSetLocalServiceUtil {
 	 */
 	public static int getDDLRecordSetsCount() {
 		return getService().getDDLRecordSetsCount();
+	}
+
+	public static java.util.List
+		<com.liferay.dynamic.data.lists.model.DDLRecordSet>
+			getDDMStructureRecordSets(long ddmStructureId) {
+
+		return getService().getDDMStructureRecordSets(ddmStructureId);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery

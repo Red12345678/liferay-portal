@@ -55,7 +55,7 @@ GroupSearch groupSearch = siteItemSelectorViewDisplayContext.getGroupSearch();
 		>
 
 			<%
-			List<Group> childGroups = group.getChildren(true);
+			List<Group> childGroups = GroupServiceUtil.getGroups(group.getCompanyId(), group.getGroupId(), true);
 
 			Map<String, Object> data = new HashMap<String, Object>();
 
@@ -133,11 +133,11 @@ GroupSearch groupSearch = siteItemSelectorViewDisplayContext.getGroupSearch();
 											<div class="autofit-col autofit-col-expand">
 												<div class="card-title text-truncate">
 													<div class="row">
-														<h5 class="col text-truncate">
+														<p class="col font-weight-bold h5 text-truncate">
 															<aui:a cssClass="selector-button" data="<%= data %>" href="javascript:;">
 																<%= siteVerticalCard.getTitle() %>
 															</aui:a>
-														</h5>
+														</p>
 
 														<aui:a cssClass="col-auto" href="<%= siteVerticalCard.getHref() %>" target="_blank" />
 													</div>
@@ -170,11 +170,11 @@ GroupSearch groupSearch = siteItemSelectorViewDisplayContext.getGroupSearch();
 											<div class="autofit-col autofit-col-expand">
 												<div class="card-title text-truncate">
 													<div class="row">
-														<h5 class="col text-truncate">
+														<p class="col font-weight-bold h5 text-truncate">
 															<aui:a cssClass="selector-button" data="<%= data %>" href="javascript:;">
 																<%= siteVerticalCard.getTitle() %>
 															</aui:a>
-														</h5>
+														</p>
 
 														<aui:a cssClass="col-auto" href="<%= siteVerticalCard.getHref() %>" target="_blank" />
 													</div>

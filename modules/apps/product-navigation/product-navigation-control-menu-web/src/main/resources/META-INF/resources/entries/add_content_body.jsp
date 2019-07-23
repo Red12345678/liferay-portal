@@ -41,18 +41,14 @@
 	</div>
 
 	<aui:script use="liferay-store,io-request,parse-content">
-		var addToggle = $('#<%= portletNamespace %>addToggleId');
+		var addToggle = document.getElementById('<%= portletNamespace %>addToggleId');
 
-		addToggle.sideNavigation();
+		Liferay.SideNavigation.initialize(addToggle);
 
 		Liferay.once(
 			'screenLoad',
 			function() {
-				var sideNavigation = addToggle.data('lexicon.sidenav');
-
-				if (sideNavigation) {
-					sideNavigation.destroy();
-				}
+				Liferay.SideNavigation.destroy(addToggle);
 			}
 		);
 	</aui:script>

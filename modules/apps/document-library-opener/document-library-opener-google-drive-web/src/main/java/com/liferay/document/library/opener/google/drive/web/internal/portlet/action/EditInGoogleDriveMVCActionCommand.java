@@ -17,11 +17,10 @@ package com.liferay.document.library.opener.google.drive.web.internal.portlet.ac
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
 import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.document.library.opener.constants.DLOpenerMimeTypes;
 import com.liferay.document.library.opener.google.drive.DLOpenerGoogleDriveFileReference;
 import com.liferay.document.library.opener.google.drive.DLOpenerGoogleDriveManager;
-import com.liferay.document.library.opener.google.drive.constants.DLOpenerGoogleDriveMimeTypes;
 import com.liferay.document.library.opener.google.drive.upload.UniqueFileEntryTitleProvider;
-import com.liferay.document.library.opener.google.drive.web.internal.constants.DLOpenerGoogleDriveWebConstants;
 import com.liferay.document.library.opener.google.drive.web.internal.constants.DLOpenerGoogleDriveWebKeys;
 import com.liferay.document.library.opener.google.drive.web.internal.util.GoogleDrivePortletRequestAuthorizationHelper;
 import com.liferay.petra.string.StringPool;
@@ -124,14 +123,14 @@ public class EditInGoogleDriveMVCActionCommand extends BaseMVCActionCommand {
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
-		if (cmd.equals(DLOpenerGoogleDriveWebConstants.GOOGLE_DRIVE_ADD)) {
+		if (cmd.equals(Constants.ADD)) {
 			try {
 				long repositoryId = ParamUtil.getLong(
 					actionRequest, "repositoryId");
 				long folderId = ParamUtil.getLong(actionRequest, "folderId");
 				String contentType = ParamUtil.getString(
 					actionRequest, "contentType",
-					DLOpenerGoogleDriveMimeTypes.APPLICATION_VND_DOCX);
+					DLOpenerMimeTypes.APPLICATION_VND_DOCX);
 
 				ServiceContext serviceContext =
 					ServiceContextFactory.getInstance(actionRequest);
@@ -153,18 +152,13 @@ public class EditInGoogleDriveMVCActionCommand extends BaseMVCActionCommand {
 				throw new PortalException(throwable);
 			}
 		}
-		else if (cmd.equals(
-					DLOpenerGoogleDriveWebConstants.
-						GOOGLE_DRIVE_CANCEL_CHECKOUT)) {
-
+		else if (cmd.equals(Constants.CANCEL_CHECKOUT)) {
 			_dlAppService.cancelCheckOut(fileEntryId);
 		}
-		else if (cmd.equals(
-					DLOpenerGoogleDriveWebConstants.GOOGLE_DRIVE_CHECKIN)) {
-
+		else if (cmd.equals(Constants.CHECKIN)) {
 			DLVersionNumberIncrease dlVersionNumberIncrease =
 				DLVersionNumberIncrease.valueOf(
-					ParamUtil.getString(actionRequest, "versionIncrease"),
+					actionRequest.getParameter("versionIncrease"),
 					DLVersionNumberIncrease.AUTOMATIC);
 
 			String changeLog = ParamUtil.getString(actionRequest, "changeLog");
@@ -176,9 +170,7 @@ public class EditInGoogleDriveMVCActionCommand extends BaseMVCActionCommand {
 				fileEntryId, dlVersionNumberIncrease, changeLog,
 				serviceContext);
 		}
-		else if (cmd.equals(
-					DLOpenerGoogleDriveWebConstants.GOOGLE_DRIVE_CHECKOUT)) {
-
+		else if (cmd.equals(Constants.CHECKOUT)) {
 			try {
 				ServiceContext serviceContext =
 					ServiceContextFactory.getInstance(actionRequest);
@@ -199,9 +191,7 @@ public class EditInGoogleDriveMVCActionCommand extends BaseMVCActionCommand {
 				throw new PortalException(throwable);
 			}
 		}
-		else if (cmd.equals(
-					DLOpenerGoogleDriveWebConstants.GOOGLE_DRIVE_EDIT)) {
-
+		else if (cmd.equals(Constants.EDIT)) {
 			ThemeDisplay themeDisplay =
 				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 

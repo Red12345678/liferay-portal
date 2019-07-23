@@ -325,6 +325,8 @@ public class LayoutsAdminDisplayContext {
 			"stagingGroupId", String.valueOf(getStagingGroupId()));
 		copyLayoutURL.setParameter(
 			"privateLayout", String.valueOf(isPrivateLayout()));
+		copyLayoutURL.setParameter(
+			"explicitCreation", String.valueOf(Boolean.TRUE));
 
 		return copyLayoutURL.toString();
 	}

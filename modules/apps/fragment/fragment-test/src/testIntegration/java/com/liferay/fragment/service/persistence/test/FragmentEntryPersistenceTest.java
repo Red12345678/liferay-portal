@@ -150,6 +150,8 @@ public class FragmentEntryPersistenceTest {
 
 		newFragmentEntry.setJs(RandomTestUtil.randomString());
 
+		newFragmentEntry.setConfiguration(RandomTestUtil.randomString());
+
 		newFragmentEntry.setPreviewFileEntryId(RandomTestUtil.nextLong());
 
 		newFragmentEntry.setType(RandomTestUtil.nextInt());
@@ -204,6 +206,9 @@ public class FragmentEntryPersistenceTest {
 			existingFragmentEntry.getHtml(), newFragmentEntry.getHtml());
 		Assert.assertEquals(
 			existingFragmentEntry.getJs(), newFragmentEntry.getJs());
+		Assert.assertEquals(
+			existingFragmentEntry.getConfiguration(),
+			newFragmentEntry.getConfiguration());
 		Assert.assertEquals(
 			existingFragmentEntry.getPreviewFileEntryId(),
 			newFragmentEntry.getPreviewFileEntryId());
@@ -365,10 +370,10 @@ public class FragmentEntryPersistenceTest {
 			"FragmentEntry", "uuid", true, "fragmentEntryId", true, "groupId",
 			true, "companyId", true, "userId", true, "userName", true,
 			"createDate", true, "modifiedDate", true, "fragmentCollectionId",
-			true, "fragmentEntryKey", true, "name", true, "css", true, "html",
-			true, "js", true, "previewFileEntryId", true, "type", true,
-			"lastPublishDate", true, "status", true, "statusByUserId", true,
-			"statusByUserName", true, "statusDate", true);
+			true, "fragmentEntryKey", true, "name", true, "previewFileEntryId",
+			true, "type", true, "lastPublishDate", true, "status", true,
+			"statusByUserId", true, "statusByUserName", true, "statusDate",
+			true);
 	}
 
 	@Test
@@ -646,6 +651,8 @@ public class FragmentEntryPersistenceTest {
 		fragmentEntry.setHtml(RandomTestUtil.randomString());
 
 		fragmentEntry.setJs(RandomTestUtil.randomString());
+
+		fragmentEntry.setConfiguration(RandomTestUtil.randomString());
 
 		fragmentEntry.setPreviewFileEntryId(RandomTestUtil.nextLong());
 

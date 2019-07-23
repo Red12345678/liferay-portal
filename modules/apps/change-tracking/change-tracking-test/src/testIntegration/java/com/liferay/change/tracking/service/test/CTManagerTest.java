@@ -15,10 +15,10 @@
 package com.liferay.change.tracking.service.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-import com.liferay.change.tracking.configuration.CTConfiguration;
-import com.liferay.change.tracking.configuration.CTConfigurationRegistrar;
-import com.liferay.change.tracking.configuration.builder.CTConfigurationBuilder;
 import com.liferay.change.tracking.constants.CTConstants;
+import com.liferay.change.tracking.definition.CTDefinition;
+import com.liferay.change.tracking.definition.CTDefinitionRegistrar;
+import com.liferay.change.tracking.definition.builder.CTDefinitionBuilder;
 import com.liferay.change.tracking.engine.CTEngineManager;
 import com.liferay.change.tracking.engine.CTManager;
 import com.liferay.change.tracking.model.CTCollection;
@@ -80,7 +80,7 @@ public class CTManagerTest {
 		_testVersionClassClassName = _classNameLocalService.addClassName(
 			Object.class.getName());
 
-		_ctConfiguration = _ctConfigurationBuilder.setContentType(
+		_ctDefinition = _ctDefinitionBuilder.setContentType(
 			"Test Object"
 		).setContentTypeLanguageKey(
 			"test-object"
@@ -108,13 +108,13 @@ public class CTManagerTest {
 			testVersion -> WorkflowConstants.STATUS_APPROVED
 		).build();
 
-		_ctConfigurationRegistrar.register(_ctConfiguration);
+		_ctDefinitionRegistrar.register(_ctDefinition);
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		if (_ctConfiguration != null) {
-			_ctConfigurationRegistrar.unregister(_ctConfiguration);
+		if (_ctDefinition != null) {
+			_ctDefinitionRegistrar.unregister(_ctDefinition);
 		}
 
 		_ctEngineManager.disableChangeTracking(TestPropsValues.getCompanyId());
@@ -122,32 +122,29 @@ public class CTManagerTest {
 
 	@Test
 	public void testAddRelatedEntryWhenDifferentResource() throws Exception {
-		Optional<CTCollection> ctCollectionOptional =
-			_ctManager.getActiveCTCollectionOptional(
-				TestPropsValues.getCompanyId(), _user.getUserId());
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
 
-		Assert.assertTrue(ctCollectionOptional.isPresent());
-
-		long ctCollectionId = ctCollectionOptional.map(
-			CTCollection::getCtCollectionId
-		).get();
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
 
 		CTEntry ownerCTEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		CTEntryAggregate ctEntryAggregate =
 			_ctEntryAggregateLocalService.fetchLatestCTEntryAggregate(
-				ctCollectionId, ownerCTEntry.getCtEntryId());
+				ctCollection.getCtCollectionId(), ownerCTEntry.getCtEntryId());
 
 		Assert.assertNull(ctEntryAggregate);
 
 		CTEntry ctEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), 1L, CTConstants.CT_CHANGE_TYPE_ADDITION,
-			ctCollectionId, new ServiceContext());
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		Optional<CTEntryAggregate> ctEntryAggregateOptionalA =
 			_ctManager.addRelatedCTEntry(
@@ -171,7 +168,7 @@ public class CTManagerTest {
 		ctEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), 2L, CTConstants.CT_CHANGE_TYPE_ADDITION,
-			ctCollectionId, new ServiceContext());
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		Optional<CTEntryAggregate> ctEntryAggregateOptionalB =
 			_ctManager.addRelatedCTEntry(
@@ -199,14 +196,18 @@ public class CTManagerTest {
 	@Test
 	public void testAddRelatedEntryWhenSameResource() throws Exception {
 		Optional<CTCollection> ctCollectionOptional =
-			_ctManager.getActiveCTCollectionOptional(
-				TestPropsValues.getCompanyId(), _user.getUserId());
+			_ctEngineManager.createCTCollection(
+				_user.getUserId(), RandomTestUtil.randomString(),
+				RandomTestUtil.randomString());
 
 		Assert.assertTrue(ctCollectionOptional.isPresent());
 
 		long ctCollectionId = ctCollectionOptional.map(
 			CTCollection::getCtCollectionId
 		).get();
+
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollectionId);
 
 		CTEntry ownerCTEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
@@ -276,26 +277,23 @@ public class CTManagerTest {
 
 	@Test
 	public void testGetCTEntryAggregateOptional() throws Exception {
-		Optional<CTCollection> ctCollectionOptional =
-			_ctManager.getActiveCTCollectionOptional(
-				TestPropsValues.getCompanyId(), _user.getUserId());
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
 
-		Assert.assertTrue(ctCollectionOptional.isPresent());
-
-		long ctCollectionId = ctCollectionOptional.map(
-			CTCollection::getCtCollectionId
-		).get();
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
 
 		CTEntry ownerCTEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		CTEntry ctEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), 1L, CTConstants.CT_CHANGE_TYPE_ADDITION,
-			ctCollectionId, new ServiceContext());
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		Optional<CTEntryAggregate> ctEntryAggregateOptionalA =
 			_ctManager.addRelatedCTEntry(
@@ -305,16 +303,14 @@ public class CTManagerTest {
 		Assert.assertTrue(ctEntryAggregateOptionalA.isPresent());
 
 		Optional<CTEntryAggregate> ctEntryAggregateOptionalB =
-			_ctManager.getCTEntryAggregateOptional(
-				ctEntry, ctCollectionOptional.get());
+			_ctManager.getCTEntryAggregateOptional(ctEntry, ctCollection);
 
 		Assert.assertTrue(ctEntryAggregateOptionalB.isPresent());
 		Assert.assertEquals(
 			ctEntryAggregateOptionalA, ctEntryAggregateOptionalB);
 
 		Optional<CTEntryAggregate> ctEntryAggregateOptionalC =
-			_ctManager.getCTEntryAggregateOptional(
-				ownerCTEntry, ctCollectionOptional.get());
+			_ctManager.getCTEntryAggregateOptional(ownerCTEntry, ctCollection);
 
 		Assert.assertTrue(ctEntryAggregateOptionalC.isPresent());
 		Assert.assertEquals(
@@ -323,27 +319,24 @@ public class CTManagerTest {
 
 	@Test
 	public void testGetLatestModelChangeCTEntryOptional() throws Exception {
-		Optional<CTCollection> ctCollectionOptional =
-			_ctManager.getActiveCTCollectionOptional(
-				TestPropsValues.getCompanyId(), _user.getUserId());
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
 
-		Assert.assertTrue(ctCollectionOptional.isPresent());
-
-		long ctCollectionId = ctCollectionOptional.map(
-			CTCollection::getCtCollectionId
-		).get();
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
 
 		_ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		CTEntry ctEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		Optional<CTEntry> ctEntryOptional =
 			_ctManager.getLatestModelChangeCTEntryOptional(
@@ -359,21 +352,18 @@ public class CTManagerTest {
 	public void testGetLatestModelChangeCTEntryOptionalWhenChangeTrackingIsDisabled()
 		throws Exception {
 
-		Optional<CTCollection> ctCollectionOptional =
-			_ctManager.getActiveCTCollectionOptional(
-				TestPropsValues.getCompanyId(), _user.getUserId());
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
 
-		Assert.assertTrue(ctCollectionOptional.isPresent());
-
-		long ctCollectionId = ctCollectionOptional.map(
-			CTCollection::getCtCollectionId
-		).get();
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
 
 		_ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		_ctEngineManager.disableChangeTracking(TestPropsValues.getCompanyId());
 
@@ -395,26 +385,23 @@ public class CTManagerTest {
 
 		Assert.assertTrue("List must be empty", ListUtil.isEmpty(ctEntries));
 
-		Optional<CTCollection> ctCollectionOptional =
-			_ctManager.getActiveCTCollectionOptional(
-				TestPropsValues.getCompanyId(), _user.getUserId());
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
 
-		Assert.assertTrue(ctCollectionOptional.isPresent());
-
-		long ctCollectionId = ctCollectionOptional.map(
-			CTCollection::getCtCollectionId
-		).get();
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
 
 		_ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 		_ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		ctEntries = _ctManager.getModelChangeCTEntries(
 			TestPropsValues.getCompanyId(), _user.getUserId(),
@@ -430,21 +417,18 @@ public class CTManagerTest {
 	public void testGetModelChangeCTEntriesWhenChangeTrackingIsDisabled()
 		throws Exception {
 
-		Optional<CTCollection> ctCollectionOptional =
-			_ctManager.getActiveCTCollectionOptional(
-				TestPropsValues.getCompanyId(), _user.getUserId());
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
 
-		Assert.assertTrue(ctCollectionOptional.isPresent());
-
-		long ctCollectionId = ctCollectionOptional.map(
-			CTCollection::getCtCollectionId
-		).get();
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
 
 		_ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		_ctEngineManager.disableChangeTracking(TestPropsValues.getCompanyId());
 
@@ -457,21 +441,18 @@ public class CTManagerTest {
 
 	@Test
 	public void testGetModelChangeCTEntryOptional() throws Exception {
-		Optional<CTCollection> ctCollectionOptional =
-			_ctManager.getActiveCTCollectionOptional(
-				TestPropsValues.getCompanyId(), _user.getUserId());
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
 
-		Assert.assertTrue(ctCollectionOptional.isPresent());
-
-		long ctCollectionId = ctCollectionOptional.map(
-			CTCollection::getCtCollectionId
-		).get();
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
 
 		CTEntry originalCTEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			_TEST_VERSION_CLASS_ENTITY_ID, _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		Optional<CTEntry> ctEntryOptional =
 			_ctManager.getModelChangeCTEntryOptional(
@@ -488,21 +469,18 @@ public class CTManagerTest {
 	public void testGetModelChangeCTEntryOptionalWhenChangeTrackingIsDisabled()
 		throws PortalException {
 
-		Optional<CTCollection> ctCollectionOptional =
-			_ctManager.getActiveCTCollectionOptional(
-				TestPropsValues.getCompanyId(), _user.getUserId());
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
 
-		Assert.assertTrue(ctCollectionOptional.isPresent());
-
-		long ctCollectionId = ctCollectionOptional.map(
-			CTCollection::getCtCollectionId
-		).get();
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
 
 		_ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			_TEST_VERSION_CLASS_ENTITY_ID, _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		_ctEngineManager.disableChangeTracking(TestPropsValues.getCompanyId());
 
@@ -519,33 +497,30 @@ public class CTManagerTest {
 
 	@Test
 	public void testGetRelatedCTEntries() throws Exception {
-		Optional<CTCollection> ctCollectionOptional =
-			_ctManager.getActiveCTCollectionOptional(
-				TestPropsValues.getCompanyId(), _user.getUserId());
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
 
-		Assert.assertTrue(ctCollectionOptional.isPresent());
-
-		long ctCollectionId = ctCollectionOptional.map(
-			CTCollection::getCtCollectionId
-		).get();
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
 
 		CTEntry ownerCTEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), _TEST_RESOURCE_CLASS_ENTITY_ID,
-			CTConstants.CT_CHANGE_TYPE_ADDITION, ctCollectionId,
-			new ServiceContext());
+			CTConstants.CT_CHANGE_TYPE_ADDITION,
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		CTEntry ctEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(),
 			RandomTestUtil.nextLong(), 1L, CTConstants.CT_CHANGE_TYPE_ADDITION,
-			ctCollectionId, new ServiceContext());
+			ctCollection.getCtCollectionId(), new ServiceContext());
 
 		_ctManager.addRelatedCTEntry(
 			TestPropsValues.getCompanyId(), _user.getUserId(), ownerCTEntry,
 			ctEntry);
 
 		List<CTEntry> relatedCTEntries = _ctManager.getRelatedCTEntries(
-			ctEntry, ctCollectionOptional.get());
+			ctEntry, ctCollection);
 
 		Assert.assertTrue(ListUtil.isNotEmpty(relatedCTEntries));
 		Assert.assertEquals(
@@ -556,6 +531,13 @@ public class CTManagerTest {
 
 	@Test
 	public void testRegisterModelChange() throws PortalException {
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
+
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
+
 		Optional<CTEntry> ctEntryOptional = _ctManager.registerModelChange(
 			_user.getCompanyId(), _user.getUserId(),
 			_testVersionClassClassName.getClassNameId(),
@@ -596,6 +578,9 @@ public class CTManagerTest {
 			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
 			StringPool.BLANK, new ServiceContext());
 
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
+
 		CTEntry ctEntry = _ctEntryLocalService.addCTEntry(
 			_user.getUserId(), _testVersionClassClassName.getClassNameId(), 0L,
 			_TEST_RESOURCE_CLASS_ENTITY_ID, CTConstants.CT_CHANGE_TYPE_ADDITION,
@@ -613,18 +598,11 @@ public class CTManagerTest {
 		_ctEngineManager.checkoutCTCollection(
 			_user.getUserId(), productionCTCollection.getCtCollectionId());
 
-		Optional<CTEntry> productionCTEntryOptional =
-			_ctManager.registerModelChange(
-				_user.getCompanyId(), _user.getUserId(),
-				_testVersionClassClassName.getClassNameId(), 1L,
-				_TEST_RESOURCE_CLASS_ENTITY_ID,
-				CTConstants.CT_CHANGE_TYPE_ADDITION);
-
-		Assert.assertTrue(productionCTEntryOptional.isPresent());
-
-		CTEntry productionCTEntry = productionCTEntryOptional.get();
-
-		Assert.assertFalse(productionCTEntry.isCollision());
+		_ctManager.registerModelChange(
+			_user.getCompanyId(), _user.getUserId(),
+			_testVersionClassClassName.getClassNameId(), 1L,
+			_TEST_RESOURCE_CLASS_ENTITY_ID,
+			CTConstants.CT_CHANGE_TYPE_MODIFICATION);
 
 		ctEntry = _ctEntryLocalService.getCTEntry(ctEntry.getCtEntryId());
 
@@ -633,6 +611,13 @@ public class CTManagerTest {
 
 	@Test
 	public void testRegisterModelChangeWhenCTEntryAggregate() throws Exception {
+		CTCollection ctCollection = _ctCollectionLocalService.addCTCollection(
+			TestPropsValues.getUserId(), RandomTestUtil.randomString(),
+			StringPool.BLANK, new ServiceContext());
+
+		_ctEngineManager.checkoutCTCollection(
+			_user.getUserId(), ctCollection.getCtCollectionId());
+
 		Optional<CTEntry> ctEntryOptionalA = _ctManager.registerModelChange(
 			_user.getCompanyId(), _user.getUserId(),
 			_testVersionClassClassName.getClassNameId(),
@@ -715,13 +700,13 @@ public class CTManagerTest {
 	@Inject
 	private CTCollectionLocalService _ctCollectionLocalService;
 
-	private CTConfiguration _ctConfiguration;
+	private CTDefinition _ctDefinition;
 
 	@Inject
-	private CTConfigurationBuilder<Object, Object> _ctConfigurationBuilder;
+	private CTDefinitionBuilder<Object, Object> _ctDefinitionBuilder;
 
 	@Inject
-	private CTConfigurationRegistrar _ctConfigurationRegistrar;
+	private CTDefinitionRegistrar _ctDefinitionRegistrar;
 
 	@Inject
 	private CTEngineManager _ctEngineManager;

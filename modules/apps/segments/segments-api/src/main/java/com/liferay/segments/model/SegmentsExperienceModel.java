@@ -223,6 +223,21 @@ public interface SegmentsExperienceModel
 	public void setSegmentsEntryId(long segmentsEntryId);
 
 	/**
+	 * Returns the segments experience key of this segments experience.
+	 *
+	 * @return the segments experience key of this segments experience
+	 */
+	@AutoEscape
+	public String getSegmentsExperienceKey();
+
+	/**
+	 * Sets the segments experience key of this segments experience.
+	 *
+	 * @param segmentsExperienceKey the segments experience key of this segments experience
+	 */
+	public void setSegmentsExperienceKey(String segmentsExperienceKey);
+
+	/**
 	 * Returns the fully qualified class name of this segments experience.
 	 *
 	 * @return the fully qualified class name of this segments experience

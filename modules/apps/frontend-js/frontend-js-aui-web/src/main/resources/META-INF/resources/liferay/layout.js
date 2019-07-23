@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-layout',
 	function(A) {
@@ -18,14 +32,16 @@ AUI.add(
 
 			PORTLET_TOPPER: A.Node.create('<div class="portlet-topper"></div>'),
 
-			PROXY_NODE: A.Node.create('<div class="lfr-portlet-proxy sortable-layout-proxy"></div>'),
+			PROXY_NODE: A.Node.create(
+				'<div class="lfr-portlet-proxy sortable-layout-proxy"></div>'
+			),
 
 			PROXY_NODE_ITEM: A.Node.create(
 				'<div class="lfr-portlet-proxy sortable-layout-proxy">' +
 					'<div class="portlet-topper">' +
-						'<span class="portlet-title"></span>' +
+					'<span class="portlet-title"></span>' +
 					'</div>' +
-				'</div>'
+					'</div>'
 			),
 
 			options: LAYOUT_CONFIG,
@@ -33,42 +49,42 @@ AUI.add(
 			bindDragDropListeners: function() {
 				var layoutHandler = Layout.getLayoutHandler();
 
-				layoutHandler.on('drag:end', A.bind('_onPortletDragEnd', Layout));
-				layoutHandler.on('drag:start', A.bind('_onPortletDragStart', Layout));
-
-				layoutHandler.delegate.dd.plug(
-					{
-						cfg: {
-							horizontal: false,
-							scrollDelay: 30,
-							vertical: true
-						},
-						fn: A.Plugin.DDWinScroll
-					}
+				layoutHandler.on(
+					'drag:end',
+					A.bind('_onPortletDragEnd', Layout)
 				);
+				layoutHandler.on(
+					'drag:start',
+					A.bind('_onPortletDragStart', Layout)
+				);
+
+				layoutHandler.delegate.dd.plug({
+					cfg: {
+						horizontal: false,
+						scrollDelay: 30,
+						vertical: true
+					},
+					fn: A.Plugin.DDWinScroll
+				});
 			},
 
 			closeNestedPortlets: function(portlet) {
 				var nestedPortlets = portlet.all('.portlet-boundary');
 
-				nestedPortlets.each(
-					function(portlet) {
-						Liferay.Portlet.close(
-							portlet,
-							true,
-							{
-								nestedPortlet: true
-							}
-						);
-					}
-				);
+				nestedPortlets.each(function(portlet) {
+					Liferay.Portlet.close(portlet, true, {
+						nestedPortlet: true
+					});
+				});
 			},
 
 			findIndex: function(node) {
 				var options = Layout.options;
 				var parentNode = node.get('parentNode');
 
-				return parentNode.all('> ' + options.portletBoundary).indexOf(node);
+				return parentNode
+					.all('> ' + options.portletBoundary)
+					.indexOf(node);
 			},
 
 			findReferencePortlet: function(dropColumn) {
@@ -82,22 +98,23 @@ AUI.add(
 					var firstPortletStatic = firstPortlet.isStatic;
 					var lastStatic = null;
 
-					if (!firstPortletStatic || (firstPortletStatic == 'end')) {
+					if (!firstPortletStatic || firstPortletStatic == 'end') {
 						referencePortlet = firstPortlet;
-					}
-					else {
-						portlets.each(
-							function(item) {
-								var isStatic = item.isStatic;
+					} else {
+						portlets.each(function(item) {
+							var isStatic = item.isStatic;
 
-								if (!isStatic ||
-									(lastStatic && isStatic && (isStatic != lastStatic))) {
-									referencePortlet = item;
-								}
-
-								lastStatic = isStatic;
+							if (
+								!isStatic ||
+								(lastStatic &&
+									isStatic &&
+									isStatic != lastStatic)
+							) {
+								referencePortlet = item;
 							}
-						);
+
+							lastStatic = isStatic;
+						});
 					}
 				}
 
@@ -119,7 +136,12 @@ AUI.add(
 			getActiveDropContainer: function() {
 				var options = Layout.options;
 
-				return A.all(options.dropContainer + ':not(.' + options.disabledDropContainerClass + ')').item(0);
+				return A.all(
+					options.dropContainer +
+						':not(.' +
+						options.disabledDropContainerClass +
+						')'
+				).item(0);
 			},
 
 			getActiveDropNodes: function() {
@@ -127,13 +149,15 @@ AUI.add(
 
 				var dropNodes = [];
 
-				A.all(options.dropContainer).each(
-					function(dropContainer) {
-						if (!dropContainer.hasClass(options.disabledDropContainerClass)) {
-							dropNodes.push(dropContainer.get('parentNode'));
-						}
+				A.all(options.dropContainer).each(function(dropContainer) {
+					if (
+						!dropContainer.hasClass(
+							options.disabledDropContainerClass
+						)
+					) {
+						dropNodes.push(dropContainer.get('parentNode'));
 					}
-				);
+				});
 
 				return A.all(dropNodes);
 			},
@@ -160,8 +184,10 @@ AUI.add(
 					var currentIndex = Layout.findIndex(dragNode);
 					var currentParent = dragNode.get('parentNode');
 
-					if ((curPortletInfo.originalParent != currentParent) ||
-						(curPortletInfo.originalIndex != currentIndex)) {
+					if (
+						curPortletInfo.originalParent != currentParent ||
+						curPortletInfo.originalIndex != currentIndex
+					) {
 						moved = true;
 					}
 				}
@@ -205,23 +231,18 @@ AUI.add(
 				var position = Layout.findIndex(portletNode);
 
 				if (Layout.hasMoved(portletNode)) {
-					Liferay.fire(
-						'portletMoved',
-						{
-							portlet: portletNode,
-							portletId: portletId,
-							position: position
-						}
-					);
+					Liferay.fire('portletMoved', {
+						portlet: portletNode,
+						portletId: portletId,
+						position: position
+					});
 
-					Layout.saveLayout(
-						{
-							cmd: 'move',
-							p_p_col_id: currentColumnId,
-							p_p_col_pos: position,
-							p_p_id: portletId
-						}
-					);
+					Layout.saveLayout({
+						cmd: 'move',
+						p_p_col_id: currentColumnId,
+						p_p_col_pos: position,
+						p_p_id: portletId
+					});
 				}
 			},
 
@@ -232,7 +253,9 @@ AUI.add(
 					var dragNodes = A.all(options.dragNodes);
 
 					if (options.invalid) {
-						dragNodes = dragNodes.filter(':not(' + options.invalid + ')');
+						dragNodes = dragNodes.filter(
+							':not(' + options.invalid + ')'
+						);
 					}
 
 					dragNodes.addClass(CSS_DRAGGABLE);
@@ -248,10 +271,14 @@ AUI.add(
 					var emptyColumnClass = options.emptyColumnClass;
 					var originalParent = curPortletInfo.originalParent;
 
-					var originalColumnHasPortlets = Layout.hasPortlets(originalParent);
+					var originalColumnHasPortlets = Layout.hasPortlets(
+						originalParent
+					);
 
 					var currentColumn = columnNode.ancestor(options.dropNodes);
-					var originalColumn = originalParent.ancestor(options.dropNodes);
+					var originalColumn = originalParent.ancestor(
+						options.dropNodes
+					);
 
 					if (currentColumn) {
 						var dropZoneId = currentColumn.get('id');
@@ -262,11 +289,19 @@ AUI.add(
 					if (originalColumn) {
 						var originalDropZoneId = originalColumn.get('id');
 
-						Layout.EMPTY_COLUMNS[originalDropZoneId] = !originalColumnHasPortlets;
+						Layout.EMPTY_COLUMNS[
+							originalDropZoneId
+						] = !originalColumnHasPortlets;
 					}
 
-					columnNode.toggleClass(emptyColumnClass, !columnHasPortlets);
-					originalParent.toggleClass(emptyColumnClass, !originalColumnHasPortlets);
+					columnNode.toggleClass(
+						emptyColumnClass,
+						!columnHasPortlets
+					);
+					originalParent.toggleClass(
+						emptyColumnClass,
+						!originalColumnHasPortlets
+					);
 				}
 			},
 
@@ -284,13 +319,11 @@ AUI.add(
 			updateEmptyColumnsInfo: function() {
 				var options = Layout.options;
 
-				A.all(options.dropNodes).each(
-					function(item) {
-						var columnId = item.get('id');
+				A.all(options.dropNodes).each(function(item) {
+					var columnId = item.get('id');
 
-						Layout.EMPTY_COLUMNS[columnId] = !Layout.hasPortlets(item);
-					}
-				);
+					Layout.EMPTY_COLUMNS[columnId] = !Layout.hasPortlets(item);
+				});
 			},
 
 			updatePortletDropZones: function(portletBoundary) {
@@ -299,11 +332,9 @@ AUI.add(
 
 				var layoutHandler = Layout.getLayoutHandler();
 
-				portletDropNodes.each(
-					function(item) {
-						layoutHandler.addDropNode(item);
-					}
-				);
+				portletDropNodes.each(function(item) {
+					layoutHandler.addDropNode(item);
+				});
 			},
 
 			_afterPortletClose: function(event) {
@@ -314,29 +345,27 @@ AUI.add(
 				}
 			},
 
-			_getPortletTitle: A.cached(
-				function(id) {
-					var portletBoundary = A.one('#' + id);
+			_getPortletTitle: A.cached(function(id) {
+				var portletBoundary = A.one('#' + id);
 
-					var portletTitle = portletBoundary.one('.portlet-title');
+				var portletTitle = portletBoundary.one('.portlet-title');
 
-					if (!portletTitle) {
-						portletTitle = Layout.PROXY_NODE_ITEM.one('.portlet-title');
+				if (!portletTitle) {
+					portletTitle = Layout.PROXY_NODE_ITEM.one('.portlet-title');
 
-						var title = portletBoundary.one('.portlet-title-default');
+					var title = portletBoundary.one('.portlet-title-default');
 
-						var titleText = '';
+					var titleText = '';
 
-						if (title) {
-							titleText = title.html();
-						}
-
-						portletTitle.html(titleText);
+					if (title) {
+						titleText = title.html();
 					}
 
-					return portletTitle.outerHTML();
+					portletTitle.html(titleText);
 				}
-			),
+
+				return portletTitle.outerHTML();
+			}),
 
 			_onPortletClose: function(event) {
 				var portlet = event.portlet;
@@ -406,7 +435,8 @@ AUI.add(
 
 			if (A.UA.ie || A.UA.edge) {
 				eventHandles.push(
-					BODY.delegate('mouseenter',
+					BODY.delegate(
+						'mouseenter',
 						function(event) {
 							event.currentTarget.addClass('focus');
 						},
@@ -415,7 +445,8 @@ AUI.add(
 				);
 
 				eventHandles.push(
-					BODY.delegate('mouseleave',
+					BODY.delegate(
+						'mouseleave',
 						function(event) {
 							event.currentTarget.removeClass('focus');
 						},
@@ -424,32 +455,26 @@ AUI.add(
 				);
 			}
 
-			A.use(
-				'liferay-layout-column',
-				function() {
-					Layout.ColumnLayout.register();
+			A.use('liferay-layout-column', function() {
+				Layout.ColumnLayout.register();
 
-					Layout.bindDragDropListeners();
+				Layout.bindDragDropListeners();
 
-					Layout.updateEmptyColumnsInfo();
+				Layout.updateEmptyColumnsInfo();
 
-					Liferay.after('closePortlet', Layout._afterPortletClose);
-					Liferay.on('closePortlet', Layout._onPortletClose);
+				Liferay.after('closePortlet', Layout._afterPortletClose);
+				Liferay.on('closePortlet', Layout._onPortletClose);
 
-					Liferay.on(
-						'screenFlip',
-						function() {
-							if (eventHandles) {
-								(new A.EventHandle(eventHandles)).detach();
-							}
+				Liferay.on('screenFlip', function() {
+					if (eventHandles) {
+						new A.EventHandle(eventHandles).detach();
+					}
 
-							Layout.getLayoutHandler().destroy();
-						}
-					);
+					Layout.getLayoutHandler().destroy();
+				});
 
-					Layout.INITIALIZED = true;
-				}
-			);
+				Layout.INITIALIZED = true;
+			});
 		};
 
 		Liferay.provide(
@@ -490,7 +515,8 @@ AUI.add(
 					var activeDropNode = activeDrop.get('node');
 					var activeDropNodeId = activeDropNode.get('id');
 
-					Layout.OVER_NESTED_PORTLET = (activeDropNodeId.indexOf(nestedPortletId) > -1);
+					Layout.OVER_NESTED_PORTLET =
+						activeDropNodeId.indexOf(nestedPortletId) > -1;
 				}
 			},
 			['dd-ddm']
@@ -499,23 +525,16 @@ AUI.add(
 		if (LAYOUT_CONFIG) {
 			var layoutContainer = A.one(LAYOUT_CONFIG.container);
 
-			Liferay.once(
-				'initLayout',
-				function() {
-					Layout.init();
-				}
-			);
+			Liferay.once('initLayout', function() {
+				Layout.init();
+			});
 
 			if (layoutContainer) {
 				if (!A.UA.touch) {
-					layoutContainer.once(
-						'mousemove',
-						function() {
-							Liferay.fire('initLayout');
-						}
-					);
-				}
-				else {
+					layoutContainer.once('mousemove', function() {
+						Liferay.fire('initLayout');
+					});
+				} else {
 					Liferay.fire('initLayout');
 				}
 			}

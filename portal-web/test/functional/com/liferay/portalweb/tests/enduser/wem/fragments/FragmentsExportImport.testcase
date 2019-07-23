@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Fragments";
@@ -119,7 +120,9 @@ definition {
 				locator1 = "FragmentEditor#JAVASCRIPT_EDITOR",
 				value1 = "${javascriptSnippet}");
 
-			PortletEntry.publish();
+			Button.clickPublish();
+
+			FragmentsAdmin.viewEntryPresent(entry = "Fragment Name");
 		}
 
 		task ("Export the fragment collection") {
@@ -154,4 +157,33 @@ definition {
 			IFrame.selectTopFrame();
 		}
 	}
+
+	@description = "This is a testcase for LPS-96113. All fragments in dependencies should validate successfully."
+	@priority = "5"
+	test ValidateDependenciesFragments {
+		property portal.acceptance = "true";
+
+		task ("Navigate to the fragment import screen") {
+			FragmentsAdmin.gotoImportCollection();
+		}
+
+		task ("Import fragment dependencies") {
+			UploadCommonFile(
+				locator1 = "TextInput#FILE",
+				value1 = "fragment-collection.zip");
+
+			Button.click(button = "Import");
+		}
+
+		task ("Assert the zip imported properly") {
+			AssertElementNotPresent(locator1 = "Message#ERROR");
+		}
+
+		task ("Assert that all fragments validated") {
+			AssertElementNotPresent(
+				key_infoMessage = "The following fragments have validation issues",
+				locator1 = "Message#INFO_SPECIFIC");
+		}
+	}
+
 }

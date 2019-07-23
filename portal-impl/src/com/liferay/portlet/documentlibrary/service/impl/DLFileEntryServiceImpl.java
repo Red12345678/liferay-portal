@@ -582,10 +582,8 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 
 	@Override
 	public boolean hasFileEntryLock(long fileEntryId) throws PortalException {
-		DLFileEntry dlFileEntry = dlFileEntryLocalService.getFileEntry(
-			fileEntryId);
-
-		return dlFileEntry.hasLock();
+		return dlFileEntryLocalService.hasFileEntryLock(
+			getUserId(), fileEntryId);
 	}
 
 	@Override
@@ -605,10 +603,8 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		PermissionChecker permissionChecker = getPermissionChecker();
-
 		_fileEntryModelResourcePermission.check(
-			permissionChecker, fileEntryId, ActionKeys.VIEW);
+			getPermissionChecker(), fileEntryId, ActionKeys.VIEW);
 
 		return dlFileEntryLocalService.isKeepFileVersionLabel(
 			fileEntryId, majorVersion, serviceContext);
@@ -624,10 +620,8 @@ public class DLFileEntryServiceImpl extends DLFileEntryServiceBaseImpl {
 			long fileEntryId, ServiceContext serviceContext)
 		throws PortalException {
 
-		PermissionChecker permissionChecker = getPermissionChecker();
-
 		_fileEntryModelResourcePermission.check(
-			permissionChecker, fileEntryId, ActionKeys.VIEW);
+			getPermissionChecker(), fileEntryId, ActionKeys.VIEW);
 
 		return dlFileEntryLocalService.isKeepFileVersionLabel(
 			fileEntryId, serviceContext);

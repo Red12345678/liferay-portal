@@ -119,10 +119,8 @@ public class UpgradeJournal extends UpgradeProcess {
 
 		addDefaultResourcePermissions(group.getGroupId());
 
-		String defaultLanguageId = UpgradeProcessUtil.getDefaultLanguageId(
-			companyId);
-
-		Locale defaultLocale = LocaleUtil.fromLanguageId(defaultLanguageId);
+		Locale defaultLocale = LocaleUtil.fromLanguageId(
+			UpgradeProcessUtil.getDefaultLanguageId(companyId));
 
 		List<Element> structureElements = getDDMStructures(defaultLocale);
 
@@ -348,10 +346,8 @@ public class UpgradeJournal extends UpgradeProcess {
 
 						Document document = SAXReaderUtil.read(content);
 
-						Element rootElement = document.getRootElement();
-
 						articleFieldNames = getArticleDynamicElements(
-							rootElement);
+							document.getRootElement());
 					}
 				}
 			}

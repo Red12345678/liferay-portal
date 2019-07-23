@@ -542,25 +542,28 @@ public class DDMStructureLocalServiceImpl
 		throws PortalException {
 
 		if (!GroupThreadLocal.isDeleteInProcess()) {
-			if (ddmStructureLinkPersistence.countByStructureId(
-					structure.getStructureId()) > 0) {
+			int count = ddmStructureLinkPersistence.countByStructureId(
+				structure.getStructureId());
 
+			if (count > 0) {
 				throw new RequiredStructureException.
 					MustNotDeleteStructureReferencedByStructureLinks(
 						structure.getStructureId());
 			}
 
-			if (ddmStructurePersistence.countByParentStructureId(
-					structure.getStructureId()) > 0) {
+			count = ddmStructurePersistence.countByParentStructureId(
+				structure.getStructureId());
 
+			if (count > 0) {
 				throw new RequiredStructureException.
 					MustNotDeleteStructureThatHasChild(
 						structure.getStructureId());
 			}
 
-			if (ddmTemplatePersistence.countByClassPK(
-					structure.getStructureId()) > 0) {
+			count = ddmTemplatePersistence.countByClassPK(
+				structure.getStructureId());
 
+			if (count > 0) {
 				throw new RequiredStructureException.
 					MustNotDeleteStructureReferencedByTemplates(
 						structure.getStructureId());
@@ -1117,6 +1120,17 @@ public class DDMStructureLocalServiceImpl
 
 	@Override
 	public List<DDMStructure> getStructures(
+		long companyId, long[] groupIds, long classNameId, String keywords,
+		int status, int start, int end,
+		OrderByComparator<DDMStructure> orderByComparator) {
+
+		return ddmStructureFinder.findByKeywords(
+			companyId, groupIds, classNameId, keywords, status, start, end,
+			orderByComparator);
+	}
+
+	@Override
+	public List<DDMStructure> getStructures(
 		long groupId, String name, String description) {
 
 		return ddmStructurePersistence.findByG_N_D(groupId, name, description);
@@ -1243,6 +1257,15 @@ public class DDMStructureLocalServiceImpl
 	@Override
 	public int getStructuresCount(long groupId, long classNameId) {
 		return ddmStructurePersistence.countByG_C(groupId, classNameId);
+	}
+
+	@Override
+	public int getStructuresCount(
+		long companyId, long[] groupIds, long classNameId, String keywords,
+		int status) {
+
+		return ddmStructureFinder.countByKeywords(
+			companyId, groupIds, classNameId, keywords, status);
 	}
 
 	/**
@@ -1534,6 +1557,7 @@ public class DDMStructureLocalServiceImpl
 			ddmFormLayout, serviceContext, structure);
 	}
 
+	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public DDMStructure updateStructure(
 			long userId, long structureId, long parentStructureId,
@@ -1553,13 +1577,7 @@ public class DDMStructureLocalServiceImpl
 			ddmStructureVersionLocalService.getLatestStructureVersion(
 				structure.getStructureId());
 
-		boolean majorVersion = GetterUtil.getBoolean(
-			serviceContext.getAttribute("majorVersion"));
-
-		String version = getNextVersion(
-			latestStructureVersion.getVersion(), majorVersion);
-
-		structure.setVersion(version);
+		structure.setVersion(latestStructureVersion.getVersion());
 
 		structure.setNameMap(nameMap);
 		structure.setVersionUserId(user.getUserId());
@@ -1568,18 +1586,7 @@ public class DDMStructureLocalServiceImpl
 		structure.setDescriptionMap(descriptionMap);
 		structure.setDefinition(definition);
 
-		// Structure version
-
-		DDMStructureVersion structureVersion = addStructureVersion(
-			user, structure, version, serviceContext);
-
-		if (!structureVersion.isApproved()) {
-			return structure;
-		}
-
 		ddmStructurePersistence.update(structure);
-
-		// Indexer
 
 		reindexStructure(structure, serviceContext);
 
@@ -2148,10 +2155,9 @@ public class DDMStructureLocalServiceImpl
 		for (DDMDataProviderInstanceLink dataProviderInstanceLink :
 				dataProviderInstanceLinks) {
 
-			long dataProviderInstanceId =
-				dataProviderInstanceLink.getDataProviderInstanceId();
+			if (dataProviderInstanceIds.remove(
+					dataProviderInstanceLink.getDataProviderInstanceId())) {
 
-			if (dataProviderInstanceIds.remove(dataProviderInstanceId)) {
 				continue;
 			}
 
@@ -2202,9 +2208,7 @@ public class DDMStructureLocalServiceImpl
 			throw sdske;
 		}
 
-		DDMForm parentDDMForm = getParentDDMForm(parentStructureId);
-
-		validate(nameMap, parentDDMForm, ddmForm);
+		validate(nameMap, getParentDDMForm(parentStructureId), ddmForm);
 	}
 
 	protected void validate(
@@ -2255,13 +2259,12 @@ public class DDMStructureLocalServiceImpl
 		}
 
 		if (!LanguageUtil.isAvailableLocale(contentDefaultLocale)) {
-			Long companyId = CompanyThreadLocal.getCompanyId();
-
 			LocaleException le = new LocaleException(
 				LocaleException.TYPE_CONTENT,
 				StringBundler.concat(
 					"The locale ", contentDefaultLocale,
-					" is not available in company ", companyId));
+					" is not available in company ",
+					CompanyThreadLocal.getCompanyId()));
 
 			le.setSourceAvailableLocales(
 				Collections.singleton(contentDefaultLocale));

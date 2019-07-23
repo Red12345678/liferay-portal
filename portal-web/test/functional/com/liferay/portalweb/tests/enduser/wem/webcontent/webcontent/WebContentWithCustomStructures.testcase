@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Web Content Administration";
@@ -681,7 +682,7 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "//div[@data-analytics-asset-title='WC WebContent Title']//dt",
-				value1 = "Text:");
+				value1 = "Text");
 
 			AssertTextEquals(
 				locator1 = "//div[@data-analytics-asset-title='WC WebContent Title']//dd",
@@ -1320,4 +1321,5 @@ definition {
 
 		WebContentStructures.addNullCP();
 	}
+
 }

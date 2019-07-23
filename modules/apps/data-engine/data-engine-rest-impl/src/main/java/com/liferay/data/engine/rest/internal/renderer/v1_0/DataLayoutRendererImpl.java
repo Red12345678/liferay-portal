@@ -14,6 +14,10 @@
 
 package com.liferay.data.engine.rest.internal.renderer.v1_0;
 
+import com.liferay.data.engine.field.type.FieldType;
+import com.liferay.data.engine.field.type.FieldTypeTracker;
+import com.liferay.data.engine.field.type.util.LocalizedValueUtil;
+import com.liferay.data.engine.renderer.DataLayoutRenderer;
 import com.liferay.data.engine.rest.dto.v1_0.DataDefinition;
 import com.liferay.data.engine.rest.dto.v1_0.DataDefinitionField;
 import com.liferay.data.engine.rest.dto.v1_0.DataLayout;
@@ -23,10 +27,6 @@ import com.liferay.data.engine.rest.dto.v1_0.DataLayoutRow;
 import com.liferay.data.engine.rest.internal.dto.v1_0.util.DataDefinitionFieldUtil;
 import com.liferay.data.engine.rest.internal.dto.v1_0.util.DataDefinitionUtil;
 import com.liferay.data.engine.rest.internal.dto.v1_0.util.DataLayoutUtil;
-import com.liferay.data.engine.spi.field.type.FieldType;
-import com.liferay.data.engine.spi.field.type.FieldTypeTracker;
-import com.liferay.data.engine.spi.field.type.util.LocalizedValueUtil;
-import com.liferay.data.engine.spi.renderer.DataLayoutRenderer;
 import com.liferay.dynamic.data.mapping.model.DDMStructureLayout;
 import com.liferay.dynamic.data.mapping.model.DDMStructureVersion;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLayoutLocalService;
@@ -35,6 +35,7 @@ import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolver;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.template.soy.renderer.ComponentDescriptor;
 import com.liferay.portal.template.soy.renderer.SoyComponentRenderer;
@@ -46,7 +47,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,7 +64,8 @@ public class DataLayoutRendererImpl implements DataLayoutRenderer {
 
 	@Override
 	public String render(
-			Long dataLayoutId, HttpServletRequest httpServletRequest,
+			Long dataLayoutId, Map<String, Object> dataRecordValues,
+			HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse)
 		throws Exception {
 
@@ -90,7 +91,8 @@ public class DataLayoutRendererImpl implements DataLayoutRenderer {
 			_createDataLayoutPageContexts(
 				_getDataDefinitionFieldsMap(
 					DataDefinitionUtil.toDataDefinition(
-						ddmStructureVersion.getStructure())),
+						ddmStructureVersion.getStructure()),
+					dataRecordValues),
 				dataLayout.getDataLayoutPages(), _fieldTypeTracker,
 				httpServletRequest, httpServletResponse));
 
@@ -223,7 +225,7 @@ public class DataLayoutRendererImpl implements DataLayoutRenderer {
 	}
 
 	private Map<String, DataDefinitionField> _getDataDefinitionFieldsMap(
-		DataDefinition dataDefinition) {
+		DataDefinition dataDefinition, Map<String, Object> dataRecordValues) {
 
 		List<DataDefinitionField> dataDefinitionFields = Arrays.asList(
 			dataDefinition.getDataDefinitionFields());
@@ -231,7 +233,22 @@ public class DataLayoutRendererImpl implements DataLayoutRenderer {
 		Stream<DataDefinitionField> stream = dataDefinitionFields.stream();
 
 		return stream.collect(
-			Collectors.toMap(field -> field.getName(), Function.identity()));
+			Collectors.toMap(
+				dataDefinitionField -> dataDefinitionField.getName(),
+				definitionField -> {
+					if (MapUtil.isEmpty(dataRecordValues)) {
+						return definitionField;
+					}
+
+					Map<String, Object> customProperties =
+						definitionField.getCustomProperties();
+
+					customProperties.put(
+						"value",
+						dataRecordValues.get(definitionField.getName()));
+
+					return definitionField;
+				}));
 	}
 
 	private static final String _MODULE_NAME =

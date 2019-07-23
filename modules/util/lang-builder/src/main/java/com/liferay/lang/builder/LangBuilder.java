@@ -210,6 +210,7 @@ public class LangBuilder {
 		_createProperties(content, "sl"); // Slovene
 		_createProperties(content, "es"); // Spanish
 		_createProperties(content, "sv"); // Swedish
+		_createProperties(content, "ta_IN"); // Tamil
 		_createProperties(content, "th"); // Thai
 		_createProperties(content, "tr"); // Turkish
 		_createProperties(content, "uk"); // Ukrainian
@@ -378,10 +379,10 @@ public class LangBuilder {
 					}
 				}
 
-				if (translatedText != null) {
-					if (translatedText.endsWith(AUTOMATIC_COPY)) {
-						translatedText = "";
-					}
+				if ((translatedText != null) &&
+					translatedText.endsWith(AUTOMATIC_COPY)) {
+
+					translatedText = "";
 				}
 
 				if ((translatedText == null) || translatedText.equals("")) {
@@ -494,6 +495,8 @@ public class LangBuilder {
 	}
 
 	private String _fixTranslation(String value) {
+		value = StringUtil.replace(value, "\n", "\\n");
+
 		value = StringUtil.replace(
 			value.trim(),
 			new String[] {
@@ -527,9 +530,7 @@ public class LangBuilder {
 		for (LangBuilderCategory langBuilderCategory :
 				LangBuilderCategory.values()) {
 
-			String prefix = langBuilderCategory.getPrefix();
-
-			if (Validator.isNotNull(prefix) &&
+			if (Validator.isNotNull(langBuilderCategory.getPrefix()) &&
 				key.startsWith(langBuilderCategory.getPrefix())) {
 
 				return langBuilderCategory;

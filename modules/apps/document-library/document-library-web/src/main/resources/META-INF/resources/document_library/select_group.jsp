@@ -18,23 +18,23 @@
 
 <%
 String eventName = ParamUtil.getString(request, "eventName", liferayPortletResponse.getNamespace() + "selectGroup");
+
+PortletURL portletURL = renderResponse.createRenderURL();
+
+portletURL.setParameter("mvcPath", "/document_library/select_group.jsp");
 %>
 
 <div class="container-fluid-1280">
+	<clay:management-toolbar
+		clearResultsURL="<%= portletURL.toString() %>"
+		searchActionURL="<%= portletURL.toString() %>"
+		selectable="<%= false %>"
+	/>
+
 	<aui:form method="post" name="selectGroupFm">
-
-		<%
-		PortletURL portletURL = renderResponse.createRenderURL();
-
-		portletURL.setParameter("mvcPath", "/document_library/select_group.jsp");
-		%>
-
 		<liferay-ui:search-container
-			searchContainer="<%= new GroupSearch(renderRequest, portletURL) %>"
+			searchContainer="<%= new GroupSearch(renderRequest, PortletURLUtil.clone(portletURL, liferayPortletResponse)) %>"
 		>
-			<liferay-ui:input-search />
-
-			<div class="separator"><!-- --></div>
 
 			<%
 			GroupSearchTerms searchTerms = (GroupSearchTerms)searchContainer.getSearchTerms();
@@ -110,11 +110,13 @@ String eventName = ParamUtil.getString(request, "eventName", liferayPortletRespo
 				%>
 
 				<liferay-ui:search-container-column-text
+					cssClass="table-cell-expand table-cell-minw-200 table-title"
 					name="name"
 					value="<%= HtmlUtil.escape(groupDescriptiveName) %>"
 				/>
 
 				<liferay-ui:search-container-column-text
+					cssClass="table-cell-expand-smaller table-cell-minw-150"
 					name="type"
 					value="<%= LanguageUtil.get(request, group.getTypeLabel()) %>"
 				/>
@@ -128,7 +130,7 @@ String eventName = ParamUtil.getString(request, "eventName", liferayPortletRespo
 					data.put("groupid", group.getGroupId());
 					%>
 
-					<aui:button cssClass="selector-button" data="<%= data %>" value="choose" />
+					<aui:button cssClass="selector-button" data="<%= data %>" value="select" />
 				</liferay-ui:search-container-column-text>
 			</liferay-ui:search-container-row>
 

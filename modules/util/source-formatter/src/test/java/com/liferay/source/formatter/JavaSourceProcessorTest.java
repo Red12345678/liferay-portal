@@ -96,6 +96,14 @@ public class JavaSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
+	public void testExceptionVariableNameForExceptionMapper() throws Exception {
+		test(
+			"ExceptionVariableNameForExceptionMapper.testjava",
+			"Rename variable 'exception' to 'noSuchStructureException'",
+			40);
+	}
+
+	@Test
 	public void testFormatAnnotations() throws Exception {
 		test("FormatAnnotations.testjava");
 	}
@@ -250,10 +258,6 @@ public class JavaSourceProcessorTest extends BaseSourceProcessorTestCase {
 	@Test
 	public void testJavaTermDividers() throws Exception {
 		test("JavaTermDividers.testjava");
-	}
-
-	public void testJavaTermMetadataIncorrectLineBreaks() throws Exception {
-		test("JavaTermMetadataIncorrectLineBreaks.testjava");
 	}
 
 	@Test

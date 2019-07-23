@@ -1,5 +1,6 @@
 @component-name = "portal-web-forms-and-data-lists"
 definition {
+
 	property custom.properties = "minifier.enabled=true";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -1684,11 +1685,11 @@ definition {
 			configurationScope = "Site Scope");
 
 		FormFields.viewSelectOption(
-			fieldName = "DisplayView",
+			fieldName = "Default Display View",
 			selectOption = "List");
 
 		FormFields.selectSelectOption(
-			fieldName = "DisplayView",
+			fieldName = "Default Display View",
 			selectOption = "Table");
 
 		SystemSettings.saveConfiguration();
@@ -2007,7 +2008,8 @@ definition {
 	@description = "This is a use case for LPS-61740"
 	@priority = "5"
 	test PreviewAndPublishForm {
-		property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
+		property portal.acceptance = "true";
+		property app.server.types = "jboss,tcserver,tomcat,weblogic,websphere,wildfly";
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 		property environment.acceptance = "true";
 
@@ -2778,7 +2780,7 @@ definition {
 	@priority = "5"
 	test SubmitFormContainingCaptchaAndViewTextFieldValue {
 		property captcha.enabled = "true";
-		property portal.acceptance = "false";
+		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "Forms#SubmitFormContainingCaptchaAndViewTextFieldValue";
 
 		Navigator.openURL();
@@ -2975,14 +2977,14 @@ definition {
 
 		for (var optionNumber : list "1,2,3") {
 			FormFields.editGridOptions(
-				gridField = "row",
+				gridField = "Row",
 				optionValue = "Option ${optionNumber}",
 				rowNumber = "${optionNumber}");
 		}
 
 		for (var optionNumber : list "1,2,3") {
 			FormFields.editGridOptions(
-				gridField = "column",
+				gridField = "Column",
 				optionValue = "Category ${optionNumber}",
 				rowNumber = "${optionNumber}");
 		}
@@ -3089,7 +3091,7 @@ definition {
 
 		FormsAdmin.viewFormTableEntry(
 			fieldLabel = "Status",
-			fieldValue = "APPROVED");
+			fieldValue = "Approved");
 
 		FormsAdminNavigator.gotoView();
 
@@ -3123,7 +3125,7 @@ definition {
 			fieldValue = "05/02/2016");
 
 		FormsAdmin.viewCheckboxEntry(
-			fieldLabel = "Checkbox",
+			fieldLabel = "Checkbox 1",
 			fieldName = "Checkbox");
 
 		FormPortlet.nextPage(
@@ -3926,15 +3928,9 @@ definition {
 			fieldLabel = "Upload Field",
 			fieldName = "UploadField");
 
-		Type(
+		AssertNotEditable(
 			key_fieldName = "UploadField",
-			locator1 = "FormFields#UPLOAD_FIELD",
-			value1 = "Cannot Input, Upload Field");
-
-		AssertTextEquals(
-			key_fieldName = "UploadField",
-			locator1 = "FormFields#UPLOAD_FIELD",
-			value1 = "");
+			locator1 = "FormFields#UPLOAD_FIELD");
 
 		ItemSelector.gotoItemSelectorViaSelectButton();
 
@@ -4556,4 +4552,5 @@ definition {
 			successPageDescription = "Thank you for filling out the Form.",
 			successPageTitle = "Success Page Title");
 	}
+
 }

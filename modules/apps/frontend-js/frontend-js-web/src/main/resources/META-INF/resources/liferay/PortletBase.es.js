@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import core from 'metal';
 import dom from 'metal-dom';
 import Component from 'metal-component';
@@ -13,7 +27,6 @@ import objectToFormData from './util/form/object_to_form_data.es';
  */
 
 class PortletBase extends Component {
-
 	/**
 	 * Returns a NodeList containing all of the matching Element nodes within
 	 * the subtrees of the root object, in tree order. If there are no matching
@@ -40,6 +53,7 @@ class PortletBase extends Component {
 
 	/**
 	 * Performs an HTTP POST request to the given url with the given body.
+	 * @deprecated since 7.3, use Liferay.Util.fetch
 	 * @param {!string} url Where to send the post request
 	 * @param {!Object|!FormData} body Request body
 	 * @return {Promise}
@@ -49,14 +63,11 @@ class PortletBase extends Component {
 	fetch(url, body) {
 		const requestBody = this.getRequestBody_(body);
 
-		return fetch(
-			url,
-			{
-				body: requestBody,
-				credentials: 'include',
-				method: 'POST'
-			}
-		);
+		return fetch(url, {
+			body: requestBody,
+			credentials: 'include',
+			method: 'POST'
+		});
 	}
 
 	/**
@@ -71,16 +82,11 @@ class PortletBase extends Component {
 
 		if (body instanceof FormData) {
 			requestBody = body;
-		}
-		else if (body instanceof HTMLFormElement) {
+		} else if (body instanceof HTMLFormElement) {
 			requestBody = new FormData(body);
-		}
-		else if (typeof body === 'object') {
-			requestBody = objectToFormData(
-				this.ns(body)
-			);
-		}
-		else {
+		} else if (typeof body === 'object') {
+			requestBody = objectToFormData(this.ns(body));
+		} else {
 			requestBody = body;
 		}
 
@@ -113,10 +119,7 @@ class PortletBase extends Component {
 	 */
 
 	ns(obj) {
-		return Liferay.Util.ns(
-			this.portletNamespace || this.namespace,
-			obj
-		);
+		return Liferay.Util.ns(this.portletNamespace || this.namespace, obj);
 	}
 
 	/**
@@ -165,7 +168,6 @@ class PortletBase extends Component {
  */
 
 PortletBase.STATE = {
-
 	/**
 	 * Portlet's namespace
 	 * @deprecated since 7.1

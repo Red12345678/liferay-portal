@@ -21,13 +21,12 @@ import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.search.elasticsearch6.internal.connection.ElasticsearchFixture;
 import com.liferay.portal.search.elasticsearch6.internal.connection.IndexCreator;
 import com.liferay.portal.search.elasticsearch6.internal.connection.IndexName;
-import com.liferay.portal.search.elasticsearch6.internal.index.IndexNameBuilder;
+import com.liferay.portal.search.index.IndexNameBuilder;
 
 import java.util.Collections;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
@@ -39,7 +38,6 @@ import org.mockito.MockitoAnnotations;
 /**
  * @author Artur Aquino
  */
-@Ignore
 public class ReplicasManagerImplTest {
 
 	@Before

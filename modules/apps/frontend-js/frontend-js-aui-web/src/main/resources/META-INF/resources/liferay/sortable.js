@@ -1,4 +1,18 @@
 /**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+/**
  * The Sortable Component.
  *
  * @deprecated since 7.2, unused
@@ -42,34 +56,30 @@ AUI.add(
 
 					instance.set(STR_ID, id);
 
-					delegate.dd.plug(
-						A.Plugin.DDProxy,
-						{
-							cloneNode: true,
-							moveOnEnd: false
-						}
-					);
+					delegate.dd.plug(A.Plugin.DDProxy, {
+						cloneNode: true,
+						moveOnEnd: false
+					});
 
-					instance.drop = new A.DD.Drop(
-						{
-							bubbleTarget: delegate,
-							groups: delegate.dd.get('groups'),
-							node: instance.get(STR_CONT)
-						}
-					);
+					instance.drop = new A.DD.Drop({
+						bubbleTarget: delegate,
+						groups: delegate.dd.get('groups'),
+						node: instance.get(STR_CONT)
+					});
 
-					instance.drop.on('drop:enter', A.bind('_onDropEnter', instance));
+					instance.drop.on(
+						'drop:enter',
+						A.bind('_onDropEnter', instance)
+					);
 
 					instance._setDragMethod();
 
-					delegate.on(
-						{
-							'drag:drag': A.bind('_dragMethod', instance),
-							'drag:end': A.bind('_onDragEnd', instance),
-							'drag:over': A.bind('_onDragOver', instance),
-							'drag:start': A.bind('_onDragStart', instance)
-						}
-					);
+					delegate.on({
+						'drag:drag': A.bind('_dragMethod', instance),
+						'drag:end': A.bind('_onDragEnd', instance),
+						'drag:over': A.bind('_onDragOver', instance),
+						'drag:start': A.bind('_onDragStart', instance)
+					});
 
 					instance.delegate = delegate;
 
@@ -93,14 +103,15 @@ AUI.add(
 
 					var dragMethod;
 
-					var node = instance.get(STR_CONT).one(instance.get(STR_NODES));
+					var node = instance
+						.get(STR_CONT)
+						.one(instance.get(STR_NODES));
 
 					var floated = node ? node.getStyle('float') : 'none';
 
 					if (floated === 'left' || floated === 'right') {
 						dragMethod = '_onDragHorizontal';
-					}
-					else {
+					} else {
 						dragMethod = '_onDrag';
 					}
 

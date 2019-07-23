@@ -51,6 +51,12 @@ public class PropsValues {
 	public static String ADMIN_EMAIL_FROM_NAME = PropsUtil.get(
 		PropsKeys.ADMIN_EMAIL_FROM_NAME);
 
+	public static final String ADMIN_EMAIL_PASSWORD_CHANGED_BODY =
+		PropsUtil.get(PropsKeys.ADMIN_EMAIL_PASSWORD_CHANGED_BODY);
+
+	public static final String ADMIN_EMAIL_PASSWORD_CHANGED_SUBJECT =
+		PropsUtil.get(PropsKeys.ADMIN_EMAIL_PASSWORD_CHANGED_SUBJECT);
+
 	public static final String ADMIN_EMAIL_PASSWORD_RESET_BODY = PropsUtil.get(
 		PropsKeys.ADMIN_EMAIL_PASSWORD_RESET_BODY);
 
@@ -68,6 +74,9 @@ public class PropsValues {
 
 	public static final String ADMIN_EMAIL_USER_ADDED_NO_PASSWORD_BODY =
 		PropsUtil.get(PropsKeys.ADMIN_EMAIL_USER_ADDED_NO_PASSWORD_BODY);
+
+	public static final String ADMIN_EMAIL_USER_ADDED_RESET_PASSWORD_BODY =
+		PropsUtil.get(PropsKeys.ADMIN_EMAIL_USER_ADDED_RESET_PASSWORD_BODY);
 
 	public static final String ADMIN_EMAIL_USER_ADDED_SUBJECT = PropsUtil.get(
 		PropsKeys.ADMIN_EMAIL_USER_ADDED_SUBJECT);
@@ -315,6 +324,10 @@ public class PropsValues {
 					PropsKeys.
 						BLOGS_ENTRY_PREVIOUS_AND_NEXT_NAVIGATION_ENABLED));
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final long BLOGS_IMAGE_MAX_SIZE = GetterUtil.getLong(
 		PropsUtil.get(PropsKeys.BLOGS_IMAGE_MAX_SIZE));
 
@@ -369,6 +382,10 @@ public class PropsValues {
 			PropsUtil.get(
 				PropsKeys.BUFFERED_INCREMENT_STANDBY_TIME_UPPER_LIMIT));
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final boolean CACHE_CLEAR_ON_CONTEXT_INITIALIZATION =
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.CACHE_CLEAR_ON_CONTEXT_INITIALIZATION));
@@ -1628,6 +1645,10 @@ public class PropsValues {
 	public static final String LIFERAY_WEB_PORTAL_DIR = PropsUtil.get(
 		PropsKeys.LIFERAY_WEB_PORTAL_DIR);
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final boolean LIVE_USERS_ENABLED = GetterUtil.getBoolean(
 		PropsUtil.get(PropsKeys.LIVE_USERS_ENABLED));
 
@@ -1940,6 +1961,12 @@ public class PropsValues {
 	public static final String
 		MODULE_FRAMEWORK_WEB_GENERATOR_GENERATED_WABS_STORE_DIR = PropsUtil.get(
 			PropsKeys.MODULE_FRAMEWORK_WEB_GENERATOR_GENERATED_WABS_STORE_DIR);
+
+	public static final String[]
+		MODULE_FRAMEWORK_WEB_SERVLET_ANNOTATION_SCANNING_BLACKLIST =
+			PropsUtil.getArray(
+				PropsKeys.
+					MODULE_FRAMEWORK_WEB_SERVLET_ANNOTATION_SCANNING_BLACKLIST);
 
 	public static final String[] MY_SITES_DIRECTORY_SITE_EXCLUDES =
 		PropsUtil.getArray(PropsKeys.MY_SITES_DIRECTORY_SITE_EXCLUDES);
@@ -2804,14 +2831,26 @@ public class PropsValues {
 	public static final int SESSION_TIMEOUT_WARNING = GetterUtil.getInteger(
 		PropsUtil.get(PropsKeys.SESSION_TIMEOUT_WARNING));
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final boolean SESSION_TRACKER_FRIENDLY_PATHS_ENABLED =
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.SESSION_TRACKER_FRIENDLY_PATHS_ENABLED));
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final boolean SESSION_TRACKER_MEMORY_ENABLED =
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.SESSION_TRACKER_MEMORY_ENABLED));
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), with no direct replacement
+	 */
+	@Deprecated
 	public static final boolean SESSION_TRACKER_PERSISTENCE_ENABLED =
 		GetterUtil.getBoolean(
 			PropsUtil.get(PropsKeys.SESSION_TRACKER_PERSISTENCE_ENABLED));
@@ -2923,6 +2962,9 @@ public class PropsValues {
 	@Deprecated
 	public static final String[] SPRING_PORTLET_CONFIGS = PropsUtil.getArray(
 		PropsKeys.SPRING_PORTLET_CONFIGS);
+
+	public static final boolean SPRITE_ENABLED = GetterUtil.getBoolean(
+		PropsUtil.get(PropsKeys.SPRITE_ENABLED));
 
 	public static final String SPRITE_FILE_NAME = PropsUtil.get(
 		PropsKeys.SPRITE_FILE_NAME);

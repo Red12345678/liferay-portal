@@ -1,30 +1,36 @@
-@import "./ColumnOverlayGrid";
+@import './ColumnOverlayGrid';
 
-@import "./DragDrop";
+@import './common/Button';
 
-@import "./ElementTopper";
+@import './common/Textarea';
 
-@import "./FloatingToolbar";
+@import './DragDrop';
 
-@import "./FragmentEntryLink";
+@import './ElementTopper';
 
-@import "./FragmentEntryLinkList";
+@import './FloatingToolbar';
 
-@import "./FragmentEntryLinkEditables";
+@import './FragmentComment';
 
-@import "./FragmentsEditorShim";
+@import './FragmentEntryLink';
 
-@import "./FragmentsEditorSidebar";
+@import './FragmentEntryLinkList';
 
-@import "./FragmentsEditorToolbar";
+@import './FragmentEntryLinkEditables';
 
-@import "./SegmentsExperienceSelector";
+@import './FragmentsEditorShim';
 
-@import "./SelectMappingDialog";
+@import './FragmentsEditorSidebar';
 
-@import "./SidebarLayoutsSection";
+@import './FragmentsEditorToolbar';
 
-@import "./variables";
+@import './SegmentsExperienceSelector';
+
+@import './SelectMappingDialog';
+
+@import './SidebarLayoutsSection';
+
+@import './variables';
 
 .lfr-edit-mode__disabled-area {
 	cursor: not-allowed;
@@ -57,7 +63,9 @@
 	overflow-y: auto;
 
 	@media (min-width: 768px) {
-		height: calc(100vh - #{$desktopControlMenuHeight + $desktopManagementBarHeight});
+		height: calc(
+			100vh - #{$desktopControlMenuHeight + $desktopManagementBarHeight}
+		);
 		margin-top: $desktopControlMenuHeight + $desktopManagementBarHeight;
 	}
 }
@@ -69,7 +77,8 @@
 	will-change: margin;
 
 	@media (min-width: 768px) {
-		&--padded, &--padded.no-fragments-message {
+		&--padded,
+		&--padded.no-fragments-message {
 			margin-right: $sidebarWidth;
 		}
 	}
@@ -86,7 +95,8 @@
 		margin-top: 0;
 	}
 
-	&--padded, &--padded.no-fragments-message {
+	&--padded,
+	&--padded.no-fragments-message {
 		margin-right: 0;
 	}
 }

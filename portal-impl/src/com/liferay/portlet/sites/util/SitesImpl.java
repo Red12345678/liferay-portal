@@ -50,10 +50,10 @@ import com.liferay.portal.kernel.model.LayoutTypePortlet;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.model.impl.VirtualLayout;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.portlet.PortletIdCodec;
 import com.liferay.portal.kernel.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
@@ -602,12 +602,15 @@ public class SitesImpl implements Sites {
 		}
 
 		if (group.isGuest() && !layout.isPrivateLayout() &&
-			layout.isRootLayout() &&
-			(LayoutLocalServiceUtil.getLayoutsCount(
-				group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID) == 1)) {
+			layout.isRootLayout()) {
 
-			throw new RequiredLayoutException(
-				RequiredLayoutException.AT_LEAST_ONE);
+			int count = LayoutLocalServiceUtil.getLayoutsCount(
+				group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
+
+			if (count == 1) {
+				throw new RequiredLayoutException(
+					RequiredLayoutException.AT_LEAST_ONE);
+			}
 		}
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
@@ -626,12 +629,9 @@ public class SitesImpl implements Sites {
 			PortletRequest portletRequest, PortletResponse portletResponse)
 		throws Exception {
 
-		HttpServletRequest httpServletRequest =
-			PortalUtil.getHttpServletRequest(portletRequest);
-		HttpServletResponse httpServletResponse =
-			PortalUtil.getHttpServletResponse(portletResponse);
-
-		return deleteLayout(httpServletRequest, httpServletResponse);
+		return deleteLayout(
+			PortalUtil.getHttpServletRequest(portletRequest),
+			PortalUtil.getHttpServletResponse(portletResponse));
 	}
 
 	@Override
@@ -639,12 +639,9 @@ public class SitesImpl implements Sites {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws Exception {
 
-		HttpServletRequest httpServletRequest =
-			PortalUtil.getHttpServletRequest(renderRequest);
-		HttpServletResponse httpServletResponse =
-			PortalUtil.getHttpServletResponse(renderResponse);
-
-		deleteLayout(httpServletRequest, httpServletResponse);
+		deleteLayout(
+			PortalUtil.getHttpServletRequest(renderRequest),
+			PortalUtil.getHttpServletResponse(renderResponse));
 	}
 
 	@Override
@@ -1741,9 +1738,7 @@ public class SitesImpl implements Sites {
 
 		LayoutLocalServiceUtil.updateLayout(layout);
 
-		LayoutSet layoutSet = layout.getLayoutSet();
-
-		doResetPrototype(layoutSet);
+		doResetPrototype(layout.getLayoutSet());
 	}
 
 	/**
@@ -1779,8 +1774,14 @@ public class SitesImpl implements Sites {
 			PortletDataHandlerKeys.DELETE_MISSING_LAYOUTS,
 			new String[] {Boolean.FALSE.toString()});
 		parameterMap.put(
+			PortletDataHandlerKeys.DELETE_LAYOUTS,
+			new String[] {Boolean.TRUE.toString()});
+		parameterMap.put(
 			PortletDataHandlerKeys.DELETE_PORTLET_DATA,
 			new String[] {Boolean.FALSE.toString()});
+		parameterMap.put(
+			PortletDataHandlerKeys.DELETIONS,
+			new String[] {Boolean.TRUE.toString()});
 		parameterMap.put(
 			PortletDataHandlerKeys.IGNORE_LAST_PUBLISH_DATE,
 			new String[] {Boolean.TRUE.toString()});
@@ -1926,6 +1927,9 @@ public class SitesImpl implements Sites {
 					ExportImportConfigurationConstants.TYPE_IMPORT_LAYOUT,
 					importLayoutSettingsMap, WorkflowConstants.STATUS_DRAFT,
 					new ServiceContext());
+
+		ExportImportLocalServiceUtil.importLayoutsDataDeletions(
+			exportImportConfiguration, file);
 
 		ExportImportLocalServiceUtil.importLayouts(
 			exportImportConfiguration, file);

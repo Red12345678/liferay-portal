@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {
 	actionItemsValidator,
 	creationMenuItemsValidator,
@@ -17,7 +31,6 @@ import templates from './ManagementToolbar.soy';
  */
 
 class ManagementToolbar extends ClayComponent {
-
 	/**
 	 * @inheritDoc
 	 * @review
@@ -28,16 +41,27 @@ class ManagementToolbar extends ClayComponent {
 
 		new EventEmitterProxy(this.refs.managementToolbar, this);
 
-		Liferay.componentReady(this.searchContainerId).then(
-			searchContainer => {
-				this._eventHandler = [
-					searchContainer.on('rowToggled', this._handleSearchContainerRowToggled, this)
-				];
+		Liferay.componentReady(this.searchContainerId).then(searchContainer => {
+			this._eventHandler = [
+				searchContainer.on(
+					'rowToggled',
+					this._handleSearchContainerRowToggled,
+					this
+				)
+			];
 
-				this._searchContainer = searchContainer;
+			this._searchContainer = searchContainer;
 
-				const select = searchContainer.select;
-				const bulkSelection = this.supportsBulkActions && select.get('bulkSelection');
+			const select = searchContainer.select;
+
+			if (
+				select &&
+				select.getAllSelectedElements &&
+				select.getCurrentPageElements &&
+				select.getCurrentPageSelectedElements
+			) {
+				const bulkSelection =
+					this.supportsBulkActions && select.get('bulkSelection');
 
 				this._setActiveStatus(
 					{
@@ -48,31 +72,25 @@ class ManagementToolbar extends ClayComponent {
 					bulkSelection
 				);
 			}
-		);
+		});
 
 		if (this.actionHandler) {
-			Liferay.componentReady(this.actionHandler).then(
-				actionHandler => {
-					this.defaultEventHandler = actionHandler;
-				}
-			);
+			Liferay.componentReady(this.actionHandler).then(actionHandler => {
+				this.defaultEventHandler = actionHandler;
+			});
 		}
 
 		if (this.infoPanelId) {
-			let sidenavToggle = AUI.$(this.refs.managementToolbar.refs.infoButton);
+			const sidenavToggle = this.refs.managementToolbar.refs.infoButton;
 
-			if (!sidenavToggle.sideNavigation('instance')) {
-				sidenavToggle.sideNavigation(
-					{
-						container: '#' + this.infoPanelId,
-						position: 'right',
-						type: 'relative',
-						typeMobile: 'fixed',
-						width: '320px'
-					}
-				);
-
-				this._sidenavInstance = sidenavToggle.sideNavigation('instance');
+			if (sidenavToggle) {
+				Liferay.SideNavigation.initialize(sidenavToggle, {
+					container: '#' + this.infoPanelId,
+					position: 'right',
+					type: 'relative',
+					typeMobile: 'fixed',
+					width: '320px'
+				});
 			}
 		}
 	}
@@ -85,12 +103,18 @@ class ManagementToolbar extends ClayComponent {
 	disposed(...args) {
 		super.disposed(...args);
 
+		if (this.infoPanelId) {
+			const sidenavToggle = this.refs.managementToolbar.refs.infoButton;
+
+			if (sidenavToggle) {
+				Liferay.SideNavigation.destroy(sidenavToggle);
+			}
+		}
+
 		if (this._eventHandler) {
-			this._eventHandler.forEach(
-				eventHandler => {
-					eventHandler.detach();
-				}
-			);
+			this._eventHandler.forEach(eventHandler => {
+				eventHandler.detach();
+			});
 		}
 	}
 
@@ -98,7 +122,9 @@ class ManagementToolbar extends ClayComponent {
 		let cacheable = true;
 
 		if (this._searchContainer && this._searchContainer.select) {
-			const keepSelection = this._searchContainer.select.get('keepSelection');
+			const keepSelection = this._searchContainer.select.get(
+				'keepSelection'
+			);
 
 			cacheable = keepSelection.test(uri);
 		}
@@ -119,13 +145,25 @@ class ManagementToolbar extends ClayComponent {
 	}
 
 	_handleCreationMenuMoreButtonClicked() {
-		const creationMenuPrimaryItemsCount = this.creationMenu.primaryItems ? this.creationMenu.primaryItems.length : 0;
+		const creationMenuPrimaryItemsCount = this.creationMenu.primaryItems
+			? this.creationMenu.primaryItems.length
+			: 0;
 
-		const creationMenuFavoriteItems = this.creationMenu.secondaryItems && this.creationMenu.secondaryItems[0] ? this.creationMenu.secondaryItems[0].items : [];
-		const creationMenuRestItems = this.creationMenu.secondaryItems && this.creationMenu.secondaryItems[1] ? this.creationMenu.secondaryItems[1].items : [];
+		const creationMenuFavoriteItems =
+			this.creationMenu.secondaryItems &&
+			this.creationMenu.secondaryItems[0]
+				? this.creationMenu.secondaryItems[0].items
+				: [];
+		const creationMenuRestItems =
+			this.creationMenu.secondaryItems &&
+			this.creationMenu.secondaryItems[1]
+				? this.creationMenu.secondaryItems[1].items
+				: [];
 
-		const creationMenuSecondaryItemsCount = creationMenuFavoriteItems.length + creationMenuRestItems.length;
-		const creationMenuTotalItemsCount = creationMenuPrimaryItemsCount + creationMenuSecondaryItemsCount;
+		const creationMenuSecondaryItemsCount =
+			creationMenuFavoriteItems.length + creationMenuRestItems.length;
+		const creationMenuTotalItemsCount =
+			creationMenuPrimaryItemsCount + creationMenuSecondaryItemsCount;
 
 		this.creationMenu.maxPrimaryItems = creationMenuPrimaryItemsCount;
 		this.creationMenu.maxSecondaryItems = creationMenuSecondaryItemsCount;
@@ -137,25 +175,11 @@ class ManagementToolbar extends ClayComponent {
 	}
 
 	_handleFilterLabelCloseClicked(event) {
-		let removeLabelURL = event.data.label.data && event.data.label.data.removeLabelURL;
+		const removeLabelURL =
+			event.data.label.data && event.data.label.data.removeLabelURL;
 
 		if (removeLabelURL) {
 			Liferay.Util.navigate(removeLabelURL);
-		}
-	}
-
-	/**
-	 * Toggles the info panel
-	 * @param {!Event} event
-	 * @private
-	 */
-
-	_handleInfoButtonClicked(event) {
-		event.preventDefault();
-		event.stopPropagation();
-
-		if (this._sidenavInstance) {
-			this._sidenavInstance.toggle();
 		}
 	}
 
@@ -167,12 +191,11 @@ class ManagementToolbar extends ClayComponent {
 
 	_handleSelectPageCheckboxChanged(event) {
 		if (this._searchContainer) {
-			let checkboxStatus = event.data.checked;
+			const checkboxStatus = event.data.checked;
 
 			if (checkboxStatus) {
 				this._searchContainer.select.toggleAllRows(true);
-			}
-			else {
+			} else {
 				this._searchContainer.select.toggleAllRows(false);
 			}
 		}
@@ -200,21 +223,21 @@ class ManagementToolbar extends ClayComponent {
 
 	_handleSearchContainerRowToggled(event) {
 		const actions = event.actions;
-		const bulkSelection = this.supportsBulkActions && this._searchContainer.select.get('bulkSelection');
+		const bulkSelection =
+			this.supportsBulkActions &&
+			this._searchContainer.select.get('bulkSelection');
 
 		this._setActiveStatus(event.elements, bulkSelection);
 
 		if (this.actionItems) {
-			this.actionItems = this.actionItems.map(
-				actionItem => {
-					return Object.assign(
-						actionItem,
-						{
-							disabled: actions && actions.indexOf(actionItem.data.action) === -1 && (!bulkSelection || !actionItem.data.enableOnBulk)
-						}
-					);
-				}
-			);
+			this.actionItems = this.actionItems.map(actionItem => {
+				return Object.assign(actionItem, {
+					disabled:
+						actions &&
+						actions.indexOf(actionItem.data.action) === -1 &&
+						(!bulkSelection || !actionItem.data.enableOnBulk)
+				});
+			});
 		}
 	}
 
@@ -230,20 +253,27 @@ class ManagementToolbar extends ClayComponent {
 		const currentPageElements = elements.currentPageElements.size();
 		const currentPageSelectedElements = elements.currentPageSelectedElements.size();
 
-		const currentPageSelected = currentPageElements === currentPageSelectedElements;
+		const currentPageSelected =
+			currentPageElements === currentPageSelectedElements;
 
-		this.selectedItems = bulkSelection ? this.totalItems : elements.allSelectedElements.filter(':enabled').size();
+		this.selectedItems = bulkSelection
+			? this.totalItems
+			: elements.allSelectedElements.filter(':enabled').size();
 		this.active = this.selectedItems > 0;
 
 		if (currentPageSelectedElements > 0) {
-			this.checkboxStatus = currentPageSelected ? 'checked' : 'indeterminate';
-		}
-		else {
+			this.checkboxStatus = currentPageSelected
+				? 'checked'
+				: 'indeterminate';
+		} else {
 			this.checkboxStatus = 'unchecked';
 		}
 
 		if (this.supportsBulkActions) {
-			this.showSelectAllButton = currentPageSelected && this.totalItems > this.selectedItems && !this._searchContainer.select.get('bulkSelection');
+			this.showSelectAllButton =
+				currentPageSelected &&
+				this.totalItems > this.selectedItems &&
+				!this._searchContainer.select.get('bulkSelection');
 		}
 	}
 }
@@ -255,7 +285,6 @@ class ManagementToolbar extends ClayComponent {
  */
 
 ManagementToolbar.STATE = {
-
 	/**
 	 * Component wired to handle the different available user actions in the
 	 * ManagementToolbar component.
@@ -292,13 +321,11 @@ ManagementToolbar.STATE = {
 	 * @memberof ManagementToolbar
 	 * @type {?(string|undefined)}
 	 */
-	checkboxStatus: Config.oneOf(
-		[
-			'checked',
-			'indeterminate',
-			'unchecked'
-		]
-	).value('unchecked'),
+	checkboxStatus: Config.oneOf([
+		'checked',
+		'indeterminate',
+		'unchecked'
+	]).value('unchecked'),
 
 	/**
 	 * Url for clear results link.
@@ -340,19 +367,17 @@ ManagementToolbar.STATE = {
 	 * @type {?(object|string|bool|undefined)}
 	 */
 
-	creationMenu: Config.shapeOf(
-		{
-			caption: Config.string(),
-			helpText: Config.string(),
-			itemsIconAlignment: Config.string(),
-			maxPrimaryItems: Config.number(),
-			maxSecondaryItems: Config.number(),
-			maxTotalItems: Config.number(),
-			primaryItems: creationMenuItemsValidator,
-			secondaryItems: creationMenuItemsValidator,
-			viewMoreURL: Config.string()
-		}
-	),
+	creationMenu: Config.shapeOf({
+		caption: Config.string(),
+		helpText: Config.string(),
+		itemsIconAlignment: Config.string(),
+		maxPrimaryItems: Config.number(),
+		maxSecondaryItems: Config.number(),
+		maxTotalItems: Config.number(),
+		primaryItems: creationMenuItemsValidator,
+		secondaryItems: creationMenuItemsValidator,
+		viewMoreURL: Config.string()
+	}),
 
 	/**
 	 * Component wired to handle the different available user actions in the
@@ -660,15 +685,13 @@ ManagementToolbar.STATE = {
 	 */
 
 	viewTypes: Config.arrayOf(
-		Config.shapeOf(
-			{
-				active: Config.bool().value(false),
-				disabled: Config.bool().value(false),
-				href: Config.string(),
-				icon: Config.string().required(),
-				label: Config.string().required()
-			}
-		)
+		Config.shapeOf({
+			active: Config.bool().value(false),
+			disabled: Config.bool().value(false),
+			href: Config.string(),
+			icon: Config.string().required(),
+			label: Config.string().required()
+		})
 	)
 };
 

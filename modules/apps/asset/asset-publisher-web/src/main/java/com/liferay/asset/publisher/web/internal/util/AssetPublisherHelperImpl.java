@@ -25,6 +25,7 @@ import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.asset.kernel.service.AssetEntryService;
 import com.liferay.asset.kernel.service.AssetTagLocalService;
 import com.liferay.asset.kernel.service.persistence.AssetEntryQuery;
+import com.liferay.asset.list.asset.entry.provider.AssetListAssetEntryProvider;
 import com.liferay.asset.list.model.AssetListEntry;
 import com.liferay.asset.list.service.AssetListEntryService;
 import com.liferay.asset.publisher.constants.AssetPublisherPortletKeys;
@@ -327,7 +328,12 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 				portletRequest.getAttribute(
 					SegmentsWebKeys.SEGMENTS_ENTRY_IDS));
 
-			return assetListEntry.getAssetEntries(segmentsEntryIds);
+			String acClientUserId = GetterUtil.getString(
+				portletRequest.getAttribute(
+					SegmentsWebKeys.SEGMENTS_ANONYMOUS_USER_ID));
+
+			return _assetListAssetEntryProvider.getAssetEntries(
+				assetListEntry, segmentsEntryIds, acClientUserId);
 		}
 
 		List<AssetEntry> assetEntries = getAssetEntries(
@@ -512,11 +518,9 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 		LiferayPortletResponse liferayPortletResponse, AssetEntry assetEntry,
 		boolean viewInContext) {
 
-		AssetRenderer<?> assetRenderer = assetEntry.getAssetRenderer();
-
 		return getAssetViewURL(
-			liferayPortletRequest, liferayPortletResponse, assetRenderer,
-			assetEntry, viewInContext);
+			liferayPortletRequest, liferayPortletResponse,
+			assetEntry.getAssetRenderer(), assetEntry, viewInContext);
 	}
 
 	@Override
@@ -722,7 +726,6 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 				groupIds.add(groupId);
 			}
 			catch (Exception e) {
-				continue;
 			}
 		}
 
@@ -987,10 +990,9 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 				baseModelSearchResult.getBaseModels();
 
 			if (!assetEntries.isEmpty() && (start < groupTotal)) {
-				String title = assetCategory.getTitle(locale);
-
 				assetEntryResults.add(
-					new AssetEntryResult(title, assetEntries));
+					new AssetEntryResult(
+						assetCategory.getTitle(locale), assetEntries));
 			}
 
 			if (groupTotal > 0) {
@@ -1201,6 +1203,9 @@ public class AssetPublisherHelperImpl implements AssetPublisherHelper {
 
 	@Reference
 	private AssetHelper _assetHelper;
+
+	@Reference
+	private AssetListAssetEntryProvider _assetListAssetEntryProvider;
 
 	@Reference
 	private AssetListEntryService _assetListEntryService;

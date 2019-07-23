@@ -32,6 +32,11 @@ public class JSPSourceProcessorTest extends BaseSourceProcessorTestCase {
 	}
 
 	@Test
+	public void testFormatSelfClosingTags() throws Exception {
+		test("FormatSelfClosingTags.testjsp");
+	}
+
+	@Test
 	public void testFormatTaglibs() throws Exception {
 		test("FormatTaglibs.testjsp");
 	}
@@ -49,6 +54,17 @@ public class JSPSourceProcessorTest extends BaseSourceProcessorTestCase {
 	@Test
 	public void testMisplacedImport() throws Exception {
 		test("MisplacedImport.testjsp", "Move imports to init.jsp");
+	}
+
+	@Test
+	public void testMissingTaglibs() throws Exception {
+		test(
+			"MissingTaglibs.testjsp",
+			new String[] {
+				"Missing taglib for tag with prefix 'aui'",
+				"Missing taglib for tag with prefix 'liferay-portlet'",
+				"Missing taglib for tag with prefix 'liferay-ui'"
+			});
 	}
 
 	@Test

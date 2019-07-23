@@ -17,12 +17,16 @@ package com.liferay.segments.asah.connector.internal.client;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.NestableRuntimeException;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.segments.asah.connector.internal.client.data.binding.IndividualJSONObjectMapper;
 import com.liferay.segments.asah.connector.internal.client.data.binding.IndividualSegmentJSONObjectMapper;
+import com.liferay.segments.asah.connector.internal.client.data.binding.InterestTermsJSONObjectMapper;
+import com.liferay.segments.asah.connector.internal.client.model.Experiment;
 import com.liferay.segments.asah.connector.internal.client.model.Individual;
 import com.liferay.segments.asah.connector.internal.client.model.IndividualSegment;
 import com.liferay.segments.asah.connector.internal.client.model.Results;
+import com.liferay.segments.asah.connector.internal.client.model.Topic;
 import com.liferay.segments.asah.connector.internal.client.util.FilterBuilder;
 import com.liferay.segments.asah.connector.internal.client.util.FilterConstants;
 import com.liferay.segments.asah.connector.internal.client.util.OrderByField;
@@ -59,8 +63,60 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 	}
 
 	@Override
+	public Experiment addExperiment(Experiment experiment) {
+		if (experiment == null) {
+			return null;
+		}
+
+		return _jsonWebServiceClient.doPost(
+			Experiment.class, _PATH_EXPERIMENTS, experiment, _headers);
+	}
+
+	@Override
 	public String getDataSourceId() {
 		return _dataSourceId;
+	}
+
+	@Override
+	public Individual getIndividual(String individualPK) {
+		FilterBuilder filterBuilder = new FilterBuilder();
+
+		filterBuilder.addFilter(
+			"dataSourceId", FilterConstants.COMPARISON_OPERATOR_EQUALS,
+			getDataSourceId());
+		filterBuilder.addFilter(
+			"dataSourceIndividualPKs/individualPKs",
+			FilterConstants.COMPARISON_OPERATOR_EQUALS, individualPK);
+
+		MultivaluedHashMap<String, Object> uriVariables =
+			new MultivaluedHashMap<>();
+
+		uriVariables.putSingle("includeAnonymousUsers", true);
+
+		try {
+			String response = _jsonWebServiceClient.doGet(
+				_PATH_INDIVIDUALS,
+				_getParameters(
+					filterBuilder,
+					FilterConstants.FIELD_NAME_CONTEXT_INDIVIDUAL, 1, 1, null,
+					uriVariables),
+				_headers);
+
+			Results<Individual> individualResults =
+				_individualJSONObjectMapper.mapToResults(response);
+
+			List<Individual> items = individualResults.getItems();
+
+			if (!ListUtil.isEmpty(items)) {
+				return items.get(0);
+			}
+
+			return null;
+		}
+		catch (IOException ioe) {
+			throw new NestableRuntimeException(
+				_ERROR_MSG + ioe.getMessage(), ioe);
+		}
 	}
 
 	@Override
@@ -83,7 +139,7 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 		}
 		catch (IOException ioe) {
 			throw new NestableRuntimeException(
-				"Unable to handle JSON response: " + ioe.getMessage(), ioe);
+				_ERROR_MSG + ioe.getMessage(), ioe);
 		}
 	}
 
@@ -113,8 +169,33 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 		}
 		catch (IOException ioe) {
 			throw new NestableRuntimeException(
+				_ERROR_MSG + ioe.getMessage(), ioe);
+		}
+	}
+
+	@Override
+	public Results<Topic> getInterestTermsResults(String userId) {
+		try {
+			String response = _jsonWebServiceClient.doGet(
+				StringUtil.replace(_PATH_INTERESTS_TERMS, "{userId}", userId),
+				new MultivaluedHashMap<>(), _headers);
+
+			return _interestTermsJSONObjectMapper.mapToResults(response);
+		}
+		catch (IOException ioe) {
+			throw new NestableRuntimeException(
 				"Unable to handle JSON response: " + ioe.getMessage(), ioe);
 		}
+	}
+
+	@Override
+	public Experiment updateExperiment(Experiment experiment) {
+		return _jsonWebServiceClient.doPut(
+			Experiment.class,
+			StringUtil.replace(
+				_PATH_EXPERIMENTS_EXPERIMENT, "{experimentId}",
+				experiment.getId()),
+			experiment, _headers);
 	}
 
 	private MultivaluedMap<String, Object> _getParameters(
@@ -129,12 +210,31 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 		return uriVariables;
 	}
 
+	private MultivaluedMap<String, Object> _getParameters(
+		FilterBuilder filterBuilder, String fieldNameContext, int cur,
+		int delta, List<OrderByField> orderByFields,
+		MultivaluedMap<String, Object> initialUriVariables) {
+
+		MultivaluedMap<String, Object> uriVariables = _getUriVariables(
+			cur, delta, orderByFields, fieldNameContext, initialUriVariables);
+
+		uriVariables.putSingle("filter", filterBuilder.build());
+
+		return uriVariables;
+	}
+
 	private MultivaluedMap<String, Object> _getUriVariables(
 		int cur, int delta, List<OrderByField> orderByFields,
 		String fieldNameContext) {
 
-		MultivaluedMap<String, Object> uriVariables =
-			new MultivaluedHashMap<>();
+		return _getUriVariables(
+			cur, delta, orderByFields, fieldNameContext,
+			new MultivaluedHashMap<>());
+	}
+
+	private MultivaluedMap<String, Object> _getUriVariables(
+		int cur, int delta, List<OrderByField> orderByFields,
+		String fieldNameContext, MultivaluedMap<String, Object> uriVariables) {
 
 		uriVariables.putSingle("page", cur - 1);
 		uriVariables.putSingle("size", delta);
@@ -161,17 +261,31 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 		return uriVariables;
 	}
 
+	private static final String _ERROR_MSG = "Unable to handle JSON response: ";
+
+	private static final String _PATH_EXPERIMENTS = "api/1.0/experiments";
+
+	private static final String _PATH_EXPERIMENTS_EXPERIMENT =
+		_PATH_EXPERIMENTS + "/{experimentId}";
+
 	private static final String _PATH_INDIVIDUAL_SEGMENTS =
 		"api/1.0/individual-segments";
 
 	private static final String _PATH_INDIVIDUAL_SEGMENTS_INDIVIDUALS =
 		_PATH_INDIVIDUAL_SEGMENTS + "/{id}/individuals";
 
+	private static final String _PATH_INDIVIDUALS = "api/1.0/individuals";
+
+	private static final String _PATH_INTERESTS_TERMS =
+		"api/1.0/interests/terms/{userId}";
+
 	private static final IndividualJSONObjectMapper
 		_individualJSONObjectMapper = new IndividualJSONObjectMapper();
 	private static final IndividualSegmentJSONObjectMapper
 		_individualSegmentJSONObjectMapper =
 			new IndividualSegmentJSONObjectMapper();
+	private static final InterestTermsJSONObjectMapper
+		_interestTermsJSONObjectMapper = new InterestTermsJSONObjectMapper();
 
 	private final String _dataSourceId;
 	private final Map<String, String> _headers = new HashMap<>();

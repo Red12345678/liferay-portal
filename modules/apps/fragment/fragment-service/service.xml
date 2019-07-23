@@ -80,6 +80,7 @@
 		<column name="css" type="String" />
 		<column name="html" type="String" />
 		<column name="js" type="String" />
+		<column name="configuration" type="String" />
 		<column name="previewFileEntryId" type="long" />
 		<column name="type" type="int" />
 		<column name="lastPublishDate" type="Date" />
@@ -144,7 +145,7 @@
 		<reference entity="Resource" package-path="com.liferay.portal" />
 		<reference entity="User" package-path="com.liferay.portal" />
 	</entity>
-	<entity local-service="true" name="FragmentEntryLink" remote-service="false" uuid="true">
+	<entity local-service="true" name="FragmentEntryLink" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
 
@@ -171,6 +172,7 @@
 		<column name="css" type="String" />
 		<column name="html" type="String" />
 		<column name="js" type="String" />
+		<column name="configuration" type="String" />
 		<column name="editableValues" type="String" />
 		<column name="namespace" type="String" />
 		<column name="position" type="int" />
@@ -190,6 +192,9 @@
 
 		<finder name="GroupId" return-type="Collection">
 			<finder-column name="groupId" />
+		</finder>
+		<finder name="RendererKey" return-type="Collection">
+			<finder-column name="rendererKey" />
 		</finder>
 		<finder name="G_F" return-type="Collection">
 			<finder-column name="groupId" />
@@ -214,6 +219,7 @@
 
 		<!-- References -->
 
+		<reference entity="FragmentCollection" package-path="com.liferay.fragment" />
 		<reference entity="FragmentEntry" package-path="com.liferay.fragment" />
 		<reference entity="User" package-path="com.liferay.portal" />
 	</entity>
@@ -223,6 +229,7 @@
 		<exception>DuplicateFragmentEntry</exception>
 		<exception>DuplicateFragmentEntryKey</exception>
 		<exception>FragmentCollectionName</exception>
+		<exception>FragmentEntryConfiguration</exception>
 		<exception>FragmentEntryContent</exception>
 		<exception>FragmentEntryName</exception>
 		<exception>InvalidFile</exception>

@@ -1,11 +1,29 @@
-import * as FormSupport from '../Form/FormSupport.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import * as FormSupport from 'dynamic-data-mapping-form-renderer/js/components/FormRenderer/FormSupport.es';
 import ClayButton from 'clay-button';
 import ClayModal from 'clay-modal';
 import Component from 'metal-jsx';
 import dom from 'metal-dom';
 import {Config} from 'metal-state';
 import {EventHandler} from 'metal-events';
-import {focusedFieldStructure, pageStructure, ruleStructure} from '../../util/config.es';
+import {
+	focusedFieldStructure,
+	pageStructure,
+	ruleStructure
+} from '../../util/config.es';
 
 class Actions extends Component {
 	render() {
@@ -53,116 +71,23 @@ class Actions extends Component {
 			dom.closest(event.target, '.col-ddm')
 		);
 
-		this.emit(
-			'fieldDuplicated',
-			{
-				indexes
-			}
-		);
+		this.emit('fieldDuplicated', {
+			indexes
+		});
 	}
 }
 
 const withActionableFields = ChildComponent => {
 	class ActionableFields extends Component {
-		static STATE = {
-
-			/**
-			 * @default undefined
-			 * @instance
-			 * @memberof ActionableFields
-			 * @type {?array<string>}
-			 */
-
-			indexes: Config.object()
-		}
-
-		static PROPS = {
-
-			/**
-			 * @default
-			 * @instance
-			 * @memberof FormBuilder
-			 * @type {?number}
-			 */
-
-			activePage: Config.number().value(0),
-
-			/**
-			 * @default undefined
-			 * @instance
-			 * @memberof FormBuilder
-			 * @type {?string}
-			 */
-
-			defaultLanguageId: Config.string(),
-
-			/**
-			 * @default undefined
-			 * @instance
-			 * @memberof FormBuilder
-			 * @type {?string}
-			 */
-
-			editingLanguageId: Config.string(),
-
-			/**
-			 * @default []
-			 * @instance
-			 * @memberof Sidebar
-			 * @type {?(array|undefined)}
-			 */
-
-			fieldTypes: Config.array().value([]),
-
-			/**
-			 * @default {}
-			 * @instance
-			 * @memberof FormBuilder
-			 * @type {?object}
-			 */
-
-			focusedField: focusedFieldStructure.value({}),
-
-			/**
-			 * @default []
-			 * @instance
-			 * @memberof FormBuilder
-			 * @type {?array<object>}
-			 */
-
-			pages: Config.arrayOf(pageStructure).value([]),
-
-			/**
-			 * @instance
-			 * @memberof FormBuilder
-			 * @type {string}
-			 */
-
-			paginationMode: Config.string().required(),
-
-			/**
-			 * @instance
-			 * @memberof FormBuilder
-			 * @type {string}
-			 */
-
-			rules: Config.arrayOf(ruleStructure).required(),
-
-			/**
-			 * @default undefined
-			 * @instance
-			 * @memberof FormRenderer
-			 * @type {!string}
-			 */
-
-			spritemap: Config.string().required()
-		}
-
 		attached() {
 			this._eventHandler = new EventHandler();
 
 			this._eventHandler.add(
-				this.delegate('mouseenter', '.ddm-field-container', this._handleMouseEnterField.bind(this))
+				this.delegate(
+					'mouseenter',
+					'.ddm-field-container',
+					this._handleMouseEnterField.bind(this)
+				)
 			);
 		}
 
@@ -191,9 +116,13 @@ const withActionableFields = ChildComponent => {
 			return (
 				<div>
 					<ClayModal
-						body={Liferay.Language.get('are-you-sure-you-want-to-delete-this-field')}
+						body={Liferay.Language.get(
+							'are-you-sure-you-want-to-delete-this-field'
+						)}
 						events={{
-							clickButton: this._handleDeleteConfirmationModalButtonClicked.bind(this)
+							clickButton: this._handleDeleteConfirmationModalButtonClicked.bind(
+								this
+							)
 						}}
 						footerButtons={[
 							{
@@ -212,7 +141,9 @@ const withActionableFields = ChildComponent => {
 						ref="deleteModal"
 						size="sm"
 						spritemap={spritemap}
-						title={Liferay.Language.get('delete-field-dialog-title')}
+						title={Liferay.Language.get(
+							'delete-field-dialog-title'
+						)}
 					/>
 
 					<ChildComponent {...this.props} events={this.getEvents()} />
@@ -251,11 +182,9 @@ const withActionableFields = ChildComponent => {
 		}
 
 		_handleDeleteRequest({indexes}) {
-			this.setState(
-				{
-					indexes
-				}
-			);
+			this.setState({
+				indexes
+			});
 
 			this.showDeleteConfirmationModal();
 		}
@@ -276,6 +205,106 @@ const withActionableFields = ChildComponent => {
 			}
 		}
 	}
+
+	ActionableFields.STATE = {
+		/**
+		 * @default undefined
+		 * @instance
+		 * @memberof ActionableFields
+		 * @type {?array<string>}
+		 */
+
+		indexes: Config.object()
+	};
+
+	ActionableFields.PROPS = {
+		/**
+		 * @default
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {?number}
+		 */
+
+		activePage: Config.number().value(0),
+
+		/**
+		 * @default undefined
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {?string}
+		 */
+
+		defaultLanguageId: Config.string(),
+
+		/**
+		 * @default undefined
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {?string}
+		 */
+
+		editingLanguageId: Config.string(),
+
+		/**
+		 * @default []
+		 * @instance
+		 * @memberof Sidebar
+		 * @type {?(array|undefined)}
+		 */
+
+		fieldTypes: Config.array().value([]),
+
+		/**
+		 * @default {}
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {?object}
+		 */
+
+		focusedField: focusedFieldStructure.value({}),
+
+		/**
+		 * @default []
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {?array<object>}
+		 */
+
+		pages: Config.arrayOf(pageStructure).value([]),
+
+		/**
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {string}
+		 */
+
+		paginationMode: Config.string().required(),
+
+		/**
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {string}
+		 */
+
+		portletNamespace: Config.string().required(),
+
+		/**
+		 * @instance
+		 * @memberof FormBuilder
+		 * @type {string}
+		 */
+
+		rules: Config.arrayOf(ruleStructure).required(),
+
+		/**
+		 * @default undefined
+		 * @instance
+		 * @memberof FormRenderer
+		 * @type {!string}
+		 */
+
+		spritemap: Config.string().required()
+	};
 
 	return ActionableFields;
 };

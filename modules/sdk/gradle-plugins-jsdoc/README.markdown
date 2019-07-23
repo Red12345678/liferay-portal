@@ -12,7 +12,7 @@ To use the plugin, include it in your build script:
 ```gradle
 buildscript {
 	dependencies {
-		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.jsdoc", version: "2.0.29"
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.jsdoc", version: "2.0.33"
 	}
 
 	repositories {
@@ -129,7 +129,7 @@ Property Name | Default Value
 
 Property Name | Type | Default Value | Description
 ------------- | ---- | ------------- | -----------
-`configuration` | [`TextResource`](https://docs.gradle.org/current/dsl/org.gradle.api.resources.TextResource.html) | `null` | The JSDoc configuration file. It sets the `--configure` argument.
+`configuration` | [`TextResource`](https://docs.gradle.org/current/dsl/org.gradle.api.resources.TextResource.html) | `null` | The JSDoc configuration file. It sets the `--configure` argument.
 <a name="destinationdir"></a>`destinationDir` | `File` | `null` | The directory where the JavaScript API documentation files are saved. It sets the `--destination` argument.
 `packageJsonFile` | `File` | `"${project.projectDir}/package.json"` | The path to the project's package file. It sets the `--package` argument.
 <a name="sourcedirs"></a>`sourceDirs` | `FileCollection` | `[]` | The directories that contains the files to process.

@@ -1,8 +1,23 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import '../SuccessPage/SuccessPage.es';
 import ClayModal from 'clay-modal';
 import Component from 'metal-jsx';
-import compose from '../../util/compose.es';
+import compose from 'dynamic-data-mapping-form-renderer/js/util/compose.es';
 import dom from 'metal-dom';
-import FormRenderer from '../../components/Form/FormRenderer.es';
+import FormRenderer from 'dynamic-data-mapping-form-renderer/js/components/FormRenderer/FormRenderer.es';
 import Sidebar from '../../components/Sidebar/Sidebar.es';
 import withActionableFields from './withActionableFields.es';
 import withEditablePageHeader from './withEditablePageHeader.es';
@@ -11,105 +26,29 @@ import withMultiplePages from './withMultiplePages.es';
 import withResizeableColumns from './withResizeableColumns.es';
 import {Config} from 'metal-state';
 import {EventHandler} from 'metal-events';
-import {focusedFieldStructure, pageStructure, ruleStructure} from '../../util/config.es';
+import {
+	focusedFieldStructure,
+	pageStructure,
+	ruleStructure
+} from '../../util/config.es';
 import {generateFieldName} from '../LayoutProvider/util/fields.es';
-import {makeFetch} from '../../util/fetch.es';
+import {makeFetch} from 'dynamic-data-mapping-form-renderer/js/util/fetch.es';
 import {normalizeSettingsContextPages} from '../../util/fieldSupport.es';
-import {PagesVisitor} from '../../util/visitors.es';
+import {PagesVisitor} from 'dynamic-data-mapping-form-renderer/js/util/visitors.es';
 
 /**
  * Builder.
  * @extends Component
  */
 
-class FormBuilder extends Component {
-	static PROPS = {
-
-		/**
-		 * @default
-		 * @instance
-		 * @memberof FormBuilder
-		 * @type {?number}
-		 */
-
-		activePage: Config.number().value(0),
-
-		/**
-		 * @default undefined
-		 * @instance
-		 * @memberof FormBuilder
-		 * @type {?string}
-		 */
-
-		defaultLanguageId: Config.string(),
-
-		/**
-		 * @default undefined
-		 * @instance
-		 * @memberof FormBuilder
-		 * @type {?string}
-		 */
-
-		editingLanguageId: Config.string(),
-
-		/**
-		 * @default []
-		 * @instance
-		 * @memberof Sidebar
-		 * @type {?(array|undefined)}
-		 */
-
-		fieldTypes: Config.array().value([]),
-
-		/**
-		 * @default {}
-		 * @instance
-		 * @memberof FormBuilder
-		 * @type {?object}
-		 */
-
-		focusedField: focusedFieldStructure.value({}),
-
-		/**
-		 * @default []
-		 * @instance
-		 * @memberof FormBuilder
-		 * @type {?array<object>}
-		 */
-
-		pages: Config.arrayOf(pageStructure).value([]),
-
-		/**
-		 * @instance
-		 * @memberof FormBuilder
-		 * @type {string}
-		 */
-
-		paginationMode: Config.string().required(),
-
-		/**
-		 * @instance
-		 * @memberof FormBuilder
-		 * @type {string}
-		 */
-
-		rules: Config.arrayOf(ruleStructure).required(),
-
-		/**
-		 * @default undefined
-		 * @instance
-		 * @memberof FormRenderer
-		 * @type {!string}
-		 */
-
-		spritemap: Config.string().required()
-	};
-
+class FormBuilderBase extends Component {
 	attached() {
 		const {activePage, pages} = this.props;
 		const {store} = this.context;
 		const formBasicInfo = document.querySelector('.ddm-form-basic-info');
-		const translationManager = document.querySelector('.ddm-translation-manager');
+		const translationManager = document.querySelector(
+			'.ddm-translation-manager'
+		);
 
 		if (formBasicInfo && translationManager) {
 			formBasicInfo.classList.remove('hide');
@@ -127,7 +66,9 @@ class FormBuilder extends Component {
 
 	created() {
 		this._eventHandler = new EventHandler();
-		this._handleCancelChangesModalButtonClicked = this._handleCancelChangesModalButtonClicked.bind(this);
+		this._handleCancelChangesModalButtonClicked = this._handleCancelChangesModalButtonClicked.bind(
+			this
+		);
 	}
 
 	disposeInternal() {
@@ -146,11 +87,12 @@ class FormBuilder extends Component {
 		return {
 			fieldAdded: this._handleFieldAdded.bind(this),
 			fieldBlurred: this._handleSidebarFieldBlurred.bind(this),
-			fieldChangesCanceled: this._handleCancelFieldChangesModal.bind(this),
+			fieldChangesCanceled: this._handleCancelFieldChangesModal.bind(
+				this
+			),
 			fieldDeleted: this._handleFieldDeleted.bind(this),
 			fieldDuplicated: this._handleFieldDuplicated.bind(this),
 			fieldSetAdded: this._handleFieldSetAdded.bind(this),
-			focusedFieldUpdated: this._handleFocusedFieldUpdated.bind(this),
 			settingsFieldBlurred: this._handleSettingsFieldBlurred.bind(this),
 			settingsFieldEdited: this._handleSettingsFieldEdited.bind(this)
 		};
@@ -165,24 +107,27 @@ class FormBuilder extends Component {
 	preparePagesForRender(pages) {
 		const visitor = new PagesVisitor(pages);
 
-		return visitor.mapFields(
-			field => {
-				if (field.type === 'select' && field.dataSourceType !== 'manual') {
-					field = {
-						...field,
-						options: [
-							{
-								label: Liferay.Language.get('dynamically-loaded-data'),
-								value: 'dynamic'
-							}
-						],
-						value: 'dynamic'
-					};
-				}
-
-				return field;
+		return visitor.mapFields(field => {
+			if (field.type === 'select' && field.dataSourceType !== 'manual') {
+				field = {
+					...field,
+					options: [
+						{
+							label: Liferay.Language.get(
+								'dynamically-loaded-data'
+							),
+							value: 'dynamic'
+						}
+					],
+					value: 'dynamic'
+				};
 			}
-		);
+
+			return {
+				...field,
+				readOnly: true
+			};
+		});
 	}
 
 	render() {
@@ -194,9 +139,9 @@ class FormBuilder extends Component {
 			fieldSets,
 			fieldTypes,
 			focusedField,
-			namespace,
 			pages,
 			paginationMode,
+			portletNamespace,
 			rules,
 			spritemap,
 			visible
@@ -213,14 +158,18 @@ class FormBuilder extends Component {
 							events={this.getFormRendererEvents()}
 							pages={this.preparePagesForRender(pages)}
 							paginationMode={paginationMode}
+							portletNamespace={portletNamespace}
 							ref="FormRenderer"
 							spritemap={spritemap}
 						/>
 
 						<ClayModal
-							body={Liferay.Language.get('are-you-sure-you-want-to-cancel')}
+							body={Liferay.Language.get(
+								'are-you-sure-you-want-to-cancel'
+							)}
 							events={{
-								clickButton: this._handleCancelChangesModalButtonClicked
+								clickButton: this
+									._handleCancelChangesModalButtonClicked
 							}}
 							footerButtons={[
 								{
@@ -239,7 +188,9 @@ class FormBuilder extends Component {
 							ref="cancelChangesModal"
 							size="sm"
 							spritemap={spritemap}
-							title={Liferay.Language.get('cancel-field-changes-question')}
+							title={Liferay.Language.get(
+								'cancel-field-changes-question'
+							)}
 						/>
 					</div>
 				</div>
@@ -251,7 +202,7 @@ class FormBuilder extends Component {
 					fieldSets={fieldSets}
 					fieldTypes={fieldTypes}
 					focusedField={focusedField}
-					namespace={namespace}
+					portletNamespace={portletNamespace}
 					ref="sidebar"
 					rules={rules}
 					spritemap={spritemap}
@@ -273,15 +224,16 @@ class FormBuilder extends Component {
 
 		if (defaultLanguageId === editingLanguageId) {
 			addButton.classList.remove('invisible');
-		}
-		else {
+		} else {
 			addButton.classList.add('invisible');
 		}
 	}
 
 	syncVisible(visible) {
 		const addButton = document.querySelector('#addFieldButton');
-		const translationManager = document.querySelector('.ddm-translation-manager');
+		const translationManager = document.querySelector(
+			'.ddm-translation-manager'
+		);
 
 		super.syncVisible(visible);
 
@@ -290,10 +242,13 @@ class FormBuilder extends Component {
 			translationManager.classList.remove('hide');
 
 			this._eventHandler.add(
-				dom.on('#addFieldButton', 'click', this._handleAddFieldButtonClicked.bind(this))
+				dom.on(
+					'#addFieldButton',
+					'click',
+					this._handleAddFieldButtonClicked.bind(this)
+				)
 			);
-		}
-		else {
+		} else {
 			this._eventHandler.removeAllListeners();
 		}
 	}
@@ -322,6 +277,10 @@ class FormBuilder extends Component {
 			}
 		}
 
+		if (pages[activePage].successPageSettings) {
+			openSidebar = false;
+		}
+
 		if (openSidebar) {
 			this.openSidebar();
 		}
@@ -332,21 +291,17 @@ class FormBuilder extends Component {
 			editingLanguageId,
 			fieldSetDefinitionURL,
 			groupId,
-			namespace
+			portletNamespace
 		} = this.props;
 
-		return makeFetch(
-			{
-				method: 'GET',
-				url: `${fieldSetDefinitionURL}?ddmStructureId=${fieldSetId}&languageId=${editingLanguageId}&portletNamespace=${namespace}&scopeGroupId=${groupId}`
-			}
-		).then(
-			({pages}) => pages
-		).catch(
-			error => {
+		return makeFetch({
+			method: 'GET',
+			url: `${fieldSetDefinitionURL}?ddmStructureId=${fieldSetId}&languageId=${editingLanguageId}&portletNamespace=${portletNamespace}&scopeGroupId=${groupId}`
+		})
+			.then(({pages}) => pages)
+			.catch(error => {
 				throw new Error(error);
-			}
-		);
+			});
 	}
 
 	_handleAddFieldButtonClicked() {
@@ -380,32 +335,42 @@ class FormBuilder extends Component {
 
 	_handleFieldAdded(event) {
 		const {dispatch} = this.context;
-		const {fieldType} = event;
+		const {
+			fieldType,
+			data: {target}
+		} = event;
 		const {editingLanguageId} = this.props;
 		const {settingsContext} = fieldType;
 		const {pages} = settingsContext;
-		const newFieldName = generateFieldName(this.props.pages, fieldType.label);
+		const newFieldName = generateFieldName(
+			this.props.pages,
+			fieldType.label
+		);
 
 		const focusedField = {
 			...fieldType,
 			fieldName: newFieldName,
 			settingsContext: {
 				...settingsContext,
-				pages: normalizeSettingsContextPages(pages, editingLanguageId, fieldType, newFieldName),
+				pages: normalizeSettingsContextPages(
+					pages,
+					editingLanguageId,
+					fieldType,
+					newFieldName
+				),
 				type: fieldType.name
 			}
 		};
 
-		const addedToPlaceholder = !event.data.target.parentElement.parentElement.classList.contains('position-relative');
-
-		dispatch(
-			'fieldAdded',
-			{
-				...event,
-				addedToPlaceholder,
-				focusedField
-			}
+		const addedToPlaceholder = target.parentElement.parentElement.classList.contains(
+			'placeholder'
 		);
+
+		dispatch('fieldAdded', {
+			...event,
+			addedToPlaceholder,
+			focusedField
+		});
 
 		this.openSidebar();
 	}
@@ -431,30 +396,12 @@ class FormBuilder extends Component {
 		const {dispatch} = this.context;
 		const {fieldSetId} = data.source.dataset;
 
-		this._fetchFieldSet(fieldSetId).then(
-			pages => {
-				dispatch(
-					'fieldSetAdded',
-					{
-						...event,
-						fieldSetPages: pages
-					}
-				);
-			}
-		);
-	}
-
-	_handleFocusedFieldUpdated(focusedField) {
-		const {dispatch} = this.context;
-		const settingsContext = focusedField.settingsContext;
-
-		dispatch(
-			'focusedFieldUpdated',
-			{
-				...focusedField,
-				settingsContext
-			}
-		);
+		this._fetchFieldSet(fieldSetId).then(pages => {
+			dispatch('fieldSetAdded', {
+				...event,
+				fieldSetPages: pages
+			});
+		});
 	}
 
 	_handleSettingsFieldBlurred({fieldInstance, value}) {
@@ -462,14 +409,11 @@ class FormBuilder extends Component {
 		const {editingLanguageId} = this.props;
 		const {fieldName} = fieldInstance;
 
-		store.emit(
-			'fieldBlurred',
-			{
-				editingLanguageId,
-				propertyName: fieldName,
-				propertyValue: value
-			}
-		);
+		store.emit('fieldBlurred', {
+			editingLanguageId,
+			propertyName: fieldName,
+			propertyValue: value
+		});
 	}
 
 	_handleSettingsFieldEdited({fieldInstance, value}) {
@@ -478,14 +422,11 @@ class FormBuilder extends Component {
 			const {fieldName} = fieldInstance;
 			const {store} = this.context;
 
-			store.emit(
-				'fieldEdited',
-				{
-					editingLanguageId,
-					propertyName: fieldName,
-					propertyValue: value
-				}
-			);
+			store.emit('fieldEdited', {
+				editingLanguageId,
+				propertyName: fieldName,
+				propertyValue: value
+			});
 		}
 	}
 
@@ -504,15 +445,102 @@ class FormBuilder extends Component {
 
 		let hasFields = false;
 
-		visitor.mapFields(
-			() => {
-				hasFields = true;
-			}
-		);
+		visitor.mapFields(() => {
+			hasFields = true;
+		});
 
 		return hasFields;
 	}
 }
+
+FormBuilderBase.PROPS = {
+	/**
+	 * @default
+	 * @instance
+	 * @memberof FormBuilder
+	 * @type {?number}
+	 */
+
+	activePage: Config.number().value(0),
+
+	/**
+	 * @default undefined
+	 * @instance
+	 * @memberof FormBuilder
+	 * @type {?string}
+	 */
+
+	defaultLanguageId: Config.string(),
+
+	/**
+	 * @default undefined
+	 * @instance
+	 * @memberof FormBuilder
+	 * @type {?string}
+	 */
+
+	editingLanguageId: Config.string(),
+
+	/**
+	 * @default []
+	 * @instance
+	 * @memberof Sidebar
+	 * @type {?(array|undefined)}
+	 */
+
+	fieldTypes: Config.array().value([]),
+
+	/**
+	 * @default {}
+	 * @instance
+	 * @memberof FormBuilder
+	 * @type {?object}
+	 */
+
+	focusedField: focusedFieldStructure.value({}),
+
+	/**
+	 * @default []
+	 * @instance
+	 * @memberof FormBuilder
+	 * @type {?array<object>}
+	 */
+
+	pages: Config.arrayOf(pageStructure).value([]),
+
+	/**
+	 * @instance
+	 * @memberof FormBuilder
+	 * @type {string}
+	 */
+
+	paginationMode: Config.string().required(),
+
+	/**
+	 * @instance
+	 * @memberof FormBuilder
+	 * @type {string}
+	 */
+
+	portletNamespace: Config.string().required(),
+
+	/**
+	 * @instance
+	 * @memberof FormBuilder
+	 * @type {string}
+	 */
+
+	rules: Config.arrayOf(ruleStructure).required(),
+
+	/**
+	 * @default undefined
+	 * @instance
+	 * @memberof FormRenderer
+	 * @type {!string}
+	 */
+
+	spritemap: Config.string().required()
+};
 
 export default compose(
 	withActionableFields,
@@ -520,4 +548,6 @@ export default compose(
 	withMoveableFields,
 	withMultiplePages,
 	withResizeableColumns
-)(FormBuilder);
+)(FormBuilderBase);
+
+export {FormBuilderBase};

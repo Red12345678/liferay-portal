@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.IndexSearcherHelper;
 import com.liferay.portal.kernel.search.IndexWriterHelper;
-import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SortFactoryUtil;
 import com.liferay.portal.kernel.search.Summary;
@@ -44,14 +43,12 @@ import java.util.Locale;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
 /**
  * @author Michael C. Han
  * @author Peter Fellwock
+ * @deprecated As of Judson (7.1.x)
  */
-@Component(immediate = true, service = Indexer.class)
+@Deprecated
 public class AccountIndexer extends BaseIndexer<Account> {
 
 	public static final String CLASS_NAME = Account.class.getName();
@@ -116,18 +113,14 @@ public class AccountIndexer extends BaseIndexer<Account> {
 
 	@Override
 	protected void doReindex(Account account) throws Exception {
-		Document document = getDocument(account);
-
 		indexWriterHelper.updateDocument(
-			getSearchEngineId(), account.getCompanyId(), document,
+			getSearchEngineId(), account.getCompanyId(), getDocument(account),
 			isCommitImmediately());
 	}
 
 	@Override
 	protected void doReindex(String className, long classPK) throws Exception {
-		Account account = accountLocalService.getAccount(classPK);
-
-		doReindex(account);
+		doReindex(accountLocalService.getAccount(classPK));
 	}
 
 	@Override
@@ -145,9 +138,8 @@ public class AccountIndexer extends BaseIndexer<Account> {
 		indexableActionableDynamicQuery.setPerformActionMethod(
 			(Account account) -> {
 				try {
-					Document document = getDocument(account);
-
-					indexableActionableDynamicQuery.addDocuments(document);
+					indexableActionableDynamicQuery.addDocuments(
+						getDocument(account));
 				}
 				catch (PortalException pe) {
 					if (_log.isWarnEnabled()) {
@@ -162,13 +154,8 @@ public class AccountIndexer extends BaseIndexer<Account> {
 		indexableActionableDynamicQuery.performActions();
 	}
 
-	@Reference
 	protected AccountLocalService accountLocalService;
-
-	@Reference
 	protected IndexSearcherHelper indexSearcherHelper;
-
-	@Reference
 	protected IndexWriterHelper indexWriterHelper;
 
 	private static final Log _log = LogFactoryUtil.getLog(AccountIndexer.class);

@@ -1,56 +1,50 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 /* globals expect */
 import editableValuesMigrator from '../../../src/main/resources/META-INF/resources/js/utils/fragmentMigrator.es';
 
-describe(
-	'fragmentMigrator',
-	() => {
-		test(
-			'should migrate single editable fragment',
-			() => {
-				const inputData = JSON.stringify(singleEditableFragmentInput);
+describe('fragmentMigrator', () => {
+	test('should migrate single editable fragment', () => {
+		const inputData = JSON.stringify(singleEditableFragmentInput);
 
-				expect(
-					editableValuesMigrator(inputData, DEFAULT_SEGMENTS_EXPERIENCE_ID)
-				).toEqual(
-					singleEditableFragmentExpected
-				);
-			}
+		expect(
+			editableValuesMigrator(inputData, DEFAULT_SEGMENTS_EXPERIENCE_ID)
+		).toEqual(singleEditableFragmentExpected);
+	});
+
+	test('should migrate double editable fragment', () => {
+		const inputData = JSON.stringify(doubleEditableFragmentInput);
+
+		expect(
+			editableValuesMigrator(inputData, DEFAULT_SEGMENTS_EXPERIENCE_ID)
+		).toEqual(doubleEditableFragmentExpected);
+	});
+
+	test('should leave already migrated segments as they are', () => {
+		const doubleInputData = JSON.stringify(doubleEditableFragmentExpected);
+		const singleInputData = JSON.stringify(singleEditableFragmentExpected);
+
+		expect(editableValuesMigrator(doubleInputData)).toEqual(
+			doubleEditableFragmentExpected
 		);
 
-		test(
-			'should migrate double editable fragment',
-			() => {
-				const inputData = JSON.stringify(doubleEditableFragmentInput);
-
-				expect(
-					editableValuesMigrator(inputData, DEFAULT_SEGMENTS_EXPERIENCE_ID)
-				).toEqual(
-					doubleEditableFragmentExpected
-				);
-			}
+		expect(editableValuesMigrator(singleInputData)).toEqual(
+			singleEditableFragmentExpected
 		);
-
-		test(
-			'should leave already migrated segments as they are',
-			() => {
-				const doubleInputData = JSON.stringify(doubleEditableFragmentExpected);
-				const singleInputData = JSON.stringify(singleEditableFragmentExpected);
-
-				expect(
-					editableValuesMigrator(doubleInputData)
-				).toEqual(
-					doubleEditableFragmentExpected
-				);
-
-				expect(
-					editableValuesMigrator(singleInputData)
-				).toEqual(
-					singleEditableFragmentExpected
-				);
-			}
-		);
-	}
-);
+	});
+});
 
 const DEFAULT_SEGMENTS_EXPERIENCE_ID = 'defaultSegmentsExperienceId';
 

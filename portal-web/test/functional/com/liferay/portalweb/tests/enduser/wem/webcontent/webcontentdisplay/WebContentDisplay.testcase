@@ -1,5 +1,6 @@
 @component-name = "portal-wcd"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Web Content Display";
@@ -17,11 +18,10 @@ definition {
 			groupName = "Test Site Name",
 			layoutName = "Web Content Display Page");
 
-		Navigator.gotoSitePage(
-			pageName = "Web Content Display Page",
-			siteName = "Test Site Name");
-
-		Portlet.addPG(portletName = "Web Content Display");
+		JSONLayout.addWidgetToPublicLayout(
+			groupName = "Test Site Name",
+			layoutName = "Web Content Display Page",
+			widgetName = "Web Content Display");
 	}
 
 	tearDown {
@@ -108,6 +108,10 @@ definition {
 	@priority = "4"
 	test AddDraftNotApproved {
 		property testray.component.names = "Web Content Display";
+
+		Navigator.gotoSitePage(
+			pageName = "Web Content Display Page",
+			siteName = "Test Site Name");
 
 		WebContent.addDraftPGViaWCD(
 			webContentContent = "WC WebContent Content",
@@ -222,6 +226,10 @@ definition {
 	@priority = "4"
 	test AddNewWebContentViaAddContentPanel {
 		property testray.component.names = "Web Content Display";
+
+		Navigator.gotoSitePage(
+			pageName = "Web Content Display Page",
+			siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
@@ -338,6 +346,10 @@ definition {
 	test AddWebContentPortalScopeCurrentPage {
 		property testray.component.names = "Web Content Display";
 
+		Navigator.gotoSitePage(
+			pageName = "Web Content Display Page",
+			siteName = "Test Site Name");
+
 		for (var i : list "1,2") {
 			ProductMenu.gotoPortlet(
 				category = "Site Builder",
@@ -419,10 +431,7 @@ definition {
 	test AddWebContentViaAddContentPanel {
 		property testray.component.names = "Web Content Display,Training";
 
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Web Content");
+		WebContent.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -489,16 +498,13 @@ definition {
 	@description = "Add a web content article with a custom DDM structure and template and display it in the web content display widget."
 	@priority = "5"
 	test AddWithStructure {
-		property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
+		property app.server.types = "jboss,tcserver,tomcat,weblogic,websphere,wildfly";
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 		property environment.acceptance = "true";
 		property portal.acceptance = "true";
 		property testray.component.names = "Web Content Display,Training";
 
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Web Content");
+		WebContent.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		NavItem.gotoStructures();
 
@@ -580,23 +586,7 @@ definition {
 	test ChangeTemplate {
 		property testray.component.names = "Web Content Display";
 
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
-
-		SitePages.addPublicPage(pageName = "Web Content Page");
-
-		Navigator.gotoSitePage(
-			pageName = "Web Content Page",
-			siteName = "Test Site Name");
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Web Content");
-
-		NavItem.gotoTemplates();
+		WebContentTemplates.openWebContentTemplatesAdmin(siteURLKey = "test-site-name");
 
 		WebContentTemplates.addCP(
 			structureName = "Basic Web Content",
@@ -604,24 +594,13 @@ definition {
 			templateName = "Second Basic Template");
 
 		Navigator.gotoSitePage(
-			pageName = "Web Content Page",
+			pageName = "Web Content Display Page",
 			siteName = "Test Site Name");
 
-		Content.addNewPG(assetType = "Basic Web Content");
-
-		WebContent.addCP(
+		WebContent.addPGViaWCD(
+			templateName = "Second Basic Template",
 			webContentContent = "WC WebContent Content",
 			webContentTitle = "WC WebContent Title");
-
-		WebContent.selectTemplateCP(
-			structureName = "Basic Web Content",
-			templateName = "Second Basic Template");
-
-		WebContent.publishViaWCD();
-
-		Navigator.gotoSitePage(
-			pageName = "Web Content Page",
-			siteName = "Test Site Name");
 
 		WebContent.viewPGViaWCD(webContentContent = "WC WebContent Content WC WebContent Content WC WebContent Content");
 
@@ -636,7 +615,7 @@ definition {
 		WebContent.publishViaWCD();
 
 		Navigator.gotoSitePage(
-			pageName = "Web Content Page",
+			pageName = "Web Content Display Page",
 			siteName = "Test Site Name");
 
 		WebContent.viewPGViaWCD(webContentContent = "WC WebContent Content");
@@ -709,22 +688,11 @@ definition {
 		WebContent.viewPGViaWCD(webContentContent = "WC WebContent Content");
 	}
 
-	@priority = "5"
-	test RemoveWCDPortletSite {
-		property portal.acceptance = "true";
-		property testray.component.names = "Web Content Display,Training";
-
-		Portlet.deletePG(portletName = "Web Content Display");
-	}
-
 	@priority = "4"
 	test SearchWebContent {
 		property testray.component.names = "Web Content Display";
 
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Web Content");
+		WebContent.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -770,20 +738,10 @@ definition {
 		property portal.acceptance = "true";
 		property testray.component.names = "Web Content Display,Training";
 
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Web Content");
-
-		WebContentNavigator.gotoAddCP();
-
-		WebContent.addCP(
-			webContentContent = "WC WebContent Content",
-			webContentTitle = "WC WebContent Title");
-
-		PortletEntry.publish();
-
-		WebContent.viewTitle(webContentTitle = "WC WebContent Title");
+		JSONWebcontent.addWebContent(
+			content = "WC WebContent Content",
+			groupName = "Test Site Name",
+			title = "WC WebContent Title");
 
 		Navigator.gotoSitePage(
 			pageName = "Web Content Display Page",
@@ -928,6 +886,10 @@ definition {
 	test ViewAllSettingsEnabledWCDConfiguration {
 		property test.name.skip.portal.instance = "WebContentDisplay#ViewAllSettingsEnabledWCDConfiguration";
 		property testray.component.names = "Web Content Display";
+
+		Navigator.gotoSitePage(
+			pageName = "Web Content Display Page",
+			siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
@@ -1194,10 +1156,7 @@ definition {
 	test ViewWebContentDisplayPortletMessages {
 		property testray.component.names = "Web Content Display";
 
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Web Content");
+		WebContent.openWebContentAdmin(siteURLKey = "test-site-name");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -1292,4 +1251,5 @@ definition {
 
 		WebContentDisplayPortlet.viewContentPageBreak(webContentContent = "Home");
 	}
+
 }

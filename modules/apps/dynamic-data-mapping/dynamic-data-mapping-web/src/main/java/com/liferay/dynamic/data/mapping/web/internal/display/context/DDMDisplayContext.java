@@ -29,7 +29,7 @@ import com.liferay.dynamic.data.mapping.util.DDMDisplayRegistry;
 import com.liferay.dynamic.data.mapping.util.DDMDisplayTabItem;
 import com.liferay.dynamic.data.mapping.util.DDMTemplateHelper;
 import com.liferay.dynamic.data.mapping.util.DDMUtil;
-import com.liferay.dynamic.data.mapping.web.configuration.DDMWebConfiguration;
+import com.liferay.dynamic.data.mapping.web.internal.configuration.DDMWebConfiguration;
 import com.liferay.dynamic.data.mapping.web.internal.context.util.DDMWebRequestHelper;
 import com.liferay.dynamic.data.mapping.web.internal.search.StructureSearch;
 import com.liferay.dynamic.data.mapping.web.internal.search.StructureSearchTerms;
@@ -106,10 +106,8 @@ public class DDMDisplayContext {
 		_ddmWebConfiguration = ddmWebConfiguration;
 		_storageAdapterRegistry = storageAdapterRegistry;
 
-		HttpServletRequest httpServletRequest =
-			PortalUtil.getHttpServletRequest(renderRequest);
-
-		_ddmWebRequestHelper = new DDMWebRequestHelper(httpServletRequest);
+		_ddmWebRequestHelper = new DDMWebRequestHelper(
+			PortalUtil.getHttpServletRequest(renderRequest));
 	}
 
 	public boolean autogenerateStructureKey() {
@@ -430,10 +428,8 @@ public class DDMDisplayContext {
 	}
 
 	public SearchContainer<DDMStructure> getStructureSearch() throws Exception {
-		PortletURL portletURL = getPortletURL();
-
 		StructureSearch structureSearch = new StructureSearch(
-			_renderRequest, portletURL);
+			_renderRequest, getPortletURL());
 
 		String orderByCol = getOrderByCol();
 		String orderByType = getOrderByType();
@@ -587,10 +583,8 @@ public class DDMDisplayContext {
 	}
 
 	public SearchContainer<DDMTemplate> getTemplateSearch() throws Exception {
-		PortletURL portletURL = getPortletURL();
-
 		TemplateSearch templateSearch = new TemplateSearch(
-			_renderRequest, portletURL);
+			_renderRequest, getPortletURL());
 
 		String orderByCol = getOrderByCol();
 		String orderByType = getOrderByType();
@@ -861,6 +855,12 @@ public class DDMDisplayContext {
 			portletURL.setParameter("delta", delta);
 		}
 
+		String eventName = ParamUtil.getString(_renderRequest, "eventName");
+
+		if (Validator.isNotNull(eventName)) {
+			portletURL.setParameter("eventName", eventName);
+		}
+
 		String keywords = getKeywords();
 
 		if (Validator.isNotNull(keywords)) {
@@ -1036,7 +1036,7 @@ public class DDMDisplayContext {
 				structureSearch.getEnd());
 		}
 		else {
-			results = _ddmStructureService.search(
+			results = _ddmStructureService.getStructures(
 				_ddmWebRequestHelper.getCompanyId(), groupIds,
 				getStructureClassNameId(), searchTerms.getKeywords(),
 				searchTerms.getStatus(), structureSearch.getStart(),
@@ -1071,7 +1071,7 @@ public class DDMDisplayContext {
 				getSearchRestrictionClassPK());
 		}
 		else {
-			total = _ddmStructureService.searchCount(
+			total = _ddmStructureService.getStructuresCount(
 				_ddmWebRequestHelper.getCompanyId(), groupIds,
 				getStructureClassNameId(), searchTerms.getKeywords(),
 				searchTerms.getStatus());

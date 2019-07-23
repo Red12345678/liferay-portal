@@ -173,10 +173,6 @@
 
 	<delete file="${app.server.tmp.properties}" />
 
-	<condition property="app.server.portal.war.name" value="${app.server.glassfish.portal.war.name}">
-		<equals arg1="${app.server.type}" arg2="glassfish" />
-	</condition>
-
 	<condition property="app.server.portal.war.name" value="${app.server.websphere.portal.war.name}">
 		<equals arg1="${app.server.type}" arg2="websphere" />
 	</condition>
@@ -488,31 +484,15 @@ information.
 		<attribute default="${app.server.classes.portal.dir}" name="deploy.properties.dest" />
 
 		<sequential>
-			<if>
-				<and>
-					<equals arg1="${app.server.bundled}" arg2="true" />
-					<equals arg1="${app.server.type}" arg2="glassfish" />
-				</and>
-				<then>
-					<war
-						destfile="${app.server.glassfish.portal.war.name}"
-						update="true"
-					>
-						<classes dir="${project.dir}/portal-impl/src" includes="portal-*.properties,system-*.properties" />
-					</war>
-				</then>
-				<else>
-					<copy
-						overwrite="true"
-						todir="@{deploy.properties.dest}"
-					>
-						<fileset
-							dir="${project.dir}/portal-impl/src"
-							includes="portal-*.properties,system-*.properties"
-						/>
-					</copy>
-				</else>
-			</if>
+			<copy
+				overwrite="true"
+				todir="@{deploy.properties.dest}"
+			>
+				<fileset
+					dir="${project.dir}/portal-impl/src"
+					includes="portal-*.properties,system-*.properties"
+				/>
+			</copy>
 		</sequential>
 	</macrodef>
 
@@ -894,6 +874,8 @@ information.
 						<arg if:set="env.JENKINS_HOME" value="-Dliferay.ssl.context.enabled=${gradle.ci.liferay.ssl.context.enabled}" />
 						<arg if:set="env.JENKINS_HOME" value="-Dorg.gradle.internal.http.connectionTimeout=${gradle.ci.http.connection.timeout}" />
 						<arg if:set="env.JENKINS_HOME" value="-Dorg.gradle.internal.http.socketTimeout=${gradle.ci.http.socket.timeout}" />
+						<arg if:set="env.JENKINS_HOME" value="-Dpatcher.hotfix.dirs=${build.patcher.hotfix.dirs}" />
+						<arg if:set="env.JENKINS_HOME" value="-Dpatcher.hotfix.qualifier=${build.patcher.hotfix.qualifier}" />
 						<arg value="tasks" />
 						<arg value="--all" />
 						<env key="GRADLE_OPTS" value="${task.gradle.opts}" />
@@ -939,6 +921,8 @@ information.
 								<arg if:set="env.JENKINS_HOME" value="-Dliferay.ssl.context.enabled=${gradle.ci.liferay.ssl.context.enabled}" />
 								<arg if:set="env.JENKINS_HOME" value="-Dorg.gradle.internal.http.connectionTimeout=${gradle.ci.http.connection.timeout}" />
 								<arg if:set="env.JENKINS_HOME" value="-Dorg.gradle.internal.http.socketTimeout=${gradle.ci.http.socket.timeout}" />
+								<arg if:set="env.JENKINS_HOME" value="-Dpatcher.hotfix.dirs=${build.patcher.hotfix.dirs}" />
+								<arg if:set="env.JENKINS_HOME" value="-Dpatcher.hotfix.qualifier=${build.patcher.hotfix.qualifier}" />
 								<arg line="@{task}" />
 								<env key="GRADLE_OPTS" value="${task.gradle.opts}" />
 								<redirector errorproperty="@{outputproperty}.error" outputproperty="@{outputproperty}" unless:blank="@{outputproperty}" />
@@ -1113,22 +1097,21 @@ information.
 				<jvmarg if:true="${junit.code.coverage}" line="-javaagent:${jacoco.agent.jar}${jacoco.agent.configuration}" />
 				<jvmarg if:true="${aspectj.weaver.enabled}" line="${aspectj.agent}" />
 				<jvmarg if:set="junit.java.add.opens" line="${junit.java.add.opens}" />
+				<jvmarg line="${app.server.jvm.args}" />
 				<jvmarg line="${junit.java.gc}" />
 				<jvmarg line="${whip.agent}" />
 				<jvmarg value="-Xss2m" />
 				<jvmarg value="-Dexternal-properties=${test.properties}" />
-				<jvmarg value="-Dfile.encoding=UTF-8" />
 				<jvmarg value="-Dfixed.issues=${fixed.issues}" />
-				<jvmarg value="-Djava.net.preferIPv4Stack=true" />
 				<jvmarg value="-Dliferay.log.dir=${liferay.home}/logs" />
 				<jvmarg value="-Dliferay.mode=test" />
 				<jvmarg value="-Dosgi.state.dir=${liferay.home}/osgi/state" />
 				<jvmarg value="-Drelease.versions.test.other.dir=${release.versions.test.other.dir}" />
+				<jvmarg value="-Drelease.versions.test.other.dir.names=${release.versions.test.other.dir.names}" />
 				<jvmarg value="-DsocksProxyHost=127.0.0.1" />
 				<jvmarg value="-DsocksProxyPort=8888" />
 				<jvmarg value="-Dsun.zip.disableMemoryMapping=true" />
 				<misc />
-				<jvmarg value="-Duser.timezone=GMT" />
 				<classpath location="test-coverage" />
 				<classpath refid="test.classpath" />
 				<formatter type="brief" usefile="false" />
@@ -1888,11 +1871,6 @@ rerun your task.
 									dir="test-classes/${current.test.dir}"
 									includes="@{test.includes}"
 								>
-									<exclude name="**/DLAppServiceHttpTest.class" />
-									<exclude name="**/DLAppServiceJsonTest.class" />
-									<exclude name="**/DLAppServiceSoapTest.class" />
-									<exclude name="**/UserServiceHttpTest.class" />
-									<exclude name="**/UserServiceSoapTest.class" />
 									<exclude name="${test.excludes}" />
 									<filename negate="true" regex="${junit.test.excludes}" />
 								</fileset>
@@ -1954,6 +1932,7 @@ rerun your task.
 					<propertyref name="org.gradle.warning.mode" />
 					<propertyref name="project.templates.test.builds" />
 					<propertyref name="release.versions.test.other.dir" />
+					<propertyref name="release.versions.test.other.dir.names" />
 					<propertyref name="sass.compiler.class.name" />
 					<propertyref name="sass.generate.source.map" />
 					<propertyref name="sass.precision" />
@@ -1961,13 +1940,14 @@ rerun your task.
 					<propertyref name="timeout.app.server.wait" />
 					<propertyref name="upgrade.table.dir" />
 					<propertyref prefix="gradle.publish." />
+					<propertyref prefix="gradle.releng.pom." />
 					<propertyref prefix="ivy.pom." />
 					<propertyref prefix="microsoft.translator." />
 					<propertyref prefix="nodejs.npm." />
 					<propertyref prefix="sonatype." />
 					<propertyref prefix="source.formatter." />
 					<propertyref regex=".+\.ignore\.local$" />
-					<propertyref regex="^\s*app\.server\.(?:glassfish|jboss|jetty|jonas|resin|tcat|tcserver|tomcat|weblogic|websphere|wildfly).*" />
+					<propertyref regex="^\s*app\.server\.(?:jboss|tcserver|tomcat|weblogic|websphere|wildfly).*" />
 				</propertyset>
 			</echoproperties>
 
@@ -2054,7 +2034,7 @@ rerun your task.
 					<propertyref prefix="ivy.pom." />
 					<propertyref prefix="microsoft.translator." />
 					<propertyref prefix="sonatype." />
-					<propertyref regex="^\s*app\.server\.(?:glassfish|jboss|jetty|jonas|resin|tcat|tcserver|tomcat|weblogic|websphere|wildfly).*\.dir" />
+					<propertyref regex="^\s*app\.server\.(?:jboss|tcserver|tomcat|weblogic|websphere|wildfly).*\.dir" />
 				</propertyset>
 			</echoproperties>
 

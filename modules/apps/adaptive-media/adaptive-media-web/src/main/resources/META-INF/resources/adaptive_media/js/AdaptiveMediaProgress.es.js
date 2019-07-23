@@ -1,8 +1,20 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import 'clay-progress-bar';
-import Ajax from 'metal-ajax';
-import PortletBase from 'frontend-js-web/liferay/PortletBase.es';
+import {PortletBase, fetch} from 'frontend-js-web';
 import Soy from 'metal-soy';
-import Tooltip from 'frontend-js-web/liferay/compat/tooltip/Tooltip.es';
 import core from 'metal';
 
 import templates from './AdaptiveMediaProgress.soy';
@@ -15,7 +27,6 @@ import templates from './AdaptiveMediaProgress.soy';
  */
 
 class AdaptiveMediaProgress extends PortletBase {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -37,12 +48,16 @@ class AdaptiveMediaProgress extends PortletBase {
 	 * that has to be invoked.
 	 */
 	startProgress(backgroundTaskUrl) {
-		if (this.percentage_ >= 100 || this.totalImages === 0 || this.disabled) {
+		if (
+			this.percentage_ >= 100 ||
+			this.totalImages === 0 ||
+			this.disabled
+		) {
 			return;
 		}
 
 		if (backgroundTaskUrl) {
-			Ajax.request(backgroundTaskUrl);
+			fetch(backgroundTaskUrl);
 		}
 
 		this.clearInterval_();
@@ -54,10 +69,7 @@ class AdaptiveMediaProgress extends PortletBase {
 
 		this.showLoadingIndicator_ = true;
 
-		this.emit(
-			'start',
-			{uuid: this.uuid}
-		);
+		this.emit('start', {uuid: this.uuid});
 	}
 
 	/**
@@ -78,22 +90,18 @@ class AdaptiveMediaProgress extends PortletBase {
 	 * @protected
 	 */
 	getAdaptedImagesPercentage_() {
-		Ajax.request(this.percentageUrl).then(
-			(xhr) => {
-				try {
-					const json = JSON.parse(xhr.response);
+		fetch(this.percentageUrl)
+			.then(res => res.json())
+			.then(json => {
+				this.updateProgressBar_(json.adaptedImages, json.totalImages);
 
-					this.updateProgressBar_(json.adaptedImages, json.totalImages);
-
-					if (this.percentage_ >= 100) {
-						this.onProgressBarComplete_();
-					}
+				if (this.percentage_ >= 100) {
+					this.onProgressBarComplete_();
 				}
-				catch (e) {
-					clearInterval(this.intervalId_);
-				}
-			}
-		);
+			})
+			.catch(() => {
+				clearInterval(this.intervalId_);
+			});
 	}
 
 	/**
@@ -105,10 +113,7 @@ class AdaptiveMediaProgress extends PortletBase {
 		this.clearInterval_();
 		this.showLoadingIndicator_ = false;
 
-		this.emit(
-			'finish',
-			{uuid: this.uuid}
-		);
+		this.emit('finish', {uuid: this.uuid});
 	}
 
 	/**
@@ -118,8 +123,10 @@ class AdaptiveMediaProgress extends PortletBase {
 	 * @protected
 	 */
 	updateProgressBar_(adaptedImages, totalImages) {
-		this.percentage_ = Math.round(adaptedImages / totalImages * 100) || 0;
-		this.progressBarTooltip_ = this.tooltip ? this.tooltip : adaptedImages + '/' + totalImages;
+		this.percentage_ = Math.round((adaptedImages / totalImages) * 100) || 0;
+		this.progressBarTooltip_ = this.tooltip
+			? this.tooltip
+			: adaptedImages + '/' + totalImages;
 	}
 }
 
@@ -130,7 +137,6 @@ class AdaptiveMediaProgress extends PortletBase {
  * @type {!Object}
  */
 AdaptiveMediaProgress.STATE = {
-
 	/**
 	 * Number of adapted images in the platform.
 	 *
@@ -257,17 +263,6 @@ AdaptiveMediaProgress.STATE = {
 	 */
 	tooltip: {
 		validator: core.isString
-	},
-
-	/**
-	 * The tooltip position in the progress bar.
-	 *
-	 * @instance
-	 * @memberof AdaptiveMediaProgress
-	 * @type {Object}
-	 */
-	tooltipPosition: {
-		value: Tooltip.Align.Top
 	},
 
 	/**

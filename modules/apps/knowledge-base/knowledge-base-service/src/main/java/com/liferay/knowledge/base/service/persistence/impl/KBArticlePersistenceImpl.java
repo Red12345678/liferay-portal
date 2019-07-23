@@ -34,12 +34,11 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.sanitizer.Sanitizer;
 import com.liferay.portal.kernel.sanitizer.SanitizerException;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -56,7 +55,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -3714,9 +3712,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		if (resourcePrimKeies.length == 1) {
@@ -3927,9 +3923,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -4564,9 +4558,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		if (resourcePrimKeies.length == 1) {
@@ -4777,9 +4769,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -5414,9 +5404,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		if (resourcePrimKeies.length == 1) {
@@ -5627,9 +5615,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -10732,9 +10718,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		if (parentResourcePrimKeies.length == 1) {
@@ -10946,9 +10931,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -11587,9 +11571,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		if (parentResourcePrimKeies.length == 1) {
@@ -11801,9 +11784,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -12443,9 +12425,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		if (parentResourcePrimKeies.length == 1) {
@@ -12657,9 +12638,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -13912,9 +13892,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -14102,9 +14080,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		if (resourcePrimKeies.length == 1) {
@@ -14334,9 +14310,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -14487,9 +14461,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -15493,9 +15465,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -15682,9 +15652,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		if (resourcePrimKeies.length == 1) {
@@ -15912,9 +15880,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -16065,9 +16031,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -17073,9 +17037,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -17263,9 +17225,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		if (resourcePrimKeies.length == 1) {
@@ -17491,9 +17451,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -17644,9 +17602,7 @@ public class KBArticlePersistenceImpl
 			resourcePrimKeies = new long[0];
 		}
 		else if (resourcePrimKeies.length > 1) {
-			resourcePrimKeies = ArrayUtil.unique(resourcePrimKeies);
-
-			Arrays.sort(resourcePrimKeies);
+			resourcePrimKeies = ArrayUtil.sortedUnique(resourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -18657,9 +18613,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -18847,9 +18802,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		if (parentResourcePrimKeies.length == 1) {
@@ -19081,9 +19035,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -19234,9 +19187,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -20247,9 +20199,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -20437,9 +20388,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		if (parentResourcePrimKeies.length == 1) {
@@ -20671,9 +20621,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -20824,9 +20773,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -21837,9 +21785,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -22027,9 +21974,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		if (parentResourcePrimKeies.length == 1) {
@@ -22261,9 +22207,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -22414,9 +22359,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -26566,9 +26510,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -26772,9 +26714,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		if (sectionses.length == 1) {
@@ -27028,9 +26968,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -27213,9 +27151,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -28281,9 +28217,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -28487,9 +28421,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		if (sectionses.length == 1) {
@@ -28743,9 +28675,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -28926,9 +28856,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -29994,9 +29922,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -30200,9 +30126,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		if (sectionses.length == 1) {
@@ -30456,9 +30380,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -30639,9 +30561,7 @@ public class KBArticlePersistenceImpl
 				sectionses[i] = Objects.toString(sectionses[i], "");
 			}
 
-			sectionses = ArrayUtil.unique(sectionses);
-
-			Arrays.sort(sectionses);
+			sectionses = ArrayUtil.sortedUnique(sectionses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -31720,9 +31640,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -31921,9 +31840,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		if (parentResourcePrimKeies.length == 1) {
@@ -32169,9 +32087,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -32335,9 +32252,8 @@ public class KBArticlePersistenceImpl
 			parentResourcePrimKeies = new long[0];
 		}
 		else if (parentResourcePrimKeies.length > 1) {
-			parentResourcePrimKeies = ArrayUtil.unique(parentResourcePrimKeies);
-
-			Arrays.sort(parentResourcePrimKeies);
+			parentResourcePrimKeies = ArrayUtil.sortedUnique(
+				parentResourcePrimKeies);
 		}
 
 		StringBundler query = new StringBundler();
@@ -33447,9 +33363,7 @@ public class KBArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -33656,9 +33570,7 @@ public class KBArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		if (statuses.length == 1) {
@@ -33925,9 +33837,7 @@ public class KBArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -34113,9 +34023,7 @@ public class KBArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -34444,7 +34352,7 @@ public class KBArticlePersistenceImpl
 
 		kbArticle.setUuid(uuid);
 
-		kbArticle.setCompanyId(companyProvider.getCompanyId());
+		kbArticle.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return kbArticle;
 	}
@@ -36796,9 +36704,6 @@ public class KBArticlePersistenceImpl
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
-	@ServiceReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@ServiceReference(type = EntityCache.class)
 	protected EntityCache entityCache;

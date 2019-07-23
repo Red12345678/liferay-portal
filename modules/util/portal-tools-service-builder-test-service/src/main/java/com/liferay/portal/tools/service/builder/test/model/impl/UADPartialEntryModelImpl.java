@@ -36,6 +36,9 @@ import com.liferay.portal.tools.service.builder.test.model.UADPartialEntrySoap;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.ArrayList;
@@ -253,6 +256,32 @@ public class UADPartialEntryModelImpl
 		return _attributeSetterBiConsumers;
 	}
 
+	private static Function<InvocationHandler, UADPartialEntry>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			UADPartialEntry.class.getClassLoader(), UADPartialEntry.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<UADPartialEntry> constructor =
+				(Constructor<UADPartialEntry>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
+	}
+
 	private static final Map<String, Function<UADPartialEntry, Object>>
 		_attributeGetterFunctions;
 	private static final Map<String, BiConsumer<UADPartialEntry, Object>>
@@ -447,8 +476,12 @@ public class UADPartialEntryModelImpl
 	@Override
 	public UADPartialEntry toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (UADPartialEntry)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, UADPartialEntry>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -616,11 +649,12 @@ public class UADPartialEntryModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		UADPartialEntry.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		UADPartialEntry.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, UADPartialEntry>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private long _uadPartialEntryId;
 	private long _userId;

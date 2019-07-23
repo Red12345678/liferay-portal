@@ -15,14 +15,14 @@
 package com.liferay.journal.internal.upgrade.v1_1_0;
 
 import com.liferay.journal.constants.JournalConstants;
-import com.liferay.journal.internal.upgrade.util.JournalArticleImageUpgradeUtil;
+import com.liferay.journal.internal.upgrade.util.JournalArticleImageUpgradeHelper;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Image;
-import com.liferay.portal.kernel.portletfilerepository.PortletFileRepositoryUtil;
+import com.liferay.portal.kernel.portletfilerepository.PortletFileRepository;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ImageLocalService;
 import com.liferay.portal.kernel.upgrade.UpgradeException;
@@ -49,10 +49,12 @@ public class UpgradeImageTypeContent extends UpgradeProcess {
 
 	public UpgradeImageTypeContent(
 		ImageLocalService imageLocalService,
-		JournalArticleImageUpgradeUtil journalArticleImageUpgradeUtil) {
+		JournalArticleImageUpgradeHelper journalArticleImageUpgradeHelper,
+		PortletFileRepository portletFileRepository) {
 
 		_imageLocalService = imageLocalService;
-		_journalArticleImageUpgradeUtil = journalArticleImageUpgradeUtil;
+		_journalArticleImageUpgradeHelper = journalArticleImageUpgradeHelper;
+		_portletFileRepository = portletFileRepository;
 	}
 
 	protected void copyJournalArticleImagesToJournalRepository()
@@ -85,7 +87,7 @@ public class UpgradeImageTypeContent extends UpgradeProcess {
 				long userId = PortalUtil.getValidUserId(
 					companyId, rs1.getLong(5));
 
-				long folderId = _journalArticleImageUpgradeUtil.getFolderId(
+				long folderId = _journalArticleImageUpgradeHelper.getFolderId(
 					userId, groupId, resourcePrimKey);
 
 				SaveImageFileEntryCallable saveImageFileEntryCallable =
@@ -133,8 +135,9 @@ public class UpgradeImageTypeContent extends UpgradeProcess {
 		UpgradeImageTypeContent.class);
 
 	private final ImageLocalService _imageLocalService;
-	private final JournalArticleImageUpgradeUtil
-		_journalArticleImageUpgradeUtil;
+	private final JournalArticleImageUpgradeHelper
+		_journalArticleImageUpgradeHelper;
+	private final PortletFileRepository _portletFileRepository;
 
 	private class SaveImageFileEntryCallable implements Callable<Boolean> {
 
@@ -151,16 +154,6 @@ public class UpgradeImageTypeContent extends UpgradeProcess {
 
 		@Override
 		public Boolean call() throws Exception {
-			String fileName = String.valueOf(_articleImageId);
-
-			FileEntry fileEntry =
-				PortletFileRepositoryUtil.fetchPortletFileEntry(
-					_groupId, _folderId, fileName);
-
-			if (fileEntry != null) {
-				return null;
-			}
-
 			try {
 				Image image = _imageLocalService.getImage(_articleImageId);
 
@@ -168,20 +161,29 @@ public class UpgradeImageTypeContent extends UpgradeProcess {
 					return null;
 				}
 
-				String mimeType = MimeTypesUtil.getContentType(
-					fileName + StringPool.PERIOD + image.getType());
+				String fileName =
+					_articleImageId + StringPool.PERIOD + image.getType();
 
-				PortletFileRepositoryUtil.addPortletFileEntry(
+				FileEntry fileEntry =
+					_portletFileRepository.fetchPortletFileEntry(
+						_groupId, _folderId, fileName);
+
+				if (fileEntry != null) {
+					return null;
+				}
+
+				_portletFileRepository.addPortletFileEntry(
 					_groupId, _userId, JournalArticle.class.getName(),
 					_resourcePrimaryKey, JournalConstants.SERVICE_NAME,
-					_folderId, image.getTextObj(), fileName, mimeType, false);
+					_folderId, image.getTextObj(), fileName,
+					MimeTypesUtil.getContentType(fileName), false);
 
 				_imageLocalService.deleteImage(image.getImageId());
 			}
 			catch (Exception e) {
 				_log.error(
-					"Unable to add the journal article image " + fileName +
-						" into the file repository",
+					"Unable to add the journal article image " +
+						_articleImageId + " into the file repository",
 					e);
 
 				return false;

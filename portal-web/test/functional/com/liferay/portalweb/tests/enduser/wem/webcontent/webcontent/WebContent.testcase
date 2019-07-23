@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Web Content Administration";
@@ -198,6 +199,13 @@ definition {
 	test EditBasicWebContentStructureAndTemplate {
 		property test.name.skip.portal.instance = "WebContent#EditBasicWebContentStructureAndTemplate";
 		property testray.component.names = "Web Content Administration";
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "Search");
+
+		SearchAdministration.executeSearchActions(actionsDescription = "Reindex all search indexes.");
 
 		WebContent.openWebContentAdmin(siteURLKey = "global");
 
@@ -1225,4 +1233,5 @@ definition {
 
 		WebContent.viewRelatedAssetsPGViaWCD(relatedAssetTitle = "WC WebContent 5 Title");
 	}
+
 }

@@ -29,10 +29,9 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -47,7 +46,6 @@ import java.lang.reflect.InvocationHandler;
 
 import java.sql.Timestamp;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -2232,9 +2230,7 @@ public class MicroblogsEntryPersistenceImpl
 			creatorClassPKs = new long[0];
 		}
 		else if (creatorClassPKs.length > 1) {
-			creatorClassPKs = ArrayUtil.unique(creatorClassPKs);
-
-			Arrays.sort(creatorClassPKs);
+			creatorClassPKs = ArrayUtil.sortedUnique(creatorClassPKs);
 		}
 
 		if (creatorClassPKs.length == 1) {
@@ -2449,9 +2445,7 @@ public class MicroblogsEntryPersistenceImpl
 			creatorClassPKs = new long[0];
 		}
 		else if (creatorClassPKs.length > 1) {
-			creatorClassPKs = ArrayUtil.unique(creatorClassPKs);
-
-			Arrays.sort(creatorClassPKs);
+			creatorClassPKs = ArrayUtil.sortedUnique(creatorClassPKs);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -4251,9 +4245,7 @@ public class MicroblogsEntryPersistenceImpl
 			creatorClassPKs = new long[0];
 		}
 		else if (creatorClassPKs.length > 1) {
-			creatorClassPKs = ArrayUtil.unique(creatorClassPKs);
-
-			Arrays.sort(creatorClassPKs);
+			creatorClassPKs = ArrayUtil.sortedUnique(creatorClassPKs);
 		}
 
 		if (creatorClassPKs.length == 1) {
@@ -4485,9 +4477,7 @@ public class MicroblogsEntryPersistenceImpl
 			creatorClassPKs = new long[0];
 		}
 		else if (creatorClassPKs.length > 1) {
-			creatorClassPKs = ArrayUtil.unique(creatorClassPKs);
-
-			Arrays.sort(creatorClassPKs);
+			creatorClassPKs = ArrayUtil.sortedUnique(creatorClassPKs);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -5778,9 +5768,7 @@ public class MicroblogsEntryPersistenceImpl
 			creatorClassPKs = new long[0];
 		}
 		else if (creatorClassPKs.length > 1) {
-			creatorClassPKs = ArrayUtil.unique(creatorClassPKs);
-
-			Arrays.sort(creatorClassPKs);
+			creatorClassPKs = ArrayUtil.sortedUnique(creatorClassPKs);
 		}
 
 		if (creatorClassPKs.length == 1) {
@@ -6014,9 +6002,7 @@ public class MicroblogsEntryPersistenceImpl
 			creatorClassPKs = new long[0];
 		}
 		else if (creatorClassPKs.length > 1) {
-			creatorClassPKs = ArrayUtil.unique(creatorClassPKs);
-
-			Arrays.sort(creatorClassPKs);
+			creatorClassPKs = ArrayUtil.sortedUnique(creatorClassPKs);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -6748,9 +6734,7 @@ public class MicroblogsEntryPersistenceImpl
 			creatorClassPKs = new long[0];
 		}
 		else if (creatorClassPKs.length > 1) {
-			creatorClassPKs = ArrayUtil.unique(creatorClassPKs);
-
-			Arrays.sort(creatorClassPKs);
+			creatorClassPKs = ArrayUtil.sortedUnique(creatorClassPKs);
 		}
 
 		if (creatorClassPKs.length == 1) {
@@ -7001,9 +6985,7 @@ public class MicroblogsEntryPersistenceImpl
 			creatorClassPKs = new long[0];
 		}
 		else if (creatorClassPKs.length > 1) {
-			creatorClassPKs = ArrayUtil.unique(creatorClassPKs);
-
-			Arrays.sort(creatorClassPKs);
+			creatorClassPKs = ArrayUtil.sortedUnique(creatorClassPKs);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -7882,7 +7864,7 @@ public class MicroblogsEntryPersistenceImpl
 		microblogsEntry.setNew(true);
 		microblogsEntry.setPrimaryKey(microblogsEntryId);
 
-		microblogsEntry.setCompanyId(companyProvider.getCompanyId());
+		microblogsEntry.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return microblogsEntry;
 	}
@@ -9090,9 +9072,6 @@ public class MicroblogsEntryPersistenceImpl
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
-	@ServiceReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@ServiceReference(type = EntityCache.class)
 	protected EntityCache entityCache;

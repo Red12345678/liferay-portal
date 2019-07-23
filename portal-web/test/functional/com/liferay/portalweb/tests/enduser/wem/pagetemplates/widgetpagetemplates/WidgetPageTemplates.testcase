@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.component.names = "Page Templates";
@@ -211,6 +212,7 @@ definition {
 		PageTemplatesAdminGlobalSite.viewDefaultCP();
 	}
 
+	@description = "This is a use case for LPS-54099."
 	@priority = "5"
 	test EditPageTemplate {
 		property portal.acceptance = "true";
@@ -225,6 +227,27 @@ definition {
 		PageTemplatesAdminGlobalSite.addCP(
 			pageTemplateActive = "Active",
 			pageTemplateName = "Page Template Name");
+
+		PageTemplatesAdminGlobalSite.gotoPageTemplateViaEdit(pageTemplateName = "Page Template Name");
+
+		Portlet.addPG(portletName = "Calendar");
+
+		Refresh();
+
+		CalendarNavigator.gotoConfiguration();
+
+		CalendarConfiguration.selectWeekStartsOn(weekStartDay = "Saturday");
+
+		CalendarConfiguration.save();
+
+		Navigator.openSiteURL(siteName = "guest");
+
+		ProductMenu.gotoSite(site = "Global");
+
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			panel = "Site Administration",
+			portlet = "Pages");
 
 		PageTemplatesAdminGlobalSite.editCP(
 			pageTemplateActive = "Not Active",
@@ -338,7 +361,7 @@ definition {
 			site = "Global");
 
 		ProductMenu.gotoPortlet(
-			category = "Generador de sitios",
+			category = "Constructor del sitio",
 			panel = "Site Administration",
 			portlet = "Páginas del sitio web");
 
@@ -407,4 +430,5 @@ definition {
 			pageTemplateName = "Page Template Name Edit",
 			siteName = "${siteName}");
 	}
+
 }

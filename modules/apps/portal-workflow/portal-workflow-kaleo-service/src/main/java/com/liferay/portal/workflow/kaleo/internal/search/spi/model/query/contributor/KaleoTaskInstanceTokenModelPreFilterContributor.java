@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
 import com.liferay.portal.kernel.model.UserGroupGroupRole;
 import com.liferay.portal.kernel.model.UserGroupRole;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.SearchContext;
@@ -98,7 +99,6 @@ public class KaleoTaskInstanceTokenModelPreFilterContributor
 		if (appendSearchCriteria(kaleoTaskInstanceTokenQuery)) {
 			appendAssetPrimaryKeyTerm(
 				booleanFilter, kaleoTaskInstanceTokenQuery);
-			appendAssetTypeTerm(booleanFilter, kaleoTaskInstanceTokenQuery);
 			appendDueDateRangeTerm(booleanFilter, kaleoTaskInstanceTokenQuery);
 		}
 	}
@@ -116,22 +116,6 @@ public class KaleoTaskInstanceTokenModelPreFilterContributor
 
 		for (Long assetPrimaryKey : assetPrimaryKeys) {
 			booleanFilter.addTerm(Field.CLASS_PK, assetPrimaryKey);
-		}
-	}
-
-	protected void appendAssetTypeTerm(
-		BooleanFilter booleanFilter,
-		KaleoTaskInstanceTokenQuery kaleoTaskInstanceTokenQuery) {
-
-		String[] assetTypes = kaleoTaskInstanceTokenQuery.getAssetTypes();
-
-		if (ArrayUtil.isEmpty(assetTypes)) {
-			return;
-		}
-
-		for (String assetType : assetTypes) {
-			booleanFilter.addTerm(
-				KaleoTaskInstanceTokenField.CLASS_NAME, assetType);
 		}
 	}
 
@@ -436,6 +420,10 @@ public class KaleoTaskInstanceTokenModelPreFilterContributor
 				roleIdGroupIdsMap);
 		}
 
+		mapSiteMemberRoleIdGroupId(
+			kaleoTaskInstanceTokenQuery.getCompanyId(),
+			kaleoTaskInstanceTokenQuery.getUserId(), roleIdGroupIdsMap);
+
 		return roleIdGroupIdsMap;
 	}
 
@@ -509,6 +497,27 @@ public class KaleoTaskInstanceTokenModelPreFilterContributor
 		}
 
 		groupIds.add(groupId);
+	}
+
+	protected void mapSiteMemberRoleIdGroupId(
+		long companyId, long userId, Map<Long, Set<Long>> roleIdGroupIdsMap) {
+
+		try {
+			Role siteMemberRole = roleLocalService.getRole(
+				companyId, RoleConstants.SITE_MEMBER);
+
+			User user = userLocalService.getUserById(userId);
+
+			for (Long groupId : user.getGroupIds()) {
+				mapRoleIdGroupId(
+					siteMemberRole.getRoleId(), groupId, roleIdGroupIdsMap);
+			}
+		}
+		catch (Exception e) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(e, e);
+			}
+		}
 	}
 
 	@Reference

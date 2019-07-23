@@ -1,26 +1,11 @@
 {
-	"csfConfig": {
-		"path:**/*.js": {
-			"js": {
-				"lint": {
-					"globals": {
-						"$": true,
-						"AlloyEditor": true,
-						"CKEDITOR": true,
-						"MODULE_PATH": true,
-						"_": true
-					}
-				}
-			}
-		}
-	},
 	"dependencies": {
-		"clay-badge": "2.15.0",
-		"clay-checkbox": "2.15.0",
-		"clay-dropdown": "2.15.0",
+		"clay-badge": "2.16.2",
+		"clay-checkbox": "2.16.2",
+		"clay-dropdown": "2.16.2",
+		"frontend-js-web": "^4.0.0",
 		"metal": "2.16.8",
 		"metal-component": "2.16.8",
-		"metal-debounce": "2.0.1",
 		"metal-dom": "2.16.8",
 		"metal-drag-drop": "3.3.1",
 		"metal-events": "2.16.8",
@@ -33,8 +18,8 @@
 	"name": "layout-admin-web",
 	"scripts": {
 		"build": "liferay-npm-scripts build",
-		"checkFormat": "liferay-npm-scripts lint",
-		"format": "liferay-npm-scripts format"
+		"checkFormat": "liferay-npm-scripts check",
+		"format": "liferay-npm-scripts fix"
 	},
 	"version": "4.0.0"
 }

@@ -37,6 +37,9 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.ArrayList;
@@ -81,11 +84,11 @@ public class FragmentEntryModelImpl
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
 		{"fragmentCollectionId", Types.BIGINT},
 		{"fragmentEntryKey", Types.VARCHAR}, {"name", Types.VARCHAR},
-		{"css", Types.VARCHAR}, {"html", Types.VARCHAR}, {"js", Types.VARCHAR},
-		{"previewFileEntryId", Types.BIGINT}, {"type_", Types.INTEGER},
-		{"lastPublishDate", Types.TIMESTAMP}, {"status", Types.INTEGER},
-		{"statusByUserId", Types.BIGINT}, {"statusByUserName", Types.VARCHAR},
-		{"statusDate", Types.TIMESTAMP}
+		{"css", Types.CLOB}, {"html", Types.CLOB}, {"js", Types.CLOB},
+		{"configuration", Types.CLOB}, {"previewFileEntryId", Types.BIGINT},
+		{"type_", Types.INTEGER}, {"lastPublishDate", Types.TIMESTAMP},
+		{"status", Types.INTEGER}, {"statusByUserId", Types.BIGINT},
+		{"statusByUserName", Types.VARCHAR}, {"statusDate", Types.TIMESTAMP}
 	};
 
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP =
@@ -103,9 +106,10 @@ public class FragmentEntryModelImpl
 		TABLE_COLUMNS_MAP.put("fragmentCollectionId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("fragmentEntryKey", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("name", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("css", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("html", Types.VARCHAR);
-		TABLE_COLUMNS_MAP.put("js", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("css", Types.CLOB);
+		TABLE_COLUMNS_MAP.put("html", Types.CLOB);
+		TABLE_COLUMNS_MAP.put("js", Types.CLOB);
+		TABLE_COLUMNS_MAP.put("configuration", Types.CLOB);
 		TABLE_COLUMNS_MAP.put("previewFileEntryId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("type_", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("lastPublishDate", Types.TIMESTAMP);
@@ -116,7 +120,7 @@ public class FragmentEntryModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table FragmentEntry (uuid_ VARCHAR(75) null,fragmentEntryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,fragmentCollectionId LONG,fragmentEntryKey VARCHAR(75) null,name VARCHAR(75) null,css STRING null,html STRING null,js STRING null,previewFileEntryId LONG,type_ INTEGER,lastPublishDate DATE null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+		"create table FragmentEntry (uuid_ VARCHAR(75) null,fragmentEntryId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,fragmentCollectionId LONG,fragmentEntryKey VARCHAR(75) null,name VARCHAR(75) null,css TEXT null,html TEXT null,js TEXT null,configuration TEXT null,previewFileEntryId LONG,type_ INTEGER,lastPublishDate DATE null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 
 	public static final String TABLE_SQL_DROP = "drop table FragmentEntry";
 
@@ -183,6 +187,7 @@ public class FragmentEntryModelImpl
 		model.setCss(soapModel.getCss());
 		model.setHtml(soapModel.getHtml());
 		model.setJs(soapModel.getJs());
+		model.setConfiguration(soapModel.getConfiguration());
 		model.setPreviewFileEntryId(soapModel.getPreviewFileEntryId());
 		model.setType(soapModel.getType());
 		model.setLastPublishDate(soapModel.getLastPublishDate());
@@ -303,6 +308,32 @@ public class FragmentEntryModelImpl
 		return _attributeSetterBiConsumers;
 	}
 
+	private static Function<InvocationHandler, FragmentEntry>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			FragmentEntry.class.getClassLoader(), FragmentEntry.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<FragmentEntry> constructor =
+				(Constructor<FragmentEntry>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
+	}
+
 	private static final Map<String, Function<FragmentEntry, Object>>
 		_attributeGetterFunctions;
 	private static final Map<String, BiConsumer<FragmentEntry, Object>>
@@ -372,6 +403,11 @@ public class FragmentEntryModelImpl
 		attributeGetterFunctions.put("js", FragmentEntry::getJs);
 		attributeSetterBiConsumers.put(
 			"js", (BiConsumer<FragmentEntry, String>)FragmentEntry::setJs);
+		attributeGetterFunctions.put(
+			"configuration", FragmentEntry::getConfiguration);
+		attributeSetterBiConsumers.put(
+			"configuration",
+			(BiConsumer<FragmentEntry, String>)FragmentEntry::setConfiguration);
 		attributeGetterFunctions.put(
 			"previewFileEntryId", FragmentEntry::getPreviewFileEntryId);
 		attributeSetterBiConsumers.put(
@@ -692,6 +728,22 @@ public class FragmentEntryModelImpl
 
 	@JSON
 	@Override
+	public String getConfiguration() {
+		if (_configuration == null) {
+			return "";
+		}
+		else {
+			return _configuration;
+		}
+	}
+
+	@Override
+	public void setConfiguration(String configuration) {
+		_configuration = configuration;
+	}
+
+	@JSON
+	@Override
 	public long getPreviewFileEntryId() {
 		return _previewFileEntryId;
 	}
@@ -918,8 +970,12 @@ public class FragmentEntryModelImpl
 	@Override
 	public FragmentEntry toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (FragmentEntry)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, FragmentEntry>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -944,6 +1000,7 @@ public class FragmentEntryModelImpl
 		fragmentEntryImpl.setCss(getCss());
 		fragmentEntryImpl.setHtml(getHtml());
 		fragmentEntryImpl.setJs(getJs());
+		fragmentEntryImpl.setConfiguration(getConfiguration());
 		fragmentEntryImpl.setPreviewFileEntryId(getPreviewFileEntryId());
 		fragmentEntryImpl.setType(getType());
 		fragmentEntryImpl.setLastPublishDate(getLastPublishDate());
@@ -1136,6 +1193,14 @@ public class FragmentEntryModelImpl
 			fragmentEntryCacheModel.js = null;
 		}
 
+		fragmentEntryCacheModel.configuration = getConfiguration();
+
+		String configuration = fragmentEntryCacheModel.configuration;
+
+		if ((configuration != null) && (configuration.length() == 0)) {
+			fragmentEntryCacheModel.configuration = null;
+		}
+
 		fragmentEntryCacheModel.previewFileEntryId = getPreviewFileEntryId();
 
 		fragmentEntryCacheModel.type = getType();
@@ -1236,11 +1301,13 @@ public class FragmentEntryModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		FragmentEntry.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		FragmentEntry.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, FragmentEntry>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
+
 	private static boolean _entityCacheEnabled;
 	private static boolean _finderCacheEnabled;
 
@@ -1268,6 +1335,7 @@ public class FragmentEntryModelImpl
 	private String _css;
 	private String _html;
 	private String _js;
+	private String _configuration;
 	private long _previewFileEntryId;
 	private int _type;
 	private int _originalType;

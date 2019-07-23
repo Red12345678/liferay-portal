@@ -14,12 +14,10 @@
 
 package com.liferay.change.tracking.service.impl;
 
-import com.liferay.change.tracking.constants.CTConstants;
 import com.liferay.change.tracking.exception.CTCollectionDescriptionException;
 import com.liferay.change.tracking.exception.CTCollectionNameException;
 import com.liferay.change.tracking.model.CTCollection;
 import com.liferay.change.tracking.model.CTEntry;
-import com.liferay.change.tracking.model.CTEntryAggregate;
 import com.liferay.change.tracking.model.CTProcess;
 import com.liferay.change.tracking.service.CTEntryAggregateLocalService;
 import com.liferay.change.tracking.service.CTEntryLocalService;
@@ -102,36 +100,18 @@ public class CTCollectionLocalServiceImpl
 	public CTCollection deleteCTCollection(CTCollection ctCollection)
 		throws PortalException {
 
-		List<CTEntry> ctEntries = ctEntryPersistence.getCTCollectionCTEntries(
+		List<CTEntry> ctEntries = ctEntryPersistence.findByCTCollectionId(
 			ctCollection.getCtCollectionId());
 
 		for (CTEntry ctEntry : ctEntries) {
-			int ctCollectionsSize = ctEntryPersistence.getCTCollectionsSize(
-				ctEntry.getCtEntryId());
-
-			if (ctCollectionsSize > 1) {
-				continue;
-			}
-
 			_ctEntryLocalService.deleteCTEntry(ctEntry);
 		}
 
-		List<CTEntryAggregate> ctEntryAggregates =
-			ctEntryAggregatePersistence.getCTCollectionCTEntryAggregates(
-				ctCollection.getCtCollectionId());
+		ctEntryAggregatePersistence.removeByCTCollectionId(
+			ctCollection.getCtCollectionId());
 
-		for (CTEntryAggregate ctEntryAggregate : ctEntryAggregates) {
-			int ctCollectionsSize =
-				ctEntryAggregatePersistence.getCTCollectionsSize(
-					ctEntryAggregate.getCtEntryAggregateId());
-
-			if (ctCollectionsSize > 1) {
-				continue;
-			}
-
-			_ctEntryAggregateLocalService.deleteCTEntryAggregate(
-				ctEntryAggregate);
-		}
+		ctPreferencesPersistence.removeByCollectionId(
+			ctCollection.getCtCollectionId());
 
 		List<CTProcess> ctProcesses = ctProcessPersistence.findByCollectionId(
 			ctCollection.getCtCollectionId());
@@ -140,15 +120,7 @@ public class CTCollectionLocalServiceImpl
 			_ctProcessLocalService.deleteCTProcess(ctProcess);
 		}
 
-		ctCollectionPersistence.remove(ctCollection);
-
-		ctCollectionPersistence.clearCTEntries(
-			ctCollection.getCtCollectionId());
-
-		ctCollectionPersistence.clearCTEntryAggregates(
-			ctCollection.getCtCollectionId());
-
-		return ctCollection;
+		return ctCollectionPersistence.remove(ctCollection);
 	}
 
 	@Override
@@ -185,11 +157,6 @@ public class CTCollectionLocalServiceImpl
 
 		dynamicQuery.add(companyIdProperty.eq(companyId));
 
-		Property nameProperty = PropertyFactoryUtil.forName("name");
-
-		dynamicQuery.add(
-			nameProperty.ne(CTConstants.CT_COLLECTION_NAME_PRODUCTION));
-
 		boolean includeActive = GetterUtil.getBoolean(
 			queryDefinition.getAttribute("includeActive"));
 
@@ -205,13 +172,15 @@ public class CTCollectionLocalServiceImpl
 
 		int status = queryDefinition.getStatus();
 
-		Property statusProperty = PropertyFactoryUtil.forName("status");
+		if (status != WorkflowConstants.STATUS_ANY) {
+			Property statusProperty = PropertyFactoryUtil.forName("status");
 
-		if (queryDefinition.isExcludeStatus()) {
-			dynamicQuery.add(statusProperty.ne(status));
-		}
-		else {
-			dynamicQuery.add(statusProperty.eq(status));
+			if (queryDefinition.isExcludeStatus()) {
+				dynamicQuery.add(statusProperty.ne(status));
+			}
+			else {
+				dynamicQuery.add(statusProperty.eq(status));
+			}
 		}
 
 		return ctCollectionLocalService.dynamicQuery(

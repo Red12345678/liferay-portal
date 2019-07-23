@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {EventHandler} from 'metal-events';
 import {FLOATING_TOOLBAR_BUTTONS} from '../../utils/constants';
 import {object} from 'metal';
@@ -37,13 +51,12 @@ function destroy() {
  * @return {object[]} Floating toolbar panels
  */
 function getFloatingToolbarButtons(editableValues) {
-	return editableValues.mappedField || editableValues.fieldId ? [
-		FLOATING_TOOLBAR_BUTTONS.textProperties,
-		FLOATING_TOOLBAR_BUTTONS.map
-	] : [
-		FLOATING_TOOLBAR_BUTTONS.edit,
-		FLOATING_TOOLBAR_BUTTONS.map
-	];
+	return editableValues.mappedField || editableValues.fieldId
+		? [
+				FLOATING_TOOLBAR_BUTTONS.textProperties,
+				FLOATING_TOOLBAR_BUTTONS.map
+		  ]
+		: [FLOATING_TOOLBAR_BUTTONS.edit, FLOATING_TOOLBAR_BUTTONS.map];
 }
 
 /**
@@ -105,43 +118,28 @@ function init(
 
 	const nativeEditor = _editor.get('nativeEditor');
 
+	_editorEventHandler.add(nativeEditor.on('key', _handleNativeEditorKey));
+
 	_editorEventHandler.add(
-		nativeEditor.on(
-			'key',
-			_handleNativeEditorKey
+		nativeEditor.on('change', () => changedCallback(nativeEditor.getData()))
+	);
+
+	_editorEventHandler.add(
+		nativeEditor.on('actionPerformed', () =>
+			changedCallback(nativeEditor.getData())
 		)
 	);
 
 	_editorEventHandler.add(
-		nativeEditor.on(
-			'change',
-			() => changedCallback(nativeEditor.getData())
-		)
-	);
-
-	_editorEventHandler.add(
-		nativeEditor.on(
-			'actionPerformed',
-			() => changedCallback(nativeEditor.getData())
-		)
-	);
-
-	_editorEventHandler.add(
-		nativeEditor.on(
-			'blur',
-			() => {
-				if (_editor._mainUI.state.hidden) {
-					requestAnimationFrame(destroy);
-				}
+		nativeEditor.on('blur', () => {
+			if (_editor._mainUI.state.hidden) {
+				requestAnimationFrame(destroy);
 			}
-		)
+		})
 	);
 
 	_editorEventHandler.add(
-		nativeEditor.on(
-			'instanceReady',
-			() => nativeEditor.focus()
-		)
+		nativeEditor.on('instanceReady', () => nativeEditor.focus())
 	);
 }
 
@@ -170,23 +168,19 @@ function _getEditorConfiguration(
 	defaultEditorConfiguration,
 	editorName
 ) {
-	return object.mixin(
-		{},
-		defaultEditorConfiguration.editorConfig || {},
-		{
-			filebrowserImageBrowseLinkUrl: defaultEditorConfiguration
-				.editorConfig
-				.filebrowserImageBrowseLinkUrl
-				.replace('_EDITOR_NAME_', editorName),
+	return object.mixin({}, defaultEditorConfiguration.editorConfig || {}, {
+		filebrowserImageBrowseLinkUrl: defaultEditorConfiguration.editorConfig.filebrowserImageBrowseLinkUrl.replace(
+			'_EDITOR_NAME_',
+			editorName
+		),
 
-			filebrowserImageBrowseUrl: defaultEditorConfiguration
-				.editorConfig
-				.filebrowserImageBrowseUrl
-				.replace('_EDITOR_NAME_', editorName),
+		filebrowserImageBrowseUrl: defaultEditorConfiguration.editorConfig.filebrowserImageBrowseUrl.replace(
+			'_EDITOR_NAME_',
+			editorName
+		),
 
-			title: editorName
-		}
-	);
+		title: editorName
+	});
 }
 
 /**

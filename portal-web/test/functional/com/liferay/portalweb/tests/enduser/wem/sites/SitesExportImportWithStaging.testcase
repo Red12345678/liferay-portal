@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Administration";
@@ -199,7 +200,7 @@ definition {
 
 			LexiconEntry.gotoAdd();
 
-			LAR.exportSuccess();
+			LAR.exportWithAssertionOnSuccess();
 
 			LAR.downloadLar();
 		}
@@ -325,4 +326,5 @@ definition {
 				locator1 = "Fragment#FRAGMENT");
 		}
 	}
+
 }

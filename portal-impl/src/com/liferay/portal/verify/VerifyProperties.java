@@ -544,6 +544,16 @@ public class VerifyProperties extends VerifyProcess {
 		},
 
 		{
+			"blogs.image.max.size", "blogs.image.max.size",
+			"com.liferay.blogs.api"
+		},
+
+		{
+			"blogs.image.extensions", "blogs.image.extensions",
+			"com.liferay.blogs.api"
+		},
+
+		{
 			"blogs.linkback.job.interval", "linkback.job.interval",
 			"com.liferay.blogs.web"
 		},
@@ -707,22 +717,6 @@ public class VerifyProperties extends VerifyProcess {
 		{
 			"dl.store.advanced.file.system.root.dir", "root.dir",
 			"com.liferay.portal.store.filesystem"
-		},
-		{
-			"dl.store.cmis.credentials.username", "credentials.username",
-			"com.liferay.portal.store.cmis"
-		},
-		{
-			"dl.store.cmis.credentials.password", "credentials.password",
-			"com.liferay.portal.store.cmis"
-		},
-		{
-			"dl.store.cmis.repository.url", "repository.url",
-			"com.liferay.portal.store.cmis"
-		},
-		{
-			"dl.store.cmis.system.root.dir", "system.root.dir",
-			"com.liferay.portal.store.cmis"
 		},
 		{
 			"dl.store.file.system.root.dir", "root.dir",
@@ -1609,7 +1603,8 @@ public class VerifyProperties extends VerifyProcess {
 		"auth.max.failures.limit", "auto.deploy.blacklist.threshold",
 		"blogs.image.small.max.size", "breadcrumb.display.style.options",
 		"buffered.increment.parallel.queue.size",
-		"buffered.increment.serial.queue.size", "captcha.max.challenges",
+		"buffered.increment.serial.queue.size",
+		"cache.clear.on.context.initialization", "captcha.max.challenges",
 		"captcha.check.portal.create_account",
 		"captcha.check.portal.send_password",
 		"captcha.check.portlet.message_boards.edit_category",
@@ -1654,8 +1649,13 @@ public class VerifyProperties extends VerifyProcess {
 		"dl.file.entry.read.count.enabled",
 		"dl.file.entry.type.ig.image.auto.create.on.upgrade",
 		"dl.file.extensions", "dl.file.max.size", "dl.file.rank.enabled",
-		"dl.folder.menu.visible", "dl.hook.jcr.fetch.delay",
-		"dl.hook.jcr.fetch.max.failures", "dl.hook.jcr.move.version.labels",
+		"dl.folder.menu.visible", "dl.hook.cmis.credentials.password",
+		"dl.hook.cmis.credentials.username", "dl.hook.cmis.repository.url",
+		"dl.hook.cmis.system.root.dir", "dl.hook.file.system.root.dir",
+		"dl.hook.jcr.fetch.delay", "dl.hook.jcr.fetch.max.failures",
+		"dl.hook.jcr.move.version.labels", "dl.store.cmis.credentials.username",
+		"dl.store.cmis.credentials.password", "dl.store.cmis.repository.url",
+		"dl.store.cmis.system.root.dir", "dl.store.file.system.root.dir",
 		"dl.store.jcr.fetch.delay", "dl.store.jcr.fetch.max.failures",
 		"dl.store.jcr.move.version.labels", "dl.tabs.visible",
 		"dockbar.add.portlets", "dockbar.administrative.links.show.in.pop.up",
@@ -1866,17 +1866,6 @@ public class VerifyProperties extends VerifyProcess {
 		},
 		{"default.user.private.layout.lar", "default.user.private.layouts.lar"},
 		{"default.user.public.layout.lar", "default.user.public.layouts.lar"},
-		{
-			"dl.hook.cmis.credentials.password",
-			"dl.store.cmis.credentials.password"
-		},
-		{
-			"dl.hook.cmis.credentials.username",
-			"dl.store.cmis.credentials.username"
-		},
-		{"dl.hook.cmis.repository.url", "dl.store.cmis.repository.url"},
-		{"dl.hook.cmis.system.root.dir", "dl.store.cmis.system.root.dir"},
-		{"dl.hook.file.system.root.dir", "dl.store.file.system.root.dir"},
 		{"dl.hook.impl", "dl.store.impl"},
 		{"dl.hook.s3.access.key", "dl.store.s3.access.key"},
 		{"dl.hook.s3.bucket.name", "dl.store.s3.bucket.name"},

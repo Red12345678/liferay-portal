@@ -35,7 +35,11 @@ portletDisplay.setURLBack(backURL.toString());
 portletDisplay.setShowBackIcon(true);
 %>
 
+<liferay-portlet:renderURL var="portletURL" />
+
 <liferay-portlet:actionURL name="/change_lists/edit_ct_collection" var="actionURL">
+	<liferay-portlet:param name="mvcRenderCommandName" value="/change_lists/view" />
+	<liferay-portlet:param name="redirect" value="<%= portletURL.toString() %>" />
 	<liferay-portlet:param name="backURL" value="<%= backURL.toString() %>" />
 </liferay-portlet:actionURL>
 
@@ -53,7 +57,7 @@ portletDisplay.setShowBackIcon(true);
 			<aui:validator name="required" />
 		</aui:input>
 
-		<aui:input label="description" name="description" placeholder="change-list-description-placeholder" value="<%= description %>">
+		<aui:input label="description" name="description" placeholder="change-list-description-placeholder" type="textarea" value="<%= description %>">
 			<aui:validator name="maxLength"><%= ModelHintsUtil.getMaxLength(CTCollection.class.getName(), "description") %></aui:validator>
 		</aui:input>
 

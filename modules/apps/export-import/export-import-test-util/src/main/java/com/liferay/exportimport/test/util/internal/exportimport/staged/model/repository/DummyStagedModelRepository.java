@@ -319,10 +319,8 @@ public class DummyStagedModelRepository
 			portletDataContext.getScopeGroupId());
 
 		exportActionableDynamicQuery.setPerformActionMethod(
-			(Dummy dummy) -> {
-				StagedModelDataHandlerUtil.exportStagedModel(
-					portletDataContext, dummy);
-			});
+			(Dummy dummy) -> StagedModelDataHandlerUtil.exportStagedModel(
+				portletDataContext, dummy));
 
 		exportActionableDynamicQuery.setStagedModelType(
 			new StagedModelType(
@@ -363,8 +361,10 @@ public class DummyStagedModelRepository
 	public class DummyBaseLocalServiceImpl extends BaseLocalServiceImpl {
 
 		public List<Dummy> dynamicQuery(DynamicQuery dynamicQuery) {
+			DynamicQueryImpl dynamicQueryImpl = (DynamicQueryImpl)dynamicQuery;
+
 			DetachedCriteria detachedCriteria =
-				((DynamicQueryImpl)dynamicQuery).getDetachedCriteria();
+				dynamicQueryImpl.getDetachedCriteria();
 
 			Class<?> detachedCriteriaClass = detachedCriteria.getClass();
 

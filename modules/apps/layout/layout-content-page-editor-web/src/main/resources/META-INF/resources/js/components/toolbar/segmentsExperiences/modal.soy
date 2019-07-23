@@ -3,7 +3,9 @@
 {template .render}
 	{@param? _handleFormSubmit: any}
 	{@param? _requiredNameError: bool | null}
-	{@param? porletPrefix: string }
+	{@param? hasSegmentsEntryPermission: bool}
+	{@param? portletPrefix: string }
+	{@param? _handleNewSegmentClick: any }
 	{@param visible: bool }
 	{@param error: [
 		visible: bool,
@@ -41,7 +43,7 @@
 					autocomplete="off"
 					class="mb-3"
 					data-onsubmit="{$_handleFormSubmit}"
-					id="{$porletPrefix}{$experienceForm.formId}"
+					id="{$portletPrefix}{$experienceForm.formId}"
 					novalidate
 				>
 					{if $error and $error.visible }
@@ -57,7 +59,7 @@
 						{/call}
 					{/if}
 					<div class="form-group {$_requiredNameError ? 'has-error ' : ''}my-2">
-						<label for="{$porletPrefix}{$experienceForm.experienceName.inputId}">
+						<label for="{$portletPrefix}{$experienceForm.experienceName.inputId}">
 							{$experienceForm.experienceName.label}
 							<svg class="lexicon-icon lexicon-icon-asterisk reference-mark" focusable="false" role="presentation">
 								<use href="{$spritemap ?: ''}#asterisk" />
@@ -67,7 +69,7 @@
 						<input
 							autofocus
 							class="form-control"
-							id="{$porletPrefix}{$experienceForm.experienceName.inputId}"
+							id="{$portletPrefix}{$experienceForm.experienceName.inputId}"
 							name="experienceName"
 							value="{$experienceForm.experienceName.value}"
 							placeholder="{$experienceForm.experienceName.placeholder}"
@@ -92,22 +94,31 @@
 					</div>
 
 					<div class="form-group my-2">
-						{if $experienceForm.segmentSelector.segments and length($experienceForm.segmentSelector.segments) > 0}
-								<label for="{$porletPrefix}{$experienceForm.segmentSelector.inputId}">
-									{$experienceForm.segmentSelector.label}
-								</label>
+						<label for="{$portletPrefix}{$experienceForm.segmentSelector.inputId}">
+							{$experienceForm.segmentSelector.label}
+						</label>
 
-								<select
-									class="form-control"
-									id="{$porletPrefix}{$experienceForm.experienceName.inputId}"
-									name="experienceSegmentId"
-									ref="experienceSegmentId"
-								>
+						{let $selectAttributes kind="attributes"}
+
+							{if $experienceForm.segmentSelector.segments and length($experienceForm.segmentSelector.segments) == 0    }
+								disabled
+							{/if}
+						{/let}
+
+						<div class="d-flex">
+							<select
+								class="form-control"
+								id="{$portletPrefix}{$experienceForm.experienceName.inputId}"
+								name="experienceSegmentId"
+								ref="experienceSegmentId"
+								{$selectAttributes}
+							>
+								{if $experienceForm.segmentSelector.segments and length($experienceForm.segmentSelector.segments) > 0}
 									{foreach $segment in $experienceForm.segmentSelector.segments}
 										{let $optionAttributes kind="attributes"}
 											value="{$segment.segmentsEntryId}"
 
-											{if $segment.segmentsEntryId == $experienceForm.segmentSelector.value    }
+											{if $segment.segmentsEntryId == $experienceForm.segmentSelector.value}
 												selected
 											{/if}
 										{/let}
@@ -116,8 +127,22 @@
 											{$segment.name}
 										</option>
 									{/foreach}
-								</select>
-						{/if}
+								{else}
+									<option>
+										{msg desc=""}
+											no-segments
+										{/msg}
+									</option>
+								{/if}
+							</select>
+							{if $hasSegmentsEntryPermission == true}
+								<button type="button" class="btn btn-secondary flex-shrink-0 ml-2" data-onclick="{$_handleNewSegmentClick}">
+									{msg desc=""}
+										new-segment
+									{/msg}
+								</button>
+							{/if}
+						</div>
 					</div>
 				</form>
 			{/param}
@@ -137,7 +162,7 @@
 						<button
 							class="btn btn-primary ml-3"
 							data-onclick="{$_handleFormSubmit}"
-							form="{$porletPrefix}{$experienceForm.formId}"
+							form="{$portletPrefix}{$experienceForm.formId}"
 							type="button"
 						>
 							{msg desc=""}save{/msg}

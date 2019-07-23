@@ -40,6 +40,9 @@ import com.liferay.segments.model.SegmentsExperienceSoap;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.ArrayList;
@@ -86,7 +89,8 @@ public class SegmentsExperienceModelImpl
 		{"groupId", Types.BIGINT}, {"companyId", Types.BIGINT},
 		{"userId", Types.BIGINT}, {"userName", Types.VARCHAR},
 		{"createDate", Types.TIMESTAMP}, {"modifiedDate", Types.TIMESTAMP},
-		{"segmentsEntryId", Types.BIGINT}, {"classNameId", Types.BIGINT},
+		{"segmentsEntryId", Types.BIGINT},
+		{"segmentsExperienceKey", Types.VARCHAR}, {"classNameId", Types.BIGINT},
 		{"classPK", Types.BIGINT}, {"name", Types.VARCHAR},
 		{"priority", Types.INTEGER}, {"active_", Types.BOOLEAN},
 		{"lastPublishDate", Types.TIMESTAMP}
@@ -105,6 +109,7 @@ public class SegmentsExperienceModelImpl
 		TABLE_COLUMNS_MAP.put("createDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("modifiedDate", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("segmentsEntryId", Types.BIGINT);
+		TABLE_COLUMNS_MAP.put("segmentsExperienceKey", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("classNameId", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("classPK", Types.BIGINT);
 		TABLE_COLUMNS_MAP.put("name", Types.VARCHAR);
@@ -114,7 +119,7 @@ public class SegmentsExperienceModelImpl
 	}
 
 	public static final String TABLE_SQL_CREATE =
-		"create table SegmentsExperience (uuid_ VARCHAR(75) null,segmentsExperienceId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,segmentsEntryId LONG,classNameId LONG,classPK LONG,name STRING null,priority INTEGER,active_ BOOLEAN,lastPublishDate DATE null)";
+		"create table SegmentsExperience (uuid_ VARCHAR(75) null,segmentsExperienceId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,segmentsEntryId LONG,segmentsExperienceKey VARCHAR(75) null,classNameId LONG,classPK LONG,name STRING null,priority INTEGER,active_ BOOLEAN,lastPublishDate DATE null)";
 
 	public static final String TABLE_SQL_DROP = "drop table SegmentsExperience";
 
@@ -159,7 +164,9 @@ public class SegmentsExperienceModelImpl
 
 	public static final long SEGMENTSENTRYID_COLUMN_BITMASK = 64L;
 
-	public static final long UUID_COLUMN_BITMASK = 128L;
+	public static final long SEGMENTSEXPERIENCEKEY_COLUMN_BITMASK = 128L;
+
+	public static final long UUID_COLUMN_BITMASK = 256L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -183,6 +190,7 @@ public class SegmentsExperienceModelImpl
 		model.setCreateDate(soapModel.getCreateDate());
 		model.setModifiedDate(soapModel.getModifiedDate());
 		model.setSegmentsEntryId(soapModel.getSegmentsEntryId());
+		model.setSegmentsExperienceKey(soapModel.getSegmentsExperienceKey());
 		model.setClassNameId(soapModel.getClassNameId());
 		model.setClassPK(soapModel.getClassPK());
 		model.setName(soapModel.getName());
@@ -308,6 +316,32 @@ public class SegmentsExperienceModelImpl
 		return _attributeSetterBiConsumers;
 	}
 
+	private static Function<InvocationHandler, SegmentsExperience>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			SegmentsExperience.class.getClassLoader(), SegmentsExperience.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<SegmentsExperience> constructor =
+				(Constructor<SegmentsExperience>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
+	}
+
 	private static final Map<String, Function<SegmentsExperience, Object>>
 		_attributeGetterFunctions;
 	private static final Map<String, BiConsumer<SegmentsExperience, Object>>
@@ -374,6 +408,13 @@ public class SegmentsExperienceModelImpl
 			"segmentsEntryId",
 			(BiConsumer<SegmentsExperience, Long>)
 				SegmentsExperience::setSegmentsEntryId);
+		attributeGetterFunctions.put(
+			"segmentsExperienceKey",
+			SegmentsExperience::getSegmentsExperienceKey);
+		attributeSetterBiConsumers.put(
+			"segmentsExperienceKey",
+			(BiConsumer<SegmentsExperience, String>)
+				SegmentsExperience::setSegmentsExperienceKey);
 		attributeGetterFunctions.put(
 			"classNameId", SegmentsExperience::getClassNameId);
 		attributeSetterBiConsumers.put(
@@ -589,6 +630,32 @@ public class SegmentsExperienceModelImpl
 
 	public long getOriginalSegmentsEntryId() {
 		return _originalSegmentsEntryId;
+	}
+
+	@JSON
+	@Override
+	public String getSegmentsExperienceKey() {
+		if (_segmentsExperienceKey == null) {
+			return "";
+		}
+		else {
+			return _segmentsExperienceKey;
+		}
+	}
+
+	@Override
+	public void setSegmentsExperienceKey(String segmentsExperienceKey) {
+		_columnBitmask |= SEGMENTSEXPERIENCEKEY_COLUMN_BITMASK;
+
+		if (_originalSegmentsExperienceKey == null) {
+			_originalSegmentsExperienceKey = _segmentsExperienceKey;
+		}
+
+		_segmentsExperienceKey = segmentsExperienceKey;
+	}
+
+	public String getOriginalSegmentsExperienceKey() {
+		return GetterUtil.getString(_originalSegmentsExperienceKey);
 	}
 
 	@Override
@@ -917,8 +984,12 @@ public class SegmentsExperienceModelImpl
 	@Override
 	public SegmentsExperience toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (SegmentsExperience)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, SegmentsExperience>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -940,6 +1011,8 @@ public class SegmentsExperienceModelImpl
 		segmentsExperienceImpl.setCreateDate(getCreateDate());
 		segmentsExperienceImpl.setModifiedDate(getModifiedDate());
 		segmentsExperienceImpl.setSegmentsEntryId(getSegmentsEntryId());
+		segmentsExperienceImpl.setSegmentsExperienceKey(
+			getSegmentsExperienceKey());
 		segmentsExperienceImpl.setClassNameId(getClassNameId());
 		segmentsExperienceImpl.setClassPK(getClassPK());
 		segmentsExperienceImpl.setName(getName());
@@ -1036,6 +1109,9 @@ public class SegmentsExperienceModelImpl
 
 		segmentsExperienceModelImpl._setOriginalSegmentsEntryId = false;
 
+		segmentsExperienceModelImpl._originalSegmentsExperienceKey =
+			segmentsExperienceModelImpl._segmentsExperienceKey;
+
 		segmentsExperienceModelImpl._originalClassNameId =
 			segmentsExperienceModelImpl._classNameId;
 
@@ -1108,6 +1184,18 @@ public class SegmentsExperienceModelImpl
 		}
 
 		segmentsExperienceCacheModel.segmentsEntryId = getSegmentsEntryId();
+
+		segmentsExperienceCacheModel.segmentsExperienceKey =
+			getSegmentsExperienceKey();
+
+		String segmentsExperienceKey =
+			segmentsExperienceCacheModel.segmentsExperienceKey;
+
+		if ((segmentsExperienceKey != null) &&
+			(segmentsExperienceKey.length() == 0)) {
+
+			segmentsExperienceCacheModel.segmentsExperienceKey = null;
+		}
 
 		segmentsExperienceCacheModel.classNameId = getClassNameId();
 
@@ -1201,11 +1289,12 @@ public class SegmentsExperienceModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		SegmentsExperience.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		SegmentsExperience.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, SegmentsExperience>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private String _uuid;
 	private String _originalUuid;
@@ -1224,6 +1313,8 @@ public class SegmentsExperienceModelImpl
 	private long _segmentsEntryId;
 	private long _originalSegmentsEntryId;
 	private boolean _setOriginalSegmentsEntryId;
+	private String _segmentsExperienceKey;
+	private String _originalSegmentsExperienceKey;
 	private long _classNameId;
 	private long _originalClassNameId;
 	private boolean _setOriginalClassNameId;

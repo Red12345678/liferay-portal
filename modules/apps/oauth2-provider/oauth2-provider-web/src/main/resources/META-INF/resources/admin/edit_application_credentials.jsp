@@ -71,6 +71,22 @@ String clientSecret = (oAuth2Application == null) ? "" : oAuth2Application.getCl
 						<liferay-ui:message arguments="<%= HtmlUtil.escape(((OAuth2ApplicationRedirectURISchemeException)errorException).getMessage()) %>" key="redirect-uri-x-scheme-is-invalid" />
 					</liferay-ui:error>
 
+					<liferay-ui:error exception="<%= OAuth2ApplicationClientCredentialUserIdException.class %>">
+
+						<%
+						OAuth2ApplicationClientCredentialUserIdException oAuth2ApplicationClientCredentialUserIdException = ((OAuth2ApplicationClientCredentialUserIdException)errorException);
+						%>
+
+						<c:choose>
+							<c:when test="<%= Validator.isNotNull(oAuth2ApplicationClientCredentialUserIdException.getClientCredentialUserScreenName()) %>">
+								<liferay-ui:message arguments="<%= oAuth2ApplicationClientCredentialUserIdException.getClientCredentialUserScreenName() %>" key="this-operation-cannot-be-performed-because-you-cannot-impersonate-x" />
+							</c:when>
+							<c:otherwise>
+								<liferay-ui:message arguments="<%= oAuth2ApplicationClientCredentialUserIdException.getClientCredentialUserId() %>" key="this-operation-cannot-be-performed-because-you-cannot-impersonate-x" />
+							</c:otherwise>
+						</c:choose>
+					</liferay-ui:error>
+
 					<aui:model-context bean="<%= oAuth2Application %>" model="<%= OAuth2Application.class %>" />
 
 					<c:if test="<%= oAuth2Application != null %>">

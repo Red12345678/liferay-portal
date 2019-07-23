@@ -18,13 +18,20 @@ import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.contributor.FragmentCollectionContributor;
 import com.liferay.fragment.contributor.FragmentCollectionContributorTracker;
 import com.liferay.fragment.model.FragmentEntry;
+import com.liferay.portal.kernel.util.AggregateResourceBundleLoader;
+import com.liferay.portal.kernel.util.ResourceBundleLoader;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -61,6 +68,55 @@ public class FragmentCollectionContributorTrackerImpl
 	@Override
 	public Map<String, FragmentEntry> getFragmentEntries() {
 		return new HashMap<>(_fragmentEntries);
+	}
+
+	@Override
+	public Map<String, FragmentEntry> getFragmentEntries(Locale locale) {
+		Stream<FragmentCollectionContributor> stream =
+			_fragmentCollectionContributors.stream();
+
+		return stream.map(
+			fragmentCollectionContributor -> {
+				Map<String, FragmentEntry> fragmentEntries = new HashMap<>();
+
+				for (int type : _SUPPORTED_FRAGMENT_TYPES) {
+					for (FragmentEntry fragmentEntry :
+							fragmentCollectionContributor.getFragmentEntries(
+								type, locale)) {
+
+						fragmentEntries.put(
+							fragmentEntry.getFragmentEntryKey(), fragmentEntry);
+					}
+				}
+
+				return fragmentEntries;
+			}
+		).flatMap(
+			fragmentEntriesMap -> {
+				Collection<FragmentEntry> fragmentEntries =
+					fragmentEntriesMap.values();
+
+				return fragmentEntries.stream();
+			}
+		).collect(
+			Collectors.toMap(
+				FragmentEntry::getFragmentEntryKey,
+				fragmentEntry -> fragmentEntry)
+		);
+	}
+
+	public ResourceBundleLoader getResourceBundleLoader() {
+		Stream<FragmentCollectionContributor> stream =
+			_fragmentCollectionContributors.stream();
+
+		return new AggregateResourceBundleLoader(
+			stream.map(
+				FragmentCollectionContributor::getResourceBundleLoader
+			).filter(
+				Objects::nonNull
+			).toArray(
+				ResourceBundleLoader[]::new
+			));
 	}
 
 	@Reference(

@@ -14,32 +14,44 @@
 
 package com.liferay.change.tracking.change.lists.history.web.internal.portlet;
 
+import com.liferay.change.tracking.configuration.CTConfiguration;
 import com.liferay.change.tracking.constants.CTPortletKeys;
 import com.liferay.change.tracking.constants.CTWebKeys;
-import com.liferay.change.tracking.model.CTCollection;
-import com.liferay.change.tracking.model.CTProcess;
 import com.liferay.change.tracking.service.CTCollectionLocalService;
-import com.liferay.change.tracking.service.CTProcessLocalService;
+import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.security.permission.UserBag;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
 
+import java.util.Map;
+
 import javax.portlet.Portlet;
 import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Laszlo Pap
  */
 @Component(
-	immediate = true,
+	configurationPid = "com.liferay.change.tracking.configuration.CTConfiguration",
+	configurationPolicy = ConfigurationPolicy.OPTIONAL, immediate = true,
 	property = {
 		"com.liferay.portlet.add-default-resource=false",
 		"com.liferay.portlet.css-class-wrapper=portlet-change-lists-history",
@@ -57,7 +69,7 @@ import org.osgi.service.component.annotations.Reference;
 		"javax.portlet.init-param.view-template=/view.jsp",
 		"javax.portlet.name=" + CTPortletKeys.CHANGE_LISTS_HISTORY,
 		"javax.portlet.resource-bundle=content.Language",
-		"javax.portlet.security-role-ref=power-user,user",
+		"javax.portlet.security-role-ref=administrator",
 		"javax.portlet.supports.mime-type=text/html"
 	},
 	service = Portlet.class
@@ -69,33 +81,69 @@ public class ChangeListsHistoryPortlet extends MVCPortlet {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
 
-		long ctProcessId = ParamUtil.getLong(
-			renderRequest, CTWebKeys.CT_PROCESS_ID);
+		try {
+			checkPermissions(renderRequest);
+		}
+		catch (Exception e) {
+			throw new PortletException(
+				"Unable to check permissions: " + e.getMessage(), e);
+		}
 
-		if (ctProcessId > 0) {
-			try {
-				CTProcess ctProcess = _ctProcessLocalService.getCTProcess(
-					ctProcessId);
+		long ctCollectionId = ParamUtil.getLong(
+			renderRequest, "ctCollectionId");
 
-				CTCollection ctCollection =
-					_ctCollectionLocalService.getCTCollection(
-						ctProcess.getCtCollectionId());
-
+		try {
+			if (ctCollectionId > 0) {
 				renderRequest.setAttribute(
-					CTWebKeys.CT_COLLECTION, ctCollection);
+					CTWebKeys.CT_COLLECTION,
+					_ctCollectionLocalService.getCTCollection(ctCollectionId));
 			}
-			catch (PortalException pe) {
-				SessionErrors.add(renderRequest, pe.getClass());
-			}
+		}
+		catch (PortalException pe) {
+			SessionErrors.add(renderRequest, pe.getClass());
 		}
 
 		super.render(renderRequest, renderResponse);
 	}
 
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		_ctConfiguration = ConfigurableUtil.createConfigurable(
+			CTConfiguration.class, properties);
+	}
+
+	@Override
+	protected void checkPermissions(PortletRequest portletRequest)
+		throws Exception {
+
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
+
+		if (permissionChecker.isCompanyAdmin()) {
+			return;
+		}
+
+		String[] administratorRoleNames =
+			_ctConfiguration.administratorRoleNames();
+
+		UserBag userBag = permissionChecker.getUserBag();
+
+		for (Role role : userBag.getRoles()) {
+			if (ArrayUtil.contains(administratorRoleNames, role.getName())) {
+				return;
+			}
+		}
+
+		throw new PrincipalException(
+			String.format(
+				"User %s must have administrator role to access %s",
+				permissionChecker.getUserId(), getClass().getSimpleName()));
+	}
+
 	@Reference
 	private CTCollectionLocalService _ctCollectionLocalService;
 
-	@Reference
-	private CTProcessLocalService _ctProcessLocalService;
+	private CTConfiguration _ctConfiguration;
 
 }

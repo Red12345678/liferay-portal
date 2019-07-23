@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Documents Management";
@@ -39,10 +40,7 @@ definition {
 		property test.name.skip.portal.instance = "Staging#StagingDemoDocumentsAndMedia";
 		property testray.component.names = "Training";
 
-		ProductMenu.gotoPortlet(
-			category = "Configuration",
-			panel = "Control Panel",
-			portlet = "System Settings");
+		SystemSettings.openSystemSettingsAdmin();
 
 		SystemSettings.gotoConfiguration(
 			configurationCategory = "Documents and Media",
@@ -170,4 +168,5 @@ definition {
 
 		DMDocument.viewDocumentTypePG(textContent = "Text");
 	}
+
 }

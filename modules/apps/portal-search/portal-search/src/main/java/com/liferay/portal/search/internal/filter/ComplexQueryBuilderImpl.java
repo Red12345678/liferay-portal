@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author André de Oliveira
@@ -56,16 +57,16 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 
 	@Override
 	public Query build() {
-		Map<String, ComplexQueryPart> complexQueryPartsMap =
-			_complexQueryParts.stream(
-			).filter(
-				filterQueryDefinition -> !Validator.isBlank(
-					filterQueryDefinition.getName())
-			).collect(
-				Collectors.toMap(ComplexQueryPart::getName, Function.identity())
-			);
+		Stream<ComplexQueryPart> stream = _complexQueryParts.stream();
 
-		Build build = new Build(complexQueryPartsMap);
+		Map<String, ComplexQueryPart> complexQueryPartsMap = stream.filter(
+			filterQueryDefinition -> !Validator.isBlank(
+				filterQueryDefinition.getName())
+		).collect(
+			Collectors.toMap(ComplexQueryPart::getName, Function.identity())
+		);
+
+		Build build = new Build(complexQueryPartsMap, _getRootBooleanQuery());
 
 		return build.build();
 	}
@@ -77,6 +78,14 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 		return this;
 	}
 
+	private BooleanQuery _getRootBooleanQuery() {
+		if (_booleanQuery != null) {
+			return _booleanQuery;
+		}
+
+		return _queries.booleanQuery();
+	}
+
 	private BooleanQuery _booleanQuery;
 	private final List<ComplexQueryPart> _complexQueryParts = new ArrayList<>();
 	private final Queries _queries;
@@ -84,8 +93,12 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 
 	private class Build {
 
-		public Build(Map<String, ComplexQueryPart> complexQueryPartsMap) {
+		public Build(
+			Map<String, ComplexQueryPart> complexQueryPartsMap,
+			BooleanQuery rootBooleanQuery) {
+
 			_complexQueryPartsMap = complexQueryPartsMap;
+			_rootBooleanQuery = rootBooleanQuery;
 		}
 
 		public Query build() {
@@ -130,11 +143,7 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 				return null;
 			}
 
-			String field = GetterUtil.getString(complexQueryPart.getField());
-			String type = GetterUtil.getString(complexQueryPart.getType());
-			String value = GetterUtil.getString(complexQueryPart.getValue());
-
-			Query query = buildQuery(type, field, value);
+			Query query = getQuery(complexQueryPart);
 
 			if (query == null) {
 				return null;
@@ -156,6 +165,10 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 			}
 
 			if (Objects.equals(type, "fuzzy")) {
+				if (Validator.isBlank(value)) {
+					return null;
+				}
+
 				return _queries.fuzzy(field, value);
 			}
 
@@ -168,10 +181,18 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 			}
 
 			if (Objects.equals(type, "match_phrase")) {
+				if (Validator.isBlank(value)) {
+					return null;
+				}
+
 				return _queries.matchPhrase(field, value);
 			}
 
 			if (Objects.equals(type, "match_phrase_prefix")) {
+				if (Validator.isBlank(value)) {
+					return null;
+				}
+
 				return _queries.matchPhrasePrefix(field, value);
 			}
 
@@ -185,10 +206,18 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 			}
 
 			if (Objects.equals(type, "prefix")) {
+				if (Validator.isBlank(value)) {
+					return null;
+				}
+
 				return _queries.prefix(field, value);
 			}
 
 			if (Objects.equals(type, "query_string")) {
+				if (Validator.isBlank(value)) {
+					return null;
+				}
+
 				StringQuery stringQuery = _queries.string(value);
 
 				if (!Validator.isBlank(field)) {
@@ -199,14 +228,26 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 			}
 
 			if (Objects.equals(type, "regexp")) {
+				if (Validator.isBlank(value)) {
+					return null;
+				}
+
 				return _queries.regex(field, value);
 			}
 
 			if (Objects.equals(type, "script")) {
+				if (Validator.isBlank(value)) {
+					return null;
+				}
+
 				return _queries.script(_scripts.script(value));
 			}
 
 			if (Objects.equals(type, "simple_query_string")) {
+				if (Validator.isBlank(value)) {
+					return null;
+				}
+
 				SimpleStringQuery simpleStringQuery = _queries.simpleString(
 					value);
 
@@ -218,10 +259,18 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 			}
 
 			if (Objects.equals(type, "term")) {
+				if (Validator.isBlank(value)) {
+					return null;
+				}
+
 				return _queries.term(field, value);
 			}
 
 			if (Objects.equals(type, "wildcard")) {
+				if (Validator.isBlank(value)) {
+					return null;
+				}
+
 				return _queries.wildcard(field, value);
 			}
 
@@ -249,8 +298,20 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 			return getRootBooleanQuery();
 		}
 
+		protected Query getQuery(ComplexQueryPart complexQueryPart) {
+			if (complexQueryPart.getQuery() != null) {
+				return complexQueryPart.getQuery();
+			}
+
+			String field = GetterUtil.getString(complexQueryPart.getField());
+			String type = GetterUtil.getString(complexQueryPart.getType());
+			String value = GetterUtil.getString(complexQueryPart.getValue());
+
+			return buildQuery(type, field, value);
+		}
+
 		protected BooleanQuery getRootBooleanQuery() {
-			return _booleanQuery;
+			return _rootBooleanQuery;
 		}
 
 		protected Query hydrate(ComplexQueryPart complexQueryPart) {
@@ -276,6 +337,7 @@ public class ComplexQueryBuilderImpl implements ComplexQueryBuilder {
 
 		private final Map<String, ComplexQueryPart> _complexQueryPartsMap;
 		private final Map<String, Query> _queriesMap = new HashMap<>();
+		private final BooleanQuery _rootBooleanQuery;
 
 	}
 

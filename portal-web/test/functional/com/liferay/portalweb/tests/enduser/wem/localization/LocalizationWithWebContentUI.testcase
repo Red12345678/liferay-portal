@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Web Content Administration";
@@ -195,6 +196,8 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
+		Pause(locator1 = "3000");
+
 		WebContentStructures.addName(structureName = "WC Structure Name");
 
 		PortletEntry.inputDescriptionTextInput(description = "WC Structure Description");
@@ -317,4 +320,5 @@ definition {
 			locale = "en_US",
 			textIcon = "english-United States");
 	}
+
 }

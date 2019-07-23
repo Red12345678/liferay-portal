@@ -1,4 +1,18 @@
 /**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+/**
  * The Autocomplete Textarea Component.
  *
  * @deprecated since 7.2, unused
@@ -19,8 +33,7 @@ AUI.add(
 
 		var STR_SPACE = ' ';
 
-		var AutoCompleteTextarea = function() {
-		};
+		var AutoCompleteTextarea = function() {};
 
 		AutoCompleteTextarea.prototype = {
 			initializer: function() {
@@ -43,7 +56,11 @@ AUI.add(
 				var inputNode = instance.get(STR_INPUT_NODE);
 
 				instance._eventHandles = [
-					inputNode.on('key', A.bind('_onKeyUp', instance), 'up:' + KEY_LIST)
+					inputNode.on(
+						'key',
+						A.bind('_onKeyUp', instance),
+						'up:' + KEY_LIST
+					)
 				];
 			},
 
@@ -103,8 +120,9 @@ AUI.add(
 				if (caretIndex) {
 					val = val.substring(0, caretIndex.start);
 
-					instance._getTriggers().forEach(
-						function(item, index, collection) {
+					instance
+						._getTriggers()
+						.forEach(function(item, index, collection) {
 							var lastTriggerIndex = val.lastIndexOf(item);
 
 							if (lastTriggerIndex >= 0) {
@@ -114,12 +132,16 @@ AUI.add(
 
 								var res = regExp.exec(val);
 
-								if (res && res.index + res[1].length + item.length === val.length && (!result || val.length < result.length)) {
+								if (
+									res &&
+									res.index + res[1].length + item.length ===
+										val.length &&
+									(!result || val.length < result.length)
+								) {
 									result = val;
 								}
 							}
-						}
-					);
+						});
 				}
 
 				return result;
@@ -156,7 +178,10 @@ AUI.add(
 					var val = instance._getACVal();
 
 					if (val) {
-						var lastTrigger = instance._getPrevTrigger(val, caretIndex.start);
+						var lastTrigger = instance._getPrevTrigger(
+							val,
+							caretIndex.start
+						);
 
 						var lastTriggerIndex = lastTrigger.index;
 
@@ -174,19 +199,27 @@ AUI.add(
 
 								var spaceAdded = 1;
 
-								if (restText.length === 0 || restText[0] !== STR_SPACE) {
+								if (
+									restText.length === 0 ||
+									restText[0] !== STR_SPACE
+								) {
 									text += STR_SPACE;
 
 									spaceAdded = 0;
 								}
 
-								var resultText = prefix + lastTrigger.value + text;
+								var resultText =
+									prefix + lastTrigger.value + text;
 
-								var resultEndPos = resultText.length + spaceAdded;
+								var resultEndPos =
+									resultText.length + spaceAdded;
 
 								instance._setACVal(resultText + restText);
 
-								instance._setCaretIndex(instance.get(STR_INPUT_NODE), resultEndPos);
+								instance._setCaretIndex(
+									instance.get(STR_INPUT_NODE),
+									resultEndPos
+								);
 							}
 						}
 					}
@@ -197,10 +230,7 @@ AUI.add(
 		Liferay.AutoCompleteTextarea = A.Base.create(
 			'liferayautocompletetextarea',
 			A.AutoComplete,
-			[
-				Liferay.AutoCompleteInputBase,
-				AutoCompleteTextarea
-			],
+			[Liferay.AutoCompleteInputBase, AutoCompleteTextarea],
 			{},
 			{
 				CSS_PREFIX: A.ClassNameManager.getClassName('aclist')

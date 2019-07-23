@@ -59,16 +59,7 @@ else {
 
 com.liferay.portal.kernel.lock.Lock lock = fileEntry.getLock();
 
-long assetClassPK = 0;
-
-if (!fileVersion.isApproved() && !fileVersion.getVersion().equals(DLFileEntryConstants.VERSION_DEFAULT) && !fileEntry.isInTrash()) {
-	assetClassPK = fileVersion.getFileVersionId();
-}
-else {
-	assetClassPK = fileEntry.getFileEntryId();
-}
-
-AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.fetchEntry(DLFileEntryConstants.getClassName(), assetClassPK);
+AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.fetchEntry(DLFileEntryConstants.getClassName(), DLAssetHelperUtil.getAssetClassPK(fileEntry, fileVersion));
 
 request.setAttribute(WebKeys.LAYOUT_ASSET_ENTRY, layoutAssetEntry);
 
@@ -190,7 +181,7 @@ if (portletTitleBasedNavigation) {
 			</div>
 		</c:if>
 
-		<c:if test="<%= (fileEntry.getLock() != null) && DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) %>">
+		<c:if test="<%= (lock != null) && DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) %>">
 			<c:choose>
 				<c:when test="<%= fileEntry.hasLock() %>">
 					<div class="alert alert-success">
@@ -252,10 +243,10 @@ if (portletTitleBasedNavigation) {
 <c:if test="<%= dlPortletInstanceSettingsHelper.isShowActions() && dlAdminDisplayContext.isVersioningStrategyOverridable() %>">
 
 	<%
-	boolean checkedOut = fileEntry.isCheckedOut();
+	request.setAttribute("edit_file_entry.jsp-checkedOut", fileEntry.isCheckedOut());
 	%>
 
-	<%@ include file="/document_library/version_details.jspf" %>
+	<liferay-util:include page="/document_library/version_details.jsp" servletContext="<%= application %>" />
 </c:if>
 
 <portlet:renderURL var="selectFolderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcRenderCommandName" value="/document_library/select_folder" /><portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" /></portlet:renderURL>

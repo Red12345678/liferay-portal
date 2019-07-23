@@ -91,7 +91,7 @@ PortalLDAPUtil.getGroups(themeDisplay.getCompanyId(), ldapContext, new byte[0], 
 	for (SearchResult searchResult : searchResults) {
 		Attributes attributes = searchResult.getAttributes();
 
-		String name = StringUtil.toLowerCase(LDAPUtil.getAttributeString(attributes, groupMappings.getProperty("groupName")));
+		String name = LDAPUtil.getAttributeString(attributes, groupMappings.getProperty("groupName"));
 		String description = LDAPUtil.getAttributeString(attributes, groupMappings.getProperty("description"));
 		Attribute attribute = attributes.get(groupMappings.getProperty("user"));
 
@@ -117,6 +117,11 @@ PortalLDAPUtil.getGroups(themeDisplay.getCompanyId(), ldapContext, new byte[0], 
 
 		if (counter == 0) {
 	%>
+
+			<col width="5%" />
+			<col width="25%" />
+			<col width="60%" />
+			<col width="15%" />
 
 			<tr>
 				<th>

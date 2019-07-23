@@ -17,13 +17,17 @@ package com.liferay.headless.admin.user.resource.v1_0.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.headless.admin.user.client.dto.v1_0.UserAccount;
 import com.liferay.headless.admin.user.client.pagination.Page;
+import com.liferay.headless.admin.user.client.pagination.Pagination;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserConstants;
+import com.liferay.portal.kernel.search.IndexWriterHelperUtil;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
@@ -33,16 +37,10 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.odata.entity.EntityField;
-import com.liferay.portal.vulcan.pagination.Pagination;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -69,15 +67,33 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 		UserLocalServiceUtil.deleteGroupUser(
 			testGroup.getGroupId(), _testUser.getUserId());
 
-		Indexer<User> indexer = IndexerRegistryUtil.nullSafeGetIndexer(
-			_testUser.getModelClassName());
+		// See LPS-94496 for why we have to delete all users except for the
+		// test user
 
 		List<User> users = UserLocalServiceUtil.getUsers(
 			PortalUtil.getDefaultCompanyId(), false,
 			WorkflowConstants.STATUS_APPROVED, QueryUtil.ALL_POS,
 			QueryUtil.ALL_POS, null);
 
-		indexer.reindex(users);
+		for (User user : users) {
+			if (user.getUserId() != _testUser.getUserId()) {
+				UserLocalServiceUtil.deleteUser(user);
+			}
+		}
+
+		Indexer<User> indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			_testUser.getModelClassName());
+
+		List<Company> companies = CompanyLocalServiceUtil.getCompanies();
+
+		for (Company company : companies) {
+			IndexWriterHelperUtil.deleteEntityDocuments(
+				indexer.getSearchEngineId(), company.getCompanyId(),
+				_testUser.getModelClassName(), true);
+
+			indexer.reindex(
+				new String[] {String.valueOf(company.getCompanyId())});
+		}
 	}
 
 	@Override
@@ -98,7 +114,7 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 			}
 		};
 
-		UserAccount getUserAccount = invokeGetMyUserAccount();
+		UserAccount getUserAccount = userAccountResource.getMyUserAccount();
 
 		assertEquals(userAccount, getUserAccount);
 		assertValid(getUserAccount);
@@ -107,28 +123,14 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 	@Override
 	@Test
 	public void testGetUserAccountsPage() throws Exception {
-
-		// See LPS-94496 for why we have to delete all users except for the
-		// test user
-
-		List<User> users = UserLocalServiceUtil.getUsers(
-			PortalUtil.getDefaultCompanyId(), false,
-			WorkflowConstants.STATUS_APPROVED, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-
-		for (User user : users) {
-			if (user.getUserId() != _testUser.getUserId()) {
-				UserLocalServiceUtil.deleteUser(user);
-			}
-		}
-
 		UserAccount userAccount1 = testGetUserAccountsPage_addUserAccount(
 			randomUserAccount());
 		UserAccount userAccount2 = testGetUserAccountsPage_addUserAccount(
 			randomUserAccount());
-		UserAccount userAccount3 = invokeGetUserAccount(_testUser.getUserId());
+		UserAccount userAccount3 = userAccountResource.getUserAccount(
+			_testUser.getUserId());
 
-		Page<UserAccount> page = invokeGetUserAccountsPage(
+		Page<UserAccount> page = userAccountResource.getUserAccountsPage(
 			null, null, Pagination.of(1, 3), null);
 
 		Assert.assertEquals(3, page.getTotalCount());
@@ -163,19 +165,8 @@ public class UserAccountResourceTest extends BaseUserAccountResourceTestCase {
 	}
 
 	@Override
-	protected List<EntityField> getEntityFields(EntityField.Type type)
-		throws Exception {
-
-		Collection<EntityField> entityFields = super.getEntityFields(type);
-
-		Stream<EntityField> stream = entityFields.stream();
-
-		return stream.filter(
-			entityField -> !Objects.equals(
-				entityField.getName(), "emailAddress")
-		).collect(
-			Collectors.toList()
-		);
+	protected String[] getIgnoredEntityFieldNames() {
+		return new String[] {"emailAddress"};
 	}
 
 	@Override

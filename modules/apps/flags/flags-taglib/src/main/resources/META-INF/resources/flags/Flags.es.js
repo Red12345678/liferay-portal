@@ -1,9 +1,24 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import 'clay-button';
+import {PortletBase} from 'frontend-js-web';
 import 'frontend-js-web/liferay/compat/modal/Modal.es';
-import PortletBase from 'frontend-js-web/liferay/PortletBase.es';
 import Soy from 'metal-soy';
-import templates from './Flags.soy';
 import {Config} from 'metal-state';
-import ClayButton from 'clay-button';
+
+import templates from './Flags.soy';
 
 /**
  * It opens a dialog where the user can flag the page.
@@ -12,7 +27,6 @@ import ClayButton from 'clay-button';
  */
 
 class Flags extends PortletBase {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -30,9 +44,10 @@ class Flags extends PortletBase {
 		let reason;
 
 		if (this.refs.modal.refs.otherReason) {
-			reason = this.refs.modal.refs.otherReason.value || Liferay.Language.get('no-reason-specified');
-		}
-		else {
+			reason =
+				this.refs.modal.refs.otherReason.value ||
+				Liferay.Language.get('no-reason-specified');
+		} else {
 			reason = this.refs.modal.refs.reason.value;
 		}
 
@@ -86,32 +101,29 @@ class Flags extends PortletBase {
 
 	_sendReport() {
 		this.formData[this.ns('reason')] = this._getReason();
-		this.formData[this.ns('reporterEmailAddress')] = this.refs.modal.refs.reporterEmailAddress.value;
+		this.formData[
+			this.ns('reporterEmailAddress')
+		] = this.refs.modal.refs.reporterEmailAddress.value;
 
-		let formData = new FormData();
+		const formData = new FormData();
 
-		for (let name in this.formData) {
+		for (const name in this.formData) {
 			formData.append(name, this.formData[name]);
 		}
 
-		fetch(
-			this.uri,
-			{
-				body: formData,
-				credentials: 'include',
-				method: 'post'
-			}
-		).then(
-			(xhr) => {
+		fetch(this.uri, {
+			body: formData,
+			credentials: 'include',
+			method: 'post'
+		})
+			.then(xhr => {
 				if (xhr.status === Liferay.STATUS_CODE.OK) {
 					this._showConfirmationMessage = true;
 				}
-			}
-		).catch(
-			() => {
+			})
+			.catch(() => {
 				this._showErrorMessage = true;
-			}
-		);
+			});
 	}
 }
 
@@ -123,7 +135,6 @@ class Flags extends PortletBase {
  */
 
 Flags.STATE = {
-
 	/**
 	 * Flag to indicate if dialog should be open.
 	 * @default false
@@ -132,7 +143,9 @@ Flags.STATE = {
 	 * @type {Boolean}
 	 */
 
-	_reportDialogOpen: Config.bool().internal().value(false),
+	_reportDialogOpen: Config.bool()
+		.internal()
+		.value(false),
 
 	/**
 	 * Flag to indicate if dialog should show the confirmation message.
@@ -142,7 +155,9 @@ Flags.STATE = {
 	 * @type {Boolean}
 	 */
 
-	_showConfirmationMessage: Config.bool().internal().value(false),
+	_showConfirmationMessage: Config.bool()
+		.internal()
+		.value(false),
 
 	/**
 	 * Flag to indicate if dialog should show the error message.
@@ -152,7 +167,9 @@ Flags.STATE = {
 	 * @type {Boolean}
 	 */
 
-	_showErrorMessage: Config.bool().internal().value(false),
+	_showErrorMessage: Config.bool()
+		.internal()
+		.value(false),
 
 	/**
 	 * Selected reason to flag.

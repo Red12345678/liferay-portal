@@ -17,14 +17,14 @@
 <%@ include file="/message_boards/init.jsp" %>
 
 <%
+String navigation = "statistics";
+
 PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("mvcRenderCommandName", "/message_boards/view_statistics");
 %>
 
-<liferay-util:include page="/message_boards_admin/nav.jsp" servletContext="<%= application %>">
-	<liferay-util:param name="navItemSelected" value="statistics" />
-</liferay-util:include>
+<%@ include file="/message_boards_admin/nav.jspf" %>
 
 <%
 long categoryId = GetterUtil.getLong(request.getAttribute("view.jsp-categoryId"));
@@ -51,19 +51,26 @@ MBCategoryDisplay categoryDisplay = new MBCategoryDisplay(scopeGroupId, category
 		>
 			<dl>
 				<dt>
-					<liferay-ui:message key="num-of-categories" />:
+					<liferay-ui:message key="categories" />:
 				</dt>
 				<dd>
 					<%= numberFormat.format(categoryDisplay.getAllCategoriesCount()) %>
 				</dd>
 				<dt>
-					<liferay-ui:message key="num-of-posts" />:
+					<c:choose>
+						<c:when test="<%= MBStatsUserLocalServiceUtil.getMessageCountByGroupId(scopeGroupId) == 1 %>">
+							<liferay-ui:message key="post" />:
+						</c:when>
+						<c:otherwise>
+							<liferay-ui:message key="posts" />:
+						</c:otherwise>
+					</c:choose>
 				</dt>
 				<dd>
 					<%= numberFormat.format(MBStatsUserLocalServiceUtil.getMessageCountByGroupId(scopeGroupId)) %>
 				</dd>
 				<dt>
-					<liferay-ui:message key="num-of-participants" />:
+					<liferay-ui:message key="participants" />:
 				</dt>
 				<dd>
 					<%= numberFormat.format(MBStatsUserLocalServiceUtil.getStatsUsersByGroupIdCount(scopeGroupId)) %>

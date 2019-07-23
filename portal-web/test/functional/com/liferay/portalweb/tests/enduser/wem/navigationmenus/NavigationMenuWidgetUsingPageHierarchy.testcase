@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Navigation";
@@ -82,7 +83,9 @@ definition {
 		}
 
 		task ("Navigate to the Navigation Menu widget") {
-			Navigator.openSiteURL(siteName = "Test Site Name");
+			Navigator.gotoSitePage(
+				pageName = "Site Page",
+				siteName = "Test Site Name");
 		}
 
 		task ("Assert the Navigation Menu widget is configured to show 'Public Pages Hierarchy' by default") {
@@ -175,4 +178,5 @@ definition {
 				locator1 = "Home#PAGE");
 		}
 	}
+
 }

@@ -211,9 +211,7 @@ public class JenkinsResultsParserUtil {
 		}
 
 		if ((jsonObject.getInt("duration") == 0) && result.equals("FAILURE")) {
-			String actualResult = getActualResult(url);
-
-			jsonObject.putOpt("result", actualResult);
+			jsonObject.putOpt("result", getActualResult(url));
 		}
 
 		return jsonObject;
@@ -789,6 +787,20 @@ public class JenkinsResultsParserUtil {
 		return _getCanonicalPath(canonicalFile);
 	}
 
+	public static String getCohortName() {
+		String jenkinsURL = System.getenv("JENKINS_URL");
+
+		return getCohortName(jenkinsURL);
+	}
+
+	public static String getCohortName(String masterHostname) {
+		Matcher matcher = _jenkinsMasterPattern.matcher(masterHostname);
+
+		matcher.find();
+
+		return matcher.group("cohortName");
+	}
+
 	public static List<File> getDirectoriesContainingFiles(
 		List<File> directories, List<File> files) {
 
@@ -890,6 +902,29 @@ public class JenkinsResultsParserUtil {
 			"/", path.replaceFirst("^/*", ""));
 	}
 
+	public static List<String> getGitHubCacheHostnames() {
+		try {
+			Properties buildProperties = getBuildProperties();
+
+			String gitHubCacheHostnames = buildProperties.getProperty(
+				"github.cache.hostnames");
+
+			String cohortName = getCohortName();
+
+			if (buildProperties.containsKey(
+					"github.cache.hostnames[" + cohortName + "]")) {
+
+				gitHubCacheHostnames = buildProperties.getProperty(
+					"github.cache.hostnames[" + cohortName + "]");
+			}
+
+			return Lists.newArrayList(gitHubCacheHostnames.split(","));
+		}
+		catch (IOException ioe) {
+			throw new RuntimeException(ioe);
+		}
+	}
+
 	public static String[] getGlobsFromProperty(String globProperty) {
 		List<String> curlyBraceExpansionList = new ArrayList<>();
 
@@ -925,6 +960,17 @@ public class JenkinsResultsParserUtil {
 		}
 
 		return globs.toArray(new String[0]);
+	}
+
+	public static String getHostIPAddress() {
+		try {
+			InetAddress inetAddress = InetAddress.getLocalHost();
+
+			return inetAddress.getHostAddress();
+		}
+		catch (UnknownHostException uhe) {
+			return "127.0.0.1";
+		}
 	}
 
 	public static String getHostName(String defaultHostName) {
@@ -1336,26 +1382,15 @@ public class JenkinsResultsParserUtil {
 	public static String getRandomGitHubDevNodeHostname(
 		List<String> excludedHostnames) {
 
-		try {
-			Properties buildProperties = getBuildProperties();
+		List<String> gitHubDevNodeHostnames = getGitHubCacheHostnames();
 
-			String gitCacheHostnames = buildProperties.getProperty(
-				"github.cache.hostnames");
-
-			List<String> gitHubDevNodeHostnames = Lists.newArrayList(
-				gitCacheHostnames.split(","));
-
-			if (excludedHostnames != null) {
-				for (String excludedHostname : excludedHostnames) {
-					gitHubDevNodeHostnames.remove(excludedHostname);
-				}
+		if (excludedHostnames != null) {
+			for (String excludedHostname : excludedHostnames) {
+				gitHubDevNodeHostnames.remove(excludedHostname);
 			}
+		}
 
-			return getRandomString(gitHubDevNodeHostnames);
-		}
-		catch (IOException ioe) {
-			throw new RuntimeException(ioe);
-		}
+		return getRandomString(gitHubDevNodeHostnames);
 	}
 
 	public static List<String> getRandomList(List<String> list, int size) {
@@ -1930,90 +1965,6 @@ public class JenkinsResultsParserUtil {
 		}
 
 		return string;
-	}
-
-	public static void regenerateSshIdRsa(File secretsVolumeDir) {
-		if (!secretsVolumeDir.exists()) {
-			return;
-		}
-
-		File secretsVolumeIdRsaFile = new File(secretsVolumeDir, "id_rsa");
-
-		if (!secretsVolumeIdRsaFile.exists()) {
-			return;
-		}
-
-		String idRsa;
-
-		try {
-			idRsa = read(secretsVolumeIdRsaFile);
-		}
-		catch (IOException ioe) {
-			throw new RuntimeException(
-				"Unable to read secrets id_rsa file", ioe);
-		}
-
-		if (idRsa.isEmpty()) {
-			return;
-		}
-
-		if (_sshIdRsaFile.exists()) {
-			_sshIdRsaFile.delete();
-		}
-
-		try {
-			write(_sshIdRsaFile, idRsa);
-		}
-		catch (IOException ioe) {
-			throw new RuntimeException("Unable to regenerate id_rsa file", ioe);
-		}
-
-		_sshIdRsaFile.setReadable(false, false);
-
-		_sshIdRsaFile.setExecutable(false, false);
-		_sshIdRsaFile.setReadable(true, true);
-		_sshIdRsaFile.setWritable(false, false);
-	}
-
-	public static void regenerateSshKnownHosts(String knownHosts) {
-		if ((knownHosts == null) || knownHosts.isEmpty()) {
-			return;
-		}
-
-		if (_sshKnownHostsFile.exists()) {
-			_sshKnownHostsFile.delete();
-		}
-
-		String command = combine(
-			"ssh-keyscan ", knownHosts.replaceAll("\\s*,\\s*", " "), " >> ",
-			getCanonicalPath(_sshKnownHostsFile));
-
-		Process process = null;
-
-		try {
-			process = executeBashCommands(command);
-		}
-		catch (IOException | TimeoutException e) {
-			throw new RuntimeException(
-				"Unable to regenerate known_hosts file for hosts " + knownHosts,
-				e);
-		}
-
-		if ((process != null) && (process.exitValue() != 0)) {
-			String errorString = null;
-
-			try {
-				errorString = readInputStream(process.getErrorStream());
-			}
-			catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-
-			throw new RuntimeException(
-				combine(
-					"Unable to regenerate known_hosts file for hosts ",
-					knownHosts, "\n", errorString));
-		}
 	}
 
 	public static List<File> removeExcludedFiles(
@@ -2621,9 +2572,22 @@ public class JenkinsResultsParserUtil {
 		buildDescription = buildDescription.replaceAll("\'", "\\\\\'");
 
 		String jenkinsScript = combine(
+			"def job = Jenkins.instance.getItemByFullName(\"", jobName,
+			"\"); def build = job.getBuildByNumber(",
+			String.valueOf(buildNumber), "); build.description = \"",
+			buildDescription, "\";");
+
+		executeJenkinsScript(masterHostname, "script=" + jenkinsScript);
+	}
+
+	public static void updateBuildResult(
+		int buildNumber, String buildResult, String jobName,
+		String masterHostname) {
+
+		String jenkinsScript = combine(
 			"def job = Jenkins.instance.getItemByFullName(\"", jobName, "\"); ",
 			"def build = job.getBuildByNumber(", String.valueOf(buildNumber),
-			"); ", "build.description = \"", buildDescription, "\";");
+			"); build.@result = hudson.model.Result.", buildResult, ";");
 
 		executeJenkinsScript(masterHostname, "script=" + jenkinsScript);
 	}
@@ -3047,6 +3011,8 @@ public class JenkinsResultsParserUtil {
 		"\\{.*?\\}");
 	private static final Pattern _javaVersionPattern = Pattern.compile(
 		"(\\d+\\.\\d+)");
+	private static final Pattern _jenkinsMasterPattern = Pattern.compile(
+		"(?<cohortName>test-\\d+)-\\d+");
 	private static Hashtable<?, ?> _jenkinsProperties;
 	private static final Pattern _localURLAuthorityPattern1 = Pattern.compile(
 		"http://(test-[0-9]+)/([0-9]+)/");
@@ -3066,9 +3032,6 @@ public class JenkinsResultsParserUtil {
 			}
 		}
 	};
-	private static final File _sshIdRsaFile = new File(getSshDir(), "id_rsa");
-	private static final File _sshKnownHostsFile = new File(
-		getSshDir(), "known_hosts");
 	private static final Set<String> _timeStamps = new HashSet<>();
 	private static final File _userHomeDir = new File(
 		System.getProperty("user.home"));

@@ -1,8 +1,25 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {Config} from 'metal-state';
 import Component from 'metal-component';
 import {Store} from '../../store/store.es';
 
-import {BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR, DEFAULT_LANGUAGE_ID_KEY} from '../../utils/constants';
+import {
+	BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR,
+	DEFAULT_LANGUAGE_ID_KEY
+} from '../../utils/constants';
 import EditableBackgroundImageProcessor from '../fragment_processors/EditableBackgroundImageProcessor.es';
 import FragmentEditableFieldTooltip from './FragmentEditableFieldTooltip.es';
 import getConnectedComponent from '../../store/ConnectedComponent.es';
@@ -19,7 +36,6 @@ const TOOLTIP_BUTTON_IDS = {
  * FragmentEditableBackgroundImage
  */
 class FragmentEditableBackgroundImage extends Component {
-
 	/**
 	 * Returns the list of buttons to be shown inside the tooltip.
 	 * @param {boolean} showMapping
@@ -37,23 +53,19 @@ class FragmentEditableBackgroundImage extends Component {
 		];
 
 		if (showMapping) {
-			buttons.push(
-				{
-					icon: 'bolt',
-					id: TOOLTIP_BUTTON_IDS.map,
-					label: Liferay.Language.get('map-background')
-				}
-			);
+			buttons.push({
+				icon: 'bolt',
+				id: TOOLTIP_BUTTON_IDS.map,
+				label: Liferay.Language.get('map-background')
+			});
 		}
 
 		if (showRemoveButton) {
-			buttons.push(
-				{
-					icon: 'times-circle',
-					id: TOOLTIP_BUTTON_IDS.remove,
-					label: Liferay.Language.get('remove-background')
-				}
-			);
+			buttons.push({
+				icon: 'times-circle',
+				id: TOOLTIP_BUTTON_IDS.remove,
+				label: Liferay.Language.get('remove-background')
+			});
 		}
 
 		return buttons;
@@ -65,9 +77,15 @@ class FragmentEditableBackgroundImage extends Component {
 	 */
 	created() {
 		this._handleClick = this._handleClick.bind(this);
-		this._handleOutsideTooltipClick = this._handleOutsideTooltipClick.bind(this);
-		this._handleSelectBackgroundImage = this._handleSelectBackgroundImage.bind(this);
-		this._handleTooltipButtonClick = this._handleTooltipButtonClick.bind(this);
+		this._handleOutsideTooltipClick = this._handleOutsideTooltipClick.bind(
+			this
+		);
+		this._handleSelectBackgroundImage = this._handleSelectBackgroundImage.bind(
+			this
+		);
+		this._handleTooltipButtonClick = this._handleTooltipButtonClick.bind(
+			this
+		);
 
 		this.element.addEventListener('click', this._handleClick);
 	}
@@ -114,14 +132,20 @@ class FragmentEditableBackgroundImage extends Component {
 	 * @review
 	 */
 	_getBackgroundImageValue() {
-		const defaultSegmentsExperienceId = prefixSegmentsExperienceId(this.defaultSegmentsExperienceId);
-		const segmentsExperienceId = prefixSegmentsExperienceId(this.segmentsExperienceId);
+		const defaultSegmentsExperienceId = prefixSegmentsExperienceId(
+			this.defaultSegmentsExperienceId
+		);
+		const segmentsExperienceId = prefixSegmentsExperienceId(
+			this.segmentsExperienceId
+		);
 
-		const segmentedValue = this.editableValues[segmentsExperienceId] ||
+		const segmentedValue =
+			this.editableValues[segmentsExperienceId] ||
 			this.editableValues[defaultSegmentsExperienceId] ||
 			this.editableValues;
 
-		const translatedValue = segmentedValue[this.languageId] ||
+		const translatedValue =
+			segmentedValue[this.languageId] ||
 			segmentedValue[this.defaultLanguageId];
 
 		return translatedValue;
@@ -131,25 +155,40 @@ class FragmentEditableBackgroundImage extends Component {
 	 * @private
 	 * @review
 	 */
-	_handleClick() {
+	_handleClick(event) {
 		if (this._tooltip) {
 			this._disposeTooltip();
-		}
-		else {
-			this._tooltip = new FragmentEditableFieldTooltip(
-				{
-					alignElement: this.element,
-					buttons: FragmentEditableBackgroundImage.getButtons(
-						this.showMapping,
-						this._getBackgroundImageValue()
-					),
-					store: this.store
-				}
-			);
+		} else if (this._shouldShowTooltip(event.target)) {
+			this._tooltip = new FragmentEditableFieldTooltip({
+				alignElement: this.element,
+				buttons: FragmentEditableBackgroundImage.getButtons(
+					this.showMapping,
+					this._getBackgroundImageValue()
+				),
+				store: this.store
+			});
 
 			this._tooltip.on('buttonClick', this._handleTooltipButtonClick);
-			this._tooltip.on('outsideTooltipClick', this._handleOutsideTooltipClick);
+			this._tooltip.on(
+				'outsideTooltipClick',
+				this._handleOutsideTooltipClick
+			);
 		}
+	}
+
+	/**
+	 * Decide wether the tooltip should be shown or not.
+	 * The tooltip will be shown when user clicks in an element
+	 * that is not an editable.
+	 * @param {HTMLElement} target The element clicked
+	 * @private
+	 * @review
+	 */
+	_shouldShowTooltip(target) {
+		const hasEditableParent = target.closest('lfr-editable');
+		const isEditable = target.tagName === 'lfr-editable';
+
+		return !hasEditableParent && !isEditable;
 	}
 
 	/**
@@ -180,9 +219,12 @@ class FragmentEditableBackgroundImage extends Component {
 				this.imageSelectorURL,
 				this.portletNamespace
 			);
-		}
-		else if (event.buttonId === TOOLTIP_BUTTON_IDS.remove) {
+		} else if (event.buttonId === TOOLTIP_BUTTON_IDS.remove) {
 			this._updateBackgroundImage('');
+
+			requestAnimationFrame(() => {
+				this._disposeTooltip();
+			});
 		}
 	}
 
@@ -209,17 +251,17 @@ class FragmentEditableBackgroundImage extends Component {
 		);
 
 		this.store.dispatch(
-			updateEditableValueAction(
-				this.fragmentEntryLinkId,
-				this.editableId,
-				this.languageId || DEFAULT_LANGUAGE_ID_KEY,
-				backgroundImageURL,
-				segmentsExperienceId || defaultSegmentsExperienceId,
-				BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR
-			)
+			updateEditableValueAction({
+				fragmentEntryLinkId: this.fragmentEntryLinkId,
+				editableValueContent: backgroundImageURL,
+				processor: BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR,
+				editableId: this.editableId,
+				editableValueId: this.languageId || DEFAULT_LANGUAGE_ID_KEY,
+				segmentsExperienceId:
+					segmentsExperienceId || defaultSegmentsExperienceId
+			})
 		);
 	}
-
 }
 
 /**
@@ -228,7 +270,6 @@ class FragmentEditableBackgroundImage extends Component {
  * @type {!Object}
  */
 FragmentEditableBackgroundImage.STATE = {
-
 	/**
 	 * FragmentEntryLink id
 	 * @default undefined
@@ -237,9 +278,7 @@ FragmentEditableBackgroundImage.STATE = {
 	 * @review
 	 * @type {!string}
 	 */
-	fragmentEntryLinkId: Config
-		.string()
-		.required(),
+	fragmentEntryLinkId: Config.string().required(),
 
 	/**
 	 * Editable ID
@@ -249,9 +288,7 @@ FragmentEditableBackgroundImage.STATE = {
 	 * @review
 	 * @type {!string}
 	 */
-	editableId: Config
-		.string()
-		.required(),
+	editableId: Config.string().required(),
 
 	/**
 	 * Editable values that should be used instead of the default ones inside
@@ -270,9 +307,7 @@ FragmentEditableBackgroundImage.STATE = {
 	 * @review
 	 * @type {!string}
 	 */
-	processor: Config
-		.string()
-		.required(),
+	processor: Config.string().required(),
 
 	/**
 	 * If <code>true</code>, the mapping is activated.
@@ -291,7 +326,6 @@ FragmentEditableBackgroundImage.STATE = {
 	 * @type {Store}
 	 */
 	store: Config.instanceOf(Store)
-
 };
 
 const ConnectedFragmentEditableBackgroundImage = getConnectedComponent(
@@ -306,5 +340,8 @@ const ConnectedFragmentEditableBackgroundImage = getConnectedComponent(
 	]
 );
 
-export {ConnectedFragmentEditableBackgroundImage, FragmentEditableBackgroundImage};
+export {
+	ConnectedFragmentEditableBackgroundImage,
+	FragmentEditableBackgroundImage
+};
 export default ConnectedFragmentEditableBackgroundImage;

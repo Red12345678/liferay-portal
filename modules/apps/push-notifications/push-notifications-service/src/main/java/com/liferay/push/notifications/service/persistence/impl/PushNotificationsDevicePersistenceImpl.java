@@ -24,8 +24,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -42,7 +41,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -901,9 +899,7 @@ public class PushNotificationsDevicePersistenceImpl
 			userIds = new long[0];
 		}
 		else if (userIds.length > 1) {
-			userIds = ArrayUtil.unique(userIds);
-
-			Arrays.sort(userIds);
+			userIds = ArrayUtil.sortedUnique(userIds);
 		}
 
 		platform = Objects.toString(platform, "");
@@ -1138,9 +1134,7 @@ public class PushNotificationsDevicePersistenceImpl
 			userIds = new long[0];
 		}
 		else if (userIds.length > 1) {
-			userIds = ArrayUtil.unique(userIds);
-
-			Arrays.sort(userIds);
+			userIds = ArrayUtil.sortedUnique(userIds);
 		}
 
 		platform = Objects.toString(platform, "");
@@ -1397,7 +1391,7 @@ public class PushNotificationsDevicePersistenceImpl
 		pushNotificationsDevice.setNew(true);
 		pushNotificationsDevice.setPrimaryKey(pushNotificationsDeviceId);
 
-		pushNotificationsDevice.setCompanyId(companyProvider.getCompanyId());
+		pushNotificationsDevice.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return pushNotificationsDevice;
 	}
@@ -1947,9 +1941,6 @@ public class PushNotificationsDevicePersistenceImpl
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
-	@ServiceReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@ServiceReference(type = EntityCache.class)
 	protected EntityCache entityCache;

@@ -60,7 +60,7 @@ public class OAuth2ApplicationLocalServiceWrapper
 	}
 
 	/**
-	 * @deprecated As of Mueller (7.2.x), since 7.2, unused
+	 * @deprecated As of Mueller (7.2.x)
 	 */
 	@Deprecated
 	@Override
@@ -399,7 +399,7 @@ public class OAuth2ApplicationLocalServiceWrapper
 	}
 
 	/**
-	 * @deprecated As of Mueller (7.2.x), since 7.2, unused
+	 * @deprecated As of Mueller (7.2.x)
 	 */
 	@Deprecated
 	@Override

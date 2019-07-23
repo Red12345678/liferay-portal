@@ -195,9 +195,14 @@ OrderByComparator<BackgroundTask> orderByComparator = BackgroundTaskComparatorFa
 							</c:if>
 						</c:if>
 
-						<span class="background-task-status-row background-task-status-<%= BackgroundTaskConstants.getStatusLabel(backgroundTask.getStatus()) %> <%= BackgroundTaskConstants.getStatusCssClass(backgroundTask.getStatus()) %>">
-							<liferay-ui:message key="<%= backgroundTask.getStatusLabel() %>" />
-						</span>
+						<div class="row">
+							<div class="col">
+								<liferay-staging:process-status
+									backgroundTaskStatus="<%= backgroundTask.getStatus() %>"
+									backgroundTaskStatusLabel="<%= backgroundTask.getStatusLabel() %>"
+								/>
+							</div>
+						</div>
 
 						<c:if test="<%= Validator.isNotNull(backgroundTask.getStatusMessage()) %>">
 							<span class="background-task-status-row">
@@ -235,11 +240,15 @@ OrderByComparator<BackgroundTask> orderByComparator = BackgroundTaskComparatorFa
 						</span>
 					</liferay-ui:search-container-column-text>
 
-					<liferay-ui:search-container-column-jsp
-						cssClass="table-cell-minw-150"
+					<liferay-ui:search-container-column-text
+						cssClass="background-task-status-column"
 						name="status"
-						path="/publish_process_message.jsp"
-					/>
+					>
+						<liferay-staging:process-status
+							backgroundTaskStatus="<%= backgroundTask.getStatus() %>"
+							backgroundTaskStatusLabel="<%= backgroundTask.getStatusLabel() %>"
+						/>
+					</liferay-ui:search-container-column-text>
 
 					<liferay-ui:search-container-column-date
 						cssClass="table-cell-expand-smallest table-cell-ws-nowrap"
@@ -301,34 +310,36 @@ OrderByComparator<BackgroundTask> orderByComparator = BackgroundTaskComparatorFa
 						markupView="lexicon"
 						showWhenSingleIcon="<%= true %>"
 					>
-						<portlet:actionURL name="editExportConfiguration" var="relaunchURL">
-							<portlet:param name="mvcRenderCommandName" value="exportLayoutsView" />
-							<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.RELAUNCH %>" />
-							<portlet:param name="redirect" value="<%= portletURL.toString() %>" />
-							<portlet:param name="backgroundTaskId" value="<%= String.valueOf(backgroundTask.getBackgroundTaskId()) %>" />
-						</portlet:actionURL>
+						<c:if test="<%= !StagingUtil.isChangeTrackingEnabled(company.getCompanyId()) %>">
+							<portlet:actionURL name="editExportConfiguration" var="relaunchURL">
+								<portlet:param name="mvcRenderCommandName" value="exportLayoutsView" />
+								<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.RELAUNCH %>" />
+								<portlet:param name="redirect" value="<%= portletURL.toString() %>" />
+								<portlet:param name="backgroundTaskId" value="<%= String.valueOf(backgroundTask.getBackgroundTaskId()) %>" />
+							</portlet:actionURL>
 
-						<liferay-ui:icon
-							icon="reload"
-							markupView="lexicon"
-							message="relaunch"
-							url="<%= relaunchURL %>"
-						/>
+							<liferay-ui:icon
+								icon="reload"
+								markupView="lexicon"
+								message="relaunch"
+								url="<%= relaunchURL %>"
+							/>
 
-						<portlet:actionURL name="deleteBackgroundTasks" var="deleteBackgroundTaskURL">
-							<portlet:param name="redirect" value="<%= portletURL.toString() %>" />
-							<portlet:param name="deleteBackgroundTaskIds" value="<%= String.valueOf(backgroundTask.getBackgroundTaskId()) %>" />
-						</portlet:actionURL>
+							<portlet:actionURL name="deleteBackgroundTasks" var="deleteBackgroundTaskURL">
+								<portlet:param name="redirect" value="<%= portletURL.toString() %>" />
+								<portlet:param name="deleteBackgroundTaskIds" value="<%= String.valueOf(backgroundTask.getBackgroundTaskId()) %>" />
+							</portlet:actionURL>
 
-						<%
-						Date completionDate = backgroundTask.getCompletionDate();
-						%>
+							<%
+							Date completionDate = backgroundTask.getCompletionDate();
+							%>
 
-						<liferay-ui:icon-delete
-							label="<%= true %>"
-							message='<%= ((completionDate != null) && completionDate.before(new Date())) ? "clear" : "cancel" %>'
-							url="<%= deleteBackgroundTaskURL %>"
-						/>
+							<liferay-ui:icon-delete
+								label="<%= true %>"
+								message='<%= ((completionDate != null) && completionDate.before(new Date())) ? "clear" : "cancel" %>'
+								url="<%= deleteBackgroundTaskURL %>"
+							/>
+						</c:if>
 					</liferay-ui:icon-menu>
 				</c:if>
 			</liferay-ui:search-container-column-text>

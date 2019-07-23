@@ -1,8 +1,21 @@
-import ClayNavigationBar from 'clay-navigation-bar';
-import PortletBase from 'frontend-js-web/liferay/PortletBase.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import 'clay-navigation-bar';
+import {PortletBase, openToast} from 'frontend-js-web';
 import Soy from 'metal-soy';
 import {Config} from 'metal-state';
-import {openToast} from 'frontend-js-web/liferay/toast/commands/OpenToast.es';
 
 import templates from './ChangeListsConfiguration.soy';
 
@@ -10,34 +23,35 @@ import templates from './ChangeListsConfiguration.soy';
  * Provides the component for the Change Lists configuration screen.
  */
 class ChangeListsConfiguration extends PortletBase {
-
 	created() {
-		this._getDataRequest(
-			this.urlChangeTrackingConfiguration,
-			response => {
-				if (response) {
-					this.changeTrackingAllowed = response.changeTrackingAllowed;
-					this.changeTrackingEnabled = response.changeTrackingEnabled;
-					this.currentPage = 'Global Settings';
-					this.initialFetch = true;
-					this.tooltipBody = '';
+		this._getDataRequest(this.urlChangeTrackingConfiguration, response => {
+			if (response) {
+				this.changeTrackingAllowed = response.changeTrackingAllowed;
+				this.changeTrackingEnabled = response.changeTrackingEnabled;
+				this.currentPage = 'Global Settings';
+				this.initialFetch = true;
+				this.tooltipBody = '';
 
-					response.supportedContentTypes.forEach(
-						(supportedContentType) => {
-							if (this.tooltipBody.length > 0) {
-								this.tooltipBody = this.tooltipBody.concat(' ');
-							}
-							this.tooltipBody = this.tooltipBody.concat(supportedContentType);
-						}
-					);
+				if (this.changeTrackingEnabled) {
+					this.userSettingsEnabled = true;
 				}
+
+				response.supportedContentTypes.forEach(supportedContentType => {
+					if (this.tooltipBody.length > 0) {
+						this.tooltipBody = this.tooltipBody.concat(' ');
+					}
+					this.tooltipBody = this.tooltipBody.concat(
+						supportedContentType
+					);
+				});
 			}
-		);
+		});
 		this._getDataRequest(
 			this.urlChangeTrackingUserConfiguration,
 			response => {
 				if (response) {
-					this.checkoutCTCollectionConfirmationEnabled = response.checkoutCTCollectionConfirmationEnabled;
+					this.checkoutCTCollectionConfirmationEnabled =
+						response.checkoutCTCollectionConfirmationEnabled;
 				}
 			}
 		);
@@ -61,28 +75,18 @@ class ChangeListsConfiguration extends PortletBase {
 	 */
 	_handleNavItemClicked(event) {
 		this.currentPage = event.data.item.label;
-		this.navigationItems = this.navigationItems.map(
-			item => {
-				if (item.label === this.currentPage) {
-					return Object.assign(
-						{},
-						item,
-						{
-							active: true
-						}
-					);
-				}
-				else {
-					return Object.assign(
-						{},
-						item,
-						{
-							active: false
-						}
-					);
-				}
+
+		this.navigationItems = this.navigationItems.map(item => {
+			if (item.label === this.currentPage) {
+				return Object.assign({}, item, {
+					active: true
+				});
 			}
-		);
+
+			return Object.assign({}, item, {
+				active: false
+			});
+		});
 	}
 
 	_handleUserConfigCheck(event) {
@@ -92,8 +96,9 @@ class ChangeListsConfiguration extends PortletBase {
 	_handleUserConfigSave(event) {
 		event.preventDefault();
 
-		let data = {
-			checkoutCTCollectionConfirmationEnabled: this.checkoutCTCollectionConfirmationEnabled
+		const data = {
+			checkoutCTCollectionConfirmationEnabled: this
+				.checkoutCTCollectionConfirmationEnabled
 		};
 
 		this._putDataRequest(
@@ -101,15 +106,15 @@ class ChangeListsConfiguration extends PortletBase {
 			data,
 			response => {
 				if (response) {
-					const message = Liferay.Language.get('the-configuration-has-been-saved');
-
-					openToast(
-						{
-							message,
-							title: Liferay.Language.get('success'),
-							type: 'success'
-						}
+					const message = Liferay.Language.get(
+						'the-configuration-has-been-saved'
 					);
+
+					openToast({
+						message,
+						title: Liferay.Language.get('success'),
+						type: 'success'
+					});
 				}
 			}
 		);
@@ -124,27 +129,22 @@ class ChangeListsConfiguration extends PortletBase {
 	_handleSave(event) {
 		event.preventDefault();
 
-		let data = {
+		const data = {
 			changeTrackingEnabled: this.changeTrackingEnabled
 		};
 
-		this._putDataRequest(
-			this.urlChangeTrackingConfiguration,
-			data,
-			response => {
-				Liferay.Util.navigate(this.urlConfiguration);
-			}
-		);
+		this._putDataRequest(this.urlChangeTrackingConfiguration, data, () => {
+			Liferay.Util.navigate(this.urlConfiguration);
+		});
 	}
 
 	/**
 	 * Saves the configuration and redirects the user to the overview screen.
 	 *
-	 * @param {!Event} event
 	 * @private
 	 */
-	_handleSaveAndGoToOverview(event) {
-		let data = {
+	_handleSaveAndGoToOverview() {
+		const data = {
 			changeTrackingEnabled: this.changeTrackingEnabled
 		};
 
@@ -153,15 +153,15 @@ class ChangeListsConfiguration extends PortletBase {
 			data,
 			response => {
 				if (response) {
-					const message = Liferay.Language.get('the-configuration-has-been-saved');
-
-					openToast(
-						{
-							message,
-							title: Liferay.Language.get('success'),
-							type: 'success'
-						}
+					const message = Liferay.Language.get(
+						'the-configuration-has-been-saved'
 					);
+
+					openToast({
+						message,
+						title: Liferay.Language.get('success'),
+						type: 'success'
+					});
 
 					Liferay.Util.navigate(this.urlOverview);
 				}
@@ -170,7 +170,7 @@ class ChangeListsConfiguration extends PortletBase {
 	}
 
 	_getDataRequest(url, callback) {
-		let headers = new Headers();
+		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		headers.append('X-CSRF-Token', Liferay.authToken);
 
@@ -183,27 +183,26 @@ class ChangeListsConfiguration extends PortletBase {
 		fetch(url, request)
 			.then(response => response.json())
 			.then(response => callback(response))
-			.catch(
-				(error) => {
-					const message = typeof error === 'string' ?
-						error :
-						Liferay.Language.get('an-error-occured-while-saving-configuration');
+			.catch(error => {
+				const message =
+					typeof error === 'string'
+						? error
+						: Liferay.Language.get(
+								'an-error-occured-while-saving-configuration'
+						  );
 
-					openToast(
-						{
-							message,
-							title: Liferay.Language.get('error'),
-							type: 'danger'
-						}
-					);
-				}
-			);
+				openToast({
+					message,
+					title: Liferay.Language.get('error'),
+					type: 'danger'
+				});
+			});
 	}
 
 	_putDataRequest(url, bodyData, callback) {
-		let body = JSON.stringify(bodyData);
+		const body = JSON.stringify(bodyData);
 
-		let headers = new Headers();
+		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		headers.append('X-CSRF-Token', Liferay.authToken);
 
@@ -217,21 +216,20 @@ class ChangeListsConfiguration extends PortletBase {
 		fetch(url, request)
 			.then(response => response.json())
 			.then(response => callback(response))
-			.catch(
-				(error) => {
-					const message = typeof error === 'string' ?
-						error :
-						Liferay.Language.get('an-error-occured-while-saving-configuration');
+			.catch(error => {
+				const message =
+					typeof error === 'string'
+						? error
+						: Liferay.Language.get(
+								'an-error-occured-while-saving-configuration'
+						  );
 
-					openToast(
-						{
-							message,
-							title: Liferay.Language.get('error'),
-							type: 'danger'
-						}
-					);
-				}
-			);
+				openToast({
+					message,
+					title: Liferay.Language.get('error'),
+					type: 'danger'
+				});
+			});
 	}
 }
 
@@ -242,7 +240,6 @@ class ChangeListsConfiguration extends PortletBase {
  * @type {!Object}
  */
 ChangeListsConfiguration.STATE = {
-
 	/**
 	 * If <code>true</code>, change tracking is allowed.
 	 *
@@ -297,15 +294,39 @@ ChangeListsConfiguration.STATE = {
 	 * @memberOf ChangeListsConfiguration
 	 * @type {!array}
 	 */
-	navigationItems: Config.arrayOf(
-		Config.shapeOf(
-			{
-				active: Config.bool().value(false),
-				href: Config.string(),
-				label: Config.string().required()
-			}
-		)
+	navigationItem: Config.arrayOf(
+		Config.shapeOf({
+			active: Config.bool().value(false),
+			href: Config.string(),
+			label: Config.string().required()
+		})
 	).required(),
+
+	/**
+	 * Itemlist for navigationBar
+	 *
+	 * @default undefined
+	 * @instance
+	 * @memberOf ChangeListsConfiguration
+	 * @type {!array}
+	 */
+	navigationItems: Config.arrayOf(
+		Config.shapeOf({
+			active: Config.bool().value(false),
+			href: Config.string(),
+			label: Config.string().required()
+		})
+	).required(),
+
+	/**
+	 * If <code>true</code>, User Settings is available in navigation.
+	 *
+	 * @default false
+	 * @instance
+	 * @memberOf ChangeListsConfiguration
+	 * @type {boolean}
+	 */
+	userSettingsEnabled: Config.bool().value(false),
 
 	/**
 	 * URL for the REST service to the change tracking configuration endpoint.

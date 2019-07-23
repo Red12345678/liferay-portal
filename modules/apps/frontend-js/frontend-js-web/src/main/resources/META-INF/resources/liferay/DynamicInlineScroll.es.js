@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import core from 'metal';
 import dom from 'metal-dom';
 import {EventHandler} from 'metal-events';
@@ -13,7 +27,6 @@ import PortletBase from './PortletBase.es';
  */
 
 class DynamicInlineScroll extends PortletBase {
-
 	/**
 	 * @inheritDoc
 	 * @review
@@ -91,9 +104,7 @@ class DynamicInlineScroll extends PortletBase {
 	getHREF_(pageIndex) {
 		const {curParam, formName, jsCall, namespace, url, urlAnchor} = this;
 
-		let href = `javascript:document.${formName}.${namespace}${curParam}.value = "${
-			pageIndex
-		}; ${jsCall}`;
+		let href = `javascript:document.${formName}.${namespace}${curParam}.value = "${pageIndex}; ${jsCall}`;
 
 		if (this.url !== null) {
 			href = `${url}${namespace}${curParam}=${pageIndex}${urlAnchor}`;
@@ -128,9 +139,12 @@ class DynamicInlineScroll extends PortletBase {
 
 			const {curParam, namespace, randomNamespace} = this;
 
-			const form = document.getElementById(randomNamespace + namespace + 'pageIteratorFm');
+			const form = document.getElementById(
+				randomNamespace + namespace + 'pageIteratorFm'
+			);
 
-			form.elements[namespace + curParam].value = event.currentTarget.textContent;
+			form.elements[namespace + curParam].value =
+				event.currentTarget.textContent;
 
 			form.submit();
 		}
@@ -150,17 +164,18 @@ class DynamicInlineScroll extends PortletBase {
 		const {target} = event;
 
 		let pageIndex = this.getNumber_(target.getAttribute('data-page-index'));
-		let pageIndexMax = this.getNumber_(target.getAttribute('data-max-index'));
+		let pageIndexMax = this.getNumber_(
+			target.getAttribute('data-max-index')
+		);
 
 		if (pageIndex === 0) {
-			let pageIndexCurrent = this.getNumber_(
+			const pageIndexCurrent = this.getNumber_(
 				target.getAttribute('data-current-index')
 			);
 
 			if (pageIndexCurrent === 0) {
 				pageIndex = initialPages;
-			}
-			else {
+			} else {
 				pageIndex = pageIndexCurrent + initialPages;
 			}
 		}
@@ -189,7 +204,6 @@ class DynamicInlineScroll extends PortletBase {
  */
 
 DynamicInlineScroll.STATE = {
-
 	/**
 	 * Current page
 	 * @instance

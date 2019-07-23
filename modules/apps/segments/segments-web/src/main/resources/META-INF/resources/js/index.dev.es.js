@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import '../css/main.scss';
 import 'clay-css/lib/css/atlas.css';
 import React from 'react';
@@ -24,23 +38,30 @@ const altProps = {
 	contributors: [
 		{
 			conjunctionId: '',
-			conjunctionInputId: '_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionConjunctionuser',
-			initialQuery: '(segmentationTeamMembers eq \'kevin\' and segmentationTeamMembers eq \'kevin\' and dateModified eq 2019-01-16T11:17:56.000Z)',
-			inputId: '_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionFilteruser',
+			conjunctionInputId:
+				'_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionConjunctionuser',
+			initialQuery:
+				"(segmentationTeamMembers eq 'kevin' and segmentationTeamMembers eq 'kevin' and dateModified eq 2019-01-16T11:17:56.000Z)",
+			inputId:
+				'_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionFilteruser',
 			propertyKey: 'user'
 		},
 		{
 			conjunctionId: '',
-			conjunctionInputId: '_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionConjunctionuser-organization',
-			initialQuery: '(cookie/any(c:contains(c, \'key1=value1\')))',
-			inputId: '_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionFilteruser-organization',
+			conjunctionInputId:
+				'_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionConjunctionuser-organization',
+			initialQuery: "(cookie/any(c:contains(c, 'key1=value1')))",
+			inputId:
+				'_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionFilteruser-organization',
 			propertyKey: 'user-organization'
 		},
 		{
 			conjunctionId: '',
-			conjunctionInputId: '_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionConjunctioncontext',
+			conjunctionInputId:
+				'_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionConjunctioncontext',
 			initialQuery: '',
-			inputId: '_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionFiltercontext',
+			inputId:
+				'_com_liferay_segments_web_internal_portlet_SegmentsPortlet_criterionFiltercontext',
 			propertyKey: 'context'
 		}
 	],
@@ -49,11 +70,12 @@ const altProps = {
 	initialMembersCount: 0,
 	initialSegmentActive: false,
 	initialSegmentName: {
-		'en_US': 'Segment title',
-		'es_ES': 'Título del segmento'
+		en_US: 'Segment title',
+		es_ES: 'Título del segmento'
 	},
 	locale: 'en_US',
-	portletNamespace: '_com_liferay_segments_web_internal_portlet_SegmentsPortlet_',
+	portletNamespace:
+		'_com_liferay_segments_web_internal_portlet_SegmentsPortlet_',
 	propertyGroups: [
 		{
 			entityName: 'User',
@@ -232,9 +254,11 @@ const altProps = {
 					label: 'Organization ID',
 					name: 'organizationId',
 					selectEntity: {
-						id: '_com_liferay_users_admin_web_portlet_UsersAdminPortlet_selectOrganization',
+						id:
+							'_com_liferay_users_admin_web_portlet_UsersAdminPortlet_selectOrganization',
 						title: 'Select Organization',
-						uri: 'http://localhost:8080/group/guest/~/control_panel/manage?p_p_id=com_liferay_segments_web_internal_portlet_SegmentsPortlet&p_p_lifecycle=0&p_p_state=pop_up&p_p_mode=view&_com_liferay_segments_web_internal_portlet_SegmentsPortlet_mvcRenderCommandName=selectSegmentsEntryOrganizations&_com_liferay_segments_web_internal_portlet_SegmentsPortlet_segmentsEntryId=37008&p_p_auth=SsX9DxLY'
+						uri:
+							'http://localhost:8080/group/guest/~/control_panel/manage?p_p_id=com_liferay_segments_web_internal_portlet_SegmentsPortlet&p_p_lifecycle=0&p_p_state=pop_up&p_p_mode=view&_com_liferay_segments_web_internal_portlet_SegmentsPortlet_mvcRenderCommandName=selectSegmentsEntryOrganizations&_com_liferay_segments_web_internal_portlet_SegmentsPortlet_segmentsEntryId=37008&p_p_auth=SsX9DxLY'
 					},
 					type: 'id'
 				},
@@ -242,9 +266,11 @@ const altProps = {
 					label: 'Parent Organization ID',
 					name: 'parentOrganizationId',
 					selectEntity: {
-						id: '_com_liferay_users_admin_web_portlet_UsersAdminPortlet_selectOrganization',
+						id:
+							'_com_liferay_users_admin_web_portlet_UsersAdminPortlet_selectOrganization',
 						title: 'Select Organization',
-						uri: 'http://localhost:8080/group/guest/~/control_panel/manage?p_p_id=com_liferay_segments_web_internal_portlet_SegmentsPortlet&p_p_lifecycle=0&p_p_state=pop_up&p_p_mode=view&_com_liferay_segments_web_internal_portlet_SegmentsPortlet_mvcRenderCommandName=selectSegmentsEntryOrganizations&_com_liferay_segments_web_internal_portlet_SegmentsPortlet_segmentsEntryId=37008&p_p_auth=SsX9DxLY'
+						uri:
+							'http://localhost:8080/group/guest/~/control_panel/manage?p_p_id=com_liferay_segments_web_internal_portlet_SegmentsPortlet&p_p_lifecycle=0&p_p_state=pop_up&p_p_mode=view&_com_liferay_segments_web_internal_portlet_SegmentsPortlet_mvcRenderCommandName=selectSegmentsEntryOrganizations&_com_liferay_segments_web_internal_portlet_SegmentsPortlet_segmentsEntryId=37008&p_p_auth=SsX9DxLY'
 					},
 					type: 'id'
 				},
@@ -274,7 +300,8 @@ const altProps = {
 			propertyKey: 'context'
 		}
 	],
-	redirect: 'http://localhost:8080/group/guest/~/control_panel/manage/-/segments/entries?p_p_auth=1EwOzg1e',
+	redirect:
+		'http://localhost:8080/group/guest/~/control_panel/manage/-/segments/entries?p_p_auth=1EwOzg1e',
 	showInEditMode: false
 };
 
@@ -286,8 +313,11 @@ const context = {
 window.Liferay = {
 	Language: {
 		available: {
-			'en_US': 'aosidopaisd',
-			'es_ES': 'aosidopaisd'
+			en_US: 'aosidopaisd',
+			es_ES: 'aosidopaisd'
+		},
+		get(name) {
+			return name;
 		}
 	}
 };

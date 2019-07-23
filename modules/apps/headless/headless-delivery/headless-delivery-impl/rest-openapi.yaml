@@ -42,6 +42,10 @@ components:
                         - $ref: "#/components/schemas/Creator"
                     description: The blog post's author.
                     readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The blog post's creation date.
                     format: date-time
@@ -471,6 +475,35 @@ components:
                     readOnly: true
                     type: string
             type: object
+        CustomField:
+            # @review
+            description: Represents the value of each custom field. Fields can contain different information types (e.g., geolocation, strings, etc.).
+            properties:
+                customValue:
+                    properties:
+                        data:
+                            description: The field's content for simple types.
+                            type: object
+                        geo:
+                            description: A point determined by latitude and longitude.
+                            properties:
+                                latitude:
+                                    description: The latitude of a point in space.
+                                    format: double
+                                    type: number
+                                longitude:
+                                    description: The longitude of a point in space.
+                                    format: double
+                                    type: number
+                            type: object
+                    type: object
+                dataType:
+                    description: The field type (e.g., image, text, etc.).
+                    readOnly: true
+                    type: string
+                name:
+                    description: The field's internal name. This is valid for comparisons and unique in the structured content.
+                    type: string
         Document:
             description: Represents a Document Library file, storing binary and metadata information. Properties follow the [MediaObject](https://schema.org/MediaObject) specification.
             properties:
@@ -513,6 +546,10 @@ components:
                         - $ref: "#/components/schemas/Creator"
                     description: The document's creator.
                     readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The document's creation date.
                     format: date-time
@@ -601,6 +638,10 @@ components:
                         - $ref: "#/components/schemas/Creator"
                     description: The folder's creator.
                     readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The folder's creation date.
                     format: date-time
@@ -659,6 +700,10 @@ components:
                         - $ref: "#/components/schemas/Creator"
                     description: The article's author.
                     readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The date the article was created.
                     format: date-time
@@ -794,6 +839,10 @@ components:
                         - $ref: "#/components/schemas/Creator"
                     description: The folder's creator.
                     readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The date the folder was created.
                     format: date-time
@@ -901,6 +950,10 @@ components:
                         - $ref: "#/components/schemas/Creator"
                     description: The message's author.
                     readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The date the message was created.
                     format: date-time
@@ -928,6 +981,12 @@ components:
                     items:
                         type: string
                     type: array
+                messageBoardThreadId:
+                    # @review
+                    description: The ID of the Message Board Thread to which this message is scoped.
+                    format: int64
+                    readOnly: true
+                    type: integer
                 numberOfMessageBoardAttachments:
                     description: The number of the message's attachments.
                     readOnly: true
@@ -963,6 +1022,10 @@ components:
                         - $ref: "#/components/schemas/Creator"
                     description: The section's creator.
                     readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The date the section was created.
                     format: date-time
@@ -1021,6 +1084,10 @@ components:
                         - $ref: "#/components/schemas/Creator"
                     description: The thread's creator.
                     readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The date the thread was created.
                     format: date-time
@@ -1163,6 +1230,10 @@ components:
                         - $ref: "#/components/schemas/Creator"
                     description: The structured content's creator.
                     readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The structured content's creation date.
                     format: date-time
@@ -1259,7 +1330,6 @@ components:
                     type: string
                     writeOnly: true
             required:
-                - contentStructureId
                 - title
         StructuredContentFolder:
             description: Represents a folder that can be used to organize structured content.
@@ -1269,6 +1339,10 @@ components:
                         - $ref: "#/components/schemas/Creator"
                     description: The folder's creator.
                     readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The date the folder was created.
                     format: date-time
@@ -1310,6 +1384,132 @@ components:
                     writeOnly: true
             required:
                 - name
+            type: object
+        WikiNode:
+            # @review
+            description: Represents a wiki node that can be used to organize wiki pages.
+            properties:
+                creator:
+                    allOf:
+                        - $ref: "#/components/schemas/Creator"
+                    description: The wiki node's creator.
+                    readOnly: true
+                dateCreated:
+                    description: The date the wiki node was created.
+                    format: date-time
+                    readOnly: true
+                    type: string
+                dateModified:
+                    description: The last time any of the wiki node's fields changed.
+                    format: date-time
+                    readOnly: true
+                    type: string
+                description:
+                    description: The wiki node's description.
+                    type: string
+                id:
+                    description: The wiki node's ID.
+                    format: int64
+                    readOnly: true
+                    type: integer
+                name:
+                    description: The wiki node's name.
+                    type: string
+                siteId:
+                    description: The ID of the site to which this wiki node is scoped.
+                    format: int64
+                    readOnly: true
+                    type: integer
+                viewableBy:
+                    description: A write-only property that specifies the default permissions.
+                    enum: [Anyone, Members, Owner]
+                    type: string
+                    writeOnly: true
+            type: object
+        WikiPage:
+            # @review
+            description: Represents a wiki page.
+            properties:
+                alternativeHeadline:
+                    description: The wiki page's alternative title.
+                    type: string
+                content:
+                    description: The wiki page's content.
+                    type: string
+                creator:
+                    allOf:
+                        - $ref: "#/components/schemas/Creator"
+                    description: The wiki page's creator.
+                    readOnly: true
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
+                dateCreated:
+                    description: The date the wiki page was created.
+                    format: date-time
+                    readOnly: true
+                    type: string
+                dateModified:
+                    description: The last time any of the wiki page's fields changed.
+                    format: date-time
+                    readOnly: true
+                    type: string
+                encodingFormat:
+                    description: The wiki page's media format (e.g., HTML, BBCode, etc.).
+                    type: string
+                headline:
+                    description: The wiki page's main title.
+                    type: string
+                id:
+                    description: The wiki page's ID.
+                    format: int64
+                    readOnly: true
+                    type: integer
+                keywords:
+                    description: A list of keywords describing the blog post.
+                    items:
+                        type: string
+                    type: array
+                relatedContents:
+                    items:
+                        $ref: "#/components/schemas/RelatedContent"
+                    readOnly: true
+                    type: array
+                siteId:
+                    description: The ID of the site to which this wiki page is scoped.
+                    format: int64
+                    readOnly: true
+                    type: integer
+                taxonomyCategories:
+                    description: The categories associated with this blog post.
+                    items:
+                        properties:
+                            taxonomyCategoryId:
+                                description: The category's ID. This can be used to retrieve more information in the `TaxonomyCategory` API.
+                                format: int64
+                                type: integer
+                            taxonomyCategoryName:
+                                description: The category's name.
+                                type: string
+                        type: object
+                    readOnly: true
+                    type: array
+                taxonomyCategoryIds:
+                    description: A write-only field that adds a `TaxonomyCategory` to this resource.
+                    items:
+                        format: int64
+                        type: integer
+                    type: array
+                    writeOnly: true
+                viewableBy:
+                    description: A write-only property that specifies the default permissions.
+                    enum: [Anyone, Members, Owner]
+                    type: string
+                    writeOnly: true
+            required:
+                - encodingFormat
+                - headline
             type: object
 info:
     description: ""
@@ -4893,6 +5093,80 @@ paths:
                                 $ref: "#/components/schemas/StructuredContent"
                     description: ""
             tags: ["StructuredContent"]
+    "/sites/{siteId}/wiki-nodes/":
+        get:
+            operationId: getSiteWikiNodesPage
+            # @review
+            description: Retrieves the wiki node's of a site. Results can be paginated, filtered, searched, and sorted.
+            parameters:
+                - in: path
+                  name: siteId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+                - in: query
+                  name: filter
+                  schema:
+                      type: string
+                - in: query
+                  name: page
+                  schema:
+                      type: integer
+                - in: query
+                  name: pageSize
+                  schema:
+                      type: integer
+                - in: query
+                  name: search
+                  schema:
+                      type: string
+                - in: query
+                  name: sort
+                  schema:
+                      type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/WikiNode"
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/WikiNode"
+                    description: ""
+            tags: ["WikiNode"]
+        post:
+            description: Creates a new wiki node
+            operationId: postSiteWikiNode
+            parameters:
+                - in: path
+                  name: siteId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/WikiNode"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/WikiNode"
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/WikiNode"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/WikiNode"
+                    description: ""
+            tags: ["WikiNode"]
     "/structured-content-folders/{parentStructuredContentFolderId}/structured-content-folders":
         get:
             description: Retrieves the parent structured content folder's subfolders. Results can be paginated, filtered, searched, and sorted.
@@ -5451,3 +5725,213 @@ paths:
                                 type: string
                     description: ""
             tags: ["StructuredContent"]
+    "/wiki-nodes/{wikiNodeId}":
+        # @review
+        delete:
+            description: Deletes the wiki node and returns a 204 if the operation succeeds.
+            operationId: deleteWikiNode
+            parameters:
+                - in: path
+                  name: wikiNodeId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+            responses:
+                204:
+                    content:
+                        application/json: {}
+                    description: ""
+            tags: ["WikiNode"]
+        get:
+            description: Retrieves the wiki node
+            operationId: getWikiNode
+            parameters:
+                - in: path
+                  name: wikiNodeId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/WikiNode"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/WikiNode"
+                    description: ""
+            tags: ["WikiNode"]
+        put:
+            description: Replaces the wiki node with the information sent in the request body. Any missing fields are deleted, unless they are required.
+            operationId: putWikiNode
+            parameters:
+                - in: path
+                  name: wikiNodeId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/WikiNode"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/WikiNode"
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/WikiNode"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/WikiNode"
+                    description: ""
+            tags: ["WikiNode"]
+    "/wiki-nodes/{wikiNodeId}/wiki-pages/":
+        get:
+            operationId: getWikiNodeWikiPagesPage
+            # @review
+            description: Retrieves the wiki page's of a node. Results can be paginated, filtered, searched, and sorted.
+            parameters:
+                - in: path
+                  name: wikiNodeId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+                - in: query
+                  name: filter
+                  schema:
+                      type: string
+                - in: query
+                  name: page
+                  schema:
+                      type: integer
+                - in: query
+                  name: pageSize
+                  schema:
+                      type: integer
+                - in: query
+                  name: search
+                  schema:
+                      type: string
+                - in: query
+                  name: sort
+                  schema:
+                      type: string
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/WikiPage"
+                        application/xml:
+                            schema:
+                                items:
+                                    $ref: "#/components/schemas/WikiPage"
+                    description: ""
+            tags: ["WikiPage"]
+        post:
+            description: Creates a new wiki page
+            operationId: postWikiNodeWikiPage
+            parameters:
+                - in: path
+                  name: wikiNodeId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/WikiPage"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/WikiPage"
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/WikiPage"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/WikiPage"
+                    description: ""
+            tags: ["WikiPage"]
+    "/wiki-pages/{wikiPageId}":
+        # @review
+        delete:
+            description: Deletes the wiki page and returns a 204 if the operation succeeds.
+            operationId: deleteWikiPage
+            parameters:
+                - in: path
+                  name: wikiPageId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+            responses:
+                204:
+                    content:
+                        application/json: {}
+                    description: ""
+            tags: ["WikiPage"]
+        get:
+            description: Retrieves the wiki page
+            operationId: getWikiPage
+            parameters:
+                - in: path
+                  name: wikiPageId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/WikiPage"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/WikiPage"
+                    description: ""
+            tags: ["WikiPage"]
+        put:
+            description: Replaces the wiki page with the information sent in the request body. Any missing fields are deleted, unless they are required.
+            operationId: putWikiPage
+            parameters:
+                - in: path
+                  name: wikiPageId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/WikiPage"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/WikiPage"
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/WikiPage"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/WikiPage"
+                    description: ""
+            tags: ["WikiPage"]

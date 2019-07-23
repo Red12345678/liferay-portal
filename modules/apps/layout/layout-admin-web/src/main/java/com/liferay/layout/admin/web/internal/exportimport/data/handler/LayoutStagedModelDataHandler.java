@@ -32,6 +32,7 @@ import com.liferay.exportimport.kernel.lar.StagedModelModifiedDateComparator;
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleConstants;
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleManager;
 import com.liferay.exportimport.kernel.staging.LayoutStagingUtil;
+import com.liferay.exportimport.kernel.staging.MergeLayoutPrototypesThreadLocal;
 import com.liferay.exportimport.kernel.staging.Staging;
 import com.liferay.exportimport.lar.PermissionImporter;
 import com.liferay.fragment.model.FragmentEntryLink;
@@ -148,6 +149,13 @@ public class LayoutStagedModelDataHandler
 
 		Layout layout = _layoutLocalService.fetchLayoutByUuidAndGroupId(
 			uuid, groupId, privateLayout);
+
+		if ((layout == null) &&
+			MergeLayoutPrototypesThreadLocal.isInProgress()) {
+
+			layout = _layoutLocalService.fetchLayoutByUuidAndGroupId(
+				uuid, groupId, !privateLayout);
+		}
 
 		if (layout != null) {
 			deleteStagedModel(layout);
@@ -279,7 +287,10 @@ public class LayoutStagedModelDataHandler
 			Layout parentLayout = _layoutLocalService.fetchLayout(
 				layout.getGroupId(), layout.isPrivateLayout(), parentLayoutId);
 
-			if (parentLayout != null) {
+			String parentLayoutUuid = layoutElement.attributeValue(
+				"parent-layout-uuid");
+
+			if ((parentLayout != null) && Validator.isNull(parentLayoutUuid)) {
 				StagedModelDataHandlerUtil.exportReferenceStagedModel(
 					portletDataContext, layout, parentLayout,
 					PortletDataContext.REFERENCE_TYPE_PARENT);
@@ -543,7 +554,9 @@ public class LayoutStagedModelDataHandler
 		Layout importedLayout = null;
 
 		if (existingLayout == null) {
-			importedLayout = _layoutLocalService.create();
+			long plid = _counterLocalService.increment(Layout.class.getName());
+
+			importedLayout = _layoutLocalService.createLayout(plid);
 
 			if (layoutsImportMode.equals(
 					PortletDataHandlerKeys.
@@ -793,13 +806,10 @@ public class LayoutStagedModelDataHandler
 
 		if ((image != null) && (image.getTextObj() != null)) {
 			String iconPath = ExportImportPathUtil.getModelPath(
-				portletDataContext.getScopeGroupId(), Image.class.getName(),
-				image.getImageId());
+				layout,
+				image.getImageId() + StringPool.PERIOD + image.getType());
 
-			Element iconImagePathElement = layoutElement.addElement(
-				"icon-image-path");
-
-			iconImagePathElement.addText(iconPath);
+			layoutElement.addAttribute("icon-image-path", iconPath);
 
 			portletDataContext.addZipEntry(iconPath, image.getTextObj());
 		}
@@ -1323,7 +1333,7 @@ public class LayoutStagedModelDataHandler
 			Element layoutElement)
 		throws Exception {
 
-		String iconImagePath = layoutElement.elementText("icon-image-path");
+		String iconImagePath = layoutElement.attributeValue("icon-image-path");
 
 		byte[] iconBytes = portletDataContext.getZipEntryAsByteArray(
 			iconImagePath);

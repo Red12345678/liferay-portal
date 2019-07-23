@@ -40,6 +40,11 @@ import java.util.regex.Pattern;
 public class JavaComponentAnnotationsCheck extends JavaAnnotationsCheck {
 
 	@Override
+	public boolean isLiferaySourceCheck() {
+		return true;
+	}
+
+	@Override
 	protected String doProcess(
 			String fileName, String absolutePath, JavaTerm javaTerm,
 			String fileContent)
@@ -53,7 +58,19 @@ public class JavaComponentAnnotationsCheck extends JavaAnnotationsCheck {
 		String fileName, String absolutePath, JavaClass javaClass,
 		String annotation, String indent) {
 
-		if (!annotation.contains("@Component")) {
+		String trimmedAnnotation = StringUtil.trim(annotation);
+
+		if (!trimmedAnnotation.equals("@Component") &&
+			!trimmedAnnotation.startsWith("@Component(")) {
+
+			return annotation;
+		}
+
+		List<String> importNames = javaClass.getImports();
+
+		if (!importNames.contains(
+				"org.osgi.service.component.annotations.Component")) {
+
 			return annotation;
 		}
 
@@ -165,9 +182,10 @@ public class JavaComponentAnnotationsCheck extends JavaAnnotationsCheck {
 				String previousParameterProperty =
 					parameterPropertiesArray[i - 1];
 
-				if (comparator.compare(
-						previousParameterProperty, parameterProperty) > 0) {
+				int compare = comparator.compare(
+					previousParameterProperty, parameterProperty);
 
+				if (compare > 0) {
 					annotation = StringUtil.replaceFirst(
 						annotation, previousParameterProperty,
 						parameterProperty);

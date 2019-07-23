@@ -163,16 +163,16 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 			currentKaleoNode.getKaleoDefinitionVersionId());
 		kaleoLog.setKaleoNodeName(currentKaleoNode.getName());
 
-		if (previousKaleoTaskAssignmentInstances != null) {
-			if (previousKaleoTaskAssignmentInstances.size() == 1) {
-				KaleoTaskAssignmentInstance kaleoTaskAssignmentInstance =
-					previousKaleoTaskAssignmentInstances.get(0);
+		if ((previousKaleoTaskAssignmentInstances != null) &&
+			(previousKaleoTaskAssignmentInstances.size() == 1)) {
 
-				kaleoLog.setPreviousAssigneeClassName(
-					kaleoTaskAssignmentInstance.getAssigneeClassName());
-				kaleoLog.setPreviousAssigneeClassPK(
-					kaleoTaskAssignmentInstance.getAssigneeClassPK());
-			}
+			KaleoTaskAssignmentInstance kaleoTaskAssignmentInstance =
+				previousKaleoTaskAssignmentInstances.get(0);
+
+			kaleoLog.setPreviousAssigneeClassName(
+				kaleoTaskAssignmentInstance.getAssigneeClassName());
+			kaleoLog.setPreviousAssigneeClassPK(
+				kaleoTaskAssignmentInstance.getAssigneeClassPK());
 		}
 
 		List<KaleoTaskAssignmentInstance> kaleoTaskAssignmentInstances =
@@ -250,11 +250,9 @@ public class KaleoLogLocalServiceImpl extends KaleoLogLocalServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		KaleoInstanceToken kaleoInstanceToken =
-			kaleoTaskInstanceToken.getKaleoInstanceToken();
-
 		KaleoLog kaleoLog = createKaleoLog(
-			kaleoInstanceToken, LogType.TASK_UPDATE, serviceContext);
+			kaleoTaskInstanceToken.getKaleoInstanceToken(), LogType.TASK_UPDATE,
+			serviceContext);
 
 		List<KaleoTaskAssignmentInstance> kaleoTaskAssignmentInstances =
 			kaleoTaskInstanceToken.getKaleoTaskAssignmentInstances();

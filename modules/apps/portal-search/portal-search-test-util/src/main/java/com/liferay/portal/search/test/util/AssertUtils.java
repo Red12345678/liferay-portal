@@ -42,6 +42,13 @@ public class AssertUtils {
 	}
 
 	public static void assertEquals(
+		String message, List<?> expectedList, List<?> actualList) {
+
+		Assert.assertEquals(
+			message, expectedList.toString(), actualList.toString());
+	}
+
+	public static void assertEquals(
 		String message, Map<?, ?> expectedMap, Map<?, ?> actualMap) {
 
 		String actual = _toString(actualMap);
@@ -53,10 +60,7 @@ public class AssertUtils {
 	private static String _toString(JSONArray jsonArray) {
 		List<String> list = new ArrayList<>(jsonArray.length());
 
-		jsonArray.forEach(
-			value -> {
-				list.add(_toString(value));
-			});
+		jsonArray.forEach(value -> list.add(_toString(value)));
 
 		Collections.sort(list);
 
@@ -69,9 +73,8 @@ public class AssertUtils {
 		Iterator<String> keys = jsonObject.keys();
 
 		keys.forEachRemaining(
-			key -> {
-				list.add(_toString(key) + ":" + _toString(jsonObject.get(key)));
-			});
+			key -> list.add(
+				_toString(key) + ":" + _toString(jsonObject.get(key))));
 
 		Collections.sort(list);
 

@@ -19,8 +19,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.UserGroupRole;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.kernel.service.RoleLocalServiceUtil;
@@ -225,9 +225,8 @@ public abstract class BaseOrganizationMembershipPolicy
 				userGroupRoleActionableDynamicQuery.setGroupId(
 					organization.getGroupId());
 				userGroupRoleActionableDynamicQuery.setPerformActionMethod(
-					(UserGroupRole userGroupRole) -> {
-						verifyPolicy(userGroupRole.getRole());
-					});
+					(UserGroupRole userGroupRole) -> verifyPolicy(
+						userGroupRole.getRole()));
 
 				userGroupRoleActionableDynamicQuery.performActions();
 			});

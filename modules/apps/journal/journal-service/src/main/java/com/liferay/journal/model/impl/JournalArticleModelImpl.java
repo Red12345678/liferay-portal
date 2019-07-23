@@ -41,6 +41,9 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.ArrayList;
@@ -359,6 +362,32 @@ public class JournalArticleModelImpl
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, JournalArticle>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			JournalArticle.class.getClassLoader(), JournalArticle.class,
+			ModelWrapper.class);
+
+		try {
+			Constructor<JournalArticle> constructor =
+				(Constructor<JournalArticle>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
 	}
 
 	private static final Map<String, Function<JournalArticle, Object>>
@@ -1506,8 +1535,12 @@ public class JournalArticleModelImpl
 	@Override
 	public JournalArticle toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (JournalArticle)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, JournalArticle>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -1973,11 +2006,13 @@ public class JournalArticleModelImpl
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader =
-		JournalArticle.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		JournalArticle.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, JournalArticle>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
+
 	private static boolean _entityCacheEnabled;
 	private static boolean _finderCacheEnabled;
 

@@ -25,11 +25,10 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -49,7 +48,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -2898,6 +2896,260 @@ public class SegmentsExperiencePersistenceImpl
 	private static final String
 		_FINDER_COLUMN_SEGMENTSENTRYID_SEGMENTSENTRYID_2 =
 			"segmentsExperience.segmentsEntryId = ?";
+
+	private FinderPath _finderPathFetchByG_S;
+	private FinderPath _finderPathCountByG_S;
+
+	/**
+	 * Returns the segments experience where groupId = &#63; and segmentsExperienceKey = &#63; or throws a <code>NoSuchExperienceException</code> if it could not be found.
+	 *
+	 * @param groupId the group ID
+	 * @param segmentsExperienceKey the segments experience key
+	 * @return the matching segments experience
+	 * @throws NoSuchExperienceException if a matching segments experience could not be found
+	 */
+	@Override
+	public SegmentsExperience findByG_S(
+			long groupId, String segmentsExperienceKey)
+		throws NoSuchExperienceException {
+
+		SegmentsExperience segmentsExperience = fetchByG_S(
+			groupId, segmentsExperienceKey);
+
+		if (segmentsExperience == null) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("groupId=");
+			msg.append(groupId);
+
+			msg.append(", segmentsExperienceKey=");
+			msg.append(segmentsExperienceKey);
+
+			msg.append("}");
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(msg.toString());
+			}
+
+			throw new NoSuchExperienceException(msg.toString());
+		}
+
+		return segmentsExperience;
+	}
+
+	/**
+	 * Returns the segments experience where groupId = &#63; and segmentsExperienceKey = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param segmentsExperienceKey the segments experience key
+	 * @return the matching segments experience, or <code>null</code> if a matching segments experience could not be found
+	 */
+	@Override
+	public SegmentsExperience fetchByG_S(
+		long groupId, String segmentsExperienceKey) {
+
+		return fetchByG_S(groupId, segmentsExperienceKey, true);
+	}
+
+	/**
+	 * Returns the segments experience where groupId = &#63; and segmentsExperienceKey = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param groupId the group ID
+	 * @param segmentsExperienceKey the segments experience key
+	 * @param retrieveFromCache whether to retrieve from the finder cache
+	 * @return the matching segments experience, or <code>null</code> if a matching segments experience could not be found
+	 */
+	@Override
+	public SegmentsExperience fetchByG_S(
+		long groupId, String segmentsExperienceKey, boolean retrieveFromCache) {
+
+		segmentsExperienceKey = Objects.toString(segmentsExperienceKey, "");
+
+		Object[] finderArgs = new Object[] {groupId, segmentsExperienceKey};
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = finderCache.getResult(
+				_finderPathFetchByG_S, finderArgs, this);
+		}
+
+		if (result instanceof SegmentsExperience) {
+			SegmentsExperience segmentsExperience = (SegmentsExperience)result;
+
+			if ((groupId != segmentsExperience.getGroupId()) ||
+				!Objects.equals(
+					segmentsExperienceKey,
+					segmentsExperience.getSegmentsExperienceKey())) {
+
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_SELECT_SEGMENTSEXPERIENCE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
+
+			boolean bindSegmentsExperienceKey = false;
+
+			if (segmentsExperienceKey.isEmpty()) {
+				query.append(_FINDER_COLUMN_G_S_SEGMENTSEXPERIENCEKEY_3);
+			}
+			else {
+				bindSegmentsExperienceKey = true;
+
+				query.append(_FINDER_COLUMN_G_S_SEGMENTSEXPERIENCEKEY_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (bindSegmentsExperienceKey) {
+					qPos.add(segmentsExperienceKey);
+				}
+
+				List<SegmentsExperience> list = q.list();
+
+				if (list.isEmpty()) {
+					finderCache.putResult(
+						_finderPathFetchByG_S, finderArgs, list);
+				}
+				else {
+					SegmentsExperience segmentsExperience = list.get(0);
+
+					result = segmentsExperience;
+
+					cacheResult(segmentsExperience);
+				}
+			}
+			catch (Exception e) {
+				finderCache.removeResult(_finderPathFetchByG_S, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
+		else {
+			return (SegmentsExperience)result;
+		}
+	}
+
+	/**
+	 * Removes the segments experience where groupId = &#63; and segmentsExperienceKey = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param segmentsExperienceKey the segments experience key
+	 * @return the segments experience that was removed
+	 */
+	@Override
+	public SegmentsExperience removeByG_S(
+			long groupId, String segmentsExperienceKey)
+		throws NoSuchExperienceException {
+
+		SegmentsExperience segmentsExperience = findByG_S(
+			groupId, segmentsExperienceKey);
+
+		return remove(segmentsExperience);
+	}
+
+	/**
+	 * Returns the number of segments experiences where groupId = &#63; and segmentsExperienceKey = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param segmentsExperienceKey the segments experience key
+	 * @return the number of matching segments experiences
+	 */
+	@Override
+	public int countByG_S(long groupId, String segmentsExperienceKey) {
+		segmentsExperienceKey = Objects.toString(segmentsExperienceKey, "");
+
+		FinderPath finderPath = _finderPathCountByG_S;
+
+		Object[] finderArgs = new Object[] {groupId, segmentsExperienceKey};
+
+		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_SEGMENTSEXPERIENCE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
+
+			boolean bindSegmentsExperienceKey = false;
+
+			if (segmentsExperienceKey.isEmpty()) {
+				query.append(_FINDER_COLUMN_G_S_SEGMENTSEXPERIENCEKEY_3);
+			}
+			else {
+				bindSegmentsExperienceKey = true;
+
+				query.append(_FINDER_COLUMN_G_S_SEGMENTSEXPERIENCEKEY_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (bindSegmentsExperienceKey) {
+					qPos.add(segmentsExperienceKey);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				finderCache.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				finderCache.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_S_GROUPID_2 =
+		"segmentsExperience.groupId = ? AND ";
+
+	private static final String _FINDER_COLUMN_G_S_SEGMENTSEXPERIENCEKEY_2 =
+		"segmentsExperience.segmentsExperienceKey = ?";
+
+	private static final String _FINDER_COLUMN_G_S_SEGMENTSEXPERIENCEKEY_3 =
+		"(segmentsExperience.segmentsExperienceKey IS NULL OR segmentsExperience.segmentsExperienceKey = '')";
 
 	private FinderPath _finderPathWithPaginationFindByG_C_C;
 	private FinderPath _finderPathWithoutPaginationFindByG_C_C;
@@ -8469,9 +8721,7 @@ public class SegmentsExperiencePersistenceImpl
 			segmentsEntryIds = new long[0];
 		}
 		else if (segmentsEntryIds.length > 1) {
-			segmentsEntryIds = ArrayUtil.unique(segmentsEntryIds);
-
-			Arrays.sort(segmentsEntryIds);
+			segmentsEntryIds = ArrayUtil.sortedUnique(segmentsEntryIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -8680,9 +8930,7 @@ public class SegmentsExperiencePersistenceImpl
 			segmentsEntryIds = new long[0];
 		}
 		else if (segmentsEntryIds.length > 1) {
-			segmentsEntryIds = ArrayUtil.unique(segmentsEntryIds);
-
-			Arrays.sort(segmentsEntryIds);
+			segmentsEntryIds = ArrayUtil.sortedUnique(segmentsEntryIds);
 		}
 
 		if (segmentsEntryIds.length == 1) {
@@ -8942,9 +9190,7 @@ public class SegmentsExperiencePersistenceImpl
 			segmentsEntryIds = new long[0];
 		}
 		else if (segmentsEntryIds.length > 1) {
-			segmentsEntryIds = ArrayUtil.unique(segmentsEntryIds);
-
-			Arrays.sort(segmentsEntryIds);
+			segmentsEntryIds = ArrayUtil.sortedUnique(segmentsEntryIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -9121,9 +9367,7 @@ public class SegmentsExperiencePersistenceImpl
 			segmentsEntryIds = new long[0];
 		}
 		else if (segmentsEntryIds.length > 1) {
-			segmentsEntryIds = ArrayUtil.unique(segmentsEntryIds);
-
-			Arrays.sort(segmentsEntryIds);
+			segmentsEntryIds = ArrayUtil.sortedUnique(segmentsEntryIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -9248,6 +9492,14 @@ public class SegmentsExperiencePersistenceImpl
 			segmentsExperience);
 
 		finderCache.putResult(
+			_finderPathFetchByG_S,
+			new Object[] {
+				segmentsExperience.getGroupId(),
+				segmentsExperience.getSegmentsExperienceKey()
+			},
+			segmentsExperience);
+
+		finderCache.putResult(
 			_finderPathFetchByG_C_C_P,
 			new Object[] {
 				segmentsExperience.getGroupId(),
@@ -9348,6 +9600,16 @@ public class SegmentsExperiencePersistenceImpl
 
 		args = new Object[] {
 			segmentsExperienceModelImpl.getGroupId(),
+			segmentsExperienceModelImpl.getSegmentsExperienceKey()
+		};
+
+		finderCache.putResult(
+			_finderPathCountByG_S, args, Long.valueOf(1), false);
+		finderCache.putResult(
+			_finderPathFetchByG_S, args, segmentsExperienceModelImpl, false);
+
+		args = new Object[] {
+			segmentsExperienceModelImpl.getGroupId(),
 			segmentsExperienceModelImpl.getClassNameId(),
 			segmentsExperienceModelImpl.getClassPK(),
 			segmentsExperienceModelImpl.getPriority()
@@ -9384,6 +9646,28 @@ public class SegmentsExperiencePersistenceImpl
 
 			finderCache.removeResult(_finderPathCountByUUID_G, args);
 			finderCache.removeResult(_finderPathFetchByUUID_G, args);
+		}
+
+		if (clearCurrent) {
+			Object[] args = new Object[] {
+				segmentsExperienceModelImpl.getGroupId(),
+				segmentsExperienceModelImpl.getSegmentsExperienceKey()
+			};
+
+			finderCache.removeResult(_finderPathCountByG_S, args);
+			finderCache.removeResult(_finderPathFetchByG_S, args);
+		}
+
+		if ((segmentsExperienceModelImpl.getColumnBitmask() &
+			 _finderPathFetchByG_S.getColumnBitmask()) != 0) {
+
+			Object[] args = new Object[] {
+				segmentsExperienceModelImpl.getOriginalGroupId(),
+				segmentsExperienceModelImpl.getOriginalSegmentsExperienceKey()
+			};
+
+			finderCache.removeResult(_finderPathCountByG_S, args);
+			finderCache.removeResult(_finderPathFetchByG_S, args);
 		}
 
 		if (clearCurrent) {
@@ -9430,7 +9714,7 @@ public class SegmentsExperiencePersistenceImpl
 
 		segmentsExperience.setUuid(uuid);
 
-		segmentsExperience.setCompanyId(companyProvider.getCompanyId());
+		segmentsExperience.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return segmentsExperience;
 	}
@@ -10306,6 +10590,21 @@ public class SegmentsExperiencePersistenceImpl
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySegmentsEntryId",
 			new String[] {Long.class.getName()});
 
+		_finderPathFetchByG_S = new FinderPath(
+			SegmentsExperienceModelImpl.ENTITY_CACHE_ENABLED,
+			SegmentsExperienceModelImpl.FINDER_CACHE_ENABLED,
+			SegmentsExperienceImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByG_S",
+			new String[] {Long.class.getName(), String.class.getName()},
+			SegmentsExperienceModelImpl.GROUPID_COLUMN_BITMASK |
+			SegmentsExperienceModelImpl.SEGMENTSEXPERIENCEKEY_COLUMN_BITMASK);
+
+		_finderPathCountByG_S = new FinderPath(
+			SegmentsExperienceModelImpl.ENTITY_CACHE_ENABLED,
+			SegmentsExperienceModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
+			new String[] {Long.class.getName(), String.class.getName()});
+
 		_finderPathWithPaginationFindByG_C_C = new FinderPath(
 			SegmentsExperienceModelImpl.ENTITY_CACHE_ENABLED,
 			SegmentsExperienceModelImpl.FINDER_CACHE_ENABLED,
@@ -10510,9 +10809,6 @@ public class SegmentsExperiencePersistenceImpl
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
-	@ServiceReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@ServiceReference(type = EntityCache.class)
 	protected EntityCache entityCache;

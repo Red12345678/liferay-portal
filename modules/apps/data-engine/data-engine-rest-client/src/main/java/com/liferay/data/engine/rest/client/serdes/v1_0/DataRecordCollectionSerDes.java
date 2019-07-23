@@ -65,6 +65,21 @@ public class DataRecordCollectionSerDes {
 			sb.append(dataRecordCollection.getDataDefinitionId());
 		}
 
+		if (dataRecordCollection.getDataRecordCollectionKey() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"dataRecordCollectionKey\": ");
+
+			sb.append("\"");
+
+			sb.append(
+				_escape(dataRecordCollection.getDataRecordCollectionKey()));
+
+			sb.append("\"");
+		}
+
 		if (dataRecordCollection.getDescription() != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -93,6 +108,16 @@ public class DataRecordCollectionSerDes {
 			sb.append("\"name\": ");
 
 			sb.append(_toJSON(dataRecordCollection.getName()));
+		}
+
+		if (dataRecordCollection.getSiteId() != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"siteId\": ");
+
+			sb.append(dataRecordCollection.getSiteId());
 		}
 
 		sb.append("}");
@@ -125,6 +150,16 @@ public class DataRecordCollectionSerDes {
 				String.valueOf(dataRecordCollection.getDataDefinitionId()));
 		}
 
+		if (dataRecordCollection.getDataRecordCollectionKey() == null) {
+			map.put("dataRecordCollectionKey", null);
+		}
+		else {
+			map.put(
+				"dataRecordCollectionKey",
+				String.valueOf(
+					dataRecordCollection.getDataRecordCollectionKey()));
+		}
+
 		if (dataRecordCollection.getDescription() == null) {
 			map.put("description", null);
 		}
@@ -148,13 +183,22 @@ public class DataRecordCollectionSerDes {
 			map.put("name", String.valueOf(dataRecordCollection.getName()));
 		}
 
+		if (dataRecordCollection.getSiteId() == null) {
+			map.put("siteId", null);
+		}
+		else {
+			map.put("siteId", String.valueOf(dataRecordCollection.getSiteId()));
+		}
+
 		return map;
 	}
 
 	private static String _escape(Object object) {
 		String string = String.valueOf(object);
 
-		return string.replaceAll("\"", "\\\\\"");
+		string = string.replace("\\", "\\\\");
+
+		return string.replace("\"", "\\\"");
 	}
 
 	private static String _toJSON(Map<String, ?> map) {
@@ -210,10 +254,18 @@ public class DataRecordCollectionSerDes {
 						Long.valueOf((String)jsonParserFieldValue));
 				}
 			}
+			else if (Objects.equals(
+						jsonParserFieldName, "dataRecordCollectionKey")) {
+
+				if (jsonParserFieldValue != null) {
+					dataRecordCollection.setDataRecordCollectionKey(
+						(String)jsonParserFieldValue);
+				}
+			}
 			else if (Objects.equals(jsonParserFieldName, "description")) {
 				if (jsonParserFieldValue != null) {
 					dataRecordCollection.setDescription(
-						DataRecordCollectionSerDes.toMap(
+						(Map)DataRecordCollectionSerDes.toMap(
 							(String)jsonParserFieldValue));
 				}
 			}
@@ -226,8 +278,14 @@ public class DataRecordCollectionSerDes {
 			else if (Objects.equals(jsonParserFieldName, "name")) {
 				if (jsonParserFieldValue != null) {
 					dataRecordCollection.setName(
-						DataRecordCollectionSerDes.toMap(
+						(Map)DataRecordCollectionSerDes.toMap(
 							(String)jsonParserFieldValue));
+				}
+			}
+			else if (Objects.equals(jsonParserFieldName, "siteId")) {
+				if (jsonParserFieldValue != null) {
+					dataRecordCollection.setSiteId(
+						Long.valueOf((String)jsonParserFieldValue));
 				}
 			}
 			else {

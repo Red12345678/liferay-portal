@@ -48,6 +48,10 @@ public class ProjectTemplatesArgs {
 		return _contributorType;
 	}
 
+	public String getDependencyInjector() {
+		return _dependencyInjector;
+	}
+
 	public File getDestinationDir() {
 		return _destinationDir;
 	}
@@ -126,6 +130,10 @@ public class ProjectTemplatesArgs {
 
 	public void setContributorType(String contributorType) {
 		_contributorType = contributorType;
+	}
+
+	public void setDependencyInjector(String dependencyInjector) {
+		_dependencyInjector = dependencyInjector;
 	}
 
 	public void setDependencyManagementEnabled(
@@ -224,6 +232,12 @@ public class ProjectTemplatesArgs {
 	private String _contributorType;
 
 	@Parameter(
+		description = "For Service Builder projects, specify the preferred dependency injection method (ds | spring). Default is DS",
+		names = "--dependency-injector"
+	)
+	private String _dependencyInjector = "ds";
+
+	@Parameter(
 		description = "If workspace support target platform, no version number is required for the module.",
 		names = "--dependency-management-enabled"
 	)
@@ -276,7 +290,7 @@ public class ProjectTemplatesArgs {
 		description = "The version of Liferay to target when creating the project.",
 		names = "--liferayVersion"
 	)
-	private String _liferayVersion = "7.1";
+	private String _liferayVersion = "7.2";
 
 	@Parameter(
 		description = "Print the list of available project templates.",

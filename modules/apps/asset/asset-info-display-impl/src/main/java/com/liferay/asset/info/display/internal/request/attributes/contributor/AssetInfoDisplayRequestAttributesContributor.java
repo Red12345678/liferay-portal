@@ -43,8 +43,14 @@ public class AssetInfoDisplayRequestAttributesContributor
 
 	@Override
 	public void addAttributes(HttpServletRequest httpServletRequest) {
-		AssetEntry assetEntry = (AssetEntry)httpServletRequest.getAttribute(
+		Object layoutAssetEntry = httpServletRequest.getAttribute(
 			WebKeys.LAYOUT_ASSET_ENTRY);
+
+		if (!(layoutAssetEntry instanceof AssetEntry)) {
+			return;
+		}
+
+		AssetEntry assetEntry = (AssetEntry)layoutAssetEntry;
 
 		if (assetEntry != null) {
 			return;
@@ -72,9 +78,11 @@ public class AssetInfoDisplayRequestAttributesContributor
 				infoDisplayContributor.getInfoDisplayObjectProvider(
 					assetEntry.getClassPK());
 
-			httpServletRequest.setAttribute(
-				AssetDisplayPageWebKeys.INFO_DISPLAY_OBJECT_PROVIDER,
-				infoDisplayObjectProvider);
+			if (infoDisplayObjectProvider != null) {
+				httpServletRequest.setAttribute(
+					AssetDisplayPageWebKeys.INFO_DISPLAY_OBJECT_PROVIDER,
+					infoDisplayObjectProvider);
+			}
 		}
 		catch (Exception e) {
 			_log.error("Unable to get info display object provider", e);

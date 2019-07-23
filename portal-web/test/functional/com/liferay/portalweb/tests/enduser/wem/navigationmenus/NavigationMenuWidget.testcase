@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Navigation";
@@ -54,7 +55,9 @@ definition {
 		}
 
 		task ("Navigate to the Navigation Menu widget") {
-			Navigator.openSiteURL(siteName = "Test Site Name");
+			Navigator.gotoSitePage(
+				pageName = "Test Page Name",
+				siteName = "Test Site Name");
 		}
 
 		task ("Configure the Navigation Menu widget to use the navigation menu") {
@@ -149,4 +152,5 @@ definition {
 			AssertLocation(value1 = "${portalURL}/web/test-site-name/test-page-name-2");
 		}
 	}
+
 }

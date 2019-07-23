@@ -1,4 +1,5 @@
 definition {
+
 	macro _openDescriptiveMenulistCP {
 		if (!(contains("${webContentTitleEscapeCharacter}", "{webContentTitleEscapeCharacter}"))) {
 			var key_webContentTitle = "${webContentTitleEscapeCharacter}";
@@ -128,6 +129,8 @@ definition {
 	}
 
 	macro gotoEntryMenuItem {
+		Pause(locator1 = "3000");
+
 		Click(
 			key_webContentTitle = "${entry}",
 			locator1 = "WC#ENTRY_LIST_MENULIST_ICON");
@@ -183,4 +186,5 @@ definition {
 			locator1 = "DDMSelectTemplate#TEMPLATE_TABLE_NAME_LINK",
 			value1 = "${templateName}");
 	}
+
 }

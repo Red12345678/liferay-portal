@@ -28,6 +28,7 @@ import com.liferay.poshi.runner.util.GetterUtil;
 import com.liferay.poshi.runner.util.HtmlUtil;
 import com.liferay.poshi.runner.util.OSDetector;
 import com.liferay.poshi.runner.util.PropsValues;
+import com.liferay.poshi.runner.util.ResourceUtil;
 import com.liferay.poshi.runner.util.RuntimeVariables;
 import com.liferay.poshi.runner.util.StringPool;
 import com.liferay.poshi.runner.util.StringUtil;
@@ -108,8 +109,7 @@ import org.sikuli.api.robot.Mouse;
 import org.sikuli.api.robot.desktop.DesktopKeyboard;
 import org.sikuli.api.robot.desktop.DesktopMouse;
 import org.sikuli.api.visual.Canvas;
-import org.sikuli.api.visual.CanvasBuilder.ElementAdder;
-import org.sikuli.api.visual.CanvasBuilder.ElementAreaSetter;
+import org.sikuli.api.visual.CanvasBuilder;
 import org.sikuli.api.visual.DesktopCanvas;
 
 import org.w3c.dom.Document;
@@ -1352,9 +1352,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 		if (!exceptions.isEmpty()) {
 			throw new Exception(exceptions.get(0));
 		}
-		else {
-			throw new TimeoutException();
-		}
+
+		throw new TimeoutException();
 	}
 
 	@Override
@@ -1562,9 +1561,7 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 	@Override
 	public boolean isConfirmation(String pattern) {
-		String confirmation = getConfirmation();
-
-		return pattern.equals(confirmation);
+		return pattern.equals(getConfirmation());
 	}
 
 	@Override
@@ -1816,6 +1813,35 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	@Override
 	public void javaScriptClick(String locator) {
 		executeJavaScriptEvent(locator, "MouseEvent", "click");
+	}
+
+	@Override
+	public void javaScriptDragAndDropToObject(
+			String sourceLocator, String targetLocator)
+		throws Exception {
+
+		WebElement sourceElement = getWebElement(sourceLocator);
+
+		WrapsDriver wrapsDriver = (WrapsDriver)sourceElement;
+
+		WebDriver wrappedWebDriver = wrapsDriver.getWrappedDriver();
+
+		JavascriptExecutor javascriptExecutor =
+			(JavascriptExecutor)wrappedWebDriver;
+
+		StringBuilder sb = new StringBuilder();
+
+		String simulateJSContent = ResourceUtil.read(
+			"com/liferay/poshi/runner/dependencies/simulate_drag_and_drop.js");
+
+		sb.append(simulateJSContent);
+
+		sb.append("\nSimulate.dragAndDrop(arguments[0], arguments[1]);");
+
+		WebElement targetElement = getWebElement(targetLocator);
+
+		javascriptExecutor.executeScript(
+			sb.toString(), sourceElement, targetElement);
 	}
 
 	public String javaScriptGetText(String locator, String timeout)
@@ -2604,9 +2630,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		Canvas canvas = new DesktopCanvas();
 
-		ElementAdder elementAdder = canvas.add();
+		CanvasBuilder.ElementAdder elementAdder = canvas.add();
 
-		ElementAreaSetter elementAreaSetter = elementAdder.box();
+		CanvasBuilder.ElementAreaSetter elementAreaSetter = elementAdder.box();
 
 		elementAreaSetter.around(screenRegion);
 
@@ -2883,7 +2909,9 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 	public void typeAceEditor(String locator, String value) {
 		WebElement webElement = getWebElement(locator);
 
-		if (locator.endsWith("/textarea")) {
+		String webElementTagName = webElement.getTagName();
+
+		if (webElementTagName.equals("textarea")) {
 			webElement.sendKeys(Keys.chord(Keys.CONTROL, "a"));
 
 			webElement.sendKeys(Keys.DELETE);
@@ -3078,10 +3106,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 
 		filePath = LiferaySeleniumHelper.getSourceDirFilePath(filePath);
 
-		filePath = FileUtil.fixFilePath(filePath);
-
-		if (value.endsWith(".jar") || value.endsWith(".war") ||
-			value.endsWith(".zip")) {
+		if (value.endsWith(".jar") || value.endsWith(".lar") ||
+			value.endsWith(".war") || value.endsWith(".zip")) {
 
 			File file = new File(filePath);
 
@@ -3096,6 +3122,8 @@ public abstract class BaseWebDriverImpl implements LiferaySelenium, WebDriver {
 				filePath = archiveFilePath;
 			}
 		}
+
+		filePath = FileUtil.fixFilePath(filePath);
 
 		uploadFile(location, filePath);
 	}

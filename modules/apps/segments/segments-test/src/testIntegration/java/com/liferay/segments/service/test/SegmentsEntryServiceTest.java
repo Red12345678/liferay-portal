@@ -20,8 +20,8 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
@@ -131,20 +131,6 @@ public class SegmentsEntryServiceTest {
 				ServiceContextTestUtil.getServiceContext(
 					_group, _groupUser.getUserId()));
 		}
-	}
-
-	@Test(expected = PrincipalException.MustHavePermission.class)
-	public void testDeleteSegmentsEntryFromExternalSource() throws Exception {
-		SegmentsEntry segmentsEntry = SegmentsTestUtil.addSegmentsEntry(
-			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
-			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
-			SegmentsConstants.SOURCE_ASAH_FARO_BACKEND,
-			RandomTestUtil.randomString(),
-			ServiceContextTestUtil.getServiceContext(
-				_group, _companyAdminUser.getUserId()));
-
-		_segmentsEntryService.deleteSegmentsEntry(
-			segmentsEntry.getSegmentsEntryId());
 	}
 
 	@Test

@@ -32,10 +32,9 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -47,7 +46,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -2723,9 +2721,7 @@ public class BackgroundTaskPersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		if (taskExecutorClassNames == null) {
@@ -2737,9 +2733,8 @@ public class BackgroundTaskPersistenceImpl
 					taskExecutorClassNames[i], "");
 			}
 
-			taskExecutorClassNames = ArrayUtil.unique(taskExecutorClassNames);
-
-			Arrays.sort(taskExecutorClassNames);
+			taskExecutorClassNames = ArrayUtil.sortedUnique(
+				taskExecutorClassNames);
 		}
 
 		if (groupIds.length == 1 && taskExecutorClassNames.length == 1) {
@@ -2994,9 +2989,7 @@ public class BackgroundTaskPersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		if (taskExecutorClassNames == null) {
@@ -3008,9 +3001,8 @@ public class BackgroundTaskPersistenceImpl
 					taskExecutorClassNames[i], "");
 			}
 
-			taskExecutorClassNames = ArrayUtil.unique(taskExecutorClassNames);
-
-			Arrays.sort(taskExecutorClassNames);
+			taskExecutorClassNames = ArrayUtil.sortedUnique(
+				taskExecutorClassNames);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -4265,9 +4257,8 @@ public class BackgroundTaskPersistenceImpl
 					taskExecutorClassNames[i], "");
 			}
 
-			taskExecutorClassNames = ArrayUtil.unique(taskExecutorClassNames);
-
-			Arrays.sort(taskExecutorClassNames);
+			taskExecutorClassNames = ArrayUtil.sortedUnique(
+				taskExecutorClassNames);
 		}
 
 		if (taskExecutorClassNames.length == 1) {
@@ -4516,9 +4507,8 @@ public class BackgroundTaskPersistenceImpl
 					taskExecutorClassNames[i], "");
 			}
 
-			taskExecutorClassNames = ArrayUtil.unique(taskExecutorClassNames);
-
-			Arrays.sort(taskExecutorClassNames);
+			taskExecutorClassNames = ArrayUtil.sortedUnique(
+				taskExecutorClassNames);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -5275,9 +5265,7 @@ public class BackgroundTaskPersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		name = Objects.toString(name, "");
@@ -5291,9 +5279,8 @@ public class BackgroundTaskPersistenceImpl
 					taskExecutorClassNames[i], "");
 			}
 
-			taskExecutorClassNames = ArrayUtil.unique(taskExecutorClassNames);
-
-			Arrays.sort(taskExecutorClassNames);
+			taskExecutorClassNames = ArrayUtil.sortedUnique(
+				taskExecutorClassNames);
 		}
 
 		if (groupIds.length == 1 && taskExecutorClassNames.length == 1) {
@@ -5591,9 +5578,7 @@ public class BackgroundTaskPersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		name = Objects.toString(name, "");
@@ -5607,9 +5592,8 @@ public class BackgroundTaskPersistenceImpl
 					taskExecutorClassNames[i], "");
 			}
 
-			taskExecutorClassNames = ArrayUtil.unique(taskExecutorClassNames);
-
-			Arrays.sort(taskExecutorClassNames);
+			taskExecutorClassNames = ArrayUtil.sortedUnique(
+				taskExecutorClassNames);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -6370,9 +6354,7 @@ public class BackgroundTaskPersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		if (taskExecutorClassNames == null) {
@@ -6384,9 +6366,8 @@ public class BackgroundTaskPersistenceImpl
 					taskExecutorClassNames[i], "");
 			}
 
-			taskExecutorClassNames = ArrayUtil.unique(taskExecutorClassNames);
-
-			Arrays.sort(taskExecutorClassNames);
+			taskExecutorClassNames = ArrayUtil.sortedUnique(
+				taskExecutorClassNames);
 		}
 
 		if (groupIds.length == 1 && taskExecutorClassNames.length == 1) {
@@ -6663,9 +6644,7 @@ public class BackgroundTaskPersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		if (taskExecutorClassNames == null) {
@@ -6677,9 +6656,8 @@ public class BackgroundTaskPersistenceImpl
 					taskExecutorClassNames[i], "");
 			}
 
-			taskExecutorClassNames = ArrayUtil.unique(taskExecutorClassNames);
-
-			Arrays.sort(taskExecutorClassNames);
+			taskExecutorClassNames = ArrayUtil.sortedUnique(
+				taskExecutorClassNames);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -7436,9 +7414,8 @@ public class BackgroundTaskPersistenceImpl
 					taskExecutorClassNames[i], "");
 			}
 
-			taskExecutorClassNames = ArrayUtil.unique(taskExecutorClassNames);
-
-			Arrays.sort(taskExecutorClassNames);
+			taskExecutorClassNames = ArrayUtil.sortedUnique(
+				taskExecutorClassNames);
 		}
 
 		if (taskExecutorClassNames.length == 1) {
@@ -7707,9 +7684,8 @@ public class BackgroundTaskPersistenceImpl
 					taskExecutorClassNames[i], "");
 			}
 
-			taskExecutorClassNames = ArrayUtil.unique(taskExecutorClassNames);
-
-			Arrays.sort(taskExecutorClassNames);
+			taskExecutorClassNames = ArrayUtil.sortedUnique(
+				taskExecutorClassNames);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -8514,9 +8490,7 @@ public class BackgroundTaskPersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		name = Objects.toString(name, "");
@@ -8814,9 +8788,7 @@ public class BackgroundTaskPersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		name = Objects.toString(name, "");
@@ -9036,7 +9008,7 @@ public class BackgroundTaskPersistenceImpl
 		backgroundTask.setNew(true);
 		backgroundTask.setPrimaryKey(backgroundTaskId);
 
-		backgroundTask.setCompanyId(companyProvider.getCompanyId());
+		backgroundTask.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return backgroundTask;
 	}
@@ -10191,9 +10163,6 @@ public class BackgroundTaskPersistenceImpl
 	}
 
 	private boolean _columnBitmaskEnabled;
-
-	@Reference(service = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@Reference
 	protected EntityCache entityCache;

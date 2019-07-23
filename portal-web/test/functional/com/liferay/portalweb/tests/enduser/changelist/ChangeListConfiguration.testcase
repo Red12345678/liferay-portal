@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Change Lists";
@@ -76,7 +77,17 @@ definition {
 			locator1 = "ChangeList#PRODUCTION_CARD_TITLE",
 			value1 = "Work on Production");
 
+		AssertElementPresent(locator1 = "ChangeList#INDICATOR");
+
 		ChangeList.viewNoStagingMenuitemsNotAvailable();
+
+		ChangeList.viewWarningOnSiteExportImport(portletName = "Export");
+
+		ChangeList.viewWarningOnSiteExportImport(portletName = "Import");
+
+		ChangeList.viewWarningOnPortletExport(portletName = "Web Content");
+
+		ChangeList.viewWarningOnPortletImport(portletName = "Web Content");
 
 		ProductMenu.gotoPortlet(
 			category = "Change Lists",
@@ -109,4 +120,5 @@ definition {
 
 		AssertElementPresent(locator1 = "ChangeListSettings#DISABLED_SAVE_AND_GO_TO_OVERVIEW_BUTTON");
 	}
+
 }

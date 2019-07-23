@@ -14,7 +14,7 @@
 
 package com.liferay.asset.auto.tagger.google.cloud.natural.language.internal;
 
-import com.liferay.asset.auto.tagger.google.cloud.natural.language.api.GCloudNaturalLanguageDocumentAssetAutoTagger;
+import com.liferay.asset.auto.tagger.google.cloud.natural.language.GCloudNaturalLanguageDocumentAssetAutoTagger;
 import com.liferay.asset.auto.tagger.google.cloud.natural.language.internal.configuration.GCloudNaturalLanguageAssetAutoTaggerCompanyConfiguration;
 import com.liferay.asset.auto.tagger.google.cloud.natural.language.internal.contants.GCloudNaturalLanguageDocumentAssetAutoTaggerConstants;
 import com.liferay.asset.auto.tagger.google.cloud.natural.language.internal.util.GCloudNaturalLanguageUtil;
@@ -235,9 +235,10 @@ public class GCloudNaturalLanguageDocumentAssetAutoTaggerImpl
 			return Collections.emptySet();
 		}
 
-		return StreamSupport.stream(
-			(Spliterator<JSONObject>)jsonArray.spliterator(), false
-		).filter(
+		Stream<JSONObject> stream = StreamSupport.stream(
+			(Spliterator<JSONObject>)jsonArray.spliterator(), false);
+
+		return stream.filter(
 			predicate
 		).map(
 			jsonObject -> StringUtil.removeChars(

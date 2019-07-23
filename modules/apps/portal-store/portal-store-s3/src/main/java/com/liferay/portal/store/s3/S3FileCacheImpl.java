@@ -73,9 +73,7 @@ public class S3FileCacheImpl implements S3FileCache {
 
 			_calledCleanUpCacheFilesCount = 0;
 
-			String cacheDirName = getCacheDirName();
-
-			File cacheDir = new File(cacheDirName);
+			File cacheDir = new File(getCacheDirName());
 
 			long lastModified = System.currentTimeMillis();
 
@@ -152,22 +150,19 @@ public class S3FileCacheImpl implements S3FileCache {
 		if (fileNames.length == 0) {
 			if (file.lastModified() < lastModified) {
 				FileUtil.deltree(file);
-
-				return;
 			}
+
+			return;
 		}
-		else {
-			for (String fileName : fileNames) {
-				cleanUpCacheFiles(new File(file, fileName), lastModified);
-			}
 
-			String[] subfileNames = file.list();
+		for (String fileName : fileNames) {
+			cleanUpCacheFiles(new File(file, fileName), lastModified);
+		}
 
-			if (subfileNames.length == 0) {
-				FileUtil.deltree(file);
+		String[] subfileNames = file.list();
 
-				return;
-			}
+		if (subfileNames.length == 0) {
+			FileUtil.deltree(file);
 		}
 	}
 

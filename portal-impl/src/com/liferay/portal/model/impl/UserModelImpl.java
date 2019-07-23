@@ -35,6 +35,9 @@ import com.liferay.portal.kernel.util.ProxyUtil;
 
 import java.io.Serializable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+
 import java.sql.Types;
 
 import java.util.ArrayList;
@@ -452,6 +455,31 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		getAttributeSetterBiConsumers() {
 
 		return _attributeSetterBiConsumers;
+	}
+
+	private static Function<InvocationHandler, User>
+		_getProxyProviderFunction() {
+
+		Class<?> proxyClass = ProxyUtil.getProxyClass(
+			User.class.getClassLoader(), User.class, ModelWrapper.class);
+
+		try {
+			Constructor<User> constructor =
+				(Constructor<User>)proxyClass.getConstructor(
+					InvocationHandler.class);
+
+			return invocationHandler -> {
+				try {
+					return constructor.newInstance(invocationHandler);
+				}
+				catch (ReflectiveOperationException roe) {
+					throw new InternalError(roe);
+				}
+			};
+		}
+		catch (NoSuchMethodException nsme) {
+			throw new InternalError(nsme);
+		}
 	}
 
 	private static final Map<String, Function<User, Object>>
@@ -1440,8 +1468,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 	@Override
 	public User toEscapedModel() {
 		if (_escapedModel == null) {
-			_escapedModel = (User)ProxyUtil.newProxyInstance(
-				_classLoader, _escapedModelInterfaces,
+			Function<InvocationHandler, User>
+				escapedModelProxyProviderFunction =
+					EscapedModelProxyProviderFunctionHolder.
+						_escapedModelProxyProviderFunction;
+
+			_escapedModel = escapedModelProxyProviderFunction.apply(
 				new AutoEscapeBeanHandler(this));
 		}
 
@@ -1937,10 +1969,12 @@ public class UserModelImpl extends BaseModelImpl<User> implements UserModel {
 		return sb.toString();
 	}
 
-	private static final ClassLoader _classLoader = User.class.getClassLoader();
-	private static final Class<?>[] _escapedModelInterfaces = new Class[] {
-		User.class, ModelWrapper.class
-	};
+	private static class EscapedModelProxyProviderFunctionHolder {
+
+		private static final Function<InvocationHandler, User>
+			_escapedModelProxyProviderFunction = _getProxyProviderFunction();
+
+	}
 
 	private long _mvccVersion;
 	private String _uuid;

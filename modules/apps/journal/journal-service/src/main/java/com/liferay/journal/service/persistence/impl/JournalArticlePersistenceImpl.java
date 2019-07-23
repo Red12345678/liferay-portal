@@ -33,11 +33,10 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -54,7 +53,6 @@ import java.lang.reflect.InvocationHandler;
 
 import java.sql.Timestamp;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -3964,9 +3962,7 @@ public class JournalArticlePersistenceImpl
 					DDMStructureKeies[i], "");
 			}
 
-			DDMStructureKeies = ArrayUtil.unique(DDMStructureKeies);
-
-			Arrays.sort(DDMStructureKeies);
+			DDMStructureKeies = ArrayUtil.sortedUnique(DDMStructureKeies);
 		}
 
 		if (DDMStructureKeies.length == 1) {
@@ -4198,9 +4194,7 @@ public class JournalArticlePersistenceImpl
 					DDMStructureKeies[i], "");
 			}
 
-			DDMStructureKeies = ArrayUtil.unique(DDMStructureKeies);
-
-			Arrays.sort(DDMStructureKeies);
+			DDMStructureKeies = ArrayUtil.sortedUnique(DDMStructureKeies);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -7040,9 +7034,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		if (statuses.length == 1) {
@@ -7251,9 +7243,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -9155,9 +9145,7 @@ public class JournalArticlePersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -9330,9 +9318,7 @@ public class JournalArticlePersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		if (folderIds.length == 1) {
@@ -9538,9 +9524,7 @@ public class JournalArticlePersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -9675,9 +9659,7 @@ public class JournalArticlePersistenceImpl
 			folderIds = new long[0];
 		}
 		else if (folderIds.length > 1) {
-			folderIds = ArrayUtil.unique(folderIds);
-
-			Arrays.sort(folderIds);
+			folderIds = ArrayUtil.sortedUnique(folderIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -15843,9 +15825,7 @@ public class JournalArticlePersistenceImpl
 				layoutUuids[i] = Objects.toString(layoutUuids[i], "");
 			}
 
-			layoutUuids = ArrayUtil.unique(layoutUuids);
-
-			Arrays.sort(layoutUuids);
+			layoutUuids = ArrayUtil.sortedUnique(layoutUuids);
 		}
 
 		StringBundler query = new StringBundler();
@@ -16039,9 +16019,7 @@ public class JournalArticlePersistenceImpl
 				layoutUuids[i] = Objects.toString(layoutUuids[i], "");
 			}
 
-			layoutUuids = ArrayUtil.unique(layoutUuids);
-
-			Arrays.sort(layoutUuids);
+			layoutUuids = ArrayUtil.sortedUnique(layoutUuids);
 		}
 
 		if (layoutUuids.length == 1) {
@@ -16279,9 +16257,7 @@ public class JournalArticlePersistenceImpl
 				layoutUuids[i] = Objects.toString(layoutUuids[i], "");
 			}
 
-			layoutUuids = ArrayUtil.unique(layoutUuids);
-
-			Arrays.sort(layoutUuids);
+			layoutUuids = ArrayUtil.sortedUnique(layoutUuids);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -16448,9 +16424,7 @@ public class JournalArticlePersistenceImpl
 				layoutUuids[i] = Objects.toString(layoutUuids[i], "");
 			}
 
-			layoutUuids = ArrayUtil.unique(layoutUuids);
-
-			Arrays.sort(layoutUuids);
+			layoutUuids = ArrayUtil.sortedUnique(layoutUuids);
 		}
 
 		StringBundler query = new StringBundler();
@@ -20902,9 +20876,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		if (statuses.length == 1) {
@@ -21132,9 +21104,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -23151,9 +23121,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -23337,9 +23305,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		if (statuses.length == 1) {
@@ -23559,9 +23525,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -23708,9 +23672,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -28537,9 +28499,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -28736,9 +28696,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		if (statuses.length == 1) {
@@ -28984,9 +28942,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -29159,9 +29115,7 @@ public class JournalArticlePersistenceImpl
 			statuses = new int[0];
 		}
 		else if (statuses.length > 1) {
-			statuses = ArrayUtil.unique(statuses);
-
-			Arrays.sort(statuses);
+			statuses = ArrayUtil.sortedUnique(statuses);
 		}
 
 		StringBundler query = new StringBundler();
@@ -32887,7 +32841,7 @@ public class JournalArticlePersistenceImpl
 
 		journalArticle.setUuid(uuid);
 
-		journalArticle.setCompanyId(companyProvider.getCompanyId());
+		journalArticle.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return journalArticle;
 	}
@@ -35351,9 +35305,6 @@ public class JournalArticlePersistenceImpl
 	}
 
 	private boolean _columnBitmaskEnabled;
-
-	@Reference(service = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@Reference
 	protected EntityCache entityCache;

@@ -20,7 +20,9 @@ import com.liferay.exportimport.test.util.lar.BaseStagedModelDataHandlerTestCase
 import com.liferay.fragment.model.FragmentCollection;
 import com.liferay.fragment.model.FragmentEntry;
 import com.liferay.fragment.model.FragmentEntryLink;
+import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.fragment.service.FragmentEntryLinkLocalServiceUtil;
+import com.liferay.fragment.util.FragmentEntryTestUtil;
 import com.liferay.fragment.util.FragmentTestUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -32,6 +34,7 @@ import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.ServiceContextTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
 import com.liferay.portal.kernel.util.PortalUtil;
+import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.test.LayoutTestUtil;
 
@@ -89,8 +92,41 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 			fragmentEntryLink.getFragmentEntryId(),
 			PortalUtil.getClassNameId(Layout.class),
 			fragmentEntryLink.getClassPK(), "css", "html", "js",
-			StringPool.BLANK, fragmentEntryLink.getPosition() + 1,
-			serviceContext);
+			fragmentEntryLink.getConfiguration(),
+			fragmentEntryLink.getEditableValues(),
+			fragmentEntryLink.getNamespace(),
+			fragmentEntryLink.getPosition() + 1, serviceContext);
+
+		try {
+			exportImportStagedModel(stagedModel);
+		}
+		finally {
+			ExportImportThreadLocal.setPortletImportInProcess(false);
+		}
+
+		StagedModel importedStagedModel = getStagedModel(
+			stagedModel.getUuid(), liveGroup);
+
+		Assert.assertNotNull(importedStagedModel);
+
+		validateImportedStagedModel(stagedModel, importedStagedModel);
+	}
+
+	@Test
+	public void testStageFragmentEntryLinkWithNoFragmentEntry()
+		throws Exception {
+
+		ServiceContext serviceContext =
+			ServiceContextTestUtil.getServiceContext(
+				stagingGroup.getGroupId(), TestPropsValues.getUserId());
+
+		StagedModel stagedModel =
+			_fragmentEntryLinkLocalService.addFragmentEntryLink(
+				TestPropsValues.getUserId(), stagingGroup.getGroupId(), 0, 0,
+				PortalUtil.getClassNameId(Layout.class),
+				stagingGroup.getDefaultPublicPlid(), StringPool.BLANK, "html",
+				StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
+				StringPool.BLANK, 0, StringPool.BLANK, serviceContext);
 
 		try {
 			exportImportStagedModel(stagedModel);
@@ -116,7 +152,7 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 		FragmentCollection fragmentCollection =
 			FragmentTestUtil.addFragmentCollection(group.getGroupId());
 
-		FragmentEntry fragmentEntry = FragmentTestUtil.addFragmentEntry(
+		FragmentEntry fragmentEntry = FragmentEntryTestUtil.addFragmentEntry(
 			fragmentCollection.getFragmentCollectionId());
 
 		return FragmentTestUtil.addFragmentEntryLink(
@@ -153,8 +189,14 @@ public class FragmentEntryLinkStagedModelDataHandlerTest
 		Assert.assertEquals(
 			importedFragmentEntryLink.getJs(), fragmentEntryLink.getJs());
 		Assert.assertEquals(
+			importedFragmentEntryLink.getConfiguration(),
+			fragmentEntryLink.getConfiguration());
+		Assert.assertEquals(
 			importedFragmentEntryLink.getPosition(),
 			fragmentEntryLink.getPosition());
 	}
+
+	@Inject
+	private FragmentEntryLinkLocalService _fragmentEntryLinkLocalService;
 
 }

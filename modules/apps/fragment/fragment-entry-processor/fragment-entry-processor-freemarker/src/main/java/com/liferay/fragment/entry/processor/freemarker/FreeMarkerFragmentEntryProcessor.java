@@ -19,12 +19,19 @@ import com.liferay.fragment.exception.FragmentEntryContentException;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.processor.FragmentEntryProcessor;
 import com.liferay.fragment.processor.FragmentEntryProcessorContext;
+import com.liferay.fragment.util.FragmentEntryConfigUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
+import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.template.StringTemplateResource;
 import com.liferay.portal.kernel.template.Template;
 import com.liferay.portal.kernel.template.TemplateConstants;
@@ -32,9 +39,16 @@ import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateManager;
 import com.liferay.portal.kernel.template.TemplateManagerUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.segments.constants.SegmentsConstants;
 
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -48,6 +62,13 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class FreeMarkerFragmentEntryProcessor
 	implements FragmentEntryProcessor {
+
+	@Override
+	public JSONObject getDefaultEditableValuesJSONObject(
+		String html, String configuration) {
+
+		return JSONFactoryUtil.createJSONObject();
+	}
 
 	@Override
 	public String processFragmentEntryLinkHTML(
@@ -89,14 +110,24 @@ public class FreeMarkerFragmentEntryProcessor
 
 		Template template = TemplateManagerUtil.getTemplate(
 			TemplateConstants.LANG_TYPE_FTL,
-			new StringTemplateResource("template_id", "[#ftl]\n" + html),
-			false);
+			new StringTemplateResource("template_id", "[#ftl]\n" + html), true);
 
 		template.put(TemplateConstants.WRITER, unsyncStringWriter);
 
 		TemplateManager templateManager =
 			TemplateManagerUtil.getTemplateManager(
 				TemplateConstants.LANG_TYPE_FTL);
+
+		Map<String, Object> contextObjects = new HashMap<>();
+
+		contextObjects.put(
+			"configuration",
+			_getConfigurationJSONObject(
+				fragmentEntryLink.getConfiguration(),
+				fragmentEntryLink.getEditableValues(),
+				fragmentEntryProcessorContext.getSegmentsExperienceIds()));
+
+		templateManager.addContextObjects(template, contextObjects);
 
 		templateManager.addTaglibSupport(
 			template, fragmentEntryProcessorContext.getHttpServletRequest(),
@@ -121,23 +152,56 @@ public class FreeMarkerFragmentEntryProcessor
 	}
 
 	@Override
-	public String processFragmentEntryLinkHTML(
-		FragmentEntryLink fragmentEntryLink, String html, String mode,
-		Locale locale, long[] segmentsExperienceIds, long previewClassPK,
-		int previewType) {
+	public void validateFragmentEntryHTML(String html, String configuration)
+		throws PortalException {
 
-		return html;
-	}
+		FreeMarkerFragmentEntryProcessorConfiguration
+			freeMarkerFragmentEntryProcessorConfiguration =
+				_configurationProvider.getCompanyConfiguration(
+					FreeMarkerFragmentEntryProcessorConfiguration.class,
+					CompanyThreadLocal.getCompanyId());
 
-	@Override
-	public void validateFragmentEntryHTML(String html) throws PortalException {
+		if (!freeMarkerFragmentEntryProcessorConfiguration.enable()) {
+			return;
+		}
+
 		Template template = TemplateManagerUtil.getTemplate(
 			TemplateConstants.LANG_TYPE_FTL,
-			new StringTemplateResource("template_id", "[#ftl]\n" + html),
-			false);
+			new StringTemplateResource("template_id", "[#ftl]\n" + html), true);
 
 		try {
-			template.processTemplate(new UnsyncStringWriter());
+			HttpServletRequest httpServletRequest = null;
+			HttpServletResponse httpServletResponse = null;
+
+			ServiceContext serviceContext =
+				ServiceContextThreadLocal.getServiceContext();
+
+			if (serviceContext != null) {
+				httpServletRequest = serviceContext.getRequest();
+				httpServletResponse = serviceContext.getResponse();
+			}
+
+			if ((httpServletRequest != null) && (httpServletResponse != null)) {
+				TemplateManager templateManager =
+					TemplateManagerUtil.getTemplateManager(
+						TemplateConstants.LANG_TYPE_FTL);
+
+				Map<String, Object> contextObjects = new HashMap<>();
+
+				contextObjects.put(
+					"configuration",
+					FragmentEntryConfigUtil.
+						getConfigurationDefaultValuesJSONObject(configuration));
+
+				templateManager.addContextObjects(template, contextObjects);
+
+				templateManager.addTaglibSupport(
+					template, httpServletRequest, httpServletResponse);
+
+				template.prepare(httpServletRequest);
+
+				template.processTemplate(new UnsyncStringWriter());
+			}
 		}
 		catch (TemplateException te) {
 			ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
@@ -148,6 +212,70 @@ public class FreeMarkerFragmentEntryProcessor
 
 			throw new FragmentEntryContentException(message, te);
 		}
+	}
+
+	private JSONObject _getConfigurationJSONObject(
+			String configuration, String editableValues,
+			long[] segmentsExperienceIds)
+		throws JSONException {
+
+		JSONObject configurationDefaultValuesJSONObject =
+			FragmentEntryConfigUtil.getConfigurationDefaultValuesJSONObject(
+				configuration);
+
+		if (configurationDefaultValuesJSONObject == null) {
+			return JSONFactoryUtil.createJSONObject();
+		}
+
+		JSONObject editableValuesJSONObject = JSONFactoryUtil.createJSONObject(
+			editableValues);
+
+		Class<?> clazz = getClass();
+
+		String className = clazz.getName();
+
+		JSONObject configurationValuesJSONObject =
+			editableValuesJSONObject.getJSONObject(className);
+
+		if (configurationValuesJSONObject == null) {
+			return configurationDefaultValuesJSONObject;
+		}
+
+		long segmentsExperienceId =
+			SegmentsConstants.SEGMENTS_EXPERIENCE_ID_DEFAULT;
+
+		if (segmentsExperienceIds.length > 0) {
+			segmentsExperienceId = segmentsExperienceIds[0];
+		}
+
+		JSONObject configurationJSONObject =
+			configurationValuesJSONObject.getJSONObject(
+				SegmentsConstants.SEGMENTS_EXPERIENCE_ID_PREFIX +
+					segmentsExperienceId);
+
+		if (configurationJSONObject == null) {
+			return configurationDefaultValuesJSONObject;
+		}
+
+		Iterator<String> iterator = configurationDefaultValuesJSONObject.keys();
+
+		while (iterator.hasNext()) {
+			String key = iterator.next();
+
+			Object object = configurationJSONObject.get(key);
+
+			if (Validator.isNull(object)) {
+				continue;
+			}
+
+			configurationDefaultValuesJSONObject.put(
+				key,
+				FragmentEntryConfigUtil.getFieldValue(
+					configuration, key,
+					configurationJSONObject.getString(key)));
+		}
+
+		return configurationDefaultValuesJSONObject;
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
