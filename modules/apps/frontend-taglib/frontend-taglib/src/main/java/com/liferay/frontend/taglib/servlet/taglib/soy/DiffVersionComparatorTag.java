@@ -77,6 +77,10 @@ public class DiffVersionComparatorTag extends ComponentRendererTag {
 
 		diffVersionJSONObject.put("sourceURL", sourceURL.toString());
 
+		if (Validator.isNotNull(_languageId)) {
+			targetURL.setParameter("languageId", _languageId);
+		}
+
 		targetURL.setParameter("targetVersion", diffVersionString);
 
 		diffVersionJSONObject.put("targetURL", targetURL.toString());
@@ -105,8 +109,6 @@ public class DiffVersionComparatorTag extends ComponentRendererTag {
 	@Override
 	public int doStartTag() {
 		if (Validator.isNotNull(_languageId)) {
-			_portletURL.setParameter("languageId", _languageId);
-
 			_resourceURL.setParameter("languageId", _languageId);
 		}
 

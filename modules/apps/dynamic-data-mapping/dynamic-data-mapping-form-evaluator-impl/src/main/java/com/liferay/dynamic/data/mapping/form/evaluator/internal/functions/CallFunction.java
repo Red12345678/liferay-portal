@@ -295,7 +295,9 @@ public class CallFunction extends BaseDDMFormRuleFunction {
 				String value = ddmDataProviderResponseOutput.getValue(
 					String.class);
 
-				setDDMFormFieldValue(ddmFormFieldName, value);
+				if (Validator.isNull(getDDMFormFieldValue(ddmFormFieldName))) {
+					setDDMFormFieldValue(ddmFormFieldName, value);
+				}
 			}
 		}
 	}

@@ -99,6 +99,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>SITE_WRAPPER</td>
+	<td>//div[contains(@id,'wrapper')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>USER_NAME_HEADER</td>
 	<td>//a[contains(@title,'Go to')]/h1 | //div[@id='heading']//div[contains(@class,'site-name')]</td>
 	<td></td>
@@ -290,6 +295,11 @@
 	<td>PAGE_3_STAGING_LIVE</td>
 	<td>//ul/li[@id='layout_3']/a</td>
 	<td></td>
+</tr>
+<tr>
+	<td>PAGE_4</td>
+	<td>//div[contains(@id,'navbar')]/ul/li[4]/a</td>
+	<td>4th Page</td>
 </tr>
 <tr>
 	<td>PAGE_TEMPLATE_3</td>

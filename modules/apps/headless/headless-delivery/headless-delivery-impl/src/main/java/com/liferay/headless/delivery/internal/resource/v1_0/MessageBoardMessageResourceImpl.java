@@ -14,12 +14,16 @@
 
 package com.liferay.headless.delivery.internal.resource.v1_0;
 
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.headless.common.spi.resource.SPIRatingResource;
 import com.liferay.headless.common.spi.service.context.ServiceContextUtil;
 import com.liferay.headless.delivery.dto.v1_0.MessageBoardMessage;
 import com.liferay.headless.delivery.dto.v1_0.Rating;
 import com.liferay.headless.delivery.dto.v1_0.converter.DefaultDTOConverterContext;
 import com.liferay.headless.delivery.internal.dto.v1_0.converter.MessageBoardMessageDTOConverter;
+import com.liferay.headless.delivery.internal.dto.v1_0.util.CustomFieldsUtil;
+import com.liferay.headless.delivery.internal.dto.v1_0.util.EntityFieldsUtil;
 import com.liferay.headless.delivery.internal.dto.v1_0.util.RatingUtil;
 import com.liferay.headless.delivery.internal.odata.entity.v1_0.MessageBoardMessageEntityModel;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardMessageResource;
@@ -28,7 +32,6 @@ import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.service.MBMessageService;
 import com.liferay.message.boards.service.MBThreadLocalService;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
@@ -45,10 +48,12 @@ import com.liferay.portal.vulcan.resource.EntityModelResource;
 import com.liferay.portal.vulcan.util.SearchUtil;
 import com.liferay.ratings.kernel.service.RatingsEntryLocalService;
 
+import java.io.Serializable;
+
 import java.util.Collections;
+import java.util.Map;
 
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -82,7 +87,11 @@ public class MessageBoardMessageResourceImpl
 
 	@Override
 	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
-		return _entityModel;
+		return new MessageBoardMessageEntityModel(
+			EntityFieldsUtil.getEntityFields(
+				_portal.getClassNameId(MBMessage.class.getName()),
+				contextCompany.getCompanyId(), _expandoColumnLocalService,
+				_expandoTableLocalService));
 	}
 
 	@Override
@@ -192,6 +201,7 @@ public class MessageBoardMessageResourceImpl
 			messageBoardMessageId, headline,
 			messageBoardMessage.getArticleBody(),
 			ServiceContextUtil.createServiceContext(
+				_getExpandoBridgeAttributes(messageBoardMessage),
 				mbMessage.getGroupId(),
 				messageBoardMessage.getViewableByAsString()));
 
@@ -233,12 +243,22 @@ public class MessageBoardMessageResourceImpl
 			GetterUtil.getBoolean(messageBoardMessage.getAnonymous()), 0.0,
 			false,
 			ServiceContextUtil.createServiceContext(
+				_getExpandoBridgeAttributes(messageBoardMessage),
 				parentMBMessage.getGroupId(),
 				messageBoardMessage.getViewableByAsString()));
 
 		_updateAnswer(mbMessage, messageBoardMessage);
 
 		return _toMessageBoardMessage(mbMessage);
+	}
+
+	private Map<String, Serializable> _getExpandoBridgeAttributes(
+		MessageBoardMessage messageBoardMessage) {
+
+		return CustomFieldsUtil.toMap(
+			MBMessage.class.getName(), contextCompany.getCompanyId(),
+			messageBoardMessage.getCustomFields(),
+			contextAcceptLanguage.getPreferredLocale());
 	}
 
 	private Page<MessageBoardMessage> _getMessageBoardMessagesPage(
@@ -265,9 +285,8 @@ public class MessageBoardMessageResourceImpl
 			filter, MBMessage.class, search, pagination,
 			queryConfig -> queryConfig.setSelectedFieldNames(
 				Field.ENTRY_CLASS_PK),
-			searchContext -> {
-				searchContext.setCompanyId(contextCompany.getCompanyId());
-			},
+			searchContext -> searchContext.setCompanyId(
+				contextCompany.getCompanyId()),
 			document -> _toMessageBoardMessage(
 				_mbMessageService.getMessage(
 					GetterUtil.getLong(document.get(Field.ENTRY_CLASS_PK)))),
@@ -279,7 +298,7 @@ public class MessageBoardMessageResourceImpl
 			MBMessage.class.getName(), _ratingsEntryLocalService,
 			ratingsEntry -> RatingUtil.toRating(
 				_portal, ratingsEntry, _userLocalService),
-			_user);
+			contextUser);
 	}
 
 	private MessageBoardMessage _toMessageBoardMessage(MBMessage mbMessage)
@@ -303,8 +322,11 @@ public class MessageBoardMessageResourceImpl
 		}
 	}
 
-	private static final EntityModel _entityModel =
-		new MessageBoardMessageEntityModel();
+	@Reference
+	private ExpandoColumnLocalService _expandoColumnLocalService;
+
+	@Reference
+	private ExpandoTableLocalService _expandoTableLocalService;
 
 	@Reference
 	private MBMessageService _mbMessageService;
@@ -320,9 +342,6 @@ public class MessageBoardMessageResourceImpl
 
 	@Reference
 	private RatingsEntryLocalService _ratingsEntryLocalService;
-
-	@Context
-	private User _user;
 
 	@Reference
 	private UserLocalService _userLocalService;

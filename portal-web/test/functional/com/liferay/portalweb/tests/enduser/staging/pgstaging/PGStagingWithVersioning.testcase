@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Staging";
@@ -11,33 +12,24 @@ definition {
 
 		JSONGroup.addGroup(groupName = "Site Name");
 
-		ProductMenu.gotoSite(site = "Site Name");
-
-		ProductMenu.gotoPortlet(
-			category = "Build",
-			panel = "Site Administration",
-			portlet = "Pages"
-		);
-
-		SitePages.addPublicPage(pageName = "Staging Test Page");
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Staging Test Page");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging"
-		);
+			portlet = "Staging");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 	}
 
 	tearDown {
@@ -55,8 +47,7 @@ definition {
 	test AddEventRepeatDaily {
 		Staging.addEventRepeatDaily(
 			scheduleTitleName = "Event Daily Name",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 	}
 
 	@priority = "5"
@@ -69,8 +60,7 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Staging.viewPageVariationPG(pageVariationName = "Page Variation Name");
 
@@ -79,18 +69,15 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.gotoPageMenuItem(
 			menuItem = "Configure",
-			pageName = "Staging Test Page"
-		);
+			pageName = "Staging Test Page");
 
 		Page.addFriendlyURLLocalizedPG(
 			friendlyUrlLocalized = "de-DE",
-			localizedFriendlyURL = "/german"
-		);
+			localizedFriendlyURL = "/german");
 
 		PortletEntry.inputName(name = "German Staging Test Page");
 
@@ -99,41 +86,39 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.gotoPageMenuItem(
 			menuItem = "Configure",
-			pageName = "Staging Test Page"
-		);
+			pageName = "Staging Test Page");
 
-		Page.viewPageFriendlyURLPG(friendlyUrlLocalized = "de_DE", pageName = "german");
+		Page.viewPageFriendlyURLPG(
+			friendlyUrlLocalized = "de_DE",
+			pageName = "german");
 	}
 
 	@priority = "5"
 	test AddPageWithPageVersioningEnabled {
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoStagingSite();
 
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Staging Page Versioning");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Page Versioning",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "Hello World");
 
 		Staging.markAsReadyForPublication();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -143,25 +128,20 @@ definition {
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Page Versioning",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
 		Portlet.viewSpecificPG(portletName = "Hello World");
 	}
 
 	@priority = "5"
 	test AddSitePagesVariation {
-		Staging.addSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name"
-		);
+		Staging.addSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
-			siteName = "Site Name"
-		);
+			siteName = "Site Name");
 
-		Staging.viewSitePagesVariationPG(
-			sitePagesVariationName = "Site Pages Variation Name"
-		);
+		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name");
 	}
+
 }

@@ -17,7 +17,6 @@ package com.liferay.commerce.price.list.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.commerce.price.list.model.CommercePriceListAccountRel;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -33,12 +32,12 @@ import java.util.Date;
  * The cache model class for representing CommercePriceListAccountRel in entity cache.
  *
  * @author Alessio Antonio Rendina
- * @see CommercePriceListAccountRel
  * @generated
  */
 @ProviderType
-public class CommercePriceListAccountRelCacheModel implements CacheModel<CommercePriceListAccountRel>,
-	Externalizable {
+public class CommercePriceListAccountRelCacheModel
+	implements CacheModel<CommercePriceListAccountRel>, Externalizable {
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -49,10 +48,14 @@ public class CommercePriceListAccountRelCacheModel implements CacheModel<Commerc
 			return false;
 		}
 
-		CommercePriceListAccountRelCacheModel commercePriceListAccountRelCacheModel =
-			(CommercePriceListAccountRelCacheModel)obj;
+		CommercePriceListAccountRelCacheModel
+			commercePriceListAccountRelCacheModel =
+				(CommercePriceListAccountRelCacheModel)obj;
 
-		if (commercePriceListAccountRelId == commercePriceListAccountRelCacheModel.commercePriceListAccountRelId) {
+		if (commercePriceListAccountRelId ==
+				commercePriceListAccountRelCacheModel.
+					commercePriceListAccountRelId) {
+
 			return true;
 		}
 
@@ -66,14 +69,12 @@ public class CommercePriceListAccountRelCacheModel implements CacheModel<Commerc
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
 		sb.append(", commercePriceListAccountRelId=");
 		sb.append(commercePriceListAccountRelId);
-		sb.append(", groupId=");
-		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
 		sb.append(", userId=");
@@ -99,7 +100,8 @@ public class CommercePriceListAccountRelCacheModel implements CacheModel<Commerc
 
 	@Override
 	public CommercePriceListAccountRel toEntityModel() {
-		CommercePriceListAccountRelImpl commercePriceListAccountRelImpl = new CommercePriceListAccountRelImpl();
+		CommercePriceListAccountRelImpl commercePriceListAccountRelImpl =
+			new CommercePriceListAccountRelImpl();
 
 		if (uuid == null) {
 			commercePriceListAccountRelImpl.setUuid("");
@@ -108,8 +110,8 @@ public class CommercePriceListAccountRelCacheModel implements CacheModel<Commerc
 			commercePriceListAccountRelImpl.setUuid(uuid);
 		}
 
-		commercePriceListAccountRelImpl.setCommercePriceListAccountRelId(commercePriceListAccountRelId);
-		commercePriceListAccountRelImpl.setGroupId(groupId);
+		commercePriceListAccountRelImpl.setCommercePriceListAccountRelId(
+			commercePriceListAccountRelId);
 		commercePriceListAccountRelImpl.setCompanyId(companyId);
 		commercePriceListAccountRelImpl.setUserId(userId);
 
@@ -131,20 +133,21 @@ public class CommercePriceListAccountRelCacheModel implements CacheModel<Commerc
 			commercePriceListAccountRelImpl.setModifiedDate(null);
 		}
 		else {
-			commercePriceListAccountRelImpl.setModifiedDate(new Date(
-					modifiedDate));
+			commercePriceListAccountRelImpl.setModifiedDate(
+				new Date(modifiedDate));
 		}
 
 		commercePriceListAccountRelImpl.setCommerceAccountId(commerceAccountId);
-		commercePriceListAccountRelImpl.setCommercePriceListId(commercePriceListId);
+		commercePriceListAccountRelImpl.setCommercePriceListId(
+			commercePriceListId);
 		commercePriceListAccountRelImpl.setOrder(order);
 
 		if (lastPublishDate == Long.MIN_VALUE) {
 			commercePriceListAccountRelImpl.setLastPublishDate(null);
 		}
 		else {
-			commercePriceListAccountRelImpl.setLastPublishDate(new Date(
-					lastPublishDate));
+			commercePriceListAccountRelImpl.setLastPublishDate(
+				new Date(lastPublishDate));
 		}
 
 		commercePriceListAccountRelImpl.resetOriginalValues();
@@ -157,8 +160,6 @@ public class CommercePriceListAccountRelCacheModel implements CacheModel<Commerc
 		uuid = objectInput.readUTF();
 
 		commercePriceListAccountRelId = objectInput.readLong();
-
-		groupId = objectInput.readLong();
 
 		companyId = objectInput.readLong();
 
@@ -176,8 +177,7 @@ public class CommercePriceListAccountRelCacheModel implements CacheModel<Commerc
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		if (uuid == null) {
 			objectOutput.writeUTF("");
 		}
@@ -186,8 +186,6 @@ public class CommercePriceListAccountRelCacheModel implements CacheModel<Commerc
 		}
 
 		objectOutput.writeLong(commercePriceListAccountRelId);
-
-		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(companyId);
 
@@ -213,7 +211,6 @@ public class CommercePriceListAccountRelCacheModel implements CacheModel<Commerc
 
 	public String uuid;
 	public long commercePriceListAccountRelId;
-	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
@@ -223,4 +220,5 @@ public class CommercePriceListAccountRelCacheModel implements CacheModel<Commerc
 	public long commercePriceListId;
 	public int order;
 	public long lastPublishDate;
+
 }

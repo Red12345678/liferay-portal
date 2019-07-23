@@ -443,8 +443,6 @@ public class PluginsSummaryBuilder {
 						_latestHASH;
 
 				relengChangeLogEntries.add(range);
-
-				continue;
 			}
 		}
 

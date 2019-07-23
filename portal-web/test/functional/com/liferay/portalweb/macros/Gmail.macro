@@ -1,12 +1,11 @@
 definition {
+
 	macro deleteSpecificMail {
 		for (var gmailMessageTitle : list "${gmailMessageTitleList}") {
 			var key_gmailMessageTitle = "${gmailMessageTitle}";
 
 			if (IsElementPresent(locator1 = "Gmail#GMAIL_HTML_MODE_MAIL_TABLE_SPECIFIC_MESSAGE_TITLE_CHECKBOX")) {
-				Check(
-					locator1 = "Gmail#GMAIL_HTML_MODE_MAIL_TABLE_SPECIFIC_MESSAGE_TITLE_CHECKBOX"
-				);
+				Check(locator1 = "Gmail#GMAIL_HTML_MODE_MAIL_TABLE_SPECIFIC_MESSAGE_TITLE_CHECKBOX");
 
 				Click(locator1 = "Gmail#GMAIL_HTML_MODE_MAIL_TABLE_DELETE_BUTTON");
 
@@ -16,9 +15,7 @@ definition {
 	}
 
 	macro gotoHtmlMode {
-		Navigator.openSpecificURL(
-			url = "https://mail.google.com/mail/?ui=html&amp;zy=h"
-		);
+		Navigator.openSpecificURL(url = "https://mail.google.com/mail/?ui=html&amp;zy=h");
 
 		if (IsElementPresent(locator1 = "Gmail#GMAIL_HTML_MODE_CONFIRMATION")) {
 			Click(locator1 = "Gmail#GMAIL_HTML_MODE_CONFIRMATION");
@@ -32,13 +29,11 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Gmail#GMAIL_HTML_MODE_MAIL_TABLE_USER_NAME",
-			value1 = "${emailFromUserName}"
-		);
+			value1 = "${emailFromUserName}");
 
 		AssertClick.assertPartialTextClickAt(
 			locator1 = "Gmail#GMAIL_HTML_MODE_MAIL_TABLE_MESSAGE_TITLE",
-			value1 = "${gmailMessageTitle}"
-		);
+			value1 = "${gmailMessageTitle}");
 
 		Pause(locator1 = "3000");
 	}
@@ -52,12 +47,16 @@ definition {
 
 		if ((IsElementNotPresent(locator1 = "Gmail#GMAIL_NORMAL_MODE_USER_SCREENNAME")) && (IsElementNotPresent(locator1 = "Gmail#GMAIL_HTML_MODE_USER_SCREENNAME"))) {
 			if (IsElementPresent(locator1 = "Gmail#LOGIN_EMAIL_FIELD")) {
-				Type(locator1 = "Gmail#LOGIN_EMAIL_FIELD", value1 = "${userEmailAddress}");
+				Type(
+					locator1 = "Gmail#LOGIN_EMAIL_FIELD",
+					value1 = "${userEmailAddress}");
 
 				Click(locator1 = "Gmail#LOGIN_NEXT_BUTTON");
 			}
 
-			Type(locator1 = "Gmail#LOGIN_PASSWORD_FIELD", value1 = "${userPassword}");
+			Type(
+				locator1 = "Gmail#LOGIN_PASSWORD_FIELD",
+				value1 = "${userPassword}");
 
 			if (IsElementPresent(locator1 = "Gmail#LOGIN_SIGN_IN_BUTTON")) {
 				Check(locator1 = "Gmail#LOGIN_STAY_SIGNED_IN_CHECKBOX");
@@ -100,11 +99,15 @@ definition {
 			Click(locator1 = "Gmail#USE_ANOTHER_ACCOUNT");
 		}
 
-		Type(locator1 = "Gmail#LOGIN_EMAIL_FIELD", value1 = "${userEmailAddress}");
+		Type(
+			locator1 = "Gmail#LOGIN_EMAIL_FIELD",
+			value1 = "${userEmailAddress}");
 
 		Click(locator1 = "Gmail#LOGIN_NEXT_BUTTON");
 
-		Type(locator1 = "Gmail#LOGIN_PASSWORD_FIELD", value1 = "${userPassword}");
+		Type(
+			locator1 = "Gmail#LOGIN_PASSWORD_FIELD",
+			value1 = "${userPassword}");
 
 		if (IsElementPresent(locator1 = "Gmail#LOGIN_SIGN_IN_BUTTON")) {
 			Check(locator1 = "Gmail#LOGIN_STAY_SIGNED_IN_CHECKBOX");
@@ -128,8 +131,7 @@ definition {
 
 		AssertClick(
 			locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_BODY_CONTINUE_READING_BUTTON",
-			value1 = "CONTINUE READING"
-		);
+			value1 = "CONTINUE READING");
 
 		if (isSet(contentTitle)) {
 			SelectWindow(locator1 = "title=- ${contentTitle} - ${siteName}");
@@ -147,8 +149,7 @@ definition {
 
 		AssertClick.assertPartialTextClickAt(
 			locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_BODY_LINK",
-			value1 = "${pageNameURL}"
-		);
+			value1 = "${pageNameURL}");
 
 		if (isSet(contentTitle)) {
 			SelectWindow(locator1 = "title=${contentTitle} - ${pageName} - ${siteName}");
@@ -166,33 +167,28 @@ definition {
 	macro replyMail {
 		Type(
 			locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_QUICK_REPLY_FIELD",
-			value1 = "${gmailReplyMessage}"
-		);
+			value1 = "${gmailReplyMessage}");
 
 		AssertClick(
 			locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_QUICK_REPLY_SEND_BUTTON",
-			value1 = "Send"
-		);
+			value1 = "Send");
 
 		AssertTextEquals(
 			locator1 = "Gmail#SUCCESS_MESSAGE",
-			value1 = "Your message has been sent."
-		);
+			value1 = "Your message has been sent.");
 	}
 
 	macro viewMail {
 		Gmail.gotoMail(
 			emailFromUserName = "${emailFromUserName}",
 			gmailAssetType = "${gmailAssetType}",
-			gmailMessageTitle = "${gmailMessageTitle}"
-		);
+			gmailMessageTitle = "${gmailMessageTitle}");
 
 		var key_gmailAssetType = "${gmailAssetType}";
 
 		AssertTextEquals(
 			locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_TITLE",
-			value1 = "${gmailMessageTitle}"
-		);
+			value1 = "${gmailMessageTitle}");
 
 		if (IsElementPresent(locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_SHOW_QUOTED_TEXT_LINK")) {
 			Click(locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_SHOW_QUOTED_TEXT_LINK");
@@ -200,26 +196,23 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_BODY_GREETING",
-			value1 = "${gmailMessageBody}"
-		);
+			value1 = "${gmailMessageBody}");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_BODY",
-			value1 = "${gmailMessageBody}"
-		);
+			value1 = "${gmailMessageBody}");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_BODY_CLOSING",
-			value1 = "${gmailMessageBody}"
-		);
+			value1 = "${gmailMessageBody}");
 
 		if (isSet(gmailMessageAttachment)) {
 			var key_gmailMessageAttachment = "${gmailMessageAttachment}";
 
 			AssertTextEquals(
 				locator1 = "Gmail#GMAIL_HTML_MODE_MESSAGE_BODY_ATTACHMENT",
-				value1 = "${gmailMessageAttachment}"
-			);
+				value1 = "${gmailMessageAttachment}");
 		}
 	}
+
 }

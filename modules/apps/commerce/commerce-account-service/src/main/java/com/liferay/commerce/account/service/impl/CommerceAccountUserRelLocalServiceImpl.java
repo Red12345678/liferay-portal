@@ -14,6 +14,8 @@
 
 package com.liferay.commerce.account.service.impl;
 
+import com.liferay.commerce.account.exception.CommerceAccountTypeException;
+import com.liferay.commerce.account.model.CommerceAccount;
 import com.liferay.commerce.account.model.CommerceAccountUserRel;
 import com.liferay.commerce.account.service.base.CommerceAccountUserRelLocalServiceBaseImpl;
 import com.liferay.commerce.account.service.persistence.CommerceAccountUserRelPK;
@@ -22,6 +24,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
+import com.liferay.portal.kernel.util.ArrayUtil;
 
 import java.util.List;
 
@@ -37,6 +40,8 @@ public class CommerceAccountUserRelLocalServiceImpl
 			long commerceAccountId, long commerceAccountUserId,
 			ServiceContext serviceContext)
 		throws PortalException {
+
+		validate(commerceAccountId, commerceAccountUserId);
 
 		User user = userLocalService.getUser(serviceContext.getUserId());
 
@@ -73,6 +78,20 @@ public class CommerceAccountUserRelLocalServiceImpl
 
 				commerceAccountUserRelLocalService.addCommerceAccountUserRel(
 					commerceAccountId, user.getUserId(), serviceContext);
+
+				if (!ArrayUtil.contains(
+						user.getGroupIds(), group.getGroupId())) {
+
+					userLocalService.addGroupUsers(
+						group.getGroupId(), new long[] {userId});
+				}
+
+				if (!ArrayUtil.contains(
+						user.getGroupIds(), serviceContext.getScopeGroupId())) {
+
+					userLocalService.addGroupUsers(
+						serviceContext.getScopeGroupId(), new long[] {userId});
+				}
 
 				if (roleIds != null) {
 					userGroupRoleLocalService.addUserGroupRoles(
@@ -116,6 +135,12 @@ public class CommerceAccountUserRelLocalServiceImpl
 
 			commerceAccountUserRelPersistence.remove(commerceAccountUserRelPK);
 		}
+
+		CommerceAccount commerceAccount =
+			commerceAccountLocalService.getCommerceAccount(commerceAccountId);
+
+		userGroupRoleLocalService.deleteUserGroupRoles(
+			userIds, commerceAccount.getCommerceAccountGroupId());
 	}
 
 	@Override
@@ -169,6 +194,42 @@ public class CommerceAccountUserRelLocalServiceImpl
 	public int getCommerceAccountUserRelsCount(long commerceAccountId) {
 		return commerceAccountUserRelPersistence.countByCommerceAccountId(
 			commerceAccountId);
+	}
+
+	protected void validate(long commerceAccountId, long commerceAccountUserId)
+		throws PortalException {
+
+		CommerceAccount commerceAccount =
+			commerceAccountLocalService.getCommerceAccount(commerceAccountId);
+
+		if (commerceAccount.isPersonalAccount()) {
+			CommerceAccountUserRel commerceAccountUserRel =
+				commerceAccountUserRelPersistence.
+					fetchByCommerceAccountId_First(commerceAccountId, null);
+
+			if ((commerceAccountUserRel != null) &&
+				(commerceAccountUserRel.getCommerceAccountUserId() ==
+					commerceAccountUserId)) {
+
+				throw new CommerceAccountTypeException();
+			}
+
+			List<CommerceAccountUserRel> commerceAccountUserRels =
+				commerceAccountUserRelPersistence.findByCommerceAccountUserId(
+					commerceAccountUserId);
+
+			for (CommerceAccountUserRel curCommerceAccountUserRel :
+					commerceAccountUserRels) {
+
+				CommerceAccount curCommerceAccount =
+					commerceAccountLocalService.getCommerceAccount(
+						curCommerceAccountUserRel.getCommerceAccountId());
+
+				if (curCommerceAccount.isPersonalAccount()) {
+					throw new CommerceAccountTypeException();
+				}
+			}
+		}
 	}
 
 }

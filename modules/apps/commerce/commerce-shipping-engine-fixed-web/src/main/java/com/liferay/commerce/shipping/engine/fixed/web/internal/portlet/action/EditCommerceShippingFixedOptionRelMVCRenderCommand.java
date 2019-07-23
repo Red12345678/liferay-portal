@@ -17,11 +17,11 @@ package com.liferay.commerce.shipping.engine.fixed.web.internal.portlet.action;
 import com.liferay.commerce.admin.constants.CommerceAdminPortletKeys;
 import com.liferay.commerce.constants.CommerceConstants;
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
+import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseService;
 import com.liferay.commerce.product.service.CPMeasurementUnitLocalService;
 import com.liferay.commerce.service.CommerceCountryService;
 import com.liferay.commerce.service.CommerceRegionService;
 import com.liferay.commerce.service.CommerceShippingMethodService;
-import com.liferay.commerce.service.CommerceWarehouseService;
 import com.liferay.commerce.shipping.engine.fixed.exception.NoSuchShippingFixedOptionRelException;
 import com.liferay.commerce.shipping.engine.fixed.service.CommerceShippingFixedOptionRelService;
 import com.liferay.commerce.shipping.engine.fixed.service.CommerceShippingFixedOptionService;
@@ -52,7 +52,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + CommerceAdminPortletKeys.COMMERCE_ADMIN,
+		"javax.portlet.name=" + CommerceAdminPortletKeys.COMMERCE_ADMIN_GROUP_INSTANCE,
 		"mvc.command.name=editCommerceShippingFixedOptionRel"
 	},
 	service = MVCRenderCommand.class
@@ -76,7 +76,7 @@ public class EditCommerceShippingFixedOptionRelMVCRenderCommand
 						_commerceCountryService, _commerceCurrencyLocalService,
 						_commerceRegionService, _commerceShippingMethodService,
 						_commerceShippingFixedOptionService,
-						_commerceWarehouseService,
+						_commerceInventoryWarehouseService,
 						_commerceShippingFixedOptionRelService,
 						_cpMeasurementUnitLocalService,
 						_portletResourcePermission, renderRequest,
@@ -116,6 +116,10 @@ public class EditCommerceShippingFixedOptionRelMVCRenderCommand
 	private CommerceCurrencyLocalService _commerceCurrencyLocalService;
 
 	@Reference
+	private CommerceInventoryWarehouseService
+		_commerceInventoryWarehouseService;
+
+	@Reference
 	private CommerceRegionService _commerceRegionService;
 
 	@Reference
@@ -128,9 +132,6 @@ public class EditCommerceShippingFixedOptionRelMVCRenderCommand
 
 	@Reference
 	private CommerceShippingMethodService _commerceShippingMethodService;
-
-	@Reference
-	private CommerceWarehouseService _commerceWarehouseService;
 
 	@Reference
 	private CPMeasurementUnitLocalService _cpMeasurementUnitLocalService;

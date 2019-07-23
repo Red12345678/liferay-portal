@@ -34,6 +34,8 @@ import com.liferay.journal.util.JournalConverter;
 import com.liferay.journal.web.internal.security.permission.resource.JournalArticlePermission;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryServiceUtil;
+import com.liferay.petra.string.StringBundler;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -423,7 +425,7 @@ public class JournalArticleAssetRenderer
 					assetEntry.getClassTypeId());
 
 		if (_isShowDisplayPage(
-				_article, assetDisplayPageEntry,
+				_article, assetDisplayPageEntry, assetEntry,
 				defaultLayoutPageTemplateEntry) &&
 			Validator.isNull(linkToLayoutUuid)) {
 
@@ -436,13 +438,16 @@ public class JournalArticleAssetRenderer
 					group.getGroupId(), layout.isPrivateLayout()),
 				themeDisplay);
 
+			StringBundler sb = new StringBundler(5);
+
+			sb.append(groupFriendlyURL);
+			sb.append(JournalArticleConstants.CANONICAL_URL_SEPARATOR);
+			sb.append(_article.getUrlTitle(themeDisplay.getLocale()));
+			sb.append(StringPool.SLASH);
+			sb.append(_article.getVersion());
+
 			return PortalUtil.addPreservedParameters(
-				themeDisplay,
-				groupFriendlyURL.concat(
-					JournalArticleConstants.CANONICAL_URL_SEPARATOR
-				).concat(
-					_article.getUrlTitle(themeDisplay.getLocale())
-				));
+				themeDisplay, sb.toString());
 		}
 
 		String hitLayoutURL = getHitLayoutURL(
@@ -638,6 +643,7 @@ public class JournalArticleAssetRenderer
 
 	private boolean _isShowDisplayPage(
 		JournalArticle article, AssetDisplayPageEntry assetDisplayPageEntry,
+		AssetEntry assetEntry,
 		LayoutPageTemplateEntry defaultAssetDisplayPageEntry) {
 
 		if (Validator.isNull(article.getLayoutUuid()) &&
@@ -646,13 +652,25 @@ public class JournalArticleAssetRenderer
 			return false;
 		}
 
-		if ((assetDisplayPageEntry != null) &&
-			(Objects.equals(
-				assetDisplayPageEntry.getType(),
-				AssetDisplayPageConstants.TYPE_SPECIFIC) ||
-			 (defaultAssetDisplayPageEntry != null))) {
+		if (assetDisplayPageEntry != null) {
+			if (Objects.equals(
+					assetDisplayPageEntry.getType(),
+					AssetDisplayPageConstants.TYPE_SPECIFIC) ||
+				(defaultAssetDisplayPageEntry != null)) {
 
-			return true;
+				return true;
+			}
+		}
+		else {
+			assetDisplayPageEntry =
+				AssetDisplayPageEntryLocalServiceUtil.
+					fetchAssetDisplayPageEntry(
+						assetEntry.getGroupId(), assetEntry.getClassNameId(),
+						article.getResourcePrimKey());
+
+			if (assetDisplayPageEntry != null) {
+				return true;
+			}
 		}
 
 		return false;

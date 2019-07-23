@@ -1,4 +1,5 @@
 definition {
+
 	macro _gotoAddCollection {
 		if (IsElementPresent(locator1 = "NavNested#NAV_NESTED_PLUS")) {
 			Click(locator1 = "NavNested#NAV_NESTED_PLUS");
@@ -15,8 +16,7 @@ definition {
 
 		Collection.editCollection(
 			collectionDescription = "${collectionDescription}",
-			collectionName = "${collectionName}"
-		);
+			collectionName = "${collectionName}");
 
 		Button.clickSave();
 	}
@@ -24,7 +24,9 @@ definition {
 	macro addFragment {
 		LexiconEntry.gotoAdd();
 
-		AssertTextEquals(locator1 = "Modal#HEADER", value1 = "Add Fragment");
+		AssertTextEquals(
+			locator1 = "Modal#HEADER",
+			value1 = "Add Fragment");
 
 		PortletEntry.inputName(name = "${fragmentName}");
 
@@ -53,7 +55,9 @@ definition {
 	macro importCollectionFromDependenciesFolder {
 		FragmentsAdmin.gotoImportCollection();
 
-		UploadCommonFile(locator1 = "TextInput#FILE", value1 = "${collectionZipFile}");
+		UploadCommonFile(
+			locator1 = "TextInput#FILE",
+			value1 = "${collectionZipFile}");
 
 		Button.click(button = "Import");
 
@@ -69,8 +73,7 @@ definition {
 
 		UploadTempFile(
 			locator1 = "TextInput#FILE",
-			value1 = "${collectionsZipFileName}"
-		);
+			value1 = "${collectionsZipFileName}");
 
 		Button.click(button = "Import");
 
@@ -80,8 +83,7 @@ definition {
 	}
 
 	macro openFragmentsAdmin {
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "group/${siteURLKey}/~/control_panel/manage/-/fragments"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "group/${siteURLKey}/~/control_panel/manage/-/fragments");
 	}
+
 }

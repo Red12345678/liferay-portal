@@ -286,8 +286,18 @@ public class TestTrashHandler implements TrashHandler {
 		return false;
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), replaced by {@link
+	 *             #isDeletable(long)}
+	 */
+	@Deprecated
 	@Override
 	public boolean isDeletable() {
+		return false;
+	}
+
+	@Override
+	public boolean isDeletable(long classPK) {
 		return false;
 	}
 
@@ -301,8 +311,18 @@ public class TestTrashHandler implements TrashHandler {
 		return false;
 	}
 
+	/**
+	 * @deprecated As of Judson (7.1.x), replaced by {@link
+	 *             #isMovable(long)}
+	 */
+	@Deprecated
 	@Override
 	public boolean isMovable() {
+		return false;
+	}
+
+	@Override
+	public boolean isMovable(long classPK) {
 		return false;
 	}
 

@@ -16,21 +16,21 @@ package com.liferay.headless.delivery.resource.v1_0.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.headless.delivery.client.dto.v1_0.MessageBoardAttachment;
-import com.liferay.headless.delivery.client.serdes.v1_0.MessageBoardAttachmentSerDes;
+import com.liferay.headless.delivery.client.http.HttpInvoker;
 import com.liferay.message.boards.model.MBMessage;
 import com.liferay.message.boards.model.MBThread;
 import com.liferay.message.boards.service.MBMessageLocalServiceUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
-import com.liferay.portal.vulcan.multipart.BinaryFile;
-import com.liferay.portal.vulcan.multipart.MultipartBody;
+import com.liferay.portal.kernel.util.FileUtil;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
@@ -60,8 +60,27 @@ public class MessageBoardAttachmentResourceTest
 	}
 
 	@Override
-	protected String[] getAdditionalAssertFieldNames() {
-		return new String[] {"contentUrl", "encodingFormat", "title"};
+	protected void assertValid(
+			MessageBoardAttachment messageBoardAttachment,
+			Map<String, File> multipartFiles)
+		throws Exception {
+
+		Assert.assertEquals(
+			new String(FileUtil.getBytes(multipartFiles.get("file"))),
+			_read(
+				"http://localhost:8080" +
+					messageBoardAttachment.getContentUrl()));
+	}
+
+	@Override
+	protected Map<String, File> getMultipartFiles() throws Exception {
+		Map<String, File> files = new HashMap<>();
+
+		String randomString = RandomTestUtil.randomString();
+
+		files.put("file", FileUtil.createTempFile(randomString.getBytes()));
+
+		return files;
 	}
 
 	@Override
@@ -69,9 +88,10 @@ public class MessageBoardAttachmentResourceTest
 			testDeleteMessageBoardAttachment_addMessageBoardAttachment()
 		throws Exception {
 
-		return invokePostMessageBoardThreadMessageBoardAttachment(
-			_mbThread.getThreadId(),
-			toMultipartBody(randomMessageBoardAttachment()));
+		return messageBoardAttachmentResource.
+			postMessageBoardThreadMessageBoardAttachment(
+				_mbThread.getThreadId(), randomMessageBoardAttachment(),
+				getMultipartFiles());
 	}
 
 	@Override
@@ -79,9 +99,10 @@ public class MessageBoardAttachmentResourceTest
 			testGetMessageBoardAttachment_addMessageBoardAttachment()
 		throws Exception {
 
-		return invokePostMessageBoardThreadMessageBoardAttachment(
-			_mbThread.getThreadId(),
-			toMultipartBody(randomMessageBoardAttachment()));
+		return messageBoardAttachmentResource.
+			postMessageBoardThreadMessageBoardAttachment(
+				_mbThread.getThreadId(), randomMessageBoardAttachment(),
+				getMultipartFiles());
 	}
 
 	@Override
@@ -98,25 +119,16 @@ public class MessageBoardAttachmentResourceTest
 		return _mbThread.getThreadId();
 	}
 
-	@Override
-	protected MultipartBody toMultipartBody(
-		MessageBoardAttachment messageBoardAttachment) {
+	private String _read(String url) throws Exception {
+		HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
 
-		testContentType = "multipart/form-data;boundary=PART";
+		httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
+		httpInvoker.path(url);
+		httpInvoker.userNameAndPassword("test@liferay.com:test");
 
-		Map<String, BinaryFile> binaryFileMap = new HashMap<>();
+		HttpInvoker.HttpResponse httpResponse = httpInvoker.invoke();
 
-		String randomString = RandomTestUtil.randomString();
-
-		binaryFileMap.put(
-			"file",
-			new BinaryFile(
-				testContentType, RandomTestUtil.randomString(),
-				new ByteArrayInputStream(randomString.getBytes()), 0));
-
-		return MultipartBody.of(
-			binaryFileMap, __ -> null,
-			MessageBoardAttachmentSerDes.toMap(messageBoardAttachment));
+		return httpResponse.getContent();
 	}
 
 	private MBThread _mbThread;

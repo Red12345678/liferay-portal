@@ -15,7 +15,7 @@
 package com.liferay.commerce.health.status.web.internal.util;
 
 import com.liferay.commerce.health.status.CommerceHealthStatus;
-import com.liferay.commerce.health.status.web.internal.constants.CommerceHealthStatusConstants;
+import com.liferay.commerce.health.status.constants.CommerceHealthStatusConstants;
 import com.liferay.commerce.product.model.CPMeasurementUnit;
 import com.liferay.commerce.product.service.CPMeasurementUnitLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -86,9 +86,17 @@ public class MeasurementUnitsCommerceHealthStatus
 	}
 
 	@Override
-	public boolean isFixed(long groupId) throws PortalException {
+	public int getType() {
+		return CommerceHealthStatusConstants.
+			COMMERCE_HEALTH_STATUS_TYPE_VIRTUAL_INSTANCE;
+	}
+
+	@Override
+	public boolean isFixed(long companyId, long groupId)
+		throws PortalException {
+
 		List<CPMeasurementUnit> cpMeasurementUnits =
-			_cpMeasurementUnitLocalService.getCPMeasurementUnits(groupId);
+			_cpMeasurementUnitLocalService.getCPMeasurementUnits(companyId);
 
 		return !cpMeasurementUnits.isEmpty();
 	}

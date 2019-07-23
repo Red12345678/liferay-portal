@@ -24,6 +24,7 @@ import com.liferay.headless.commerce.core.dto.v1_0.converter.DTOConverterRegistr
 import com.liferay.headless.commerce.core.dto.v1_0.converter.DefaultDTOConverterContext;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
+import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
@@ -79,20 +80,6 @@ public class OptionResourceImpl extends BaseOptionResourceImpl {
 	}
 
 	@Override
-	public Page<Option> getCatalogSiteOptionsPage(
-			Long siteId, Pagination pagination)
-		throws Exception {
-
-		List<CPOption> cpOptions = _cpOptionService.getCPOptions(
-			siteId, pagination.getStartPosition(), pagination.getEndPosition(),
-			null);
-
-		int totalItems = _cpOptionService.getCPOptionsCount(siteId);
-
-		return Page.of(_toOptions(cpOptions), pagination, totalItems);
-	}
-
-	@Override
 	public Option getOption(Long id) throws Exception {
 		DTOConverter optionDTOConverter = _dtoConverterRegistry.getDTOConverter(
 			CPOption.class.getName());
@@ -116,6 +103,21 @@ public class OptionResourceImpl extends BaseOptionResourceImpl {
 			new DefaultDTOConverterContext(
 				contextAcceptLanguage.getPreferredLocale(),
 				cpOption.getCPOptionId()));
+	}
+
+	@Override
+	public Page<Option> getOptionsPage(Pagination pagination) throws Exception {
+		BaseModelSearchResult<CPOption> cpOptionBaseModelSearchResult =
+			_cpOptionService.searchCPOptions(
+				contextCompany.getCompanyId(), null,
+				pagination.getStartPosition(), pagination.getEndPosition(),
+				null);
+
+		int totalItems = cpOptionBaseModelSearchResult.getLength();
+
+		return Page.of(
+			_toOptions(cpOptionBaseModelSearchResult.getBaseModels()),
+			pagination, totalItems);
 	}
 
 	@Override
@@ -151,10 +153,8 @@ public class OptionResourceImpl extends BaseOptionResourceImpl {
 	}
 
 	@Override
-	public Option postCatalogSiteOption(Long siteId, Option option)
-		throws Exception {
-
-		return _upsertOption(siteId, option);
+	public Option postOption(Option option) throws Exception {
+		return _upsertOption(option);
 	}
 
 	private List<Option> _toOptions(List<CPOption> cpOptions) throws Exception {
@@ -188,8 +188,7 @@ public class OptionResourceImpl extends BaseOptionResourceImpl {
 			GetterUtil.get(option.getRequired(), cpOption.isRequired()),
 			GetterUtil.get(
 				option.getSkuContributor(), cpOption.isSkuContributor()),
-			option.getKey(),
-			_serviceContextHelper.getServiceContext(cpOption.getGroupId()));
+			option.getKey(), _serviceContextHelper.getServiceContext());
 
 		DTOConverter optionDTOConverter = _dtoConverterRegistry.getDTOConverter(
 			CPOption.class.getName());
@@ -200,7 +199,7 @@ public class OptionResourceImpl extends BaseOptionResourceImpl {
 				cpOption.getCPOptionId()));
 	}
 
-	private Option _upsertOption(long siteId, Option option) throws Exception {
+	private Option _upsertOption(Option option) throws Exception {
 		Option.FieldType fieldType = option.getFieldType();
 
 		CPOption cpOption = _cpOptionService.upsertCPOption(
@@ -210,7 +209,7 @@ public class OptionResourceImpl extends BaseOptionResourceImpl {
 			GetterUtil.get(option.getRequired(), false),
 			GetterUtil.get(option.getSkuContributor(), false), option.getKey(),
 			option.getExternalReferenceCode(),
-			_serviceContextHelper.getServiceContext(siteId));
+			_serviceContextHelper.getServiceContext());
 
 		DTOConverter optionDTOConverter = _dtoConverterRegistry.getDTOConverter(
 			CPOption.class.getName());

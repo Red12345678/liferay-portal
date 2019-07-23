@@ -54,6 +54,18 @@ public class CPInstanceItemSelectorViewDisplayContext
 	}
 
 	@Override
+	public PortletURL getPortletURL() {
+		PortletURL portletURL = super.getPortletURL();
+
+		portletURL.setParameter(
+			"checkedCPInstanceIds", String.valueOf(getCheckedCPInstanceIds()));
+		portletURL.setParameter(
+			"commerceCatalogGroupId", String.valueOf(getGroupId()));
+
+		return portletURL;
+	}
+
+	@Override
 	public SearchContainer<CPInstance> getSearchContainer()
 		throws PortalException {
 
@@ -78,33 +90,32 @@ public class CPInstanceItemSelectorViewDisplayContext
 		searchContainer.setOrderByType(getOrderByType());
 		searchContainer.setRowChecker(rowChecker);
 
-		int total;
-		List<CPInstance> results;
+		Sort sort = CPItemSelectorViewUtil.getCPInstanceSort(
+			getOrderByCol(), getOrderByType());
 
-		if (isSearch()) {
-			Sort sort = CPItemSelectorViewUtil.getCPInstanceSort(
-				getOrderByCol(), getOrderByType());
+		BaseModelSearchResult<CPInstance> cpInstanceBaseModelSearchResult;
 
-			BaseModelSearchResult<CPInstance> cpInstanceBaseModelSearchResult =
+		if (getGroupId() > 0) {
+			cpInstanceBaseModelSearchResult =
 				_cpInstanceService.searchCPInstances(
-					cpRequestHelper.getCompanyId(), getScopeGroupId(),
-					getKeywords(), WorkflowConstants.STATUS_APPROVED,
+					cpRequestHelper.getCompanyId(), getGroupId(), getKeywords(),
+					WorkflowConstants.STATUS_APPROVED,
 					searchContainer.getStart(), searchContainer.getEnd(), sort);
-
-			total = cpInstanceBaseModelSearchResult.getLength();
-			results = cpInstanceBaseModelSearchResult.getBaseModels();
 		}
 		else {
-			total = _cpInstanceService.getCPInstancesCount(
-				getScopeGroupId(), WorkflowConstants.STATUS_APPROVED);
-			results = _cpInstanceService.getCPInstances(
-				getScopeGroupId(), WorkflowConstants.STATUS_APPROVED,
-				searchContainer.getStart(), searchContainer.getEnd(),
-				orderByComparator);
+			cpInstanceBaseModelSearchResult =
+				_cpInstanceService.searchCPInstances(
+					cpRequestHelper.getCompanyId(), getKeywords(),
+					WorkflowConstants.STATUS_APPROVED,
+					searchContainer.getStart(), searchContainer.getEnd(), sort);
 		}
 
-		searchContainer.setTotal(total);
-		searchContainer.setResults(results);
+		List<CPInstance> cpInstances =
+			cpInstanceBaseModelSearchResult.getBaseModels();
+		int totalCPInstances = cpInstanceBaseModelSearchResult.getLength();
+
+		searchContainer.setResults(cpInstances);
+		searchContainer.setTotal(totalCPInstances);
 
 		return searchContainer;
 	}
@@ -112,6 +123,10 @@ public class CPInstanceItemSelectorViewDisplayContext
 	protected long[] getCheckedCPInstanceIds() {
 		return ParamUtil.getLongValues(
 			httpServletRequest, "checkedCPInstanceIds");
+	}
+
+	protected long getGroupId() {
+		return ParamUtil.getLong(httpServletRequest, "commerceCatalogGroupId");
 	}
 
 	private final CPInstanceService _cpInstanceService;

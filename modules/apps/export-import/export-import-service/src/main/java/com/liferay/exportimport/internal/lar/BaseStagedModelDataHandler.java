@@ -23,5 +23,5 @@ import com.liferay.portal.kernel.model.StagedModel;
 @Deprecated
 public abstract class BaseStagedModelDataHandler<T extends StagedModel>
 	extends com.liferay.exportimport.data.handler.base.
-		BaseStagedModelDataHandler<T> {
+				BaseStagedModelDataHandler<T> {
 }

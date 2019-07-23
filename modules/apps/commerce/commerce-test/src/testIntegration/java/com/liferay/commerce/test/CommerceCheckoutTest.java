@@ -20,7 +20,6 @@ import com.liferay.commerce.currency.test.util.CommerceCurrencyTestUtil;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderItem;
 import com.liferay.commerce.product.model.CPInstance;
-import com.liferay.commerce.service.CommerceOrderLocalService;
 import com.liferay.commerce.test.util.CommerceTestUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
@@ -29,7 +28,6 @@ import com.liferay.portal.kernel.test.rule.DeleteAfterTestRun;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PermissionCheckerTestRule;
 
@@ -40,6 +38,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,6 +46,7 @@ import org.junit.runner.RunWith;
 /**
  * @author Luca Pellizzon
  */
+@Ignore
 @RunWith(Arquillian.class)
 public class CommerceCheckoutTest {
 
@@ -110,9 +110,6 @@ public class CommerceCheckoutTest {
 		Assert.assertEquals(
 			expectedTotal.doubleValue(), actualTotal.doubleValue(), 0.0001);
 	}
-
-	@Inject
-	private CommerceOrderLocalService _commerceOrderLocalService;
 
 	@DeleteAfterTestRun
 	private Group _group;

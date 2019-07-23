@@ -28,10 +28,12 @@ import com.liferay.portal.osgi.web.servlet.context.helper.order.Order;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EventListener;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContextListener;
@@ -139,10 +141,12 @@ public class WebXMLDefinitionLoaderTest {
 	@Test
 	public void testLoadWebXML() throws Exception {
 		Bundle bundle = new MockBundle();
+		Set<Class<?>> classes = Collections.emptySet();
 
 		WebXMLDefinitionLoader webXMLDefinitionLoader =
 			new WebXMLDefinitionLoader(
-				bundle, null, SAXParserFactory.newInstance(), new Logger(null));
+				bundle, null, SAXParserFactory.newInstance(), new Logger(null),
+				classes, classes);
 
 		WebXMLDefinition webXMLDefinition =
 			webXMLDefinitionLoader.loadWebXMLDefinition(
@@ -400,11 +404,12 @@ public class WebXMLDefinitionLoaderTest {
 		throws Exception {
 
 		TestBundle testBundle = new TestBundle(path);
+		Set<Class<?>> classes = Collections.emptySet();
 
 		WebXMLDefinitionLoader webXMLDefinitionLoader =
 			new WebXMLDefinitionLoader(
 				testBundle, null, SAXParserFactory.newInstance(),
-				new Logger(null));
+				new Logger(null), classes, classes);
 
 		return webXMLDefinitionLoader.loadWebXMLDefinition(testBundle.getURL());
 	}

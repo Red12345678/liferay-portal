@@ -14,57 +14,51 @@
 
 package com.liferay.headless.delivery.resource.v1_0.test;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
 import com.liferay.headless.delivery.client.dto.v1_0.ContentSetElement;
+import com.liferay.headless.delivery.client.http.HttpInvoker;
 import com.liferay.headless.delivery.client.pagination.Page;
+import com.liferay.headless.delivery.client.pagination.Pagination;
+import com.liferay.headless.delivery.client.resource.v1_0.ContentSetElementResource;
 import com.liferay.headless.delivery.client.serdes.v1_0.ContentSetElementSerDes;
-import com.liferay.headless.delivery.resource.v1_0.ContentSetElementResource;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.Http;
-import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.odata.entity.EntityField;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.resource.EntityModelResource;
 
 import java.lang.reflect.InvocationTargetException;
 
-import java.net.URL;
-
 import java.text.DateFormat;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
 import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 
@@ -98,10 +92,18 @@ public abstract class BaseContentSetElementResourceTestCase {
 	public void setUp() throws Exception {
 		irrelevantGroup = GroupTestUtil.addGroup();
 		testGroup = GroupTestUtil.addGroup();
-		testLocale = LocaleUtil.getDefault();
 
-		_resourceURL = new URL(
-			"http://localhost:8080/o/headless-delivery/v1.0");
+		testCompany = CompanyLocalServiceUtil.getCompany(
+			testGroup.getCompanyId());
+
+		_contentSetElementResource.setContextCompany(testCompany);
+
+		ContentSetElementResource.Builder builder =
+			ContentSetElementResource.builder();
+
+		contentSetElementResource = builder.locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	@After
@@ -115,10 +117,16 @@ public abstract class BaseContentSetElementResourceTestCase {
 		ObjectMapper objectMapper = new ObjectMapper() {
 			{
 				configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+				configure(
+					SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
 				enable(SerializationFeature.INDENT_OUTPUT);
 				setDateFormat(new ISO8601DateFormat());
 				setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 				setSerializationInclusion(JsonInclude.Include.NON_NULL);
+				setVisibility(
+					PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+				setVisibility(
+					PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE);
 			}
 		};
 
@@ -137,9 +145,15 @@ public abstract class BaseContentSetElementResourceTestCase {
 		ObjectMapper objectMapper = new ObjectMapper() {
 			{
 				configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+				configure(
+					SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
 				setDateFormat(new ISO8601DateFormat());
 				setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 				setSerializationInclusion(JsonInclude.Include.NON_NULL);
+				setVisibility(
+					PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+				setVisibility(
+					PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE);
 			}
 		};
 
@@ -153,7 +167,33 @@ public abstract class BaseContentSetElementResourceTestCase {
 	}
 
 	@Test
+	public void testEscapeRegexInStringFields() throws Exception {
+		String regex = "^[0-9]+(\\.[0-9]{1,2})\"?";
+
+		ContentSetElement contentSetElement = randomContentSetElement();
+
+		contentSetElement.setContentType(regex);
+		contentSetElement.setTitle(regex);
+
+		String json = ContentSetElementSerDes.toJSON(contentSetElement);
+
+		Assert.assertFalse(json.contains(regex));
+
+		contentSetElement = ContentSetElementSerDes.toDTO(json);
+
+		Assert.assertEquals(regex, contentSetElement.getContentType());
+		Assert.assertEquals(regex, contentSetElement.getTitle());
+	}
+
+	@Test
 	public void testGetContentSetContentSetElementsPage() throws Exception {
+		Page<ContentSetElement> page =
+			contentSetElementResource.getContentSetContentSetElementsPage(
+				testGetContentSetContentSetElementsPage_getContentSetId(),
+				Pagination.of(1, 2));
+
+		Assert.assertEquals(0, page.getTotalCount());
+
 		Long contentSetId =
 			testGetContentSetContentSetElementsPage_getContentSetId();
 		Long irrelevantContentSetId =
@@ -165,8 +205,8 @@ public abstract class BaseContentSetElementResourceTestCase {
 					irrelevantContentSetId,
 					randomIrrelevantContentSetElement());
 
-			Page<ContentSetElement> page =
-				invokeGetContentSetContentSetElementsPage(
+			page =
+				contentSetElementResource.getContentSetContentSetElementsPage(
 					irrelevantContentSetId, Pagination.of(1, 2));
 
 			Assert.assertEquals(1, page.getTotalCount());
@@ -185,9 +225,8 @@ public abstract class BaseContentSetElementResourceTestCase {
 			testGetContentSetContentSetElementsPage_addContentSetElement(
 				contentSetId, randomContentSetElement());
 
-		Page<ContentSetElement> page =
-			invokeGetContentSetContentSetElementsPage(
-				contentSetId, Pagination.of(1, 2));
+		page = contentSetElementResource.getContentSetContentSetElementsPage(
+			contentSetId, Pagination.of(1, 2));
 
 		Assert.assertEquals(2, page.getTotalCount());
 
@@ -217,7 +256,7 @@ public abstract class BaseContentSetElementResourceTestCase {
 				contentSetId, randomContentSetElement());
 
 		Page<ContentSetElement> page1 =
-			invokeGetContentSetContentSetElementsPage(
+			contentSetElementResource.getContentSetContentSetElementsPage(
 				contentSetId, Pagination.of(1, 2));
 
 		List<ContentSetElement> contentSetElements1 =
@@ -227,7 +266,7 @@ public abstract class BaseContentSetElementResourceTestCase {
 			contentSetElements1.toString(), 2, contentSetElements1.size());
 
 		Page<ContentSetElement> page2 =
-			invokeGetContentSetContentSetElementsPage(
+			contentSetElementResource.getContentSetContentSetElementsPage(
 				contentSetId, Pagination.of(2, 2));
 
 		Assert.assertEquals(3, page2.getTotalCount());
@@ -238,15 +277,14 @@ public abstract class BaseContentSetElementResourceTestCase {
 		Assert.assertEquals(
 			contentSetElements2.toString(), 1, contentSetElements2.size());
 
+		Page<ContentSetElement> page3 =
+			contentSetElementResource.getContentSetContentSetElementsPage(
+				contentSetId, Pagination.of(1, 3));
+
 		assertEqualsIgnoringOrder(
 			Arrays.asList(
 				contentSetElement1, contentSetElement2, contentSetElement3),
-			new ArrayList<ContentSetElement>() {
-				{
-					addAll(contentSetElements1);
-					addAll(contentSetElements2);
-				}
-			});
+			(List<ContentSetElement>)page3.getItems());
 	}
 
 	protected ContentSetElement
@@ -272,65 +310,18 @@ public abstract class BaseContentSetElementResourceTestCase {
 		return null;
 	}
 
-	protected Page<ContentSetElement> invokeGetContentSetContentSetElementsPage(
-			Long contentSetId, Pagination pagination)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/content-sets/{contentSetId}/content-set-elements",
-					contentSetId);
-
-		if (pagination != null) {
-			location = HttpUtil.addParameter(
-				location, "page", pagination.getPage());
-			location = HttpUtil.addParameter(
-				location, "pageSize", pagination.getPageSize());
-		}
-
-		options.setLocation(location);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		return Page.of(string, ContentSetElementSerDes::toDTO);
-	}
-
-	protected Http.Response invokeGetContentSetContentSetElementsPageResponse(
-			Long contentSetId, Pagination pagination)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/content-sets/{contentSetId}/content-set-elements",
-					contentSetId);
-
-		if (pagination != null) {
-			location = HttpUtil.addParameter(
-				location, "page", pagination.getPage());
-			location = HttpUtil.addParameter(
-				location, "pageSize", pagination.getPageSize());
-		}
-
-		options.setLocation(location);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
-	}
-
 	@Test
 	public void testGetSiteContentSetByKeyContentSetElementsPage()
 		throws Exception {
+
+		Page<ContentSetElement> page =
+			contentSetElementResource.
+				getSiteContentSetByKeyContentSetElementsPage(
+					testGetSiteContentSetByKeyContentSetElementsPage_getSiteId(),
+					testGetSiteContentSetByKeyContentSetElementsPage_getKey(),
+					Pagination.of(1, 2));
+
+		Assert.assertEquals(0, page.getTotalCount());
 
 		Long siteId =
 			testGetSiteContentSetByKeyContentSetElementsPage_getSiteId();
@@ -346,9 +337,10 @@ public abstract class BaseContentSetElementResourceTestCase {
 					irrelevantSiteId, irrelevantKey,
 					randomIrrelevantContentSetElement());
 
-			Page<ContentSetElement> page =
-				invokeGetSiteContentSetByKeyContentSetElementsPage(
-					irrelevantSiteId, irrelevantKey, Pagination.of(1, 2));
+			page =
+				contentSetElementResource.
+					getSiteContentSetByKeyContentSetElementsPage(
+						irrelevantSiteId, irrelevantKey, Pagination.of(1, 2));
 
 			Assert.assertEquals(1, page.getTotalCount());
 
@@ -366,9 +358,10 @@ public abstract class BaseContentSetElementResourceTestCase {
 			testGetSiteContentSetByKeyContentSetElementsPage_addContentSetElement(
 				siteId, key, randomContentSetElement());
 
-		Page<ContentSetElement> page =
-			invokeGetSiteContentSetByKeyContentSetElementsPage(
-				siteId, key, Pagination.of(1, 2));
+		page =
+			contentSetElementResource.
+				getSiteContentSetByKeyContentSetElementsPage(
+					siteId, key, Pagination.of(1, 2));
 
 		Assert.assertEquals(2, page.getTotalCount());
 
@@ -399,8 +392,9 @@ public abstract class BaseContentSetElementResourceTestCase {
 				siteId, key, randomContentSetElement());
 
 		Page<ContentSetElement> page1 =
-			invokeGetSiteContentSetByKeyContentSetElementsPage(
-				siteId, key, Pagination.of(1, 2));
+			contentSetElementResource.
+				getSiteContentSetByKeyContentSetElementsPage(
+					siteId, key, Pagination.of(1, 2));
 
 		List<ContentSetElement> contentSetElements1 =
 			(List<ContentSetElement>)page1.getItems();
@@ -409,8 +403,9 @@ public abstract class BaseContentSetElementResourceTestCase {
 			contentSetElements1.toString(), 2, contentSetElements1.size());
 
 		Page<ContentSetElement> page2 =
-			invokeGetSiteContentSetByKeyContentSetElementsPage(
-				siteId, key, Pagination.of(2, 2));
+			contentSetElementResource.
+				getSiteContentSetByKeyContentSetElementsPage(
+					siteId, key, Pagination.of(2, 2));
 
 		Assert.assertEquals(3, page2.getTotalCount());
 
@@ -420,15 +415,15 @@ public abstract class BaseContentSetElementResourceTestCase {
 		Assert.assertEquals(
 			contentSetElements2.toString(), 1, contentSetElements2.size());
 
+		Page<ContentSetElement> page3 =
+			contentSetElementResource.
+				getSiteContentSetByKeyContentSetElementsPage(
+					siteId, key, Pagination.of(1, 3));
+
 		assertEqualsIgnoringOrder(
 			Arrays.asList(
 				contentSetElement1, contentSetElement2, contentSetElement3),
-			new ArrayList<ContentSetElement>() {
-				{
-					addAll(contentSetElements1);
-					addAll(contentSetElements2);
-				}
-			});
+			(List<ContentSetElement>)page3.getItems());
 	}
 
 	protected ContentSetElement
@@ -467,67 +462,18 @@ public abstract class BaseContentSetElementResourceTestCase {
 		return null;
 	}
 
-	protected Page<ContentSetElement>
-			invokeGetSiteContentSetByKeyContentSetElementsPage(
-				Long siteId, String key, Pagination pagination)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/sites/{siteId}/content-sets/by-key/{key}/content-set-elements",
-					siteId, key);
-
-		if (pagination != null) {
-			location = HttpUtil.addParameter(
-				location, "page", pagination.getPage());
-			location = HttpUtil.addParameter(
-				location, "pageSize", pagination.getPageSize());
-		}
-
-		options.setLocation(location);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		return Page.of(string, ContentSetElementSerDes::toDTO);
-	}
-
-	protected Http.Response
-			invokeGetSiteContentSetByKeyContentSetElementsPageResponse(
-				Long siteId, String key, Pagination pagination)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/sites/{siteId}/content-sets/by-key/{key}/content-set-elements",
-					siteId, key);
-
-		if (pagination != null) {
-			location = HttpUtil.addParameter(
-				location, "page", pagination.getPage());
-			location = HttpUtil.addParameter(
-				location, "pageSize", pagination.getPageSize());
-		}
-
-		options.setLocation(location);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
-	}
-
 	@Test
 	public void testGetSiteContentSetByUuidContentSetElementsPage()
 		throws Exception {
+
+		Page<ContentSetElement> page =
+			contentSetElementResource.
+				getSiteContentSetByUuidContentSetElementsPage(
+					testGetSiteContentSetByUuidContentSetElementsPage_getSiteId(),
+					testGetSiteContentSetByUuidContentSetElementsPage_getUuid(),
+					Pagination.of(1, 2));
+
+		Assert.assertEquals(0, page.getTotalCount());
 
 		Long siteId =
 			testGetSiteContentSetByUuidContentSetElementsPage_getSiteId();
@@ -544,9 +490,10 @@ public abstract class BaseContentSetElementResourceTestCase {
 					irrelevantSiteId, irrelevantUuid,
 					randomIrrelevantContentSetElement());
 
-			Page<ContentSetElement> page =
-				invokeGetSiteContentSetByUuidContentSetElementsPage(
-					irrelevantSiteId, irrelevantUuid, Pagination.of(1, 2));
+			page =
+				contentSetElementResource.
+					getSiteContentSetByUuidContentSetElementsPage(
+						irrelevantSiteId, irrelevantUuid, Pagination.of(1, 2));
 
 			Assert.assertEquals(1, page.getTotalCount());
 
@@ -564,9 +511,10 @@ public abstract class BaseContentSetElementResourceTestCase {
 			testGetSiteContentSetByUuidContentSetElementsPage_addContentSetElement(
 				siteId, uuid, randomContentSetElement());
 
-		Page<ContentSetElement> page =
-			invokeGetSiteContentSetByUuidContentSetElementsPage(
-				siteId, uuid, Pagination.of(1, 2));
+		page =
+			contentSetElementResource.
+				getSiteContentSetByUuidContentSetElementsPage(
+					siteId, uuid, Pagination.of(1, 2));
 
 		Assert.assertEquals(2, page.getTotalCount());
 
@@ -598,8 +546,9 @@ public abstract class BaseContentSetElementResourceTestCase {
 				siteId, uuid, randomContentSetElement());
 
 		Page<ContentSetElement> page1 =
-			invokeGetSiteContentSetByUuidContentSetElementsPage(
-				siteId, uuid, Pagination.of(1, 2));
+			contentSetElementResource.
+				getSiteContentSetByUuidContentSetElementsPage(
+					siteId, uuid, Pagination.of(1, 2));
 
 		List<ContentSetElement> contentSetElements1 =
 			(List<ContentSetElement>)page1.getItems();
@@ -608,8 +557,9 @@ public abstract class BaseContentSetElementResourceTestCase {
 			contentSetElements1.toString(), 2, contentSetElements1.size());
 
 		Page<ContentSetElement> page2 =
-			invokeGetSiteContentSetByUuidContentSetElementsPage(
-				siteId, uuid, Pagination.of(2, 2));
+			contentSetElementResource.
+				getSiteContentSetByUuidContentSetElementsPage(
+					siteId, uuid, Pagination.of(2, 2));
 
 		Assert.assertEquals(3, page2.getTotalCount());
 
@@ -619,15 +569,15 @@ public abstract class BaseContentSetElementResourceTestCase {
 		Assert.assertEquals(
 			contentSetElements2.toString(), 1, contentSetElements2.size());
 
+		Page<ContentSetElement> page3 =
+			contentSetElementResource.
+				getSiteContentSetByUuidContentSetElementsPage(
+					siteId, uuid, Pagination.of(1, 3));
+
 		assertEqualsIgnoringOrder(
 			Arrays.asList(
 				contentSetElement1, contentSetElement2, contentSetElement3),
-			new ArrayList<ContentSetElement>() {
-				{
-					addAll(contentSetElements1);
-					addAll(contentSetElements2);
-				}
-			});
+			(List<ContentSetElement>)page3.getItems());
 	}
 
 	protected ContentSetElement
@@ -666,69 +616,12 @@ public abstract class BaseContentSetElementResourceTestCase {
 		return null;
 	}
 
-	protected Page<ContentSetElement>
-			invokeGetSiteContentSetByUuidContentSetElementsPage(
-				Long siteId, String uuid, Pagination pagination)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/sites/{siteId}/content-sets/by-uuid/{uuid}/content-set-elements",
-					siteId, uuid);
-
-		if (pagination != null) {
-			location = HttpUtil.addParameter(
-				location, "page", pagination.getPage());
-			location = HttpUtil.addParameter(
-				location, "pageSize", pagination.getPageSize());
-		}
-
-		options.setLocation(location);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		return Page.of(string, ContentSetElementSerDes::toDTO);
-	}
-
-	protected Http.Response
-			invokeGetSiteContentSetByUuidContentSetElementsPageResponse(
-				Long siteId, String uuid, Pagination pagination)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/sites/{siteId}/content-sets/by-uuid/{uuid}/content-set-elements",
-					siteId, uuid);
-
-		if (pagination != null) {
-			location = HttpUtil.addParameter(
-				location, "page", pagination.getPage());
-			location = HttpUtil.addParameter(
-				location, "pageSize", pagination.getPageSize());
-		}
-
-		options.setLocation(location);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
-	}
-
-	protected void assertResponseCode(
-		int expectedResponseCode, Http.Response actualResponse) {
+	protected void assertHttpResponseStatusCode(
+		int expectedHttpResponseStatusCode,
+		HttpInvoker.HttpResponse actualHttpResponse) {
 
 		Assert.assertEquals(
-			expectedResponseCode, actualResponse.getResponseCode());
+			expectedHttpResponseStatusCode, actualHttpResponse.getStatusCode());
 	}
 
 	protected void assertEquals(
@@ -824,7 +717,8 @@ public abstract class BaseContentSetElementResourceTestCase {
 	protected void assertValid(Page<ContentSetElement> page) {
 		boolean valid = false;
 
-		Collection<ContentSetElement> contentSetElements = page.getItems();
+		java.util.Collection<ContentSetElement> contentSetElements =
+			page.getItems();
 
 		int size = contentSetElements.size();
 
@@ -839,6 +733,10 @@ public abstract class BaseContentSetElementResourceTestCase {
 	}
 
 	protected String[] getAdditionalAssertFieldNames() {
+		return new String[0];
+	}
+
+	protected String[] getIgnoredEntityFieldNames() {
 		return new String[0];
 	}
 
@@ -905,7 +803,9 @@ public abstract class BaseContentSetElementResourceTestCase {
 		return true;
 	}
 
-	protected Collection<EntityField> getEntityFields() throws Exception {
+	protected java.util.Collection<EntityField> getEntityFields()
+		throws Exception {
+
 		if (!(_contentSetElementResource instanceof EntityModelResource)) {
 			throw new UnsupportedOperationException(
 				"Resource is not an instance of EntityModelResource");
@@ -926,12 +826,15 @@ public abstract class BaseContentSetElementResourceTestCase {
 	protected List<EntityField> getEntityFields(EntityField.Type type)
 		throws Exception {
 
-		Collection<EntityField> entityFields = getEntityFields();
+		java.util.Collection<EntityField> entityFields = getEntityFields();
 
 		Stream<EntityField> stream = entityFields.stream();
 
 		return stream.filter(
-			entityField -> Objects.equals(entityField.getType(), type)
+			entityField ->
+				Objects.equals(entityField.getType(), type) &&
+				!ArrayUtil.contains(
+					getIgnoredEntityFieldNames(), entityField.getName())
 		).collect(
 			Collectors.toList()
 		);
@@ -981,7 +884,7 @@ public abstract class BaseContentSetElementResourceTestCase {
 			"Invalid entity field " + entityFieldName);
 	}
 
-	protected ContentSetElement randomContentSetElement() {
+	protected ContentSetElement randomContentSetElement() throws Exception {
 		return new ContentSetElement() {
 			{
 				contentType = RandomTestUtil.randomString();
@@ -991,88 +894,25 @@ public abstract class BaseContentSetElementResourceTestCase {
 		};
 	}
 
-	protected ContentSetElement randomIrrelevantContentSetElement() {
+	protected ContentSetElement randomIrrelevantContentSetElement()
+		throws Exception {
+
 		ContentSetElement randomIrrelevantContentSetElement =
 			randomContentSetElement();
 
 		return randomIrrelevantContentSetElement;
 	}
 
-	protected ContentSetElement randomPatchContentSetElement() {
+	protected ContentSetElement randomPatchContentSetElement()
+		throws Exception {
+
 		return randomContentSetElement();
 	}
 
+	protected ContentSetElementResource contentSetElementResource;
 	protected Group irrelevantGroup;
-	protected String testContentType = "application/json";
+	protected Company testCompany;
 	protected Group testGroup;
-	protected Locale testLocale;
-	protected String testUserNameAndPassword = "test@liferay.com:test";
-
-	private Http.Options _createHttpOptions() {
-		Http.Options options = new Http.Options();
-
-		options.addHeader("Accept", "application/json");
-		options.addHeader(
-			"Accept-Language", LocaleUtil.toW3cLanguageId(testLocale));
-
-		String encodedTestUserNameAndPassword = Base64.encode(
-			testUserNameAndPassword.getBytes());
-
-		options.addHeader(
-			"Authorization", "Basic " + encodedTestUserNameAndPassword);
-
-		options.addHeader("Content-Type", testContentType);
-
-		return options;
-	}
-
-	private String _toJSON(Map<String, String> map) {
-		if (map == null) {
-			return "null";
-		}
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{");
-
-		Set<Map.Entry<String, String>> set = map.entrySet();
-
-		Iterator<Map.Entry<String, String>> iterator = set.iterator();
-
-		while (iterator.hasNext()) {
-			Map.Entry<String, String> entry = iterator.next();
-
-			sb.append("\"" + entry.getKey() + "\": ");
-
-			if (entry.getValue() == null) {
-				sb.append("null");
-			}
-			else {
-				sb.append("\"" + entry.getValue() + "\"");
-			}
-
-			if (iterator.hasNext()) {
-				sb.append(", ");
-			}
-		}
-
-		sb.append("}");
-
-		return sb.toString();
-	}
-
-	private String _toPath(String template, Object... values) {
-		if (ArrayUtil.isEmpty(values)) {
-			return template;
-		}
-
-		for (int i = 0; i < values.length; i++) {
-			template = template.replaceFirst(
-				"\\{.*?\\}", String.valueOf(values[i]));
-		}
-
-		return template;
-	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BaseContentSetElementResourceTestCase.class);
@@ -1092,8 +932,8 @@ public abstract class BaseContentSetElementResourceTestCase {
 	private static DateFormat _dateFormat;
 
 	@Inject
-	private ContentSetElementResource _contentSetElementResource;
-
-	private URL _resourceURL;
+	private
+		com.liferay.headless.delivery.resource.v1_0.ContentSetElementResource
+			_contentSetElementResource;
 
 }

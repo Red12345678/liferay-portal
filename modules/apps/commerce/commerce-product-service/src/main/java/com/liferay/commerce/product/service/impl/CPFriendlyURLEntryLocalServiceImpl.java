@@ -133,6 +133,14 @@ public class CPFriendlyURLEntryLocalServiceImpl
 	}
 
 	@Override
+	public List<CPFriendlyURLEntry> getCPFriendlyURLEntries(
+		long groupId, long classNameId, String urlTitle) {
+
+		return cpFriendlyURLEntryPersistence.findByG_C_U(
+			groupId, classNameId, urlTitle);
+	}
+
+	@Override
 	public Map<String, String> getLanguageIdToUrlTitleMap(
 		long groupId, long classNameId, long classPK) {
 
@@ -322,13 +330,8 @@ public class CPFriendlyURLEntryLocalServiceImpl
 		}
 
 		if (classPK > 0) {
-			CPFriendlyURLEntry cpFriendlyURLEntry =
-				cpFriendlyURLEntryPersistence.fetchByG_C_C_L_U(
-					groupId, classNameId, classPK, languageId, urlTitle);
-
-			if (cpFriendlyURLEntry != null) {
-				return;
-			}
+			cpFriendlyURLEntryPersistence.fetchByG_C_C_L_U(
+				groupId, classNameId, classPK, languageId, urlTitle);
 		}
 	}
 

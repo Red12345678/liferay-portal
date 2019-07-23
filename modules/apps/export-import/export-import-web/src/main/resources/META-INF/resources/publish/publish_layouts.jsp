@@ -244,6 +244,12 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 							</div>
 						</aui:fieldset>
 
+						<liferay-staging:deletions
+							cmd="<%= Constants.PUBLISH %>"
+							disableInputs="<%= configuredPublish %>"
+							exportImportConfigurationId="<%= exportImportConfigurationId %>"
+						/>
+
 						<c:if test="<%= !group.isCompany() %>">
 							<liferay-staging:select-pages
 								action="<%= Constants.PUBLISH %>"
@@ -260,12 +266,6 @@ response.setHeader("Ajax-ID", request.getHeader("Ajax-ID"));
 							disableInputs="<%= configuredPublish %>"
 							exportImportConfigurationId="<%= exportImportConfigurationId %>"
 							type="<%= localPublishing ? Constants.PUBLISH_TO_LIVE : Constants.PUBLISH_TO_REMOTE %>"
-						/>
-
-						<liferay-staging:deletions
-							cmd="<%= Constants.PUBLISH %>"
-							disableInputs="<%= configuredPublish %>"
-							exportImportConfigurationId="<%= exportImportConfigurationId %>"
 						/>
 
 						<liferay-staging:permissions

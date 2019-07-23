@@ -54,6 +54,17 @@
 	<td>//ul[contains(@class,'nav')]//li[contains(@class,'nav-item')]//a[contains(.,'${key_tabName}')]</td>
 	<td></td>
 </tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--WIDGETS-->
+<tr>
+	<td>WIDGETS_OPTIONS_ICON</td>
+	<td>//span[contains(@class,'portlet-name') and contains(.,'${key_portletName}')]/../..//button[contains(.,'Configure')]</td>
+	<td></td>
+</tr>
 </tbody>
 </table>
 </body>

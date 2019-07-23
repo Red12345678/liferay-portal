@@ -15,8 +15,8 @@
 package com.liferay.headless.commerce.admin.site.setting.internal.util.v1_0;
 
 import com.liferay.commerce.exception.NoSuchWarehouseException;
-import com.liferay.commerce.model.CommerceWarehouse;
-import com.liferay.commerce.service.CommerceWarehouseService;
+import com.liferay.commerce.inventory.model.CommerceInventoryWarehouse;
+import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseService;
 import com.liferay.headless.commerce.admin.site.setting.dto.v1_0.Warehouse;
 import com.liferay.headless.commerce.admin.site.setting.internal.mapper.v1_0.DTOMapper;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
@@ -29,9 +29,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -43,83 +40,98 @@ import org.osgi.service.component.annotations.Reference;
 public class WarehouseHelper {
 
 	public void deleteWarehouse(Long id) throws PortalException {
-		_commerceWarehouseService.deleteCommerceWarehouse(id);
+		_commerceInventoryWarehouseService.deleteCommerceInventoryWarehouse(id);
 	}
 
 	public Warehouse getWarehouse(Long id) throws PortalException {
-		CommerceWarehouse commerceWarehouse =
-			_commerceWarehouseService.getCommerceWarehouse(id);
+		CommerceInventoryWarehouse commerceInventoryWarehouse =
+			_commerceInventoryWarehouseService.getCommerceInventoryWarehouse(
+				id);
 
-		return _dtoMapper.modelToDTO(commerceWarehouse);
+		return _dtoMapper.modelToDTO(commerceInventoryWarehouse);
 	}
 
 	public Page<Warehouse> getWarehouses(
 			Long groupId, Boolean active, Pagination pagination)
 		throws PortalException {
 
-		List<CommerceWarehouse> commerceWarehouses;
-		int count;
+		return null;
+		/*
+				List<CommerceInventoryWarehouse> commerceInventoryWarehouses;
+				int count;
 
-		if (active == null) {
-			commerceWarehouses =
-				_commerceWarehouseService.getCommerceWarehouses(
-					groupId, pagination.getStartPosition(),
-					pagination.getEndPosition(), null);
+				if (active == null) {
+					commerceInventoryWarehouses =
+						_commerceInventoryWarehouseService.getCommerceInventoryWarehouses(
+							groupId, pagination.getStartPosition(),
+							pagination.getEndPosition(), null);
 
-			count = _commerceWarehouseService.getCommerceWarehousesCount(
-				groupId);
-		}
-		else {
-			commerceWarehouses =
-				_commerceWarehouseService.getCommerceWarehouses(
-					groupId, active, pagination.getStartPosition(),
-					pagination.getEndPosition(), null);
+					count = _commerceInventoryWarehouseService.getCommerceInventoryWarehousesCount(
+						groupId);
+				}
+				else {
+					commerceInventoryWarehouses =
+						_commerceInventoryWarehouseService.getCommerceInventoryWarehouses(
+							groupId, active, pagination.getStartPosition(),
+							pagination.getEndPosition(), null);
 
-			count = _commerceWarehouseService.getCommerceWarehousesCount(
-				groupId, active);
-		}
+					count = _commerceInventoryWarehouseService.getCommerceInventoryWarehousesCount(
+						groupId, active);
+				}
 
-		List<Warehouse> availabilityEstimates = new ArrayList<>();
+				List<Warehouse> availabilityEstimates = new ArrayList<>();
 
-		for (CommerceWarehouse commerceWarehouse : commerceWarehouses) {
-			availabilityEstimates.add(_dtoMapper.modelToDTO(commerceWarehouse));
-		}
+				for (CommerceInventoryWarehouse commerceInventoryWarehouse : commerceInventoryWarehouses) {
+					availabilityEstimates.add(_dtoMapper.modelToDTO(commerceInventoryWarehouse));
+				}
 
-		return Page.of(availabilityEstimates, pagination, count);
+				return Page.of(availabilityEstimates, pagination, count);
+		*/
+
 	}
 
-	public CommerceWarehouse updateWarehouse(
+	public CommerceInventoryWarehouse updateWarehouse(
 			Long id, Warehouse warehouse, User user)
 		throws PortalException {
 
-		CommerceWarehouse commerceWarehouse =
-			_commerceWarehouseService.getCommerceWarehouse(id);
+		CommerceInventoryWarehouse commerceInventoryWarehouse =
+			_commerceInventoryWarehouseService.getCommerceInventoryWarehouse(
+				id);
 
 		ServiceContext serviceContext = _serviceContextHelper.getServiceContext(
-			commerceWarehouse.getGroupId(), new long[0], user, true);
+			0, new long[0], user, true);
 
-		return _commerceWarehouseService.updateCommerceWarehouse(
-			commerceWarehouse.getCommerceWarehouseId(), warehouse.getName(),
-			GetterUtil.get(
-				warehouse.getDescription(), commerceWarehouse.getDescription()),
-			GetterUtil.get(warehouse.getActive(), commerceWarehouse.isActive()),
-			GetterUtil.get(
-				warehouse.getStreet1(), commerceWarehouse.getStreet1()),
-			GetterUtil.get(
-				warehouse.getStreet2(), commerceWarehouse.getStreet2()),
-			GetterUtil.get(
-				warehouse.getStreet3(), commerceWarehouse.getStreet3()),
-			GetterUtil.get(warehouse.getCity(), commerceWarehouse.getCity()),
-			GetterUtil.get(warehouse.getZip(), commerceWarehouse.getZip()),
-			GetterUtil.get(
-				warehouse.getCommerceRegionId(),
-				commerceWarehouse.getCommerceRegionId()),
-			warehouse.getCommerceCountryId(),
-			GetterUtil.get(
-				warehouse.getLatitude(), commerceWarehouse.getLatitude()),
-			GetterUtil.get(
-				warehouse.getLongitude(), commerceWarehouse.getLongitude()),
-			serviceContext);
+		return _commerceInventoryWarehouseService.
+			updateCommerceInventoryWarehouse(
+				commerceInventoryWarehouse.getCommerceInventoryWarehouseId(),
+				warehouse.getName(),
+				GetterUtil.get(
+					warehouse.getDescription(),
+					commerceInventoryWarehouse.getDescription()),
+				GetterUtil.get(
+					warehouse.getActive(),
+					commerceInventoryWarehouse.isActive()),
+				GetterUtil.get(
+					warehouse.getStreet1(),
+					commerceInventoryWarehouse.getStreet1()),
+				GetterUtil.get(
+					warehouse.getStreet2(),
+					commerceInventoryWarehouse.getStreet2()),
+				GetterUtil.get(
+					warehouse.getStreet3(),
+					commerceInventoryWarehouse.getStreet3()),
+				GetterUtil.get(
+					warehouse.getCity(), commerceInventoryWarehouse.getCity()),
+				GetterUtil.get(
+					warehouse.getZip(), commerceInventoryWarehouse.getZip()),
+				null, null,
+				GetterUtil.get(
+					warehouse.getLatitude(),
+					commerceInventoryWarehouse.getLatitude()),
+				GetterUtil.get(
+					warehouse.getLongitude(),
+					commerceInventoryWarehouse.getLongitude()),
+				serviceContext);
 	}
 
 	public Warehouse upsertWarehouse(
@@ -127,10 +139,10 @@ public class WarehouseHelper {
 		throws PortalException {
 
 		try {
-			CommerceWarehouse commerceWarehouse = updateWarehouse(
-				warehouse.getId(), warehouse, user);
+			CommerceInventoryWarehouse commerceInventoryWarehouse =
+				updateWarehouse(warehouse.getId(), warehouse, user);
 
-			return _dtoMapper.modelToDTO(commerceWarehouse);
+			return _dtoMapper.modelToDTO(commerceInventoryWarehouse);
 		}
 		catch (NoSuchWarehouseException nswe) {
 			if (_log.isDebugEnabled()) {
@@ -143,25 +155,25 @@ public class WarehouseHelper {
 		ServiceContext serviceContext = _serviceContextHelper.getServiceContext(
 			groupId, new long[0], user, true);
 
-		CommerceWarehouse commerceWarehouse =
-			_commerceWarehouseService.addCommerceWarehouse(
+		CommerceInventoryWarehouse commerceInventoryWarehouse =
+			_commerceInventoryWarehouseService.addCommerceInventoryWarehouse(
 				warehouse.getName(), warehouse.getDescription(),
 				GetterUtil.get(warehouse.getActive(), false),
 				warehouse.getStreet1(), warehouse.getStreet2(),
 				warehouse.getStreet3(), warehouse.getCity(), warehouse.getZip(),
-				GetterUtil.get(warehouse.getCommerceRegionId(), 0L),
-				warehouse.getCommerceCountryId(),
-				GetterUtil.get(warehouse.getLatitude(), 0D),
-				GetterUtil.get(warehouse.getLongitude(), 0D), serviceContext);
+				"", "", GetterUtil.get(warehouse.getLatitude(), 0D),
+				GetterUtil.get(warehouse.getLongitude(), 0D), null,
+				serviceContext);
 
-		return _dtoMapper.modelToDTO(commerceWarehouse);
+		return _dtoMapper.modelToDTO(commerceInventoryWarehouse);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		WarehouseHelper.class);
 
 	@Reference
-	private CommerceWarehouseService _commerceWarehouseService;
+	private CommerceInventoryWarehouseService
+		_commerceInventoryWarehouseService;
 
 	@Reference
 	private DTOMapper _dtoMapper;

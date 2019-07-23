@@ -41,8 +41,8 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -59,18 +59,65 @@ import javax.ws.rs.core.UriInfo;
 public abstract class BasePriceEntryResourceImpl implements PriceEntryResource {
 
 	@Override
+	@DELETE
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
+	@Path("/priceEntries/{id}")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "PriceEntry")})
+	public Response deletePriceEntry(
+			@NotNull @Parameter(hidden = true) @PathParam("id") String id)
+		throws Exception {
+
+		Response.ResponseBuilder responseBuilder = Response.ok();
+
+		return responseBuilder.build();
+	}
+
+	@Override
+	@GET
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
+	@Path("/priceEntries/{id}")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "PriceEntry")})
+	public PriceEntry getPriceEntry(
+			@NotNull @Parameter(hidden = true) @PathParam("id") String id)
+		throws Exception {
+
+		return new PriceEntry();
+	}
+
+	@Override
+	@Consumes({"application/json", "application/xml"})
+	@PATCH
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
+	@Path("/priceEntries/{id}")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "PriceEntry")})
+	public Response patchPriceEntry(
+			@NotNull @Parameter(hidden = true) @PathParam("id") String id,
+			PriceEntry priceEntry)
+		throws Exception {
+
+		Response.ResponseBuilder responseBuilder = Response.ok();
+
+		return responseBuilder.build();
+	}
+
+	@Override
 	@GET
 	@Parameters(
 		value = {
+			@Parameter(in = ParameterIn.PATH, name = "id"),
 			@Parameter(in = ParameterIn.QUERY, name = "page"),
 			@Parameter(in = ParameterIn.QUERY, name = "pageSize")
 		}
 	)
-	@Path("/priceEntry/{id}/tierPrice/")
+	@Path("/priceEntries/{id}/tierPrices/")
 	@Produces({"application/json", "application/xml"})
 	@Tags(value = {@Tag(name = "PriceEntry")})
-	public Page<TierPrice> getTierPrices(
-			@NotNull @PathParam("id") String id, @Context Pagination pagination)
+	public Page<TierPrice> getPriceEntryTierPricesPage(
+			@NotNull @Parameter(hidden = true) @PathParam("id") String id,
+			@Context Pagination pagination)
 		throws Exception {
 
 		return Page.of(Collections.emptyList());
@@ -79,60 +126,24 @@ public abstract class BasePriceEntryResourceImpl implements PriceEntryResource {
 	@Override
 	@Consumes({"application/json", "application/xml"})
 	@POST
-	@Path("/priceEntry/{id}/tierPrice/")
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
+	@Path("/priceEntries/{id}/tierPrice/")
 	@Produces({"application/json", "application/xml"})
 	@Tags(value = {@Tag(name = "PriceEntry")})
-	public TierPrice upsertTierPrice(
-			@NotNull @PathParam("id") String id, TierPrice tierPrice)
+	public TierPrice postPriceEntryTierPrice(
+			@NotNull @Parameter(hidden = true) @PathParam("id") String id,
+			TierPrice tierPrice)
 		throws Exception {
 
 		return new TierPrice();
-	}
-
-	@Override
-	@DELETE
-	@Path("/priceEntry/{id}")
-	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "PriceEntry")})
-	public Response deletePriceEntry(@NotNull @PathParam("id") String id)
-		throws Exception {
-
-		Response.ResponseBuilder responseBuilder = Response.ok();
-
-		return responseBuilder.build();
-	}
-
-	@Override
-	@GET
-	@Path("/priceEntry/{id}")
-	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "PriceEntry")})
-	public PriceEntry getPriceEntry(@NotNull @PathParam("id") String id)
-		throws Exception {
-
-		return new PriceEntry();
-	}
-
-	@Override
-	@Consumes({"application/json", "application/xml"})
-	@PUT
-	@Path("/priceEntry/{id}")
-	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "PriceEntry")})
-	public Response updatePriceEntry(
-			@NotNull @PathParam("id") String id, PriceEntry priceEntry)
-		throws Exception {
-
-		Response.ResponseBuilder responseBuilder = Response.ok();
-
-		return responseBuilder.build();
 	}
 
 	public void setContextCompany(Company contextCompany) {
 		this.contextCompany = contextCompany;
 	}
 
-	protected void preparePatch(PriceEntry priceEntry) {
+	protected void preparePatch(
+		PriceEntry priceEntry, PriceEntry existingPriceEntry) {
 	}
 
 	protected <T, R> List<R> transform(

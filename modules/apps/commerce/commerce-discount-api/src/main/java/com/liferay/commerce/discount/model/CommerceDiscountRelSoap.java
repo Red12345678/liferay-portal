@@ -26,16 +26,17 @@ import java.util.List;
  * This class is used by SOAP remote services, specifically {@link com.liferay.commerce.discount.service.http.CommerceDiscountRelServiceSoap}.
  *
  * @author Marco Leo
- * @see com.liferay.commerce.discount.service.http.CommerceDiscountRelServiceSoap
  * @generated
  */
 @ProviderType
 public class CommerceDiscountRelSoap implements Serializable {
-	public static CommerceDiscountRelSoap toSoapModel(CommerceDiscountRel model) {
+
+	public static CommerceDiscountRelSoap toSoapModel(
+		CommerceDiscountRel model) {
+
 		CommerceDiscountRelSoap soapModel = new CommerceDiscountRelSoap();
 
 		soapModel.setCommerceDiscountRelId(model.getCommerceDiscountRelId());
-		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setUserName(model.getUserName());
@@ -50,7 +51,9 @@ public class CommerceDiscountRelSoap implements Serializable {
 
 	public static CommerceDiscountRelSoap[] toSoapModels(
 		CommerceDiscountRel[] models) {
-		CommerceDiscountRelSoap[] soapModels = new CommerceDiscountRelSoap[models.length];
+
+		CommerceDiscountRelSoap[] soapModels =
+			new CommerceDiscountRelSoap[models.length];
 
 		for (int i = 0; i < models.length; i++) {
 			soapModels[i] = toSoapModel(models[i]);
@@ -61,10 +64,12 @@ public class CommerceDiscountRelSoap implements Serializable {
 
 	public static CommerceDiscountRelSoap[][] toSoapModels(
 		CommerceDiscountRel[][] models) {
+
 		CommerceDiscountRelSoap[][] soapModels = null;
 
 		if (models.length > 0) {
-			soapModels = new CommerceDiscountRelSoap[models.length][models[0].length];
+			soapModels =
+				new CommerceDiscountRelSoap[models.length][models[0].length];
 		}
 		else {
 			soapModels = new CommerceDiscountRelSoap[0][0];
@@ -79,13 +84,16 @@ public class CommerceDiscountRelSoap implements Serializable {
 
 	public static CommerceDiscountRelSoap[] toSoapModels(
 		List<CommerceDiscountRel> models) {
-		List<CommerceDiscountRelSoap> soapModels = new ArrayList<CommerceDiscountRelSoap>(models.size());
+
+		List<CommerceDiscountRelSoap> soapModels =
+			new ArrayList<CommerceDiscountRelSoap>(models.size());
 
 		for (CommerceDiscountRel model : models) {
 			soapModels.add(toSoapModel(model));
 		}
 
-		return soapModels.toArray(new CommerceDiscountRelSoap[soapModels.size()]);
+		return soapModels.toArray(
+			new CommerceDiscountRelSoap[soapModels.size()]);
 	}
 
 	public CommerceDiscountRelSoap() {
@@ -105,14 +113,6 @@ public class CommerceDiscountRelSoap implements Serializable {
 
 	public void setCommerceDiscountRelId(long commerceDiscountRelId) {
 		_commerceDiscountRelId = commerceDiscountRelId;
-	}
-
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	public void setGroupId(long groupId) {
-		_groupId = groupId;
 	}
 
 	public long getCompanyId() {
@@ -180,7 +180,6 @@ public class CommerceDiscountRelSoap implements Serializable {
 	}
 
 	private long _commerceDiscountRelId;
-	private long _groupId;
 	private long _companyId;
 	private long _userId;
 	private String _userName;
@@ -189,4 +188,5 @@ public class CommerceDiscountRelSoap implements Serializable {
 	private long _commerceDiscountId;
 	private long _classNameId;
 	private long _classPK;
+
 }

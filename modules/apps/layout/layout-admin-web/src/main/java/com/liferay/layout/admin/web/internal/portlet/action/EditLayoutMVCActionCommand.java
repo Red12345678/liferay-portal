@@ -121,6 +121,7 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 			groupId, privateLayout, layoutId);
 
 		String currentType = layout.getType();
+		String oldFriendlyURL = layout.getFriendlyURL();
 
 		layout = _layoutService.updateLayout(
 			groupId, privateLayout, layoutId, layout.getParentLayoutId(),
@@ -205,7 +206,7 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 
 		String redirect = ParamUtil.getString(actionRequest, "redirect");
 
-		if (Validator.isNull(redirect)) {
+		if (Validator.isNull(redirect) || redirect.contains(oldFriendlyURL)) {
 			redirect = _portal.getLayoutFullURL(layout, themeDisplay);
 		}
 

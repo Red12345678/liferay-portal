@@ -1,12 +1,12 @@
 definition {
+
 	macro executeSearchActions {
 		Panel.expandPanel(panel = "Index Actions");
 
 		AssertClick(
+			key_actionsDescription = "${actionsDescription}",
 			locator1 = "Button#EXECUTE_ACTION",
-			value1 = "Execute",
-			key_actionsDescription = "${actionsDescription}"
-		);
+			value1 = "Execute");
 
 		var pauseCount = "0";
 
@@ -22,4 +22,5 @@ definition {
 			fail("Reindex timed out after 2 minutes.");
 		}
 	}
+
 }

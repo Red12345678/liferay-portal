@@ -19,11 +19,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>PROFILE_BADGE_COUNT</td>
-	<td>//span[contains(@class,'notifications-count')]</td>
-	<td></td>
-</tr>
-<tr>
 	<td>MY_ACCOUNT_BADGE_COUNT</td>
 	<td>//a[contains(@class,'list-group-heading') and (@aria-expanded='false')]//span[contains(@class,'panel-notifications-count')]</td>
 	<td></td>

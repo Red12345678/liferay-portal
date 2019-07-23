@@ -21,12 +21,10 @@ import com.liferay.headless.admin.workflow.dto.v1_0.WorkflowTaskAssignToUser;
 import com.liferay.headless.admin.workflow.resource.v1_0.WorkflowTaskResource;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
-import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
-
-import graphql.annotations.annotationTypes.GraphQLField;
-import graphql.annotations.annotationTypes.GraphQLInvokeDetached;
-import graphql.annotations.annotationTypes.GraphQLName;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLField;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLName;
 
 import javax.annotation.Generated;
 
@@ -48,7 +46,6 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
 	public WorkflowTask postWorkflowTaskAssignToMe(
 			@GraphQLName("workflowTaskId") Long workflowTaskId,
 			@GraphQLName("workflowTaskAssignToMe") WorkflowTaskAssignToMe
@@ -64,7 +61,6 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
 	public WorkflowTask postWorkflowTaskAssignToUser(
 			@GraphQLName("workflowTaskId") Long workflowTaskId,
 			@GraphQLName("workflowTaskAssignToUser") WorkflowTaskAssignToUser
@@ -80,7 +76,6 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
 	public WorkflowTask postWorkflowTaskChangeTransition(
 			@GraphQLName("workflowTaskId") Long workflowTaskId,
 			@GraphQLName("changeTransition") ChangeTransition changeTransition)
@@ -95,7 +90,6 @@ public class Mutation {
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
 	public WorkflowTask postWorkflowTaskUpdateDueDate(
 			@GraphQLName("workflowTaskId") Long workflowTaskId,
 			@GraphQLName("workflowTaskAssignToMe") WorkflowTaskAssignToMe
@@ -152,12 +146,14 @@ public class Mutation {
 			WorkflowTaskResource workflowTaskResource)
 		throws Exception {
 
-		workflowTaskResource.setContextCompany(
-			CompanyLocalServiceUtil.getCompany(
-				CompanyThreadLocal.getCompanyId()));
+		workflowTaskResource.setContextAcceptLanguage(_acceptLanguage);
+		workflowTaskResource.setContextCompany(_company);
 	}
 
 	private static ComponentServiceObjects<WorkflowTaskResource>
 		_workflowTaskResourceComponentServiceObjects;
+
+	private AcceptLanguage _acceptLanguage;
+	private Company _company;
 
 }

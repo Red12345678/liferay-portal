@@ -21,9 +21,8 @@ import com.liferay.commerce.context.CommerceContextFactory;
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.commerce.order.CommerceOrderHttpHelper;
 import com.liferay.commerce.price.list.service.CommercePriceListLocalService;
-import com.liferay.commerce.product.service.CPRuleLocalService;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.commerce.service.CommerceOrderService;
-import com.liferay.commerce.user.segment.util.CommerceUserSegmentHelper;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.util.Portal;
 
@@ -42,21 +41,20 @@ public class CommerceContextFactoryImpl implements CommerceContextFactory {
 	public CommerceContext create(HttpServletRequest httpServletRequest) {
 		return new CommerceContextHttpImpl(
 			httpServletRequest, _commerceAccountHelper,
-			_commerceCurrencyLocalService, _commerceOrderHttpHelper,
-			_commercePriceListLocalService, _commerceUserSegmentHelper,
-			_configurationProvider, _cpRuleLocalService, _portal);
+			_commerceChannelLocalService, _commerceCurrencyLocalService,
+			_commerceOrderHttpHelper, _configurationProvider, _portal);
 	}
 
 	@Override
 	public CommerceContext create(
-		long groupId, long userId, long orderId, long commerceAccountId) {
+		long companyId, long groupId, long userId, long orderId,
+		long commerceAccountId) {
 
 		return new CommerceContextImpl(
-			groupId, userId, orderId, commerceAccountId,
-			_commerceAccountService, _commerceCurrencyLocalService,
-			_commerceOrderService, _commercePriceListLocalService,
-			_commerceUserSegmentHelper, _configurationProvider,
-			_cpRuleLocalService);
+			companyId, groupId, orderId, commerceAccountId,
+			_commerceAccountHelper, _commerceAccountService,
+			_commerceChannelLocalService, _commerceCurrencyLocalService,
+			_commerceOrderService, _configurationProvider);
 	}
 
 	@Reference
@@ -64,6 +62,9 @@ public class CommerceContextFactoryImpl implements CommerceContextFactory {
 
 	@Reference
 	private CommerceAccountService _commerceAccountService;
+
+	@Reference
+	private CommerceChannelLocalService _commerceChannelLocalService;
 
 	@Reference
 	private CommerceCurrencyLocalService _commerceCurrencyLocalService;
@@ -78,13 +79,7 @@ public class CommerceContextFactoryImpl implements CommerceContextFactory {
 	private CommercePriceListLocalService _commercePriceListLocalService;
 
 	@Reference
-	private CommerceUserSegmentHelper _commerceUserSegmentHelper;
-
-	@Reference
 	private ConfigurationProvider _configurationProvider;
-
-	@Reference
-	private CPRuleLocalService _cpRuleLocalService;
 
 	@Reference
 	private Portal _portal;

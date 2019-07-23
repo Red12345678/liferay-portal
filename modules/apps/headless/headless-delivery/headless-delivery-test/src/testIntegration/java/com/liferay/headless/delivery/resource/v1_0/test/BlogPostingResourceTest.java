@@ -29,4 +29,9 @@ public class BlogPostingResourceTest extends BaseBlogPostingResourceTestCase {
 		return new String[] {"description", "headline"};
 	}
 
+	@Override
+	protected String[] getIgnoredEntityFieldNames() {
+		return new String[] {"creatorId"};
+	}
+
 }

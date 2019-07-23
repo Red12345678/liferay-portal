@@ -14,7 +14,6 @@
 
 package com.liferay.headless.delivery.internal.odata.entity.v1_0;
 
-import com.liferay.petra.string.CharPool;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.odata.entity.CollectionEntityField;
@@ -38,7 +37,9 @@ import java.util.stream.Stream;
  */
 public class StructuredContentEntityModel implements EntityModel {
 
-	public StructuredContentEntityModel(List<EntityField> entityFields) {
+	public StructuredContentEntityModel(
+		List<EntityField> entityFields, List<EntityField> customEntityFields) {
+
 		_entityFieldsMap = Stream.of(
 			new CollectionEntityField(
 				new IntegerEntityField(
@@ -46,7 +47,8 @@ public class StructuredContentEntityModel implements EntityModel {
 			new CollectionEntityField(
 				new StringEntityField(
 					"keywords", locale -> "assetTagNames.raw")),
-			new ComplexEntityField("values", entityFields),
+			new ComplexEntityField("contentFields", entityFields),
+			new ComplexEntityField("customFields", customEntityFields),
 			new DateTimeEntityField(
 				"dateCreated",
 				locale -> Field.getSortableFieldName(Field.CREATE_DATE),
@@ -74,13 +76,6 @@ public class StructuredContentEntityModel implements EntityModel {
 	@Override
 	public Map<String, EntityField> getEntityFieldsMap() {
 		return _entityFieldsMap;
-	}
-
-	@Override
-	public String getName() {
-		String name = StructuredContentEntityModel.class.getName();
-
-		return name.replace(CharPool.PERIOD, CharPool.UNDERLINE);
 	}
 
 	private final Map<String, EntityField> _entityFieldsMap;

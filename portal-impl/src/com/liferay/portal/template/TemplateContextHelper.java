@@ -238,10 +238,10 @@ public class TemplateContextHelper {
 			(PortletRequest)request.getAttribute(
 				JavaConstants.JAVAX_PORTLET_REQUEST);
 
-		if (portletRequest != null) {
-			if (portletRequest instanceof RenderRequest) {
-				contextObjects.put("renderRequest", portletRequest);
-			}
+		if ((portletRequest != null) &&
+			(portletRequest instanceof RenderRequest)) {
+
+			contextObjects.put("renderRequest", portletRequest);
 		}
 
 		// Render response
@@ -250,10 +250,10 @@ public class TemplateContextHelper {
 			(PortletResponse)request.getAttribute(
 				JavaConstants.JAVAX_PORTLET_RESPONSE);
 
-		if (portletResponse != null) {
-			if (portletResponse instanceof RenderResponse) {
-				contextObjects.put("renderResponse", portletResponse);
-			}
+		if ((portletResponse != null) &&
+			(portletResponse instanceof RenderResponse)) {
+
+			contextObjects.put("renderResponse", portletResponse);
 		}
 
 		// XML request

@@ -86,7 +86,7 @@ if (oAuth2Application.getOAuth2ApplicationScopeAliasesId() > 0) {
 		A.one('#<portlet:namespace />navScopeTypes').toggleClass('hidden', false);
 	}
 
-	var appsAccordion = A.one('#appsAccordion');
+	var appsAccordion = A.one('#<portlet:namespace />appsAccordion');
 
 	var modal = new A.Modal(
 		{

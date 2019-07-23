@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Navigation";
@@ -39,19 +40,22 @@ definition {
 
 		LexiconEntry.gotoEntry(rowEntry = "Navigation Menu Name 1");
 
-		NavigationMenusAdmin.addItem(item = "Page", pageNames = "Test Page Name");
+		NavigationMenusAdmin.addItem(
+			item = "Page",
+			pageNames = "Test Page Name");
 
 		NavigationMenusAdmin.viewItem(itemName = "Test Page Name");
 
-		NavigationMenusAdmin.addItem(item = "Submenu", submenuName = "Submenu Name");
+		NavigationMenusAdmin.addItem(
+			item = "Submenu",
+			submenuName = "Submenu Name");
 
 		NavigationMenusAdmin.viewItem(itemName = "Submenu Name");
 
 		NavigationMenusAdmin.addItem(
 			item = "URL",
 			url = "https://www.liferay.com/",
-			urlName = "Liferay"
-		);
+			urlName = "Liferay");
 
 		NavigationMenusAdmin.viewItem(itemName = "Liferay");
 	}
@@ -70,7 +74,9 @@ definition {
 
 		NavigationMenusAdmin.addMenu(menuName = "Primary Menu Name 2");
 
-		NavigationMenusAdmin.addItem(item = "Page", pageNames = "Test Page Name");
+		NavigationMenusAdmin.addItem(
+			item = "Page",
+			pageNames = "Test Page Name");
 
 		NavigationMenusAdmin.viewItem(itemName = "Test Page Name");
 	}
@@ -89,8 +95,7 @@ definition {
 		NavigationMenusAdmin.addItem(
 			item = "URL",
 			url = "https://www.liferay.com/",
-			urlName = "Liferay"
-		);
+			urlName = "Liferay");
 
 		NavigationMenusAdmin.viewItem(itemName = "Liferay");
 
@@ -103,10 +108,9 @@ definition {
 		Portlet.saveAndCloseConfig();
 
 		AssertClick(
+			key_pageName = "Liferay",
 			locator1 = "Home#PAGE",
-			value1 = "Liferay",
-			key_pageName = "Liferay"
-		);
+			value1 = "Liferay");
 
 		AssertLocation(value1 = "https://www.liferay.com/");
 	}
@@ -125,24 +129,20 @@ definition {
 
 		NavigationMenusAdmin.configureMenuType(
 			menuType = "Primary Navigation",
-			navigationMenu = "Navigation Menu Name 1"
-		);
+			navigationMenu = "Navigation Menu Name 1");
 
 		NavigationMenusAdmin.viewMenuType(
 			menuType = "Primary Navigation",
-			rowEntry = "Navigation Menu Name 1"
-		);
+			rowEntry = "Navigation Menu Name 1");
 
 		NavigationMenusAdmin.configureMenuType(
 			menuType = "Primary Navigation",
 			navigationMenu = "Navigation Menu Name 2",
-			oldPrimaryNavigationMenu = "Navigation Menu Name 1"
-		);
+			oldPrimaryNavigationMenu = "Navigation Menu Name 1");
 
 		NavigationMenusAdmin.viewMenuType(
 			menuType = "Primary Navigation",
-			rowEntry = "Navigation Menu Name 2"
-		);
+			rowEntry = "Navigation Menu Name 2");
 	}
 
 	@priority = "4"
@@ -159,13 +159,11 @@ definition {
 
 		NavigationMenusAdmin.configureMenuType(
 			menuType = "Secondary Navigation",
-			navigationMenu = "Navigation Menu Name 2"
-		);
+			navigationMenu = "Navigation Menu Name 2");
 
 		NavigationMenusAdmin.viewMenuType(
 			menuType = "Secondary Navigation",
-			rowEntry = "Navigation Menu Name 2"
-		);
+			rowEntry = "Navigation Menu Name 2");
 	}
 
 	@priority = "4"
@@ -182,13 +180,11 @@ definition {
 
 		NavigationMenusAdmin.configureMenuType(
 			menuType = "Social Navigation",
-			navigationMenu = "Navigation Menu Name 2"
-		);
+			navigationMenu = "Navigation Menu Name 2");
 
 		NavigationMenusAdmin.viewMenuType(
 			menuType = "Social Navigation",
-			rowEntry = "Navigation Menu Name 2"
-		);
+			rowEntry = "Navigation Menu Name 2");
 	}
 
 	@priority = "5"
@@ -201,7 +197,9 @@ definition {
 
 		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name");
 
-		LexiconEntry.delete(menuItem = "Delete", rowEntry = "Navigation Menu Name 1");
+		LexiconEntry.delete(
+			menuItem = "Delete",
+			rowEntry = "Navigation Menu Name 1");
 
 		LexiconEntry.viewNoEntry(rowEntry = "Navigation Menu Name 1");
 	}
@@ -223,38 +221,31 @@ definition {
 
 		NavigationMenusAdmin.addItem(
 			item = "Page",
-			pageNames = "Site Page Name 1,Site Page Name 2"
-		);
+			pageNames = "Site Page Name 1,Site Page Name 2");
 
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Navigation Menus"
-		);
+			portlet = "Navigation Menus");
 
 		NavigationMenusAdmin.configureMenuType(
 			menuType = "Primary Navigation",
-			navigationMenu = "Test Navigation Menu Name"
-		);
+			navigationMenu = "Test Navigation Menu Name");
 
-		NavigationMenusAdmin.markAsPrimaryNavigation(
-			newMenuName = "Test Navigation Menu Name"
-		);
+		NavigationMenusAdmin.markAsPrimaryNavigation(newMenuName = "Test Navigation Menu Name");
 
 		LexiconEntry.gotoEntry(rowEntry = "Test Navigation Menu Name");
 
 		NavigationMenusAdmin.editItem(
 			item = "Page",
 			itemName = "Site Page Name 2",
-			name = "Site Page Name 3"
-		);
+			name = "Site Page Name 3");
 
 		NavigationMenusAdmin.viewItem(itemName = "Site Page Name 3");
 
 		Navigator.gotoSitePage(
 			pageName = "Site Page Name 1",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		NavigationMenusWidget.gotoNavigationMenuWidgetConfig();
 
@@ -264,8 +255,7 @@ definition {
 
 		Navigator.gotoSitePage(
 			pageName = "Site Page Name 3",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		var portalURL = PropsUtil.get("portal.url");
 
@@ -282,8 +272,7 @@ definition {
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Rename",
-			rowEntry = "Navigation Menu Name 1"
-		);
+			rowEntry = "Navigation Menu Name 1");
 
 		PortletEntry.inputName(name = "Navigation Menu Name 1 Edit");
 
@@ -306,8 +295,7 @@ definition {
 		NavigationMenusAdmin.addItem(
 			item = "URL",
 			url = "https://www.liferay.com/",
-			urlName = "Liferay"
-		);
+			urlName = "Liferay");
 
 		NavigationMenusAdmin.viewItem(itemName = "Liferay");
 
@@ -331,8 +319,11 @@ definition {
 
 		LexiconEntry.gotoEntry(rowEntry = "Navigation Menu Name 1");
 
-		NavigationMenusAdmin.addItem(item = "Page", pageNames = "Test Page Name");
+		NavigationMenusAdmin.addItem(
+			item = "Page",
+			pageNames = "Test Page Name");
 
 		Alert.viewSuccessMessage();
 	}
+
 }

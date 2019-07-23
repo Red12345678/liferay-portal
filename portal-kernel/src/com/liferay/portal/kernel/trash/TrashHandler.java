@@ -574,8 +574,20 @@ public interface TrashHandler {
 	 *
 	 * @return <code>true</code> if the entity can be deleted from the Recycle
 	 *         Bin.
+	 * @deprecated As of Judson (7.1.x), replaced by {@link
+	 *             #isDeletable(long)}
 	 */
+	@Deprecated
 	public boolean isDeletable();
+
+	/**
+	 * Returns <code>true</code> if the entity can be deleted from the Recycle
+	 * Bin.
+	 *
+	 * @return <code>true</code> if the entity can be deleted from the Recycle
+	 *         Bin.
+	 */
+	public boolean isDeletable(long classPK) throws PortalException;
 
 	/**
 	 * Returns <code>true</code> if the model entity with the primary key is in
@@ -622,8 +634,21 @@ public interface TrashHandler {
 	 *
 	 * @return <code>true</code> if the entity can be moved from one container
 	 *         model to another; <code>false</code> otherwise
+	 * @deprecated As of Judson (7.1.x), replaced by {@link
+	 *             #isMovable(long)}
 	 */
+	@Deprecated
 	public boolean isMovable();
+
+	/**
+	 * Returns <code>true</code> if the entity can be moved from one container
+	 * model (such as a folder) to another.
+	 *
+	 * @param  classPK the primary key of the model entity
+	 * @return <code>true</code> if the entity can be moved from one container
+	 *         model to another; <code>false</code> otherwise
+	 */
+	public boolean isMovable(long classPK) throws PortalException;
 
 	/**
 	 * Returns <code>true</code> if the model entity can be restored to its

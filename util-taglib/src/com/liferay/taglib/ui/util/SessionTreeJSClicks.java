@@ -77,7 +77,6 @@ public class SessionTreeJSClicks {
 				return;
 			}
 			catch (ConcurrentModificationException cme) {
-				continue;
 			}
 			catch (Exception e) {
 				_log.error(e, e);
@@ -100,7 +99,6 @@ public class SessionTreeJSClicks {
 				return;
 			}
 			catch (ConcurrentModificationException cme) {
-				continue;
 			}
 			catch (Exception e) {
 				_log.error(e, e);
@@ -133,7 +131,6 @@ public class SessionTreeJSClicks {
 				return;
 			}
 			catch (ConcurrentModificationException cme) {
-				continue;
 			}
 			catch (Exception e) {
 				_log.error(e, e);
@@ -200,7 +197,6 @@ public class SessionTreeJSClicks {
 				return;
 			}
 			catch (ConcurrentModificationException cme) {
-				continue;
 			}
 			catch (Exception e) {
 				_log.error(e, e);
@@ -232,7 +228,6 @@ public class SessionTreeJSClicks {
 				return;
 			}
 			catch (ConcurrentModificationException cme) {
-				continue;
 			}
 			catch (Exception e) {
 				_log.error(e, e);

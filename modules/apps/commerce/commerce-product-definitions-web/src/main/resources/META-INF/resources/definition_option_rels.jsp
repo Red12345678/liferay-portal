@@ -19,11 +19,12 @@
 <%
 CPDefinitionOptionRelDisplayContext cpDefinitionOptionRelDisplayContext = (CPDefinitionOptionRelDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 
-long cpDefinitionId = cpDefinitionOptionRelDisplayContext.getCPDefinitionId();
+CPDefinition cpDefinition = cpDefinitionOptionRelDisplayContext.getCPDefinition();
 %>
 
-<c:if test="<%= cpDefinitionOptionRelDisplayContext.hasViewPermission() %>">
+<c:if test="<%= CommerceCatalogPermission.contains(permissionChecker, cpDefinition, ActionKeys.VIEW) %>">
 	<portlet:resourceURL id="cpDefinitionOptionRels" var="cpDefinitionOptionsURL">
+		<portlet:param name="cpDefinitionId" value="<%= String.valueOf(cpDefinition.getCPDefinitionId()) %>" />
 	</portlet:resourceURL>
 
 	<liferay-portlet:renderURL var="cpDefinitionOptionRelURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
@@ -42,12 +43,12 @@ long cpDefinitionId = cpDefinitionOptionRelDisplayContext.getCPDefinitionId();
 	<%
 	Map<String, Object> context = new HashMap<>();
 
-	context.put("cpDefinitionId", String.valueOf(cpDefinitionId));
+	context.put("cpDefinitionId", String.valueOf(cpDefinition.getCPDefinitionId()));
 	context.put("cpDefinitionOptionsURL", cpDefinitionOptionsURL);
 	context.put("cpDefinitionOptionValueRelsURL", cpDefinitionOptionValueRelsURL);
 	context.put("cpDefinitionOptionValueRelURL", cpDefinitionOptionValueRelURL);
 	context.put("editProductDefinitionOptionRelURL", editProductDefinitionOptionRelURL);
-	context.put("hasEditPermission", cpDefinitionOptionRelDisplayContext.hasEditPermission());
+	context.put("hasEditPermission", CommerceCatalogPermission.contains(permissionChecker, cpDefinition, ActionKeys.UPDATE));
 	context.put("id", "CPDefinitionOptionsEditor");
 	context.put("namespace", liferayPortletResponse.getNamespace());
 	context.put("optionsItemSelectorURL", cpDefinitionOptionRelDisplayContext.getItemSelectorUrl());
@@ -59,7 +60,7 @@ long cpDefinitionId = cpDefinitionOptionRelDisplayContext.getCPDefinitionId();
 	<div class="container-fluid-1280" id="<portlet:namespace />CPOptionsEditor">
 		<soy:template-renderer
 			context="<%= context %>"
-			module="commerce-product-definitions-web@1.1.9/definition_option_rel/CPDefinitionOptionsEditor.es"
+			module="commerce-product-definitions-web@2.0.3/definition_option_rel/CPDefinitionOptionsEditor.es"
 			templateNamespace="CPDefinitionOptionsEditor.render"
 		/>
 	</div>

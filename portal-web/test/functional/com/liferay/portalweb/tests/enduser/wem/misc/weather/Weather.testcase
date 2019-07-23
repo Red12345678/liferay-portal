@@ -1,5 +1,6 @@
 @component-name = "portal-plugins-osgi"
 definition {
+
 	property osgi.app.includes = "weather";
 	property plugins.deployment.type = "osgi";
 	property portal.release = "true";
@@ -13,8 +14,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Test Page");
 	}
@@ -31,4 +31,5 @@ definition {
 
 		Portlet.addPG(portletName = "Weather");
 	}
+
 }

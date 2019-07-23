@@ -1,7 +1,17 @@
+create table CDiscountCAccountGroupRel (
+	CDiscountCAccountGroupRelId LONG not null primary key,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	commerceDiscountId LONG,
+	commerceAccountGroupId LONG
+);
+
 create table CommerceDiscount (
 	uuid_ VARCHAR(75) null,
 	commerceDiscountId LONG not null primary key,
-	groupId LONG,
 	companyId LONG,
 	userId LONG,
 	userName VARCHAR(75) null,
@@ -32,7 +42,6 @@ create table CommerceDiscount (
 
 create table CommerceDiscountRel (
 	commerceDiscountRelId LONG not null primary key,
-	groupId LONG,
 	companyId LONG,
 	userId LONG,
 	userName VARCHAR(75) null,
@@ -45,7 +54,6 @@ create table CommerceDiscountRel (
 
 create table CommerceDiscountRule (
 	commerceDiscountRuleId LONG not null primary key,
-	groupId LONG,
 	companyId LONG,
 	userId LONG,
 	userName VARCHAR(75) null,
@@ -58,7 +66,6 @@ create table CommerceDiscountRule (
 
 create table CommerceDiscountUsageEntry (
 	commerceDiscountUsageEntryId LONG not null primary key,
-	groupId LONG,
 	companyId LONG,
 	userId LONG,
 	userName VARCHAR(75) null,
@@ -67,16 +74,4 @@ create table CommerceDiscountUsageEntry (
 	commerceAccountId LONG,
 	commerceOrderId LONG,
 	commerceDiscountId LONG
-);
-
-create table CommerceDiscountUserSegmentRel (
-	CDiscountUserSegmentRelId LONG not null primary key,
-	groupId LONG,
-	companyId LONG,
-	userId LONG,
-	userName VARCHAR(75) null,
-	createDate DATE null,
-	modifiedDate DATE null,
-	commerceDiscountId LONG,
-	commerceUserSegmentEntryId LONG
 );

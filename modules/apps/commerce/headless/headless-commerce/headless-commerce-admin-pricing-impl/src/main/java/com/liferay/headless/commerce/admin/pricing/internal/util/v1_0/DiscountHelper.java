@@ -21,13 +21,16 @@ import com.liferay.headless.commerce.admin.pricing.dto.v1_0.Discount;
 import com.liferay.headless.commerce.admin.pricing.internal.mapper.v1_0.DTOMapper;
 import com.liferay.headless.commerce.core.util.DateConfig;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 
@@ -57,19 +60,22 @@ public class DiscountHelper {
 		return _dtoMapper.modelToDTO(commerceDiscount);
 	}
 
-	public Page<Discount> getDiscounts(Long groupId, Pagination pagination)
+	public Page<Discount> getDiscounts(Long companyId, Pagination pagination)
 		throws PortalException {
 
-		List<CommerceDiscount> commerceDiscounts =
-			_commerceDiscountService.getCommerceDiscounts(
-				groupId, pagination.getStartPosition(),
-				pagination.getEndPosition(), null);
+		BaseModelSearchResult<CommerceDiscount> commerceDiscounts =
+			_commerceDiscountService.searchCommerceDiscounts(
+				companyId, StringPool.BLANK, WorkflowConstants.STATUS_ANY,
+				pagination.getStartPosition(), pagination.getEndPosition(),
+				null);
 
-		int count = _commerceDiscountService.getCommerceDiscountsCount(groupId);
+		int count = commerceDiscounts.getLength();
 
 		List<Discount> discounts = new ArrayList<>();
 
-		for (CommerceDiscount commerceDiscount : commerceDiscounts) {
+		for (CommerceDiscount commerceDiscount :
+				commerceDiscounts.getBaseModels()) {
+
 			discounts.add(_dtoMapper.modelToDTO(commerceDiscount));
 		}
 
@@ -90,7 +96,7 @@ public class DiscountHelper {
 		}
 
 		ServiceContext serviceContext = _serviceContextHelper.getServiceContext(
-			commerceDiscount.getGroupId(), new long[0], user, true);
+			0L, new long[0], user, true);
 
 		Calendar displayCalendar = CalendarFactoryUtil.getCalendar(
 			serviceContext.getTimeZone());
@@ -128,7 +134,7 @@ public class DiscountHelper {
 			neverExpire, serviceContext);
 	}
 
-	public Discount upsertDiscount(Long groupId, Discount discount, User user)
+	public Discount upsertDiscount(Discount discount, User user)
 		throws PortalException {
 
 		try {
@@ -151,7 +157,7 @@ public class DiscountHelper {
 		}
 
 		ServiceContext serviceContext = _serviceContextHelper.getServiceContext(
-			groupId, new long[0], user, true);
+			user);
 
 		Calendar displayCalendar = CalendarFactoryUtil.getCalendar(
 			serviceContext.getTimeZone());
@@ -194,7 +200,7 @@ public class DiscountHelper {
 
 		CommerceDiscount commerceDiscount =
 			_commerceDiscountService.addCommerceDiscount(
-				discount.getTitle(), discount.getTarget(),
+				user.getUserId(), discount.getTitle(), discount.getTarget(),
 				GetterUtil.get(discount.getUseCouponCode(), false),
 				discount.getCouponCode(),
 				GetterUtil.get(discount.getUsePercentage(), false),

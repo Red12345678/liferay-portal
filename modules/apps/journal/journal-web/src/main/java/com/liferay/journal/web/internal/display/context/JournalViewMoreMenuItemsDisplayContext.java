@@ -190,6 +190,7 @@ public class JournalViewMoreMenuItemsDisplayContext {
 		portletURL.setParameter("mvcPath", "/view_more_menu_items.jsp");
 		portletURL.setParameter("folderId", String.valueOf(_folderId));
 		portletURL.setParameter("eventName", getEventName());
+		portletURL.setParameter("orderByType", getOrderByType());
 
 		return portletURL;
 	}
@@ -232,7 +233,8 @@ public class JournalViewMoreMenuItemsDisplayContext {
 				add(
 					dropdownItem -> {
 						dropdownItem.setActive(true);
-						dropdownItem.setHref(_renderResponse.createRenderURL());
+						dropdownItem.setHref(
+							getPortletURL(), "navigation", "all");
 						dropdownItem.setLabel(
 							LanguageUtil.get(_request, "all"));
 					});

@@ -15,21 +15,18 @@
 package com.liferay.commerce.warehouse.web.internal.admin;
 
 import com.liferay.commerce.admin.CommerceAdminModule;
-import com.liferay.commerce.configuration.CommerceShippingGroupServiceConfiguration;
-import com.liferay.commerce.constants.CommerceActionKeys;
-import com.liferay.commerce.constants.CommerceConstants;
+import com.liferay.commerce.admin.constants.CommerceAdminConstants;
+import com.liferay.commerce.inventory.constants.CommerceInventoryActionKeys;
+import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseService;
+import com.liferay.commerce.product.service.CommerceChannelRelService;
+import com.liferay.commerce.product.service.CommerceChannelService;
 import com.liferay.commerce.service.CommerceCountryService;
-import com.liferay.commerce.service.CommerceWarehouseLocalService;
-import com.liferay.commerce.service.CommerceWarehouseService;
-import com.liferay.commerce.warehouse.web.internal.display.context.CommerceWarehousesDisplayContext;
+import com.liferay.commerce.warehouse.web.internal.display.context.CommerceInventoryWarehousesDisplayContext;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
-import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
+import com.liferay.portal.kernel.service.permission.PortalPermissionUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -52,6 +49,7 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Andrea Di Giorgi
+ * @author Alessio Antonio Rendina
  */
 @Component(
 	immediate = true,
@@ -77,8 +75,10 @@ public class WarehousesCommerceAdminModule implements CommerceAdminModule {
 		HttpServletRequest httpServletRequest = _portal.getHttpServletRequest(
 			renderRequest);
 
-		CommerceWarehousesDisplayContext commerceWarehousesDisplayContext =
-			setCommerceWarehousesDisplayContext(httpServletRequest);
+		CommerceInventoryWarehousesDisplayContext
+			commerceInventoryWarehousesDisplayContext =
+				setCommerceInventoryWarehousesDisplayContext(
+					httpServletRequest);
 
 		PortletURL portletURL = renderResponse.createRenderURL();
 
@@ -86,34 +86,22 @@ public class WarehousesCommerceAdminModule implements CommerceAdminModule {
 		portletURL.setParameter(
 			"commerceCountryId",
 			String.valueOf(
-				commerceWarehousesDisplayContext.getCommerceCountryId()));
+				commerceInventoryWarehousesDisplayContext.
+					getCommerceCountryTwoLettersIsoCode()));
 
 		return portletURL;
 	}
 
 	@Override
+	public int getType() {
+		return CommerceAdminConstants.COMMERCE_ADMIN_TYPE_VIRTUAL_INSTANCE;
+	}
+
+	@Override
 	public boolean isVisible(long groupId) throws PortalException {
-		CommerceShippingGroupServiceConfiguration
-			commerceShippingGroupServiceConfiguration =
-				_configurationProvider.getConfiguration(
-					CommerceShippingGroupServiceConfiguration.class,
-					new GroupServiceSettingsLocator(
-						groupId, CommerceConstants.SHIPPING_SERVICE_NAME));
-
-		String commerceShippingOriginLocatorKey =
-			commerceShippingGroupServiceConfiguration.
-				commerceShippingOriginLocatorKey();
-
-		if (commerceShippingOriginLocatorKey.equals("address")) {
-			return false;
-		}
-
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
-
-		return _portletResourcePermission.contains(
-			permissionChecker, groupId,
-			CommerceActionKeys.MANAGE_COMMERCE_WAREHOUSES);
+		return PortalPermissionUtil.contains(
+			PermissionThreadLocal.getPermissionChecker(),
+			CommerceInventoryActionKeys.MANAGE_INVENTORY);
 	}
 
 	@Override
@@ -126,57 +114,56 @@ public class WarehousesCommerceAdminModule implements CommerceAdminModule {
 		HttpServletResponse httpServletResponse =
 			_portal.getHttpServletResponse(renderResponse);
 
-		setCommerceWarehousesDisplayContext(httpServletRequest);
+		setCommerceInventoryWarehousesDisplayContext(httpServletRequest);
 
 		_jspRenderer.renderJSP(
 			_servletContext, httpServletRequest, httpServletResponse,
 			"/view.jsp");
 	}
 
-	protected CommerceWarehousesDisplayContext
-		setCommerceWarehousesDisplayContext(
+	protected CommerceInventoryWarehousesDisplayContext
+		setCommerceInventoryWarehousesDisplayContext(
 			HttpServletRequest httpServletRequest) {
 
-		CommerceWarehousesDisplayContext commerceWarehousesDisplayContext =
-			(CommerceWarehousesDisplayContext)httpServletRequest.getAttribute(
-				WebKeys.PORTLET_DISPLAY_CONTEXT);
+		CommerceInventoryWarehousesDisplayContext
+			commerceInventoryWarehousesDisplayContext =
+				(CommerceInventoryWarehousesDisplayContext)
+					httpServletRequest.getAttribute(
+						WebKeys.PORTLET_DISPLAY_CONTEXT);
 
-		if (commerceWarehousesDisplayContext == null) {
-			commerceWarehousesDisplayContext =
-				new CommerceWarehousesDisplayContext(
-					_commerceCountryService, _commerceWarehouseService,
-					httpServletRequest, _portletResourcePermission);
+		if (commerceInventoryWarehousesDisplayContext == null) {
+			commerceInventoryWarehousesDisplayContext =
+				new CommerceInventoryWarehousesDisplayContext(
+					_commerceChannelRelService, _commerceChannelService,
+					_commerceCountryService, _commerceInventoryWarehouseService,
+					httpServletRequest);
 
 			httpServletRequest.setAttribute(
 				WebKeys.PORTLET_DISPLAY_CONTEXT,
-				commerceWarehousesDisplayContext);
+				commerceInventoryWarehousesDisplayContext);
 		}
 
-		return commerceWarehousesDisplayContext;
+		return commerceInventoryWarehousesDisplayContext;
 	}
+
+	@Reference
+	private CommerceChannelRelService _commerceChannelRelService;
+
+	@Reference
+	private CommerceChannelService _commerceChannelService;
 
 	@Reference
 	private CommerceCountryService _commerceCountryService;
 
 	@Reference
-	private CommerceWarehouseLocalService _commerceWarehouseLocalService;
-
-	@Reference
-	private CommerceWarehouseService _commerceWarehouseService;
-
-	@Reference
-	private ConfigurationProvider _configurationProvider;
+	private CommerceInventoryWarehouseService
+		_commerceInventoryWarehouseService;
 
 	@Reference
 	private JSPRenderer _jspRenderer;
 
 	@Reference
 	private Portal _portal;
-
-	@Reference(
-		target = "(resource.name=" + CommerceConstants.RESOURCE_NAME + ")"
-	)
-	private PortletResourcePermission _portletResourcePermission;
 
 	@Reference(
 		target = "(osgi.web.symbolicname=com.liferay.commerce.warehouse.web)"

@@ -145,6 +145,27 @@ public class MessageBoardMessage {
 
 	protected Creator creator;
 
+	public CustomField[] getCustomFields() {
+		return customFields;
+	}
+
+	public void setCustomFields(CustomField[] customFields) {
+		this.customFields = customFields;
+	}
+
+	public void setCustomFields(
+		UnsafeSupplier<CustomField[], Exception> customFieldsUnsafeSupplier) {
+
+		try {
+			customFields = customFieldsUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected CustomField[] customFields;
+
 	public Date getDateCreated() {
 		return dateCreated;
 	}
@@ -268,6 +289,27 @@ public class MessageBoardMessage {
 	}
 
 	protected String[] keywords;
+
+	public Long getMessageBoardThreadId() {
+		return messageBoardThreadId;
+	}
+
+	public void setMessageBoardThreadId(Long messageBoardThreadId) {
+		this.messageBoardThreadId = messageBoardThreadId;
+	}
+
+	public void setMessageBoardThreadId(
+		UnsafeSupplier<Long, Exception> messageBoardThreadIdUnsafeSupplier) {
+
+		try {
+			messageBoardThreadId = messageBoardThreadIdUnsafeSupplier.get();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected Long messageBoardThreadId;
 
 	public Integer getNumberOfMessageBoardAttachments() {
 		return numberOfMessageBoardAttachments;

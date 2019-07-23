@@ -20,8 +20,8 @@
 CPDefinitionsDisplayContext cpDefinitionsDisplayContext = (CPDefinitionsDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 
 CPDefinition cpDefinition = cpDefinitionsDisplayContext.getCPDefinition();
-
 long cpDefinitionId = cpDefinitionsDisplayContext.getCPDefinitionId();
+List<CommerceCatalog> commerceCatalogs = cpDefinitionsDisplayContext.getCommerceCatalogs();
 
 String productTypeName = BeanParamUtil.getString(cpDefinition, request, "productTypeName");
 
@@ -55,6 +55,7 @@ if ((cpDefinition != null) && (cpDefinition.getExpirationDate() != null)) {
 			<liferay-ui:error exception="<%= CPDefinitionMetaDescriptionException.class %>" message="the-meta-description-is-too-long" />
 			<liferay-ui:error exception="<%= CPDefinitionMetaKeywordsException.class %>" message="the-meta-keywords-are-too-long" />
 			<liferay-ui:error exception="<%= CPDefinitionMetaTitleException.class %>" message="the-meta-title-is-too-long" />
+			<liferay-ui:error exception="<%= NoSuchCatalogException.class %>" message="please-select-a-valid-catalog" />
 
 			<liferay-ui:error exception="<%= CPFriendlyURLEntryException.class %>">
 
@@ -70,6 +71,20 @@ if ((cpDefinition != null) && (cpDefinition.getExpirationDate() != null)) {
 					<aui:workflow-status id="<%= String.valueOf(cpDefinitionId) %>" markupView="lexicon" showHelpMessage="<%= false %>" showIcon="<%= false %>" showLabel="<%= false %>" status="<%= cpDefinition.getStatus() %>" />
 				</liferay-frontend:info-bar>
 			</c:if>
+
+			<aui:select disabled="<%= cpDefinition != null %>" label="catalog" name="commerceCatalogGroupId" required="<%= true %>" showEmptyOption="<%= true %>">
+
+				<%
+				for (CommerceCatalog commerceCatalog : commerceCatalogs) {
+				%>
+
+					<aui:option label="<%= commerceCatalog.getName() %>" selected="<%= (cpDefinition == null) ? (commerceCatalogs.size() == 1) : cpDefinitionsDisplayContext.isSelectedCatalog(commerceCatalog) %>" value="<%= commerceCatalog.getGroupId() %>" />
+
+				<%
+				}
+				%>
+
+			</aui:select>
 
 			<aui:input autoFocus="<%= true %>" label="name" localized="<%= true %>" name="nameMapAsXML" type="text">
 				<aui:validator name="required" />

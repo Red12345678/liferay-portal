@@ -17,10 +17,8 @@ package com.liferay.headless.commerce.admin.site.setting.internal.graphql.servle
 import com.liferay.headless.commerce.admin.site.setting.internal.graphql.mutation.v1_0.Mutation;
 import com.liferay.headless.commerce.admin.site.setting.internal.graphql.query.v1_0.Query;
 import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.AvailabilityEstimateResource;
-import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.CatalogRuleResource;
 import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.MeasurementUnitResource;
 import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.TaxCategoryResource;
-import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.UserSegmentResource;
 import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.WarehouseResource;
 import com.liferay.portal.vulcan.graphql.servlet.ServletData;
 
@@ -45,27 +43,19 @@ public class ServletDataImpl implements ServletData {
 	public void activate(BundleContext bundleContext) {
 		Mutation.setAvailabilityEstimateResourceComponentServiceObjects(
 			_availabilityEstimateResourceComponentServiceObjects);
-		Mutation.setCatalogRuleResourceComponentServiceObjects(
-			_catalogRuleResourceComponentServiceObjects);
 		Mutation.setMeasurementUnitResourceComponentServiceObjects(
 			_measurementUnitResourceComponentServiceObjects);
 		Mutation.setTaxCategoryResourceComponentServiceObjects(
 			_taxCategoryResourceComponentServiceObjects);
-		Mutation.setUserSegmentResourceComponentServiceObjects(
-			_userSegmentResourceComponentServiceObjects);
 		Mutation.setWarehouseResourceComponentServiceObjects(
 			_warehouseResourceComponentServiceObjects);
 
 		Query.setAvailabilityEstimateResourceComponentServiceObjects(
 			_availabilityEstimateResourceComponentServiceObjects);
-		Query.setCatalogRuleResourceComponentServiceObjects(
-			_catalogRuleResourceComponentServiceObjects);
 		Query.setMeasurementUnitResourceComponentServiceObjects(
 			_measurementUnitResourceComponentServiceObjects);
 		Query.setTaxCategoryResourceComponentServiceObjects(
 			_taxCategoryResourceComponentServiceObjects);
-		Query.setUserSegmentResourceComponentServiceObjects(
-			_userSegmentResourceComponentServiceObjects);
 		Query.setWarehouseResourceComponentServiceObjects(
 			_warehouseResourceComponentServiceObjects);
 	}
@@ -90,20 +80,12 @@ public class ServletDataImpl implements ServletData {
 		_availabilityEstimateResourceComponentServiceObjects;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
-	private ComponentServiceObjects<CatalogRuleResource>
-		_catalogRuleResourceComponentServiceObjects;
-
-	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<MeasurementUnitResource>
 		_measurementUnitResourceComponentServiceObjects;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<TaxCategoryResource>
 		_taxCategoryResourceComponentServiceObjects;
-
-	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
-	private ComponentServiceObjects<UserSegmentResource>
-		_userSegmentResourceComponentServiceObjects;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<WarehouseResource>

@@ -21,7 +21,6 @@ import com.liferay.commerce.product.model.CPOptionValue;
 import com.liferay.commerce.product.model.impl.CPOptionValueImpl;
 import com.liferay.commerce.product.model.impl.CPOptionValueModelImpl;
 import com.liferay.commerce.product.service.persistence.CPOptionValuePersistence;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -31,10 +30,9 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ProxyUtil;
@@ -68,55 +66,33 @@ import java.util.Set;
  * </p>
  *
  * @author Marco Leo
- * @see CPOptionValuePersistence
- * @see com.liferay.commerce.product.service.persistence.CPOptionValueUtil
  * @generated
  */
 @ProviderType
-public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionValue>
+public class CPOptionValuePersistenceImpl
+	extends BasePersistenceImpl<CPOptionValue>
 	implements CPOptionValuePersistence {
+
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify or reference this class directly. Always use {@link CPOptionValueUtil} to access the cp option value persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
+	 * Never modify or reference this class directly. Always use <code>CPOptionValueUtil</code> to access the cp option value persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
-	public static final String FINDER_CLASS_NAME_ENTITY = CPOptionValueImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List1";
-	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByUuid",
-			new String[] {
-				String.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByUuid", new String[] { String.class.getName() },
-			CPOptionValueModelImpl.UUID_COLUMN_BITMASK |
-			CPOptionValueModelImpl.PRIORITY_COLUMN_BITMASK |
-			CPOptionValueModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
-			new String[] { String.class.getName() });
+	public static final String FINDER_CLASS_NAME_ENTITY =
+		CPOptionValueImpl.class.getName();
+
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION =
+		FINDER_CLASS_NAME_ENTITY + ".List1";
+
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION =
+		FINDER_CLASS_NAME_ENTITY + ".List2";
+
+	private FinderPath _finderPathWithPaginationFindAll;
+	private FinderPath _finderPathWithoutPaginationFindAll;
+	private FinderPath _finderPathCountAll;
+	private FinderPath _finderPathWithPaginationFindByUuid;
+	private FinderPath _finderPathWithoutPaginationFindByUuid;
+	private FinderPath _finderPathCountByUuid;
 
 	/**
 	 * Returns all the cp option values where uuid = &#63;.
@@ -133,7 +109,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Returns a range of all the cp option values where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -150,7 +126,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Returns an ordered range of all the cp option values where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -160,8 +136,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the ordered range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByUuid(String uuid, int start, int end,
+	public List<CPOptionValue> findByUuid(
+		String uuid, int start, int end,
 		OrderByComparator<CPOptionValue> orderByComparator) {
+
 		return findByUuid(uuid, start, end, orderByComparator, true);
 	}
 
@@ -169,7 +147,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Returns an ordered range of all the cp option values where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -180,33 +158,38 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the ordered range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByUuid(String uuid, int start, int end,
+	public List<CPOptionValue> findByUuid(
+		String uuid, int start, int end,
 		OrderByComparator<CPOptionValue> orderByComparator,
 		boolean retrieveFromCache) {
+
+		uuid = Objects.toString(uuid, "");
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
+			finderPath = _finderPathWithoutPaginationFindByUuid;
+			finderArgs = new Object[] {uuid};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+			finderPath = _finderPathWithPaginationFindByUuid;
+			finderArgs = new Object[] {uuid, start, end, orderByComparator};
 		}
 
 		List<CPOptionValue> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CPOptionValue>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CPOptionValue>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
 				for (CPOptionValue cpOptionValue : list) {
-					if (!Objects.equals(uuid, cpOptionValue.getUuid())) {
+					if (!uuid.equals(cpOptionValue.getUuid())) {
 						list = null;
 
 						break;
@@ -219,8 +202,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(3);
@@ -230,10 +213,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_UUID_3);
 			}
 			else {
@@ -243,11 +223,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			}
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
+			else if (pagination) {
 				query.append(CPOptionValueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -267,16 +246,16 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				}
 
 				if (!pagination) {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+					list = (List<CPOptionValue>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end);
+					list = (List<CPOptionValue>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -305,10 +284,12 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue findByUuid_First(String uuid,
-		OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue findByUuid_First(
+			String uuid, OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByUuid_First(uuid, orderByComparator);
+
+		CPOptionValue cpOptionValue = fetchByUuid_First(
+			uuid, orderByComparator);
 
 		if (cpOptionValue != null) {
 			return cpOptionValue;
@@ -334,8 +315,9 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the first matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByUuid_First(String uuid,
-		OrderByComparator<CPOptionValue> orderByComparator) {
+	public CPOptionValue fetchByUuid_First(
+		String uuid, OrderByComparator<CPOptionValue> orderByComparator) {
+
 		List<CPOptionValue> list = findByUuid(uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -354,9 +336,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue findByUuid_Last(String uuid,
-		OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue findByUuid_Last(
+			String uuid, OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
+
 		CPOptionValue cpOptionValue = fetchByUuid_Last(uuid, orderByComparator);
 
 		if (cpOptionValue != null) {
@@ -383,16 +366,17 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the last matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByUuid_Last(String uuid,
-		OrderByComparator<CPOptionValue> orderByComparator) {
+	public CPOptionValue fetchByUuid_Last(
+		String uuid, OrderByComparator<CPOptionValue> orderByComparator) {
+
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CPOptionValue> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
+		List<CPOptionValue> list = findByUuid(
+			uuid, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -411,9 +395,13 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a cp option value with the primary key could not be found
 	 */
 	@Override
-	public CPOptionValue[] findByUuid_PrevAndNext(long CPOptionValueId,
-		String uuid, OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue[] findByUuid_PrevAndNext(
+			long CPOptionValueId, String uuid,
+			OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
+
+		uuid = Objects.toString(uuid, "");
+
 		CPOptionValue cpOptionValue = findByPrimaryKey(CPOptionValueId);
 
 		Session session = null;
@@ -423,13 +411,13 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			CPOptionValue[] array = new CPOptionValueImpl[3];
 
-			array[0] = getByUuid_PrevAndNext(session, cpOptionValue, uuid,
-					orderByComparator, true);
+			array[0] = getByUuid_PrevAndNext(
+				session, cpOptionValue, uuid, orderByComparator, true);
 
 			array[1] = cpOptionValue;
 
-			array[2] = getByUuid_PrevAndNext(session, cpOptionValue, uuid,
-					orderByComparator, false);
+			array[2] = getByUuid_PrevAndNext(
+				session, cpOptionValue, uuid, orderByComparator, false);
 
 			return array;
 		}
@@ -441,14 +429,15 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		}
 	}
 
-	protected CPOptionValue getByUuid_PrevAndNext(Session session,
-		CPOptionValue cpOptionValue, String uuid,
+	protected CPOptionValue getByUuid_PrevAndNext(
+		Session session, CPOptionValue cpOptionValue, String uuid,
 		OrderByComparator<CPOptionValue> orderByComparator, boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -459,10 +448,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 		boolean bindUuid = false;
 
-		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_UUID_1);
-		}
-		else if (uuid.equals("")) {
+		if (uuid.isEmpty()) {
 			query.append(_FINDER_COLUMN_UUID_UUID_3);
 		}
 		else {
@@ -472,7 +458,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		}
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -544,10 +531,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(cpOptionValue);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						cpOptionValue)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -568,8 +556,9 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public void removeByUuid(String uuid) {
-		for (CPOptionValue cpOptionValue : findByUuid(uuid, QueryUtil.ALL_POS,
-				QueryUtil.ALL_POS, null)) {
+		for (CPOptionValue cpOptionValue :
+				findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
 			remove(cpOptionValue);
 		}
 	}
@@ -582,9 +571,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public int countByUuid(String uuid) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+		uuid = Objects.toString(uuid, "");
 
-		Object[] finderArgs = new Object[] { uuid };
+		FinderPath finderPath = _finderPathCountByUuid;
+
+		Object[] finderArgs = new Object[] {uuid};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -595,10 +586,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_UUID_3);
 			}
 			else {
@@ -639,280 +627,15 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "cpOptionValue.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "cpOptionValue.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(cpOptionValue.uuid IS NULL OR cpOptionValue.uuid = '')";
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			CPOptionValueModelImpl.UUID_COLUMN_BITMASK |
-			CPOptionValueModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+	private static final String _FINDER_COLUMN_UUID_UUID_2 =
+		"cpOptionValue.uuid = ?";
 
-	/**
-	 * Returns the cp option value where uuid = &#63; and groupId = &#63; or throws a {@link NoSuchCPOptionValueException} if it could not be found.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the matching cp option value
-	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
-	 */
-	@Override
-	public CPOptionValue findByUUID_G(String uuid, long groupId)
-		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByUUID_G(uuid, groupId);
+	private static final String _FINDER_COLUMN_UUID_UUID_3 =
+		"(cpOptionValue.uuid IS NULL OR cpOptionValue.uuid = '')";
 
-		if (cpOptionValue == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(", groupId=");
-			msg.append(groupId);
-
-			msg.append("}");
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(msg.toString());
-			}
-
-			throw new NoSuchCPOptionValueException(msg.toString());
-		}
-
-		return cpOptionValue;
-	}
-
-	/**
-	 * Returns the cp option value where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the matching cp option value, or <code>null</code> if a matching cp option value could not be found
-	 */
-	@Override
-	public CPOptionValue fetchByUUID_G(String uuid, long groupId) {
-		return fetchByUUID_G(uuid, groupId, true);
-	}
-
-	/**
-	 * Returns the cp option value where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @param retrieveFromCache whether to retrieve from the finder cache
-	 * @return the matching cp option value, or <code>null</code> if a matching cp option value could not be found
-	 */
-	@Override
-	public CPOptionValue fetchByUUID_G(String uuid, long groupId,
-		boolean retrieveFromCache) {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = finderCache.getResult(FINDER_PATH_FETCH_BY_UUID_G,
-					finderArgs, this);
-		}
-
-		if (result instanceof CPOptionValue) {
-			CPOptionValue cpOptionValue = (CPOptionValue)result;
-
-			if (!Objects.equals(uuid, cpOptionValue.getUuid()) ||
-					(groupId != cpOptionValue.getGroupId())) {
-				result = null;
-			}
-		}
-
-		if (result == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_SELECT_CPOPTIONVALUE_WHERE);
-
-			boolean bindUuid = false;
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else if (uuid.equals("")) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-			}
-			else {
-				bindUuid = true;
-
-				query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (bindUuid) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				List<CPOptionValue> list = q.list();
-
-				if (list.isEmpty()) {
-					finderCache.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs, list);
-				}
-				else {
-					CPOptionValue cpOptionValue = list.get(0);
-
-					result = cpOptionValue;
-
-					cacheResult(cpOptionValue);
-				}
-			}
-			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_FETCH_BY_UUID_G, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		if (result instanceof List<?>) {
-			return null;
-		}
-		else {
-			return (CPOptionValue)result;
-		}
-	}
-
-	/**
-	 * Removes the cp option value where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the cp option value that was removed
-	 */
-	@Override
-	public CPOptionValue removeByUUID_G(String uuid, long groupId)
-		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = findByUUID_G(uuid, groupId);
-
-		return remove(cpOptionValue);
-	}
-
-	/**
-	 * Returns the number of cp option values where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching cp option values
-	 */
-	@Override
-	public int countByUUID_G(String uuid, long groupId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
-
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_CPOPTIONVALUE_WHERE);
-
-			boolean bindUuid = false;
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else if (uuid.equals("")) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-			}
-			else {
-				bindUuid = true;
-
-				query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (bindUuid) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "cpOptionValue.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "cpOptionValue.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(cpOptionValue.uuid IS NULL OR cpOptionValue.uuid = '') AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "cpOptionValue.groupId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			CPOptionValueModelImpl.UUID_COLUMN_BITMASK |
-			CPOptionValueModelImpl.COMPANYID_COLUMN_BITMASK |
-			CPOptionValueModelImpl.PRIORITY_COLUMN_BITMASK |
-			CPOptionValueModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+	private FinderPath _finderPathWithPaginationFindByUuid_C;
+	private FinderPath _finderPathWithoutPaginationFindByUuid_C;
+	private FinderPath _finderPathCountByUuid_C;
 
 	/**
 	 * Returns all the cp option values where uuid = &#63; and companyId = &#63;.
@@ -923,15 +646,15 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public List<CPOptionValue> findByUuid_C(String uuid, long companyId) {
-		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
+		return findByUuid_C(
+			uuid, companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
 	 * Returns a range of all the cp option values where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -941,8 +664,9 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByUuid_C(String uuid, long companyId,
-		int start, int end) {
+	public List<CPOptionValue> findByUuid_C(
+		String uuid, long companyId, int start, int end) {
+
 		return findByUuid_C(uuid, companyId, start, end, null);
 	}
 
@@ -950,7 +674,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Returns an ordered range of all the cp option values where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -961,16 +685,19 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the ordered range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator<CPOptionValue> orderByComparator) {
-		return findByUuid_C(uuid, companyId, start, end, orderByComparator, true);
+	public List<CPOptionValue> findByUuid_C(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator<CPOptionValue> orderByComparator) {
+
+		return findByUuid_C(
+			uuid, companyId, start, end, orderByComparator, true);
 	}
 
 	/**
 	 * Returns an ordered range of all the cp option values where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -982,38 +709,42 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the ordered range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByUuid_C(String uuid, long companyId,
-		int start, int end, OrderByComparator<CPOptionValue> orderByComparator,
+	public List<CPOptionValue> findByUuid_C(
+		String uuid, long companyId, int start, int end,
+		OrderByComparator<CPOptionValue> orderByComparator,
 		boolean retrieveFromCache) {
+
+		uuid = Objects.toString(uuid, "");
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
+			finderPath = _finderPathWithoutPaginationFindByUuid_C;
+			finderArgs = new Object[] {uuid, companyId};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderPath = _finderPathWithPaginationFindByUuid_C;
 			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
+				uuid, companyId, start, end, orderByComparator
+			};
 		}
 
 		List<CPOptionValue> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CPOptionValue>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CPOptionValue>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
 				for (CPOptionValue cpOptionValue : list) {
-					if (!Objects.equals(uuid, cpOptionValue.getUuid()) ||
-							(companyId != cpOptionValue.getCompanyId())) {
+					if (!uuid.equals(cpOptionValue.getUuid()) ||
+						(companyId != cpOptionValue.getCompanyId())) {
+
 						list = null;
 
 						break;
@@ -1026,8 +757,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(4);
@@ -1037,10 +768,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 			}
 			else {
@@ -1052,11 +780,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
+			else if (pagination) {
 				query.append(CPOptionValueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1078,16 +805,16 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				qPos.add(companyId);
 
 				if (!pagination) {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+					list = (List<CPOptionValue>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end);
+					list = (List<CPOptionValue>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -1117,11 +844,13 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue findByUuid_C_First(String uuid, long companyId,
-		OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue findByUuid_C_First(
+			String uuid, long companyId,
+			OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByUuid_C_First(uuid, companyId,
-				orderByComparator);
+
+		CPOptionValue cpOptionValue = fetchByUuid_C_First(
+			uuid, companyId, orderByComparator);
 
 		if (cpOptionValue != null) {
 			return cpOptionValue;
@@ -1151,10 +880,12 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the first matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByUuid_C_First(String uuid, long companyId,
+	public CPOptionValue fetchByUuid_C_First(
+		String uuid, long companyId,
 		OrderByComparator<CPOptionValue> orderByComparator) {
-		List<CPOptionValue> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
+
+		List<CPOptionValue> list = findByUuid_C(
+			uuid, companyId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1173,11 +904,13 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue findByUuid_C_Last(String uuid, long companyId,
-		OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue findByUuid_C_Last(
+			String uuid, long companyId,
+			OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByUuid_C_Last(uuid, companyId,
-				orderByComparator);
+
+		CPOptionValue cpOptionValue = fetchByUuid_C_Last(
+			uuid, companyId, orderByComparator);
 
 		if (cpOptionValue != null) {
 			return cpOptionValue;
@@ -1207,16 +940,18 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the last matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByUuid_C_Last(String uuid, long companyId,
+	public CPOptionValue fetchByUuid_C_Last(
+		String uuid, long companyId,
 		OrderByComparator<CPOptionValue> orderByComparator) {
+
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CPOptionValue> list = findByUuid_C(uuid, companyId, count - 1,
-				count, orderByComparator);
+		List<CPOptionValue> list = findByUuid_C(
+			uuid, companyId, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1236,10 +971,13 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a cp option value with the primary key could not be found
 	 */
 	@Override
-	public CPOptionValue[] findByUuid_C_PrevAndNext(long CPOptionValueId,
-		String uuid, long companyId,
-		OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue[] findByUuid_C_PrevAndNext(
+			long CPOptionValueId, String uuid, long companyId,
+			OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
+
+		uuid = Objects.toString(uuid, "");
+
 		CPOptionValue cpOptionValue = findByPrimaryKey(CPOptionValueId);
 
 		Session session = null;
@@ -1249,13 +987,15 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			CPOptionValue[] array = new CPOptionValueImpl[3];
 
-			array[0] = getByUuid_C_PrevAndNext(session, cpOptionValue, uuid,
-					companyId, orderByComparator, true);
+			array[0] = getByUuid_C_PrevAndNext(
+				session, cpOptionValue, uuid, companyId, orderByComparator,
+				true);
 
 			array[1] = cpOptionValue;
 
-			array[2] = getByUuid_C_PrevAndNext(session, cpOptionValue, uuid,
-					companyId, orderByComparator, false);
+			array[2] = getByUuid_C_PrevAndNext(
+				session, cpOptionValue, uuid, companyId, orderByComparator,
+				false);
 
 			return array;
 		}
@@ -1267,14 +1007,16 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		}
 	}
 
-	protected CPOptionValue getByUuid_C_PrevAndNext(Session session,
-		CPOptionValue cpOptionValue, String uuid, long companyId,
-		OrderByComparator<CPOptionValue> orderByComparator, boolean previous) {
+	protected CPOptionValue getByUuid_C_PrevAndNext(
+		Session session, CPOptionValue cpOptionValue, String uuid,
+		long companyId, OrderByComparator<CPOptionValue> orderByComparator,
+		boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(5 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -1285,10 +1027,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 		boolean bindUuid = false;
 
-		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-		}
-		else if (uuid.equals("")) {
+		if (uuid.isEmpty()) {
 			query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 		}
 		else {
@@ -1300,7 +1039,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -1374,10 +1114,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(cpOptionValue);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						cpOptionValue)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -1399,8 +1140,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public void removeByUuid_C(String uuid, long companyId) {
-		for (CPOptionValue cpOptionValue : findByUuid_C(uuid, companyId,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+		for (CPOptionValue cpOptionValue :
+				findByUuid_C(
+					uuid, companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
+
 			remove(cpOptionValue);
 		}
 	}
@@ -1414,9 +1158,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public int countByUuid_C(String uuid, long companyId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+		uuid = Objects.toString(uuid, "");
 
-		Object[] finderArgs = new Object[] { uuid, companyId };
+		FinderPath finderPath = _finderPathCountByUuid_C;
+
+		Object[] finderArgs = new Object[] {uuid, companyId};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -1427,10 +1173,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 			}
 			else {
@@ -1475,539 +1218,18 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "cpOptionValue.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "cpOptionValue.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(cpOptionValue.uuid IS NULL OR cpOptionValue.uuid = '') AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "cpOptionValue.companyId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByGroupId", new String[] { Long.class.getName() },
-			CPOptionValueModelImpl.GROUPID_COLUMN_BITMASK |
-			CPOptionValueModelImpl.PRIORITY_COLUMN_BITMASK |
-			CPOptionValueModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 =
+		"cpOptionValue.uuid = ? AND ";
 
-	/**
-	 * Returns all the cp option values where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the matching cp option values
-	 */
-	@Override
-	public List<CPOptionValue> findByGroupId(long groupId) {
-		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 =
+		"(cpOptionValue.uuid IS NULL OR cpOptionValue.uuid = '') AND ";
 
-	/**
-	 * Returns a range of all the cp option values where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of cp option values
-	 * @param end the upper bound of the range of cp option values (not inclusive)
-	 * @return the range of matching cp option values
-	 */
-	@Override
-	public List<CPOptionValue> findByGroupId(long groupId, int start, int end) {
-		return findByGroupId(groupId, start, end, null);
-	}
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
+		"cpOptionValue.companyId = ?";
 
-	/**
-	 * Returns an ordered range of all the cp option values where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of cp option values
-	 * @param end the upper bound of the range of cp option values (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching cp option values
-	 */
-	@Override
-	public List<CPOptionValue> findByGroupId(long groupId, int start, int end,
-		OrderByComparator<CPOptionValue> orderByComparator) {
-		return findByGroupId(groupId, start, end, orderByComparator, true);
-	}
-
-	/**
-	 * Returns an ordered range of all the cp option values where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of cp option values
-	 * @param end the upper bound of the range of cp option values (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
-	 * @return the ordered range of matching cp option values
-	 */
-	@Override
-	public List<CPOptionValue> findByGroupId(long groupId, int start, int end,
-		OrderByComparator<CPOptionValue> orderByComparator,
-		boolean retrieveFromCache) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<CPOptionValue> list = null;
-
-		if (retrieveFromCache) {
-			list = (List<CPOptionValue>)finderCache.getResult(finderPath,
-					finderArgs, this);
-
-			if ((list != null) && !list.isEmpty()) {
-				for (CPOptionValue cpOptionValue : list) {
-					if ((groupId != cpOptionValue.getGroupId())) {
-						list = null;
-
-						break;
-					}
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 2));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_CPOPTIONVALUE_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(CPOptionValueModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (!pagination) {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-
-				cacheResult(list);
-
-				finderCache.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first cp option value in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching cp option value
-	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
-	 */
-	@Override
-	public CPOptionValue findByGroupId_First(long groupId,
-		OrderByComparator<CPOptionValue> orderByComparator)
-		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (cpOptionValue != null) {
-			return cpOptionValue;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append("}");
-
-		throw new NoSuchCPOptionValueException(msg.toString());
-	}
-
-	/**
-	 * Returns the first cp option value in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching cp option value, or <code>null</code> if a matching cp option value could not be found
-	 */
-	@Override
-	public CPOptionValue fetchByGroupId_First(long groupId,
-		OrderByComparator<CPOptionValue> orderByComparator) {
-		List<CPOptionValue> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last cp option value in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching cp option value
-	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
-	 */
-	@Override
-	public CPOptionValue findByGroupId_Last(long groupId,
-		OrderByComparator<CPOptionValue> orderByComparator)
-		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (cpOptionValue != null) {
-			return cpOptionValue;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append("}");
-
-		throw new NoSuchCPOptionValueException(msg.toString());
-	}
-
-	/**
-	 * Returns the last cp option value in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching cp option value, or <code>null</code> if a matching cp option value could not be found
-	 */
-	@Override
-	public CPOptionValue fetchByGroupId_Last(long groupId,
-		OrderByComparator<CPOptionValue> orderByComparator) {
-		int count = countByGroupId(groupId);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<CPOptionValue> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the cp option values before and after the current cp option value in the ordered set where groupId = &#63;.
-	 *
-	 * @param CPOptionValueId the primary key of the current cp option value
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next cp option value
-	 * @throws NoSuchCPOptionValueException if a cp option value with the primary key could not be found
-	 */
-	@Override
-	public CPOptionValue[] findByGroupId_PrevAndNext(long CPOptionValueId,
-		long groupId, OrderByComparator<CPOptionValue> orderByComparator)
-		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = findByPrimaryKey(CPOptionValueId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			CPOptionValue[] array = new CPOptionValueImpl[3];
-
-			array[0] = getByGroupId_PrevAndNext(session, cpOptionValue,
-					groupId, orderByComparator, true);
-
-			array[1] = cpOptionValue;
-
-			array[2] = getByGroupId_PrevAndNext(session, cpOptionValue,
-					groupId, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected CPOptionValue getByGroupId_PrevAndNext(Session session,
-		CPOptionValue cpOptionValue, long groupId,
-		OrderByComparator<CPOptionValue> orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
-					(orderByComparator.getOrderByFields().length * 3));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_CPOPTIONVALUE_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(CPOptionValueModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(groupId);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(cpOptionValue);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<CPOptionValue> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the cp option values where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 */
-	@Override
-	public void removeByGroupId(long groupId) {
-		for (CPOptionValue cpOptionValue : findByGroupId(groupId,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(cpOptionValue);
-		}
-	}
-
-	/**
-	 * Returns the number of cp option values where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching cp option values
-	 */
-	@Override
-	public int countByGroupId(long groupId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
-
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_CPOPTIONVALUE_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "cpOptionValue.groupId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByCompanyId",
-			new String[] {
-				Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByCompanyId", new String[] { Long.class.getName() },
-			CPOptionValueModelImpl.COMPANYID_COLUMN_BITMASK |
-			CPOptionValueModelImpl.PRIORITY_COLUMN_BITMASK |
-			CPOptionValueModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
-			new String[] { Long.class.getName() });
+	private FinderPath _finderPathWithPaginationFindByCompanyId;
+	private FinderPath _finderPathWithoutPaginationFindByCompanyId;
+	private FinderPath _finderPathCountByCompanyId;
 
 	/**
 	 * Returns all the cp option values where companyId = &#63;.
@@ -2017,15 +1239,15 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public List<CPOptionValue> findByCompanyId(long companyId) {
-		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			null);
+		return findByCompanyId(
+			companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
 	 * Returns a range of all the cp option values where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -2034,8 +1256,9 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByCompanyId(long companyId, int start,
-		int end) {
+	public List<CPOptionValue> findByCompanyId(
+		long companyId, int start, int end) {
+
 		return findByCompanyId(companyId, start, end, null);
 	}
 
@@ -2043,7 +1266,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Returns an ordered range of all the cp option values where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -2053,8 +1276,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the ordered range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator<CPOptionValue> orderByComparator) {
+	public List<CPOptionValue> findByCompanyId(
+		long companyId, int start, int end,
+		OrderByComparator<CPOptionValue> orderByComparator) {
+
 		return findByCompanyId(companyId, start, end, orderByComparator, true);
 	}
 
@@ -2062,7 +1287,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Returns an ordered range of all the cp option values where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -2073,29 +1298,34 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the ordered range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator<CPOptionValue> orderByComparator,
+	public List<CPOptionValue> findByCompanyId(
+		long companyId, int start, int end,
+		OrderByComparator<CPOptionValue> orderByComparator,
 		boolean retrieveFromCache) {
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
+			finderPath = _finderPathWithoutPaginationFindByCompanyId;
+			finderArgs = new Object[] {companyId};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+			finderPath = _finderPathWithPaginationFindByCompanyId;
+			finderArgs = new Object[] {
+				companyId, start, end, orderByComparator
+			};
 		}
 
 		List<CPOptionValue> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CPOptionValue>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CPOptionValue>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
 				for (CPOptionValue cpOptionValue : list) {
@@ -2112,8 +1342,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(3);
@@ -2124,11 +1354,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
+			else if (pagination) {
 				query.append(CPOptionValueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2146,16 +1375,16 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				qPos.add(companyId);
 
 				if (!pagination) {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+					list = (List<CPOptionValue>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end);
+					list = (List<CPOptionValue>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -2184,11 +1413,12 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue findByCompanyId_First(long companyId,
-		OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue findByCompanyId_First(
+			long companyId, OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByCompanyId_First(companyId,
-				orderByComparator);
+
+		CPOptionValue cpOptionValue = fetchByCompanyId_First(
+			companyId, orderByComparator);
 
 		if (cpOptionValue != null) {
 			return cpOptionValue;
@@ -2214,10 +1444,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the first matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByCompanyId_First(long companyId,
-		OrderByComparator<CPOptionValue> orderByComparator) {
-		List<CPOptionValue> list = findByCompanyId(companyId, 0, 1,
-				orderByComparator);
+	public CPOptionValue fetchByCompanyId_First(
+		long companyId, OrderByComparator<CPOptionValue> orderByComparator) {
+
+		List<CPOptionValue> list = findByCompanyId(
+			companyId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -2235,11 +1466,12 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue findByCompanyId_Last(long companyId,
-		OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue findByCompanyId_Last(
+			long companyId, OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByCompanyId_Last(companyId,
-				orderByComparator);
+
+		CPOptionValue cpOptionValue = fetchByCompanyId_Last(
+			companyId, orderByComparator);
 
 		if (cpOptionValue != null) {
 			return cpOptionValue;
@@ -2265,16 +1497,17 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the last matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByCompanyId_Last(long companyId,
-		OrderByComparator<CPOptionValue> orderByComparator) {
+	public CPOptionValue fetchByCompanyId_Last(
+		long companyId, OrderByComparator<CPOptionValue> orderByComparator) {
+
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CPOptionValue> list = findByCompanyId(companyId, count - 1, count,
-				orderByComparator);
+		List<CPOptionValue> list = findByCompanyId(
+			companyId, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -2293,9 +1526,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a cp option value with the primary key could not be found
 	 */
 	@Override
-	public CPOptionValue[] findByCompanyId_PrevAndNext(long CPOptionValueId,
-		long companyId, OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue[] findByCompanyId_PrevAndNext(
+			long CPOptionValueId, long companyId,
+			OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
+
 		CPOptionValue cpOptionValue = findByPrimaryKey(CPOptionValueId);
 
 		Session session = null;
@@ -2305,13 +1540,13 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			CPOptionValue[] array = new CPOptionValueImpl[3];
 
-			array[0] = getByCompanyId_PrevAndNext(session, cpOptionValue,
-					companyId, orderByComparator, true);
+			array[0] = getByCompanyId_PrevAndNext(
+				session, cpOptionValue, companyId, orderByComparator, true);
 
 			array[1] = cpOptionValue;
 
-			array[2] = getByCompanyId_PrevAndNext(session, cpOptionValue,
-					companyId, orderByComparator, false);
+			array[2] = getByCompanyId_PrevAndNext(
+				session, cpOptionValue, companyId, orderByComparator, false);
 
 			return array;
 		}
@@ -2323,14 +1558,15 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		}
 	}
 
-	protected CPOptionValue getByCompanyId_PrevAndNext(Session session,
-		CPOptionValue cpOptionValue, long companyId,
+	protected CPOptionValue getByCompanyId_PrevAndNext(
+		Session session, CPOptionValue cpOptionValue, long companyId,
 		OrderByComparator<CPOptionValue> orderByComparator, boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -2342,7 +1578,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -2412,10 +1649,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(cpOptionValue);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						cpOptionValue)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -2436,8 +1674,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public void removeByCompanyId(long companyId) {
-		for (CPOptionValue cpOptionValue : findByCompanyId(companyId,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+		for (CPOptionValue cpOptionValue :
+				findByCompanyId(
+					companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
 			remove(cpOptionValue);
 		}
 	}
@@ -2450,9 +1690,9 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public int countByCompanyId(long companyId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
+		FinderPath finderPath = _finderPathCountByCompanyId;
 
-		Object[] finderArgs = new Object[] { companyId };
+		Object[] finderArgs = new Object[] {companyId};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -2493,30 +1733,12 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "cpOptionValue.companyId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_CPOPTIONID =
-		new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByCPOptionId",
-			new String[] {
-				Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CPOPTIONID =
-		new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByCPOptionId", new String[] { Long.class.getName() },
-			CPOptionValueModelImpl.CPOPTIONID_COLUMN_BITMASK |
-			CPOptionValueModelImpl.PRIORITY_COLUMN_BITMASK |
-			CPOptionValueModelImpl.NAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_CPOPTIONID = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCPOptionId",
-			new String[] { Long.class.getName() });
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 =
+		"cpOptionValue.companyId = ?";
+
+	private FinderPath _finderPathWithPaginationFindByCPOptionId;
+	private FinderPath _finderPathWithoutPaginationFindByCPOptionId;
+	private FinderPath _finderPathCountByCPOptionId;
 
 	/**
 	 * Returns all the cp option values where CPOptionId = &#63;.
@@ -2526,15 +1748,15 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public List<CPOptionValue> findByCPOptionId(long CPOptionId) {
-		return findByCPOptionId(CPOptionId, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
+		return findByCPOptionId(
+			CPOptionId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
 	 * Returns a range of all the cp option values where CPOptionId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param CPOptionId the cp option ID
@@ -2543,8 +1765,9 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByCPOptionId(long CPOptionId, int start,
-		int end) {
+	public List<CPOptionValue> findByCPOptionId(
+		long CPOptionId, int start, int end) {
+
 		return findByCPOptionId(CPOptionId, start, end, null);
 	}
 
@@ -2552,7 +1775,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Returns an ordered range of all the cp option values where CPOptionId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param CPOptionId the cp option ID
@@ -2562,16 +1785,19 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the ordered range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByCPOptionId(long CPOptionId, int start,
-		int end, OrderByComparator<CPOptionValue> orderByComparator) {
-		return findByCPOptionId(CPOptionId, start, end, orderByComparator, true);
+	public List<CPOptionValue> findByCPOptionId(
+		long CPOptionId, int start, int end,
+		OrderByComparator<CPOptionValue> orderByComparator) {
+
+		return findByCPOptionId(
+			CPOptionId, start, end, orderByComparator, true);
 	}
 
 	/**
 	 * Returns an ordered range of all the cp option values where CPOptionId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param CPOptionId the cp option ID
@@ -2582,29 +1808,34 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the ordered range of matching cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findByCPOptionId(long CPOptionId, int start,
-		int end, OrderByComparator<CPOptionValue> orderByComparator,
+	public List<CPOptionValue> findByCPOptionId(
+		long CPOptionId, int start, int end,
+		OrderByComparator<CPOptionValue> orderByComparator,
 		boolean retrieveFromCache) {
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CPOPTIONID;
-			finderArgs = new Object[] { CPOptionId };
+			finderPath = _finderPathWithoutPaginationFindByCPOptionId;
+			finderArgs = new Object[] {CPOptionId};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_CPOPTIONID;
-			finderArgs = new Object[] { CPOptionId, start, end, orderByComparator };
+			finderPath = _finderPathWithPaginationFindByCPOptionId;
+			finderArgs = new Object[] {
+				CPOptionId, start, end, orderByComparator
+			};
 		}
 
 		List<CPOptionValue> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CPOptionValue>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CPOptionValue>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
 				for (CPOptionValue cpOptionValue : list) {
@@ -2621,8 +1852,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(3);
@@ -2633,11 +1864,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			query.append(_FINDER_COLUMN_CPOPTIONID_CPOPTIONID_2);
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
+			else if (pagination) {
 				query.append(CPOptionValueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2655,16 +1885,16 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				qPos.add(CPOptionId);
 
 				if (!pagination) {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+					list = (List<CPOptionValue>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end);
+					list = (List<CPOptionValue>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -2693,11 +1923,12 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue findByCPOptionId_First(long CPOptionId,
-		OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue findByCPOptionId_First(
+			long CPOptionId, OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByCPOptionId_First(CPOptionId,
-				orderByComparator);
+
+		CPOptionValue cpOptionValue = fetchByCPOptionId_First(
+			CPOptionId, orderByComparator);
 
 		if (cpOptionValue != null) {
 			return cpOptionValue;
@@ -2723,10 +1954,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the first matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByCPOptionId_First(long CPOptionId,
-		OrderByComparator<CPOptionValue> orderByComparator) {
-		List<CPOptionValue> list = findByCPOptionId(CPOptionId, 0, 1,
-				orderByComparator);
+	public CPOptionValue fetchByCPOptionId_First(
+		long CPOptionId, OrderByComparator<CPOptionValue> orderByComparator) {
+
+		List<CPOptionValue> list = findByCPOptionId(
+			CPOptionId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -2744,11 +1976,12 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue findByCPOptionId_Last(long CPOptionId,
-		OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue findByCPOptionId_Last(
+			long CPOptionId, OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByCPOptionId_Last(CPOptionId,
-				orderByComparator);
+
+		CPOptionValue cpOptionValue = fetchByCPOptionId_Last(
+			CPOptionId, orderByComparator);
 
 		if (cpOptionValue != null) {
 			return cpOptionValue;
@@ -2774,16 +2007,17 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the last matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByCPOptionId_Last(long CPOptionId,
-		OrderByComparator<CPOptionValue> orderByComparator) {
+	public CPOptionValue fetchByCPOptionId_Last(
+		long CPOptionId, OrderByComparator<CPOptionValue> orderByComparator) {
+
 		int count = countByCPOptionId(CPOptionId);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CPOptionValue> list = findByCPOptionId(CPOptionId, count - 1,
-				count, orderByComparator);
+		List<CPOptionValue> list = findByCPOptionId(
+			CPOptionId, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -2802,9 +2036,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a cp option value with the primary key could not be found
 	 */
 	@Override
-	public CPOptionValue[] findByCPOptionId_PrevAndNext(long CPOptionValueId,
-		long CPOptionId, OrderByComparator<CPOptionValue> orderByComparator)
+	public CPOptionValue[] findByCPOptionId_PrevAndNext(
+			long CPOptionValueId, long CPOptionId,
+			OrderByComparator<CPOptionValue> orderByComparator)
 		throws NoSuchCPOptionValueException {
+
 		CPOptionValue cpOptionValue = findByPrimaryKey(CPOptionValueId);
 
 		Session session = null;
@@ -2814,13 +2050,13 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			CPOptionValue[] array = new CPOptionValueImpl[3];
 
-			array[0] = getByCPOptionId_PrevAndNext(session, cpOptionValue,
-					CPOptionId, orderByComparator, true);
+			array[0] = getByCPOptionId_PrevAndNext(
+				session, cpOptionValue, CPOptionId, orderByComparator, true);
 
 			array[1] = cpOptionValue;
 
-			array[2] = getByCPOptionId_PrevAndNext(session, cpOptionValue,
-					CPOptionId, orderByComparator, false);
+			array[2] = getByCPOptionId_PrevAndNext(
+				session, cpOptionValue, CPOptionId, orderByComparator, false);
 
 			return array;
 		}
@@ -2832,14 +2068,15 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		}
 	}
 
-	protected CPOptionValue getByCPOptionId_PrevAndNext(Session session,
-		CPOptionValue cpOptionValue, long CPOptionId,
+	protected CPOptionValue getByCPOptionId_PrevAndNext(
+		Session session, CPOptionValue cpOptionValue, long CPOptionId,
 		OrderByComparator<CPOptionValue> orderByComparator, boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -2851,7 +2088,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		query.append(_FINDER_COLUMN_CPOPTIONID_CPOPTIONID_2);
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -2921,10 +2159,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		qPos.add(CPOptionId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(cpOptionValue);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						cpOptionValue)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -2945,8 +2184,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public void removeByCPOptionId(long CPOptionId) {
-		for (CPOptionValue cpOptionValue : findByCPOptionId(CPOptionId,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+		for (CPOptionValue cpOptionValue :
+				findByCPOptionId(
+					CPOptionId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
 			remove(cpOptionValue);
 		}
 	}
@@ -2959,9 +2200,9 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public int countByCPOptionId(long CPOptionId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_CPOPTIONID;
+		FinderPath finderPath = _finderPathCountByCPOptionId;
 
-		Object[] finderArgs = new Object[] { CPOptionId };
+		Object[] finderArgs = new Object[] {CPOptionId};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -3002,20 +2243,14 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_CPOPTIONID_CPOPTIONID_2 = "cpOptionValue.CPOptionId = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_K = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByC_K",
-			new String[] { Long.class.getName(), String.class.getName() },
-			CPOptionValueModelImpl.CPOPTIONID_COLUMN_BITMASK |
-			CPOptionValueModelImpl.KEY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_K = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_K",
-			new String[] { Long.class.getName(), String.class.getName() });
+	private static final String _FINDER_COLUMN_CPOPTIONID_CPOPTIONID_2 =
+		"cpOptionValue.CPOptionId = ?";
+
+	private FinderPath _finderPathFetchByC_K;
+	private FinderPath _finderPathCountByC_K;
 
 	/**
-	 * Returns the cp option value where CPOptionId = &#63; and key = &#63; or throws a {@link NoSuchCPOptionValueException} if it could not be found.
+	 * Returns the cp option value where CPOptionId = &#63; and key = &#63; or throws a <code>NoSuchCPOptionValueException</code> if it could not be found.
 	 *
 	 * @param CPOptionId the cp option ID
 	 * @param key the key
@@ -3025,6 +2260,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	@Override
 	public CPOptionValue findByC_K(long CPOptionId, String key)
 		throws NoSuchCPOptionValueException {
+
 		CPOptionValue cpOptionValue = fetchByC_K(CPOptionId, key);
 
 		if (cpOptionValue == null) {
@@ -3071,22 +2307,26 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByC_K(long CPOptionId, String key,
-		boolean retrieveFromCache) {
-		Object[] finderArgs = new Object[] { CPOptionId, key };
+	public CPOptionValue fetchByC_K(
+		long CPOptionId, String key, boolean retrieveFromCache) {
+
+		key = Objects.toString(key, "");
+
+		Object[] finderArgs = new Object[] {CPOptionId, key};
 
 		Object result = null;
 
 		if (retrieveFromCache) {
-			result = finderCache.getResult(FINDER_PATH_FETCH_BY_C_K,
-					finderArgs, this);
+			result = finderCache.getResult(
+				_finderPathFetchByC_K, finderArgs, this);
 		}
 
 		if (result instanceof CPOptionValue) {
 			CPOptionValue cpOptionValue = (CPOptionValue)result;
 
 			if ((CPOptionId != cpOptionValue.getCPOptionId()) ||
-					!Objects.equals(key, cpOptionValue.getKey())) {
+				!Objects.equals(key, cpOptionValue.getKey())) {
+
 				result = null;
 			}
 		}
@@ -3100,10 +2340,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			boolean bindKey = false;
 
-			if (key == null) {
-				query.append(_FINDER_COLUMN_C_K_KEY_1);
-			}
-			else if (key.equals("")) {
+			if (key.isEmpty()) {
 				query.append(_FINDER_COLUMN_C_K_KEY_3);
 			}
 			else {
@@ -3132,8 +2369,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				List<CPOptionValue> list = q.list();
 
 				if (list.isEmpty()) {
-					finderCache.putResult(FINDER_PATH_FETCH_BY_C_K, finderArgs,
-						list);
+					finderCache.putResult(
+						_finderPathFetchByC_K, finderArgs, list);
 				}
 				else {
 					CPOptionValue cpOptionValue = list.get(0);
@@ -3144,7 +2381,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_FETCH_BY_C_K, finderArgs);
+				finderCache.removeResult(_finderPathFetchByC_K, finderArgs);
 
 				throw processException(e);
 			}
@@ -3171,6 +2408,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	@Override
 	public CPOptionValue removeByC_K(long CPOptionId, String key)
 		throws NoSuchCPOptionValueException {
+
 		CPOptionValue cpOptionValue = findByC_K(CPOptionId, key);
 
 		return remove(cpOptionValue);
@@ -3185,9 +2423,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public int countByC_K(long CPOptionId, String key) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_K;
+		key = Objects.toString(key, "");
 
-		Object[] finderArgs = new Object[] { CPOptionId, key };
+		FinderPath finderPath = _finderPathCountByC_K;
+
+		Object[] finderArgs = new Object[] {CPOptionId, key};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -3200,10 +2440,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			boolean bindKey = false;
 
-			if (key == null) {
-				query.append(_FINDER_COLUMN_C_K_KEY_1);
-			}
-			else if (key.equals("")) {
+			if (key.isEmpty()) {
 				query.append(_FINDER_COLUMN_C_K_KEY_3);
 			}
 			else {
@@ -3246,23 +2483,20 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_C_K_CPOPTIONID_2 = "cpOptionValue.CPOptionId = ? AND ";
-	private static final String _FINDER_COLUMN_C_K_KEY_1 = "cpOptionValue.key IS NULL";
-	private static final String _FINDER_COLUMN_C_K_KEY_2 = "cpOptionValue.key = ?";
-	private static final String _FINDER_COLUMN_C_K_KEY_3 = "(cpOptionValue.key IS NULL OR cpOptionValue.key = '')";
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_ERC = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
-			CPOptionValueImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByC_ERC",
-			new String[] { Long.class.getName(), String.class.getName() },
-			CPOptionValueModelImpl.COMPANYID_COLUMN_BITMASK |
-			CPOptionValueModelImpl.EXTERNALREFERENCECODE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_ERC = new FinderPath(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_ERC",
-			new String[] { Long.class.getName(), String.class.getName() });
+	private static final String _FINDER_COLUMN_C_K_CPOPTIONID_2 =
+		"cpOptionValue.CPOptionId = ? AND ";
+
+	private static final String _FINDER_COLUMN_C_K_KEY_2 =
+		"cpOptionValue.key = ?";
+
+	private static final String _FINDER_COLUMN_C_K_KEY_3 =
+		"(cpOptionValue.key IS NULL OR cpOptionValue.key = '')";
+
+	private FinderPath _finderPathFetchByC_ERC;
+	private FinderPath _finderPathCountByC_ERC;
 
 	/**
-	 * Returns the cp option value where companyId = &#63; and externalReferenceCode = &#63; or throws a {@link NoSuchCPOptionValueException} if it could not be found.
+	 * Returns the cp option value where companyId = &#63; and externalReferenceCode = &#63; or throws a <code>NoSuchCPOptionValueException</code> if it could not be found.
 	 *
 	 * @param companyId the company ID
 	 * @param externalReferenceCode the external reference code
@@ -3270,10 +2504,12 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @throws NoSuchCPOptionValueException if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue findByC_ERC(long companyId,
-		String externalReferenceCode) throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = fetchByC_ERC(companyId,
-				externalReferenceCode);
+	public CPOptionValue findByC_ERC(
+			long companyId, String externalReferenceCode)
+		throws NoSuchCPOptionValueException {
+
+		CPOptionValue cpOptionValue = fetchByC_ERC(
+			companyId, externalReferenceCode);
 
 		if (cpOptionValue == null) {
 			StringBundler msg = new StringBundler(6);
@@ -3306,8 +2542,9 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByC_ERC(long companyId,
-		String externalReferenceCode) {
+	public CPOptionValue fetchByC_ERC(
+		long companyId, String externalReferenceCode) {
+
 		return fetchByC_ERC(companyId, externalReferenceCode, true);
 	}
 
@@ -3320,23 +2557,29 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the matching cp option value, or <code>null</code> if a matching cp option value could not be found
 	 */
 	@Override
-	public CPOptionValue fetchByC_ERC(long companyId,
-		String externalReferenceCode, boolean retrieveFromCache) {
-		Object[] finderArgs = new Object[] { companyId, externalReferenceCode };
+	public CPOptionValue fetchByC_ERC(
+		long companyId, String externalReferenceCode,
+		boolean retrieveFromCache) {
+
+		externalReferenceCode = Objects.toString(externalReferenceCode, "");
+
+		Object[] finderArgs = new Object[] {companyId, externalReferenceCode};
 
 		Object result = null;
 
 		if (retrieveFromCache) {
-			result = finderCache.getResult(FINDER_PATH_FETCH_BY_C_ERC,
-					finderArgs, this);
+			result = finderCache.getResult(
+				_finderPathFetchByC_ERC, finderArgs, this);
 		}
 
 		if (result instanceof CPOptionValue) {
 			CPOptionValue cpOptionValue = (CPOptionValue)result;
 
 			if ((companyId != cpOptionValue.getCompanyId()) ||
-					!Objects.equals(externalReferenceCode,
-						cpOptionValue.getExternalReferenceCode())) {
+				!Objects.equals(
+					externalReferenceCode,
+					cpOptionValue.getExternalReferenceCode())) {
+
 				result = null;
 			}
 		}
@@ -3350,10 +2593,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			boolean bindExternalReferenceCode = false;
 
-			if (externalReferenceCode == null) {
-				query.append(_FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_1);
-			}
-			else if (externalReferenceCode.equals("")) {
+			if (externalReferenceCode.isEmpty()) {
 				query.append(_FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_3);
 			}
 			else {
@@ -3382,8 +2622,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				List<CPOptionValue> list = q.list();
 
 				if (list.isEmpty()) {
-					finderCache.putResult(FINDER_PATH_FETCH_BY_C_ERC,
-						finderArgs, list);
+					finderCache.putResult(
+						_finderPathFetchByC_ERC, finderArgs, list);
 				}
 				else {
 					if (list.size() > 1) {
@@ -3392,8 +2632,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 						if (_log.isWarnEnabled()) {
 							_log.warn(
 								"CPOptionValuePersistenceImpl.fetchByC_ERC(long, String, boolean) with parameters (" +
-								StringUtil.merge(finderArgs) +
-								") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
 						}
 					}
 
@@ -3405,7 +2645,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_FETCH_BY_C_ERC, finderArgs);
+				finderCache.removeResult(_finderPathFetchByC_ERC, finderArgs);
 
 				throw processException(e);
 			}
@@ -3430,10 +2670,12 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the cp option value that was removed
 	 */
 	@Override
-	public CPOptionValue removeByC_ERC(long companyId,
-		String externalReferenceCode) throws NoSuchCPOptionValueException {
-		CPOptionValue cpOptionValue = findByC_ERC(companyId,
-				externalReferenceCode);
+	public CPOptionValue removeByC_ERC(
+			long companyId, String externalReferenceCode)
+		throws NoSuchCPOptionValueException {
+
+		CPOptionValue cpOptionValue = findByC_ERC(
+			companyId, externalReferenceCode);
 
 		return remove(cpOptionValue);
 	}
@@ -3447,9 +2689,11 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public int countByC_ERC(long companyId, String externalReferenceCode) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_ERC;
+		externalReferenceCode = Objects.toString(externalReferenceCode, "");
 
-		Object[] finderArgs = new Object[] { companyId, externalReferenceCode };
+		FinderPath finderPath = _finderPathCountByC_ERC;
+
+		Object[] finderArgs = new Object[] {companyId, externalReferenceCode};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -3462,10 +2706,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 			boolean bindExternalReferenceCode = false;
 
-			if (externalReferenceCode == null) {
-				query.append(_FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_1);
-			}
-			else if (externalReferenceCode.equals("")) {
+			if (externalReferenceCode.isEmpty()) {
 				query.append(_FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_3);
 			}
 			else {
@@ -3508,24 +2749,28 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_C_ERC_COMPANYID_2 = "cpOptionValue.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_1 = "cpOptionValue.externalReferenceCode IS NULL";
-	private static final String _FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_2 = "cpOptionValue.externalReferenceCode = ?";
-	private static final String _FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_3 = "(cpOptionValue.externalReferenceCode IS NULL OR cpOptionValue.externalReferenceCode = '')";
+	private static final String _FINDER_COLUMN_C_ERC_COMPANYID_2 =
+		"cpOptionValue.companyId = ? AND ";
+
+	private static final String _FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_2 =
+		"cpOptionValue.externalReferenceCode = ?";
+
+	private static final String _FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_3 =
+		"(cpOptionValue.externalReferenceCode IS NULL OR cpOptionValue.externalReferenceCode = '')";
 
 	public CPOptionValuePersistenceImpl() {
 		setModelClass(CPOptionValue.class);
 
+		Map<String, String> dbColumnNames = new HashMap<String, String>();
+
+		dbColumnNames.put("uuid", "uuid_");
+		dbColumnNames.put("key", "key_");
+
 		try {
 			Field field = BasePersistenceImpl.class.getDeclaredField(
-					"_dbColumnNames");
+				"_dbColumnNames");
 
 			field.setAccessible(true);
-
-			Map<String, String> dbColumnNames = new HashMap<String, String>();
-
-			dbColumnNames.put("uuid", "uuid_");
-			dbColumnNames.put("key", "key_");
 
 			field.set(this, dbColumnNames);
 		}
@@ -3543,23 +2788,25 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public void cacheResult(CPOptionValue cpOptionValue) {
-		entityCache.putResult(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+		entityCache.putResult(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
 			CPOptionValueImpl.class, cpOptionValue.getPrimaryKey(),
 			cpOptionValue);
 
-		finderCache.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] { cpOptionValue.getUuid(), cpOptionValue.getGroupId() },
+		finderCache.putResult(
+			_finderPathFetchByC_K,
+			new Object[] {
+				cpOptionValue.getCPOptionId(), cpOptionValue.getKey()
+			},
 			cpOptionValue);
 
-		finderCache.putResult(FINDER_PATH_FETCH_BY_C_K,
-			new Object[] { cpOptionValue.getCPOptionId(), cpOptionValue.getKey() },
-			cpOptionValue);
-
-		finderCache.putResult(FINDER_PATH_FETCH_BY_C_ERC,
+		finderCache.putResult(
+			_finderPathFetchByC_ERC,
 			new Object[] {
 				cpOptionValue.getCompanyId(),
 				cpOptionValue.getExternalReferenceCode()
-			}, cpOptionValue);
+			},
+			cpOptionValue);
 
 		cpOptionValue.resetOriginalValues();
 	}
@@ -3573,8 +2820,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	public void cacheResult(List<CPOptionValue> cpOptionValues) {
 		for (CPOptionValue cpOptionValue : cpOptionValues) {
 			if (entityCache.getResult(
-						CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-						CPOptionValueImpl.class, cpOptionValue.getPrimaryKey()) == null) {
+					CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+					CPOptionValueImpl.class, cpOptionValue.getPrimaryKey()) ==
+						null) {
+
 				cacheResult(cpOptionValue);
 			}
 			else {
@@ -3587,7 +2836,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Clears the cache for all cp option values.
 	 *
 	 * <p>
-	 * The {@link EntityCache} and {@link FinderCache} are both cleared by this method.
+	 * The <code>EntityCache</code> and <code>FinderCache</code> are both cleared by this method.
 	 * </p>
 	 */
 	@Override
@@ -3603,12 +2852,13 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Clears the cache for the cp option value.
 	 *
 	 * <p>
-	 * The {@link EntityCache} and {@link FinderCache} are both cleared by this method.
+	 * The <code>EntityCache</code> and <code>FinderCache</code> are both cleared by this method.
 	 * </p>
 	 */
 	@Override
 	public void clearCache(CPOptionValue cpOptionValue) {
-		entityCache.removeResult(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+		entityCache.removeResult(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
 			CPOptionValueImpl.class, cpOptionValue.getPrimaryKey());
 
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
@@ -3623,109 +2873,84 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
 		for (CPOptionValue cpOptionValue : cpOptionValues) {
-			entityCache.removeResult(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			entityCache.removeResult(
+				CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
 				CPOptionValueImpl.class, cpOptionValue.getPrimaryKey());
 
-			clearUniqueFindersCache((CPOptionValueModelImpl)cpOptionValue, true);
+			clearUniqueFindersCache(
+				(CPOptionValueModelImpl)cpOptionValue, true);
 		}
 	}
 
 	protected void cacheUniqueFindersCache(
 		CPOptionValueModelImpl cpOptionValueModelImpl) {
+
 		Object[] args = new Object[] {
-				cpOptionValueModelImpl.getUuid(),
-				cpOptionValueModelImpl.getGroupId()
-			};
+			cpOptionValueModelImpl.getCPOptionId(),
+			cpOptionValueModelImpl.getKey()
+		};
 
-		finderCache.putResult(FINDER_PATH_COUNT_BY_UUID_G, args,
-			Long.valueOf(1), false);
-		finderCache.putResult(FINDER_PATH_FETCH_BY_UUID_G, args,
-			cpOptionValueModelImpl, false);
-
-		args = new Object[] {
-				cpOptionValueModelImpl.getCPOptionId(),
-				cpOptionValueModelImpl.getKey()
-			};
-
-		finderCache.putResult(FINDER_PATH_COUNT_BY_C_K, args, Long.valueOf(1),
-			false);
-		finderCache.putResult(FINDER_PATH_FETCH_BY_C_K, args,
-			cpOptionValueModelImpl, false);
+		finderCache.putResult(
+			_finderPathCountByC_K, args, Long.valueOf(1), false);
+		finderCache.putResult(
+			_finderPathFetchByC_K, args, cpOptionValueModelImpl, false);
 
 		args = new Object[] {
-				cpOptionValueModelImpl.getCompanyId(),
-				cpOptionValueModelImpl.getExternalReferenceCode()
-			};
+			cpOptionValueModelImpl.getCompanyId(),
+			cpOptionValueModelImpl.getExternalReferenceCode()
+		};
 
-		finderCache.putResult(FINDER_PATH_COUNT_BY_C_ERC, args,
-			Long.valueOf(1), false);
-		finderCache.putResult(FINDER_PATH_FETCH_BY_C_ERC, args,
-			cpOptionValueModelImpl, false);
+		finderCache.putResult(
+			_finderPathCountByC_ERC, args, Long.valueOf(1), false);
+		finderCache.putResult(
+			_finderPathFetchByC_ERC, args, cpOptionValueModelImpl, false);
 	}
 
 	protected void clearUniqueFindersCache(
 		CPOptionValueModelImpl cpOptionValueModelImpl, boolean clearCurrent) {
-		if (clearCurrent) {
-			Object[] args = new Object[] {
-					cpOptionValueModelImpl.getUuid(),
-					cpOptionValueModelImpl.getGroupId()
-				};
-
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-		}
-
-		if ((cpOptionValueModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-			Object[] args = new Object[] {
-					cpOptionValueModelImpl.getOriginalUuid(),
-					cpOptionValueModelImpl.getOriginalGroupId()
-				};
-
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-		}
 
 		if (clearCurrent) {
 			Object[] args = new Object[] {
-					cpOptionValueModelImpl.getCPOptionId(),
-					cpOptionValueModelImpl.getKey()
-				};
+				cpOptionValueModelImpl.getCPOptionId(),
+				cpOptionValueModelImpl.getKey()
+			};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_C_K, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_C_K, args);
+			finderCache.removeResult(_finderPathCountByC_K, args);
+			finderCache.removeResult(_finderPathFetchByC_K, args);
 		}
 
 		if ((cpOptionValueModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_C_K.getColumnBitmask()) != 0) {
-			Object[] args = new Object[] {
-					cpOptionValueModelImpl.getOriginalCPOptionId(),
-					cpOptionValueModelImpl.getOriginalKey()
-				};
+			 _finderPathFetchByC_K.getColumnBitmask()) != 0) {
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_C_K, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_C_K, args);
+			Object[] args = new Object[] {
+				cpOptionValueModelImpl.getOriginalCPOptionId(),
+				cpOptionValueModelImpl.getOriginalKey()
+			};
+
+			finderCache.removeResult(_finderPathCountByC_K, args);
+			finderCache.removeResult(_finderPathFetchByC_K, args);
 		}
 
 		if (clearCurrent) {
 			Object[] args = new Object[] {
-					cpOptionValueModelImpl.getCompanyId(),
-					cpOptionValueModelImpl.getExternalReferenceCode()
-				};
+				cpOptionValueModelImpl.getCompanyId(),
+				cpOptionValueModelImpl.getExternalReferenceCode()
+			};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_C_ERC, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_C_ERC, args);
+			finderCache.removeResult(_finderPathCountByC_ERC, args);
+			finderCache.removeResult(_finderPathFetchByC_ERC, args);
 		}
 
 		if ((cpOptionValueModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_C_ERC.getColumnBitmask()) != 0) {
-			Object[] args = new Object[] {
-					cpOptionValueModelImpl.getOriginalCompanyId(),
-					cpOptionValueModelImpl.getOriginalExternalReferenceCode()
-				};
+			 _finderPathFetchByC_ERC.getColumnBitmask()) != 0) {
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_C_ERC, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_C_ERC, args);
+			Object[] args = new Object[] {
+				cpOptionValueModelImpl.getOriginalCompanyId(),
+				cpOptionValueModelImpl.getOriginalExternalReferenceCode()
+			};
+
+			finderCache.removeResult(_finderPathCountByC_ERC, args);
+			finderCache.removeResult(_finderPathFetchByC_ERC, args);
 		}
 	}
 
@@ -3746,7 +2971,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 		cpOptionValue.setUuid(uuid);
 
-		cpOptionValue.setCompanyId(companyProvider.getCompanyId());
+		cpOptionValue.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return cpOptionValue;
 	}
@@ -3761,6 +2986,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	@Override
 	public CPOptionValue remove(long CPOptionValueId)
 		throws NoSuchCPOptionValueException {
+
 		return remove((Serializable)CPOptionValueId);
 	}
 
@@ -3774,21 +3000,22 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	@Override
 	public CPOptionValue remove(Serializable primaryKey)
 		throws NoSuchCPOptionValueException {
+
 		Session session = null;
 
 		try {
 			session = openSession();
 
-			CPOptionValue cpOptionValue = (CPOptionValue)session.get(CPOptionValueImpl.class,
-					primaryKey);
+			CPOptionValue cpOptionValue = (CPOptionValue)session.get(
+				CPOptionValueImpl.class, primaryKey);
 
 			if (cpOptionValue == null) {
 				if (_log.isDebugEnabled()) {
 					_log.debug(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 				}
 
-				throw new NoSuchCPOptionValueException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
+				throw new NoSuchCPOptionValueException(
+					_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 			}
 
 			return remove(cpOptionValue);
@@ -3812,8 +3039,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			session = openSession();
 
 			if (!session.contains(cpOptionValue)) {
-				cpOptionValue = (CPOptionValue)session.get(CPOptionValueImpl.class,
-						cpOptionValue.getPrimaryKeyObj());
+				cpOptionValue = (CPOptionValue)session.get(
+					CPOptionValueImpl.class, cpOptionValue.getPrimaryKeyObj());
 			}
 
 			if (cpOptionValue != null) {
@@ -3842,19 +3069,21 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			InvocationHandler invocationHandler = null;
 
 			if (ProxyUtil.isProxyClass(cpOptionValue.getClass())) {
-				invocationHandler = ProxyUtil.getInvocationHandler(cpOptionValue);
+				invocationHandler = ProxyUtil.getInvocationHandler(
+					cpOptionValue);
 
 				throw new IllegalArgumentException(
 					"Implement ModelWrapper in cpOptionValue proxy " +
-					invocationHandler.getClass());
+						invocationHandler.getClass());
 			}
 
 			throw new IllegalArgumentException(
 				"Implement ModelWrapper in custom CPOptionValue implementation " +
-				cpOptionValue.getClass());
+					cpOptionValue.getClass());
 		}
 
-		CPOptionValueModelImpl cpOptionValueModelImpl = (CPOptionValueModelImpl)cpOptionValue;
+		CPOptionValueModelImpl cpOptionValueModelImpl =
+			(CPOptionValueModelImpl)cpOptionValue;
 
 		if (Validator.isNull(cpOptionValue.getUuid())) {
 			String uuid = PortalUUIDUtil.generate();
@@ -3862,7 +3091,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			cpOptionValue.setUuid(uuid);
 		}
 
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 
 		Date now = new Date();
 
@@ -3880,8 +3110,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				cpOptionValue.setModifiedDate(now);
 			}
 			else {
-				cpOptionValue.setModifiedDate(serviceContext.getModifiedDate(
-						now));
+				cpOptionValue.setModifiedDate(
+					serviceContext.getModifiedDate(now));
 			}
 		}
 
@@ -3911,138 +3141,122 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		if (!CPOptionValueModelImpl.COLUMN_BITMASK_ENABLED) {
 			finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
-		else
-		 if (isNew) {
-			Object[] args = new Object[] { cpOptionValueModelImpl.getUuid() };
+		else if (isNew) {
+			Object[] args = new Object[] {cpOptionValueModelImpl.getUuid()};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-				args);
+			finderCache.removeResult(_finderPathCountByUuid, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByUuid, args);
 
 			args = new Object[] {
+				cpOptionValueModelImpl.getUuid(),
+				cpOptionValueModelImpl.getCompanyId()
+			};
+
+			finderCache.removeResult(_finderPathCountByUuid_C, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByUuid_C, args);
+
+			args = new Object[] {cpOptionValueModelImpl.getCompanyId()};
+
+			finderCache.removeResult(_finderPathCountByCompanyId, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByCompanyId, args);
+
+			args = new Object[] {cpOptionValueModelImpl.getCPOptionId()};
+
+			finderCache.removeResult(_finderPathCountByCPOptionId, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByCPOptionId, args);
+
+			finderCache.removeResult(_finderPathCountAll, FINDER_ARGS_EMPTY);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindAll, FINDER_ARGS_EMPTY);
+		}
+		else {
+			if ((cpOptionValueModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByUuid.getColumnBitmask()) !=
+					 0) {
+
+				Object[] args = new Object[] {
+					cpOptionValueModelImpl.getOriginalUuid()
+				};
+
+				finderCache.removeResult(_finderPathCountByUuid, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid, args);
+
+				args = new Object[] {cpOptionValueModelImpl.getUuid()};
+
+				finderCache.removeResult(_finderPathCountByUuid, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid, args);
+			}
+
+			if ((cpOptionValueModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByUuid_C.getColumnBitmask()) !=
+					 0) {
+
+				Object[] args = new Object[] {
+					cpOptionValueModelImpl.getOriginalUuid(),
+					cpOptionValueModelImpl.getOriginalCompanyId()
+				};
+
+				finderCache.removeResult(_finderPathCountByUuid_C, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid_C, args);
+
+				args = new Object[] {
 					cpOptionValueModelImpl.getUuid(),
 					cpOptionValueModelImpl.getCompanyId()
 				};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-				args);
-
-			args = new Object[] { cpOptionValueModelImpl.getGroupId() };
-
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-				args);
-
-			args = new Object[] { cpOptionValueModelImpl.getCompanyId() };
-
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_COMPANYID, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-				args);
-
-			args = new Object[] { cpOptionValueModelImpl.getCPOptionId() };
-
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_CPOPTIONID, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CPOPTIONID,
-				args);
-
-			finderCache.removeResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL,
-				FINDER_ARGS_EMPTY);
-		}
-
-		else {
-			if ((cpOptionValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						cpOptionValueModelImpl.getOriginalUuid()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { cpOptionValueModelImpl.getUuid() };
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
+				finderCache.removeResult(_finderPathCountByUuid_C, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid_C, args);
 			}
 
 			if ((cpOptionValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				 _finderPathWithoutPaginationFindByCompanyId.
+					 getColumnBitmask()) != 0) {
+
 				Object[] args = new Object[] {
-						cpOptionValueModelImpl.getOriginalUuid(),
-						cpOptionValueModelImpl.getOriginalCompanyId()
-					};
+					cpOptionValueModelImpl.getOriginalCompanyId()
+				};
 
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
+				finderCache.removeResult(_finderPathCountByCompanyId, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByCompanyId, args);
 
-				args = new Object[] {
-						cpOptionValueModelImpl.getUuid(),
-						cpOptionValueModelImpl.getCompanyId()
-					};
+				args = new Object[] {cpOptionValueModelImpl.getCompanyId()};
 
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
+				finderCache.removeResult(_finderPathCountByCompanyId, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByCompanyId, args);
 			}
 
 			if ((cpOptionValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
+				 _finderPathWithoutPaginationFindByCPOptionId.
+					 getColumnBitmask()) != 0) {
+
 				Object[] args = new Object[] {
-						cpOptionValueModelImpl.getOriginalGroupId()
-					};
+					cpOptionValueModelImpl.getOriginalCPOptionId()
+				};
 
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
+				finderCache.removeResult(_finderPathCountByCPOptionId, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByCPOptionId, args);
 
-				args = new Object[] { cpOptionValueModelImpl.getGroupId() };
+				args = new Object[] {cpOptionValueModelImpl.getCPOptionId()};
 
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((cpOptionValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						cpOptionValueModelImpl.getOriginalCompanyId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_COMPANYID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] { cpOptionValueModelImpl.getCompanyId() };
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_COMPANYID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((cpOptionValueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CPOPTIONID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						cpOptionValueModelImpl.getOriginalCPOptionId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_CPOPTIONID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CPOPTIONID,
-					args);
-
-				args = new Object[] { cpOptionValueModelImpl.getCPOptionId() };
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_CPOPTIONID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CPOPTIONID,
-					args);
+				finderCache.removeResult(_finderPathCountByCPOptionId, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByCPOptionId, args);
 			}
 		}
 
-		entityCache.putResult(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+		entityCache.putResult(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
 			CPOptionValueImpl.class, cpOptionValue.getPrimaryKey(),
 			cpOptionValue, false);
 
@@ -4055,7 +3269,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	}
 
 	/**
-	 * Returns the cp option value with the primary key or throws a {@link com.liferay.portal.kernel.exception.NoSuchModelException} if it could not be found.
+	 * Returns the cp option value with the primary key or throws a <code>com.liferay.portal.kernel.exception.NoSuchModelException</code> if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the cp option value
 	 * @return the cp option value
@@ -4064,6 +3278,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	@Override
 	public CPOptionValue findByPrimaryKey(Serializable primaryKey)
 		throws NoSuchCPOptionValueException {
+
 		CPOptionValue cpOptionValue = fetchByPrimaryKey(primaryKey);
 
 		if (cpOptionValue == null) {
@@ -4071,15 +3286,15 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				_log.debug(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 			}
 
-			throw new NoSuchCPOptionValueException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				primaryKey);
+			throw new NoSuchCPOptionValueException(
+				_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 		}
 
 		return cpOptionValue;
 	}
 
 	/**
-	 * Returns the cp option value with the primary key or throws a {@link NoSuchCPOptionValueException} if it could not be found.
+	 * Returns the cp option value with the primary key or throws a <code>NoSuchCPOptionValueException</code> if it could not be found.
 	 *
 	 * @param CPOptionValueId the primary key of the cp option value
 	 * @return the cp option value
@@ -4088,6 +3303,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	@Override
 	public CPOptionValue findByPrimaryKey(long CPOptionValueId)
 		throws NoSuchCPOptionValueException {
+
 		return findByPrimaryKey((Serializable)CPOptionValueId);
 	}
 
@@ -4099,8 +3315,9 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public CPOptionValue fetchByPrimaryKey(Serializable primaryKey) {
-		Serializable serializable = entityCache.getResult(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-				CPOptionValueImpl.class, primaryKey);
+		Serializable serializable = entityCache.getResult(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueImpl.class, primaryKey);
 
 		if (serializable == nullModel) {
 			return null;
@@ -4114,19 +3331,21 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			try {
 				session = openSession();
 
-				cpOptionValue = (CPOptionValue)session.get(CPOptionValueImpl.class,
-						primaryKey);
+				cpOptionValue = (CPOptionValue)session.get(
+					CPOptionValueImpl.class, primaryKey);
 
 				if (cpOptionValue != null) {
 					cacheResult(cpOptionValue);
 				}
 				else {
-					entityCache.putResult(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+					entityCache.putResult(
+						CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
 						CPOptionValueImpl.class, primaryKey, nullModel);
 				}
 			}
 			catch (Exception e) {
-				entityCache.removeResult(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+				entityCache.removeResult(
+					CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
 					CPOptionValueImpl.class, primaryKey);
 
 				throw processException(e);
@@ -4153,11 +3372,13 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	@Override
 	public Map<Serializable, CPOptionValue> fetchByPrimaryKeys(
 		Set<Serializable> primaryKeys) {
+
 		if (primaryKeys.isEmpty()) {
 			return Collections.emptyMap();
 		}
 
-		Map<Serializable, CPOptionValue> map = new HashMap<Serializable, CPOptionValue>();
+		Map<Serializable, CPOptionValue> map =
+			new HashMap<Serializable, CPOptionValue>();
 
 		if (primaryKeys.size() == 1) {
 			Iterator<Serializable> iterator = primaryKeys.iterator();
@@ -4176,8 +3397,9 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		Set<Serializable> uncachedPrimaryKeys = null;
 
 		for (Serializable primaryKey : primaryKeys) {
-			Serializable serializable = entityCache.getResult(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
-					CPOptionValueImpl.class, primaryKey);
+			Serializable serializable = entityCache.getResult(
+				CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+				CPOptionValueImpl.class, primaryKey);
 
 			if (serializable != nullModel) {
 				if (serializable == null) {
@@ -4197,8 +3419,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			return map;
 		}
 
-		StringBundler query = new StringBundler((uncachedPrimaryKeys.size() * 2) +
-				1);
+		StringBundler query = new StringBundler(
+			uncachedPrimaryKeys.size() * 2 + 1);
 
 		query.append(_SQL_SELECT_CPOPTIONVALUE_WHERE_PKS_IN);
 
@@ -4230,7 +3452,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			}
 
 			for (Serializable primaryKey : uncachedPrimaryKeys) {
-				entityCache.putResult(CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+				entityCache.putResult(
+					CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
 					CPOptionValueImpl.class, primaryKey, nullModel);
 			}
 		}
@@ -4258,7 +3481,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Returns a range of all the cp option values.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of cp option values
@@ -4274,7 +3497,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Returns an ordered range of all the cp option values.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of cp option values
@@ -4283,8 +3506,10 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the ordered range of cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findAll(int start, int end,
+	public List<CPOptionValue> findAll(
+		int start, int end,
 		OrderByComparator<CPOptionValue> orderByComparator) {
+
 		return findAll(start, end, orderByComparator, true);
 	}
 
@@ -4292,7 +3517,7 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Returns an ordered range of all the cp option values.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CPOptionValueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CPOptionValueModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of cp option values
@@ -4302,29 +3527,31 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * @return the ordered range of cp option values
 	 */
 	@Override
-	public List<CPOptionValue> findAll(int start, int end,
-		OrderByComparator<CPOptionValue> orderByComparator,
+	public List<CPOptionValue> findAll(
+		int start, int end, OrderByComparator<CPOptionValue> orderByComparator,
 		boolean retrieveFromCache) {
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderPath = _finderPathWithoutPaginationFindAll;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
+			finderPath = _finderPathWithPaginationFindAll;
+			finderArgs = new Object[] {start, end, orderByComparator};
 		}
 
 		List<CPOptionValue> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CPOptionValue>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CPOptionValue>)finderCache.getResult(
+				finderPath, finderArgs, this);
 		}
 
 		if (list == null) {
@@ -4332,13 +3559,13 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 			String sql = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					2 + (orderByComparator.getOrderByFields().length * 2));
 
 				query.append(_SQL_SELECT_CPOPTIONVALUE);
 
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 
 				sql = query.toString();
 			}
@@ -4358,16 +3585,16 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 				Query q = session.createQuery(sql);
 
 				if (!pagination) {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end, false);
+					list = (List<CPOptionValue>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CPOptionValue>)QueryUtil.list(q, getDialect(),
-							start, end);
+					list = (List<CPOptionValue>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -4405,8 +3632,8 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 */
 	@Override
 	public int countAll() {
-		Long count = (Long)finderCache.getResult(FINDER_PATH_COUNT_ALL,
-				FINDER_ARGS_EMPTY, this);
+		Long count = (Long)finderCache.getResult(
+			_finderPathCountAll, FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -4418,12 +3645,12 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 
 				count = (Long)q.uniqueResult();
 
-				finderCache.putResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY,
-					count);
+				finderCache.putResult(
+					_finderPathCountAll, FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY);
+				finderCache.removeResult(
+					_finderPathCountAll, FINDER_ARGS_EMPTY);
 
 				throw processException(e);
 			}
@@ -4449,6 +3676,154 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 	 * Initializes the cp option value persistence.
 	 */
 	public void afterPropertiesSet() {
+		_finderPathWithPaginationFindAll = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+
+		_finderPathWithoutPaginationFindAll = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findAll", new String[0]);
+
+		_finderPathCountAll = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll",
+			new String[0]);
+
+		_finderPathWithPaginationFindByUuid = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid",
+			new String[] {
+				String.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByUuid = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByUuid", new String[] {String.class.getName()},
+			CPOptionValueModelImpl.UUID_COLUMN_BITMASK |
+			CPOptionValueModelImpl.PRIORITY_COLUMN_BITMASK |
+			CPOptionValueModelImpl.NAME_COLUMN_BITMASK);
+
+		_finderPathCountByUuid = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] {String.class.getName()});
+
+		_finderPathWithPaginationFindByUuid_C = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByUuid_C = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByUuid_C",
+			new String[] {String.class.getName(), Long.class.getName()},
+			CPOptionValueModelImpl.UUID_COLUMN_BITMASK |
+			CPOptionValueModelImpl.COMPANYID_COLUMN_BITMASK |
+			CPOptionValueModelImpl.PRIORITY_COLUMN_BITMASK |
+			CPOptionValueModelImpl.NAME_COLUMN_BITMASK);
+
+		_finderPathCountByUuid_C = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] {String.class.getName(), Long.class.getName()});
+
+		_finderPathWithPaginationFindByCompanyId = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByCompanyId",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByCompanyId = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByCompanyId", new String[] {Long.class.getName()},
+			CPOptionValueModelImpl.COMPANYID_COLUMN_BITMASK |
+			CPOptionValueModelImpl.PRIORITY_COLUMN_BITMASK |
+			CPOptionValueModelImpl.NAME_COLUMN_BITMASK);
+
+		_finderPathCountByCompanyId = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] {Long.class.getName()});
+
+		_finderPathWithPaginationFindByCPOptionId = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByCPOptionId",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByCPOptionId = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByCPOptionId", new String[] {Long.class.getName()},
+			CPOptionValueModelImpl.CPOPTIONID_COLUMN_BITMASK |
+			CPOptionValueModelImpl.PRIORITY_COLUMN_BITMASK |
+			CPOptionValueModelImpl.NAME_COLUMN_BITMASK);
+
+		_finderPathCountByCPOptionId = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCPOptionId",
+			new String[] {Long.class.getName()});
+
+		_finderPathFetchByC_K = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByC_K",
+			new String[] {Long.class.getName(), String.class.getName()},
+			CPOptionValueModelImpl.CPOPTIONID_COLUMN_BITMASK |
+			CPOptionValueModelImpl.KEY_COLUMN_BITMASK);
+
+		_finderPathCountByC_K = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_K",
+			new String[] {Long.class.getName(), String.class.getName()});
+
+		_finderPathFetchByC_ERC = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED,
+			CPOptionValueImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByC_ERC",
+			new String[] {Long.class.getName(), String.class.getName()},
+			CPOptionValueModelImpl.COMPANYID_COLUMN_BITMASK |
+			CPOptionValueModelImpl.EXTERNALREFERENCECODE_COLUMN_BITMASK);
+
+		_finderPathCountByC_ERC = new FinderPath(
+			CPOptionValueModelImpl.ENTITY_CACHE_ENABLED,
+			CPOptionValueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_ERC",
+			new String[] {Long.class.getName(), String.class.getName()});
 	}
 
 	public void destroy() {
@@ -4458,22 +3833,39 @@ public class CPOptionValuePersistenceImpl extends BasePersistenceImpl<CPOptionVa
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@ServiceReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 	@ServiceReference(type = EntityCache.class)
 	protected EntityCache entityCache;
+
 	@ServiceReference(type = FinderCache.class)
 	protected FinderCache finderCache;
-	private static final String _SQL_SELECT_CPOPTIONVALUE = "SELECT cpOptionValue FROM CPOptionValue cpOptionValue";
-	private static final String _SQL_SELECT_CPOPTIONVALUE_WHERE_PKS_IN = "SELECT cpOptionValue FROM CPOptionValue cpOptionValue WHERE CPOptionValueId IN (";
-	private static final String _SQL_SELECT_CPOPTIONVALUE_WHERE = "SELECT cpOptionValue FROM CPOptionValue cpOptionValue WHERE ";
-	private static final String _SQL_COUNT_CPOPTIONVALUE = "SELECT COUNT(cpOptionValue) FROM CPOptionValue cpOptionValue";
-	private static final String _SQL_COUNT_CPOPTIONVALUE_WHERE = "SELECT COUNT(cpOptionValue) FROM CPOptionValue cpOptionValue WHERE ";
+
+	private static final String _SQL_SELECT_CPOPTIONVALUE =
+		"SELECT cpOptionValue FROM CPOptionValue cpOptionValue";
+
+	private static final String _SQL_SELECT_CPOPTIONVALUE_WHERE_PKS_IN =
+		"SELECT cpOptionValue FROM CPOptionValue cpOptionValue WHERE CPOptionValueId IN (";
+
+	private static final String _SQL_SELECT_CPOPTIONVALUE_WHERE =
+		"SELECT cpOptionValue FROM CPOptionValue cpOptionValue WHERE ";
+
+	private static final String _SQL_COUNT_CPOPTIONVALUE =
+		"SELECT COUNT(cpOptionValue) FROM CPOptionValue cpOptionValue";
+
+	private static final String _SQL_COUNT_CPOPTIONVALUE_WHERE =
+		"SELECT COUNT(cpOptionValue) FROM CPOptionValue cpOptionValue WHERE ";
+
 	private static final String _ORDER_BY_ENTITY_ALIAS = "cpOptionValue.";
-	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No CPOptionValue exists with the primary key ";
-	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No CPOptionValue exists with the key {";
-	private static final Log _log = LogFactoryUtil.getLog(CPOptionValuePersistenceImpl.class);
-	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
-				"uuid", "key"
-			});
+
+	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY =
+		"No CPOptionValue exists with the primary key ";
+
+	private static final String _NO_SUCH_ENTITY_WITH_KEY =
+		"No CPOptionValue exists with the key {";
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		CPOptionValuePersistenceImpl.class);
+
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(
+		new String[] {"uuid", "key"});
+
 }

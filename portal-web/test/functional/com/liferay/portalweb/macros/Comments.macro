@@ -1,10 +1,17 @@
 definition {
+
 	macro addComment {
-		Click(locator1 = "AlloyEditor#EDITOR", key_editor = "postReply");
+		Click(
+			key_editor = "postReply",
+			locator1 = "AlloyEditor#EDITOR");
 
-		AlloyEditor.typeEditor(content = "${entryComment}", editor = "postReply");
+		AlloyEditor.typeEditor(
+			content = "${entryComment}",
+			editor = "postReply");
 
-		AssertClick(locator1 = "Button#REPLY", value1 = "Reply");
+		AssertClick(
+			locator1 = "Button#REPLY",
+			value1 = "Reply");
 
 		Alert.viewSuccessMessage();
 	}
@@ -12,9 +19,39 @@ definition {
 	macro subscribePG {
 		AssertClick(
 			locator1 = "Comments#SUBSCRIBE_TO_COMMENTS_LINK",
-			value1 = "Subscribe to Comments"
-		);
+			value1 = "Subscribe to Comments");
 
 		Alert.viewSuccessMessage();
 	}
+
+	macro viewCommentReadOnly {
+		AssertElementNotPresent(locator1 = "Comments#COMMENT_FIELD");
+
+		AssertTextEquals(
+			locator1 = "Comments#COMMENT_INFO",
+			value1 = "Comments are read only in Staging.");
+	}
+
+	macro viewPG {
+		var key_entryComment = "${entryComment}";
+
+		Pause(locator1 = "1000");
+
+		if (isSet(commentCount)) {
+			AssertTextEquals.assertPartialText(
+				locator1 = "Comments#ENTRY_COUNT_PANEL",
+				value1 = "${commentCount} COMMENT");
+		}
+
+		var key_userFullName = "${userFullName}";
+
+		AssertTextEquals.assertPartialText(
+			locator1 = "Comments#USER_NAME",
+			value1 = "${userFullName}");
+
+		AssertTextEquals(
+			locator1 = "Comments#COMMENT_BODY_SPECIFIC",
+			value1 = "${entryComment}");
+	}
+
 }

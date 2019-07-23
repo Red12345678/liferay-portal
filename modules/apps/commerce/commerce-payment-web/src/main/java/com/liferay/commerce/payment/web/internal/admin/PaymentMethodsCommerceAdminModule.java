@@ -15,6 +15,7 @@
 package com.liferay.commerce.payment.web.internal.admin;
 
 import com.liferay.commerce.admin.CommerceAdminModule;
+import com.liferay.commerce.admin.constants.CommerceAdminConstants;
 import com.liferay.commerce.constants.CommerceActionKeys;
 import com.liferay.commerce.constants.CommerceConstants;
 import com.liferay.commerce.payment.method.CommercePaymentMethodRegistry;
@@ -23,7 +24,6 @@ import com.liferay.commerce.payment.web.internal.display.context.CommercePayment
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.util.Portal;
@@ -48,6 +48,7 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Andrea Di Giorgi
+ * @author Alessio Antonio Rendina
  */
 @Component(
 	immediate = true,
@@ -74,12 +75,14 @@ public class PaymentMethodsCommerceAdminModule implements CommerceAdminModule {
 	}
 
 	@Override
-	public boolean isVisible(long groupId) throws PortalException {
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
+	public int getType() {
+		return CommerceAdminConstants.COMMERCE_ADMIN_TYPE_GROUP_INSTANCE;
+	}
 
+	@Override
+	public boolean isVisible(long groupId) throws PortalException {
 		return _portletResourcePermission.contains(
-			permissionChecker, groupId,
+			PermissionThreadLocal.getPermissionChecker(), groupId,
 			CommerceActionKeys.MANAGE_COMMERCE_PAYMENT_METHODS);
 	}
 
@@ -89,14 +92,15 @@ public class PaymentMethodsCommerceAdminModule implements CommerceAdminModule {
 		throws IOException {
 
 		CommercePaymentMethodGroupRelsDisplayContext
-			commerceCurrenciesDisplayContext =
+			commercePaymentMethodGroupRelsDisplayContext =
 				new CommercePaymentMethodGroupRelsDisplayContext(
 					_commercePaymentMethodRegistry,
 					_commercePaymentMethodGroupRelService,
 					_portletResourcePermission, renderRequest, renderResponse);
 
 		renderRequest.setAttribute(
-			WebKeys.PORTLET_DISPLAY_CONTEXT, commerceCurrenciesDisplayContext);
+			WebKeys.PORTLET_DISPLAY_CONTEXT,
+			commercePaymentMethodGroupRelsDisplayContext);
 
 		HttpServletRequest httpServletRequest = _portal.getHttpServletRequest(
 			renderRequest);

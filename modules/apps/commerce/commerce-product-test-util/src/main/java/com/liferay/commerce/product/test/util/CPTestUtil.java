@@ -26,11 +26,13 @@ import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CPInstanceConstants;
 import com.liferay.commerce.product.model.CPOption;
 import com.liferay.commerce.product.model.CPOptionValue;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.CPDefinitionLocalServiceUtil;
 import com.liferay.commerce.product.service.CPDefinitionOptionRelLocalServiceUtil;
 import com.liferay.commerce.product.service.CPInstanceLocalServiceUtil;
 import com.liferay.commerce.product.service.CPOptionLocalServiceUtil;
 import com.liferay.commerce.product.service.CPOptionValueLocalServiceUtil;
+import com.liferay.commerce.product.service.CommerceCatalogLocalServiceUtil;
 import com.liferay.commerce.product.type.simple.constants.SimpleCPTypeConstants;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -54,6 +56,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -157,22 +160,20 @@ public class CPTestUtil {
 			cpOptionConfiguration.ddmFormFieldTypesAllowed();
 
 		return CPOptionLocalServiceUtil.addCPOption(
-			RandomTestUtil.randomLocaleStringMap(),
+			serviceContext.getUserId(), RandomTestUtil.randomLocaleStringMap(),
 			RandomTestUtil.randomLocaleStringMap(), ddmFormFieldTypesAllowed[0],
 			RandomTestUtil.randomBoolean(), RandomTestUtil.randomBoolean(),
-			skuContributor, RandomTestUtil.randomString(), serviceContext);
+			skuContributor, RandomTestUtil.randomString(), null,
+			serviceContext);
 	}
 
 	public static CPOptionValue addCPOptionValue(CPOption cpOption)
 		throws PortalException {
 
-		ServiceContext serviceContext =
-			ServiceContextTestUtil.getServiceContext(cpOption.getGroupId());
-
 		return CPOptionValueLocalServiceUtil.addCPOptionValue(
 			cpOption.getCPOptionId(), RandomTestUtil.randomLocaleStringMap(),
 			RandomTestUtil.randomDouble(), RandomTestUtil.randomString(),
-			serviceContext);
+			ServiceContextTestUtil.getServiceContext());
 	}
 
 	public static void buildCPInstances(CPDefinition cpDefinition)
@@ -226,6 +227,12 @@ public class CPTestUtil {
 		throws PortalException {
 
 		User user = UserLocalServiceUtil.getUser(serviceContext.getUserId());
+
+		List<CommerceCatalog> commerceCatalogs =
+			CommerceCatalogLocalServiceUtil.getCommerceCatalogs(
+				user.getCompanyId(), true);
+
+		CommerceCatalog commerceCatalog = commerceCatalogs.get(0);
 
 		long now = System.currentTimeMillis();
 
@@ -289,18 +296,23 @@ public class CPTestUtil {
 			expirationDateHour += 12;
 		}
 
-		boolean neverExpire = false;
+		String defaultSku = null;
+
+		if (hasDefaultInstance) {
+			defaultSku = CPInstanceConstants.DEFAULT_SKU;
+		}
 
 		return CPDefinitionLocalServiceUtil.addCPDefinition(
-			titleMap, shortDescriptionMap, descriptionMap, urlTitleMap,
-			metaTitleMap, metaKeywordsMap, metaDescriptionMap, productTypeName,
+			commerceCatalog.getGroupId(), user.getUserId(), titleMap,
+			shortDescriptionMap, descriptionMap, urlTitleMap, metaTitleMap,
+			metaKeywordsMap, metaDescriptionMap, productTypeName,
 			ignoreSKUCombinations, shippable, freeShipping, shipSeparately,
 			shippingExtraPrice, width, height, depth, weight, cpTaxCategoryId,
 			taxExempt, telcoOrElectronics, ddmStructureKey, published,
 			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
 			displayDateMinute, expirationDateMonth, expirationDateDay,
-			expirationDateYear, expirationDateHour, expirationDateMinute,
-			neverExpire, hasDefaultInstance, serviceContext);
+			expirationDateYear, expirationDateHour, expirationDateMinute, false,
+			defaultSku, false, 0, null, null, 0L, null, serviceContext);
 	}
 
 }

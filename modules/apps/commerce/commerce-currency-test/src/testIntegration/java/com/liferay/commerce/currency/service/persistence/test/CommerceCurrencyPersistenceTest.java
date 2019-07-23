@@ -15,13 +15,11 @@
 package com.liferay.commerce.currency.service.persistence.test;
 
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
-
 import com.liferay.commerce.currency.exception.NoSuchCurrencyException;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalServiceUtil;
 import com.liferay.commerce.currency.service.persistence.CommerceCurrencyPersistence;
 import com.liferay.commerce.currency.service.persistence.CommerceCurrencyUtil;
-
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -41,15 +39,6 @@ import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.PersistenceTestRule;
 import com.liferay.portal.test.rule.TransactionalTestRule;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-
-import org.junit.runner.RunWith;
-
 import java.io.Serializable;
 
 import java.math.BigDecimal;
@@ -62,17 +51,27 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 /**
  * @generated
  */
 @RunWith(Arquillian.class)
 public class CommerceCurrencyPersistenceTest {
+
 	@ClassRule
 	@Rule
-	public static final AggregateTestRule aggregateTestRule = new AggregateTestRule(new LiferayIntegrationTestRule(),
-			PersistenceTestRule.INSTANCE,
-			new TransactionalTestRule(Propagation.REQUIRED,
-				"com.liferay.commerce.currency.service"));
+	public static final AggregateTestRule aggregateTestRule =
+		new AggregateTestRule(
+			new LiferayIntegrationTestRule(), PersistenceTestRule.INSTANCE,
+			new TransactionalTestRule(
+				Propagation.REQUIRED, "com.liferay.commerce.currency.service"));
 
 	@Before
 	public void setUp() {
@@ -111,7 +110,8 @@ public class CommerceCurrencyPersistenceTest {
 
 		_persistence.remove(newCommerceCurrency);
 
-		CommerceCurrency existingCommerceCurrency = _persistence.fetchByPrimaryKey(newCommerceCurrency.getPrimaryKey());
+		CommerceCurrency existingCommerceCurrency =
+			_persistence.fetchByPrimaryKey(newCommerceCurrency.getPrimaryKey());
 
 		Assert.assertNull(existingCommerceCurrency);
 	}
@@ -129,8 +129,6 @@ public class CommerceCurrencyPersistenceTest {
 
 		newCommerceCurrency.setUuid(RandomTestUtil.randomString());
 
-		newCommerceCurrency.setGroupId(RandomTestUtil.nextLong());
-
 		newCommerceCurrency.setCompanyId(RandomTestUtil.nextLong());
 
 		newCommerceCurrency.setUserId(RandomTestUtil.nextLong());
@@ -145,7 +143,8 @@ public class CommerceCurrencyPersistenceTest {
 
 		newCommerceCurrency.setName(RandomTestUtil.randomString());
 
-		newCommerceCurrency.setRate(new BigDecimal(RandomTestUtil.nextDouble()));
+		newCommerceCurrency.setRate(
+			new BigDecimal(RandomTestUtil.nextDouble()));
 
 		newCommerceCurrency.setFormatPattern(RandomTestUtil.randomString());
 
@@ -165,47 +164,58 @@ public class CommerceCurrencyPersistenceTest {
 
 		_commerceCurrencies.add(_persistence.update(newCommerceCurrency));
 
-		CommerceCurrency existingCommerceCurrency = _persistence.findByPrimaryKey(newCommerceCurrency.getPrimaryKey());
+		CommerceCurrency existingCommerceCurrency =
+			_persistence.findByPrimaryKey(newCommerceCurrency.getPrimaryKey());
 
-		Assert.assertEquals(existingCommerceCurrency.getUuid(),
-			newCommerceCurrency.getUuid());
-		Assert.assertEquals(existingCommerceCurrency.getCommerceCurrencyId(),
+		Assert.assertEquals(
+			existingCommerceCurrency.getUuid(), newCommerceCurrency.getUuid());
+		Assert.assertEquals(
+			existingCommerceCurrency.getCommerceCurrencyId(),
 			newCommerceCurrency.getCommerceCurrencyId());
-		Assert.assertEquals(existingCommerceCurrency.getGroupId(),
-			newCommerceCurrency.getGroupId());
-		Assert.assertEquals(existingCommerceCurrency.getCompanyId(),
+		Assert.assertEquals(
+			existingCommerceCurrency.getCompanyId(),
 			newCommerceCurrency.getCompanyId());
-		Assert.assertEquals(existingCommerceCurrency.getUserId(),
+		Assert.assertEquals(
+			existingCommerceCurrency.getUserId(),
 			newCommerceCurrency.getUserId());
-		Assert.assertEquals(existingCommerceCurrency.getUserName(),
+		Assert.assertEquals(
+			existingCommerceCurrency.getUserName(),
 			newCommerceCurrency.getUserName());
-		Assert.assertEquals(Time.getShortTimestamp(
-				existingCommerceCurrency.getCreateDate()),
+		Assert.assertEquals(
+			Time.getShortTimestamp(existingCommerceCurrency.getCreateDate()),
 			Time.getShortTimestamp(newCommerceCurrency.getCreateDate()));
-		Assert.assertEquals(Time.getShortTimestamp(
-				existingCommerceCurrency.getModifiedDate()),
+		Assert.assertEquals(
+			Time.getShortTimestamp(existingCommerceCurrency.getModifiedDate()),
 			Time.getShortTimestamp(newCommerceCurrency.getModifiedDate()));
-		Assert.assertEquals(existingCommerceCurrency.getCode(),
-			newCommerceCurrency.getCode());
-		Assert.assertEquals(existingCommerceCurrency.getName(),
-			newCommerceCurrency.getName());
-		Assert.assertEquals(existingCommerceCurrency.getRate(),
-			newCommerceCurrency.getRate());
-		Assert.assertEquals(existingCommerceCurrency.getFormatPattern(),
+		Assert.assertEquals(
+			existingCommerceCurrency.getCode(), newCommerceCurrency.getCode());
+		Assert.assertEquals(
+			existingCommerceCurrency.getName(), newCommerceCurrency.getName());
+		Assert.assertEquals(
+			existingCommerceCurrency.getRate(), newCommerceCurrency.getRate());
+		Assert.assertEquals(
+			existingCommerceCurrency.getFormatPattern(),
 			newCommerceCurrency.getFormatPattern());
-		Assert.assertEquals(existingCommerceCurrency.getMaxFractionDigits(),
+		Assert.assertEquals(
+			existingCommerceCurrency.getMaxFractionDigits(),
 			newCommerceCurrency.getMaxFractionDigits());
-		Assert.assertEquals(existingCommerceCurrency.getMinFractionDigits(),
+		Assert.assertEquals(
+			existingCommerceCurrency.getMinFractionDigits(),
 			newCommerceCurrency.getMinFractionDigits());
-		Assert.assertEquals(existingCommerceCurrency.getRoundingMode(),
+		Assert.assertEquals(
+			existingCommerceCurrency.getRoundingMode(),
 			newCommerceCurrency.getRoundingMode());
-		Assert.assertEquals(existingCommerceCurrency.isPrimary(),
+		Assert.assertEquals(
+			existingCommerceCurrency.isPrimary(),
 			newCommerceCurrency.isPrimary());
-		AssertUtils.assertEquals(existingCommerceCurrency.getPriority(),
+		AssertUtils.assertEquals(
+			existingCommerceCurrency.getPriority(),
 			newCommerceCurrency.getPriority());
-		Assert.assertEquals(existingCommerceCurrency.isActive(),
+		Assert.assertEquals(
+			existingCommerceCurrency.isActive(),
 			newCommerceCurrency.isActive());
-		Assert.assertEquals(Time.getShortTimestamp(
+		Assert.assertEquals(
+			Time.getShortTimestamp(
 				existingCommerceCurrency.getLastPublishDate()),
 			Time.getShortTimestamp(newCommerceCurrency.getLastPublishDate()));
 	}
@@ -220,15 +230,6 @@ public class CommerceCurrencyPersistenceTest {
 	}
 
 	@Test
-	public void testCountByUUID_G() throws Exception {
-		_persistence.countByUUID_G("", RandomTestUtil.nextLong());
-
-		_persistence.countByUUID_G("null", 0L);
-
-		_persistence.countByUUID_G((String)null, 0L);
-	}
-
-	@Test
 	public void testCountByUuid_C() throws Exception {
 		_persistence.countByUuid_C("", RandomTestUtil.nextLong());
 
@@ -238,51 +239,53 @@ public class CommerceCurrencyPersistenceTest {
 	}
 
 	@Test
-	public void testCountByGroupId() throws Exception {
-		_persistence.countByGroupId(RandomTestUtil.nextLong());
+	public void testCountByCompanyId() throws Exception {
+		_persistence.countByCompanyId(RandomTestUtil.nextLong());
 
-		_persistence.countByGroupId(0L);
+		_persistence.countByCompanyId(0L);
 	}
 
 	@Test
-	public void testCountByG_C() throws Exception {
-		_persistence.countByG_C(RandomTestUtil.nextLong(), "");
+	public void testCountByC_C() throws Exception {
+		_persistence.countByC_C(RandomTestUtil.nextLong(), "");
 
-		_persistence.countByG_C(0L, "null");
+		_persistence.countByC_C(0L, "null");
 
-		_persistence.countByG_C(0L, (String)null);
+		_persistence.countByC_C(0L, (String)null);
 	}
 
 	@Test
-	public void testCountByG_P() throws Exception {
-		_persistence.countByG_P(RandomTestUtil.nextLong(),
+	public void testCountByC_P() throws Exception {
+		_persistence.countByC_P(
+			RandomTestUtil.nextLong(), RandomTestUtil.randomBoolean());
+
+		_persistence.countByC_P(0L, RandomTestUtil.randomBoolean());
+	}
+
+	@Test
+	public void testCountByC_A() throws Exception {
+		_persistence.countByC_A(
+			RandomTestUtil.nextLong(), RandomTestUtil.randomBoolean());
+
+		_persistence.countByC_A(0L, RandomTestUtil.randomBoolean());
+	}
+
+	@Test
+	public void testCountByC_P_A() throws Exception {
+		_persistence.countByC_P_A(
+			RandomTestUtil.nextLong(), RandomTestUtil.randomBoolean(),
 			RandomTestUtil.randomBoolean());
 
-		_persistence.countByG_P(0L, RandomTestUtil.randomBoolean());
-	}
-
-	@Test
-	public void testCountByG_A() throws Exception {
-		_persistence.countByG_A(RandomTestUtil.nextLong(),
-			RandomTestUtil.randomBoolean());
-
-		_persistence.countByG_A(0L, RandomTestUtil.randomBoolean());
-	}
-
-	@Test
-	public void testCountByG_P_A() throws Exception {
-		_persistence.countByG_P_A(RandomTestUtil.nextLong(),
-			RandomTestUtil.randomBoolean(), RandomTestUtil.randomBoolean());
-
-		_persistence.countByG_P_A(0L, RandomTestUtil.randomBoolean(),
-			RandomTestUtil.randomBoolean());
+		_persistence.countByC_P_A(
+			0L, RandomTestUtil.randomBoolean(), RandomTestUtil.randomBoolean());
 	}
 
 	@Test
 	public void testFindByPrimaryKeyExisting() throws Exception {
 		CommerceCurrency newCommerceCurrency = addCommerceCurrency();
 
-		CommerceCurrency existingCommerceCurrency = _persistence.findByPrimaryKey(newCommerceCurrency.getPrimaryKey());
+		CommerceCurrency existingCommerceCurrency =
+			_persistence.findByPrimaryKey(newCommerceCurrency.getPrimaryKey());
 
 		Assert.assertEquals(existingCommerceCurrency, newCommerceCurrency);
 	}
@@ -296,16 +299,16 @@ public class CommerceCurrencyPersistenceTest {
 
 	@Test
 	public void testFindAll() throws Exception {
-		_persistence.findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			getOrderByComparator());
+		_persistence.findAll(
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, getOrderByComparator());
 	}
 
 	protected OrderByComparator<CommerceCurrency> getOrderByComparator() {
-		return OrderByComparatorFactoryUtil.create("CommerceCurrency", "uuid",
-			true, "commerceCurrencyId", true, "groupId", true, "companyId",
-			true, "userId", true, "userName", true, "createDate", true,
-			"modifiedDate", true, "code", true, "name", true, "rate", true,
-			"formatPattern", true, "maxFractionDigits", true,
+		return OrderByComparatorFactoryUtil.create(
+			"CommerceCurrency", "uuid", true, "commerceCurrencyId", true,
+			"companyId", true, "userId", true, "userName", true, "createDate",
+			true, "modifiedDate", true, "code", true, "name", true, "rate",
+			true, "formatPattern", true, "maxFractionDigits", true,
 			"minFractionDigits", true, "roundingMode", true, "primary", true,
 			"priority", true, "active", true, "lastPublishDate", true);
 	}
@@ -314,7 +317,8 @@ public class CommerceCurrencyPersistenceTest {
 	public void testFetchByPrimaryKeyExisting() throws Exception {
 		CommerceCurrency newCommerceCurrency = addCommerceCurrency();
 
-		CommerceCurrency existingCommerceCurrency = _persistence.fetchByPrimaryKey(newCommerceCurrency.getPrimaryKey());
+		CommerceCurrency existingCommerceCurrency =
+			_persistence.fetchByPrimaryKey(newCommerceCurrency.getPrimaryKey());
 
 		Assert.assertEquals(existingCommerceCurrency, newCommerceCurrency);
 	}
@@ -323,7 +327,8 @@ public class CommerceCurrencyPersistenceTest {
 	public void testFetchByPrimaryKeyMissing() throws Exception {
 		long pk = RandomTestUtil.nextLong();
 
-		CommerceCurrency missingCommerceCurrency = _persistence.fetchByPrimaryKey(pk);
+		CommerceCurrency missingCommerceCurrency =
+			_persistence.fetchByPrimaryKey(pk);
 
 		Assert.assertNull(missingCommerceCurrency);
 	}
@@ -331,6 +336,7 @@ public class CommerceCurrencyPersistenceTest {
 	@Test
 	public void testFetchByPrimaryKeysWithMultiplePrimaryKeysWhereAllPrimaryKeysExist()
 		throws Exception {
+
 		CommerceCurrency newCommerceCurrency1 = addCommerceCurrency();
 		CommerceCurrency newCommerceCurrency2 = addCommerceCurrency();
 
@@ -339,18 +345,22 @@ public class CommerceCurrencyPersistenceTest {
 		primaryKeys.add(newCommerceCurrency1.getPrimaryKey());
 		primaryKeys.add(newCommerceCurrency2.getPrimaryKey());
 
-		Map<Serializable, CommerceCurrency> commerceCurrencies = _persistence.fetchByPrimaryKeys(primaryKeys);
+		Map<Serializable, CommerceCurrency> commerceCurrencies =
+			_persistence.fetchByPrimaryKeys(primaryKeys);
 
 		Assert.assertEquals(2, commerceCurrencies.size());
-		Assert.assertEquals(newCommerceCurrency1,
+		Assert.assertEquals(
+			newCommerceCurrency1,
 			commerceCurrencies.get(newCommerceCurrency1.getPrimaryKey()));
-		Assert.assertEquals(newCommerceCurrency2,
+		Assert.assertEquals(
+			newCommerceCurrency2,
 			commerceCurrencies.get(newCommerceCurrency2.getPrimaryKey()));
 	}
 
 	@Test
 	public void testFetchByPrimaryKeysWithMultiplePrimaryKeysWhereNoPrimaryKeysExist()
 		throws Exception {
+
 		long pk1 = RandomTestUtil.nextLong();
 
 		long pk2 = RandomTestUtil.nextLong();
@@ -360,7 +370,8 @@ public class CommerceCurrencyPersistenceTest {
 		primaryKeys.add(pk1);
 		primaryKeys.add(pk2);
 
-		Map<Serializable, CommerceCurrency> commerceCurrencies = _persistence.fetchByPrimaryKeys(primaryKeys);
+		Map<Serializable, CommerceCurrency> commerceCurrencies =
+			_persistence.fetchByPrimaryKeys(primaryKeys);
 
 		Assert.assertTrue(commerceCurrencies.isEmpty());
 	}
@@ -368,6 +379,7 @@ public class CommerceCurrencyPersistenceTest {
 	@Test
 	public void testFetchByPrimaryKeysWithMultiplePrimaryKeysWhereSomePrimaryKeysExist()
 		throws Exception {
+
 		CommerceCurrency newCommerceCurrency = addCommerceCurrency();
 
 		long pk = RandomTestUtil.nextLong();
@@ -377,36 +389,39 @@ public class CommerceCurrencyPersistenceTest {
 		primaryKeys.add(newCommerceCurrency.getPrimaryKey());
 		primaryKeys.add(pk);
 
-		Map<Serializable, CommerceCurrency> commerceCurrencies = _persistence.fetchByPrimaryKeys(primaryKeys);
+		Map<Serializable, CommerceCurrency> commerceCurrencies =
+			_persistence.fetchByPrimaryKeys(primaryKeys);
 
 		Assert.assertEquals(1, commerceCurrencies.size());
-		Assert.assertEquals(newCommerceCurrency,
+		Assert.assertEquals(
+			newCommerceCurrency,
 			commerceCurrencies.get(newCommerceCurrency.getPrimaryKey()));
 	}
 
 	@Test
-	public void testFetchByPrimaryKeysWithNoPrimaryKeys()
-		throws Exception {
+	public void testFetchByPrimaryKeysWithNoPrimaryKeys() throws Exception {
 		Set<Serializable> primaryKeys = new HashSet<Serializable>();
 
-		Map<Serializable, CommerceCurrency> commerceCurrencies = _persistence.fetchByPrimaryKeys(primaryKeys);
+		Map<Serializable, CommerceCurrency> commerceCurrencies =
+			_persistence.fetchByPrimaryKeys(primaryKeys);
 
 		Assert.assertTrue(commerceCurrencies.isEmpty());
 	}
 
 	@Test
-	public void testFetchByPrimaryKeysWithOnePrimaryKey()
-		throws Exception {
+	public void testFetchByPrimaryKeysWithOnePrimaryKey() throws Exception {
 		CommerceCurrency newCommerceCurrency = addCommerceCurrency();
 
 		Set<Serializable> primaryKeys = new HashSet<Serializable>();
 
 		primaryKeys.add(newCommerceCurrency.getPrimaryKey());
 
-		Map<Serializable, CommerceCurrency> commerceCurrencies = _persistence.fetchByPrimaryKeys(primaryKeys);
+		Map<Serializable, CommerceCurrency> commerceCurrencies =
+			_persistence.fetchByPrimaryKeys(primaryKeys);
 
 		Assert.assertEquals(1, commerceCurrencies.size());
-		Assert.assertEquals(newCommerceCurrency,
+		Assert.assertEquals(
+			newCommerceCurrency,
 			commerceCurrencies.get(newCommerceCurrency.getPrimaryKey()));
 	}
 
@@ -414,15 +429,19 @@ public class CommerceCurrencyPersistenceTest {
 	public void testActionableDynamicQuery() throws Exception {
 		final IntegerWrapper count = new IntegerWrapper();
 
-		ActionableDynamicQuery actionableDynamicQuery = CommerceCurrencyLocalServiceUtil.getActionableDynamicQuery();
+		ActionableDynamicQuery actionableDynamicQuery =
+			CommerceCurrencyLocalServiceUtil.getActionableDynamicQuery();
 
-		actionableDynamicQuery.setPerformActionMethod(new ActionableDynamicQuery.PerformActionMethod<CommerceCurrency>() {
+		actionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod<CommerceCurrency>() {
+
 				@Override
 				public void performAction(CommerceCurrency commerceCurrency) {
 					Assert.assertNotNull(commerceCurrency);
 
 					count.increment();
 				}
+
 			});
 
 		actionableDynamicQuery.performActions();
@@ -431,17 +450,19 @@ public class CommerceCurrencyPersistenceTest {
 	}
 
 	@Test
-	public void testDynamicQueryByPrimaryKeyExisting()
-		throws Exception {
+	public void testDynamicQueryByPrimaryKeyExisting() throws Exception {
 		CommerceCurrency newCommerceCurrency = addCommerceCurrency();
 
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(CommerceCurrency.class,
-				_dynamicQueryClassLoader);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			CommerceCurrency.class, _dynamicQueryClassLoader);
 
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("commerceCurrencyId",
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.eq(
+				"commerceCurrencyId",
 				newCommerceCurrency.getCommerceCurrencyId()));
 
-		List<CommerceCurrency> result = _persistence.findWithDynamicQuery(dynamicQuery);
+		List<CommerceCurrency> result = _persistence.findWithDynamicQuery(
+			dynamicQuery);
 
 		Assert.assertEquals(1, result.size());
 
@@ -452,32 +473,35 @@ public class CommerceCurrencyPersistenceTest {
 
 	@Test
 	public void testDynamicQueryByPrimaryKeyMissing() throws Exception {
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(CommerceCurrency.class,
-				_dynamicQueryClassLoader);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			CommerceCurrency.class, _dynamicQueryClassLoader);
 
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("commerceCurrencyId",
-				RandomTestUtil.nextLong()));
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.eq(
+				"commerceCurrencyId", RandomTestUtil.nextLong()));
 
-		List<CommerceCurrency> result = _persistence.findWithDynamicQuery(dynamicQuery);
+		List<CommerceCurrency> result = _persistence.findWithDynamicQuery(
+			dynamicQuery);
 
 		Assert.assertEquals(0, result.size());
 	}
 
 	@Test
-	public void testDynamicQueryByProjectionExisting()
-		throws Exception {
+	public void testDynamicQueryByProjectionExisting() throws Exception {
 		CommerceCurrency newCommerceCurrency = addCommerceCurrency();
 
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(CommerceCurrency.class,
-				_dynamicQueryClassLoader);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			CommerceCurrency.class, _dynamicQueryClassLoader);
 
-		dynamicQuery.setProjection(ProjectionFactoryUtil.property(
-				"commerceCurrencyId"));
+		dynamicQuery.setProjection(
+			ProjectionFactoryUtil.property("commerceCurrencyId"));
 
-		Object newCommerceCurrencyId = newCommerceCurrency.getCommerceCurrencyId();
+		Object newCommerceCurrencyId =
+			newCommerceCurrency.getCommerceCurrencyId();
 
-		dynamicQuery.add(RestrictionsFactoryUtil.in("commerceCurrencyId",
-				new Object[] { newCommerceCurrencyId }));
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.in(
+				"commerceCurrencyId", new Object[] {newCommerceCurrencyId}));
 
 		List<Object> result = _persistence.findWithDynamicQuery(dynamicQuery);
 
@@ -490,14 +514,16 @@ public class CommerceCurrencyPersistenceTest {
 
 	@Test
 	public void testDynamicQueryByProjectionMissing() throws Exception {
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(CommerceCurrency.class,
-				_dynamicQueryClassLoader);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			CommerceCurrency.class, _dynamicQueryClassLoader);
 
-		dynamicQuery.setProjection(ProjectionFactoryUtil.property(
-				"commerceCurrencyId"));
+		dynamicQuery.setProjection(
+			ProjectionFactoryUtil.property("commerceCurrencyId"));
 
-		dynamicQuery.add(RestrictionsFactoryUtil.in("commerceCurrencyId",
-				new Object[] { RandomTestUtil.nextLong() }));
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.in(
+				"commerceCurrencyId",
+				new Object[] {RandomTestUtil.nextLong()}));
 
 		List<Object> result = _persistence.findWithDynamicQuery(dynamicQuery);
 
@@ -510,21 +536,20 @@ public class CommerceCurrencyPersistenceTest {
 
 		_persistence.clearCache();
 
-		CommerceCurrency existingCommerceCurrency = _persistence.findByPrimaryKey(newCommerceCurrency.getPrimaryKey());
+		CommerceCurrency existingCommerceCurrency =
+			_persistence.findByPrimaryKey(newCommerceCurrency.getPrimaryKey());
 
-		Assert.assertTrue(Objects.equals(existingCommerceCurrency.getUuid(),
-				ReflectionTestUtil.invoke(existingCommerceCurrency,
-					"getOriginalUuid", new Class<?>[0])));
-		Assert.assertEquals(Long.valueOf(existingCommerceCurrency.getGroupId()),
-			ReflectionTestUtil.<Long>invoke(existingCommerceCurrency,
-				"getOriginalGroupId", new Class<?>[0]));
-
-		Assert.assertEquals(Long.valueOf(existingCommerceCurrency.getGroupId()),
-			ReflectionTestUtil.<Long>invoke(existingCommerceCurrency,
-				"getOriginalGroupId", new Class<?>[0]));
-		Assert.assertTrue(Objects.equals(existingCommerceCurrency.getCode(),
-				ReflectionTestUtil.invoke(existingCommerceCurrency,
-					"getOriginalCode", new Class<?>[0])));
+		Assert.assertEquals(
+			Long.valueOf(existingCommerceCurrency.getCompanyId()),
+			ReflectionTestUtil.<Long>invoke(
+				existingCommerceCurrency, "getOriginalCompanyId",
+				new Class<?>[0]));
+		Assert.assertTrue(
+			Objects.equals(
+				existingCommerceCurrency.getCode(),
+				ReflectionTestUtil.invoke(
+					existingCommerceCurrency, "getOriginalCode",
+					new Class<?>[0])));
 	}
 
 	protected CommerceCurrency addCommerceCurrency() throws Exception {
@@ -533,8 +558,6 @@ public class CommerceCurrencyPersistenceTest {
 		CommerceCurrency commerceCurrency = _persistence.create(pk);
 
 		commerceCurrency.setUuid(RandomTestUtil.randomString());
-
-		commerceCurrency.setGroupId(RandomTestUtil.nextLong());
 
 		commerceCurrency.setCompanyId(RandomTestUtil.nextLong());
 
@@ -573,7 +596,9 @@ public class CommerceCurrencyPersistenceTest {
 		return commerceCurrency;
 	}
 
-	private List<CommerceCurrency> _commerceCurrencies = new ArrayList<CommerceCurrency>();
+	private List<CommerceCurrency> _commerceCurrencies =
+		new ArrayList<CommerceCurrency>();
 	private CommerceCurrencyPersistence _persistence;
 	private ClassLoader _dynamicQueryClassLoader;
+
 }

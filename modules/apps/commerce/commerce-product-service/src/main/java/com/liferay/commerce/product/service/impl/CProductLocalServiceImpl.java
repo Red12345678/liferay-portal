@@ -16,6 +16,7 @@ package com.liferay.commerce.product.service.impl;
 
 import com.liferay.commerce.product.exception.DuplicateCProductException;
 import com.liferay.commerce.product.model.CPDefinition;
+import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CProduct;
 import com.liferay.commerce.product.service.base.CProductLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -23,8 +24,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
-
-import java.util.Date;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author Ethan Bustad
@@ -34,26 +34,22 @@ public class CProductLocalServiceImpl extends CProductLocalServiceBaseImpl {
 
 	@Override
 	public CProduct addCProduct(
-			String externalReferenceCode, ServiceContext serviceContext)
+			long groupId, long userId, String externalReferenceCode,
+			ServiceContext serviceContext)
 		throws PortalException {
 
-		User user = userLocalService.getUser(serviceContext.getUserId());
+		User user = userLocalService.getUser(userId);
 
-		validate(serviceContext.getCompanyId(), externalReferenceCode);
+		validate(user.getCompanyId(), externalReferenceCode);
 
 		CProduct cProduct = cProductLocalService.createCProduct(
 			counterLocalService.increment());
 
-		cProduct.setGroupId(serviceContext.getScopeGroupId());
+		cProduct.setGroupId(groupId);
 		cProduct.setCompanyId(user.getCompanyId());
 		cProduct.setUserId(user.getUserId());
 		cProduct.setUserName(user.getFullName());
 		cProduct.setUuid(serviceContext.getUuid());
-
-		Date now = new Date();
-
-		cProduct.setCreateDate(now);
-		cProduct.setModifiedDate(now);
 
 		cProduct.setExternalReferenceCode(externalReferenceCode);
 		cProduct.setLatestVersion(1);
@@ -62,12 +58,21 @@ public class CProductLocalServiceImpl extends CProductLocalServiceBaseImpl {
 	}
 
 	@Override
+	public CProduct getCProductByCPInstanceUuid(String cpInstanceUuid)
+		throws PortalException {
+
+		CPInstance cpInstance =
+			cpInstancePersistence.fetchByCPInstanceUuid_First(
+				cpInstanceUuid, null);
+
+		CPDefinition cpDefinition = cpInstance.getCPDefinition();
+
+		return cpDefinition.getCProduct();
+	}
+
+	@Override
 	public int increment(long cProductId) throws PortalException {
 		CProduct cProduct = cProductLocalService.getCProduct(cProductId);
-
-		Date now = new Date();
-
-		cProduct.setModifiedDate(now);
 
 		cProduct.setLatestVersion(cProduct.getLatestVersion() + 1);
 
@@ -90,10 +95,6 @@ public class CProductLocalServiceImpl extends CProductLocalServiceBaseImpl {
 			return cProduct;
 		}
 
-		Date now = new Date();
-
-		cProduct.setModifiedDate(now);
-
 		cProduct.setPublishedCPDefinitionId(publishedCPDefinitionId);
 
 		cProduct = cProductPersistence.update(cProduct);
@@ -115,6 +116,10 @@ public class CProductLocalServiceImpl extends CProductLocalServiceBaseImpl {
 
 	protected void validate(long companyId, String externalReferenceCode)
 		throws PortalException {
+
+		if (Validator.isNull(externalReferenceCode)) {
+			return;
+		}
 
 		CProduct cProduct = cProductPersistence.fetchByC_ERC(
 			companyId, externalReferenceCode);

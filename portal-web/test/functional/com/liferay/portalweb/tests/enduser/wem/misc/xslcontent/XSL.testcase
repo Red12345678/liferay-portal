@@ -1,5 +1,6 @@
 @component-name = "portal-xsl"
 definition {
+
 	property osgi.module.configuration.file.names = "com.liferay.xsl.content.web.configuration.XSLContentConfiguration.config";
 	property osgi.module.configurations = "com.liferay.portlet.include=&quot;true&quot;\ncom.liferay.portlet.display-category=&quot;category.cms&quot;";
 	property osgi.modules.includes = "xsl-content";
@@ -16,34 +17,32 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Test Page Name");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.addPG(portletName = "XSL Content");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "System Settings"
-		);
+			portlet = "System Settings");
 
 		SystemSettings.gotoConfiguration(
 			configurationCategory = "XSL Content",
 			configurationName = "Options",
-			configurationScope = "System Scope"
-		);
+			configurationScope = "System Scope");
 
 		XSLContent.configureConfigurationAdminXSL();
 	}
@@ -57,8 +56,7 @@ definition {
 		else {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "test@liferay.com",
-				userLoginFullName = "Test Test"
-			);
+				userLoginFullName = "Test Test");
 
 			Site.tearDownCP();
 		}
@@ -68,59 +66,52 @@ definition {
 	test AddXSL {
 		property test.name.skip.portal.instance = "XSL#AddXSL";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "Test XML Description",
 			dmDocumentFile = "test.xml",
-			dmDocumentTitle = "Test XML Title"
-		);
+			dmDocumentTitle = "Test XML Title");
 
 		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "Test XML Title");
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
-			roleList = "Guest"
-		);
+			roleList = "Guest");
 
 		IFrame.closeFrame();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "Test XSL Description",
 			dmDocumentFile = "test.xsl",
-			dmDocumentTitle = "Test XSL Title"
-		);
+			dmDocumentTitle = "Test XSL Title");
 
 		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "Test XSL Title");
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
-			roleList = "Guest"
-		);
+			roleList = "Guest");
 
 		IFrame.closeFrame();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		XSLContent.gotoDocumentURL(dmDocumentTitle = "Test XML Title");
 
@@ -135,8 +126,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		XSLContent.gotoDocumentURL(dmDocumentTitle = "Test XSL Title");
 
@@ -148,15 +138,21 @@ definition {
 
 		echo("xsl url ${xslURL}");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
 		SelectFrame(locator1 = "IFrame#DIALOG");
 
-		Type(locator1 = "TextInput#SETUP_XML_URL", value1 = "@portal_url@/${xmlURL}");
+		Type(
+			locator1 = "TextInput#SETUP_XML_URL",
+			value1 = "@portal_url@/${xmlURL}");
 
-		Type(locator1 = "TextInput#SETUP_XSL_URL", value1 = "@portal_url@/${xslURL}");
+		Type(
+			locator1 = "TextInput#SETUP_XSL_URL",
+			value1 = "@portal_url@/${xslURL}");
 
 		Click(locator1 = "Button#SAVE");
 
@@ -164,21 +160,21 @@ definition {
 
 		SelectFrameTop(value1 = "relative=top");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		XSLContent.viewXSLPortletHymnDisplay(
 			tableArtistEntry = "Dallán Forgaill",
 			tableCountryEntry = "Ireland",
 			tableTitleEntry = "Be Thou my Vision",
-			tableYearEntry = "700"
-		);
+			tableYearEntry = "700");
 
 		XSLContent.viewXSLPortletHymnDisplay(
 			tableArtistEntry = "Stanley Gai",
 			tableCountryEntry = "US",
 			tableTitleEntry = "Say Something",
-			tableYearEntry = "2015"
-		);
+			tableYearEntry = "2015");
 	}
 
 	@priority = "4"
@@ -186,61 +182,52 @@ definition {
 		property ignore.errors = "must be terminated by the matching end-tag";
 		property test.name.skip.portal.instance = "XSL#ConfigurePortletWithCorruptXML";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "Test XML Description",
 			dmDocumentFile = "test_corrupt.xml",
-			dmDocumentTitle = "Test Corrupt XML Title"
-		);
+			dmDocumentTitle = "Test Corrupt XML Title");
 
-		DMNavigator.gotoDocumentPermissionsCP(
-			dmDocumentTitle = "Test Corrupt XML Title"
-		);
+		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "Test Corrupt XML Title");
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
-			roleList = "Guest"
-		);
+			roleList = "Guest");
 
 		IFrame.closeFrame();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "Test XSL Description",
 			dmDocumentFile = "test.xsl",
-			dmDocumentTitle = "Test XSL Title"
-		);
+			dmDocumentTitle = "Test XSL Title");
 
 		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "Test XSL Title");
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
-			roleList = "Guest"
-		);
+			roleList = "Guest");
 
 		IFrame.closeFrame();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		XSLContent.gotoDocumentURL(dmDocumentTitle = "Test Corrupt XML Title");
 
@@ -255,8 +242,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		XSLContent.gotoDocumentURL(dmDocumentTitle = "Test XSL Title");
 
@@ -268,15 +254,21 @@ definition {
 
 		echo("xsl url ${xslURL}");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
 		SelectFrame(locator1 = "IFrame#DIALOG");
 
-		Type(locator1 = "TextInput#SETUP_XML_URL", value1 = "@portal_url@/${xmlURL}");
+		Type(
+			locator1 = "TextInput#SETUP_XML_URL",
+			value1 = "@portal_url@/${xmlURL}");
 
-		Type(locator1 = "TextInput#SETUP_XSL_URL", value1 = "@portal_url@/${xslURL}");
+		Type(
+			locator1 = "TextInput#SETUP_XSL_URL",
+			value1 = "@portal_url@/${xslURL}");
 
 		Click(locator1 = "Button#SAVE");
 
@@ -284,7 +276,9 @@ definition {
 
 		SelectFrameTop(value1 = "relative=top");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		XSLContent.viewErrorMessage();
 	}
@@ -294,61 +288,52 @@ definition {
 		property ignore.errors = "must be terminated by the matching end-tag";
 		property test.name.skip.portal.instance = "XSL#ConfigurePortletWithCorruptXSL";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "Test XML Description",
 			dmDocumentFile = "test.xml",
-			dmDocumentTitle = "Test XML Title"
-		);
+			dmDocumentTitle = "Test XML Title");
 
 		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "Test XML Title");
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
-			roleList = "Guest"
-		);
+			roleList = "Guest");
 
 		IFrame.closeFrame();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "Test XSL Description",
 			dmDocumentFile = "test_corrupt.xsl",
-			dmDocumentTitle = "Test Corrupt XSL Title"
-		);
+			dmDocumentTitle = "Test Corrupt XSL Title");
 
-		DMNavigator.gotoDocumentPermissionsCP(
-			dmDocumentTitle = "Test Corrupt XSL Title"
-		);
+		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "Test Corrupt XSL Title");
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
-			roleList = "Guest"
-		);
+			roleList = "Guest");
 
 		IFrame.closeFrame();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		XSLContent.gotoDocumentURL(dmDocumentTitle = "Test XML Title");
 
@@ -363,8 +348,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		XSLContent.gotoDocumentURL(dmDocumentTitle = "Test Corrupt XSL Title");
 
@@ -376,15 +360,21 @@ definition {
 
 		echo("xsl url ${xslURL}");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
 		SelectFrame(locator1 = "IFrame#DIALOG");
 
-		Type(locator1 = "TextInput#SETUP_XML_URL", value1 = "@portal_url@/${xmlURL}");
+		Type(
+			locator1 = "TextInput#SETUP_XML_URL",
+			value1 = "@portal_url@/${xmlURL}");
 
-		Type(locator1 = "TextInput#SETUP_XSL_URL", value1 = "@portal_url@/${xslURL}");
+		Type(
+			locator1 = "TextInput#SETUP_XSL_URL",
+			value1 = "@portal_url@/${xslURL}");
 
 		Click(locator1 = "Button#SAVE");
 
@@ -392,7 +382,9 @@ definition {
 
 		SelectFrameTop(value1 = "relative=top");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		XSLContent.viewErrorMessage();
 	}
@@ -401,59 +393,52 @@ definition {
 	test ConfigurePortletWithIncorrectVersionXmlAndXsl {
 		property test.name.skip.portal.instance = "XSL#ConfigurePortletWithIncorrectVersionXmlAndXsl";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "Test XML Description",
 			dmDocumentFile = "test_version.xml",
-			dmDocumentTitle = "Test XML Title"
-		);
+			dmDocumentTitle = "Test XML Title");
 
 		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "Test XML Title");
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
-			roleList = "Guest"
-		);
+			roleList = "Guest");
 
 		IFrame.closeFrame();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMDocument.addCP(
 			dmDocumentDescription = "Test XSL Description",
 			dmDocumentFile = "test_version.xsl",
-			dmDocumentTitle = "Test XSL Title"
-		);
+			dmDocumentTitle = "Test XSL Title");
 
 		DMNavigator.gotoDocumentPermissionsCP(dmDocumentTitle = "Test XSL Title");
 
 		PermissionsInline.addOrRemoveViewPermissionFromAllRoles(
 			addOrRemoveViewPermission = "Add",
-			roleList = "Guest"
-		);
+			roleList = "Guest");
 
 		IFrame.closeFrame();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		XSLContent.gotoDocumentURL(dmDocumentTitle = "Test XML Title");
 
@@ -468,8 +453,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		XSLContent.gotoDocumentURL(dmDocumentTitle = "Test XSL Title");
 
@@ -481,15 +465,21 @@ definition {
 
 		echo("xsl url ${xslURL}");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
 		SelectFrame(locator1 = "IFrame#DIALOG");
 
-		Type(locator1 = "TextInput#SETUP_XML_URL", value1 = "@portal_url@/${xmlURL}");
+		Type(
+			locator1 = "TextInput#SETUP_XML_URL",
+			value1 = "@portal_url@/${xmlURL}");
 
-		Type(locator1 = "TextInput#SETUP_XSL_URL", value1 = "@portal_url@/${xslURL}");
+		Type(
+			locator1 = "TextInput#SETUP_XSL_URL",
+			value1 = "@portal_url@/${xslURL}");
 
 		Click(locator1 = "Button#SAVE");
 
@@ -497,7 +487,9 @@ definition {
 
 		SelectFrameTop(value1 = "relative=top");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		XSLContent.viewErrorMessage();
 
@@ -508,14 +500,21 @@ definition {
 	test ViewXSLDefaultContent {
 		property test.name.skip.portal.instance = "XSL#ViewXSLDefaultContent";
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
-		Portlet.viewPG(portletBody = "Belgian Waffles", portletName = "XSL Content");
+		Portlet.viewPG(
+			portletBody = "Belgian Waffles",
+			portletName = "XSL Content");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Site Name");
 
 		Portlet.gotoPortletOptions(portletOption = "Configuration");
 
 		XSLContent.viewConfigurationXSLContent();
 	}
+
 }

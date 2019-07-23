@@ -701,6 +701,10 @@ public class PortletImpl extends PortletBaseImpl {
 	public ConfigurationAction getConfigurationActionInstance() {
 		PortletBag portletBag = PortletBagPool.get(getRootPortletId());
 
+		if (portletBag == null) {
+			return null;
+		}
+
 		List<ConfigurationAction> configurationActionInstances =
 			portletBag.getConfigurationActionInstances();
 
@@ -2233,6 +2237,10 @@ public class PortletImpl extends PortletBaseImpl {
 	public WebDAVStorage getWebDAVStorageInstance() {
 		PortletBag portletBag = PortletBagPool.get(getRootPortletId());
 
+		if (portletBag == null) {
+			return null;
+		}
+
 		List<WebDAVStorage> webDAVStorageInstances =
 			portletBag.getWebDAVStorageInstances();
 
@@ -2759,7 +2767,7 @@ public class PortletImpl extends PortletBaseImpl {
 		Readiness readiness = _readinessMap.get(getRootPortletId());
 
 		if (readiness == null) {
-			return true;
+			return false;
 		}
 
 		return readiness._ready;

@@ -29,12 +29,10 @@ public class TestEmailAddressValidator implements EmailAddressValidator {
 
 	@Override
 	public boolean validate(long companyId, String emailAddress) {
-		if (companyId == 1) {
-			if (emailAddress.equals(
-					"TestEmailAddressValidator@liferay-test.com")) {
+		if ((companyId == 1) &&
+			emailAddress.equals("TestEmailAddressValidator@liferay-test.com")) {
 
-				return true;
-			}
+			return true;
 		}
 
 		return false;

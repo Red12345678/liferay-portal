@@ -16,6 +16,8 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page isErrorPage="true" %>
 

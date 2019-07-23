@@ -546,7 +546,7 @@ class Layout extends Component {
 				credentials: 'include',
 				method: 'POST'
 			}
-		).catch (
+		).catch(
 			() => {
 				this._resetHoveredData();
 			}

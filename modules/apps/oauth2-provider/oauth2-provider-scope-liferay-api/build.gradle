@@ -2,5 +2,6 @@ dependencies {
 	compileOnly group: "com.liferay", name: "com.liferay.oauth2.provider.scope.api", version: "1.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.oauth2.provider.scope.spi", version: "1.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.osgi.service.tracker.collections", version: "3.0.0"
-	compileOnly group: "org.osgi", name: "org.osgi.core", version: "5.0.0"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "3.69.0"
+	compileOnly group: "org.osgi", name: "osgi.core", version: "5.0.0"
 }

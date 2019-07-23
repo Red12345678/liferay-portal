@@ -20,10 +20,9 @@ import com.liferay.commerce.product.options.web.internal.util.CPOptionsPortletUt
 import com.liferay.commerce.product.service.CPOptionCategoryService;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
+import com.liferay.portal.kernel.search.BaseModelSearchResult;
+import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.util.OrderByComparator;
-
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,13 +34,12 @@ public class CPOptionCategoryDisplayContext
 
 	public CPOptionCategoryDisplayContext(
 			ActionHelper actionHelper, HttpServletRequest httpServletRequest,
-			PortletResourcePermission portletResourcePermission,
 			CPOptionCategoryService cpOptionCategoryService)
 		throws PortalException {
 
 		super(
 			actionHelper, httpServletRequest,
-			CPOptionCategory.class.getSimpleName(), portletResourcePermission);
+			CPOptionCategory.class.getSimpleName());
 
 		setDefaultOrderByCol("priority");
 
@@ -66,22 +64,24 @@ public class CPOptionCategoryDisplayContext
 			CPOptionsPortletUtil.getCPOptionCategoryOrderByComparator(
 				getOrderByCol(), getOrderByType());
 
+		Sort sort = CPOptionsPortletUtil.getCPOptionCategorySort(
+			getOrderByCol(), getOrderByType());
+
 		searchContainer.setOrderByCol(getOrderByCol());
 		searchContainer.setOrderByComparator(orderByComparator);
 		searchContainer.setOrderByType(getOrderByType());
 		searchContainer.setRowChecker(getRowChecker());
 
-		int total = _cpOptionCategoryService.getCPOptionCategoriesCount(
-			getScopeGroupId());
+		BaseModelSearchResult<CPOptionCategory>
+			cpOptionCategoryBaseModelSearchResult =
+				_cpOptionCategoryService.searchCPOptionCategories(
+					cpRequestHelper.getCompanyId(), getKeywords(),
+					searchContainer.getStart(), searchContainer.getEnd(), sort);
 
-		searchContainer.setTotal(total);
-
-		List<CPOptionCategory> results =
-			_cpOptionCategoryService.getCPOptionCategories(
-				getScopeGroupId(), searchContainer.getStart(),
-				searchContainer.getEnd(), orderByComparator);
-
-		searchContainer.setResults(results);
+		searchContainer.setResults(
+			cpOptionCategoryBaseModelSearchResult.getBaseModels());
+		searchContainer.setTotal(
+			cpOptionCategoryBaseModelSearchResult.getLength());
 
 		return searchContainer;
 	}

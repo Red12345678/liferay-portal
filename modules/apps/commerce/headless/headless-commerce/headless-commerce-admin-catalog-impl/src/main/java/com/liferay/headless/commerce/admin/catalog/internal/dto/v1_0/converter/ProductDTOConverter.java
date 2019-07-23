@@ -14,6 +14,10 @@
 
 package com.liferay.headless.commerce.admin.catalog.internal.dto.v1_0.converter;
 
+import com.liferay.asset.kernel.model.AssetCategory;
+import com.liferay.asset.kernel.model.AssetTag;
+import com.liferay.asset.kernel.service.AssetCategoryService;
+import com.liferay.asset.kernel.service.AssetTagService;
 import com.liferay.commerce.model.CPDefinitionInventory;
 import com.liferay.commerce.product.model.CPAttachmentFileEntry;
 import com.liferay.commerce.product.model.CPAttachmentFileEntryConstants;
@@ -21,10 +25,12 @@ import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPDefinitionLink;
 import com.liferay.commerce.product.model.CPDefinitionOptionRel;
 import com.liferay.commerce.product.model.CProduct;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.CPDefinitionLinkService;
 import com.liferay.commerce.product.service.CPDefinitionService;
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Attachment;
+import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Category;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Product;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfiguration;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductOption;
@@ -89,6 +95,8 @@ public class ProductDTOConverter implements DTOConverter {
 				attachments = _getAttachments(
 					cpDefinition, CPAttachmentFileEntryConstants.TYPE_OTHER,
 					dtoConverterContext);
+				catalogId = _getCommerceCatalogId(cpDefinition);
+				categories = _getCategories(cpDefinition, dtoConverterContext);
 				configuration =
 					(ProductConfiguration)
 						productConfigurationDTOConverter.toDTO(
@@ -101,6 +109,12 @@ public class ProductDTOConverter implements DTOConverter {
 				images = _getAttachments(
 					cpDefinition, CPAttachmentFileEntryConstants.TYPE_IMAGE,
 					dtoConverterContext);
+				metaDescription = LanguageUtils.getLanguageIdMap(
+					cpDefinition.getMetaDescriptionMap());
+				metaKeyword = LanguageUtils.getLanguageIdMap(
+					cpDefinition.getMetaKeywordsMap());
+				metaTitle = LanguageUtils.getLanguageIdMap(
+					cpDefinition.getMetaTitleMap());
 				name = LanguageUtils.getLanguageIdMap(
 					cpDefinition.getNameMap());
 				options = _getProductOptions(cpDefinition, dtoConverterContext);
@@ -122,6 +136,7 @@ public class ProductDTOConverter implements DTOConverter {
 					(ProductTaxConfiguration)
 						productTaxConfigurationDTOConverter.toDTO(
 							dtoConverterContext);
+				tags = _getTags(cpDefinition);
 			}
 		};
 	}
@@ -151,6 +166,44 @@ public class ProductDTOConverter implements DTOConverter {
 		Stream<Attachment> stream = attachments.stream();
 
 		return stream.toArray(Attachment[]::new);
+	}
+
+	private Category[] _getCategories(
+			CPDefinition cpDefinition, DTOConverterContext dtoConverterContext)
+		throws Exception {
+
+		List<Category> categories = new ArrayList<>();
+
+		List<AssetCategory> assetCategories =
+			_assetCategoryService.getCategories(
+				cpDefinition.getModelClassName(),
+				cpDefinition.getCPDefinitionId());
+
+		DTOConverter categoryDTOConverter =
+			_dtoConverterRegistry.getDTOConverter(
+				AssetCategory.class.getName());
+
+		for (AssetCategory assetCategory : assetCategories) {
+			categories.add(
+				(Category)categoryDTOConverter.toDTO(
+					new DefaultDTOConverterContext(
+						dtoConverterContext.getLocale(),
+						assetCategory.getCategoryId())));
+		}
+
+		Stream<Category> stream = categories.stream();
+
+		return stream.toArray(Category[]::new);
+	}
+
+	private long _getCommerceCatalogId(CPDefinition cpDefinition) {
+		CommerceCatalog commerceCatalog = cpDefinition.getCommerceCatalog();
+
+		if (commerceCatalog == null) {
+			return 0;
+		}
+
+		return commerceCatalog.getCommerceCatalogId();
 	}
 
 	private ProductOption[] _getProductOptions(
@@ -205,6 +258,25 @@ public class ProductDTOConverter implements DTOConverter {
 
 		return stream.toArray(RelatedProduct[]::new);
 	}
+
+	private String[] _getTags(CPDefinition cpDefinition) {
+		List<AssetTag> assetEntryAssetTags = _assetTagService.getTags(
+			cpDefinition.getModelClassName(), cpDefinition.getCPDefinitionId());
+
+		Stream<AssetTag> stream = assetEntryAssetTags.stream();
+
+		return stream.map(
+			AssetTag::getName
+		).toArray(
+			String[]::new
+		);
+	}
+
+	@Reference
+	private AssetCategoryService _assetCategoryService;
+
+	@Reference
+	private AssetTagService _assetTagService;
 
 	@Reference
 	private CPDefinitionLinkService _cpDefinitionLinkService;

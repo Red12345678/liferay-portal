@@ -76,22 +76,16 @@ public class ElasticsearchQuerySuggester implements QuerySuggester {
 			return StringPool.BLANK;
 		}
 
-		List<String> words = new ArrayList<>();
+		Suggest.Suggestion
+			<? extends Suggest.Suggestion.Entry
+				<? extends Suggest.Suggestion.Entry.Option>> suggestion =
+					suggest.getSuggestion(suggester.getName());
 
-		for (Suggest.Suggestion
-				<? extends Suggest.Suggestion.Entry
-					<? extends Suggest.Suggestion.Entry.Option>> suggestion :
-						suggest) {
-
-			for (Suggest.Suggestion.Entry
-					<? extends Suggest.Suggestion.Entry.Option>
-						suggestionEntry : suggestion) {
-
-				Text text = getWord(suggestionEntry);
-
-				words.add(text.string());
-			}
+		if (suggestion == null) {
+			return StringPool.BLANK;
 		}
+
+		List<String> words = getHighestRankedSuggestResults(suggestion);
 
 		return StringUtil.merge(words, StringPool.SPACE);
 	}
@@ -182,19 +176,8 @@ public class ElasticsearchQuerySuggester implements QuerySuggester {
 			return StringPool.EMPTY_ARRAY;
 		}
 
-		List<String> keywordQueries = new ArrayList<>();
-
-		for (Suggest.Suggestion.Entry<? extends Suggest.Suggestion.Entry.Option>
-				suggestionEntry : suggestion) {
-
-			for (Suggest.Suggestion.Entry.Option suggestionEntryOption :
-					suggestionEntry.getOptions()) {
-
-				Text optionText = suggestionEntryOption.getText();
-
-				keywordQueries.add(optionText.string());
-			}
-		}
+		List<String> keywordQueries = getHighestRankedSuggestResults(
+			suggestion);
 
 		return keywordQueries.toArray(new String[0]);
 	}
@@ -285,6 +268,28 @@ public class ElasticsearchQuerySuggester implements QuerySuggester {
 		return suggest;
 	}
 
+	protected List<String> getHighestRankedSuggestResults(
+		Suggest.Suggestion
+			<? extends Suggest.Suggestion.Entry
+				<? extends Suggest.Suggestion.Entry.Option>> suggestion) {
+
+		List<String> texts = new ArrayList<>();
+
+		for (Suggest.Suggestion.Entry<? extends Suggest.Suggestion.Entry.Option>
+				suggestionEntry : suggestion) {
+
+			for (Suggest.Suggestion.Entry.Option suggestionEntryOption :
+					suggestionEntry.getOptions()) {
+
+				Text optionText = suggestionEntryOption.getText();
+
+				texts.add(optionText.string());
+			}
+		}
+
+		return texts;
+	}
+
 	protected Localization getLocalization() {
 
 		// See LPS-72507 and LPS-76500
@@ -317,23 +322,6 @@ public class ElasticsearchQuerySuggester implements QuerySuggester {
 
 			throw spee;
 		}
-	}
-
-	protected Text getWord(
-		Suggest.Suggestion.Entry<? extends Suggest.Suggestion.Entry.Option>
-			suggestionEntry) {
-
-		List<? extends Suggest.Suggestion.Entry.Option> suggestionEntryOptions =
-			suggestionEntry.getOptions();
-
-		if (suggestionEntryOptions.isEmpty()) {
-			return suggestionEntry.getText();
-		}
-
-		Suggest.Suggestion.Entry.Option suggestionEntryOption =
-			suggestionEntryOptions.get(0);
-
-		return suggestionEntryOption.getText();
 	}
 
 	protected SuggesterResult translate(

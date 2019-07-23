@@ -27,8 +27,6 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 %>
 
 <c:if test="<%= commercePriceListDisplayContext.hasManageCommercePriceListPermission() %>">
-	<%@ include file="/price_list_navbar.jspf" %>
-
 	<liferay-util:include page="/toolbar.jsp" servletContext="<%= application %>">
 		<liferay-util:param name="searchContainerId" value="commercePriceLists" />
 	</liferay-util:include>
@@ -70,6 +68,8 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 								rowURL.setParameter("mvcRenderCommandName", "editCommercePriceList");
 								rowURL.setParameter("redirect", currentURL);
 								rowURL.setParameter("commercePriceListId", String.valueOf(commercePriceList.getCommercePriceListId()));
+
+								CommerceCatalog commerceCatalog = commercePriceListDisplayContext.fetchCommerceCatalog(commercePriceList);
 								%>
 
 								<liferay-ui:search-container-column-text
@@ -84,10 +84,10 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 									property="userName"
 								/>
 
-								<liferay-ui:search-container-column-status
+								<liferay-ui:search-container-column-text
 									cssClass="table-cell-content"
-									name="status"
-									status="<%= commercePriceList.getStatus() %>"
+									name="catalog"
+									value="<%= (commerceCatalog == null) ? StringPool.BLANK : HtmlUtil.escape(commerceCatalog.getName()) %>"
 								/>
 
 								<liferay-ui:search-container-column-date
@@ -102,9 +102,10 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 									property="displayDate"
 								/>
 
-								<liferay-ui:search-container-column-text
+								<liferay-ui:search-container-column-status
 									cssClass="table-cell-content"
-									property="priority"
+									name="status"
+									status="<%= commercePriceList.getStatus() %>"
 								/>
 
 								<liferay-ui:search-container-column-jsp

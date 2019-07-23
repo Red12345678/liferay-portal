@@ -26,11 +26,11 @@ import java.util.List;
  * This class is used by SOAP remote services, specifically {@link com.liferay.commerce.product.service.http.CPDefinitionServiceSoap}.
  *
  * @author Marco Leo
- * @see com.liferay.commerce.product.service.http.CPDefinitionServiceSoap
  * @generated
  */
 @ProviderType
 public class CPDefinitionSoap implements Serializable {
+
 	public static CPDefinitionSoap toSoapModel(CPDefinition model) {
 		CPDefinitionSoap soapModel = new CPDefinitionSoap();
 
@@ -66,8 +66,12 @@ public class CPDefinitionSoap implements Serializable {
 		soapModel.setSubscriptionEnabled(model.isSubscriptionEnabled());
 		soapModel.setSubscriptionLength(model.getSubscriptionLength());
 		soapModel.setSubscriptionType(model.getSubscriptionType());
-		soapModel.setSubscriptionTypeSettings(model.getSubscriptionTypeSettings());
+		soapModel.setSubscriptionTypeSettings(
+			model.getSubscriptionTypeSettings());
 		soapModel.setMaxSubscriptionCycles(model.getMaxSubscriptionCycles());
+		soapModel.setAccountGroupFilterEnabled(
+			model.isAccountGroupFilterEnabled());
+		soapModel.setChannelFilterEnabled(model.isChannelFilterEnabled());
 		soapModel.setVersion(model.getVersion());
 		soapModel.setStatus(model.getStatus());
 		soapModel.setStatusByUserId(model.getStatusByUserId());
@@ -105,7 +109,8 @@ public class CPDefinitionSoap implements Serializable {
 	}
 
 	public static CPDefinitionSoap[] toSoapModels(List<CPDefinition> models) {
-		List<CPDefinitionSoap> soapModels = new ArrayList<CPDefinitionSoap>(models.size());
+		List<CPDefinitionSoap> soapModels = new ArrayList<CPDefinitionSoap>(
+			models.size());
 
 		for (CPDefinition model : models) {
 			soapModels.add(toSoapModel(model));
@@ -433,6 +438,32 @@ public class CPDefinitionSoap implements Serializable {
 		_maxSubscriptionCycles = maxSubscriptionCycles;
 	}
 
+	public boolean getAccountGroupFilterEnabled() {
+		return _accountGroupFilterEnabled;
+	}
+
+	public boolean isAccountGroupFilterEnabled() {
+		return _accountGroupFilterEnabled;
+	}
+
+	public void setAccountGroupFilterEnabled(
+		boolean accountGroupFilterEnabled) {
+
+		_accountGroupFilterEnabled = accountGroupFilterEnabled;
+	}
+
+	public boolean getChannelFilterEnabled() {
+		return _channelFilterEnabled;
+	}
+
+	public boolean isChannelFilterEnabled() {
+		return _channelFilterEnabled;
+	}
+
+	public void setChannelFilterEnabled(boolean channelFilterEnabled) {
+		_channelFilterEnabled = channelFilterEnabled;
+	}
+
 	public int getVersion() {
 		return _version;
 	}
@@ -507,9 +538,12 @@ public class CPDefinitionSoap implements Serializable {
 	private String _subscriptionType;
 	private String _subscriptionTypeSettings;
 	private long _maxSubscriptionCycles;
+	private boolean _accountGroupFilterEnabled;
+	private boolean _channelFilterEnabled;
 	private int _version;
 	private int _status;
 	private long _statusByUserId;
 	private String _statusByUserName;
 	private Date _statusDate;
+
 }

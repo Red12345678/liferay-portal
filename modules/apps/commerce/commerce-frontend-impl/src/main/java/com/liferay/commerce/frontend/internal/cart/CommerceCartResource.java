@@ -29,6 +29,8 @@ import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderItem;
 import com.liferay.commerce.order.CommerceOrderHttpHelper;
 import com.liferay.commerce.order.CommerceOrderValidatorResult;
+import com.liferay.commerce.product.model.CommerceChannel;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.commerce.service.CommerceOrderItemService;
 import com.liferay.commerce.service.CommerceOrderService;
 import com.liferay.portal.kernel.log.Log;
@@ -84,8 +86,12 @@ public class CommerceCartResource {
 
 			CommerceOrder commerceOrder = commerceOrderItem.getCommerceOrder();
 
+			CommerceChannel commerceChannel =
+				_commerceChannelLocalService.getCommerceChannelByOrderGroupId(
+					commerceOrder.getGroupId());
+
 			CommerceContext commerceContext = _commerceContextFactory.create(
-				commerceOrder.getGroupId(),
+				commerceOrder.getCompanyId(), commerceChannel.getSiteGroupId(),
 				_portal.getUserId(httpServletRequest),
 				commerceOrder.getCommerceOrderId(),
 				commerceOrder.getCommerceAccountId());
@@ -97,12 +103,7 @@ public class CommerceCartResource {
 				(ThemeDisplay)httpServletRequest.getAttribute(
 					WebKeys.THEME_DISPLAY);
 
-			themeDisplay.setScopeGroupId(commerceOrder.getGroupId());
-
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(
-				CommerceOrderItem.class.getName(), httpServletRequest);
-
-			serviceContext.setScopeGroupId(commerceOrder.getGroupId());
+			themeDisplay.setScopeGroupId(commerceChannel.getSiteGroupId());
 
 			_commerceOrderItemService.deleteCommerceOrderItem(
 				commerceOrderItem.getCommerceOrderItemId(), commerceContext);
@@ -131,8 +132,12 @@ public class CommerceCartResource {
 			CommerceOrder commerceOrder =
 				_commerceOrderService.getCommerceOrder(commerceOrderId);
 
+			CommerceChannel commerceChannel =
+				_commerceChannelLocalService.getCommerceChannelByOrderGroupId(
+					commerceOrder.getGroupId());
+
 			CommerceContext commerceContext = _commerceContextFactory.create(
-				commerceOrder.getGroupId(),
+				commerceOrder.getCompanyId(), commerceChannel.getSiteGroupId(),
 				_portal.getUserId(httpServletRequest),
 				commerceOrder.getCommerceOrderId(),
 				commerceOrder.getCommerceAccountId());
@@ -144,12 +149,7 @@ public class CommerceCartResource {
 				(ThemeDisplay)httpServletRequest.getAttribute(
 					WebKeys.THEME_DISPLAY);
 
-			themeDisplay.setScopeGroupId(commerceOrder.getGroupId());
-
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(
-				CommerceOrderItem.class.getName(), httpServletRequest);
-
-			serviceContext.setScopeGroupId(commerceOrder.getGroupId());
+			themeDisplay.setScopeGroupId(commerceChannel.getSiteGroupId());
 
 			cart = _commerceCartResourceUtil.getCart(
 				commerceOrderId, themeDisplay.getLocale(), commerceContext);
@@ -181,8 +181,12 @@ public class CommerceCartResource {
 
 			CommerceOrder commerceOrder = commerceOrderItem.getCommerceOrder();
 
+			CommerceChannel commerceChannel =
+				_commerceChannelLocalService.getCommerceChannelByOrderGroupId(
+					commerceOrder.getGroupId());
+
 			CommerceContext commerceContext = _commerceContextFactory.create(
-				commerceOrder.getGroupId(),
+				commerceOrder.getCompanyId(), commerceChannel.getSiteGroupId(),
 				_portal.getUserId(httpServletRequest),
 				commerceOrder.getCommerceOrderId(),
 				commerceOrder.getCommerceAccountId());
@@ -194,12 +198,12 @@ public class CommerceCartResource {
 				(ThemeDisplay)httpServletRequest.getAttribute(
 					WebKeys.THEME_DISPLAY);
 
-			themeDisplay.setScopeGroupId(commerceOrder.getGroupId());
+			themeDisplay.setScopeGroupId(commerceChannel.getSiteGroupId());
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
 				CommerceOrderItem.class.getName(), httpServletRequest);
 
-			serviceContext.setScopeGroupId(commerceOrder.getGroupId());
+			serviceContext.setScopeGroupId(commerceChannel.getSiteGroupId());
 
 			_commerceOrderItemService.updateCommerceOrderItem(
 				commerceOrderItem.getCommerceOrderItemId(),
@@ -240,7 +244,8 @@ public class CommerceCartResource {
 
 		try {
 			CommerceContext commerceContext = _commerceContextFactory.create(
-				groupId, _portal.getUserId(httpServletRequest), orderId,
+				_portal.getCompanyId(httpServletRequest), groupId,
+				_portal.getUserId(httpServletRequest), orderId,
 				commerceAccountId);
 
 			httpServletRequest.setAttribute(
@@ -268,7 +273,8 @@ public class CommerceCartResource {
 			}
 
 			commerceContext = _commerceContextFactory.create(
-				groupId, _portal.getUserId(httpServletRequest),
+				_portal.getCompanyId(httpServletRequest), groupId,
+				_portal.getUserId(httpServletRequest),
 				commerceOrder.getCommerceOrderId(), commerceAccountId);
 
 			httpServletRequest.setAttribute(
@@ -276,8 +282,6 @@ public class CommerceCartResource {
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
 				CommerceOrderItem.class.getName(), httpServletRequest);
-
-			serviceContext.setScopeGroupId(commerceOrder.getGroupId());
 
 			CommerceOrderItem commerceOrderItem =
 				_commerceOrderItemService.upsertCommerceOrderItem(
@@ -358,6 +362,9 @@ public class CommerceCartResource {
 
 	@Reference
 	private CommerceCartResourceUtil _commerceCartResourceUtil;
+
+	@Reference
+	private CommerceChannelLocalService _commerceChannelLocalService;
 
 	@Reference
 	private CommerceContextFactory _commerceContextFactory;

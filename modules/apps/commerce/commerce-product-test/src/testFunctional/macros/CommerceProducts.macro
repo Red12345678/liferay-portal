@@ -1,20 +1,19 @@
 definition {
+
 	macro addEntry {
 		CommerceNavigator.gotoCommercePortletNavItem(navItem = "Products");
 
 		Click(locator1 = "Button#PLUS");
 
 		Click(
+			key_menuItem = "${productType}",
 			locator1 = "MenuItem#DROPDOWN_MENU_ITEM",
-			value1 = "${key_menuItem}",
-			key_menuItem = "${productType}"
-		);
+			value1 = "${key_menuItem}");
 
 		CommerceEntry.addProductsEntry(
 			productFullDescription = "${productFullDescription}",
 			productName = "${productName}",
-			productShortDescription = "${productShortDescription}"
-		);
+			productShortDescription = "${productShortDescription}");
 	}
 
 	macro deleteEntries {
@@ -33,9 +32,8 @@ definition {
 
 	macro moveCatalogEntryToRecycleBinViaCheckbox {
 		Click(
-			locator1 = "CommerceNavigation#SINGLE_ENTRY_CHECKBOX",
-			key_entryName = "${productName}"
-		);
+			key_entryName = "${productName}",
+			locator1 = "CommerceNavigation#SINGLE_ENTRY_CHECKBOX");
 
 		Click(locator1 = "Button#RECYCLE_BIN");
 
@@ -45,4 +43,5 @@ definition {
 
 		AssertElementPresent(locator1 = "CommerceNavigation#EMPTY_SEARCH_CONTAINER");
 	}
+
 }

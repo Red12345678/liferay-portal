@@ -26,24 +26,27 @@ import java.util.List;
  * This class is used by SOAP remote services, specifically {@link com.liferay.commerce.service.http.CPDAvailabilityEstimateServiceSoap}.
  *
  * @author Alessio Antonio Rendina
- * @see com.liferay.commerce.service.http.CPDAvailabilityEstimateServiceSoap
  * @generated
  */
 @ProviderType
 public class CPDAvailabilityEstimateSoap implements Serializable {
+
 	public static CPDAvailabilityEstimateSoap toSoapModel(
 		CPDAvailabilityEstimate model) {
-		CPDAvailabilityEstimateSoap soapModel = new CPDAvailabilityEstimateSoap();
+
+		CPDAvailabilityEstimateSoap soapModel =
+			new CPDAvailabilityEstimateSoap();
 
 		soapModel.setUuid(model.getUuid());
-		soapModel.setCPDAvailabilityEstimateId(model.getCPDAvailabilityEstimateId());
-		soapModel.setGroupId(model.getGroupId());
+		soapModel.setCPDAvailabilityEstimateId(
+			model.getCPDAvailabilityEstimateId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setUserName(model.getUserName());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
-		soapModel.setCommerceAvailabilityEstimateId(model.getCommerceAvailabilityEstimateId());
+		soapModel.setCommerceAvailabilityEstimateId(
+			model.getCommerceAvailabilityEstimateId());
 		soapModel.setCProductId(model.getCProductId());
 		soapModel.setLastPublishDate(model.getLastPublishDate());
 
@@ -52,7 +55,9 @@ public class CPDAvailabilityEstimateSoap implements Serializable {
 
 	public static CPDAvailabilityEstimateSoap[] toSoapModels(
 		CPDAvailabilityEstimate[] models) {
-		CPDAvailabilityEstimateSoap[] soapModels = new CPDAvailabilityEstimateSoap[models.length];
+
+		CPDAvailabilityEstimateSoap[] soapModels =
+			new CPDAvailabilityEstimateSoap[models.length];
 
 		for (int i = 0; i < models.length; i++) {
 			soapModels[i] = toSoapModel(models[i]);
@@ -63,10 +68,13 @@ public class CPDAvailabilityEstimateSoap implements Serializable {
 
 	public static CPDAvailabilityEstimateSoap[][] toSoapModels(
 		CPDAvailabilityEstimate[][] models) {
+
 		CPDAvailabilityEstimateSoap[][] soapModels = null;
 
 		if (models.length > 0) {
-			soapModels = new CPDAvailabilityEstimateSoap[models.length][models[0].length];
+			soapModels =
+				new CPDAvailabilityEstimateSoap
+					[models.length][models[0].length];
 		}
 		else {
 			soapModels = new CPDAvailabilityEstimateSoap[0][0];
@@ -81,13 +89,16 @@ public class CPDAvailabilityEstimateSoap implements Serializable {
 
 	public static CPDAvailabilityEstimateSoap[] toSoapModels(
 		List<CPDAvailabilityEstimate> models) {
-		List<CPDAvailabilityEstimateSoap> soapModels = new ArrayList<CPDAvailabilityEstimateSoap>(models.size());
+
+		List<CPDAvailabilityEstimateSoap> soapModels =
+			new ArrayList<CPDAvailabilityEstimateSoap>(models.size());
 
 		for (CPDAvailabilityEstimate model : models) {
 			soapModels.add(toSoapModel(model));
 		}
 
-		return soapModels.toArray(new CPDAvailabilityEstimateSoap[soapModels.size()]);
+		return soapModels.toArray(
+			new CPDAvailabilityEstimateSoap[soapModels.size()]);
 	}
 
 	public CPDAvailabilityEstimateSoap() {
@@ -115,14 +126,6 @@ public class CPDAvailabilityEstimateSoap implements Serializable {
 
 	public void setCPDAvailabilityEstimateId(long CPDAvailabilityEstimateId) {
 		_CPDAvailabilityEstimateId = CPDAvailabilityEstimateId;
-	}
-
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	public void setGroupId(long groupId) {
-		_groupId = groupId;
 	}
 
 	public long getCompanyId() {
@@ -171,6 +174,7 @@ public class CPDAvailabilityEstimateSoap implements Serializable {
 
 	public void setCommerceAvailabilityEstimateId(
 		long commerceAvailabilityEstimateId) {
+
 		_commerceAvailabilityEstimateId = commerceAvailabilityEstimateId;
 	}
 
@@ -192,7 +196,6 @@ public class CPDAvailabilityEstimateSoap implements Serializable {
 
 	private String _uuid;
 	private long _CPDAvailabilityEstimateId;
-	private long _groupId;
 	private long _companyId;
 	private long _userId;
 	private String _userName;
@@ -201,4 +204,5 @@ public class CPDAvailabilityEstimateSoap implements Serializable {
 	private long _commerceAvailabilityEstimateId;
 	private long _CProductId;
 	private Date _lastPublishDate;
+
 }

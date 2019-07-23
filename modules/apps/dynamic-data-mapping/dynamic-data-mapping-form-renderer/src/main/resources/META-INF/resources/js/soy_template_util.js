@@ -30,19 +30,24 @@ AUI.add(
 						Liferay.Loader,
 						dependencies.concat(callback)
 					);
-
 				}
 				else {
 					fetch(Liferay.MODULES_PATH + '?query=' + encodeURI('dynamic-data-.*\\.es'))
-						.then(response => response.json())
-						.then(modules => {
-							var dependencies = AObject.keys(modules);
+						.then(
+							function(response) {
+								return response.json();
+							}
+						).then(
+							function(modules) {
+								var dependencies = AObject.keys(modules);
 
-							Liferay.Loader.require.apply(
-								Liferay.Loader,
-								dependencies.concat(callback)
-							);
-						});
+								Liferay.Loader.require.apply(
+									Liferay.Loader,
+									dependencies.concat(callback)
+								);
+							}
+						);
+
 				}
 			}
 		};

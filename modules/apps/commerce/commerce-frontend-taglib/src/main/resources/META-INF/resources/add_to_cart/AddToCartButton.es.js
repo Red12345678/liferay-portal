@@ -4,6 +4,8 @@ import Soy, {Config} from 'metal-soy';
 
 import '../quantity_selector/QuantitySelector.es';
 
+let notificationDidShow = false;
+
 const selectInput = (element) => {
 	const inputBox = element.querySelector('input');
 	const selectBox = element.querySelector('select');
@@ -18,7 +20,7 @@ const selectInput = (element) => {
 };
 
 function showNotification(message, type) {
-	AUI().use(
+	!notificationDidShow && AUI().use(
 		'liferay-notification',
 		() => {
 			new Liferay.Notification(
@@ -37,6 +39,20 @@ function showNotification(message, type) {
 			);
 		}
 	);
+
+	notificationDidShow = true;
+
+	setTimeout(() => {
+		notificationDidShow = false;
+	}, 500);
+}
+
+function resetInputQuantity() {
+	setTimeout(
+		() => {
+			this.inputQuantity = (this.settings.allowedQuantities && this.settings.allowedQuantities.length) ?
+				this.settings.allowedQuantities[0] : this.settings.minQuantity;
+		}, 500);
 }
 
 function doFocusOut() {
@@ -47,10 +63,6 @@ function doFocusOut() {
 	}
 
 	this.editMode = false;
-}
-
-function isInline(buttonVariant) {
-	return buttonVariant.className.includes('--inline');
 }
 
 function doSubmit() {
@@ -67,7 +79,7 @@ function doSubmit() {
 		formData.append('orderId', this.orderId);
 	}
 
-	fetch(
+	return fetch(
 		this.cartAPI,
 		{
 			body: formData,
@@ -78,11 +90,30 @@ function doSubmit() {
 	).then(
 		jsonresponse => {
 			if (jsonresponse.success) {
-				Liferay.fire('updateCart', jsonresponse);
+				if (jsonresponse.products) {
+					Liferay.fire(
+						'refreshCartUsingData',
+						{
+							orderId: jsonresponse.orderId,
+							products: jsonresponse.products,
+							summary: jsonresponse.summary
+						}
+					);
+				}
+
+				if (this.orderId !== jsonresponse.orderId) {
+					Liferay.fire(
+						'orderChanged',
+						{
+							orderId: jsonresponse.orderId
+						}
+					);
+					this.orderId = jsonresponse.orderId;
+				}
 
 				this.initialQuantity = this.quantity;
+				this.hasQuantityChanged = true;
 				this.emit('submitQuantity', this.productId, this.quantity);
-
 			}
 			else if (jsonresponse.errorMessages) {
 				showNotification(jsonresponse.errorMessages[0], 'danger');
@@ -101,14 +132,18 @@ function doSubmit() {
 					showNotification(jsonresponse.error, 'danger');
 				}
 			}
-		}).catch(weShouldHandleErrors => {});
+		}
+	).catch(
+		weShouldHandleErrors => {}
+	);
 }
 
 class AddToCartButton extends Component {
 
 	created() {
 		this.initialQuantity = this.quantity;
-		this.inputQuantity = this.settings.minQuantity;
+		resetInputQuantity.call(this);
+		this.hasQuantityChanged = false;
 
 		window.Liferay.on('accountSelected', this._handleAccountChange, this);
 	}
@@ -119,7 +154,10 @@ class AddToCartButton extends Component {
 
 	willReceiveState(changes) {
 		if (changes.editMode) {
-			setTimeout(() => selectInput(this.element), 100);
+			setTimeout(
+				() => selectInput(this.element),
+				100
+			);
 		}
 	}
 
@@ -139,6 +177,8 @@ class AddToCartButton extends Component {
 	_disableEditMode() {
 		this.editMode = false;
 		this.quantity = this.initialQuantity;
+		this.hasQuantityChanged = false;
+		doFocusOut.call(this);
 	}
 
 	_handleBtnClick(e) {
@@ -150,17 +190,21 @@ class AddToCartButton extends Component {
 		) {
 			this._enableEditMode();
 		}
-		else if (!this.accountId || this.disabled) {
-			showNotification('No account selected.', 'danger');
-		}
-	}
+		else if (!this.accountId) {
+			const message = Liferay.Language.get('no-account-selected');
+			const type = 'danger';
 
-	_handleBtnFocus(e) {
-		this._handleBtnClick(e);
+			showNotification(message, type);
+		}
 	}
 
 	_handleAccountChange(e) {
 		this.accountId = e.accountId;
+		this.orderId = null;
+	}
+
+	_handleBtnFocus(e) {
+		this._handleBtnClick(e);
 	}
 
 	_handleBtnFocusin() {
@@ -170,16 +214,20 @@ class AddToCartButton extends Component {
 	_handleBtnFocusout(e) {
 		this.closingTimeout = setTimeout(
 			() => this._disableEditMode(),
-			100
+			(this.hasQuantityChanged ? 1000 : 100)
 		);
 	}
 
 	_handleSubmitClick() {
-		this.quantity = this.inputQuantity;
-		this.inputQuantity = this.settings.minQuantity;
+		if (this.disabled) {
+			return null;
+		}
 
-		doSubmit.call(this);
-		doFocusOut.call(this);
+		this.quantity = this.inputQuantity;
+		resetInputQuantity.call(this);
+
+		doSubmit.call(this)
+			.then(() => doFocusOut.call(this));
 	}
 }
 

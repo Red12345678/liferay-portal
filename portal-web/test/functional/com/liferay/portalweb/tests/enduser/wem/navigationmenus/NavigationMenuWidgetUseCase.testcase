@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Navigation";
@@ -33,8 +34,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Navigation Display Test Page");
 
@@ -46,8 +46,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Navigation#BREADCRUMB_ENTRY",
-			value1 = "Navigation Display Test Page"
-		);
+			value1 = "Navigation Display Test Page");
 	}
 
 	@description = "This is a use case for LPS-67191."
@@ -56,8 +55,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Navigation Test Page1");
 
@@ -67,23 +65,20 @@ definition {
 
 		ApplicationDisplayTemplates.selectPortletADT(
 			portletName = "Navigation",
-			templateName = "Split Button Dropdowns"
-		);
+			templateName = "Split Button Dropdowns");
 
 		Navigator.gotoPage(pageName = "Navigation Test Page1");
 
 		ApplicationDisplayTemplates.selectPortletADT(
 			portletName = "Navigation",
-			templateName = "Bar minimally styled"
-		);
+			templateName = "Bar minimally styled");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Navigation Test Page2");
 
@@ -93,7 +88,9 @@ definition {
 
 		Page.editName(pageNameEdit = "Navigation Test Page2 Edit");
 
-		Page.view(pageName = "Navigation Test Page2 Edit", privacy = "Public Pages");
+		Page.view(
+			pageName = "Navigation Test Page2 Edit",
+			privacy = "Public Pages");
 
 		Navigator.gotoPage(pageName = "Navigation Test Page2 Edit");
 
@@ -106,26 +103,22 @@ definition {
 		Navigator.gotoPage(pageName = "Navigation Test Page1");
 
 		AssertClick(
+			key_pageName = "Navigation Test Page2 Edit",
 			locator1 = "Navigation#BREADCRUMB_ENTRY",
-			value1 = "Navigation Test Page2 Edit",
-			key_pageName = "Navigation Test Page2 Edit"
-		);
+			value1 = "Navigation Test Page2 Edit");
 
 		AssertVisible(
-			locator1 = "Home#PAGE_ACTIVE",
-			key_pageName = "Navigation Test Page2 Edit"
-		);
+			key_pageName = "Navigation Test Page2 Edit",
+			locator1 = "Home#PAGE_ACTIVE");
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		DragAndDrop.dragAndDropToObject(
 			locator1 = "Home#PAGE_1",
 			locator2 = "Home#PAGE_2",
-			value1 = "Welcome"
-		);
+			value1 = "Welcome");
 	}
 
 	@priority = "3"
@@ -136,8 +129,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Navigation Display Test Page");
 
@@ -151,20 +143,17 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "Navigation#BREADCRUMB_ENTRY",
-			value1 = "Navigation Display Test Page"
-		);
+			value1 = "Navigation Display Test Page");
 
 		ApplicationDisplayTemplates.selectPortletADT(
 			portletName = "Navigation Menu",
-			templateName = "Bar minimally styled"
-		);
+			templateName = "Bar minimally styled");
 
 		Navigator.gotoPage(pageName = "Navigation Display Test Page");
 
 		AssertTextEquals(
 			locator1 = "Navigation#BREADCRUMB_ENTRY",
-			value1 = "Navigation Display Test Page"
-		);
+			value1 = "Navigation Display Test Page");
 	}
 
 	@priority = "4"
@@ -174,8 +163,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Navigation Page");
 
@@ -183,8 +171,7 @@ definition {
 
 		Role.definePermissionPG(
 			permissionsList = "CONTENT_PERMISSIONS_ADD_DISCUSSION_CHECKBOX,CONTENT_PERMISSIONS_CONFIGURE_APPLICATIONS_CHECKBOX,CONTENT_PERMISSIONS_CUSTOMIZE_CHECKBOX,CONTENT_PERMISSIONS_DELETE_CHECKBOX,CONTENT_PERMISSIONS_DELETE_DISCUSSION_CHECKBOX,CONTENT_PERMISSIONS_PERMISSIONS_CHECKBOX,CONTENT_PERMISSIONS_UPDATE_CHECKBOX,CONTENT_PERMISSIONS_UPDATE_DISCUSSION_CHECKBOX,CONTENT_PERMISSIONS_VIEW_CHECKBOX",
-			roleTitle = "Power User"
-		);
+			roleTitle = "Power User");
 
 		IFrame.selectTopFrame();
 
@@ -193,34 +180,31 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Roles"
-		);
+			portlet = "Roles");
 
-		Role.assignRegRoleCP(roleTitle = "Power User", userScreenName = "usersn");
+		Role.assignRegRoleCP(
+			roleTitle = "Power User",
+			userScreenName = "usersn");
 
 		User.logoutPG();
 
@@ -234,4 +218,5 @@ definition {
 
 		User.loginUserPG();
 	}
+
 }

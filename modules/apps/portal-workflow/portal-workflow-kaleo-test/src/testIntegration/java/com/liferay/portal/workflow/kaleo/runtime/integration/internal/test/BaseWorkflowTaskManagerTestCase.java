@@ -501,10 +501,6 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 		}
 	}
 
-	protected User createContentReviewerUser(String roleName) throws Exception {
-		return createUser(roleName, group, false);
-	}
-
 	protected DDMFormValues createDDMFormValues(DDMForm ddmForm) {
 		DDMFormValues ddmFormValues = DDMFormValuesTestUtil.createDDMFormValues(
 			ddmForm);
@@ -571,6 +567,24 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 			WorkflowDefinitionManagerUtil.deployWorkflowDefinition(
 				adminUser.getCompanyId(), adminUser.getUserId(),
 				SCRIPTED_SINGLE_APPROVER, SCRIPTED_SINGLE_APPROVER,
+				content.getBytes());
+		}
+	}
+
+	protected void createSiteMemberWorkflow() throws Exception {
+		try (CaptureAppender captureAppender =
+				Log4JLoggerTestUtil.configureLog4JLogger(
+					_PROXY_MESSAGE_LISTENER_CLASS_NAME, Level.OFF)) {
+
+			WorkflowDefinitionManagerUtil.getWorkflowDefinition(
+				adminUser.getCompanyId(), SITE_MEMBER_SINGLE_APPROVER, 1);
+		}
+		catch (WorkflowException we) {
+			String content = read("single-approver-definition-site-member.xml");
+
+			WorkflowDefinitionManagerUtil.deployWorkflowDefinition(
+				adminUser.getCompanyId(), adminUser.getUserId(),
+				SITE_MEMBER_SINGLE_APPROVER, SITE_MEMBER_SINGLE_APPROVER,
 				content.getBytes());
 		}
 	}
@@ -733,6 +747,13 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 		return workflowTasks.get(0);
 	}
 
+	protected boolean hasOtherAssignees(User user) throws Exception {
+		WorkflowTask workflowTask = getWorkflowTask(user, null, false, null, 0);
+
+		return WorkflowTaskManagerUtil.hasOtherAssignees(
+			workflowTask.getWorkflowTaskId(), user.getUserId());
+	}
+
 	protected String read(String fileName) throws Exception {
 		Class<?> clazz = getClass();
 
@@ -785,13 +806,16 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 
 		siteAdminUser = createUser(RoleConstants.SITE_ADMINISTRATOR);
 
-		siteContentReviewerUser = createContentReviewerUser(
+		siteContentReviewerUser = createUser(
 			RoleConstants.SITE_CONTENT_REVIEWER);
+
+		siteMemberUser = createUser(RoleConstants.SITE_MEMBER);
 	}
 
 	protected void setUpWorkflow() throws Exception {
 		createJoinXorWorkflow();
 		createScriptedAssignmentWorkflow();
+		createSiteMemberWorkflow();
 	}
 
 	protected FileVersion updateFileVersion(long fileEntryId) throws Exception {
@@ -831,7 +855,7 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 
 		serviceContext.setAttribute(
 			"dlFileEntryTypesSearchContainerPrimaryKeys",
-			String.join(StringPool.COMMA, dlFileEntryTypeMap.keySet()));
+			StringUtil.merge(dlFileEntryTypeMap.keySet()));
 
 		dlFileEntryTypeMap.forEach(
 			(dlFileEntryType, workflowDefinition) ->
@@ -862,6 +886,9 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 	protected static final String SCRIPTED_SINGLE_APPROVER =
 		"Scripted Single Approver";
 
+	protected static final String SITE_MEMBER_SINGLE_APPROVER =
+		"Site Member Single Approver";
+
 	protected User adminUser;
 
 	@DeleteAfterTestRun
@@ -873,6 +900,7 @@ public abstract class BaseWorkflowTaskManagerTestCase {
 	protected ServiceContext serviceContext;
 	protected User siteAdminUser;
 	protected User siteContentReviewerUser;
+	protected User siteMemberUser;
 
 	private static final String _MAIL_ENGINE_CLASS_NAME =
 		"com.liferay.util.mail.MailEngine";

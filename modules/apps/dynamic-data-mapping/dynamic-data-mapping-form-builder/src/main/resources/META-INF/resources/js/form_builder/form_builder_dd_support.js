@@ -333,6 +333,16 @@ AUI.add(
 			_addDragAndDropActions: function() {
 				var instance = this;
 
+				if (A.UA.ie) {
+					var rows = A.all('.layout-row .last-col');
+
+					rows.each(function(row) {
+						if (!row.one('.form-builder-field')) {
+							row.addClass('col-empty');
+						}
+					});
+				}
+
 				instance.sortable1 = new A.SortableLayout(
 					{
 						delegateConfig: {

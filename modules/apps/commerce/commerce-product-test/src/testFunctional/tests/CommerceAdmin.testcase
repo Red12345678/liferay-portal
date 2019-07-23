@@ -1,6 +1,7 @@
 @component-name = "portal-commerce"
 definition {
-	property portal.upstream = "true";
+
+	property portal.upstream = "false";
 	property testray.main.component.name = "Commerce";
 
 	setUp {
@@ -13,15 +14,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "commerceuser@liferay.com",
 			userFirstName = "Commerce",
 			userLastName = "User",
-			userScreenName = "commerce"
-		);
+			userScreenName = "commerce");
 	}
 
 	tearDown {
@@ -37,6 +36,68 @@ definition {
 		}
 	}
 
+	@ignore = "true"
+	test CreateNewAccountGroupByOrganizations {
+		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewAccountGroupByOrganizations";
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		Organization.addCP(
+			orgName = "Commerce Organization",
+			orgType = "Organization");
+
+		CommerceEntry.createNewAccountGroup(
+			criteriaType = "Organizations",
+			criterionEntryName = "Commerce Organization",
+			entryName = "Account groups");
+	}
+
+	@ignore = "true"
+	test CreateNewAccountGroupByRegularRole {
+		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewAccountGroupByRegularRole";
+
+		CommerceEntry.createNewAccountGroup(
+			criteriaType = "Roles",
+			criterionEntryName = "User",
+			entryName = "Account groups",
+			roleType = "Regular Role");
+	}
+
+	@ignore = "true"
+	test CreateNewAccountGroupByUserGroups {
+		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewAccountGroupByUserGroups";
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "User Groups");
+
+		UserGroup.addCP(userGroupName = "Commerce UserGroup");
+
+		CommerceEntry.createNewAccountGroup(
+			criteriaType = "User Groups",
+			criterionEntryName = "Commerce UserGroup",
+			entryName = "Account groups");
+	}
+
+	@ignore = "true"
+	test CreateNewAccountGroupByUsers {
+		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewAccountGroupByUsers";
+
+		CommerceEntry.createNewAccountGroup(
+			criteriaType = "Users",
+			criterionEntryName = "Commerce User",
+			entryName = "Account groups");
+	}
+
+	@ignore = "true"
 	test CreateNewAvailabilityEstimate {
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewAvailabilityEstimate";
@@ -44,47 +105,20 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Commerce",
 			panel = "Site Administration",
-			portlet = "Settings"
-		);
+			portlet = "Settings");
 
 		CommerceNavigator.gotoCommercePortletNavItem(navItem = "Availability Estimates");
 
 		Click(locator1 = "Button#PLUS");
 
-		CommerceEntry.addNewAvailabilityEstimatesEntry(
-			entryName = "New Availability Estimate"
-		);
+		CommerceEntry.addNewAvailabilityEstimatesEntry(entryName = "New Availability Estimate");
 
 		Button.clickSave();
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
 	}
 
-	test CreateNewCatalogRule {
-		property portal.acceptance = "true";
-		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewCatalogRule";
-
-		CommerceEntry.createNewUserSegment(
-			criteriaType = "Users",
-			criterionEntryName = "Commerce User",
-			entryName = "User Segment"
-		);
-
-		ProductMenu.gotoPortlet(
-			category = "Commerce",
-			panel = "Site Administration",
-			portlet = "Catalog Rules"
-		);
-
-		Click(locator1 = "Button#PLUS");
-
-		CommerceEntry.addNewCatalogRule(
-			catalogRuleType = "All Products",
-			entryName = "New Catalog Rule",
-			userSegment = "User Segment"
-		);
-	}
-
+	@ignore = "true"
 	test CreateNewCountry {
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewCountry";
@@ -92,8 +126,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Commerce",
 			panel = "Site Administration",
-			portlet = "Settings"
-		);
+			portlet = "Settings");
 
 		CommerceNavigator.gotoCommercePortletNavItem(navItem = "Countries");
 
@@ -109,48 +142,52 @@ definition {
 
 		Click(locator1 = "Button#PLUS");
 
-		CommerceEntry.addNewRegionsEntry(code = "NRE", entryName = "New Region");
+		CommerceEntry.addNewRegionsEntry(
+			code = "NRE",
+			entryName = "New Region");
 
 		Button.clickSave();
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
 	}
 
+	@ignore = "true"
 	test CreateNewCurrency {
-		CommerceEntry.createNewCurrenciesEntry(code = "NCU", entryName = "New Currency");
+		CommerceEntry.createNewCurrenciesEntry(
+			code = "NCU",
+			entryName = "New Currency");
 	}
 
+	@ignore = "true"
 	test CreateNewDiscount {
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewDiscount";
 
-		CommerceEntry.createNewUserSegment(
+		CommerceEntry.createNewAccountGroup(
 			criteriaType = "Users",
 			criterionEntryName = "Commerce User",
-			entryName = "User Segment"
-		);
+			entryName = "Account groups");
 
 		ProductMenu.gotoPortlet(
 			category = "Commerce",
 			panel = "Site Administration",
-			portlet = "Discounts"
-		);
+			portlet = "Discounts");
 
 		Click(locator1 = "Button#PLUS");
 
 		CommerceEntry.addNewDiscountsEntry(
+			accountGroup = "Account groups",
 			discountLevel = "15",
 			discountTarget = "Apply to Product",
 			entryTitle = "New Discount",
-			maximumDiscountAmount = "10",
-			userSegment = "User Segment"
-		);
+			maximumDiscountAmount = "10");
 
 		Button.clickPublish();
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
 	}
 
+	@ignore = "true"
 	test CreateNewMeasurementUnits {
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewMeasurementUnits";
@@ -158,8 +195,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Commerce",
 			panel = "Site Administration",
-			portlet = "Settings"
-		);
+			portlet = "Settings");
 
 		CommerceNavigator.gotoCommercePortletNavItem(navItem = "Measurement Units");
 
@@ -187,17 +223,15 @@ definition {
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewNotificationTemplate";
 
-		CommerceEntry.createNewUserSegment(
+		CommerceEntry.createNewAccountGroup(
 			criteriaType = "Users",
 			criterionEntryName = "Commerce User",
-			entryName = "User Segment"
-		);
+			entryName = "Account groups");
 
 		ProductMenu.gotoPortlet(
 			category = "Commerce",
 			panel = "Site Administration",
-			portlet = "Settings"
-		);
+			portlet = "Settings");
 
 		CommerceNavigator.gotoCommercePortletNavItem(navItem = "Notificatios");
 
@@ -206,107 +240,46 @@ definition {
 		Click(locator1 = "Button#PLUS");
 
 		CommerceEntry.addNewNotificationTemplate(
+			accountGroup = "Account groups",
 			entryName = "New Notification Template",
 			fromAddress = "test@liferay.com",
 			fromName = "Test Test",
-			notificationType = "Order Placed",
-			userSegment = "User Segment"
-		);
+			notificationType = "Order Placed");
 
 		Button.clickSave();
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
 	}
 
+	@ignore = "true"
 	test CreateNewPriceList {
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewPriceList";
 
-		CommerceEntry.createNewCurrenciesEntry(code = "NCU", entryName = "New Currency");
+		CommerceEntry.createNewCurrenciesEntry(
+			code = "NCU",
+			entryName = "New Currency");
 
-		CommerceEntry.createNewUserSegment(
+		CommerceEntry.createNewAccountGroup(
 			criteriaType = "Users",
 			criterionEntryName = "Commerce User",
-			entryName = "User Segment"
-		);
+			entryName = "Account groups");
 
 		ProductMenu.gotoPortlet(
 			category = "Commerce",
 			panel = "Site Administration",
-			portlet = "Price Lists"
-		);
+			portlet = "Price Lists");
 
 		Click(locator1 = "Button#PLUS");
 
 		CommerceEntry.addNewPriceListsEntry(
+			accountGroupName = "Account groups",
 			currencyCode = "NCU",
-			entryName = "New Price List",
-			userSegmentName = "User Segment"
-		);
+			entryName = "New Price List");
 
 		Button.clickPublish();
 
 		AssertElementPresent(locator1 = "Message#SUCCESS");
 	}
 
-	test CreateNewUserSegmentByOrganizations {
-		property portal.acceptance = "true";
-		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewUserSegmentByOrganizations";
-
-		ProductMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
-
-		Organization.addCP(orgName = "Commerce Organization", orgType = "Organization");
-
-		CommerceEntry.createNewUserSegment(
-			criteriaType = "Organizations",
-			criterionEntryName = "Commerce Organization",
-			entryName = "User Segment"
-		);
-	}
-
-	test CreateNewUserSegmentByRegularRole {
-		property portal.acceptance = "true";
-		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewUserSegmentByRegularRole";
-
-		CommerceEntry.createNewUserSegment(
-			criteriaType = "Roles",
-			criterionEntryName = "User",
-			entryName = "User Segment",
-			roleType = "Regular Role"
-		);
-	}
-
-	test CreateNewUserSegmentByUserGroups {
-		property portal.acceptance = "true";
-		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewUserSegmentByUserGroups";
-
-		ProductMenu.gotoPortlet(
-			category = "Users",
-			panel = "Control Panel",
-			portlet = "User Groups"
-		);
-
-		UserGroup.addCP(userGroupName = "Commerce UserGroup");
-
-		CommerceEntry.createNewUserSegment(
-			criteriaType = "User Groups",
-			criterionEntryName = "Commerce UserGroup",
-			entryName = "User Segment"
-		);
-	}
-
-	test CreateNewUserSegmentByUsers {
-		property portal.acceptance = "true";
-		property test.name.skip.portal.instance = "CommerceAdmin#CreateNewUserSegmentByUsers";
-
-		CommerceEntry.createNewUserSegment(
-			criteriaType = "Users",
-			criterionEntryName = "Commerce User",
-			entryName = "User Segment"
-		);
-	}
 }

@@ -27,17 +27,22 @@ taglib uri="http://liferay.com/tld/item-selector" prefix="liferay-item-selector"
 taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %><%@
 taglib uri="http://liferay.com/tld/soy" prefix="soy" %><%@
 taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
-taglib uri="http://liferay.com/tld/trash" prefix="liferay-trash" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
 <%@ page import="com.liferay.asset.kernel.model.AssetRenderer" %><%@
+page import="com.liferay.commerce.account.model.CommerceAccountGroup" %><%@
+page import="com.liferay.commerce.account.model.CommerceAccountGroupRel" %><%@
+page import="com.liferay.commerce.admin.constants.CommerceAdminWebKeys" %><%@
 page import="com.liferay.commerce.media.CommerceMediaResolverUtil" %><%@
-page import="com.liferay.commerce.product.constants.CPActionKeys" %><%@
 page import="com.liferay.commerce.product.constants.CPConstants" %><%@
 page import="com.liferay.commerce.product.constants.CPPortletKeys" %><%@
 page import="com.liferay.commerce.product.constants.CPWebKeys" %><%@
+page import="com.liferay.commerce.product.definitions.web.internal.admin.ProductDisplayLayoutsCommerceAdminModule" %><%@
 page import="com.liferay.commerce.product.definitions.web.internal.display.context.CPAttachmentFileEntriesDisplayContext" %><%@
+page import="com.liferay.commerce.product.definitions.web.internal.display.context.CPDefinitionAccountGroupDisplayContext" %><%@
+page import="com.liferay.commerce.product.definitions.web.internal.display.context.CPDefinitionChannelDisplayContext" %><%@
+page import="com.liferay.commerce.product.definitions.web.internal.display.context.CPDefinitionDisplayLayoutDisplayContext" %><%@
 page import="com.liferay.commerce.product.definitions.web.internal.display.context.CPDefinitionLinkDisplayContext" %><%@
 page import="com.liferay.commerce.product.definitions.web.internal.display.context.CPDefinitionOptionRelDisplayContext" %><%@
 page import="com.liferay.commerce.product.definitions.web.internal.display.context.CPDefinitionOptionValueRelDisplayContext" %><%@
@@ -50,6 +55,7 @@ page import="com.liferay.commerce.product.definitions.web.internal.display.conte
 page import="com.liferay.commerce.product.definitions.web.internal.display.context.CPInstancePricingInfoDisplayContext" %><%@
 page import="com.liferay.commerce.product.definitions.web.internal.display.context.CPInstanceShippingInfoDisplayContext" %><%@
 page import="com.liferay.commerce.product.definitions.web.internal.display.context.CPInstanceSubscriptionInfoDisplayContext" %><%@
+page import="com.liferay.commerce.product.definitions.web.internal.security.permission.resource.CommerceCatalogPermission" %><%@
 page import="com.liferay.commerce.product.definitions.web.internal.servlet.taglib.ui.CPAttachmentFileEntryFormNavigatorConstants" %><%@
 page import="com.liferay.commerce.product.definitions.web.internal.servlet.taglib.ui.CPDefinitionSpecificationOptionValueFormNavigatorConstants" %><%@
 page import="com.liferay.commerce.product.definitions.web.servlet.taglib.ui.CPDefinitionScreenNavigationConstants" %><%@
@@ -61,6 +67,8 @@ page import="com.liferay.commerce.product.exception.CPDefinitionMetaKeywordsExce
 page import="com.liferay.commerce.product.exception.CPDefinitionMetaTitleException" %><%@
 page import="com.liferay.commerce.product.exception.CPDefinitionOptionValueRelKeyException" %><%@
 page import="com.liferay.commerce.product.exception.CPDefinitionProductTypeNameException" %><%@
+page import="com.liferay.commerce.product.exception.CPDisplayLayoutEntryException" %><%@
+page import="com.liferay.commerce.product.exception.CPDisplayLayoutLayoutUuidException" %><%@
 page import="com.liferay.commerce.product.exception.CPFriendlyURLEntryException" %><%@
 page import="com.liferay.commerce.product.exception.CPInstanceJsonException" %><%@
 page import="com.liferay.commerce.product.exception.CPInstanceSkuException" %><%@
@@ -71,6 +79,7 @@ page import="com.liferay.commerce.product.exception.NoSuchCPDefinitionLinkExcept
 page import="com.liferay.commerce.product.exception.NoSuchCPDefinitionOptionRelException" %><%@
 page import="com.liferay.commerce.product.exception.NoSuchCPDefinitionOptionValueRelException" %><%@
 page import="com.liferay.commerce.product.exception.NoSuchCPInstanceException" %><%@
+page import="com.liferay.commerce.product.exception.NoSuchCatalogException" %><%@
 page import="com.liferay.commerce.product.exception.NoSuchSkuContributorCPDefinitionOptionRelException" %><%@
 page import="com.liferay.commerce.product.model.CPAttachmentFileEntry" %><%@
 page import="com.liferay.commerce.product.model.CPAttachmentFileEntryConstants" %><%@
@@ -79,12 +88,15 @@ page import="com.liferay.commerce.product.model.CPDefinitionLink" %><%@
 page import="com.liferay.commerce.product.model.CPDefinitionOptionRel" %><%@
 page import="com.liferay.commerce.product.model.CPDefinitionOptionValueRel" %><%@
 page import="com.liferay.commerce.product.model.CPDefinitionSpecificationOptionValue" %><%@
+page import="com.liferay.commerce.product.model.CPDisplayLayout" %><%@
 page import="com.liferay.commerce.product.model.CPInstance" %><%@
 page import="com.liferay.commerce.product.model.CPMeasurementUnitConstants" %><%@
 page import="com.liferay.commerce.product.model.CPOptionCategory" %><%@
 page import="com.liferay.commerce.product.model.CPSpecificationOption" %><%@
 page import="com.liferay.commerce.product.model.CPTaxCategory" %><%@
 page import="com.liferay.commerce.product.model.CProduct" %><%@
+page import="com.liferay.commerce.product.model.CommerceCatalog" %><%@
+page import="com.liferay.commerce.product.model.CommerceChannel" %><%@
 page import="com.liferay.commerce.product.service.CPDefinitionLocalServiceUtil" %><%@
 page import="com.liferay.commerce.product.type.CPType" %><%@
 page import="com.liferay.commerce.product.util.CPNavigationItemRegistryUtil" %><%@
@@ -101,9 +113,12 @@ page import="com.liferay.portal.kernel.model.Layout" %><%@
 page import="com.liferay.portal.kernel.model.Portlet" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
 page import="com.liferay.portal.kernel.repository.model.FileEntry" %><%@
+page import="com.liferay.portal.kernel.security.permission.ActionKeys" %><%@
 page import="com.liferay.portal.kernel.service.LayoutLocalServiceUtil" %><%@
 page import="com.liferay.portal.kernel.service.PortletLocalServiceUtil" %><%@
 page import="com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalServiceUtil" %><%@
+page import="com.liferay.portal.kernel.service.permission.GroupPermissionUtil" %><%@
+page import="com.liferay.portal.kernel.util.ArrayUtil" %><%@
 page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.HttpUtil" %><%@
@@ -111,13 +126,14 @@ page import="com.liferay.portal.kernel.util.LocaleUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.PortalUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
+page import="com.liferay.portal.kernel.util.UnicodeFormatter" %><%@
 page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.kernel.util.WebKeys" %><%@
 page import="com.liferay.portal.kernel.workflow.WorkflowConstants" %><%@
-page import="com.liferay.taglib.search.ResultRow" %><%@
-page import="com.liferay.trash.kernel.util.TrashUtil" %>
+page import="com.liferay.taglib.search.ResultRow" %>
 
 <%@ page import="java.util.ArrayList" %><%@
+page import="java.util.Arrays" %><%@
 page import="java.util.Collections" %><%@
 page import="java.util.HashMap" %><%@
 page import="java.util.List" %><%@
@@ -133,6 +149,8 @@ page import="java.util.StringJoiner" %>
 <portlet:defineObjects />
 
 <%
+String commerceAdminModuleKey = ProductDisplayLayoutsCommerceAdminModule.KEY;
+
 String lifecycle = (String)request.getAttribute(liferayPortletRequest.LIFECYCLE_PHASE);
 
 PortletURL catalogURLObj = PortalUtil.getControlPanelPortletURL(request, CPPortletKeys.CP_DEFINITIONS, lifecycle);

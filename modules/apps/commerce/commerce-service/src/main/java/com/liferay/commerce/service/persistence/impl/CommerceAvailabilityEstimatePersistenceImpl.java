@@ -21,7 +21,6 @@ import com.liferay.commerce.model.CommerceAvailabilityEstimate;
 import com.liferay.commerce.model.impl.CommerceAvailabilityEstimateImpl;
 import com.liferay.commerce.model.impl.CommerceAvailabilityEstimateModelImpl;
 import com.liferay.commerce.service.persistence.CommerceAvailabilityEstimatePersistence;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -67,57 +66,33 @@ import java.util.Set;
  * </p>
  *
  * @author Alessio Antonio Rendina
- * @see CommerceAvailabilityEstimatePersistence
- * @see com.liferay.commerce.service.persistence.CommerceAvailabilityEstimateUtil
  * @generated
  */
 @ProviderType
 public class CommerceAvailabilityEstimatePersistenceImpl
 	extends BasePersistenceImpl<CommerceAvailabilityEstimate>
 	implements CommerceAvailabilityEstimatePersistence {
+
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify or reference this class directly. Always use {@link CommerceAvailabilityEstimateUtil} to access the commerce availability estimate persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
+	 * Never modify or reference this class directly. Always use <code>CommerceAvailabilityEstimateUtil</code> to access the commerce availability estimate persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
-	public static final String FINDER_CLASS_NAME_ENTITY = CommerceAvailabilityEstimateImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List1";
-	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			CommerceAvailabilityEstimateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			CommerceAvailabilityEstimateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll",
-			new String[0]);
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			CommerceAvailabilityEstimateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
-			new String[] {
-				String.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			CommerceAvailabilityEstimateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			CommerceAvailabilityEstimateModelImpl.UUID_COLUMN_BITMASK |
-			CommerceAvailabilityEstimateModelImpl.TITLE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByUuid", new String[] { String.class.getName() });
+	public static final String FINDER_CLASS_NAME_ENTITY =
+		CommerceAvailabilityEstimateImpl.class.getName();
+
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION =
+		FINDER_CLASS_NAME_ENTITY + ".List1";
+
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION =
+		FINDER_CLASS_NAME_ENTITY + ".List2";
+
+	private FinderPath _finderPathWithPaginationFindAll;
+	private FinderPath _finderPathWithoutPaginationFindAll;
+	private FinderPath _finderPathCountAll;
+	private FinderPath _finderPathWithPaginationFindByUuid;
+	private FinderPath _finderPathWithoutPaginationFindByUuid;
+	private FinderPath _finderPathCountByUuid;
 
 	/**
 	 * Returns all the commerce availability estimates where uuid = &#63;.
@@ -134,7 +109,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * Returns a range of all the commerce availability estimates where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -143,8 +118,9 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the range of matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByUuid(String uuid,
-		int start, int end) {
+	public List<CommerceAvailabilityEstimate> findByUuid(
+		String uuid, int start, int end) {
+
 		return findByUuid(uuid, start, end, null);
 	}
 
@@ -152,7 +128,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * Returns an ordered range of all the commerce availability estimates where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -162,9 +138,10 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the ordered range of matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByUuid(String uuid,
-		int start, int end,
+	public List<CommerceAvailabilityEstimate> findByUuid(
+		String uuid, int start, int end,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator) {
+
 		return findByUuid(uuid, start, end, orderByComparator, true);
 	}
 
@@ -172,7 +149,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * Returns an ordered range of all the commerce availability estimates where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -183,35 +160,40 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the ordered range of matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByUuid(String uuid,
-		int start, int end,
+	public List<CommerceAvailabilityEstimate> findByUuid(
+		String uuid, int start, int end,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator,
 		boolean retrieveFromCache) {
+
+		uuid = Objects.toString(uuid, "");
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
+			finderPath = _finderPathWithoutPaginationFindByUuid;
+			finderArgs = new Object[] {uuid};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+			finderPath = _finderPathWithPaginationFindByUuid;
+			finderArgs = new Object[] {uuid, start, end, orderByComparator};
 		}
 
 		List<CommerceAvailabilityEstimate> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CommerceAvailabilityEstimate>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CommerceAvailabilityEstimate>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
-				for (CommerceAvailabilityEstimate commerceAvailabilityEstimate : list) {
-					if (!Objects.equals(uuid,
-								commerceAvailabilityEstimate.getUuid())) {
+				for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
+						list) {
+
+					if (!uuid.equals(commerceAvailabilityEstimate.getUuid())) {
 						list = null;
 
 						break;
@@ -224,8 +206,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(3);
@@ -235,10 +217,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_UUID_3);
 			}
 			else {
@@ -248,12 +227,12 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 			}
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
-				query.append(CommerceAvailabilityEstimateModelImpl.ORDER_BY_JPQL);
+			else if (pagination) {
+				query.append(
+					CommerceAvailabilityEstimateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -272,16 +251,16 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 				}
 
 				if (!pagination) {
-					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(q,
-							getDialect(), start, end);
+					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -310,11 +289,13 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @throws NoSuchAvailabilityEstimateException if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate findByUuid_First(String uuid,
-		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
+	public CommerceAvailabilityEstimate findByUuid_First(
+			String uuid,
+			OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
 		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = fetchByUuid_First(uuid,
-				orderByComparator);
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			fetchByUuid_First(uuid, orderByComparator);
 
 		if (commerceAvailabilityEstimate != null) {
 			return commerceAvailabilityEstimate;
@@ -340,10 +321,12 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the first matching commerce availability estimate, or <code>null</code> if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate fetchByUuid_First(String uuid,
+	public CommerceAvailabilityEstimate fetchByUuid_First(
+		String uuid,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator) {
-		List<CommerceAvailabilityEstimate> list = findByUuid(uuid, 0, 1,
-				orderByComparator);
+
+		List<CommerceAvailabilityEstimate> list = findByUuid(
+			uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -361,11 +344,13 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @throws NoSuchAvailabilityEstimateException if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate findByUuid_Last(String uuid,
-		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
+	public CommerceAvailabilityEstimate findByUuid_Last(
+			String uuid,
+			OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
 		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = fetchByUuid_Last(uuid,
-				orderByComparator);
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			fetchByUuid_Last(uuid, orderByComparator);
 
 		if (commerceAvailabilityEstimate != null) {
 			return commerceAvailabilityEstimate;
@@ -391,16 +376,18 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the last matching commerce availability estimate, or <code>null</code> if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate fetchByUuid_Last(String uuid,
+	public CommerceAvailabilityEstimate fetchByUuid_Last(
+		String uuid,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator) {
+
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CommerceAvailabilityEstimate> list = findByUuid(uuid, count - 1,
-				count, orderByComparator);
+		List<CommerceAvailabilityEstimate> list = findByUuid(
+			uuid, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -420,25 +407,32 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public CommerceAvailabilityEstimate[] findByUuid_PrevAndNext(
-		long commerceAvailabilityEstimateId, String uuid,
-		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
+			long commerceAvailabilityEstimateId, String uuid,
+			OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
 		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = findByPrimaryKey(commerceAvailabilityEstimateId);
+
+		uuid = Objects.toString(uuid, "");
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			findByPrimaryKey(commerceAvailabilityEstimateId);
 
 		Session session = null;
 
 		try {
 			session = openSession();
 
-			CommerceAvailabilityEstimate[] array = new CommerceAvailabilityEstimateImpl[3];
+			CommerceAvailabilityEstimate[] array =
+				new CommerceAvailabilityEstimateImpl[3];
 
-			array[0] = getByUuid_PrevAndNext(session,
-					commerceAvailabilityEstimate, uuid, orderByComparator, true);
+			array[0] = getByUuid_PrevAndNext(
+				session, commerceAvailabilityEstimate, uuid, orderByComparator,
+				true);
 
 			array[1] = commerceAvailabilityEstimate;
 
-			array[2] = getByUuid_PrevAndNext(session,
-					commerceAvailabilityEstimate, uuid, orderByComparator, false);
+			array[2] = getByUuid_PrevAndNext(
+				session, commerceAvailabilityEstimate, uuid, orderByComparator,
+				false);
 
 			return array;
 		}
@@ -455,11 +449,12 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		CommerceAvailabilityEstimate commerceAvailabilityEstimate, String uuid,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator,
 		boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -470,10 +465,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 		boolean bindUuid = false;
 
-		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_UUID_1);
-		}
-		else if (uuid.equals("")) {
+		if (uuid.isEmpty()) {
 			query.append(_FINDER_COLUMN_UUID_UUID_3);
 		}
 		else {
@@ -483,7 +475,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		}
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -555,10 +548,11 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(commerceAvailabilityEstimate);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						commerceAvailabilityEstimate)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -579,8 +573,9 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public void removeByUuid(String uuid) {
-		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate : findByUuid(
-				uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
+				findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
 			remove(commerceAvailabilityEstimate);
 		}
 	}
@@ -593,9 +588,11 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public int countByUuid(String uuid) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+		uuid = Objects.toString(uuid, "");
 
-		Object[] finderArgs = new Object[] { uuid };
+		FinderPath finderPath = _finderPathCountByUuid;
+
+		Object[] finderArgs = new Object[] {uuid};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -606,10 +603,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_UUID_3);
 			}
 			else {
@@ -650,284 +644,15 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "commerceAvailabilityEstimate.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "commerceAvailabilityEstimate.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(commerceAvailabilityEstimate.uuid IS NULL OR commerceAvailabilityEstimate.uuid = '')";
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			CommerceAvailabilityEstimateImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			CommerceAvailabilityEstimateModelImpl.UUID_COLUMN_BITMASK |
-			CommerceAvailabilityEstimateModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+	private static final String _FINDER_COLUMN_UUID_UUID_2 =
+		"commerceAvailabilityEstimate.uuid = ?";
 
-	/**
-	 * Returns the commerce availability estimate where uuid = &#63; and groupId = &#63; or throws a {@link NoSuchAvailabilityEstimateException} if it could not be found.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the matching commerce availability estimate
-	 * @throws NoSuchAvailabilityEstimateException if a matching commerce availability estimate could not be found
-	 */
-	@Override
-	public CommerceAvailabilityEstimate findByUUID_G(String uuid, long groupId)
-		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = fetchByUUID_G(uuid,
-				groupId);
+	private static final String _FINDER_COLUMN_UUID_UUID_3 =
+		"(commerceAvailabilityEstimate.uuid IS NULL OR commerceAvailabilityEstimate.uuid = '')";
 
-		if (commerceAvailabilityEstimate == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(", groupId=");
-			msg.append(groupId);
-
-			msg.append("}");
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(msg.toString());
-			}
-
-			throw new NoSuchAvailabilityEstimateException(msg.toString());
-		}
-
-		return commerceAvailabilityEstimate;
-	}
-
-	/**
-	 * Returns the commerce availability estimate where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the matching commerce availability estimate, or <code>null</code> if a matching commerce availability estimate could not be found
-	 */
-	@Override
-	public CommerceAvailabilityEstimate fetchByUUID_G(String uuid, long groupId) {
-		return fetchByUUID_G(uuid, groupId, true);
-	}
-
-	/**
-	 * Returns the commerce availability estimate where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @param retrieveFromCache whether to retrieve from the finder cache
-	 * @return the matching commerce availability estimate, or <code>null</code> if a matching commerce availability estimate could not be found
-	 */
-	@Override
-	public CommerceAvailabilityEstimate fetchByUUID_G(String uuid,
-		long groupId, boolean retrieveFromCache) {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = finderCache.getResult(FINDER_PATH_FETCH_BY_UUID_G,
-					finderArgs, this);
-		}
-
-		if (result instanceof CommerceAvailabilityEstimate) {
-			CommerceAvailabilityEstimate commerceAvailabilityEstimate = (CommerceAvailabilityEstimate)result;
-
-			if (!Objects.equals(uuid, commerceAvailabilityEstimate.getUuid()) ||
-					(groupId != commerceAvailabilityEstimate.getGroupId())) {
-				result = null;
-			}
-		}
-
-		if (result == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_SELECT_COMMERCEAVAILABILITYESTIMATE_WHERE);
-
-			boolean bindUuid = false;
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else if (uuid.equals("")) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-			}
-			else {
-				bindUuid = true;
-
-				query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (bindUuid) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				List<CommerceAvailabilityEstimate> list = q.list();
-
-				if (list.isEmpty()) {
-					finderCache.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs, list);
-				}
-				else {
-					CommerceAvailabilityEstimate commerceAvailabilityEstimate = list.get(0);
-
-					result = commerceAvailabilityEstimate;
-
-					cacheResult(commerceAvailabilityEstimate);
-				}
-			}
-			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_FETCH_BY_UUID_G, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		if (result instanceof List<?>) {
-			return null;
-		}
-		else {
-			return (CommerceAvailabilityEstimate)result;
-		}
-	}
-
-	/**
-	 * Removes the commerce availability estimate where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the commerce availability estimate that was removed
-	 */
-	@Override
-	public CommerceAvailabilityEstimate removeByUUID_G(String uuid, long groupId)
-		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = findByUUID_G(uuid,
-				groupId);
-
-		return remove(commerceAvailabilityEstimate);
-	}
-
-	/**
-	 * Returns the number of commerce availability estimates where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching commerce availability estimates
-	 */
-	@Override
-	public int countByUUID_G(String uuid, long groupId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
-
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_COMMERCEAVAILABILITYESTIMATE_WHERE);
-
-			boolean bindUuid = false;
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else if (uuid.equals("")) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-			}
-			else {
-				bindUuid = true;
-
-				query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (bindUuid) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "commerceAvailabilityEstimate.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "commerceAvailabilityEstimate.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(commerceAvailabilityEstimate.uuid IS NULL OR commerceAvailabilityEstimate.uuid = '') AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "commerceAvailabilityEstimate.groupId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			CommerceAvailabilityEstimateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			CommerceAvailabilityEstimateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			CommerceAvailabilityEstimateModelImpl.UUID_COLUMN_BITMASK |
-			CommerceAvailabilityEstimateModelImpl.COMPANYID_COLUMN_BITMASK |
-			CommerceAvailabilityEstimateModelImpl.TITLE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+	private FinderPath _finderPathWithPaginationFindByUuid_C;
+	private FinderPath _finderPathWithoutPaginationFindByUuid_C;
+	private FinderPath _finderPathCountByUuid_C;
 
 	/**
 	 * Returns all the commerce availability estimates where uuid = &#63; and companyId = &#63;.
@@ -937,17 +662,18 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByUuid_C(String uuid,
-		long companyId) {
-		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
+	public List<CommerceAvailabilityEstimate> findByUuid_C(
+		String uuid, long companyId) {
+
+		return findByUuid_C(
+			uuid, companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
 	 * Returns a range of all the commerce availability estimates where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -957,8 +683,9 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the range of matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByUuid_C(String uuid,
-		long companyId, int start, int end) {
+	public List<CommerceAvailabilityEstimate> findByUuid_C(
+		String uuid, long companyId, int start, int end) {
+
 		return findByUuid_C(uuid, companyId, start, end, null);
 	}
 
@@ -966,7 +693,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * Returns an ordered range of all the commerce availability estimates where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -977,17 +704,19 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the ordered range of matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByUuid_C(String uuid,
-		long companyId, int start, int end,
+	public List<CommerceAvailabilityEstimate> findByUuid_C(
+		String uuid, long companyId, int start, int end,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator) {
-		return findByUuid_C(uuid, companyId, start, end, orderByComparator, true);
+
+		return findByUuid_C(
+			uuid, companyId, start, end, orderByComparator, true);
 	}
 
 	/**
 	 * Returns an ordered range of all the commerce availability estimates where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -999,40 +728,45 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the ordered range of matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByUuid_C(String uuid,
-		long companyId, int start, int end,
+	public List<CommerceAvailabilityEstimate> findByUuid_C(
+		String uuid, long companyId, int start, int end,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator,
 		boolean retrieveFromCache) {
+
+		uuid = Objects.toString(uuid, "");
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
+			finderPath = _finderPathWithoutPaginationFindByUuid_C;
+			finderArgs = new Object[] {uuid, companyId};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderPath = _finderPathWithPaginationFindByUuid_C;
 			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
+				uuid, companyId, start, end, orderByComparator
+			};
 		}
 
 		List<CommerceAvailabilityEstimate> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CommerceAvailabilityEstimate>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CommerceAvailabilityEstimate>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
-				for (CommerceAvailabilityEstimate commerceAvailabilityEstimate : list) {
-					if (!Objects.equals(uuid,
-								commerceAvailabilityEstimate.getUuid()) ||
-							(companyId != commerceAvailabilityEstimate.getCompanyId())) {
+				for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
+						list) {
+
+					if (!uuid.equals(commerceAvailabilityEstimate.getUuid()) ||
+						(companyId !=
+							commerceAvailabilityEstimate.getCompanyId())) {
+
 						list = null;
 
 						break;
@@ -1045,8 +779,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(4);
@@ -1056,10 +790,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 			}
 			else {
@@ -1071,12 +802,12 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
-				query.append(CommerceAvailabilityEstimateModelImpl.ORDER_BY_JPQL);
+			else if (pagination) {
+				query.append(
+					CommerceAvailabilityEstimateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1097,16 +828,16 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 				qPos.add(companyId);
 
 				if (!pagination) {
-					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(q,
-							getDialect(), start, end);
+					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -1136,12 +867,13 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @throws NoSuchAvailabilityEstimateException if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate findByUuid_C_First(String uuid,
-		long companyId,
-		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
+	public CommerceAvailabilityEstimate findByUuid_C_First(
+			String uuid, long companyId,
+			OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
 		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = fetchByUuid_C_First(uuid,
-				companyId, orderByComparator);
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			fetchByUuid_C_First(uuid, companyId, orderByComparator);
 
 		if (commerceAvailabilityEstimate != null) {
 			return commerceAvailabilityEstimate;
@@ -1171,11 +903,12 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the first matching commerce availability estimate, or <code>null</code> if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate fetchByUuid_C_First(String uuid,
-		long companyId,
+	public CommerceAvailabilityEstimate fetchByUuid_C_First(
+		String uuid, long companyId,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator) {
-		List<CommerceAvailabilityEstimate> list = findByUuid_C(uuid, companyId,
-				0, 1, orderByComparator);
+
+		List<CommerceAvailabilityEstimate> list = findByUuid_C(
+			uuid, companyId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1194,12 +927,13 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @throws NoSuchAvailabilityEstimateException if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate findByUuid_C_Last(String uuid,
-		long companyId,
-		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
+	public CommerceAvailabilityEstimate findByUuid_C_Last(
+			String uuid, long companyId,
+			OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
 		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = fetchByUuid_C_Last(uuid,
-				companyId, orderByComparator);
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			fetchByUuid_C_Last(uuid, companyId, orderByComparator);
 
 		if (commerceAvailabilityEstimate != null) {
 			return commerceAvailabilityEstimate;
@@ -1229,17 +963,18 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the last matching commerce availability estimate, or <code>null</code> if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate fetchByUuid_C_Last(String uuid,
-		long companyId,
+	public CommerceAvailabilityEstimate fetchByUuid_C_Last(
+		String uuid, long companyId,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator) {
+
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CommerceAvailabilityEstimate> list = findByUuid_C(uuid, companyId,
-				count - 1, count, orderByComparator);
+		List<CommerceAvailabilityEstimate> list = findByUuid_C(
+			uuid, companyId, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1260,27 +995,32 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public CommerceAvailabilityEstimate[] findByUuid_C_PrevAndNext(
-		long commerceAvailabilityEstimateId, String uuid, long companyId,
-		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
+			long commerceAvailabilityEstimateId, String uuid, long companyId,
+			OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
 		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = findByPrimaryKey(commerceAvailabilityEstimateId);
+
+		uuid = Objects.toString(uuid, "");
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			findByPrimaryKey(commerceAvailabilityEstimateId);
 
 		Session session = null;
 
 		try {
 			session = openSession();
 
-			CommerceAvailabilityEstimate[] array = new CommerceAvailabilityEstimateImpl[3];
+			CommerceAvailabilityEstimate[] array =
+				new CommerceAvailabilityEstimateImpl[3];
 
-			array[0] = getByUuid_C_PrevAndNext(session,
-					commerceAvailabilityEstimate, uuid, companyId,
-					orderByComparator, true);
+			array[0] = getByUuid_C_PrevAndNext(
+				session, commerceAvailabilityEstimate, uuid, companyId,
+				orderByComparator, true);
 
 			array[1] = commerceAvailabilityEstimate;
 
-			array[2] = getByUuid_C_PrevAndNext(session,
-					commerceAvailabilityEstimate, uuid, companyId,
-					orderByComparator, false);
+			array[2] = getByUuid_C_PrevAndNext(
+				session, commerceAvailabilityEstimate, uuid, companyId,
+				orderByComparator, false);
 
 			return array;
 		}
@@ -1298,11 +1038,12 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		long companyId,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator,
 		boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(5 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -1313,10 +1054,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 		boolean bindUuid = false;
 
-		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-		}
-		else if (uuid.equals("")) {
+		if (uuid.isEmpty()) {
 			query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 		}
 		else {
@@ -1328,7 +1066,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -1402,10 +1141,11 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(commerceAvailabilityEstimate);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						commerceAvailabilityEstimate)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -1427,8 +1167,11 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public void removeByUuid_C(String uuid, long companyId) {
-		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate : findByUuid_C(
-				uuid, companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
+				findByUuid_C(
+					uuid, companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
+
 			remove(commerceAvailabilityEstimate);
 		}
 	}
@@ -1442,9 +1185,11 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public int countByUuid_C(String uuid, long companyId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+		uuid = Objects.toString(uuid, "");
 
-		Object[] finderArgs = new Object[] { uuid, companyId };
+		FinderPath finderPath = _finderPathCountByUuid_C;
+
+		Object[] finderArgs = new Object[] {uuid, companyId};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -1455,10 +1200,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 			}
 			else {
@@ -1503,90 +1245,79 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "commerceAvailabilityEstimate.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "commerceAvailabilityEstimate.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(commerceAvailabilityEstimate.uuid IS NULL OR commerceAvailabilityEstimate.uuid = '') AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "commerceAvailabilityEstimate.companyId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			CommerceAvailabilityEstimateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			CommerceAvailabilityEstimateImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			CommerceAvailabilityEstimateModelImpl.GROUPID_COLUMN_BITMASK |
-			CommerceAvailabilityEstimateModelImpl.TITLE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
-			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByGroupId", new String[] { Long.class.getName() });
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 =
+		"commerceAvailabilityEstimate.uuid = ? AND ";
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 =
+		"(commerceAvailabilityEstimate.uuid IS NULL OR commerceAvailabilityEstimate.uuid = '') AND ";
+
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
+		"commerceAvailabilityEstimate.companyId = ?";
+
+	private FinderPath _finderPathWithPaginationFindByCompanyId;
+	private FinderPath _finderPathWithoutPaginationFindByCompanyId;
+	private FinderPath _finderPathCountByCompanyId;
 
 	/**
-	 * Returns all the commerce availability estimates where groupId = &#63;.
+	 * Returns all the commerce availability estimates where companyId = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @return the matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByGroupId(long groupId) {
-		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	public List<CommerceAvailabilityEstimate> findByCompanyId(long companyId) {
+		return findByCompanyId(
+			companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the commerce availability estimates where groupId = &#63;.
+	 * Returns a range of all the commerce availability estimates where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param start the lower bound of the range of commerce availability estimates
 	 * @param end the upper bound of the range of commerce availability estimates (not inclusive)
 	 * @return the range of matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByGroupId(long groupId,
-		int start, int end) {
-		return findByGroupId(groupId, start, end, null);
+	public List<CommerceAvailabilityEstimate> findByCompanyId(
+		long companyId, int start, int end) {
+
+		return findByCompanyId(companyId, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the commerce availability estimates where groupId = &#63;.
+	 * Returns an ordered range of all the commerce availability estimates where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param start the lower bound of the range of commerce availability estimates
 	 * @param end the upper bound of the range of commerce availability estimates (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByGroupId(long groupId,
-		int start, int end,
+	public List<CommerceAvailabilityEstimate> findByCompanyId(
+		long companyId, int start, int end,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator) {
-		return findByGroupId(groupId, start, end, orderByComparator, true);
+
+		return findByCompanyId(companyId, start, end, orderByComparator, true);
 	}
 
 	/**
-	 * Returns an ordered range of all the commerce availability estimates where groupId = &#63;.
+	 * Returns an ordered range of all the commerce availability estimates where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param start the lower bound of the range of commerce availability estimates
 	 * @param end the upper bound of the range of commerce availability estimates (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -1594,34 +1325,42 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the ordered range of matching commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findByGroupId(long groupId,
-		int start, int end,
+	public List<CommerceAvailabilityEstimate> findByCompanyId(
+		long companyId, int start, int end,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator,
 		boolean retrieveFromCache) {
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
+			finderPath = _finderPathWithoutPaginationFindByCompanyId;
+			finderArgs = new Object[] {companyId};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+			finderPath = _finderPathWithPaginationFindByCompanyId;
+			finderArgs = new Object[] {
+				companyId, start, end, orderByComparator
+			};
 		}
 
 		List<CommerceAvailabilityEstimate> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CommerceAvailabilityEstimate>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CommerceAvailabilityEstimate>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
-				for (CommerceAvailabilityEstimate commerceAvailabilityEstimate : list) {
-					if ((groupId != commerceAvailabilityEstimate.getGroupId())) {
+				for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
+						list) {
+
+					if ((companyId !=
+							commerceAvailabilityEstimate.getCompanyId())) {
+
 						list = null;
 
 						break;
@@ -1634,8 +1373,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(3);
@@ -1643,15 +1382,15 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 			query.append(_SQL_SELECT_COMMERCEAVAILABILITYESTIMATE_WHERE);
 
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
-				query.append(CommerceAvailabilityEstimateModelImpl.ORDER_BY_JPQL);
+			else if (pagination) {
+				query.append(
+					CommerceAvailabilityEstimateModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1665,19 +1404,19 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				qPos.add(groupId);
+				qPos.add(companyId);
 
 				if (!pagination) {
-					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(q,
-							getDialect(), start, end);
+					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -1698,19 +1437,21 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	}
 
 	/**
-	 * Returns the first commerce availability estimate in the ordered set where groupId = &#63;.
+	 * Returns the first commerce availability estimate in the ordered set where companyId = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching commerce availability estimate
 	 * @throws NoSuchAvailabilityEstimateException if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate findByGroupId_First(long groupId,
-		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
+	public CommerceAvailabilityEstimate findByCompanyId_First(
+			long companyId,
+			OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
 		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = fetchByGroupId_First(groupId,
-				orderByComparator);
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			fetchByCompanyId_First(companyId, orderByComparator);
 
 		if (commerceAvailabilityEstimate != null) {
 			return commerceAvailabilityEstimate;
@@ -1720,8 +1461,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		msg.append("groupId=");
-		msg.append(groupId);
+		msg.append("companyId=");
+		msg.append(companyId);
 
 		msg.append("}");
 
@@ -1729,17 +1470,19 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	}
 
 	/**
-	 * Returns the first commerce availability estimate in the ordered set where groupId = &#63;.
+	 * Returns the first commerce availability estimate in the ordered set where companyId = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching commerce availability estimate, or <code>null</code> if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate fetchByGroupId_First(long groupId,
+	public CommerceAvailabilityEstimate fetchByCompanyId_First(
+		long companyId,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator) {
-		List<CommerceAvailabilityEstimate> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
+
+		List<CommerceAvailabilityEstimate> list = findByCompanyId(
+			companyId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1749,19 +1492,21 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	}
 
 	/**
-	 * Returns the last commerce availability estimate in the ordered set where groupId = &#63;.
+	 * Returns the last commerce availability estimate in the ordered set where companyId = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching commerce availability estimate
 	 * @throws NoSuchAvailabilityEstimateException if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate findByGroupId_Last(long groupId,
-		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
+	public CommerceAvailabilityEstimate findByCompanyId_Last(
+			long companyId,
+			OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
 		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = fetchByGroupId_Last(groupId,
-				orderByComparator);
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			fetchByCompanyId_Last(companyId, orderByComparator);
 
 		if (commerceAvailabilityEstimate != null) {
 			return commerceAvailabilityEstimate;
@@ -1771,8 +1516,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-		msg.append("groupId=");
-		msg.append(groupId);
+		msg.append("companyId=");
+		msg.append(companyId);
 
 		msg.append("}");
 
@@ -1780,23 +1525,25 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	}
 
 	/**
-	 * Returns the last commerce availability estimate in the ordered set where groupId = &#63;.
+	 * Returns the last commerce availability estimate in the ordered set where companyId = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching commerce availability estimate, or <code>null</code> if a matching commerce availability estimate could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate fetchByGroupId_Last(long groupId,
+	public CommerceAvailabilityEstimate fetchByCompanyId_Last(
+		long companyId,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator) {
-		int count = countByGroupId(groupId);
+
+		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CommerceAvailabilityEstimate> list = findByGroupId(groupId,
-				count - 1, count, orderByComparator);
+		List<CommerceAvailabilityEstimate> list = findByCompanyId(
+			companyId, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1806,37 +1553,40 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	}
 
 	/**
-	 * Returns the commerce availability estimates before and after the current commerce availability estimate in the ordered set where groupId = &#63;.
+	 * Returns the commerce availability estimates before and after the current commerce availability estimate in the ordered set where companyId = &#63;.
 	 *
 	 * @param commerceAvailabilityEstimateId the primary key of the current commerce availability estimate
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next commerce availability estimate
 	 * @throws NoSuchAvailabilityEstimateException if a commerce availability estimate with the primary key could not be found
 	 */
 	@Override
-	public CommerceAvailabilityEstimate[] findByGroupId_PrevAndNext(
-		long commerceAvailabilityEstimateId, long groupId,
-		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
+	public CommerceAvailabilityEstimate[] findByCompanyId_PrevAndNext(
+			long commerceAvailabilityEstimateId, long companyId,
+			OrderByComparator<CommerceAvailabilityEstimate> orderByComparator)
 		throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = findByPrimaryKey(commerceAvailabilityEstimateId);
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			findByPrimaryKey(commerceAvailabilityEstimateId);
 
 		Session session = null;
 
 		try {
 			session = openSession();
 
-			CommerceAvailabilityEstimate[] array = new CommerceAvailabilityEstimateImpl[3];
+			CommerceAvailabilityEstimate[] array =
+				new CommerceAvailabilityEstimateImpl[3];
 
-			array[0] = getByGroupId_PrevAndNext(session,
-					commerceAvailabilityEstimate, groupId, orderByComparator,
-					true);
+			array[0] = getByCompanyId_PrevAndNext(
+				session, commerceAvailabilityEstimate, companyId,
+				orderByComparator, true);
 
 			array[1] = commerceAvailabilityEstimate;
 
-			array[2] = getByGroupId_PrevAndNext(session,
-					commerceAvailabilityEstimate, groupId, orderByComparator,
-					false);
+			array[2] = getByCompanyId_PrevAndNext(
+				session, commerceAvailabilityEstimate, companyId,
+				orderByComparator, false);
 
 			return array;
 		}
@@ -1848,17 +1598,18 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		}
 	}
 
-	protected CommerceAvailabilityEstimate getByGroupId_PrevAndNext(
+	protected CommerceAvailabilityEstimate getByCompanyId_PrevAndNext(
 		Session session,
 		CommerceAvailabilityEstimate commerceAvailabilityEstimate,
-		long groupId,
+		long companyId,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator,
 		boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -1867,10 +1618,11 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 		query.append(_SQL_SELECT_COMMERCEAVAILABILITYESTIMATE_WHERE);
 
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -1937,13 +1689,14 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		qPos.add(groupId);
+		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(commerceAvailabilityEstimate);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						commerceAvailabilityEstimate)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -1958,29 +1711,31 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	}
 
 	/**
-	 * Removes all the commerce availability estimates where groupId = &#63; from the database.
+	 * Removes all the commerce availability estimates where companyId = &#63; from the database.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 */
 	@Override
-	public void removeByGroupId(long groupId) {
-		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate : findByGroupId(
-				groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+	public void removeByCompanyId(long companyId) {
+		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
+				findByCompanyId(
+					companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
 			remove(commerceAvailabilityEstimate);
 		}
 	}
 
 	/**
-	 * Returns the number of commerce availability estimates where groupId = &#63;.
+	 * Returns the number of commerce availability estimates where companyId = &#63;.
 	 *
-	 * @param groupId the group ID
+	 * @param companyId the company ID
 	 * @return the number of matching commerce availability estimates
 	 */
 	@Override
-	public int countByGroupId(long groupId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
+	public int countByCompanyId(long companyId) {
+		FinderPath finderPath = _finderPathCountByCompanyId;
 
-		Object[] finderArgs = new Object[] { groupId };
+		Object[] finderArgs = new Object[] {companyId};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -1989,7 +1744,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 			query.append(_SQL_COUNT_COMMERCEAVAILABILITYESTIMATE_WHERE);
 
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
 
 			String sql = query.toString();
 
@@ -2002,7 +1757,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				qPos.add(groupId);
+				qPos.add(companyId);
 
 				count = (Long)q.uniqueResult();
 
@@ -2021,20 +1776,21 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "commerceAvailabilityEstimate.groupId = ?";
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 =
+		"commerceAvailabilityEstimate.companyId = ?";
 
 	public CommerceAvailabilityEstimatePersistenceImpl() {
 		setModelClass(CommerceAvailabilityEstimate.class);
 
+		Map<String, String> dbColumnNames = new HashMap<String, String>();
+
+		dbColumnNames.put("uuid", "uuid_");
+
 		try {
 			Field field = BasePersistenceImpl.class.getDeclaredField(
-					"_dbColumnNames");
+				"_dbColumnNames");
 
 			field.setAccessible(true);
-
-			Map<String, String> dbColumnNames = new HashMap<String, String>();
-
-			dbColumnNames.put("uuid", "uuid_");
 
 			field.set(this, dbColumnNames);
 		}
@@ -2053,16 +1809,12 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	@Override
 	public void cacheResult(
 		CommerceAvailabilityEstimate commerceAvailabilityEstimate) {
-		entityCache.putResult(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+
+		entityCache.putResult(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
 			CommerceAvailabilityEstimateImpl.class,
 			commerceAvailabilityEstimate.getPrimaryKey(),
 			commerceAvailabilityEstimate);
-
-		finderCache.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				commerceAvailabilityEstimate.getUuid(),
-				commerceAvailabilityEstimate.getGroupId()
-			}, commerceAvailabilityEstimate);
 
 		commerceAvailabilityEstimate.resetOriginalValues();
 	}
@@ -2075,11 +1827,15 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	@Override
 	public void cacheResult(
 		List<CommerceAvailabilityEstimate> commerceAvailabilityEstimates) {
-		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate : commerceAvailabilityEstimates) {
+
+		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
+				commerceAvailabilityEstimates) {
+
 			if (entityCache.getResult(
-						CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-						CommerceAvailabilityEstimateImpl.class,
-						commerceAvailabilityEstimate.getPrimaryKey()) == null) {
+					CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+					CommerceAvailabilityEstimateImpl.class,
+					commerceAvailabilityEstimate.getPrimaryKey()) == null) {
+
 				cacheResult(commerceAvailabilityEstimate);
 			}
 			else {
@@ -2092,7 +1848,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * Clears the cache for all commerce availability estimates.
 	 *
 	 * <p>
-	 * The {@link EntityCache} and {@link FinderCache} are both cleared by this method.
+	 * The <code>EntityCache</code> and <code>FinderCache</code> are both cleared by this method.
 	 * </p>
 	 */
 	@Override
@@ -2108,74 +1864,36 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * Clears the cache for the commerce availability estimate.
 	 *
 	 * <p>
-	 * The {@link EntityCache} and {@link FinderCache} are both cleared by this method.
+	 * The <code>EntityCache</code> and <code>FinderCache</code> are both cleared by this method.
 	 * </p>
 	 */
 	@Override
 	public void clearCache(
 		CommerceAvailabilityEstimate commerceAvailabilityEstimate) {
-		entityCache.removeResult(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+
+		entityCache.removeResult(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
 			CommerceAvailabilityEstimateImpl.class,
 			commerceAvailabilityEstimate.getPrimaryKey());
 
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache((CommerceAvailabilityEstimateModelImpl)commerceAvailabilityEstimate,
-			true);
 	}
 
 	@Override
 	public void clearCache(
 		List<CommerceAvailabilityEstimate> commerceAvailabilityEstimates) {
+
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
-		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate : commerceAvailabilityEstimates) {
-			entityCache.removeResult(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
+				commerceAvailabilityEstimates) {
+
+			entityCache.removeResult(
+				CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
 				CommerceAvailabilityEstimateImpl.class,
 				commerceAvailabilityEstimate.getPrimaryKey());
-
-			clearUniqueFindersCache((CommerceAvailabilityEstimateModelImpl)commerceAvailabilityEstimate,
-				true);
-		}
-	}
-
-	protected void cacheUniqueFindersCache(
-		CommerceAvailabilityEstimateModelImpl commerceAvailabilityEstimateModelImpl) {
-		Object[] args = new Object[] {
-				commerceAvailabilityEstimateModelImpl.getUuid(),
-				commerceAvailabilityEstimateModelImpl.getGroupId()
-			};
-
-		finderCache.putResult(FINDER_PATH_COUNT_BY_UUID_G, args,
-			Long.valueOf(1), false);
-		finderCache.putResult(FINDER_PATH_FETCH_BY_UUID_G, args,
-			commerceAvailabilityEstimateModelImpl, false);
-	}
-
-	protected void clearUniqueFindersCache(
-		CommerceAvailabilityEstimateModelImpl commerceAvailabilityEstimateModelImpl,
-		boolean clearCurrent) {
-		if (clearCurrent) {
-			Object[] args = new Object[] {
-					commerceAvailabilityEstimateModelImpl.getUuid(),
-					commerceAvailabilityEstimateModelImpl.getGroupId()
-				};
-
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-		}
-
-		if ((commerceAvailabilityEstimateModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-			Object[] args = new Object[] {
-					commerceAvailabilityEstimateModelImpl.getOriginalUuid(),
-					commerceAvailabilityEstimateModelImpl.getOriginalGroupId()
-				};
-
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
 		}
 	}
 
@@ -2188,16 +1906,20 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	@Override
 	public CommerceAvailabilityEstimate create(
 		long commerceAvailabilityEstimateId) {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = new CommerceAvailabilityEstimateImpl();
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			new CommerceAvailabilityEstimateImpl();
 
 		commerceAvailabilityEstimate.setNew(true);
-		commerceAvailabilityEstimate.setPrimaryKey(commerceAvailabilityEstimateId);
+		commerceAvailabilityEstimate.setPrimaryKey(
+			commerceAvailabilityEstimateId);
 
 		String uuid = PortalUUIDUtil.generate();
 
 		commerceAvailabilityEstimate.setUuid(uuid);
 
-		commerceAvailabilityEstimate.setCompanyId(companyProvider.getCompanyId());
+		commerceAvailabilityEstimate.setCompanyId(
+			companyProvider.getCompanyId());
 
 		return commerceAvailabilityEstimate;
 	}
@@ -2211,8 +1933,9 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public CommerceAvailabilityEstimate remove(
-		long commerceAvailabilityEstimateId)
+			long commerceAvailabilityEstimateId)
 		throws NoSuchAvailabilityEstimateException {
+
 		return remove((Serializable)commerceAvailabilityEstimateId);
 	}
 
@@ -2226,21 +1949,23 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	@Override
 	public CommerceAvailabilityEstimate remove(Serializable primaryKey)
 		throws NoSuchAvailabilityEstimateException {
+
 		Session session = null;
 
 		try {
 			session = openSession();
 
-			CommerceAvailabilityEstimate commerceAvailabilityEstimate = (CommerceAvailabilityEstimate)session.get(CommerceAvailabilityEstimateImpl.class,
-					primaryKey);
+			CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+				(CommerceAvailabilityEstimate)session.get(
+					CommerceAvailabilityEstimateImpl.class, primaryKey);
 
 			if (commerceAvailabilityEstimate == null) {
 				if (_log.isDebugEnabled()) {
 					_log.debug(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 				}
 
-				throw new NoSuchAvailabilityEstimateException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
+				throw new NoSuchAvailabilityEstimateException(
+					_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 			}
 
 			return remove(commerceAvailabilityEstimate);
@@ -2259,13 +1984,16 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	@Override
 	protected CommerceAvailabilityEstimate removeImpl(
 		CommerceAvailabilityEstimate commerceAvailabilityEstimate) {
+
 		Session session = null;
 
 		try {
 			session = openSession();
 
 			if (!session.contains(commerceAvailabilityEstimate)) {
-				commerceAvailabilityEstimate = (CommerceAvailabilityEstimate)session.get(CommerceAvailabilityEstimateImpl.class,
+				commerceAvailabilityEstimate =
+					(CommerceAvailabilityEstimate)session.get(
+						CommerceAvailabilityEstimateImpl.class,
 						commerceAvailabilityEstimate.getPrimaryKeyObj());
 			}
 
@@ -2290,26 +2018,34 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	@Override
 	public CommerceAvailabilityEstimate updateImpl(
 		CommerceAvailabilityEstimate commerceAvailabilityEstimate) {
+
 		boolean isNew = commerceAvailabilityEstimate.isNew();
 
-		if (!(commerceAvailabilityEstimate instanceof CommerceAvailabilityEstimateModelImpl)) {
+		if (!(commerceAvailabilityEstimate instanceof
+				CommerceAvailabilityEstimateModelImpl)) {
+
 			InvocationHandler invocationHandler = null;
 
-			if (ProxyUtil.isProxyClass(commerceAvailabilityEstimate.getClass())) {
-				invocationHandler = ProxyUtil.getInvocationHandler(commerceAvailabilityEstimate);
+			if (ProxyUtil.isProxyClass(
+					commerceAvailabilityEstimate.getClass())) {
+
+				invocationHandler = ProxyUtil.getInvocationHandler(
+					commerceAvailabilityEstimate);
 
 				throw new IllegalArgumentException(
 					"Implement ModelWrapper in commerceAvailabilityEstimate proxy " +
-					invocationHandler.getClass());
+						invocationHandler.getClass());
 			}
 
 			throw new IllegalArgumentException(
 				"Implement ModelWrapper in custom CommerceAvailabilityEstimate implementation " +
-				commerceAvailabilityEstimate.getClass());
+					commerceAvailabilityEstimate.getClass());
 		}
 
-		CommerceAvailabilityEstimateModelImpl commerceAvailabilityEstimateModelImpl =
-			(CommerceAvailabilityEstimateModelImpl)commerceAvailabilityEstimate;
+		CommerceAvailabilityEstimateModelImpl
+			commerceAvailabilityEstimateModelImpl =
+				(CommerceAvailabilityEstimateModelImpl)
+					commerceAvailabilityEstimate;
 
 		if (Validator.isNull(commerceAvailabilityEstimate.getUuid())) {
 			String uuid = PortalUUIDUtil.generate();
@@ -2317,7 +2053,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 			commerceAvailabilityEstimate.setUuid(uuid);
 		}
 
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 
 		Date now = new Date();
 
@@ -2326,8 +2063,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 				commerceAvailabilityEstimate.setCreateDate(now);
 			}
 			else {
-				commerceAvailabilityEstimate.setCreateDate(serviceContext.getCreateDate(
-						now));
+				commerceAvailabilityEstimate.setCreateDate(
+					serviceContext.getCreateDate(now));
 			}
 		}
 
@@ -2336,8 +2073,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 				commerceAvailabilityEstimate.setModifiedDate(now);
 			}
 			else {
-				commerceAvailabilityEstimate.setModifiedDate(serviceContext.getModifiedDate(
-						now));
+				commerceAvailabilityEstimate.setModifiedDate(
+					serviceContext.getModifiedDate(now));
 			}
 		}
 
@@ -2352,7 +2089,9 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 				commerceAvailabilityEstimate.setNew(false);
 			}
 			else {
-				commerceAvailabilityEstimate = (CommerceAvailabilityEstimate)session.merge(commerceAvailabilityEstimate);
+				commerceAvailabilityEstimate =
+					(CommerceAvailabilityEstimate)session.merge(
+						commerceAvailabilityEstimate);
 			}
 		}
 		catch (Exception e) {
@@ -2367,106 +2106,108 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		if (!CommerceAvailabilityEstimateModelImpl.COLUMN_BITMASK_ENABLED) {
 			finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
-		else
-		 if (isNew) {
+		else if (isNew) {
 			Object[] args = new Object[] {
+				commerceAvailabilityEstimateModelImpl.getUuid()
+			};
+
+			finderCache.removeResult(_finderPathCountByUuid, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByUuid, args);
+
+			args = new Object[] {
+				commerceAvailabilityEstimateModelImpl.getUuid(),
+				commerceAvailabilityEstimateModelImpl.getCompanyId()
+			};
+
+			finderCache.removeResult(_finderPathCountByUuid_C, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByUuid_C, args);
+
+			args = new Object[] {
+				commerceAvailabilityEstimateModelImpl.getCompanyId()
+			};
+
+			finderCache.removeResult(_finderPathCountByCompanyId, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByCompanyId, args);
+
+			finderCache.removeResult(_finderPathCountAll, FINDER_ARGS_EMPTY);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindAll, FINDER_ARGS_EMPTY);
+		}
+		else {
+			if ((commerceAvailabilityEstimateModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByUuid.getColumnBitmask()) !=
+					 0) {
+
+				Object[] args = new Object[] {
+					commerceAvailabilityEstimateModelImpl.getOriginalUuid()
+				};
+
+				finderCache.removeResult(_finderPathCountByUuid, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid, args);
+
+				args = new Object[] {
 					commerceAvailabilityEstimateModelImpl.getUuid()
 				};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-				args);
+				finderCache.removeResult(_finderPathCountByUuid, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid, args);
+			}
 
-			args = new Object[] {
+			if ((commerceAvailabilityEstimateModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByUuid_C.getColumnBitmask()) !=
+					 0) {
+
+				Object[] args = new Object[] {
+					commerceAvailabilityEstimateModelImpl.getOriginalUuid(),
+					commerceAvailabilityEstimateModelImpl.getOriginalCompanyId()
+				};
+
+				finderCache.removeResult(_finderPathCountByUuid_C, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid_C, args);
+
+				args = new Object[] {
 					commerceAvailabilityEstimateModelImpl.getUuid(),
 					commerceAvailabilityEstimateModelImpl.getCompanyId()
 				};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-				args);
+				finderCache.removeResult(_finderPathCountByUuid_C, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid_C, args);
+			}
 
-			args = new Object[] {
-					commerceAvailabilityEstimateModelImpl.getGroupId()
+			if ((commerceAvailabilityEstimateModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByCompanyId.
+					 getColumnBitmask()) != 0) {
+
+				Object[] args = new Object[] {
+					commerceAvailabilityEstimateModelImpl.getOriginalCompanyId()
 				};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-				args);
-
-			finderCache.removeResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL,
-				FINDER_ARGS_EMPTY);
-		}
-
-		else {
-			if ((commerceAvailabilityEstimateModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						commerceAvailabilityEstimateModelImpl.getOriginalUuid()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
+				finderCache.removeResult(_finderPathCountByCompanyId, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByCompanyId, args);
 
 				args = new Object[] {
-						commerceAvailabilityEstimateModelImpl.getUuid()
-					};
+					commerceAvailabilityEstimateModelImpl.getCompanyId()
+				};
 
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((commerceAvailabilityEstimateModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						commerceAvailabilityEstimateModelImpl.getOriginalUuid(),
-						commerceAvailabilityEstimateModelImpl.getOriginalCompanyId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						commerceAvailabilityEstimateModelImpl.getUuid(),
-						commerceAvailabilityEstimateModelImpl.getCompanyId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((commerceAvailabilityEstimateModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						commerceAvailabilityEstimateModelImpl.getOriginalGroupId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] {
-						commerceAvailabilityEstimateModelImpl.getGroupId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
+				finderCache.removeResult(_finderPathCountByCompanyId, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByCompanyId, args);
 			}
 		}
 
-		entityCache.putResult(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+		entityCache.putResult(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
 			CommerceAvailabilityEstimateImpl.class,
 			commerceAvailabilityEstimate.getPrimaryKey(),
 			commerceAvailabilityEstimate, false);
-
-		clearUniqueFindersCache(commerceAvailabilityEstimateModelImpl, false);
-		cacheUniqueFindersCache(commerceAvailabilityEstimateModelImpl);
 
 		commerceAvailabilityEstimate.resetOriginalValues();
 
@@ -2474,7 +2215,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	}
 
 	/**
-	 * Returns the commerce availability estimate with the primary key or throws a {@link com.liferay.portal.kernel.exception.NoSuchModelException} if it could not be found.
+	 * Returns the commerce availability estimate with the primary key or throws a <code>com.liferay.portal.kernel.exception.NoSuchModelException</code> if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the commerce availability estimate
 	 * @return the commerce availability estimate
@@ -2482,23 +2223,26 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public CommerceAvailabilityEstimate findByPrimaryKey(
-		Serializable primaryKey) throws NoSuchAvailabilityEstimateException {
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = fetchByPrimaryKey(primaryKey);
+			Serializable primaryKey)
+		throws NoSuchAvailabilityEstimateException {
+
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			fetchByPrimaryKey(primaryKey);
 
 		if (commerceAvailabilityEstimate == null) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 			}
 
-			throw new NoSuchAvailabilityEstimateException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				primaryKey);
+			throw new NoSuchAvailabilityEstimateException(
+				_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 		}
 
 		return commerceAvailabilityEstimate;
 	}
 
 	/**
-	 * Returns the commerce availability estimate with the primary key or throws a {@link NoSuchAvailabilityEstimateException} if it could not be found.
+	 * Returns the commerce availability estimate with the primary key or throws a <code>NoSuchAvailabilityEstimateException</code> if it could not be found.
 	 *
 	 * @param commerceAvailabilityEstimateId the primary key of the commerce availability estimate
 	 * @return the commerce availability estimate
@@ -2506,8 +2250,9 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public CommerceAvailabilityEstimate findByPrimaryKey(
-		long commerceAvailabilityEstimateId)
+			long commerceAvailabilityEstimateId)
 		throws NoSuchAvailabilityEstimateException {
+
 		return findByPrimaryKey((Serializable)commerceAvailabilityEstimateId);
 	}
 
@@ -2520,14 +2265,17 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	@Override
 	public CommerceAvailabilityEstimate fetchByPrimaryKey(
 		Serializable primaryKey) {
-		Serializable serializable = entityCache.getResult(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-				CommerceAvailabilityEstimateImpl.class, primaryKey);
+
+		Serializable serializable = entityCache.getResult(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateImpl.class, primaryKey);
 
 		if (serializable == nullModel) {
 			return null;
 		}
 
-		CommerceAvailabilityEstimate commerceAvailabilityEstimate = (CommerceAvailabilityEstimate)serializable;
+		CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+			(CommerceAvailabilityEstimate)serializable;
 
 		if (commerceAvailabilityEstimate == null) {
 			Session session = null;
@@ -2535,20 +2283,24 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 			try {
 				session = openSession();
 
-				commerceAvailabilityEstimate = (CommerceAvailabilityEstimate)session.get(CommerceAvailabilityEstimateImpl.class,
-						primaryKey);
+				commerceAvailabilityEstimate =
+					(CommerceAvailabilityEstimate)session.get(
+						CommerceAvailabilityEstimateImpl.class, primaryKey);
 
 				if (commerceAvailabilityEstimate != null) {
 					cacheResult(commerceAvailabilityEstimate);
 				}
 				else {
-					entityCache.putResult(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+					entityCache.putResult(
+						CommerceAvailabilityEstimateModelImpl.
+							ENTITY_CACHE_ENABLED,
 						CommerceAvailabilityEstimateImpl.class, primaryKey,
 						nullModel);
 				}
 			}
 			catch (Exception e) {
-				entityCache.removeResult(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+				entityCache.removeResult(
+					CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
 					CommerceAvailabilityEstimateImpl.class, primaryKey);
 
 				throw processException(e);
@@ -2570,24 +2322,28 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	@Override
 	public CommerceAvailabilityEstimate fetchByPrimaryKey(
 		long commerceAvailabilityEstimateId) {
+
 		return fetchByPrimaryKey((Serializable)commerceAvailabilityEstimateId);
 	}
 
 	@Override
 	public Map<Serializable, CommerceAvailabilityEstimate> fetchByPrimaryKeys(
 		Set<Serializable> primaryKeys) {
+
 		if (primaryKeys.isEmpty()) {
 			return Collections.emptyMap();
 		}
 
-		Map<Serializable, CommerceAvailabilityEstimate> map = new HashMap<Serializable, CommerceAvailabilityEstimate>();
+		Map<Serializable, CommerceAvailabilityEstimate> map =
+			new HashMap<Serializable, CommerceAvailabilityEstimate>();
 
 		if (primaryKeys.size() == 1) {
 			Iterator<Serializable> iterator = primaryKeys.iterator();
 
 			Serializable primaryKey = iterator.next();
 
-			CommerceAvailabilityEstimate commerceAvailabilityEstimate = fetchByPrimaryKey(primaryKey);
+			CommerceAvailabilityEstimate commerceAvailabilityEstimate =
+				fetchByPrimaryKey(primaryKey);
 
 			if (commerceAvailabilityEstimate != null) {
 				map.put(primaryKey, commerceAvailabilityEstimate);
@@ -2599,8 +2355,9 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 		Set<Serializable> uncachedPrimaryKeys = null;
 
 		for (Serializable primaryKey : primaryKeys) {
-			Serializable serializable = entityCache.getResult(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
-					CommerceAvailabilityEstimateImpl.class, primaryKey);
+			Serializable serializable = entityCache.getResult(
+				CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+				CommerceAvailabilityEstimateImpl.class, primaryKey);
 
 			if (serializable != nullModel) {
 				if (serializable == null) {
@@ -2611,8 +2368,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 					uncachedPrimaryKeys.add(primaryKey);
 				}
 				else {
-					map.put(primaryKey,
-						(CommerceAvailabilityEstimate)serializable);
+					map.put(
+						primaryKey, (CommerceAvailabilityEstimate)serializable);
 				}
 			}
 		}
@@ -2621,8 +2378,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 			return map;
 		}
 
-		StringBundler query = new StringBundler((uncachedPrimaryKeys.size() * 2) +
-				1);
+		StringBundler query = new StringBundler(
+			uncachedPrimaryKeys.size() * 2 + 1);
 
 		query.append(_SQL_SELECT_COMMERCEAVAILABILITYESTIMATE_WHERE_PKS_IN);
 
@@ -2645,17 +2402,22 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 			Query q = session.createQuery(sql);
 
-			for (CommerceAvailabilityEstimate commerceAvailabilityEstimate : (List<CommerceAvailabilityEstimate>)q.list()) {
-				map.put(commerceAvailabilityEstimate.getPrimaryKeyObj(),
+			for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
+					(List<CommerceAvailabilityEstimate>)q.list()) {
+
+				map.put(
+					commerceAvailabilityEstimate.getPrimaryKeyObj(),
 					commerceAvailabilityEstimate);
 
 				cacheResult(commerceAvailabilityEstimate);
 
-				uncachedPrimaryKeys.remove(commerceAvailabilityEstimate.getPrimaryKeyObj());
+				uncachedPrimaryKeys.remove(
+					commerceAvailabilityEstimate.getPrimaryKeyObj());
 			}
 
 			for (Serializable primaryKey : uncachedPrimaryKeys) {
-				entityCache.putResult(CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+				entityCache.putResult(
+					CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
 					CommerceAvailabilityEstimateImpl.class, primaryKey,
 					nullModel);
 			}
@@ -2684,7 +2446,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * Returns a range of all the commerce availability estimates.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of commerce availability estimates
@@ -2700,7 +2462,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * Returns an ordered range of all the commerce availability estimates.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of commerce availability estimates
@@ -2709,8 +2471,10 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the ordered range of commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findAll(int start, int end,
+	public List<CommerceAvailabilityEstimate> findAll(
+		int start, int end,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator) {
+
 		return findAll(start, end, orderByComparator, true);
 	}
 
@@ -2718,7 +2482,7 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * Returns an ordered range of all the commerce availability estimates.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceAvailabilityEstimateModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceAvailabilityEstimateModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of commerce availability estimates
@@ -2728,29 +2492,32 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * @return the ordered range of commerce availability estimates
 	 */
 	@Override
-	public List<CommerceAvailabilityEstimate> findAll(int start, int end,
+	public List<CommerceAvailabilityEstimate> findAll(
+		int start, int end,
 		OrderByComparator<CommerceAvailabilityEstimate> orderByComparator,
 		boolean retrieveFromCache) {
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderPath = _finderPathWithoutPaginationFindAll;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
+			finderPath = _finderPathWithPaginationFindAll;
+			finderArgs = new Object[] {start, end, orderByComparator};
 		}
 
 		List<CommerceAvailabilityEstimate> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CommerceAvailabilityEstimate>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CommerceAvailabilityEstimate>)finderCache.getResult(
+				finderPath, finderArgs, this);
 		}
 
 		if (list == null) {
@@ -2758,13 +2525,13 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 			String sql = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					2 + (orderByComparator.getOrderByFields().length * 2));
 
 				query.append(_SQL_SELECT_COMMERCEAVAILABILITYESTIMATE);
 
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 
 				sql = query.toString();
 			}
@@ -2772,7 +2539,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 				sql = _SQL_SELECT_COMMERCEAVAILABILITYESTIMATE;
 
 				if (pagination) {
-					sql = sql.concat(CommerceAvailabilityEstimateModelImpl.ORDER_BY_JPQL);
+					sql = sql.concat(
+						CommerceAvailabilityEstimateModelImpl.ORDER_BY_JPQL);
 				}
 			}
 
@@ -2784,16 +2552,16 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 				Query q = session.createQuery(sql);
 
 				if (!pagination) {
-					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(q,
-							getDialect(), start, end);
+					list = (List<CommerceAvailabilityEstimate>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -2819,7 +2587,9 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public void removeAll() {
-		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate : findAll()) {
+		for (CommerceAvailabilityEstimate commerceAvailabilityEstimate :
+				findAll()) {
+
 			remove(commerceAvailabilityEstimate);
 		}
 	}
@@ -2831,8 +2601,8 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 */
 	@Override
 	public int countAll() {
-		Long count = (Long)finderCache.getResult(FINDER_PATH_COUNT_ALL,
-				FINDER_ARGS_EMPTY, this);
+		Long count = (Long)finderCache.getResult(
+			_finderPathCountAll, FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -2840,16 +2610,17 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 			try {
 				session = openSession();
 
-				Query q = session.createQuery(_SQL_COUNT_COMMERCEAVAILABILITYESTIMATE);
+				Query q = session.createQuery(
+					_SQL_COUNT_COMMERCEAVAILABILITYESTIMATE);
 
 				count = (Long)q.uniqueResult();
 
-				finderCache.putResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY,
-					count);
+				finderCache.putResult(
+					_finderPathCountAll, FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY);
+				finderCache.removeResult(
+					_finderPathCountAll, FINDER_ARGS_EMPTY);
 
 				throw processException(e);
 			}
@@ -2875,10 +2646,107 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 	 * Initializes the commerce availability estimate persistence.
 	 */
 	public void afterPropertiesSet() {
+		_finderPathWithPaginationFindAll = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			CommerceAvailabilityEstimateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+
+		_finderPathWithoutPaginationFindAll = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			CommerceAvailabilityEstimateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll",
+			new String[0]);
+
+		_finderPathCountAll = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll",
+			new String[0]);
+
+		_finderPathWithPaginationFindByUuid = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			CommerceAvailabilityEstimateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
+			new String[] {
+				String.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByUuid = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			CommerceAvailabilityEstimateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] {String.class.getName()},
+			CommerceAvailabilityEstimateModelImpl.UUID_COLUMN_BITMASK |
+			CommerceAvailabilityEstimateModelImpl.TITLE_COLUMN_BITMASK);
+
+		_finderPathCountByUuid = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByUuid", new String[] {String.class.getName()});
+
+		_finderPathWithPaginationFindByUuid_C = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			CommerceAvailabilityEstimateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByUuid_C = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			CommerceAvailabilityEstimateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] {String.class.getName(), Long.class.getName()},
+			CommerceAvailabilityEstimateModelImpl.UUID_COLUMN_BITMASK |
+			CommerceAvailabilityEstimateModelImpl.COMPANYID_COLUMN_BITMASK |
+			CommerceAvailabilityEstimateModelImpl.TITLE_COLUMN_BITMASK);
+
+		_finderPathCountByUuid_C = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByUuid_C",
+			new String[] {String.class.getName(), Long.class.getName()});
+
+		_finderPathWithPaginationFindByCompanyId = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			CommerceAvailabilityEstimateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByCompanyId = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			CommerceAvailabilityEstimateImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] {Long.class.getName()},
+			CommerceAvailabilityEstimateModelImpl.COMPANYID_COLUMN_BITMASK |
+			CommerceAvailabilityEstimateModelImpl.TITLE_COLUMN_BITMASK);
+
+		_finderPathCountByCompanyId = new FinderPath(
+			CommerceAvailabilityEstimateModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceAvailabilityEstimateModelImpl.FINDER_CACHE_ENABLED,
+			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByCompanyId", new String[] {Long.class.getName()});
 	}
 
 	public void destroy() {
-		entityCache.removeCache(CommerceAvailabilityEstimateImpl.class.getName());
+		entityCache.removeCache(
+			CommerceAvailabilityEstimateImpl.class.getName());
 		finderCache.removeCache(FINDER_CLASS_NAME_ENTITY);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
@@ -2886,21 +2754,42 @@ public class CommerceAvailabilityEstimatePersistenceImpl
 
 	@ServiceReference(type = CompanyProviderWrapper.class)
 	protected CompanyProvider companyProvider;
+
 	@ServiceReference(type = EntityCache.class)
 	protected EntityCache entityCache;
+
 	@ServiceReference(type = FinderCache.class)
 	protected FinderCache finderCache;
-	private static final String _SQL_SELECT_COMMERCEAVAILABILITYESTIMATE = "SELECT commerceAvailabilityEstimate FROM CommerceAvailabilityEstimate commerceAvailabilityEstimate";
-	private static final String _SQL_SELECT_COMMERCEAVAILABILITYESTIMATE_WHERE_PKS_IN =
-		"SELECT commerceAvailabilityEstimate FROM CommerceAvailabilityEstimate commerceAvailabilityEstimate WHERE commerceAvailabilityEstimateId IN (";
-	private static final String _SQL_SELECT_COMMERCEAVAILABILITYESTIMATE_WHERE = "SELECT commerceAvailabilityEstimate FROM CommerceAvailabilityEstimate commerceAvailabilityEstimate WHERE ";
-	private static final String _SQL_COUNT_COMMERCEAVAILABILITYESTIMATE = "SELECT COUNT(commerceAvailabilityEstimate) FROM CommerceAvailabilityEstimate commerceAvailabilityEstimate";
-	private static final String _SQL_COUNT_COMMERCEAVAILABILITYESTIMATE_WHERE = "SELECT COUNT(commerceAvailabilityEstimate) FROM CommerceAvailabilityEstimate commerceAvailabilityEstimate WHERE ";
-	private static final String _ORDER_BY_ENTITY_ALIAS = "commerceAvailabilityEstimate.";
-	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No CommerceAvailabilityEstimate exists with the primary key ";
-	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No CommerceAvailabilityEstimate exists with the key {";
-	private static final Log _log = LogFactoryUtil.getLog(CommerceAvailabilityEstimatePersistenceImpl.class);
-	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
-				"uuid"
-			});
+
+	private static final String _SQL_SELECT_COMMERCEAVAILABILITYESTIMATE =
+		"SELECT commerceAvailabilityEstimate FROM CommerceAvailabilityEstimate commerceAvailabilityEstimate";
+
+	private static final String
+		_SQL_SELECT_COMMERCEAVAILABILITYESTIMATE_WHERE_PKS_IN =
+			"SELECT commerceAvailabilityEstimate FROM CommerceAvailabilityEstimate commerceAvailabilityEstimate WHERE commerceAvailabilityEstimateId IN (";
+
+	private static final String _SQL_SELECT_COMMERCEAVAILABILITYESTIMATE_WHERE =
+		"SELECT commerceAvailabilityEstimate FROM CommerceAvailabilityEstimate commerceAvailabilityEstimate WHERE ";
+
+	private static final String _SQL_COUNT_COMMERCEAVAILABILITYESTIMATE =
+		"SELECT COUNT(commerceAvailabilityEstimate) FROM CommerceAvailabilityEstimate commerceAvailabilityEstimate";
+
+	private static final String _SQL_COUNT_COMMERCEAVAILABILITYESTIMATE_WHERE =
+		"SELECT COUNT(commerceAvailabilityEstimate) FROM CommerceAvailabilityEstimate commerceAvailabilityEstimate WHERE ";
+
+	private static final String _ORDER_BY_ENTITY_ALIAS =
+		"commerceAvailabilityEstimate.";
+
+	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY =
+		"No CommerceAvailabilityEstimate exists with the primary key ";
+
+	private static final String _NO_SUCH_ENTITY_WITH_KEY =
+		"No CommerceAvailabilityEstimate exists with the key {";
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		CommerceAvailabilityEstimatePersistenceImpl.class);
+
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(
+		new String[] {"uuid"});
+
 }

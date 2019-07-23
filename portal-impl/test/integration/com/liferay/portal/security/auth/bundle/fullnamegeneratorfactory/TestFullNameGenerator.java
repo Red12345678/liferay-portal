@@ -43,10 +43,8 @@ public class TestFullNameGenerator implements FullNameGenerator {
 		String firstName, String middleName, String lastName, Locale locale,
 		long prefixId, long suffixId) {
 
-		if (firstName.equals("James")) {
-			if (locale.equals(LocaleUtil.FRENCH)) {
-				return "Jacques";
-			}
+		if (firstName.equals("James") && locale.equals(LocaleUtil.FRENCH)) {
+			return "Jacques";
 		}
 
 		return "not Jacques";

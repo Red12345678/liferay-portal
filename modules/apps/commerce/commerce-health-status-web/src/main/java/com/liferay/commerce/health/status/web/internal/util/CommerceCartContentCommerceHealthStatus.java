@@ -16,7 +16,7 @@ package com.liferay.commerce.health.status.web.internal.util;
 
 import com.liferay.commerce.constants.CommercePortletKeys;
 import com.liferay.commerce.health.status.CommerceHealthStatus;
-import com.liferay.commerce.health.status.web.internal.constants.CommerceHealthStatusConstants;
+import com.liferay.commerce.health.status.constants.CommerceHealthStatusConstants;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -59,7 +59,7 @@ public class CommerceCartContentCommerceHealthStatus
 
 		long groupId = _portal.getScopeGroupId(httpServletRequest);
 
-		if (isFixed(groupId)) {
+		if (isFixed(_portal.getCompanyId(httpServletRequest), groupId)) {
 			return;
 		}
 
@@ -125,7 +125,15 @@ public class CommerceCartContentCommerceHealthStatus
 	}
 
 	@Override
-	public boolean isFixed(long groupId) throws PortalException {
+	public int getType() {
+		return CommerceHealthStatusConstants.
+			COMMERCE_HEALTH_STATUS_TYPE_GROUP_INSTANCE;
+	}
+
+	@Override
+	public boolean isFixed(long companyId, long groupId)
+		throws PortalException {
+
 		long plid = _portal.getPlidFromPortletId(
 			groupId, CommercePortletKeys.COMMERCE_CART_CONTENT);
 

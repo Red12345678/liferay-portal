@@ -15,14 +15,16 @@
 package com.liferay.commerce.discount.web.internal.servlet.taglib.ui;
 
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
+import com.liferay.commerce.discount.constants.CommerceDiscountConstants;
 import com.liferay.commerce.discount.model.CommerceDiscount;
-import com.liferay.commerce.discount.model.CommerceDiscountConstants;
+import com.liferay.commerce.discount.service.CommerceDiscountCommerceAccountGroupRelService;
 import com.liferay.commerce.discount.service.CommerceDiscountRelService;
 import com.liferay.commerce.discount.service.CommerceDiscountService;
-import com.liferay.commerce.discount.service.CommerceDiscountUserSegmentRelService;
 import com.liferay.commerce.discount.target.CommerceDiscountTargetRegistry;
 import com.liferay.commerce.discount.web.internal.display.context.CommerceDiscountRelDisplayContext;
 import com.liferay.commerce.product.service.CPDefinitionService;
+import com.liferay.commerce.product.service.CommerceChannelRelService;
+import com.liferay.commerce.product.service.CommerceChannelService;
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationCategory;
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
@@ -30,7 +32,6 @@ import com.liferay.item.selector.ItemSelector;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -112,12 +113,13 @@ public class CommerceDiscountCategoriesScreenNavigationEntry
 
 		CommerceDiscountRelDisplayContext commerceDiscountRelDisplayContext =
 			new CommerceDiscountRelDisplayContext(
+				_commerceChannelRelService, _commerceChannelService,
 				_commerceCurrencyLocalService,
 				_commerceDiscountModelResourcePermission,
 				_commerceDiscountRelService, _commerceDiscountService,
 				_commerceDiscountTargetRegistry,
-				_commerceDiscountUserSegmentRelService, _cpDefinitionService,
-				httpServletRequest, _itemSelector, _portletResourcePermission);
+				_commerceDiscountCommerceAccountGroupRelService,
+				_cpDefinitionService, httpServletRequest, _itemSelector);
 
 		httpServletRequest.setAttribute(
 			WebKeys.PORTLET_DISPLAY_CONTEXT, commerceDiscountRelDisplayContext);
@@ -128,7 +130,17 @@ public class CommerceDiscountCategoriesScreenNavigationEntry
 	}
 
 	@Reference
+	private CommerceChannelRelService _commerceChannelRelService;
+
+	@Reference
+	private CommerceChannelService _commerceChannelService;
+
+	@Reference
 	private CommerceCurrencyLocalService _commerceCurrencyLocalService;
+
+	@Reference
+	private CommerceDiscountCommerceAccountGroupRelService
+		_commerceDiscountCommerceAccountGroupRelService;
 
 	@Reference(
 		target = "(model.class.name=com.liferay.commerce.discount.model.CommerceDiscount)"
@@ -146,10 +158,6 @@ public class CommerceDiscountCategoriesScreenNavigationEntry
 	private CommerceDiscountTargetRegistry _commerceDiscountTargetRegistry;
 
 	@Reference
-	private CommerceDiscountUserSegmentRelService
-		_commerceDiscountUserSegmentRelService;
-
-	@Reference
 	private CPDefinitionService _cpDefinitionService;
 
 	@Reference
@@ -157,11 +165,6 @@ public class CommerceDiscountCategoriesScreenNavigationEntry
 
 	@Reference
 	private JSPRenderer _jspRenderer;
-
-	@Reference(
-		target = "(resource.name=" + com.liferay.commerce.discount.constants.CommerceDiscountConstants.RESOURCE_NAME + ")"
-	)
-	private PortletResourcePermission _portletResourcePermission;
 
 	@Reference(
 		target = "(osgi.web.symbolicname=com.liferay.commerce.discount.web)"

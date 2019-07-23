@@ -15,15 +15,14 @@
 package com.liferay.commerce.discount.test.util;
 
 import com.liferay.asset.kernel.model.AssetCategory;
+import com.liferay.commerce.account.model.CommerceAccountGroup;
+import com.liferay.commerce.discount.constants.CommerceDiscountConstants;
 import com.liferay.commerce.discount.model.CommerceDiscount;
-import com.liferay.commerce.discount.model.CommerceDiscountConstants;
-import com.liferay.commerce.discount.model.CommerceDiscountUserSegmentRel;
+import com.liferay.commerce.discount.model.CommerceDiscountCommerceAccountGroupRel;
+import com.liferay.commerce.discount.service.CommerceDiscountCommerceAccountGroupRelLocalServiceUtil;
 import com.liferay.commerce.discount.service.CommerceDiscountLocalServiceUtil;
 import com.liferay.commerce.discount.service.CommerceDiscountRelLocalServiceUtil;
-import com.liferay.commerce.discount.service.CommerceDiscountUserSegmentRelLocalServiceUtil;
 import com.liferay.commerce.product.model.CPDefinition;
-import com.liferay.commerce.user.segment.model.CommerceUserSegmentEntry;
-import com.liferay.commerce.user.segment.test.util.CommerceUserSegmentTestUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
@@ -39,6 +38,23 @@ import java.util.Calendar;
  * @author Luca Pellizzon
  */
 public class CommerceDiscountTestUtil {
+
+	public static CommerceDiscountCommerceAccountGroupRel
+			addAccountGroupToDiscount(
+				CommerceDiscount commerceDiscount, long userId)
+		throws Exception {
+
+		CommerceAccountGroup commerceAccountGroup = null;
+
+		/*CommerceAccountGroupTestUtil.addUserCommerceAccountGroup(
+			userId);*/
+
+		return CommerceDiscountCommerceAccountGroupRelLocalServiceUtil.
+			addCommerceDiscountCommerceAccountGroupRel(
+				commerceDiscount.getCommerceDiscountId(),
+				commerceAccountGroup.getCommerceAccountGroupId(),
+				ServiceContextTestUtil.getServiceContext());
+	}
 
 	public static CommerceDiscount addCouponDiscount(
 			long groupId, double amount, String couponCode, String target,
@@ -61,22 +77,21 @@ public class CommerceDiscountTestUtil {
 		return commerceDiscount;
 	}
 
-	public static CommerceDiscountUserSegmentRel addDiscountUserSegmentRel(
-			CommerceDiscount commerceDiscount, long userId)
+	public static CommerceDiscountCommerceAccountGroupRel
+			addDiscountCommerceAccountGroupRel(
+				CommerceDiscount commerceDiscount, long userId)
 		throws Exception {
 
-		CommerceUserSegmentEntry commerceUserSegmentEntry =
-			CommerceUserSegmentTestUtil.addUserCommerceUserSegmentEntry(
-				commerceDiscount.getGroupId(), userId);
+		CommerceAccountGroup commerceAccountGroup = null;
 
-		ServiceContext serviceContext =
-			ServiceContextTestUtil.getServiceContext();
+		/*CommerceAccountGroupTestUtil.addUserCommerceAccountGroup(
+			commerceDiscount.getGroupId(), userId);*/
 
-		return CommerceDiscountUserSegmentRelLocalServiceUtil.
-			addCommerceDiscountUserSegmentRel(
+		return CommerceDiscountCommerceAccountGroupRelLocalServiceUtil.
+			addCommerceDiscountCommerceAccountGroupRel(
 				commerceDiscount.getCommerceDiscountId(),
-				commerceUserSegmentEntry.getCommerceUserSegmentEntryId(),
-				serviceContext);
+				commerceAccountGroup.getCommerceAccountGroupId(),
+				ServiceContextTestUtil.getServiceContext());
 	}
 
 	public static CommerceDiscount addFixedCommerceDiscount(
@@ -95,9 +110,9 @@ public class CommerceDiscountTestUtil {
 
 		CommerceDiscount commerceDiscount =
 			CommerceDiscountLocalServiceUtil.addCommerceDiscount(
-				RandomTestUtil.randomString(), target, false, null, false,
-				BigDecimal.ZERO, discount, BigDecimal.ZERO, BigDecimal.ZERO,
-				BigDecimal.ZERO,
+				user.getUserId(), RandomTestUtil.randomString(), target, false,
+				null, false, BigDecimal.ZERO, discount, BigDecimal.ZERO,
+				BigDecimal.ZERO, BigDecimal.ZERO,
 				CommerceDiscountConstants.LIMITATION_TYPE_UNLIMITED, 0, true,
 				calendar.get(Calendar.MONTH),
 				calendar.get(Calendar.DAY_OF_MONTH),
@@ -133,10 +148,10 @@ public class CommerceDiscountTestUtil {
 
 		CommerceDiscount commerceDiscount =
 			CommerceDiscountLocalServiceUtil.addCommerceDiscount(
-				RandomTestUtil.randomString(), target, false, null, true,
-				BigDecimal.valueOf(10000), level1, level2, level3, level4,
-				CommerceDiscountConstants.LIMITATION_TYPE_UNLIMITED, 0, true,
-				calendar.get(Calendar.MONTH),
+				user.getUserId(), RandomTestUtil.randomString(), target, false,
+				null, true, BigDecimal.valueOf(10000), level1, level2, level3,
+				level4, CommerceDiscountConstants.LIMITATION_TYPE_UNLIMITED, 0,
+				true, calendar.get(Calendar.MONTH),
 				calendar.get(Calendar.DAY_OF_MONTH),
 				calendar.get(Calendar.YEAR), calendar.get(Calendar.HOUR_OF_DAY),
 				calendar.get(Calendar.MINUTE), calendar.get(Calendar.MONTH),
@@ -149,33 +164,12 @@ public class CommerceDiscountTestUtil {
 		return commerceDiscount;
 	}
 
-	public static CommerceDiscountUserSegmentRel addUserSegmentToDiscount(
-			CommerceDiscount commerceDiscount, long userId)
-		throws Exception {
-
-		long groupId = commerceDiscount.getGroupId();
-
-		CommerceUserSegmentEntry commerceUserSegmentEntry =
-			CommerceUserSegmentTestUtil.addUserCommerceUserSegmentEntry(
-				groupId, userId);
-
-		ServiceContext serviceContext =
-			ServiceContextTestUtil.getServiceContext(groupId);
-
-		return CommerceDiscountUserSegmentRelLocalServiceUtil.
-			addCommerceDiscountUserSegmentRel(
-				commerceDiscount.getCommerceDiscountId(),
-				commerceUserSegmentEntry.getCommerceUserSegmentEntryId(),
-				serviceContext);
-	}
-
 	private static void _addDiscountCategoryRel(
 			CommerceDiscount commerceDiscount, long... targetIds)
 		throws Exception {
 
 		ServiceContext serviceContext =
-			ServiceContextTestUtil.getServiceContext(
-				commerceDiscount.getGroupId());
+			ServiceContextTestUtil.getServiceContext();
 
 		for (long id : targetIds) {
 			CommerceDiscountRelLocalServiceUtil.addCommerceDiscountRel(
@@ -189,8 +183,7 @@ public class CommerceDiscountTestUtil {
 		throws Exception {
 
 		ServiceContext serviceContext =
-			ServiceContextTestUtil.getServiceContext(
-				commerceDiscount.getGroupId());
+			ServiceContextTestUtil.getServiceContext();
 
 		for (long id : targetIds) {
 			CommerceDiscountRelLocalServiceUtil.addCommerceDiscountRel(

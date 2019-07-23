@@ -1106,7 +1106,6 @@ public class AssetPublisherUtil {
 				groupIds.add(groupId);
 			}
 			catch (Exception e) {
-				continue;
 			}
 		}
 

@@ -73,6 +73,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.portlet.WindowState;
 
@@ -103,31 +104,49 @@ public class DisplayPageFriendlyURLResolver implements FriendlyURLResolver {
 
 		String ddmTemplateKey = null;
 
+		double version = 0;
+
 		if (i > 0) {
 			urlTitle = initialURL.substring(0, i);
-			ddmTemplateKey = initialURL.substring(i + 1);
+			String param = initialURL.substring(i + 1);
+
+			if (param.contains(StringPool.PERIOD)) {
+				version = Double.valueOf(param);
+			}
+			else {
+				ddmTemplateKey = param;
+			}
 
 			friendlyURL =
 				JournalArticleConstants.CANONICAL_URL_SEPARATOR + urlTitle;
 		}
 
-		String decodedUrlTitle = _http.decodePath(urlTitle);
-
 		String normalizedUrlTitle =
-			FriendlyURLNormalizerUtil.normalizeWithEncoding(decodedUrlTitle);
+			FriendlyURLNormalizerUtil.normalizeWithEncoding(urlTitle);
 
-		JournalArticle journalArticle =
-			_journalArticleLocalService.fetchLatestArticleByUrlTitle(
-				groupId, normalizedUrlTitle, WorkflowConstants.STATUS_APPROVED);
+		JournalArticle journalArticle = null;
+
+		if (version > 0) {
+			journalArticle = _journalArticleLocalService.fetchArticleByUrlTitle(
+				groupId, normalizedUrlTitle, version);
+		}
+		else {
+			journalArticle =
+				_journalArticleLocalService.fetchLatestArticleByUrlTitle(
+					groupId, normalizedUrlTitle,
+					WorkflowConstants.STATUS_APPROVED);
+		}
 
 		if (journalArticle == null) {
-			PermissionChecker permissionChecker =
-				PermissionThreadLocal.getPermissionChecker();
-
 			journalArticle =
 				_journalArticleLocalService.getLatestArticleByUrlTitle(
 					groupId, normalizedUrlTitle,
 					WorkflowConstants.STATUS_PENDING);
+		}
+
+		if (!journalArticle.isApproved()) {
+			PermissionChecker permissionChecker =
+				PermissionThreadLocal.getPermissionChecker();
 
 			if (!WorkflowPermissionUtil.hasPermission(
 					permissionChecker, groupId,
@@ -223,10 +242,8 @@ public class DisplayPageFriendlyURLResolver implements FriendlyURLResolver {
 		String urlTitle = friendlyURL.substring(
 			JournalArticleConstants.CANONICAL_URL_SEPARATOR.length());
 
-		String decodedUrlTitle = _http.decodePath(urlTitle);
-
 		String normalizedUrlTitle =
-			FriendlyURLNormalizerUtil.normalizeWithEncoding(decodedUrlTitle);
+			FriendlyURLNormalizerUtil.normalizeWithEncoding(urlTitle);
 
 		JournalArticle journalArticle =
 			_journalArticleLocalService.fetchLatestArticleByUrlTitle(
@@ -422,7 +439,18 @@ public class DisplayPageFriendlyURLResolver implements FriendlyURLResolver {
 
 		Locale locale = _portal.getLocale(request);
 
-		actualParams.put(namespace + "urlTitle", new String[] {urlTitle});
+		AssetEntry assetEntry = Optional.ofNullable(
+			_assetEntryLocalService.fetchEntry(
+				JournalArticle.class.getName(), journalArticle.getPrimaryKey())
+		).orElse(
+			assetRendererFactory.getAssetEntry(
+				JournalArticle.class.getName(),
+				journalArticle.getResourcePrimKey())
+		);
+
+		actualParams.put(
+			namespace + "assetEntryId",
+			new String[] {String.valueOf(assetEntry.getEntryId())});
 
 		if (Validator.isNotNull(ddmTemplateKey)) {
 			actualParams.put(

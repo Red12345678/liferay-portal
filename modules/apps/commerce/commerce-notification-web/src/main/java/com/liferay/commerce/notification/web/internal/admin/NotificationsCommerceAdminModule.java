@@ -15,6 +15,7 @@
 package com.liferay.commerce.notification.web.internal.admin;
 
 import com.liferay.commerce.admin.CommerceAdminModule;
+import com.liferay.commerce.admin.constants.CommerceAdminConstants;
 import com.liferay.commerce.notification.constants.CommerceNotificationActionKeys;
 import com.liferay.commerce.notification.constants.CommerceNotificationConstants;
 import com.liferay.commerce.notification.service.CommerceNotificationQueueEntryService;
@@ -24,7 +25,6 @@ import com.liferay.commerce.notification.web.internal.display.context.CommerceNo
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.util.Portal;
@@ -70,12 +70,14 @@ public class NotificationsCommerceAdminModule implements CommerceAdminModule {
 	}
 
 	@Override
-	public boolean isVisible(long groupId) throws PortalException {
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
+	public int getType() {
+		return CommerceAdminConstants.COMMERCE_ADMIN_TYPE_GROUP_INSTANCE;
+	}
 
+	@Override
+	public boolean isVisible(long groupId) throws PortalException {
 		return _portletResourcePermission.contains(
-			permissionChecker, groupId,
+			PermissionThreadLocal.getPermissionChecker(), groupId,
 			CommerceNotificationActionKeys.
 				VIEW_COMMERCE_NOTIFICATION_TEMPLATES);
 	}

@@ -14,8 +14,8 @@
 
 package com.liferay.commerce.inventory.web.internal.servlet.taglib;
 
+import com.liferay.commerce.inventory.engine.CommerceInventoryEngine;
 import com.liferay.commerce.product.model.CPInstance;
-import com.liferay.commerce.service.CommerceWarehouseItemService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -40,25 +40,18 @@ public class InventoryDataJSPDynamicInclude extends BaseJSPDynamicInclude {
 
 	@Override
 	public void include(
-			HttpServletRequest request, HttpServletResponse response,
-			String key)
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse, String key)
 		throws IOException {
 
 		try {
-			long cpInstanceId = 0;
-
-			CPInstance cpInstance = (CPInstance)request.getAttribute(
+			CPInstance cpInstance = (CPInstance)httpServletRequest.getAttribute(
 				"inventory-cpInstance");
 
-			if (cpInstance != null) {
-				cpInstanceId = cpInstance.getCPInstanceId();
-			}
+			int cpInstanceQuantity = _commerceInventoryEngine.getStockQuantity(
+				cpInstance.getCompanyId(), cpInstance.getSku());
 
-			int cpInstanceQuantity =
-				_commerceWarehouseItemService.getCPInstanceQuantity(
-					cpInstanceId);
-
-			PrintWriter printWriter = response.getWriter();
+			PrintWriter printWriter = httpServletResponse.getWriter();
 
 			printWriter.println(cpInstanceQuantity);
 		}
@@ -96,6 +89,6 @@ public class InventoryDataJSPDynamicInclude extends BaseJSPDynamicInclude {
 		InventoryDataJSPDynamicInclude.class);
 
 	@Reference
-	private CommerceWarehouseItemService _commerceWarehouseItemService;
+	private CommerceInventoryEngine _commerceInventoryEngine;
 
 }

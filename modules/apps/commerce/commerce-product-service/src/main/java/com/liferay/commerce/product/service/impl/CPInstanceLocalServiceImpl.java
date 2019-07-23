@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.SystemEventConstants;
@@ -87,7 +88,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 	@Override
 	public CPInstance addCPInstance(
-			long cpDefinitionId, String sku, String gtin,
+			long cpDefinitionId, long groupId, String sku, String gtin,
 			String manufacturerPartNumber, boolean purchasable, String json,
 			boolean published, int displayDateMonth, int displayDateDay,
 			int displayDateYear, int displayDateHour, int displayDateMinute,
@@ -101,20 +102,21 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 			cpDefinitionId);
 
 		return cpInstanceLocalService.addCPInstance(
-			cpDefinitionId, sku, gtin, manufacturerPartNumber, purchasable,
-			json, cpDefinition.getWidth(), cpDefinition.getHeight(),
-			cpDefinition.getDepth(), cpDefinition.getWeight(), BigDecimal.ZERO,
-			BigDecimal.ZERO, BigDecimal.ZERO, published, StringPool.BLANK,
-			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, expirationDateMonth, expirationDateDay,
-			expirationDateYear, expirationDateHour, expirationDateMinute,
-			neverExpire, serviceContext);
+			cpDefinitionId, groupId, sku, gtin, manufacturerPartNumber,
+			purchasable, json, cpDefinition.getWidth(),
+			cpDefinition.getHeight(), cpDefinition.getDepth(),
+			cpDefinition.getWeight(), BigDecimal.ZERO, BigDecimal.ZERO,
+			BigDecimal.ZERO, published, StringPool.BLANK, displayDateMonth,
+			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
+			expirationDateMonth, expirationDateDay, expirationDateYear,
+			expirationDateHour, expirationDateMinute, neverExpire,
+			serviceContext);
 	}
 
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CPInstance addCPInstance(
-			long cpDefinitionId, String sku, String gtin,
+			long cpDefinitionId, long groupId, String sku, String gtin,
 			String manufacturerPartNumber, boolean purchasable, String json,
 			double width, double height, double depth, double weight,
 			BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
@@ -133,7 +135,6 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		// Commerce product instance
 
 		User user = userLocalService.getUser(serviceContext.getUserId());
-		long groupId = serviceContext.getScopeGroupId();
 
 		Date displayDate = null;
 		Date expirationDate = null;
@@ -224,7 +225,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 	@Override
 	public CPInstance addCPInstance(
-			long cpDefinitionId, String sku, String gtin,
+			long cpDefinitionId, long groupId, String sku, String gtin,
 			String manufacturerPartNumber, boolean purchasable, String json,
 			double width, double height, double depth, double weight,
 			BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
@@ -237,10 +238,10 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		throws PortalException {
 
 		return cpInstanceLocalService.addCPInstance(
-			cpDefinitionId, sku, gtin, manufacturerPartNumber, purchasable,
-			json, width, height, depth, weight, price, promoPrice, cost,
-			published, externalReferenceCode, displayDateMonth, displayDateDay,
-			displayDateYear, displayDateHour, displayDateMinute,
+			cpDefinitionId, groupId, sku, gtin, manufacturerPartNumber,
+			purchasable, json, width, height, depth, weight, price, promoPrice,
+			cost, published, externalReferenceCode, displayDateMonth,
+			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
 			expirationDateMonth, expirationDateDay, expirationDateYear,
 			expirationDateHour, expirationDateMinute, neverExpire, false, false,
 			1, StringPool.BLANK, null, 0, serviceContext);
@@ -309,19 +310,17 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 						cpDefinitionOptionValueRel.getName(
 							serviceContext.getLanguageId())));
 
-				JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-
-				JSONArray valueJSONArray = JSONFactoryUtil.createJSONArray();
-
-				valueJSONArray.put(
+				JSONArray valueJSONArray = JSONUtil.put(
 					String.valueOf(
 						cpDefinitionOptionValueRel.
 							getCPDefinitionOptionValueRelId()));
 
-				jsonObject.put(
+				JSONObject jsonObject = JSONUtil.put(
 					"key",
-					cpDefinitionOptionValueRel.getCPDefinitionOptionRelId());
-				jsonObject.put("value", valueJSONArray);
+					cpDefinitionOptionValueRel.getCPDefinitionOptionRelId()
+				).put(
+					"value", valueJSONArray
+				);
 
 				jsonArray.put(jsonObject);
 			}
@@ -335,12 +334,12 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 			try {
 				addCPInstance(
-					cpDefinitionId, skuSB.toString(), StringPool.BLANK,
-					StringPool.BLANK, true, jsonArray.toString(),
-					cpDefinition.getWidth(), cpDefinition.getHeight(),
-					cpDefinition.getDepth(), cpDefinition.getWeight(),
-					BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, true,
-					cpDefinition.getDisplayDate(),
+					cpDefinitionId, cpDefinition.getGroupId(), skuSB.toString(),
+					StringPool.BLANK, StringPool.BLANK, true,
+					jsonArray.toString(), cpDefinition.getWidth(),
+					cpDefinition.getHeight(), cpDefinition.getDepth(),
+					cpDefinition.getWeight(), BigDecimal.ZERO, BigDecimal.ZERO,
+					BigDecimal.ZERO, true, cpDefinition.getDisplayDate(),
 					cpDefinition.getExpirationDate(), neverExpire,
 					serviceContext);
 			}
@@ -495,27 +494,21 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		OrderByComparator<CPInstance> orderByComparator) {
 
 		if (status == WorkflowConstants.STATUS_ANY) {
-			return cpInstanceFinder.findByC_NotCST_NotST(
-				cpDefinitionId, WorkflowConstants.STATUS_IN_TRASH,
-				WorkflowConstants.STATUS_IN_TRASH, start, end,
-				orderByComparator);
+			return cpInstancePersistence.findByCPDefinitionId(
+				cpDefinitionId, start, end, orderByComparator);
 		}
 
-		return cpInstanceFinder.findByC_NotCST_ST(
-			cpDefinitionId, WorkflowConstants.STATUS_IN_TRASH, status, start,
-			end, orderByComparator);
+		return cpInstancePersistence.findByC_ST(
+			cpDefinitionId, status, start, end, orderByComparator);
 	}
 
 	@Override
 	public int getCPDefinitionInstancesCount(long cpDefinitionId, int status) {
 		if (status == WorkflowConstants.STATUS_ANY) {
-			cpInstanceFinder.countByC_NotCST_NotST(
-				cpDefinitionId, WorkflowConstants.STATUS_IN_TRASH,
-				WorkflowConstants.STATUS_IN_TRASH);
+			return cpInstancePersistence.countByCPDefinitionId(cpDefinitionId);
 		}
 
-		return cpInstanceFinder.countByC_NotCST_ST(
-			cpDefinitionId, WorkflowConstants.STATUS_IN_TRASH, status);
+		return cpInstancePersistence.countByC_ST(cpDefinitionId, status);
 	}
 
 	@Override
@@ -541,9 +534,8 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		throws PortalException {
 
 		if (status == WorkflowConstants.STATUS_ANY) {
-			return cpInstancePersistence.findByG_NotST(
-				groupId, WorkflowConstants.STATUS_IN_TRASH, start, end,
-				orderByComparator);
+			return cpInstancePersistence.findByGroupId(
+				groupId, start, end, orderByComparator);
 		}
 
 		return cpInstancePersistence.findByG_ST(
@@ -555,8 +547,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		throws PortalException {
 
 		if (status == WorkflowConstants.STATUS_ANY) {
-			return cpInstancePersistence.countByG_NotST(
-				groupId, WorkflowConstants.STATUS_IN_TRASH);
+			return cpInstancePersistence.countByGroupId(groupId);
 		}
 
 		return cpInstancePersistence.countByG_ST(groupId, status);
@@ -607,25 +598,36 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 	@Override
 	public BaseModelSearchResult<CPInstance> searchCPDefinitionInstances(
-			long companyId, long groupId, long cpDefinitionId, String keywords,
-			int status, int start, int end, Sort sort)
+			long companyId, long cpDefinitionId, String keywords, int status,
+			int start, int end, Sort sort)
 		throws PortalException {
 
 		SearchContext searchContext = buildSearchContext(
-			companyId, groupId, cpDefinitionId, keywords, status, start, end,
-			sort);
+			companyId, cpDefinitionId, keywords, status, start, end, sort);
 
 		return searchCPInstances(searchContext);
 	}
 
 	@Override
 	public BaseModelSearchResult<CPInstance> searchCPInstances(
-			long companyId, long groupId, String keywords, int status,
+			long companyId, long[] groupIds, String keywords, int status,
 			int start, int end, Sort sort)
 		throws PortalException {
 
 		SearchContext searchContext = buildSearchContext(
-			companyId, groupId, keywords, status, start, end, sort);
+			companyId, groupIds, keywords, status, start, end, sort);
+
+		return searchCPInstances(searchContext);
+	}
+
+	@Override
+	public BaseModelSearchResult<CPInstance> searchCPInstances(
+			long companyId, String keywords, int status, int start, int end,
+			Sort sort)
+		throws PortalException {
+
+		SearchContext searchContext = buildSearchContext(
+			companyId, keywords, status, start, end, sort);
 
 		return searchCPInstances(searchContext);
 	}
@@ -931,7 +933,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 	@Override
 	public CPInstance upsertCPInstance(
-			long cpDefinitionId, String sku, String gtin,
+			long cpDefinitionId, long groupId, String sku, String gtin,
 			String manufacturerPartNumber, boolean purchasable, String json,
 			double width, double height, double depth, double weight,
 			BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
@@ -948,13 +950,13 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 
 		if (cpInstance == null) {
 			cpInstance = addCPInstance(
-				cpDefinitionId, sku, gtin, manufacturerPartNumber, purchasable,
-				json, width, height, depth, weight, price, promoPrice, cost,
-				published, externalReferenceCode, displayDateMonth,
-				displayDateDay, displayDateYear, displayDateHour,
-				displayDateMinute, expirationDateMonth, expirationDateDay,
-				expirationDateYear, expirationDateHour, expirationDateMinute,
-				neverExpire, serviceContext);
+				cpDefinitionId, groupId, sku, gtin, manufacturerPartNumber,
+				purchasable, json, width, height, depth, weight, price,
+				promoPrice, cost, published, externalReferenceCode,
+				displayDateMonth, displayDateDay, displayDateYear,
+				displayDateHour, displayDateMinute, expirationDateMonth,
+				expirationDateDay, expirationDateYear, expirationDateHour,
+				expirationDateMinute, neverExpire, serviceContext);
 		}
 		else {
 			cpInstance = updateCPInstance(
@@ -971,7 +973,7 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	}
 
 	protected CPInstance addCPInstance(
-			long cpDefinitionId, String sku, String gtin,
+			long cpDefinitionId, long groupId, String sku, String gtin,
 			String manufacturerPartNumber, boolean purchasable, String json,
 			double width, double height, double depth, double weight,
 			BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
@@ -1009,9 +1011,9 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		}
 
 		return cpInstanceLocalService.addCPInstance(
-			cpDefinitionId, sku, gtin, manufacturerPartNumber, purchasable,
-			json, width, height, depth, weight, price, promoPrice, cost,
-			published, StringPool.BLANK, displayDateMonth, displayDateDay,
+			cpDefinitionId, groupId, sku, gtin, manufacturerPartNumber,
+			purchasable, json, width, height, depth, weight, price, promoPrice,
+			cost, published, StringPool.BLANK, displayDateMonth, displayDateDay,
 			displayDateYear, displayDateHour, displayDateMinute,
 			expirationDateMonth, expirationDateDay, expirationDateYear,
 			expirationDateHour, expirationDateMinute, neverExpire,
@@ -1019,8 +1021,8 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	}
 
 	protected SearchContext buildSearchContext(
-		long companyId, long groupId, long cpDefinitionId, String keywords,
-		int status, int start, int end, Sort sort) {
+		long companyId, long cpDefinitionId, String keywords, int status,
+		int start, int end, Sort sort) {
 
 		SearchContext searchContext = new SearchContext();
 
@@ -1044,7 +1046,6 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		searchContext.setCompanyId(companyId);
 		searchContext.setStart(start);
 		searchContext.setEnd(end);
-		searchContext.setGroupIds(new long[] {groupId});
 
 		if (Validator.isNotNull(keywords)) {
 			searchContext.setKeywords(keywords);
@@ -1063,8 +1064,47 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 	}
 
 	protected SearchContext buildSearchContext(
-		long companyId, long groupId, String keywords, int status, int start,
+		long companyId, long[] groupIds, String keywords, int status, int start,
 		int end, Sort sort) {
+
+		SearchContext searchContext = new SearchContext();
+
+		LinkedHashMap<String, Object> params = new LinkedHashMap<>();
+
+		params.put("keywords", keywords);
+
+		Map<String, Serializable> attributes = new HashMap<>();
+
+		attributes.put(Field.CONTENT, keywords);
+		attributes.put(Field.STATUS, status);
+		attributes.put("params", params);
+
+		searchContext.setAttributes(attributes);
+
+		searchContext.setCompanyId(companyId);
+		searchContext.setGroupIds(groupIds);
+		searchContext.setStart(start);
+		searchContext.setEnd(end);
+
+		if (Validator.isNotNull(keywords)) {
+			searchContext.setKeywords(keywords);
+		}
+
+		QueryConfig queryConfig = searchContext.getQueryConfig();
+
+		queryConfig.setHighlightEnabled(false);
+		queryConfig.setScoreEnabled(false);
+
+		if (sort != null) {
+			searchContext.setSorts(sort);
+		}
+
+		return searchContext;
+	}
+
+	protected SearchContext buildSearchContext(
+		long companyId, String keywords, int status, int start, int end,
+		Sort sort) {
 
 		SearchContext searchContext = new SearchContext();
 
@@ -1083,7 +1123,6 @@ public class CPInstanceLocalServiceImpl extends CPInstanceLocalServiceBaseImpl {
 		searchContext.setCompanyId(companyId);
 		searchContext.setStart(start);
 		searchContext.setEnd(end);
-		searchContext.setGroupIds(new long[] {groupId});
 
 		if (Validator.isNotNull(keywords)) {
 			searchContext.setKeywords(keywords);

@@ -28,6 +28,7 @@ import com.liferay.commerce.product.model.CPDefinitionSpecificationOptionValue;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CPTaxCategory;
 import com.liferay.commerce.product.model.CProduct;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.CPAttachmentFileEntryLocalServiceUtil;
 import com.liferay.commerce.product.service.CPDefinitionLocalServiceUtil;
 import com.liferay.commerce.product.service.CPDefinitionOptionRelLocalServiceUtil;
@@ -36,10 +37,14 @@ import com.liferay.commerce.product.service.CPFriendlyURLEntryLocalServiceUtil;
 import com.liferay.commerce.product.service.CPInstanceLocalServiceUtil;
 import com.liferay.commerce.product.service.CPTaxCategoryLocalServiceUtil;
 import com.liferay.commerce.product.service.CProductLocalServiceUtil;
+import com.liferay.commerce.product.service.CommerceCatalogLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.ModelHintsUtil;
 import com.liferay.portal.kernel.service.ClassNameLocalServiceUtil;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
@@ -161,6 +166,11 @@ public class CPDefinitionImpl extends CPDefinitionBaseImpl {
 		return availableLanguageIds.toArray(new String[0]);
 	}
 
+	public CommerceCatalog getCommerceCatalog() {
+		return CommerceCatalogLocalServiceUtil.fetchCommerceCatalogByGroupId(
+			getGroupId());
+	}
+
 	@Override
 	public List<CPAttachmentFileEntry> getCPAttachmentFileEntries(
 			int type, int status)
@@ -215,10 +225,11 @@ public class CPDefinitionImpl extends CPDefinitionBaseImpl {
 			CPDefinitionLocalServiceUtil.getDefaultImage(getCPDefinitionId());
 
 		if (cpAttachmentFileEntry == null) {
-			CProduct cProduct = getCProduct();
+			Company company = CompanyLocalServiceUtil.getCompany(
+				getCompanyId());
 
 			return CommerceMediaResolverUtil.getDefaultUrl(
-				cProduct.getGroupId());
+				company.getGroupId());
 		}
 
 		return CommerceMediaResolverUtil.getUrl(
@@ -231,10 +242,11 @@ public class CPDefinitionImpl extends CPDefinitionBaseImpl {
 			CPDefinitionLocalServiceUtil.getDefaultImage(getCPDefinitionId());
 
 		if (cpAttachmentFileEntry == null) {
-			CProduct cProduct = getCProduct();
+			Company company = CompanyLocalServiceUtil.getCompany(
+				getCompanyId());
 
 			return CommerceMediaResolverUtil.getDefaultUrl(
-				cProduct.getGroupId());
+				company.getGroupId());
 		}
 
 		return CommerceMediaResolverUtil.getThumbnailUrl(
@@ -355,7 +367,8 @@ public class CPDefinitionImpl extends CPDefinitionBaseImpl {
 
 		Map<String, String> languageIdToUrlTitleMap =
 			CPFriendlyURLEntryLocalServiceUtil.getLanguageIdToUrlTitleMap(
-				getGroupId(), classNameId, getCProductId());
+				GroupConstants.DEFAULT_LIVE_GROUP_ID, classNameId,
+				getCProductId());
 
 		return languageIdToUrlTitleMap.get(languageId);
 	}

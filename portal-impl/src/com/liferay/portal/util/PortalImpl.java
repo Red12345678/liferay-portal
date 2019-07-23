@@ -1077,10 +1077,10 @@ public class PortalImpl implements Portal {
 	public String getAbsoluteURL(HttpServletRequest request, String url) {
 		String portalURL = getPortalURL(request);
 
-		if (url.charAt(0) == CharPool.SLASH) {
-			if (Validator.isNotNull(portalURL)) {
-				url = portalURL.concat(url);
-			}
+		if ((url.charAt(0) == CharPool.SLASH) &&
+			Validator.isNotNull(portalURL)) {
+
+			url = portalURL.concat(url);
 		}
 
 		if (!CookieKeys.hasSessionId(request) && url.startsWith(portalURL)) {
@@ -4553,6 +4553,10 @@ public class PortalImpl implements Portal {
 		if (Validator.isNotNull(friendlyURL)) {
 			layout = LayoutLocalServiceUtil.getFriendlyURLLayout(
 				groupId, privateLayout, friendlyURL);
+
+			if (Validator.isNotNull(layout.getSourcePrototypeLayoutUuid())) {
+				layout = LayoutLocalServiceUtil.getLayout(layout.getPlid());
+			}
 		}
 		else {
 			long defaultPlid = LayoutLocalServiceUtil.getDefaultPlid(
@@ -8543,7 +8547,7 @@ public class PortalImpl implements Portal {
 			languageId = siteDefaultLocale.getLanguage();
 		}
 
-		return StringPool.SLASH.concat(languageId);
+		return StringPool.SLASH.concat(LocaleUtil.toW3cLanguageId(languageId));
 	}
 
 	private Map<Locale, String> _getAlternateURLs(
@@ -8812,7 +8816,7 @@ public class PortalImpl implements Portal {
 						themeDisplay.getSiteGroupId()) &&
 					 (group.getClassPK() != themeDisplay.getUserId()))) {
 
-					if (group.isControlPanel()) {
+					if (group.isControlPanel() || controlPanel) {
 						virtualHostname = themeDisplay.getServerName();
 
 						if (Validator.isNull(virtualHostname) ||

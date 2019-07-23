@@ -21,7 +21,8 @@ import java.util.List;
  */
 public class Cart {
 
-	public Cart(List<Product> products, Summary summary) {
+	public Cart(long orderId, List<Product> products, Summary summary) {
+		_orderId = orderId;
 		_products = products;
 		_summary = summary;
 		_success = true;
@@ -34,6 +35,10 @@ public class Cart {
 
 	public String[] getErrorMessages() {
 		return _errorMessages;
+	}
+
+	public long getOrderId() {
+		return _orderId;
 	}
 
 	public List<Product> getProducts() {
@@ -57,6 +62,7 @@ public class Cart {
 	}
 
 	private String[] _errorMessages;
+	private long _orderId;
 	private List<Product> _products;
 	private boolean _success;
 	private Summary _summary;

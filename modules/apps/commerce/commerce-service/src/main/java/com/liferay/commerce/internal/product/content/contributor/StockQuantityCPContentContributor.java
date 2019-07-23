@@ -16,9 +16,12 @@ package com.liferay.commerce.internal.product.content.contributor;
 
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngine;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngineRegistry;
+import com.liferay.commerce.inventory.engine.CommerceInventoryEngine;
 import com.liferay.commerce.model.CPDefinitionInventory;
 import com.liferay.commerce.product.constants.CPContentContributorConstants;
 import com.liferay.commerce.product.model.CPInstance;
+import com.liferay.commerce.product.model.CommerceChannel;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.commerce.product.util.CPContentContributor;
 import com.liferay.commerce.service.CPDefinitionInventoryLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -26,6 +29,7 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +68,14 @@ public class StockQuantityCPContentContributor implements CPContentContributor {
 			return jsonObject;
 		}
 
+		CommerceChannel commerceChannel =
+			_commerceChannelLocalService.fetchCommerceChannelBySiteGroupId(
+				_portal.getScopeGroupId(httpServletRequest));
+
+		if (commerceChannel == null) {
+			return jsonObject;
+		}
+
 		CPDefinitionInventory cpDefinitionInventory =
 			_cpDefinitionInventoryLocalService.
 				fetchCPDefinitionInventoryByCPDefinitionId(
@@ -81,11 +93,19 @@ public class StockQuantityCPContentContributor implements CPContentContributor {
 				CPContentContributorConstants.STOCK_QUANTITY_NAME,
 				LanguageUtil.format(
 					themeDisplay.getLocale(), "stock-quantity-x",
-					cpDefinitionInventoryEngine.getStockQuantity(cpInstance)));
+					_commerceInventoryEngine.getStockQuantity(
+						cpInstance.getCompanyId(), commerceChannel.getGroupId(),
+						cpInstance.getSku())));
 		}
 
 		return jsonObject;
 	}
+
+	@Reference
+	private CommerceChannelLocalService _commerceChannelLocalService;
+
+	@Reference
+	private CommerceInventoryEngine _commerceInventoryEngine;
 
 	@Reference
 	private CPDefinitionInventoryEngineRegistry
@@ -97,5 +117,8 @@ public class StockQuantityCPContentContributor implements CPContentContributor {
 
 	@Reference
 	private JSONFactory _jsonFactory;
+
+	@Reference
+	private Portal _portal;
 
 }

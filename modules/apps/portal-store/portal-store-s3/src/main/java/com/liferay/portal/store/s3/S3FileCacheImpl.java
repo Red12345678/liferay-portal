@@ -152,8 +152,6 @@ public class S3FileCacheImpl implements S3FileCache {
 		if (fileNames.length == 0) {
 			if (file.lastModified() < lastModified) {
 				FileUtil.deltree(file);
-
-				return;
 			}
 		}
 		else {
@@ -165,8 +163,6 @@ public class S3FileCacheImpl implements S3FileCache {
 
 			if (subfileNames.length == 0) {
 				FileUtil.deltree(file);
-
-				return;
 			}
 		}
 	}

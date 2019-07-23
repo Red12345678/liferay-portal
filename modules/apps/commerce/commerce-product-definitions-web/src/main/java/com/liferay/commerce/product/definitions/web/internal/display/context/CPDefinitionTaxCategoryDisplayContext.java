@@ -15,15 +15,11 @@
 package com.liferay.commerce.product.definitions.web.internal.display.context;
 
 import com.liferay.commerce.product.definitions.web.portlet.action.ActionHelper;
-import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPTaxCategory;
 import com.liferay.commerce.product.service.CPDefinitionService;
 import com.liferay.commerce.product.service.CPTaxCategoryService;
-import com.liferay.commerce.product.util.CPDefinitionHelper;
-import com.liferay.item.selector.ItemSelector;
+import com.liferay.commerce.product.service.CommerceCatalogService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -38,19 +34,14 @@ public class CPDefinitionTaxCategoryDisplayContext
 	extends CPDefinitionsDisplayContext {
 
 	public CPDefinitionTaxCategoryDisplayContext(
-			ActionHelper actionHelper, HttpServletRequest httpServletRequest,
-			CPDefinitionHelper cpDefinitionHelper,
-			ModelResourcePermission<CPDefinition>
-				cpDefinitionModelResourcePermission,
-			CPDefinitionService cpDefinitionService, ItemSelector itemSelector,
-			PortletResourcePermission portletResourcePermission,
-			CPTaxCategoryService cpTaxCategoryService)
-		throws PortalException {
+		ActionHelper actionHelper, HttpServletRequest httpServletRequest,
+		CommerceCatalogService commerceCatalogService,
+		CPDefinitionService cpDefinitionService,
+		CPTaxCategoryService cpTaxCategoryService) {
 
 		super(
-			actionHelper, httpServletRequest, cpDefinitionHelper,
-			cpDefinitionModelResourcePermission, cpDefinitionService,
-			itemSelector, portletResourcePermission);
+			actionHelper, httpServletRequest, commerceCatalogService,
+			cpDefinitionService);
 
 		_cpTaxCategoryService = cpTaxCategoryService;
 	}
@@ -61,7 +52,7 @@ public class CPDefinitionTaxCategoryDisplayContext
 				WebKeys.THEME_DISPLAY);
 
 		return _cpTaxCategoryService.getCPTaxCategories(
-			themeDisplay.getScopeGroupId());
+			themeDisplay.getCompanyId());
 	}
 
 	private final CPTaxCategoryService _cpTaxCategoryService;

@@ -17,7 +17,6 @@ package com.liferay.commerce.price.list.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.commerce.price.list.model.CommerceTierPriceEntry;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -35,12 +34,12 @@ import java.util.Date;
  * The cache model class for representing CommerceTierPriceEntry in entity cache.
  *
  * @author Alessio Antonio Rendina
- * @see CommerceTierPriceEntry
  * @generated
  */
 @ProviderType
-public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTierPriceEntry>,
-	Externalizable {
+public class CommerceTierPriceEntryCacheModel
+	implements CacheModel<CommerceTierPriceEntry>, Externalizable {
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -51,9 +50,12 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 			return false;
 		}
 
-		CommerceTierPriceEntryCacheModel commerceTierPriceEntryCacheModel = (CommerceTierPriceEntryCacheModel)obj;
+		CommerceTierPriceEntryCacheModel commerceTierPriceEntryCacheModel =
+			(CommerceTierPriceEntryCacheModel)obj;
 
-		if (commerceTierPriceEntryId == commerceTierPriceEntryCacheModel.commerceTierPriceEntryId) {
+		if (commerceTierPriceEntryId ==
+				commerceTierPriceEntryCacheModel.commerceTierPriceEntryId) {
+
 			return true;
 		}
 
@@ -67,7 +69,7 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -75,8 +77,6 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 		sb.append(externalReferenceCode);
 		sb.append(", commerceTierPriceEntryId=");
 		sb.append(commerceTierPriceEntryId);
-		sb.append(", groupId=");
-		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
 		sb.append(", userId=");
@@ -104,7 +104,8 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 
 	@Override
 	public CommerceTierPriceEntry toEntityModel() {
-		CommerceTierPriceEntryImpl commerceTierPriceEntryImpl = new CommerceTierPriceEntryImpl();
+		CommerceTierPriceEntryImpl commerceTierPriceEntryImpl =
+			new CommerceTierPriceEntryImpl();
 
 		if (uuid == null) {
 			commerceTierPriceEntryImpl.setUuid("");
@@ -117,11 +118,12 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 			commerceTierPriceEntryImpl.setExternalReferenceCode("");
 		}
 		else {
-			commerceTierPriceEntryImpl.setExternalReferenceCode(externalReferenceCode);
+			commerceTierPriceEntryImpl.setExternalReferenceCode(
+				externalReferenceCode);
 		}
 
-		commerceTierPriceEntryImpl.setCommerceTierPriceEntryId(commerceTierPriceEntryId);
-		commerceTierPriceEntryImpl.setGroupId(groupId);
+		commerceTierPriceEntryImpl.setCommerceTierPriceEntryId(
+			commerceTierPriceEntryId);
 		commerceTierPriceEntryImpl.setCompanyId(companyId);
 		commerceTierPriceEntryImpl.setUserId(userId);
 
@@ -146,7 +148,8 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 			commerceTierPriceEntryImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
-		commerceTierPriceEntryImpl.setCommercePriceEntryId(commercePriceEntryId);
+		commerceTierPriceEntryImpl.setCommercePriceEntryId(
+			commercePriceEntryId);
 		commerceTierPriceEntryImpl.setPrice(price);
 		commerceTierPriceEntryImpl.setPromoPrice(promoPrice);
 		commerceTierPriceEntryImpl.setMinQuantity(minQuantity);
@@ -155,8 +158,8 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 			commerceTierPriceEntryImpl.setLastPublishDate(null);
 		}
 		else {
-			commerceTierPriceEntryImpl.setLastPublishDate(new Date(
-					lastPublishDate));
+			commerceTierPriceEntryImpl.setLastPublishDate(
+				new Date(lastPublishDate));
 		}
 
 		commerceTierPriceEntryImpl.resetOriginalValues();
@@ -167,12 +170,11 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 	@Override
 	public void readExternal(ObjectInput objectInput)
 		throws ClassNotFoundException, IOException {
+
 		uuid = objectInput.readUTF();
 		externalReferenceCode = objectInput.readUTF();
 
 		commerceTierPriceEntryId = objectInput.readLong();
-
-		groupId = objectInput.readLong();
 
 		companyId = objectInput.readLong();
 
@@ -190,8 +192,7 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		if (uuid == null) {
 			objectOutput.writeUTF("");
 		}
@@ -207,8 +208,6 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 		}
 
 		objectOutput.writeLong(commerceTierPriceEntryId);
-
-		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(companyId);
 
@@ -235,7 +234,6 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 	public String uuid;
 	public String externalReferenceCode;
 	public long commerceTierPriceEntryId;
-	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
@@ -246,4 +244,5 @@ public class CommerceTierPriceEntryCacheModel implements CacheModel<CommerceTier
 	public BigDecimal promoPrice;
 	public int minQuantity;
 	public long lastPublishDate;
+
 }

@@ -1,5 +1,6 @@
 @component-name = "portal-user-management-and-portal-configuration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Custom Fields";
@@ -30,182 +31,152 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Boolean",
 			customFieldType = "True/False",
-			resourceName = "Blogs Entry"
-		);
+			resourceName = "Blogs Entry");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Date",
 			customFieldType = "Date",
-			resourceName = "Bookmarks Entry"
-		);
+			resourceName = "Bookmarks Entry");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Decimal",
 			customFieldType = "Decimal Number (64-bit)",
-			resourceName = "Bookmarks Folder"
-		);
+			resourceName = "Bookmarks Folder");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Decimal",
 			customFieldType = "Group of Decimal Numbers (64-bit)",
-			resourceName = "Document"
-		);
+			resourceName = "Document");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Decimal",
 			customFieldType = "Decimal Number (32-bit)",
-			resourceName = "Documents Folder"
-		);
+			resourceName = "Documents Folder");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Integer",
 			customFieldType = "Integer (64-bit)",
-			resourceName = "Message Boards Category"
-		);
+			resourceName = "Message Boards Category");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Integer",
 			customFieldType = "Group of Integers (64-bit)",
-			resourceName = "Message Boards Message"
-		);
+			resourceName = "Message Boards Message");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Number",
 			customFieldType = "Decimal Number or Integer (64-bit)",
-			resourceName = "Organization"
-		);
+			resourceName = "Organization");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Integer",
 			customFieldType = "Integer (16-bit)",
-			resourceName = "Page"
-		);
+			resourceName = "Page");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Integer",
 			customFieldType = "Group of Integers (16-bit)",
-			resourceName = "Role"
-		);
+			resourceName = "Role");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Text",
 			customFieldType = "Text",
-			resourceName = "Site"
-		);
+			resourceName = "Site");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Text",
 			customFieldType = "Group of Text Values",
-			resourceName = "User"
-		);
+			resourceName = "User");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Text",
 			customFieldType = "Group of Text Values",
-			resourceName = "User Group"
-		);
+			resourceName = "User Group");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Text",
 			customFieldType = "Localized Text",
-			resourceName = "Web Content Article"
-		);
+			resourceName = "Web Content Article");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Number",
 			customFieldType = "Group of Decimal Numbers or Integers (64-bit)",
-			resourceName = "Wiki Page"
-		);
+			resourceName = "Wiki Page");
 	}
 
 	@priority = "5"
@@ -213,40 +184,34 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Boolean",
 			customFieldType = "True/False",
-			resourceName = "User"
-		);
+			resourceName = "User");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.gotoEditCP(userScreenName = "usersn");
 
 		User.viewUserCustomFieldsCP(
 			customFieldName = "Boolean",
-			customFieldValue = "False"
-		);
+			customFieldValue = "False");
 	}
 
 	@priority = "5"
@@ -259,53 +224,45 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Boolean",
 			customFieldType = "True/False",
-			resourceName = "User"
-		);
+			resourceName = "User");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.editCP(
 			customFieldName = "Boolean",
 			customFieldType = "True/False",
 			defaultValue = "True",
-			resourceName = "User"
-		);
+			resourceName = "User");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.gotoEditCP(userScreenName = "usersn");
 
 		User.viewUserCustomFieldsCP(
 			customFieldName = "Boolean",
-			customFieldValue = "True"
-		);
+			customFieldValue = "True");
 	}
 
 	@priority = "4"
@@ -313,20 +270,17 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Text",
 			customFieldType = "Text",
-			resourceName = "Wiki Page"
-		);
+			resourceName = "Wiki Page");
 
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Wiki Test Page");
 
@@ -341,20 +295,17 @@ definition {
 		WikiPage.addPG(
 			customFieldText = "Wiki Text Custom Field",
 			wikiPageContent = "Wiki Page Content",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 
 		WikiPage.editPagePG(
 			customFieldTextEdit = "Wiki Text Custom Field Edit",
 			wikiPageContentEdit = "Wiki Page Content Edit",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 
 		WikiPage.viewPagePG(
 			customFieldText = "Wiki Text Custom Field Edit",
 			wikiPageContent = "Wiki Page Content Edit",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 
 		Navigator.gotoPage(pageName = "Wiki Test Page");
 
@@ -364,8 +315,7 @@ definition {
 			wikiPageRevisionNew = "1.2",
 			wikiPageRevisionOld = "1.0",
 			wikiPageTitle = "Wiki Page Title",
-			wikiVersionSummary = "Reverted to 1.0"
-		);
+			wikiVersionSummary = "Reverted to 1.0");
 
 		Navigator.gotoPage(pageName = "Wiki Test Page");
 
@@ -374,7 +324,98 @@ definition {
 		WikiPage.viewPagePG(
 			customFieldText = "Wiki Text Custom Field",
 			wikiPageContent = "Wiki Page Content",
-			wikiPageTitle = "Wiki Page Title"
-		);
+			wikiPageTitle = "Wiki Page Title");
 	}
+
+	@description = "This is a use case for LPS-57830."
+	@priority = "4"
+	test UpdateDocumentWithCustomField {
+		JSONGroup.addGroup(groupName = "Site Name");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Documents and Media Page");
+
+		Navigator.gotoSitePage(
+			pageName = "Documents and Media Page",
+			siteName = "Site Name");
+
+		Portlet.addPG(
+			pageName = "Documents and Media Page",
+			portletName = "Documents and Media");
+
+		DMDocument.enableActionsMenuOnPortlet();
+
+		JSONRole.addRegularRole(
+			roleKey = "Update DM Role",
+			roleTitle = "Update DM Role");
+
+		Permissions.definePermissionViaJSONAPI(
+			resourceAction = "VIEW",
+			resourceName = "com.liferay.expando.kernel.model.ExpandoColumn",
+			roleTitle = "Update DM Role");
+
+		Permissions.definePermissionViaJSONAPI(
+			resourceAction = "UPDATE",
+			resourceName = "com.liferay.document.library.kernel.model.DLFileEntry",
+			roleTitle = "Update DM Role");
+
+		JSONUser.addUser(
+			userEmailAddress = "userea@liferay.com",
+			userFirstName = "userfn",
+			userLastName = "userln",
+			userScreenName = "usersn");
+
+		JSONRole.assignRoleToUser(
+			roleTitle = "Update DM Role",
+			userEmailAddress = "userea@liferay.com");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.editPasswordCP(
+			userEmailAddress = "userea@liferay.com",
+			userScreenName = "usersn");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "Custom Fields");
+
+		CustomFields.addCP(
+			customFieldName = "Note",
+			customFieldType = "Text",
+			resourceName = "Document");
+
+		Navigator.openSiteURL(siteName = "Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Content",
+			panel = "Site Administration",
+			portlet = "Documents and Media");
+
+		DMDocument.addCP(
+			customFieldText = "This is my favorate Document",
+			dmDocumentDescription = "DM Document Description",
+			dmDocumentFile = "Document_1.txt",
+			dmDocumentTitle = "DM Document Title");
+
+		User.logoutAndLoginPG(
+			userLoginEmailAddress = "userea@liferay.com",
+			userLoginFullName = "userfn userln");
+
+		Navigator.gotoSitePage(
+			pageName = "Documents and Media Page",
+			siteName = "Site Name");
+
+		LexiconEntry.changeDisplayStyle(displayStyle = "list");
+
+		DMDocument.editPG(dmDocumentTitle = "DM Document Title");
+
+		AssertConsoleTextNotPresent(value1 = "PrincipalException$MustHavePermission");
+		AssertConsoleTextNotPresent(value1 = "must have UPDATE permission for com.liferay.portlet.expando.model.ExpandoColumn");
+	}
+
 }

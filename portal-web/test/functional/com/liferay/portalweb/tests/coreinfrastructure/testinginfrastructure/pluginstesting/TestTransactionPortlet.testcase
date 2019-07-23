@@ -1,5 +1,6 @@
 @component-name = "portal-test-plugins"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Test Plugins";
@@ -18,8 +19,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Test Transaction Page");
 
@@ -31,4 +31,5 @@ definition {
 
 		AssertTextNotPresent(value1 = "FAILED");
 	}
+
 }

@@ -31,6 +31,12 @@ birthdayCalendar.set(Calendar.YEAR, 1970);
 renderResponse.setTitle(LanguageUtil.get(request, "create-account"));
 %>
 
+<c:if test="<%= Validator.isNotNull(openId) %>">
+	<div class="alert alert-info">
+		<liferay-ui:message arguments="<%= openId %>" key="you-are-about-to-create-an-account-with-openid-x" translateArguments="<%= false %>" />
+	</div>
+</c:if>
+
 <portlet:actionURL name="/login/create_account" secure="<%= PropsValues.COMPANY_SECURITY_AUTH_REQUIRES_HTTPS || request.isSecure() %>" var="createAccountURL" windowState="<%= LiferayWindowState.MAXIMIZED.toString() %>">
 	<portlet:param name="mvcRenderCommandName" value="/login/create_account" />
 </portlet:actionURL>
@@ -45,6 +51,7 @@ renderResponse.setTitle(LanguageUtil.get(request, "create-account"));
 	<liferay-ui:error exception="<%= AddressStreetException.class %>" message="please-enter-a-valid-street" />
 	<liferay-ui:error exception="<%= AddressZipException.class %>" message="please-enter-a-valid-postal-code" />
 	<liferay-ui:error exception="<%= CaptchaConfigurationException.class %>" message="a-captcha-error-occurred-please-contact-an-administrator" />
+	<liferay-ui:error exception="<%= CaptchaException.class %>" message="captcha-verification-failed" />
 	<liferay-ui:error exception="<%= CaptchaTextException.class %>" message="text-verification-failed" />
 	<liferay-ui:error exception="<%= CompanyMaxUsersException.class %>" message="unable-to-create-user-account-because-the-maximum-number-of-users-has-been-reached" />
 	<liferay-ui:error exception="<%= ContactBirthdayException.class %>" message="please-enter-a-valid-birthday" />

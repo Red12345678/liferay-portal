@@ -1,4 +1,5 @@
 definition {
+
 	var ddlDataDefinitionName = "Data Definition Name";
 	var ddlListName = "List Name";
 
@@ -13,9 +14,7 @@ definition {
 
 		Search.searchCP(searchTerm = "${ddlDataDefinitionName}");
 
-		Click.waitForMenuToggleJSClick(
-			locator1 = "DDMSelectStructure#DDM_STRUCTURE_ELLIPSIS_1"
-		);
+		Click.waitForMenuToggleJSClick(locator1 = "DDMSelectStructure#DDM_STRUCTURE_ELLIPSIS_1");
 
 		MenuItem.click(menuItem = "Permissions");
 	}
@@ -29,8 +28,7 @@ definition {
 
 		WorkflowAsset.viewDetails(
 			userName = "${userName}",
-			workflowStatus = "${workflowStatus}"
-		);
+			workflowStatus = "${workflowStatus}");
 	}
 
 	macro gotoEdit {
@@ -42,9 +40,13 @@ definition {
 	macro gotoListRecords {
 		var key_ddlListName = "${ddlListName}";
 
-		AssertTextEquals(locator1 = "DDL#LIST_TABLE_NAME", value1 = "${ddlListName}");
+		AssertTextEquals(
+			locator1 = "DDL#LIST_TABLE_NAME",
+			value1 = "${ddlListName}");
 
-		AssertClick(locator1 = "DDL#LIST_TABLE_NAME", value1 = "${ddlListName}");
+		AssertClick(
+			locator1 = "DDL#LIST_TABLE_NAME",
+			value1 = "${ddlListName}");
 
 		SiteAdmin.viewPortletTitle(portletTitle = "${ddlListName}");
 	}
@@ -54,7 +56,9 @@ definition {
 
 		LexiconEntry.gotoHeaderMenuItem(menuItem = "Manage Data Definitions");
 
-		AssertTextEquals(locator1 = "Portlet#HEADER", value1 = "Data Definitions");
+		AssertTextEquals(
+			locator1 = "Portlet#HEADER",
+			value1 = "Data Definitions");
 	}
 
 	macro gotoManageTemplates {
@@ -62,9 +66,7 @@ definition {
 
 		var key_ddlDataDefinitionName = "${ddlDataDefinitionName}";
 
-		Click.waitForMenuToggleJSClick(
-			locator1 = "DDMSelectStructure#DDM_STRUCTURE_ELLIPSIS"
-		);
+		Click.waitForMenuToggleJSClick(locator1 = "DDMSelectStructure#DDM_STRUCTURE_ELLIPSIS");
 
 		MenuItem.click(menuItem = "Manage Templates");
 	}
@@ -74,21 +76,18 @@ definition {
 
 		AssertClick(
 			locator1 = "DDLConfiguration#NAVIGATION_OPTIONAL_CONFIGURATION",
-			value1 = "Optional Configuration"
-		);
+			value1 = "Optional Configuration");
 	}
 
 	macro gotoSpreadsheetView {
 		AssertTextEquals(
+			key_ddlListName = "${ddlListName}",
 			locator1 = "DDL#LIST_TABLE_NAME",
-			value1 = "${ddlListName}",
-			key_ddlListName = "${ddlListName}"
-		);
+			value1 = "${ddlListName}");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Spreadsheet View",
-			rowEntry = "${ddlListName}"
-		);
+			rowEntry = "${ddlListName}");
 	}
 
 	macro gotoView {
@@ -96,4 +95,5 @@ definition {
 
 		MenuItem.click(menuItem = "View");
 	}
+
 }

@@ -17,8 +17,6 @@
 <%@ include file="/init.jsp" %>
 
 <%
-CPDefinitionsDisplayContext cpDefinitionsDisplayContext = (CPDefinitionsDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
-
 ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
 CPDefinition cpDefinition = null;
@@ -38,7 +36,7 @@ else {
 	message="<%= StringPool.BLANK %>"
 	showWhenSingleIcon="<%= true %>"
 >
-	<c:if test="<%= cpDefinitionsDisplayContext.hasEditPermission(cpDefinition.getCPDefinitionId()) %>">
+	<c:if test="<%= CommerceCatalogPermission.contains(permissionChecker, cpDefinition, ActionKeys.UPDATE) %>">
 		<portlet:renderURL var="editURL">
 			<portlet:param name="mvcRenderCommandName" value="editProductDefinition" />
 			<portlet:param name="cpDefinitionId" value="<%= String.valueOf(cpDefinition.getCPDefinitionId()) %>" />
@@ -49,32 +47,15 @@ else {
 			message="edit"
 			url="<%= editURL %>"
 		/>
-	</c:if>
 
-	<c:if test="<%= cpDefinition.isApproved() && cpDefinitionsDisplayContext.hasViewPermission(cpDefinition.getCPDefinitionId()) %>">
-
-		<%
-		String productURL = cpDefinitionsDisplayContext.getProductURL(cpDefinition);
-		%>
-
-		<liferay-ui:icon
-			iconCssClass="icon-new-window"
-			message="view-in-public-store"
-			target="_blank"
-			url="<%= productURL %>"
-		/>
-	</c:if>
-
-	<c:if test="<%= cpDefinitionsDisplayContext.hasDeletePermission(cpDefinition.getCPDefinitionId()) %>">
 		<portlet:actionURL name="editProductDefinition" var="deleteURL">
-			<portlet:param name="<%= Constants.CMD %>" value="<%= TrashUtil.isTrashEnabled(scopeGroupId) ? Constants.MOVE_TO_TRASH : Constants.DELETE %>" />
+			<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="cpDefinitionId" value="<%= String.valueOf(cpDefinition.getCPDefinitionId()) %>" />
 		</portlet:actionURL>
 
 		<liferay-ui:icon-delete
 			label="<%= true %>"
-			trash="<%= TrashUtil.isTrashEnabled(scopeGroupId) %>"
 			url="<%= deleteURL %>"
 		/>
 	</c:if>

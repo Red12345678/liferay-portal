@@ -17,12 +17,12 @@
 <%@ include file="/init.jsp" %>
 
 <%
-CommerceWarehousesDisplayContext commerceWarehousesDisplayContext = (CommerceWarehousesDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
+CommerceInventoryWarehousesDisplayContext commerceInventoryWarehousesDisplayContext = (CommerceInventoryWarehousesDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 
-CommerceWarehouse commerceWarehouse = commerceWarehousesDisplayContext.getCommerceWarehouse();
+CommerceInventoryWarehouse commerceInventoryWarehouse = commerceInventoryWarehousesDisplayContext.getCommerceInventoryWarehouse();
 
-long commerceCountryId = BeanParamUtil.getLong(commerceWarehouse, request, "commerceCountryId");
-long commerceRegionId = BeanParamUtil.getLong(commerceWarehouse, request, "commerceRegionId");
+String countryTwoLettersISOCode = BeanParamUtil.getString(commerceInventoryWarehouse, request, "countryTwoLettersISOCode");
+String commerceRegionCode = BeanParamUtil.getString(commerceInventoryWarehouse, request, "commerceRegionCode");
 %>
 
 <liferay-ui:error-marker
@@ -30,9 +30,7 @@ long commerceRegionId = BeanParamUtil.getLong(commerceWarehouse, request, "comme
 	value="address"
 />
 
-<liferay-ui:error exception="<%= CommerceWarehouseCommerceRegionIdException.class %>" message="please-enter-a-valid-region" />
-
-<aui:model-context bean="<%= commerceWarehouse %>" model="<%= CommerceWarehouse.class %>" />
+<aui:model-context bean="<%= commerceInventoryWarehouse %>" model="<%= CommerceInventoryWarehouse.class %>" />
 
 <aui:fieldset>
 	<div class="col-md-6">
@@ -42,9 +40,9 @@ long commerceRegionId = BeanParamUtil.getLong(commerceWarehouse, request, "comme
 
 		<aui:input name="street3" />
 
-		<aui:select label="country" name="commerceCountryId" />
+		<aui:select label="country" name="countryTwoLettersISOCode" />
 
-		<aui:select label="region" name="commerceRegionId" />
+		<aui:select label="region" name="commerceRegionCode" />
 	</div>
 
 	<div class="col-md-6">
@@ -58,37 +56,38 @@ long commerceRegionId = BeanParamUtil.getLong(commerceWarehouse, request, "comme
 	new Liferay.DynamicSelect(
 		[
 			{
-				select: '<portlet:namespace />commerceCountryId',
+				select: '<portlet:namespace />countryTwoLettersISOCode',
 				selectData: function(callback) {
 					Liferay.Service(
 						'/commerce.commercecountry/get-commerce-countries',
 						{
-							groupId: <%= scopeGroupId %>,
+							companyId: <%= company.getCompanyId() %>,
 							active: true
 						},
 						callback
 					);
 				},
 				selectDesc: 'nameCurrentValue',
-				selectId: 'commerceCountryId',
+				selectId: 'twoLettersISOCode',
 				selectSort: '<%= true %>',
-				selectVal: '<%= commerceCountryId %>'
+				selectVal: '<%= HtmlUtil.escape(countryTwoLettersISOCode) %>'
 			},
 			{
-				select: '<portlet:namespace />commerceRegionId',
+				select: '<portlet:namespace />commerceRegionCode',
 				selectData: function(callback, selectKey) {
 					Liferay.Service(
 						'/commerce.commerceregion/get-commerce-regions',
 						{
-							commerceCountryId: Number(selectKey),
+							companyId: <%= company.getCompanyId() %>,
+							countryTwoLettersISOCode: selectKey,
 							active: true
 						},
 						callback
 					);
 				},
 				selectDesc: 'name',
-				selectId: 'commerceRegionId',
-				selectVal: '<%= commerceRegionId %>'
+				selectId: 'code',
+				selectVal: '<%= HtmlUtil.escape(commerceRegionCode) %>'
 			}
 		]
 	);

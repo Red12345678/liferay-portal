@@ -15,7 +15,7 @@
 package com.liferay.commerce.currency.web.internal.portlet.action;
 
 import com.liferay.commerce.admin.constants.CommerceAdminPortletKeys;
-import com.liferay.commerce.currency.configuration.ExchangeRateProviderGroupServiceConfiguration;
+import com.liferay.commerce.currency.configuration.CommerceCurrencyConfiguration;
 import com.liferay.commerce.currency.constants.CommerceCurrencyExchangeRateConstants;
 import com.liferay.commerce.currency.exception.CommerceCurrencyCodeException;
 import com.liferay.commerce.currency.exception.CommerceCurrencyNameException;
@@ -30,7 +30,7 @@ import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
+import com.liferay.portal.kernel.settings.CompanyServiceSettingsLocator;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -53,7 +53,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + CommerceAdminPortletKeys.COMMERCE_ADMIN,
+		"javax.portlet.name=" + CommerceAdminPortletKeys.COMMERCE_ADMIN_VIRTUAL_INSTANCE,
 		"mvc.command.name=editCommerceCurrency"
 	},
 	service = MVCActionCommand.class
@@ -186,9 +186,9 @@ public class EditCommerceCurrencyMVCActionCommand extends BaseMVCActionCommand {
 
 		if (commerceCurrencyId <= 0) {
 			commerceCurrency = _commerceCurrencyService.addCommerceCurrency(
-				code, nameMap, new BigDecimal(rate), formatPatternMap,
-				maxFractionDigits, minFractionDigits, roundingMode, primary,
-				priority, active, serviceContext);
+				serviceContext.getUserId(), code, nameMap, new BigDecimal(rate),
+				formatPatternMap, maxFractionDigits, minFractionDigits,
+				roundingMode, primary, priority, active, serviceContext);
 		}
 		else {
 			commerceCurrency = _commerceCurrencyService.updateCommerceCurrency(
@@ -223,17 +223,15 @@ public class EditCommerceCurrencyMVCActionCommand extends BaseMVCActionCommand {
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			CommerceCurrency.class.getName(), actionRequest);
 
-		ExchangeRateProviderGroupServiceConfiguration
-			exchangeRateProviderGroupServiceConfiguration =
-				_configurationProvider.getConfiguration(
-					ExchangeRateProviderGroupServiceConfiguration.class,
-					new GroupServiceSettingsLocator(
-						serviceContext.getScopeGroupId(),
-						CommerceCurrencyExchangeRateConstants.SERVICE_NAME));
+		CommerceCurrencyConfiguration commerceCurrencyConfiguration =
+			_configurationProvider.getConfiguration(
+				CommerceCurrencyConfiguration.class,
+				new CompanyServiceSettingsLocator(
+					serviceContext.getCompanyId(),
+					CommerceCurrencyExchangeRateConstants.SERVICE_NAME));
 
 		String exchangeRateProviderKey =
-			exchangeRateProviderGroupServiceConfiguration.
-				defaultExchangeRateProviderKey();
+			commerceCurrencyConfiguration.defaultExchangeRateProviderKey();
 
 		for (long updateCommerceCurrencyExchangeRateId :
 				updateCommerceCurrencyExchangeRateIds) {

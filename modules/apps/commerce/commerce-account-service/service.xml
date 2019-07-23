@@ -57,6 +57,119 @@
 		<reference entity="Role" package-path="com.liferay.portal" />
 		<reference entity="ExpandoRow" package-path="com.liferay.portlet.expando" />
 	</entity>
+	<entity external-reference-code="true" local-service="true" name="CommerceAccountGroup" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="commerceAccountGroupId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="name" type="String" />> >
+		<column name="type" type="int" />
+		<column name="system" type="boolean" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="name" />
+		</order>
+
+		<!-- Finders -->
+
+		<finder name="CommerceAccountGroupIds" return-type="Collection">
+			<finder-column arrayable-operator="OR" name="commerceAccountGroupId" />
+		</finder>
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
+		</finder>
+		<finder name="C_T" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="type" />
+		</finder>
+
+		<!-- References -->
+
+		<reference entity="Role" package-path="com.liferay.portal" />
+		<reference entity="ExpandoRow" package-path="com.liferay.portlet.expando" />
+	</entity>
+	<entity external-reference-code="true" local-service="true" name="CommerceAccountGroupCommerceAccountRel" remote-service="true" table="CAccountGroupCAccountRel">
+
+		<!-- PK fields -->
+
+		<column db-name="CAccountGroupCAccountRelId" name="commerceAccountGroupCommerceAccountRelId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="commerceAccountGroupId" type="long" />
+		<column name="commerceAccountId" type="long" />
+
+		<!-- Finders -->
+
+		<finder name="CommerceAccountGroupId" return-type="Collection">
+			<finder-column name="commerceAccountGroupId" />
+		</finder>
+		<finder name="CommerceAccountId" return-type="Collection">
+			<finder-column name="commerceAccountId" />
+		</finder>
+	</entity>
+	<entity local-service="true" name="CommerceAccountGroupRel" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="commerceAccountGroupRelId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="classNameId" type="long" />
+		<column name="classPK" type="long" />
+		<column name="commerceAccountGroupId" type="long" />
+
+		<!-- Order -->
+
+		<order by="desc">
+			<order-column name="createDate" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="CommerceAccountGroupId" return-type="Collection">
+			<finder-column name="commerceAccountGroupId" />
+		</finder>
+		<finder name="C_C" return-type="Collection">
+			<finder-column name="classNameId" />
+			<finder-column name="classPK" />
+		</finder>
+		<finder name="C_C_C" return-type="CommerceAccountGroupRel" unique="true">
+			<finder-column name="classNameId" />
+			<finder-column name="classPK" />
+			<finder-column name="commerceAccountGroupId" />
+		</finder>
+	</entity>
 	<entity local-service="true" name="CommerceAccountOrganizationRel" remote-service="true">
 
 		<!-- PK fields -->
@@ -122,7 +235,11 @@
 		<reference entity="UserGroupRole" package-path="com.liferay.portal" />
 	</entity>
 	<exceptions>
+		<exception>CommerceAccountGroupName</exception>
 		<exception>CommerceAccountName</exception>
+		<exception>CommerceAccountType</exception>
 		<exception>DuplicateCommerceAccount</exception>
+		<exception>DuplicateCommerceAccountGroupRel</exception>
+		<exception>SystemCommerceAccountGroup</exception>
 	</exceptions>
 </service-builder>

@@ -62,7 +62,6 @@ public class ConfiguratorExtension implements Extension {
 				_createConfiguration(namedConfigurationContent);
 			}
 			catch (IOException ioe) {
-				continue;
 			}
 		}
 	}

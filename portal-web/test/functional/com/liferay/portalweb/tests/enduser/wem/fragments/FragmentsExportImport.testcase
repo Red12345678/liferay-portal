@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Fragments";
@@ -38,14 +39,11 @@ definition {
 
 		UploadCommonFile(
 			locator1 = "TextInput#FILE",
-			value1 = "fragment-invalid-zip.zip"
-		);
+			value1 = "fragment-invalid-zip.zip");
 
 		Button.click(button = "Import");
 
-		Alert.viewErrorMessage(
-			errorMessage = "The selected file is not a valid zip file."
-		);
+		Alert.viewErrorMessage(errorMessage = "The selected file is not a valid zip file.");
 
 		IFrame.closeFrame();
 	}
@@ -57,12 +55,13 @@ definition {
 
 		FragmentsAdmin.gotoImportCollection();
 
-		UploadCommonFile(locator1 = "TextInput#FILE", value1 = "Document_1.doc");
+		UploadCommonFile(
+			locator1 = "TextInput#FILE",
+			value1 = "Document_1.doc");
 
 		AssertTextEquals(
 			locator1 = "Message#ERROR_FORM_VALIDATION",
-			value1 = "Please enter a file with a valid extension (zip)."
-		);
+			value1 = "Please enter a file with a valid extension (zip).");
 
 		IFrame.closeFrame();
 	}
@@ -73,8 +72,7 @@ definition {
 
 		FragmentsAdmin.addCollection(
 			collectionDescription = "Collection Description",
-			collectionName = "Collection Name"
-		);
+			collectionName = "Collection Name");
 
 		Navigator.gotoNavNested(navNested = "Collection Name");
 
@@ -84,22 +82,19 @@ definition {
 
 		Type.typeAceEditorNoError(
 			locator1 = "FragmentEditor#HTML_EDITOR",
-			value1 = "${htmlSnippet}"
-		);
+			value1 = "${htmlSnippet}");
 
 		var cssSnippet = TestCase.getFileContent(fileName = "fragment_button.css");
 
 		Type.typeAceEditorNoError(
 			locator1 = "FragmentEditor#CSS_EDITOR",
-			value1 = "${cssSnippet}"
-		);
+			value1 = "${cssSnippet}");
 
 		var javascriptSnippet = TestCase.getFileContent(fileName = "fragment_button.js");
 
 		Type.typeAceEditorNoError(
 			locator1 = "FragmentEditor#JAVASCRIPT_EDITOR",
-			value1 = "${javascriptSnippet}"
-		);
+			value1 = "${javascriptSnippet}");
 
 		PortletEntry.publish();
 
@@ -113,7 +108,9 @@ definition {
 
 		Navigator.gotoNavNested(navNested = "Collection Name");
 
-		LexiconEntry.gotoEntryMenuItem(menuItem = "Edit", rowEntry = "Fragment Name");
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Edit",
+			rowEntry = "Fragment Name");
 
 		SelectFrame(locator1 = "FragmentEditor#PREVIEW_IFRAME");
 
@@ -127,4 +124,5 @@ definition {
 
 		IFrame.selectTopFrame();
 	}
+
 }

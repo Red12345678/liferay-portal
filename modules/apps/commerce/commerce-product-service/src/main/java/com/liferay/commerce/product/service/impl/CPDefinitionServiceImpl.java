@@ -14,20 +14,18 @@
 
 package com.liferay.commerce.product.service.impl;
 
-import com.liferay.asset.kernel.model.AssetCategory;
-import com.liferay.commerce.product.constants.CPActionKeys;
-import com.liferay.commerce.product.constants.CPConstants;
+import com.liferay.commerce.product.exception.NoSuchCPDefinitionException;
 import com.liferay.commerce.product.model.CPDefinition;
-import com.liferay.commerce.product.model.CProduct;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.base.CPDefinitionServiceBaseImpl;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermissionFactory;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.UnicodeProperties;
@@ -37,6 +35,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * @author Marco Leo
@@ -46,7 +45,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 
 	@Override
 	public CPDefinition addCPDefinition(
-			Map<Locale, String> nameMap,
+			long groupId, long userId, Map<Locale, String> nameMap,
 			Map<Locale, String> shortDescriptionMap,
 			Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
 			Map<Locale, String> metaTitleMap,
@@ -62,54 +61,28 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			int displayDateMinute, int expirationDateMonth,
 			int expirationDateDay, int expirationDateYear,
 			int expirationDateHour, int expirationDateMinute,
-			boolean neverExpire, ServiceContext serviceContext)
-		throws PortalException {
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), serviceContext.getScopeGroupId(),
-			CPActionKeys.ADD_COMMERCE_PRODUCT_DEFINITION);
-
-		return cpDefinitionLocalService.addCPDefinition(
-			nameMap, shortDescriptionMap, descriptionMap, urlTitleMap,
-			metaTitleMap, metaDescriptionMap, metaKeywordsMap, productTypeName,
-			ignoreSKUCombinations, shippable, freeShipping, shipSeparately,
-			shippingExtraPrice, width, height, depth, weight, cpTaxCategoryId,
-			taxExempt, telcoOrElectronics, ddmStructureKey, published,
-			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, expirationDateMonth, expirationDateDay,
-			expirationDateYear, expirationDateHour, expirationDateMinute,
-			neverExpire, serviceContext);
-	}
-
-	@Override
-	public CPDefinition addCPDefinition(
-			Map<Locale, String> nameMap,
-			Map<Locale, String> shortDescriptionMap,
-			Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
-			Map<Locale, String> metaTitleMap,
-			Map<Locale, String> metaDescriptionMap,
-			Map<Locale, String> metaKeywordsMap, String productTypeName,
-			boolean ignoreSKUCombinations, String ddmStructureKey,
-			boolean published, int displayDateMonth, int displayDateDay,
-			int displayDateYear, int displayDateHour, int displayDateMinute,
-			int expirationDateMonth, int expirationDateDay,
-			int expirationDateYear, int expirationDateHour,
-			int expirationDateMinute, boolean neverExpire,
+			boolean neverExpire, String defaultSku, boolean subscriptionEnabled,
+			int subscriptionLength, String subscriptionType,
+			UnicodeProperties subscriptionTypeSettingsProperties,
+			long maxSubscriptionCycles, String externalReferenceCode,
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), serviceContext.getScopeGroupId(),
-			CPActionKeys.ADD_COMMERCE_PRODUCT_DEFINITION);
+		_checkCommerceCatalogPermission(groupId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.addCPDefinition(
-			nameMap, shortDescriptionMap, descriptionMap, urlTitleMap,
-			metaTitleMap, metaDescriptionMap, metaKeywordsMap, productTypeName,
-			ignoreSKUCombinations, ddmStructureKey, published, displayDateMonth,
-			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
-			expirationDateMonth, expirationDateDay, expirationDateYear,
-			expirationDateHour, expirationDateMinute, neverExpire,
-			serviceContext);
+			groupId, userId, nameMap, shortDescriptionMap, descriptionMap,
+			urlTitleMap, metaTitleMap, metaDescriptionMap, metaKeywordsMap,
+			productTypeName, ignoreSKUCombinations, shippable, freeShipping,
+			shipSeparately, shippingExtraPrice, width, height, depth, weight,
+			cpTaxCategoryId, taxExempt, telcoOrElectronics, ddmStructureKey,
+			published, displayDateMonth, displayDateDay, displayDateYear,
+			displayDateHour, displayDateMinute, expirationDateMonth,
+			expirationDateDay, expirationDateYear, expirationDateHour,
+			expirationDateMinute, neverExpire, defaultSku, subscriptionEnabled,
+			subscriptionLength, subscriptionType,
+			subscriptionTypeSettingsProperties, maxSubscriptionCycles,
+			externalReferenceCode, serviceContext);
 	}
 
 	@Override
@@ -117,8 +90,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			long cpDefinitionId, long categoryId, ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		cpDefinitionLocalService.deleteAssetCategoryCPDefinition(
 			cpDefinitionId, categoryId, serviceContext);
@@ -126,8 +99,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 
 	@Override
 	public void deleteCPDefinition(long cpDefinitionId) throws PortalException {
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.DELETE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		cpDefinitionLocalService.deleteCPDefinition(cpDefinitionId);
 	}
@@ -140,8 +113,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			cpDefinitionId);
 
 		if (cpDefinition != null) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cpDefinition, ActionKeys.VIEW);
+			_checkCommerceCatalogPermissionByCPDefinitionId(
+				cpDefinitionId, ActionKeys.VIEW);
 		}
 
 		return cpDefinition;
@@ -158,8 +131,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 					companyId, externalReferenceCode);
 
 		if (cpDefinition != null) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cpDefinition, ActionKeys.VIEW);
+			_checkCommerceCatalogPermissionByCPDefinitionId(
+				cpDefinition.getCPDefinitionId(), ActionKeys.VIEW);
 		}
 
 		return cpDefinition;
@@ -173,8 +146,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			cpDefinitionLocalService.fetchCPDefinitionByCProductId(cProductId);
 
 		if (cpDefinition != null) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cpDefinition, ActionKeys.VIEW);
+			_checkCommerceCatalogPermissionByCPDefinitionId(
+				cpDefinition.getCPDefinitionId(), ActionKeys.VIEW);
 		}
 
 		return cpDefinition;
@@ -184,22 +157,10 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 	public CPDefinition getCPDefinition(long cpDefinitionId)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionLocalService.getCPDefinition(cpDefinitionId);
-	}
-
-	@Override
-	public List<CPDefinition> getCPDefinitions(
-			long groupId, int status, int start, int end)
-		throws PortalException {
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
-
-		return cpDefinitionLocalService.getCPDefinitions(
-			groupId, status, start, end);
 	}
 
 	@Override
@@ -208,85 +169,25 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			OrderByComparator<CPDefinition> orderByComparator)
 		throws PortalException {
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
+		_checkCommerceCatalogPermission(groupId, ActionKeys.VIEW);
 
 		return cpDefinitionLocalService.getCPDefinitions(
 			groupId, status, start, end, orderByComparator);
 	}
 
 	@Override
-	public List<CPDefinition> getCPDefinitions(
-			long groupId, String productTypeName, String languageId, int status,
-			int start, int end,
-			OrderByComparator<CPDefinition> orderByComparator)
-		throws PortalException {
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
-
-		return cpDefinitionLocalService.getCPDefinitions(
-			groupId, productTypeName, languageId, status, start, end,
-			orderByComparator);
-	}
-
-	@Override
-	public List<CPDefinition> getCPDefinitionsByCategoryId(
-			long categoryId, int start, int end)
-		throws PortalException {
-
-		AssetCategory assetCategory =
-			assetCategoryLocalService.getAssetCategory(categoryId);
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), assetCategory.getGroupId(),
-			CPActionKeys.MANAGE_CATALOG);
-
-		return cpDefinitionLocalService.getCPDefinitionsByCategoryId(
-			categoryId, start, end);
-	}
-
-	@Override
 	public int getCPDefinitionsCount(long groupId, int status)
 		throws PortalException {
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
+		_checkCommerceCatalogPermission(groupId, ActionKeys.VIEW);
 
 		return cpDefinitionLocalService.getCPDefinitionsCount(groupId, status);
 	}
 
 	@Override
-	public int getCPDefinitionsCount(
-			long groupId, String productTypeName, String languageId, int status)
-		throws PortalException {
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
-
-		return cpDefinitionLocalService.getCPDefinitionsCount(
-			groupId, productTypeName, languageId, status);
-	}
-
-	@Override
-	public int getCPDefinitionsCountByCategoryId(long categoryId)
-		throws PortalException {
-
-		AssetCategory assetCategory =
-			assetCategoryLocalService.getAssetCategory(categoryId);
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), assetCategory.getGroupId(),
-			CPActionKeys.MANAGE_CATALOG);
-
-		return cpDefinitionLocalService.getCPDefinitionsCountByCategoryId(
-			categoryId);
-	}
-
-	@Override
 	public String getLayoutUuid(long cpDefinitionId) throws PortalException {
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionLocalService.getLayoutUuid(cpDefinitionId);
 	}
@@ -295,58 +196,50 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 	public String getUrlTitleMapAsXML(long cpDefinitionId)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionLocalService.getUrlTitleMapAsXML(cpDefinitionId);
 	}
 
 	@Override
-	public CPDefinition moveCPDefinitionToTrash(long cpDefinitionId)
-		throws PortalException {
-
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.DELETE);
-
-		return cpDefinitionLocalService.moveCPDefinitionToTrash(
-			getUserId(), cpDefinitionId);
-	}
-
-	@Override
-	public void restoreCPDefinitionFromTrash(long cpDefinitionId)
-		throws PortalException {
-
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.DELETE);
-
-		cpDefinitionLocalService.restoreCPDefinitionFromTrash(
-			getUserId(), cpDefinitionId);
-	}
-
-	@Override
 	public BaseModelSearchResult<CPDefinition> searchCPDefinitions(
-			long companyId, long groupId, String keywords, int status,
-			int start, int end, Sort sort)
+			long companyId, String keywords, int status, int start, int end,
+			Sort sort)
 		throws PortalException {
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
+		List<CommerceCatalog> commerceCatalogs =
+			commerceCatalogService.getCommerceCatalogs(
+				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		Stream<CommerceCatalog> stream = commerceCatalogs.stream();
+
+		long[] groupIds = stream.mapToLong(
+			CommerceCatalog::getGroupId
+		).toArray();
 
 		return cpDefinitionLocalService.searchCPDefinitions(
-			companyId, groupId, keywords, status, start, end, sort);
+			companyId, groupIds, keywords, status, start, end, sort);
 	}
 
 	@Override
 	public BaseModelSearchResult<CPDefinition> searchCPDefinitions(
-			long companyId, long groupId, String keywords, String filterFields,
+			long companyId, String keywords, String filterFields,
 			String filterValues, int start, int end, Sort sort)
 		throws PortalException {
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
+		List<CommerceCatalog> commerceCatalogs =
+			commerceCatalogService.getCommerceCatalogs(
+				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		Stream<CommerceCatalog> stream = commerceCatalogs.stream();
+
+		long[] groupIds = stream.mapToLong(
+			CommerceCatalog::getGroupId
+		).toArray();
 
 		return cpDefinitionLocalService.searchCPDefinitions(
-			companyId, groupId, keywords, filterFields, filterValues, start,
+			companyId, groupIds, keywords, filterFields, filterValues, start,
 			end, sort);
 	}
 
@@ -366,8 +259,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			boolean neverExpire, ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateCPDefinition(
 			cpDefinitionId, nameMap, shortDescriptionMap, descriptionMap,
@@ -380,15 +273,39 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 	}
 
 	@Override
+	public CPDefinition updateCPDefinitionAccountGroupFilter(
+			long cpDefinitionId, boolean enable)
+		throws PortalException {
+
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
+
+		return cpDefinitionLocalService.updateCPDefinitionAccountGroupFilter(
+			cpDefinitionId, enable);
+	}
+
+	@Override
 	public CPDefinition updateCPDefinitionCategorization(
 			long cpDefinitionId, ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateCPDefinitionCategorization(
 			cpDefinitionId, serviceContext);
+	}
+
+	@Override
+	public CPDefinition updateCPDefinitionChannelFilter(
+			long cpDefinitionId, boolean enable)
+		throws PortalException {
+
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
+
+		return cpDefinitionLocalService.updateCPDefinitionChannelFilter(
+			cpDefinitionId, enable);
 	}
 
 	@Override
@@ -397,8 +314,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		cpDisplayLayoutLocalService.addCPDisplayLayout(
 			CPDefinition.class, cpDefinitionId, layoutUuid, serviceContext);
@@ -412,8 +329,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateShippingInfo(
 			cpDefinitionId, shippable, freeShipping, shipSeparately,
@@ -426,8 +343,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			Map<String, Serializable> workflowContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateStatus(
 			userId, cpDefinitionId, status, serviceContext, workflowContext);
@@ -441,8 +358,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			long maxSubscriptionCycles, ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateSubscriptionInfo(
 			cpDefinitionId, subscriptionEnabled, subscriptionLength,
@@ -456,8 +373,8 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			boolean telcoOrElectronics)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.updateTaxCategoryInfo(
 			cpDefinitionId, cpTaxCategoryId, taxExempt, telcoOrElectronics);
@@ -465,7 +382,7 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 
 	@Override
 	public CPDefinition upsertCPDefinition(
-			Map<Locale, String> nameMap,
+			long groupId, long userId, Map<Locale, String> nameMap,
 			Map<Locale, String> shortDescriptionMap,
 			Map<Locale, String> descriptionMap, Map<Locale, String> urlTitleMap,
 			Map<Locale, String> metaTitleMap,
@@ -481,45 +398,68 @@ public class CPDefinitionServiceImpl extends CPDefinitionServiceBaseImpl {
 			int displayDateMinute, int expirationDateMonth,
 			int expirationDateDay, int expirationDateYear,
 			int expirationDateHour, int expirationDateMinute,
-			boolean neverExpire, String defaultSKU,
-			String externalReferenceCode, ServiceContext serviceContext)
+			boolean neverExpire, String defaultSku, boolean subscriptionEnabled,
+			int subscriptionLength, String subscriptionType,
+			UnicodeProperties subscriptionTypeSettingsProperties,
+			long maxSubscriptionCycles, String externalReferenceCode,
+			ServiceContext serviceContext)
 		throws PortalException {
 
-		CProduct cProduct = cProductLocalService.fetchCProductByReferenceCode(
-			serviceContext.getCompanyId(), externalReferenceCode);
-
-		if (cProduct == null) {
-			_portletResourcePermission.check(
-				getPermissionChecker(), serviceContext.getScopeGroupId(),
-				CPActionKeys.ADD_COMMERCE_PRODUCT_DEFINITION);
-		}
-		else {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cProduct.getPublishedCPDefinitionId(),
-				ActionKeys.UPDATE);
-		}
+		_checkCommerceCatalogPermission(groupId, ActionKeys.UPDATE);
 
 		return cpDefinitionLocalService.upsertCPDefinition(
-			nameMap, shortDescriptionMap, descriptionMap, urlTitleMap,
-			metaTitleMap, metaDescriptionMap, metaKeywordsMap, productTypeName,
-			ignoreSKUCombinations, shippable, freeShipping, shipSeparately,
-			shippingExtraPrice, width, height, depth, weight, cpTaxCategoryId,
-			taxExempt, telcoOrElectronics, ddmStructureKey, published,
-			displayDateMonth, displayDateDay, displayDateYear, displayDateHour,
-			displayDateMinute, expirationDateMonth, expirationDateDay,
-			expirationDateYear, expirationDateHour, expirationDateMinute,
-			neverExpire, defaultSKU, externalReferenceCode, serviceContext);
+			groupId, userId, nameMap, shortDescriptionMap, descriptionMap,
+			urlTitleMap, metaTitleMap, metaDescriptionMap, metaKeywordsMap,
+			productTypeName, ignoreSKUCombinations, shippable, freeShipping,
+			shipSeparately, shippingExtraPrice, width, height, depth, weight,
+			cpTaxCategoryId, taxExempt, telcoOrElectronics, ddmStructureKey,
+			published, displayDateMonth, displayDateDay, displayDateYear,
+			displayDateHour, displayDateMinute, expirationDateMonth,
+			expirationDateDay, expirationDateYear, expirationDateHour,
+			expirationDateMinute, neverExpire, defaultSku, subscriptionEnabled,
+			subscriptionLength, subscriptionType,
+			subscriptionTypeSettingsProperties, maxSubscriptionCycles,
+			externalReferenceCode, serviceContext);
 	}
 
-	private static volatile ModelResourcePermission<CPDefinition>
-		_cpDefinitionModelResourcePermission =
+	private void _checkCommerceCatalogPermission(long groupId, String actionId)
+		throws PortalException {
+
+		CommerceCatalog commerceCatalog =
+			commerceCatalogLocalService.fetchCommerceCatalogByGroupId(groupId);
+
+		if (commerceCatalog == null) {
+			throw new PrincipalException();
+		}
+
+		_commerceCatalogModelResourcePermission.check(
+			getPermissionChecker(), commerceCatalog, actionId);
+	}
+
+	private void _checkCommerceCatalogPermissionByCPDefinitionId(
+			long cpDefinitionId, String actionId)
+		throws PortalException {
+
+		CPDefinition cpDefinition = cpDefinitionLocalService.fetchCPDefinition(
+			cpDefinitionId);
+
+		if (cpDefinition == null) {
+			throw new NoSuchCPDefinitionException();
+		}
+
+		CommerceCatalog commerceCatalog =
+			commerceCatalogLocalService.fetchCommerceCatalogByGroupId(
+				cpDefinition.getGroupId());
+
+		_commerceCatalogModelResourcePermission.check(
+			getPermissionChecker(), commerceCatalog, actionId);
+	}
+
+	private static volatile ModelResourcePermission<CommerceCatalog>
+		_commerceCatalogModelResourcePermission =
 			ModelResourcePermissionFactory.getInstance(
 				CPDefinitionServiceImpl.class,
-				"_cpDefinitionModelResourcePermission", CPDefinition.class);
-	private static volatile PortletResourcePermission
-		_portletResourcePermission =
-			PortletResourcePermissionFactory.getInstance(
-				CPDefinitionServiceImpl.class, "_portletResourcePermission",
-				CPConstants.RESOURCE_NAME);
+				"_commerceCatalogModelResourcePermission",
+				CommerceCatalog.class);
 
 }

@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Display Pages";
@@ -13,9 +14,7 @@ definition {
 
 		FragmentsAdmin.openFragmentsAdmin(siteURLKey = "test-site-name");
 
-		FragmentsAdmin.importCollectionFromDependenciesFolder(
-			collectionZipFile = "fragment-collection.zip"
-		);
+		FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "fragment-collection.zip");
 
 		DisplayPagesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
@@ -48,15 +47,13 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		AssertVisible(
-			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT");
 
 		PageEditor.viewAutoSaveMessage();
 
@@ -64,23 +61,20 @@ definition {
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "Display Page Name"
-		);
+			rowEntry = "Display Page Name");
 
 		AssertVisible(
-			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT");
 	}
 
 	@priority = "4"
 	test AssertAssetTypeOnlySelectableOnce {
 		PageEditorMapping.selectAssetType(
 			assetType = "Web Content Article",
-			subType = "Basic Web Content"
-		);
+			subType = "Basic Web Content");
 
 		PageEditorMapping.assertAssetTypeUnselectable();
 	}
@@ -90,60 +84,53 @@ definition {
 	test AssertDisplayPageEditorFunctionality {
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Rich Text"
-		);
+			fragmentName = "Rich Text");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Button"
-		);
+			fragmentName = "Button");
 
-		PageEditor.moveFragment(direction = "down", fragmentName = "Title");
+		PageEditor.moveFragment(
+			direction = "down",
+			fragmentName = "Title");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Content"
-		);
+			fragmentName = "Content");
 
 		PageEditor.editFragmentText(
 			fragmentName = "Rich Text",
 			id = "rich-text",
-			text = "Editing Finished"
-		);
+			text = "Editing Finished");
 
 		PageEditor.removeFragment(fragmentName = "Button");
 
 		PageEditor.viewFragmentEditableText(
 			editableText = "Editing Finished",
 			fragmentName = "Rich Text",
-			id = "rich-text"
-		);
+			id = "rich-text");
 
 		AssertVisible(
-			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT",
 			key_content = "Editing Finished",
 			key_fragmentClass = "rich-text",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet",
 			key_fragmentClass = "header",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tempus eleifend lacus nec porttitor. Vestibulum pharetra ullamcorper felis volutpat commodo. Nam id ipsum placerat, hendrerit orci eu, congue nisi. Proin.",
 			key_fragmentClass = "body",
-			key_position = "3"
-		);
+			key_position = "3",
+			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT");
 
 		Button.viewNotPresent(button = "Submit");
 	}
@@ -165,38 +152,34 @@ definition {
 	test EditDisplayPage {
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Rich Text"
-		);
+			fragmentName = "Rich Text");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Button"
-		);
+			fragmentName = "Button");
 
 		PortletEntry.publish();
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "Display Page Name"
-		);
+			rowEntry = "Display Page Name");
 
-		PageEditor.moveFragment(direction = "down", fragmentName = "Title");
+		PageEditor.moveFragment(
+			direction = "down",
+			fragmentName = "Title");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Content"
-		);
+			fragmentName = "Content");
 
 		PageEditor.editFragmentText(
 			fragmentName = "Rich Text",
 			id = "rich-text",
-			text = "Editing Finished"
-		);
+			text = "Editing Finished");
 
 		PageEditor.removeFragment(fragmentName = "Button");
 
@@ -204,35 +187,30 @@ definition {
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "Display Page Name"
-		);
+			rowEntry = "Display Page Name");
 
 		PageEditor.viewFragmentEditableText(
 			editableText = "Editing Finished",
 			fragmentName = "Rich Text",
-			id = "rich-text"
-		);
+			id = "rich-text");
 
 		AssertVisible(
-			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT",
 			key_content = "Editing Finished",
 			key_fragmentClass = "rich-text",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet",
 			key_fragmentClass = "header",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tempus eleifend lacus nec porttitor. Vestibulum pharetra ullamcorper felis volutpat commodo. Nam id ipsum placerat, hendrerit orci eu, congue nisi. Proin.",
 			key_fragmentClass = "body",
-			key_position = "3"
-		);
+			key_position = "3",
+			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT");
 
 		Button.viewNotPresent(button = "Submit");
 	}
@@ -244,8 +222,7 @@ definition {
 
 		PageTemplatesAdmin.rename(
 			pageTemplateName = "Display Page Name New",
-			rowEntry = "Display Page Name"
-		);
+			rowEntry = "Display Page Name");
 
 		LexiconEntry.viewEntryName(rowEntry = "Display Page Name New");
 	}
@@ -255,8 +232,7 @@ definition {
 	test ViewCannotDeleteActiveDisplayPage {
 		PageEditorMapping.selectAssetType(
 			assetType = "Web Content Article",
-			subType = "Basic Web Content"
-		);
+			subType = "Basic Web Content");
 
 		Button.clickPublish();
 
@@ -264,21 +240,19 @@ definition {
 
 		WebContent.addArticleCP(
 			webContentContent = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 
 		WebContentNavigator.gotoEditCP(webContentTitle = "Webcontent Title");
 
 		WebContent.editDisplayPage(
 			pageName = "Display Page Name",
-			pageType = "Display Pages"
-		);
+			pageType = "Display Pages");
 
 		DisplayPagesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
 		LexiconEntry.delete(
 			failure = "Error:You cannot delete asset display pages that are used by one or more assets.",
-			rowEntry = "Display Page Name"
-		);
+			rowEntry = "Display Page Name");
 	}
+
 }

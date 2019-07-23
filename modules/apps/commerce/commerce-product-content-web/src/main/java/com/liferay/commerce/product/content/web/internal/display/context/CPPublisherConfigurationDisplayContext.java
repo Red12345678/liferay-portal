@@ -37,6 +37,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletProvider;
@@ -147,19 +149,18 @@ public class CPPublisherConfigurationDisplayContext
 		JSONArray rulesJSONArray = JSONFactoryUtil.createJSONArray();
 
 		for (int queryLogicIndex : queryLogicIndexes) {
-			JSONObject ruleJSONObject = JSONFactoryUtil.createJSONObject();
-
 			boolean queryAndOperator = PrefsParamUtil.getBoolean(
 				portletPreferences, cpContentRequestHelper.getRequest(),
 				"queryAndOperator" + queryLogicIndex);
-
-			ruleJSONObject.put("queryAndOperator", queryAndOperator);
-
 			boolean queryContains = PrefsParamUtil.getBoolean(
 				portletPreferences, cpContentRequestHelper.getRequest(),
 				"queryContains" + queryLogicIndex, true);
 
-			ruleJSONObject.put("queryContains", queryContains);
+			JSONObject ruleJSONObject = JSONUtil.put(
+				"queryAndOperator", queryAndOperator
+			).put(
+				"queryContains", queryContains
+			);
 
 			String queryValues = StringUtil.merge(
 				portletPreferences.getValues(
@@ -175,7 +176,7 @@ public class CPPublisherConfigurationDisplayContext
 					"queryTagNames" + queryLogicIndex, queryValues);
 
 				queryValues = filterAssetTagNames(
-					themeDisplay.getScopeGroupId(), queryValues);
+					themeDisplay.getCompanyGroupId(), queryValues);
 			}
 			else {
 				queryValues = ParamUtil.getString(
@@ -337,9 +338,12 @@ public class CPPublisherConfigurationDisplayContext
 
 			portletURL.setParameter(
 				"eventName", _getPortletNamespace() + "selectTag");
+
+			Company company = cpContentRequestHelper.getCompany();
+
 			portletURL.setParameter(
-				"groupIds",
-				String.valueOf(cpContentRequestHelper.getScopeGroupId()));
+				"groupIds", String.valueOf(company.getGroupId()));
+
 			portletURL.setParameter("selectedTagNames", "{selectedTagNames}");
 			portletURL.setWindowState(LiferayWindowState.POP_UP);
 
@@ -352,9 +356,11 @@ public class CPPublisherConfigurationDisplayContext
 	}
 
 	public String getVocabularyIds() throws Exception {
+		ThemeDisplay themeDisplay = cpContentRequestHelper.getThemeDisplay();
+
 		List<AssetVocabulary> vocabularies =
 			AssetVocabularyServiceUtil.getGroupVocabularies(
-				cpContentRequestHelper.getScopeGroupId());
+				themeDisplay.getCompanyGroupId());
 
 		return ListUtil.toString(
 			vocabularies, AssetVocabulary.VOCABULARY_ID_ACCESSOR);

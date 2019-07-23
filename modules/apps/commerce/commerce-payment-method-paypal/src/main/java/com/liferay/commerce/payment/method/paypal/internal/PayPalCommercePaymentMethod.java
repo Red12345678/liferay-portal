@@ -34,6 +34,8 @@ import com.liferay.commerce.product.constants.CPConstants;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CPSubscriptionInfo;
+import com.liferay.commerce.product.model.CommerceChannel;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.commerce.service.CommerceOrderLocalService;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
@@ -258,9 +260,7 @@ public class PayPalCommercePaymentMethod implements CommercePaymentMethod {
 		PayPalCommercePaymentRequest payPalCommercePaymentRequest =
 			(PayPalCommercePaymentRequest)commercePaymentRequest;
 
-		String transactionId = payPalCommercePaymentRequest.getTransactionId();
-
-		payment.setId(transactionId);
+		payment.setId(payPalCommercePaymentRequest.getTransactionId());
 
 		CommerceOrder commerceOrder =
 			_commerceOrderLocalService.getCommerceOrder(
@@ -270,9 +270,7 @@ public class PayPalCommercePaymentMethod implements CommercePaymentMethod {
 
 		PaymentExecution paymentExecution = new PaymentExecution();
 
-		String payerId = payPalCommercePaymentRequest.getPayerId();
-
-		paymentExecution.setPayerId(payerId);
+		paymentExecution.setPayerId(payPalCommercePaymentRequest.getPayerId());
 
 		payment.execute(apiContext, paymentExecution);
 
@@ -815,8 +813,13 @@ public class PayPalCommercePaymentMethod implements CommercePaymentMethod {
 	}
 
 	private APIContext _getAPIContext(long groupId) throws PortalException {
+		CommerceChannel commerceChannel =
+			_commerceChannelLocalService.getCommerceChannelByOrderGroupId(
+				groupId);
+
 		PayPalGroupServiceConfiguration payPalGroupServiceConfiguration =
-			_getPayPalGroupServiceConfiguration(groupId);
+			_getPayPalGroupServiceConfiguration(
+				commerceChannel.getSiteGroupId());
 
 		return new APIContext(
 			payPalGroupServiceConfiguration.clientId(),
@@ -1011,11 +1014,9 @@ public class PayPalCommercePaymentMethod implements CommercePaymentMethod {
 			subscriptionType = PayPalCommercePaymentMethodConstants.YEAR;
 		}
 
-		BigDecimal finalPrice = commerceOrderItem.getFinalPrice();
-
 		Currency amount = new Currency(
 			commerceCurrency.getCode(),
-			_payPalDecimalFormat.format(finalPrice));
+			_payPalDecimalFormat.format(commerceOrderItem.getFinalPrice()));
 
 		PaymentDefinition paymentDefinition = new PaymentDefinition(
 			_getResource(locale, "payment-definition"),
@@ -1049,8 +1050,13 @@ public class PayPalCommercePaymentMethod implements CommercePaymentMethod {
 			PayPalCommercePaymentMethodConstants.INITIAL_FAIL_AMOUNT_ACTION);
 		merchantPreferences.setReturnUrl(commercePaymentRequest.getReturnUrl());
 
+		CommerceChannel commerceChannel =
+			_commerceChannelLocalService.getCommerceChannelByOrderGroupId(
+				commerceOrder.getGroupId());
+
 		PayPalGroupServiceConfiguration payPalGroupServiceConfiguration =
-			_getPayPalGroupServiceConfiguration(commerceOrder.getGroupId());
+			_getPayPalGroupServiceConfiguration(
+				commerceChannel.getSiteGroupId());
 
 		String attemptsMaxCount =
 			payPalGroupServiceConfiguration.paymentAttemptsMaxCount();
@@ -1148,11 +1154,9 @@ public class PayPalCommercePaymentMethod implements CommercePaymentMethod {
 
 		BigDecimal taxAmount = commerceOrder.getTaxAmount();
 
-		CommerceCurrency commerceCurrency = commerceOrder.getCommerceCurrency();
-
 		if ((taxAmount != null) && (taxAmount.compareTo(BigDecimal.ZERO) > 0)) {
 			_addItem(
-				commerceCurrency,
+				commerceOrder.getCommerceCurrency(),
 				_getResource(locale, "paypal-taxes-description"), false, items,
 				_getResource(locale, "paypal-taxes"), taxAmount);
 		}
@@ -1195,6 +1199,9 @@ public class PayPalCommercePaymentMethod implements CommercePaymentMethod {
 	private static final DecimalFormat _payPalDecimalFormat = new DecimalFormat(
 		"#,###.##");
 	private static final TimeZone _utc = TimeZone.getTimeZone("UTC");
+
+	@Reference
+	private CommerceChannelLocalService _commerceChannelLocalService;
 
 	@Reference
 	private CommerceOrderLocalService _commerceOrderLocalService;

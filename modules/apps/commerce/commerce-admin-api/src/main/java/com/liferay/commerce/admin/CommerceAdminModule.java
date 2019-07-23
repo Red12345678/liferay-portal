@@ -28,6 +28,7 @@ import javax.portlet.RenderResponse;
 
 /**
  * @author Andrea Di Giorgi
+ * @author Alessio Antonio Rendina
  */
 @ProviderType
 public interface CommerceAdminModule {
@@ -36,6 +37,8 @@ public interface CommerceAdminModule {
 
 	public PortletURL getSearchURL(
 		RenderRequest renderRequest, RenderResponse renderResponse);
+
+	public int getType();
 
 	public boolean isVisible(long groupId) throws PortalException;
 

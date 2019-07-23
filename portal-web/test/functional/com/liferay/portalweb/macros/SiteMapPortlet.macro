@@ -1,12 +1,12 @@
 definition {
+
 	macro viewCustomADTMultiColumnPG {
 		for (var pageName : list "${listPageName}") {
 			var key_pageName = "${pageName}";
 
 			AssertTextEquals(
 				locator1 = "SiteMap#ADT_MULTI_COLUMN_PAGE_DISPLAY",
-				value1 = "${pageName}"
-			);
+				value1 = "${pageName}");
 		}
 
 		if (isSet(listChildPageName)) {
@@ -15,8 +15,7 @@ definition {
 
 				AssertTextEquals(
 					locator1 = "SiteMap#ADT_MULTI_COLUMN_CHILD_PAGE_DISPLAY",
-					value1 = "${childPageName}"
-				);
+					value1 = "${childPageName}");
 			}
 		}
 	}
@@ -27,8 +26,7 @@ definition {
 
 			AssertTextEquals.assertPartialText(
 				locator1 = "SiteMap#SITE_MAP_PAGE_DISPLAY",
-				value1 = "${pageName}"
-			);
+				value1 = "${pageName}");
 		}
 
 		if (isSet(listChildPageName)) {
@@ -37,9 +35,9 @@ definition {
 
 				AssertTextEquals.assertPartialText(
 					locator1 = "SiteMap#SITE_MAP_CHILD_PAGE_DISPLAY",
-					value1 = "${childPageName}"
-				);
+					value1 = "${childPageName}");
 			}
 		}
 	}
+
 }

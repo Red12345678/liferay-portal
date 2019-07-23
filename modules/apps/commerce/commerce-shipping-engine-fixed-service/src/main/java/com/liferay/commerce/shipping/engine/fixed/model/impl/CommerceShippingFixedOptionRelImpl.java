@@ -16,14 +16,14 @@ package com.liferay.commerce.shipping.engine.fixed.model.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.commerce.inventory.model.CommerceInventoryWarehouse;
+import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseLocalServiceUtil;
 import com.liferay.commerce.model.CommerceCountry;
 import com.liferay.commerce.model.CommerceRegion;
 import com.liferay.commerce.model.CommerceShippingMethod;
-import com.liferay.commerce.model.CommerceWarehouse;
 import com.liferay.commerce.service.CommerceCountryLocalServiceUtil;
 import com.liferay.commerce.service.CommerceRegionLocalServiceUtil;
 import com.liferay.commerce.service.CommerceShippingMethodLocalServiceUtil;
-import com.liferay.commerce.service.CommerceWarehouseLocalServiceUtil;
 import com.liferay.commerce.shipping.engine.fixed.model.CommerceShippingFixedOption;
 import com.liferay.commerce.shipping.engine.fixed.service.CommerceShippingFixedOptionLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -43,6 +43,19 @@ public class CommerceShippingFixedOptionRelImpl
 		if (getCommerceCountryId() > 0) {
 			return CommerceCountryLocalServiceUtil.getCommerceCountry(
 				getCommerceCountryId());
+		}
+
+		return null;
+	}
+
+	@Override
+	public CommerceInventoryWarehouse getCommerceInventoryWarehouse()
+		throws PortalException {
+
+		if (getCommerceInventoryWarehouseId() > 0) {
+			return CommerceInventoryWarehouseLocalServiceUtil.
+				getCommerceInventoryWarehouse(
+					getCommerceInventoryWarehouseId());
 		}
 
 		return null;
@@ -78,16 +91,6 @@ public class CommerceShippingFixedOptionRelImpl
 		if (getCommerceShippingMethodId() > 0) {
 			return CommerceShippingMethodLocalServiceUtil.
 				getCommerceShippingMethod(getCommerceShippingMethodId());
-		}
-
-		return null;
-	}
-
-	@Override
-	public CommerceWarehouse getCommerceWarehouse() throws PortalException {
-		if (getCommerceWarehouseId() > 0) {
-			return CommerceWarehouseLocalServiceUtil.getCommerceWarehouse(
-				getCommerceWarehouseId());
 		}
 
 		return null;

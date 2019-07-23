@@ -105,7 +105,7 @@ List<CommerceAddress> commerceAddresses = commerceOrderContentDisplayContext.get
 							request.setAttribute("order_notes.jsp-taglibLinkCssClass", "link-outline link-outline-borderless link-outline-secondary lfr-icon-item-reverse");
 							%>
 
-							<liferay-util:include page="/order_notes.jsp" servletContext="<%= application %>" />
+							<liferay-util:include page="/pending_orders/order_notes.jsp" servletContext="<%= application %>" />
 						</dd>
 					</dl>
 				</div>
@@ -141,29 +141,31 @@ List<CommerceAddress> commerceAddresses = commerceOrderContentDisplayContext.get
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-md-12">
-			<div class="commerce-panel">
-				<div class="commerce-panel__title"><liferay-ui:message key="purchase-order-number" /></div>
-				<div class="commerce-panel__content">
-					<div class="row">
-						<div class="col-md-6">
-							<dl class="commerce-list">
-								<c:choose>
-									<c:when test="<%= commerceOrderContentDisplayContext.hasModelPermission(commerceOrder, ActionKeys.UPDATE) %>">
-										<aui:input cssClass="commerce-input" inlineField="<%= true %>" label="" name="purchaseOrderNumber" wrappedField="<%= false %>" />
-									</c:when>
-									<c:otherwise>
-										<%= commerceOrder.getPurchaseOrderNumber() %>
-									</c:otherwise>
-								</c:choose>
-							</dl>
+	<c:if test="<%= commerceOrderContentDisplayContext.isShowPurchaseOrderNumber() %>">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="commerce-panel">
+					<div class="commerce-panel__title"><liferay-ui:message key="purchase-order-number" /></div>
+					<div class="commerce-panel__content">
+						<div class="row">
+							<div class="col-md-6">
+								<dl class="commerce-list">
+									<c:choose>
+										<c:when test="<%= commerceOrderContentDisplayContext.hasModelPermission(commerceOrder, ActionKeys.UPDATE) %>">
+											<aui:input cssClass="commerce-input" inlineField="<%= true %>" label="" name="purchaseOrderNumber" wrappedField="<%= false %>" />
+										</c:when>
+										<c:otherwise>
+											<%= commerceOrder.getPurchaseOrderNumber() %>
+										</c:otherwise>
+									</c:choose>
+								</dl>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</c:if>
 
 	<div class="row">
 		<div class="col-md-6">

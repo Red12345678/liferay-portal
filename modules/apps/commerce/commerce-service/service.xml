@@ -128,10 +128,6 @@
 
 		<column name="commerceAvailabilityEstimateId" primary="true" type="long" />
 
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
-
 		<!-- Audit fields -->
 
 		<column name="companyId" type="long" />
@@ -154,8 +150,8 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
 		</finder>
 	</entity>
 	<entity local-service="true" name="CommerceCountry" remote-service="true" uuid="true">
@@ -163,10 +159,6 @@
 		<!-- PK fields -->
 
 		<column name="commerceCountryId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
 
@@ -197,28 +189,28 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
 		</finder>
-		<finder name="G_Tw" return-type="CommerceCountry" unique="true">
-			<finder-column name="groupId" />
+		<finder name="C_Tw" return-type="CommerceCountry" unique="true">
+			<finder-column name="companyId" />
 			<finder-column name="twoLettersISOCode" />
 		</finder>
-		<finder name="G_N" return-type="CommerceCountry" unique="true">
-			<finder-column name="groupId" />
+		<finder name="C_N" return-type="CommerceCountry" unique="true">
+			<finder-column name="companyId" />
 			<finder-column name="numericISOCode" />
 		</finder>
-		<finder name="G_A" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="C_A" return-type="Collection">
+			<finder-column name="companyId" />
 			<finder-column name="active" />
 		</finder>
-		<finder name="G_B_A" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="C_B_A" return-type="Collection">
+			<finder-column name="companyId" />
 			<finder-column name="billingAllowed" />
 			<finder-column name="active" />
 		</finder>
-		<finder name="G_S_A" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="C_S_A" return-type="Collection">
+			<finder-column name="companyId" />
 			<finder-column name="shippingAllowed" />
 			<finder-column name="active" />
 		</finder>
@@ -276,6 +268,8 @@
 		<column name="advanceStatus" type="String" />
 		<column name="paymentStatus" type="int" />
 		<column name="orderStatus" type="int" />
+		<column name="printedNote" type="String" />
+		<column name="requestedDeliveryDate" type="Date" />
 		<column name="status" type="int" />
 		<column name="statusByUserId" type="long" />
 		<column name="statusByUserName" type="String" />
@@ -364,6 +358,11 @@
 		<column name="discountPercentageLevel3" type="BigDecimal" />
 		<column name="discountPercentageLevel4" type="BigDecimal" />
 		<column name="subscription" type="boolean" />
+		<column name="deliveryGroup" type="String" />
+		<column name="shippingAddressId" type="long" />
+		<column name="printedNote" type="String" />
+		<column name="requestedDeliveryDate" type="Date" />
+		<column name="bookedQuantityId" type="long" />
 
 		<!-- Order -->
 
@@ -478,10 +477,6 @@
 
 		<column name="commerceRegionId" primary="true" type="long" />
 
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
-
 		<!-- Audit fields -->
 
 		<column name="companyId" type="long" />
@@ -557,11 +552,11 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="GroupIds" return-type="Collection">
+			<finder-column arrayable-operator="OR" name="groupId" />
 		</finder>
 		<finder name="G_S" return-type="Collection">
-			<finder-column name="groupId" />
+			<finder-column arrayable-operator="OR" name="groupId" />
 			<finder-column name="status" />
 		</finder>
 	</entity>
@@ -587,7 +582,7 @@
 
 		<column name="commerceShipmentId" type="long" />
 		<column name="commerceOrderItemId" type="long" />
-		<column name="commerceWarehouseId" type="long" />
+		<column name="commerceInventoryWarehouseId" type="long" />
 		<column name="quantity" type="int" />
 
 		<!-- Order -->
@@ -697,14 +692,19 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
 		</finder>
 		<finder name="SubscriptionStatus" return-type="Collection">
 			<finder-column name="subscriptionStatus" />
 		</finder>
-		<finder name="G_U" return-type="Collection">
+		<finder name="C_U" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="userId" />
+		</finder>
+		<finder name="G_C_U" return-type="Collection">
 			<finder-column name="groupId" />
+			<finder-column name="companyId" />
 			<finder-column name="userId" />
 		</finder>
 		<finder name="C_C_C" return-type="CommerceSubscriptionEntry" unique="true">
@@ -713,137 +713,11 @@
 			<finder-column name="commerceOrderItemId" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="CommerceWarehouse" remote-service="true">
-
-		<!-- PK fields -->
-
-		<column name="commerceWarehouseId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
-
-		<!-- Audit fields -->
-
-		<column name="companyId" type="long" />
-		<column name="userId" type="long" />
-		<column name="userName" type="String" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
-
-		<!-- Other fields -->
-
-		<column name="name" type="String" />
-		<column name="description" type="String" />
-		<column name="active" type="boolean" />
-		<column name="street1" type="String" />
-		<column name="street2" type="String" />
-		<column name="street3" type="String" />
-		<column name="city" type="String" />
-		<column name="zip" type="String" />
-		<column name="commerceRegionId" type="long" />
-		<column name="commerceCountryId" type="long" />
-		<column name="latitude" type="double" />
-		<column name="longitude" type="double" />
-		<column name="primary" type="boolean" />
-
-		<!-- Order -->
-
-		<order by="asc">
-			<order-column name="name" />
-		</order>
-
-		<!-- Finder methods -->
-
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
-		</finder>
-		<finder name="G_A" return-type="Collection">
-			<finder-column name="groupId" />
-			<finder-column name="active" />
-		</finder>
-		<finder name="G_C" return-type="Collection">
-			<finder-column name="groupId" />
-			<finder-column name="commerceCountryId" />
-		</finder>
-		<finder name="G_P" return-type="Collection">
-			<finder-column name="groupId" />
-			<finder-column name="primary" />
-		</finder>
-		<finder name="G_A_C" return-type="Collection">
-			<finder-column name="groupId" />
-			<finder-column name="active" />
-			<finder-column name="commerceCountryId" />
-		</finder>
-		<finder name="G_A_P" return-type="Collection">
-			<finder-column name="groupId" />
-			<finder-column name="active" />
-			<finder-column name="primary" />
-		</finder>
-		<finder name="G_C_P" return-type="Collection">
-			<finder-column name="groupId" />
-			<finder-column name="commerceCountryId" />
-			<finder-column name="primary" />
-		</finder>
-		<finder name="G_A_C_P" return-type="Collection">
-			<finder-column name="groupId" />
-			<finder-column name="active" />
-			<finder-column name="commerceCountryId" />
-			<finder-column name="primary" />
-		</finder>
-
-		<!-- References -->
-
-		<reference entity="ExpandoRow" package-path="com.liferay.portlet.expando" />
-	</entity>
-	<entity local-service="true" name="CommerceWarehouseItem" remote-service="true">
-
-		<!-- PK fields -->
-
-		<column name="commerceWarehouseItemId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
-
-		<!-- Audit fields -->
-
-		<column name="companyId" type="long" />
-		<column name="userId" type="long" />
-		<column name="userName" type="String" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
-
-		<!-- Other fields -->
-
-		<column name="commerceWarehouseId" type="long" />
-		<column name="CProductId" type="long" />
-		<column name="CPInstanceUuid" type="String" />
-		<column name="quantity" type="int" />
-
-		<!-- Finder methods -->
-
-		<finder name="CommerceWarehouseId" return-type="Collection">
-			<finder-column name="commerceWarehouseId" />
-		</finder>
-		<finder name="CWI_CPIU" return-type="CommerceWarehouseItem" unique="true">
-			<finder-column name="commerceWarehouseId" />
-			<finder-column name="CPInstanceUuid" />
-		</finder>
-		<finder name="CPI_CPIU" return-type="Collection">
-			<finder-column name="CProductId" />
-			<finder-column name="CPInstanceUuid" />
-		</finder>
-	</entity>
 	<entity local-service="true" name="CPDAvailabilityEstimate" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
 
 		<column name="CPDAvailabilityEstimateId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
 
@@ -917,10 +791,12 @@
 		<exception>CommerceCountryTwoLettersISOCode</exception>
 		<exception>CommerceGeocoder</exception>
 		<exception>CommerceOrderBillingAddress</exception>
+		<exception>CommerceOrderItemRequestedDeliveryDate</exception>
 		<exception>CommerceOrderNoteContent</exception>
 		<exception>CommerceOrderPaymentMethod</exception>
 		<exception>CommerceOrderPrice</exception>
 		<exception>CommerceOrderPurchaseOrderNumber</exception>
+		<exception>CommerceOrderRequestedDeliveryDate</exception>
 		<exception>CommerceOrderShippingAddress</exception>
 		<exception>CommerceOrderShippingMethod</exception>
 		<exception>CommerceOrderStatus</exception>
@@ -939,9 +815,6 @@
 		<exception>CommerceSubscriptionEntryStartDate</exception>
 		<exception>CommerceSubscriptionEntrySubscriptionStatus</exception>
 		<exception>CommerceSubscriptionType</exception>
-		<exception>CommerceWarehouseActive</exception>
-		<exception>CommerceWarehouseCommerceRegionId</exception>
-		<exception>CommerceWarehouseName</exception>
 		<exception>DuplicateCommerceOrderNote</exception>
 		<exception>GuestCartItemMaxAllowed</exception>
 		<exception>GuestCartMaxAllowed</exception>

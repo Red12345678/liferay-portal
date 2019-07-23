@@ -51,7 +51,6 @@ public abstract class BaseAuthVerifierBundleActivator
 				serviceRegistration.unregister();
 			}
 			catch (Exception e) {
-				continue;
 			}
 		}
 	}

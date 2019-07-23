@@ -23,6 +23,8 @@ SearchContainer<CommerceOrder> commerceOrderSearchContainer = commerceOrderListD
 CommerceOrderDisplayTerms commerceOrderDisplayTerms = (CommerceOrderDisplayTerms)commerceOrderSearchContainer.getDisplayTerms();
 boolean showFilter = commerceOrderListDisplayContext.isShowFilter();
 
+List<CommerceChannel> channels = commerceOrderListDisplayContext.getCommerceChannels();
+
 List<KeyValuePair> availableAdvanceStatusKVPs = commerceOrderListDisplayContext.getAvailableAdvanceStatusKVPs();
 List<KeyValuePair> availableOrderStatusKVPs = commerceOrderListDisplayContext.getAvailableOrderStatusKVPs();
 
@@ -69,7 +71,7 @@ pageContext.setAttribute("searchURL", searchURL);
 		</liferay-frontend:management-bar-action-buttons>
 	</liferay-frontend:management-bar>
 
-	<div class="form-group-autofit <%= showFilter ? StringPool.BLANK : "hide" %>" id="<portlet:namespace />filterSettings">
+	<div class="container form-group-autofit panel p-2 <%= showFilter ? StringPool.BLANK : "hide" %>" id="<portlet:namespace />filterSettings">
 		<div class="form-group-item">
 			<label for="<portlet:namespace /><%= CommerceOrderDisplayTerms.START_CREATE_DATE %>">
 				<liferay-ui:message key="from" />
@@ -104,6 +106,23 @@ pageContext.setAttribute("searchURL", searchURL);
 				yearParam="<%= CommerceOrderDisplayTerms.END_CREATE_DATE_YEAR %>"
 				yearValue="<%= commerceOrderDisplayTerms.getEndCreateDateYear() %>"
 			/>
+		</div>
+
+		<div class="form-group-item">
+			<aui:select name="<%= CommerceOrderDisplayTerms.CHANNEL %>" showEmptyOption="<%= true %>">
+
+				<%
+				for (CommerceChannel channel : channels) {
+					String channelName = channel.getName();
+				%>
+
+					<aui:option label="<%= channelName %>" selected="<%= channelName.equals(commerceOrderDisplayTerms.getCommerceChannel()) %>" value="<%= channelName %>" />
+
+				<%
+				}
+				%>
+
+			</aui:select>
 		</div>
 
 		<c:if test="<%= !availableAdvanceStatusKVPs.isEmpty() %>">
@@ -145,7 +164,7 @@ pageContext.setAttribute("searchURL", searchURL);
 			</div>
 		</c:if>
 
-		<div class="form-group-item">
+		<div class="form-group-item mt-auto">
 			<aui:button cssClass="btn-outline-borderless btn-outline-primary" type="submit" value="apply-filters" />
 		</div>
 	</div>

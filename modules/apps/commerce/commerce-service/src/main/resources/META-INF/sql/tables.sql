@@ -1,7 +1,6 @@
 create table CPDAvailabilityEstimate (
 	uuid_ VARCHAR(75) null,
 	CPDAvailabilityEstimateId LONG not null primary key,
-	groupId LONG,
 	companyId LONG,
 	userId LONG,
 	userName VARCHAR(75) null,
@@ -76,7 +75,6 @@ create table CommerceAddressRestriction (
 create table CommerceAvailabilityEstimate (
 	uuid_ VARCHAR(75) null,
 	commerceAvailabilityEstimateId LONG not null primary key,
-	groupId LONG,
 	companyId LONG,
 	userId LONG,
 	userName VARCHAR(75) null,
@@ -90,7 +88,6 @@ create table CommerceAvailabilityEstimate (
 create table CommerceCountry (
 	uuid_ VARCHAR(75) null,
 	commerceCountryId LONG not null primary key,
-	groupId LONG,
 	companyId LONG,
 	userId LONG,
 	userName VARCHAR(75) null,
@@ -151,6 +148,8 @@ create table CommerceOrder (
 	advanceStatus VARCHAR(75) null,
 	paymentStatus INTEGER,
 	orderStatus INTEGER,
+	printedNote VARCHAR(75) null,
+	requestedDeliveryDate DATE null,
 	status INTEGER,
 	statusByUserId LONG,
 	statusByUserName VARCHAR(75) null,
@@ -181,7 +180,12 @@ create table CommerceOrderItem (
 	discountPercentageLevel2 DECIMAL(30, 16) null,
 	discountPercentageLevel3 DECIMAL(30, 16) null,
 	discountPercentageLevel4 DECIMAL(30, 16) null,
-	subscription BOOLEAN
+	subscription BOOLEAN,
+	deliveryGroup VARCHAR(75) null,
+	shippingAddressId LONG,
+	printedNote VARCHAR(75) null,
+	requestedDeliveryDate DATE null,
+	bookedQuantityId LONG
 );
 
 create table CommerceOrderNote (
@@ -215,7 +219,6 @@ create table CommerceOrderPayment (
 create table CommerceRegion (
 	uuid_ VARCHAR(75) null,
 	commerceRegionId LONG not null primary key,
-	groupId LONG,
 	companyId LONG,
 	userId LONG,
 	userName VARCHAR(75) null,
@@ -258,7 +261,7 @@ create table CommerceShipmentItem (
 	modifiedDate DATE null,
 	commerceShipmentId LONG,
 	commerceOrderItemId LONG,
-	commerceWarehouseId LONG,
+	commerceInventoryWarehouseId LONG,
 	quantity INTEGER
 );
 
@@ -299,41 +302,4 @@ create table CommerceSubscriptionEntry (
 	lastIterationDate DATE null,
 	nextIterationDate DATE null,
 	startDate DATE null
-);
-
-create table CommerceWarehouse (
-	commerceWarehouseId LONG not null primary key,
-	groupId LONG,
-	companyId LONG,
-	userId LONG,
-	userName VARCHAR(75) null,
-	createDate DATE null,
-	modifiedDate DATE null,
-	name VARCHAR(75) null,
-	description VARCHAR(75) null,
-	active_ BOOLEAN,
-	street1 VARCHAR(75) null,
-	street2 VARCHAR(75) null,
-	street3 VARCHAR(75) null,
-	city VARCHAR(75) null,
-	zip VARCHAR(75) null,
-	commerceRegionId LONG,
-	commerceCountryId LONG,
-	latitude DOUBLE,
-	longitude DOUBLE,
-	primary_ BOOLEAN
-);
-
-create table CommerceWarehouseItem (
-	commerceWarehouseItemId LONG not null primary key,
-	groupId LONG,
-	companyId LONG,
-	userId LONG,
-	userName VARCHAR(75) null,
-	createDate DATE null,
-	modifiedDate DATE null,
-	commerceWarehouseId LONG,
-	CProductId LONG,
-	CPInstanceUuid VARCHAR(75) null,
-	quantity INTEGER
 );

@@ -1,5 +1,6 @@
 @component-name = "portal-plugins-deployment"
 definition {
+
 	property testray.main.component.name = "Plugin Installer";
 
 	setUp {
@@ -13,9 +14,9 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Apps",
 			panel = "Control Panel",
-			portlet = "App Manager"
-		);
+			portlet = "App Manager");
 
 		AppManager.viewAppCP(appName = "${appName}");
 	}
+
 }

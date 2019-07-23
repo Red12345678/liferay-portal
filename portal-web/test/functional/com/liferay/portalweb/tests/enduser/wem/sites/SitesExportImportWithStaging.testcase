@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Administration";
@@ -27,15 +28,11 @@ definition {
 
 		FragmentsAdmin.openFragmentsAdmin(siteURLKey = "test-site-name-1-staging");
 
-		FragmentsAdmin.importCollectionFromDependenciesFolder(
-			collectionZipFile = "fragment-collection.zip"
-		);
+		FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "fragment-collection.zip");
 
 		// Add a content page template.
 
-		PageTemplatesAdmin.openPageTemplatesAdmin(
-			siteURLKey = "test-site-name-1-staging"
-		);
+		PageTemplatesAdmin.openPageTemplatesAdmin(siteURLKey = "test-site-name-1-staging");
 
 		PageTemplatesAdmin.addCollection(collectionName = "Page Template Collection");
 
@@ -45,8 +42,7 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Button"
-		);
+			fragmentName = "Button");
 
 		Button.clickPublish();
 
@@ -57,8 +53,7 @@ definition {
 		ContentPages.addPage(
 			collectionName = "Page Template Collection",
 			pageName = "Test Template Content Page",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
 		// Add a regular content page.
 
@@ -68,27 +63,22 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		// Add a navigation menu.
 
-		NavigationMenusAdmin.openNavigationMenusAdmin(
-			siteURLKey = "test-site-name-1-staging"
-		);
+		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name-1-staging");
 
 		NavigationMenusAdmin.addMenu(menuName = "Test Navigation Menu Name");
 
 		NavigationMenusAdmin.addItem(
 			item = "Page",
-			pageNames = "Test Template Content Page,Test Regular Content Page"
-		);
+			pageNames = "Test Template Content Page,Test Regular Content Page");
 
 		NavigationMenusAdmin.addItem(
 			item = "URL",
 			url = "https://www.liferay.com/",
-			urlName = "Liferay"
-		);
+			urlName = "Liferay");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-1-staging");
 
@@ -106,30 +96,25 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Rich Text"
-		);
+			fragmentName = "Rich Text");
 
 		PageEditorMapping.selectAssetType(
 			assetType = "Web Content Article",
-			subType = "Basic Web Content"
-		);
+			subType = "Basic Web Content");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Title",
 			id = "title",
-			itemName = "Title"
-		);
+			itemName = "Title");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Rich Text",
 			id = "rich-text",
-			itemName = "content"
-		);
+			itemName = "content");
 
 		PortletEntry.publish();
 
@@ -141,13 +126,11 @@ definition {
 
 		WebContent.addCP(
 			webContentContent = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 
 		WebContent.editDisplayPage(
 			pageName = "Display Page Name",
-			pageType = "Display Pages"
-		);
+			pageType = "Display Pages");
 
 		Staging.openStagingAdmin(siteURLKey = "test-site-name-1-staging");
 
@@ -194,22 +177,33 @@ definition {
 
 		FragmentsAdmin.openFragmentsAdmin(siteURLKey = "test-site-name-2-staging");
 
-		AssertVisible(locator1 = "Card#SPECIFIC_LARGE_TEXT", key_cardText = "Content");
-
-		AssertVisible(locator1 = "Card#SPECIFIC_LARGE_TEXT", key_cardText = "Image");
-
-		AssertVisible(locator1 = "Card#SPECIFIC_LARGE_TEXT", key_cardText = "Button");
+		AssertVisible(
+			key_cardText = "Content",
+			locator1 = "Card#SPECIFIC_LARGE_TEXT");
 
 		AssertVisible(
-			locator1 = "Card#SPECIFIC_LARGE_TEXT",
-			key_cardText = "Multiple Editables"
-		);
+			key_cardText = "Image",
+			locator1 = "Card#SPECIFIC_LARGE_TEXT");
 
-		AssertVisible(locator1 = "Card#SPECIFIC_LARGE_TEXT", key_cardText = "Rich Text");
+		AssertVisible(
+			key_cardText = "Button",
+			locator1 = "Card#SPECIFIC_LARGE_TEXT");
 
-		AssertVisible(locator1 = "Card#SPECIFIC_LARGE_TEXT", key_cardText = "Title");
+		AssertVisible(
+			key_cardText = "Multiple Editables",
+			locator1 = "Card#SPECIFIC_LARGE_TEXT");
 
-		LexiconEntry.gotoEntryMenuItem(menuItem = "Edit", rowEntry = "Button");
+		AssertVisible(
+			key_cardText = "Rich Text",
+			locator1 = "Card#SPECIFIC_LARGE_TEXT");
+
+		AssertVisible(
+			key_cardText = "Title",
+			locator1 = "Card#SPECIFIC_LARGE_TEXT");
+
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Edit",
+			rowEntry = "Button");
 
 		SelectFrame(locator1 = "FragmentEditor#PREVIEW_IFRAME");
 
@@ -217,7 +211,9 @@ definition {
 
 		AssertElementPresent(locator1 = "Button#CANCEL");
 
-		AssertClickNoError(locator1 = "Button#SUBMIT", value1 = "Submit");
+		AssertClickNoError(
+			locator1 = "Button#SUBMIT",
+			value1 = "Submit");
 
 		AssertConfirm(value1 = "Form submitted");
 
@@ -225,21 +221,17 @@ definition {
 
 		// Assert content page template.
 
-		PageTemplatesAdmin.openPageTemplatesAdmin(
-			siteURLKey = "test-site-name-2-staging"
-		);
+		PageTemplatesAdmin.openPageTemplatesAdmin(siteURLKey = "test-site-name-2-staging");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "Page Template Name"
-		);
+			rowEntry = "Page Template Name");
 
 		AssertVisible(
-			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT",
 			key_content = "Submit",
 			key_fragmentClass = "footer",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#PAGE_EDITOR_FRAGMENT");
 
 		for (var button : list "Submit,Cancel") {
 			Button.viewPresent(button = "${button}");
@@ -249,70 +241,67 @@ definition {
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-2-staging");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Test Template Content Page");
+		Click(
+			key_pageName = "Test Template Content Page",
+			locator1 = "Home#PAGE");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Submit",
 			key_fragmentClass = "footer",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		for (var button : list "Submit,Cancel") {
 			Button.viewPresent(button = "${button}");
 		}
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Test Regular Content Page");
+		Click(
+			key_pageName = "Test Regular Content Page",
+			locator1 = "Home#PAGE");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		Click(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
 		AssertLocation(value1 = "https://www.liferay.com/");
 
 		// Assert navigation menu.
 
-		NavigationMenusAdmin.openNavigationMenusAdmin(
-			siteURLKey = "test-site-name-2-staging"
-		);
+		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name-2-staging");
 
 		AssertVisible(
-			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME_LINK",
-			key_rowEntry = "Test Navigation Menu Name"
-		);
+			key_rowEntry = "Test Navigation Menu Name",
+			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME_LINK");
 
 		// Assert display page.
 
 		DisplayPagesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name-2-staging");
 
 		AssertVisible(
-			locator1 = "Card#SPECIFIC_LARGE_TEXT",
-			key_cardText = "Display Page Name"
-		);
+			key_cardText = "Display Page Name",
+			locator1 = "Card#SPECIFIC_LARGE_TEXT");
 
 		// Assert web content article.
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name-2-staging/-/webcontent-title"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-2-staging/-/webcontent-title");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Title",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Content",
 			key_fragmentClass = "rich-text",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#FRAGMENT");
 	}
+
 }

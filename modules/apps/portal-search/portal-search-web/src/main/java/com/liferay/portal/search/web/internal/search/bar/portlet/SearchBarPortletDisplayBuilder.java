@@ -65,6 +65,8 @@ public class SearchBarPortletDisplayBuilder {
 				true);
 		}
 
+		searchBarPortletDisplayContext.setPaginationStartParameterName(
+			getPaginationStartParameterName());
 		searchBarPortletDisplayContext.setScopeParameterName(
 			_scopeParameterName);
 		searchBarPortletDisplayContext.setScopeParameterValue(
@@ -103,6 +105,14 @@ public class SearchBarPortletDisplayBuilder {
 
 	public void setKeywordsParameterName(String keywordsParameterName) {
 		_keywordsParameterName = keywordsParameterName;
+	}
+
+	public SearchBarPortletDisplayBuilder setPaginationStartParameterName(
+		String paginationStartParameterName) {
+
+		_paginationStartParameterName = paginationStartParameterName;
+
+		return this;
 	}
 
 	public void setScopeParameterName(String scopeParameterName) {
@@ -180,6 +190,14 @@ public class SearchBarPortletDisplayBuilder {
 		}
 	}
 
+	protected String getPaginationStartParameterName() {
+		if (_paginationStartParameterName != null) {
+			return _paginationStartParameterName;
+		}
+
+		return StringPool.BLANK;
+	}
+
 	protected String getScopeParameterValue() {
 		if (_scopeParameterValue != null) {
 			return _scopeParameterValue;
@@ -241,6 +259,7 @@ public class SearchBarPortletDisplayBuilder {
 	private String _keywords;
 	private String _keywordsParameterName;
 	private final LayoutLocalService _layoutLocalService;
+	private String _paginationStartParameterName;
 	private final Portal _portal;
 	private String _scopeParameterName;
 	private String _scopeParameterValue;

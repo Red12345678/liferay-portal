@@ -19,7 +19,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.template.TemplateException;
 import com.liferay.portal.kernel.template.TemplateResource;
 import com.liferay.portal.template.soy.internal.SoyManager;
-import com.liferay.portal.template.soy.utils.SoyTemplateResourcesProvider;
+import com.liferay.portal.template.soy.util.SoyTemplateResourcesProvider;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,9 +31,18 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Shuyang Zhou
  */
-@Component(immediate = true, service = SoyTemplateResourcesProvider.class)
+@Component(
+	immediate = true,
+	service = {
+		com.liferay.portal.template.soy.utils.SoyTemplateResourcesProvider.
+			class,
+		SoyTemplateResourcesProvider.class
+	}
+)
 public class SoyTemplateResourcesProviderImpl
-	implements SoyTemplateResourcesProvider {
+	implements com.liferay.portal.template.soy.utils.
+				   SoyTemplateResourcesProvider,
+			   SoyTemplateResourcesProvider {
 
 	@Override
 	public List<TemplateResource> getAllTemplateResources() {

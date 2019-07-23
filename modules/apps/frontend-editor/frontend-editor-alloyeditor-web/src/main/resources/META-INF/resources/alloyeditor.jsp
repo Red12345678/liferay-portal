@@ -221,6 +221,7 @@ name = HtmlUtil.escapeJS(name);
 		editorConfig = A.merge(
 			{
 				documentBrowseLinkCallback: documentBrowseLinkCallback,
+				htmlEncodeOutput: true,
 				spritemap: themeDisplay.getPathThemeImages() + '/lexicon/icons.svg',
 				title: false,
 				uiNode: uiNode

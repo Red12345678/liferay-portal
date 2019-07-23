@@ -14,7 +14,7 @@
 
 package com.liferay.commerce.media.internal.upload;
 
-import com.liferay.commerce.product.definitions.web.configuration.AttachmentsConfiguration;
+import com.liferay.commerce.product.configuration.AttachmentsConfiguration;
 import com.liferay.commerce.product.exception.CPAttachmentFileEntryNameException;
 import com.liferay.commerce.product.exception.CPAttachmentFileEntrySizeException;
 import com.liferay.petra.string.StringPool;
@@ -22,8 +22,8 @@ import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.settings.SettingsFactory;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -46,7 +46,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Alec Sloan
  */
 @Component(
-	configurationPid = "com.liferay.commerce.product.definition.web.configuration.AttachmentsConfiguration",
+	configurationPid = "com.liferay.commerce.product.configuration.AttachmentsConfiguration",
 	configurationPolicy = ConfigurationPolicy.OPTIONAL,
 	service = CommerceMediaDefaultImageUploadFileEntryHandler.class
 )
@@ -91,9 +91,11 @@ public class CommerceMediaDefaultImageUploadFileEntryHandler
 		String uniqueFileName = _uniqueFileNameProvider.provide(
 			fileName, curFileName -> _exists(themeDisplay, curFileName));
 
+		Company company = themeDisplay.getCompany();
+
 		return TempFileEntryUtil.addTempFileEntry(
-			themeDisplay.getScopeGroupId(), themeDisplay.getUserId(),
-			_TEMP_FOLDER_NAME, uniqueFileName, inputStream, contentType);
+			company.getGroupId(), themeDisplay.getUserId(), _TEMP_FOLDER_NAME,
+			uniqueFileName, inputStream, contentType);
 	}
 
 	private boolean _exists(ThemeDisplay themeDisplay, String curFileName) {
@@ -150,9 +152,6 @@ public class CommerceMediaDefaultImageUploadFileEntryHandler
 		CommerceMediaDefaultImageUploadFileEntryHandler.class);
 
 	private volatile AttachmentsConfiguration _attachmentsConfiguration;
-
-	@Reference
-	private SettingsFactory _settingsFactory;
 
 	@Reference
 	private UniqueFileNameProvider _uniqueFileNameProvider;

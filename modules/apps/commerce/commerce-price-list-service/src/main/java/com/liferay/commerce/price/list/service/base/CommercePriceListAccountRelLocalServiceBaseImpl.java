@@ -20,19 +20,16 @@ import com.liferay.commerce.price.list.model.CommercePriceListAccountRel;
 import com.liferay.commerce.price.list.service.CommercePriceListAccountRelLocalService;
 import com.liferay.commerce.price.list.service.persistence.CommercePriceEntryPersistence;
 import com.liferay.commerce.price.list.service.persistence.CommercePriceListAccountRelPersistence;
+import com.liferay.commerce.price.list.service.persistence.CommercePriceListCommerceAccountGroupRelPersistence;
 import com.liferay.commerce.price.list.service.persistence.CommercePriceListFinder;
 import com.liferay.commerce.price.list.service.persistence.CommercePriceListPersistence;
-import com.liferay.commerce.price.list.service.persistence.CommercePriceListUserSegmentEntryRelPersistence;
 import com.liferay.commerce.price.list.service.persistence.CommerceTierPriceEntryPersistence;
-
 import com.liferay.expando.kernel.service.persistence.ExpandoRowPersistence;
-
 import com.liferay.exportimport.kernel.lar.ExportImportHelperUtil;
 import com.liferay.exportimport.kernel.lar.ManifestSummary;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.exportimport.kernel.lar.StagedModelType;
-
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
 import com.liferay.portal.kernel.dao.db.DBManagerUtil;
@@ -75,17 +72,18 @@ import javax.sql.DataSource;
  *
  * @author Alessio Antonio Rendina
  * @see com.liferay.commerce.price.list.service.impl.CommercePriceListAccountRelLocalServiceImpl
- * @see com.liferay.commerce.price.list.service.CommercePriceListAccountRelLocalServiceUtil
  * @generated
  */
 @ProviderType
 public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	extends BaseLocalServiceImpl
-	implements CommercePriceListAccountRelLocalService, IdentifiableOSGiService {
+	implements CommercePriceListAccountRelLocalService,
+			   IdentifiableOSGiService {
+
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify or reference this class directly. Always use {@link com.liferay.commerce.price.list.service.CommercePriceListAccountRelLocalServiceUtil} to access the commerce price list account rel local service.
+	 * Never modify or reference this class directly. Use <code>CommercePriceListAccountRelLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.liferay.commerce.price.list.service.CommercePriceListAccountRelLocalServiceUtil</code>.
 	 */
 
 	/**
@@ -98,9 +96,11 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	@Override
 	public CommercePriceListAccountRel addCommercePriceListAccountRel(
 		CommercePriceListAccountRel commercePriceListAccountRel) {
+
 		commercePriceListAccountRel.setNew(true);
 
-		return commercePriceListAccountRelPersistence.update(commercePriceListAccountRel);
+		return commercePriceListAccountRelPersistence.update(
+			commercePriceListAccountRel);
 	}
 
 	/**
@@ -113,7 +113,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	@Transactional(enabled = false)
 	public CommercePriceListAccountRel createCommercePriceListAccountRel(
 		long commercePriceListAccountRelId) {
-		return commercePriceListAccountRelPersistence.create(commercePriceListAccountRelId);
+
+		return commercePriceListAccountRelPersistence.create(
+			commercePriceListAccountRelId);
 	}
 
 	/**
@@ -126,8 +128,11 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public CommercePriceListAccountRel deleteCommercePriceListAccountRel(
-		long commercePriceListAccountRelId) throws PortalException {
-		return commercePriceListAccountRelPersistence.remove(commercePriceListAccountRelId);
+			long commercePriceListAccountRelId)
+		throws PortalException {
+
+		return commercePriceListAccountRelPersistence.remove(
+			commercePriceListAccountRelId);
 	}
 
 	/**
@@ -140,17 +145,19 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public CommercePriceListAccountRel deleteCommercePriceListAccountRel(
-		CommercePriceListAccountRel commercePriceListAccountRel)
+			CommercePriceListAccountRel commercePriceListAccountRel)
 		throws PortalException {
-		return commercePriceListAccountRelPersistence.remove(commercePriceListAccountRel);
+
+		return commercePriceListAccountRelPersistence.remove(
+			commercePriceListAccountRel);
 	}
 
 	@Override
 	public DynamicQuery dynamicQuery() {
 		Class<?> clazz = getClass();
 
-		return DynamicQueryFactoryUtil.forClass(CommercePriceListAccountRel.class,
-			clazz.getClassLoader());
+		return DynamicQueryFactoryUtil.forClass(
+			CommercePriceListAccountRel.class, clazz.getClassLoader());
 	}
 
 	/**
@@ -161,14 +168,15 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	@Override
 	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
-		return commercePriceListAccountRelPersistence.findWithDynamicQuery(dynamicQuery);
+		return commercePriceListAccountRelPersistence.findWithDynamicQuery(
+			dynamicQuery);
 	}
 
 	/**
 	 * Performs a dynamic query on the database and returns a range of the matching rows.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.commerce.price.list.model.impl.CommercePriceListAccountRelModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>com.liferay.commerce.price.list.model.impl.CommercePriceListAccountRelModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param dynamicQuery the dynamic query
@@ -177,17 +185,18 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
-		int end) {
-		return commercePriceListAccountRelPersistence.findWithDynamicQuery(dynamicQuery,
-			start, end);
+	public <T> List<T> dynamicQuery(
+		DynamicQuery dynamicQuery, int start, int end) {
+
+		return commercePriceListAccountRelPersistence.findWithDynamicQuery(
+			dynamicQuery, start, end);
 	}
 
 	/**
 	 * Performs a dynamic query on the database and returns an ordered range of the matching rows.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.commerce.price.list.model.impl.CommercePriceListAccountRelModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>com.liferay.commerce.price.list.model.impl.CommercePriceListAccountRelModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param dynamicQuery the dynamic query
@@ -197,10 +206,12 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
-		int end, OrderByComparator<T> orderByComparator) {
-		return commercePriceListAccountRelPersistence.findWithDynamicQuery(dynamicQuery,
-			start, end, orderByComparator);
+	public <T> List<T> dynamicQuery(
+		DynamicQuery dynamicQuery, int start, int end,
+		OrderByComparator<T> orderByComparator) {
+
+		return commercePriceListAccountRelPersistence.findWithDynamicQuery(
+			dynamicQuery, start, end, orderByComparator);
 	}
 
 	/**
@@ -211,7 +222,8 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	@Override
 	public long dynamicQueryCount(DynamicQuery dynamicQuery) {
-		return commercePriceListAccountRelPersistence.countWithDynamicQuery(dynamicQuery);
+		return commercePriceListAccountRelPersistence.countWithDynamicQuery(
+			dynamicQuery);
 	}
 
 	/**
@@ -222,30 +234,35 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @return the number of rows matching the dynamic query
 	 */
 	@Override
-	public long dynamicQueryCount(DynamicQuery dynamicQuery,
-		Projection projection) {
-		return commercePriceListAccountRelPersistence.countWithDynamicQuery(dynamicQuery,
-			projection);
+	public long dynamicQueryCount(
+		DynamicQuery dynamicQuery, Projection projection) {
+
+		return commercePriceListAccountRelPersistence.countWithDynamicQuery(
+			dynamicQuery, projection);
 	}
 
 	@Override
 	public CommercePriceListAccountRel fetchCommercePriceListAccountRel(
 		long commercePriceListAccountRelId) {
-		return commercePriceListAccountRelPersistence.fetchByPrimaryKey(commercePriceListAccountRelId);
+
+		return commercePriceListAccountRelPersistence.fetchByPrimaryKey(
+			commercePriceListAccountRelId);
 	}
 
 	/**
-	 * Returns the commerce price list account rel matching the UUID and group.
+	 * Returns the commerce price list account rel with the matching UUID and company.
 	 *
 	 * @param uuid the commerce price list account rel's UUID
-	 * @param groupId the primary key of the group
+	 * @param companyId the primary key of the company
 	 * @return the matching commerce price list account rel, or <code>null</code> if a matching commerce price list account rel could not be found
 	 */
 	@Override
-	public CommercePriceListAccountRel fetchCommercePriceListAccountRelByUuidAndGroupId(
-		String uuid, long groupId) {
-		return commercePriceListAccountRelPersistence.fetchByUUID_G(uuid,
-			groupId);
+	public CommercePriceListAccountRel
+		fetchCommercePriceListAccountRelByUuidAndCompanyId(
+			String uuid, long companyId) {
+
+		return commercePriceListAccountRelPersistence.fetchByUuid_C_First(
+			uuid, companyId, null);
 	}
 
 	/**
@@ -257,15 +274,20 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	@Override
 	public CommercePriceListAccountRel getCommercePriceListAccountRel(
-		long commercePriceListAccountRelId) throws PortalException {
-		return commercePriceListAccountRelPersistence.findByPrimaryKey(commercePriceListAccountRelId);
+			long commercePriceListAccountRelId)
+		throws PortalException {
+
+		return commercePriceListAccountRelPersistence.findByPrimaryKey(
+			commercePriceListAccountRelId);
 	}
 
 	@Override
 	public ActionableDynamicQuery getActionableDynamicQuery() {
-		ActionableDynamicQuery actionableDynamicQuery = new DefaultActionableDynamicQuery();
+		ActionableDynamicQuery actionableDynamicQuery =
+			new DefaultActionableDynamicQuery();
 
-		actionableDynamicQuery.setBaseLocalService(commercePriceListAccountRelLocalService);
+		actionableDynamicQuery.setBaseLocalService(
+			commercePriceListAccountRelLocalService);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 		actionableDynamicQuery.setModelClass(CommercePriceListAccountRel.class);
 
@@ -276,12 +298,17 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	}
 
 	@Override
-	public IndexableActionableDynamicQuery getIndexableActionableDynamicQuery() {
-		IndexableActionableDynamicQuery indexableActionableDynamicQuery = new IndexableActionableDynamicQuery();
+	public IndexableActionableDynamicQuery
+		getIndexableActionableDynamicQuery() {
 
-		indexableActionableDynamicQuery.setBaseLocalService(commercePriceListAccountRelLocalService);
+		IndexableActionableDynamicQuery indexableActionableDynamicQuery =
+			new IndexableActionableDynamicQuery();
+
+		indexableActionableDynamicQuery.setBaseLocalService(
+			commercePriceListAccountRelLocalService);
 		indexableActionableDynamicQuery.setClassLoader(getClassLoader());
-		indexableActionableDynamicQuery.setModelClass(CommercePriceListAccountRel.class);
+		indexableActionableDynamicQuery.setModelClass(
+			CommercePriceListAccountRel.class);
 
 		indexableActionableDynamicQuery.setPrimaryKeyPropertyName(
 			"commercePriceListAccountRelId");
@@ -291,7 +318,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 
 	protected void initActionableDynamicQuery(
 		ActionableDynamicQuery actionableDynamicQuery) {
-		actionableDynamicQuery.setBaseLocalService(commercePriceListAccountRelLocalService);
+
+		actionableDynamicQuery.setBaseLocalService(
+			commercePriceListAccountRelLocalService);
 		actionableDynamicQuery.setClassLoader(getClassLoader());
 		actionableDynamicQuery.setModelClass(CommercePriceListAccountRel.class);
 
@@ -302,52 +331,66 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	@Override
 	public ExportActionableDynamicQuery getExportActionableDynamicQuery(
 		final PortletDataContext portletDataContext) {
-		final ExportActionableDynamicQuery exportActionableDynamicQuery = new ExportActionableDynamicQuery() {
+
+		final ExportActionableDynamicQuery exportActionableDynamicQuery =
+			new ExportActionableDynamicQuery() {
+
 				@Override
 				public long performCount() throws PortalException {
-					ManifestSummary manifestSummary = portletDataContext.getManifestSummary();
+					ManifestSummary manifestSummary =
+						portletDataContext.getManifestSummary();
 
 					StagedModelType stagedModelType = getStagedModelType();
 
 					long modelAdditionCount = super.performCount();
 
-					manifestSummary.addModelAdditionCount(stagedModelType,
-						modelAdditionCount);
+					manifestSummary.addModelAdditionCount(
+						stagedModelType, modelAdditionCount);
 
-					long modelDeletionCount = ExportImportHelperUtil.getModelDeletionCount(portletDataContext,
-							stagedModelType);
+					long modelDeletionCount =
+						ExportImportHelperUtil.getModelDeletionCount(
+							portletDataContext, stagedModelType);
 
-					manifestSummary.addModelDeletionCount(stagedModelType,
-						modelDeletionCount);
+					manifestSummary.addModelDeletionCount(
+						stagedModelType, modelDeletionCount);
 
 					return modelAdditionCount;
 				}
+
 			};
 
 		initActionableDynamicQuery(exportActionableDynamicQuery);
 
-		exportActionableDynamicQuery.setAddCriteriaMethod(new ActionableDynamicQuery.AddCriteriaMethod() {
+		exportActionableDynamicQuery.setAddCriteriaMethod(
+			new ActionableDynamicQuery.AddCriteriaMethod() {
+
 				@Override
 				public void addCriteria(DynamicQuery dynamicQuery) {
-					portletDataContext.addDateRangeCriteria(dynamicQuery,
-						"modifiedDate");
+					portletDataContext.addDateRangeCriteria(
+						dynamicQuery, "modifiedDate");
 				}
+
 			});
 
-		exportActionableDynamicQuery.setCompanyId(portletDataContext.getCompanyId());
+		exportActionableDynamicQuery.setCompanyId(
+			portletDataContext.getCompanyId());
 
-		exportActionableDynamicQuery.setGroupId(portletDataContext.getScopeGroupId());
+		exportActionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod
+				<CommercePriceListAccountRel>() {
 
-		exportActionableDynamicQuery.setPerformActionMethod(new ActionableDynamicQuery.PerformActionMethod<CommercePriceListAccountRel>() {
 				@Override
 				public void performAction(
-					CommercePriceListAccountRel commercePriceListAccountRel)
+						CommercePriceListAccountRel commercePriceListAccountRel)
 					throws PortalException {
-					StagedModelDataHandlerUtil.exportStagedModel(portletDataContext,
-						commercePriceListAccountRel);
+
+					StagedModelDataHandlerUtil.exportStagedModel(
+						portletDataContext, commercePriceListAccountRel);
 				}
+
 			});
-		exportActionableDynamicQuery.setStagedModelType(new StagedModelType(
+		exportActionableDynamicQuery.setStagedModelType(
+			new StagedModelType(
 				PortalUtil.getClassNameId(
 					CommercePriceListAccountRel.class.getName())));
 
@@ -360,66 +403,43 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return commercePriceListAccountRelLocalService.deleteCommercePriceListAccountRel((CommercePriceListAccountRel)persistedModel);
+
+		return commercePriceListAccountRelLocalService.
+			deleteCommercePriceListAccountRel(
+				(CommercePriceListAccountRel)persistedModel);
 	}
 
 	@Override
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException {
-		return commercePriceListAccountRelPersistence.findByPrimaryKey(primaryKeyObj);
+
+		return commercePriceListAccountRelPersistence.findByPrimaryKey(
+			primaryKeyObj);
 	}
 
 	/**
-	 * Returns all the commerce price list account rels matching the UUID and company.
-	 *
-	 * @param uuid the UUID of the commerce price list account rels
-	 * @param companyId the primary key of the company
-	 * @return the matching commerce price list account rels, or an empty list if no matches were found
-	 */
-	@Override
-	public List<CommercePriceListAccountRel> getCommercePriceListAccountRelsByUuidAndCompanyId(
-		String uuid, long companyId) {
-		return commercePriceListAccountRelPersistence.findByUuid_C(uuid,
-			companyId);
-	}
-
-	/**
-	 * Returns a range of commerce price list account rels matching the UUID and company.
-	 *
-	 * @param uuid the UUID of the commerce price list account rels
-	 * @param companyId the primary key of the company
-	 * @param start the lower bound of the range of commerce price list account rels
-	 * @param end the upper bound of the range of commerce price list account rels (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the range of matching commerce price list account rels, or an empty list if no matches were found
-	 */
-	@Override
-	public List<CommercePriceListAccountRel> getCommercePriceListAccountRelsByUuidAndCompanyId(
-		String uuid, long companyId, int start, int end,
-		OrderByComparator<CommercePriceListAccountRel> orderByComparator) {
-		return commercePriceListAccountRelPersistence.findByUuid_C(uuid,
-			companyId, start, end, orderByComparator);
-	}
-
-	/**
-	 * Returns the commerce price list account rel matching the UUID and group.
+	 * Returns the commerce price list account rel with the matching UUID and company.
 	 *
 	 * @param uuid the commerce price list account rel's UUID
-	 * @param groupId the primary key of the group
+	 * @param companyId the primary key of the company
 	 * @return the matching commerce price list account rel
 	 * @throws PortalException if a matching commerce price list account rel could not be found
 	 */
 	@Override
-	public CommercePriceListAccountRel getCommercePriceListAccountRelByUuidAndGroupId(
-		String uuid, long groupId) throws PortalException {
-		return commercePriceListAccountRelPersistence.findByUUID_G(uuid, groupId);
+	public CommercePriceListAccountRel
+			getCommercePriceListAccountRelByUuidAndCompanyId(
+				String uuid, long companyId)
+		throws PortalException {
+
+		return commercePriceListAccountRelPersistence.findByUuid_C_First(
+			uuid, companyId, null);
 	}
 
 	/**
 	 * Returns a range of all the commerce price list account rels.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.commerce.price.list.model.impl.CommercePriceListAccountRelModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>com.liferay.commerce.price.list.model.impl.CommercePriceListAccountRelModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of commerce price list account rels
@@ -429,6 +449,7 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	@Override
 	public List<CommercePriceListAccountRel> getCommercePriceListAccountRels(
 		int start, int end) {
+
 		return commercePriceListAccountRelPersistence.findAll(start, end);
 	}
 
@@ -452,7 +473,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	@Override
 	public CommercePriceListAccountRel updateCommercePriceListAccountRel(
 		CommercePriceListAccountRel commercePriceListAccountRel) {
-		return commercePriceListAccountRelPersistence.update(commercePriceListAccountRel);
+
+		return commercePriceListAccountRelPersistence.update(
+			commercePriceListAccountRel);
 	}
 
 	/**
@@ -460,7 +483,10 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the commerce price entry local service
 	 */
-	public com.liferay.commerce.price.list.service.CommercePriceEntryLocalService getCommercePriceEntryLocalService() {
+	public
+		com.liferay.commerce.price.list.service.CommercePriceEntryLocalService
+			getCommercePriceEntryLocalService() {
+
 		return commercePriceEntryLocalService;
 	}
 
@@ -470,7 +496,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @param commercePriceEntryLocalService the commerce price entry local service
 	 */
 	public void setCommercePriceEntryLocalService(
-		com.liferay.commerce.price.list.service.CommercePriceEntryLocalService commercePriceEntryLocalService) {
+		com.liferay.commerce.price.list.service.CommercePriceEntryLocalService
+			commercePriceEntryLocalService) {
+
 		this.commercePriceEntryLocalService = commercePriceEntryLocalService;
 	}
 
@@ -490,6 +518,7 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	public void setCommercePriceEntryPersistence(
 		CommercePriceEntryPersistence commercePriceEntryPersistence) {
+
 		this.commercePriceEntryPersistence = commercePriceEntryPersistence;
 	}
 
@@ -498,7 +527,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the commerce price list local service
 	 */
-	public com.liferay.commerce.price.list.service.CommercePriceListLocalService getCommercePriceListLocalService() {
+	public com.liferay.commerce.price.list.service.CommercePriceListLocalService
+		getCommercePriceListLocalService() {
+
 		return commercePriceListLocalService;
 	}
 
@@ -508,7 +539,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @param commercePriceListLocalService the commerce price list local service
 	 */
 	public void setCommercePriceListLocalService(
-		com.liferay.commerce.price.list.service.CommercePriceListLocalService commercePriceListLocalService) {
+		com.liferay.commerce.price.list.service.CommercePriceListLocalService
+			commercePriceListLocalService) {
+
 		this.commercePriceListLocalService = commercePriceListLocalService;
 	}
 
@@ -528,6 +561,7 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	public void setCommercePriceListPersistence(
 		CommercePriceListPersistence commercePriceListPersistence) {
+
 		this.commercePriceListPersistence = commercePriceListPersistence;
 	}
 
@@ -547,6 +581,7 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	public void setCommercePriceListFinder(
 		CommercePriceListFinder commercePriceListFinder) {
+
 		this.commercePriceListFinder = commercePriceListFinder;
 	}
 
@@ -555,7 +590,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the commerce price list account rel local service
 	 */
-	public CommercePriceListAccountRelLocalService getCommercePriceListAccountRelLocalService() {
+	public CommercePriceListAccountRelLocalService
+		getCommercePriceListAccountRelLocalService() {
+
 		return commercePriceListAccountRelLocalService;
 	}
 
@@ -565,8 +602,11 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @param commercePriceListAccountRelLocalService the commerce price list account rel local service
 	 */
 	public void setCommercePriceListAccountRelLocalService(
-		CommercePriceListAccountRelLocalService commercePriceListAccountRelLocalService) {
-		this.commercePriceListAccountRelLocalService = commercePriceListAccountRelLocalService;
+		CommercePriceListAccountRelLocalService
+			commercePriceListAccountRelLocalService) {
+
+		this.commercePriceListAccountRelLocalService =
+			commercePriceListAccountRelLocalService;
 	}
 
 	/**
@@ -574,7 +614,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the commerce price list account rel persistence
 	 */
-	public CommercePriceListAccountRelPersistence getCommercePriceListAccountRelPersistence() {
+	public CommercePriceListAccountRelPersistence
+		getCommercePriceListAccountRelPersistence() {
+
 		return commercePriceListAccountRelPersistence;
 	}
 
@@ -584,46 +626,61 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @param commercePriceListAccountRelPersistence the commerce price list account rel persistence
 	 */
 	public void setCommercePriceListAccountRelPersistence(
-		CommercePriceListAccountRelPersistence commercePriceListAccountRelPersistence) {
-		this.commercePriceListAccountRelPersistence = commercePriceListAccountRelPersistence;
+		CommercePriceListAccountRelPersistence
+			commercePriceListAccountRelPersistence) {
+
+		this.commercePriceListAccountRelPersistence =
+			commercePriceListAccountRelPersistence;
 	}
 
 	/**
-	 * Returns the commerce price list user segment entry rel local service.
+	 * Returns the commerce price list commerce account group rel local service.
 	 *
-	 * @return the commerce price list user segment entry rel local service
+	 * @return the commerce price list commerce account group rel local service
 	 */
-	public com.liferay.commerce.price.list.service.CommercePriceListUserSegmentEntryRelLocalService getCommercePriceListUserSegmentEntryRelLocalService() {
-		return commercePriceListUserSegmentEntryRelLocalService;
+	public com.liferay.commerce.price.list.service.
+		CommercePriceListCommerceAccountGroupRelLocalService
+			getCommercePriceListCommerceAccountGroupRelLocalService() {
+
+		return commercePriceListCommerceAccountGroupRelLocalService;
 	}
 
 	/**
-	 * Sets the commerce price list user segment entry rel local service.
+	 * Sets the commerce price list commerce account group rel local service.
 	 *
-	 * @param commercePriceListUserSegmentEntryRelLocalService the commerce price list user segment entry rel local service
+	 * @param commercePriceListCommerceAccountGroupRelLocalService the commerce price list commerce account group rel local service
 	 */
-	public void setCommercePriceListUserSegmentEntryRelLocalService(
-		com.liferay.commerce.price.list.service.CommercePriceListUserSegmentEntryRelLocalService commercePriceListUserSegmentEntryRelLocalService) {
-		this.commercePriceListUserSegmentEntryRelLocalService = commercePriceListUserSegmentEntryRelLocalService;
+	public void setCommercePriceListCommerceAccountGroupRelLocalService(
+		com.liferay.commerce.price.list.service.
+			CommercePriceListCommerceAccountGroupRelLocalService
+				commercePriceListCommerceAccountGroupRelLocalService) {
+
+		this.commercePriceListCommerceAccountGroupRelLocalService =
+			commercePriceListCommerceAccountGroupRelLocalService;
 	}
 
 	/**
-	 * Returns the commerce price list user segment entry rel persistence.
+	 * Returns the commerce price list commerce account group rel persistence.
 	 *
-	 * @return the commerce price list user segment entry rel persistence
+	 * @return the commerce price list commerce account group rel persistence
 	 */
-	public CommercePriceListUserSegmentEntryRelPersistence getCommercePriceListUserSegmentEntryRelPersistence() {
-		return commercePriceListUserSegmentEntryRelPersistence;
+	public CommercePriceListCommerceAccountGroupRelPersistence
+		getCommercePriceListCommerceAccountGroupRelPersistence() {
+
+		return commercePriceListCommerceAccountGroupRelPersistence;
 	}
 
 	/**
-	 * Sets the commerce price list user segment entry rel persistence.
+	 * Sets the commerce price list commerce account group rel persistence.
 	 *
-	 * @param commercePriceListUserSegmentEntryRelPersistence the commerce price list user segment entry rel persistence
+	 * @param commercePriceListCommerceAccountGroupRelPersistence the commerce price list commerce account group rel persistence
 	 */
-	public void setCommercePriceListUserSegmentEntryRelPersistence(
-		CommercePriceListUserSegmentEntryRelPersistence commercePriceListUserSegmentEntryRelPersistence) {
-		this.commercePriceListUserSegmentEntryRelPersistence = commercePriceListUserSegmentEntryRelPersistence;
+	public void setCommercePriceListCommerceAccountGroupRelPersistence(
+		CommercePriceListCommerceAccountGroupRelPersistence
+			commercePriceListCommerceAccountGroupRelPersistence) {
+
+		this.commercePriceListCommerceAccountGroupRelPersistence =
+			commercePriceListCommerceAccountGroupRelPersistence;
 	}
 
 	/**
@@ -631,7 +688,11 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the commerce tier price entry local service
 	 */
-	public com.liferay.commerce.price.list.service.CommerceTierPriceEntryLocalService getCommerceTierPriceEntryLocalService() {
+	public
+		com.liferay.commerce.price.list.service.
+			CommerceTierPriceEntryLocalService
+				getCommerceTierPriceEntryLocalService() {
+
 		return commerceTierPriceEntryLocalService;
 	}
 
@@ -641,8 +702,12 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @param commerceTierPriceEntryLocalService the commerce tier price entry local service
 	 */
 	public void setCommerceTierPriceEntryLocalService(
-		com.liferay.commerce.price.list.service.CommerceTierPriceEntryLocalService commerceTierPriceEntryLocalService) {
-		this.commerceTierPriceEntryLocalService = commerceTierPriceEntryLocalService;
+		com.liferay.commerce.price.list.service.
+			CommerceTierPriceEntryLocalService
+				commerceTierPriceEntryLocalService) {
+
+		this.commerceTierPriceEntryLocalService =
+			commerceTierPriceEntryLocalService;
 	}
 
 	/**
@@ -650,7 +715,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the commerce tier price entry persistence
 	 */
-	public CommerceTierPriceEntryPersistence getCommerceTierPriceEntryPersistence() {
+	public CommerceTierPriceEntryPersistence
+		getCommerceTierPriceEntryPersistence() {
+
 		return commerceTierPriceEntryPersistence;
 	}
 
@@ -661,7 +728,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	public void setCommerceTierPriceEntryPersistence(
 		CommerceTierPriceEntryPersistence commerceTierPriceEntryPersistence) {
-		this.commerceTierPriceEntryPersistence = commerceTierPriceEntryPersistence;
+
+		this.commerceTierPriceEntryPersistence =
+			commerceTierPriceEntryPersistence;
 	}
 
 	/**
@@ -669,7 +738,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the counter local service
 	 */
-	public com.liferay.counter.kernel.service.CounterLocalService getCounterLocalService() {
+	public com.liferay.counter.kernel.service.CounterLocalService
+		getCounterLocalService() {
+
 		return counterLocalService;
 	}
 
@@ -679,7 +750,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @param counterLocalService the counter local service
 	 */
 	public void setCounterLocalService(
-		com.liferay.counter.kernel.service.CounterLocalService counterLocalService) {
+		com.liferay.counter.kernel.service.CounterLocalService
+			counterLocalService) {
+
 		this.counterLocalService = counterLocalService;
 	}
 
@@ -688,7 +761,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the class name local service
 	 */
-	public com.liferay.portal.kernel.service.ClassNameLocalService getClassNameLocalService() {
+	public com.liferay.portal.kernel.service.ClassNameLocalService
+		getClassNameLocalService() {
+
 		return classNameLocalService;
 	}
 
@@ -698,7 +773,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @param classNameLocalService the class name local service
 	 */
 	public void setClassNameLocalService(
-		com.liferay.portal.kernel.service.ClassNameLocalService classNameLocalService) {
+		com.liferay.portal.kernel.service.ClassNameLocalService
+			classNameLocalService) {
+
 		this.classNameLocalService = classNameLocalService;
 	}
 
@@ -718,6 +795,7 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	public void setClassNamePersistence(
 		ClassNamePersistence classNamePersistence) {
+
 		this.classNamePersistence = classNamePersistence;
 	}
 
@@ -726,7 +804,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the resource local service
 	 */
-	public com.liferay.portal.kernel.service.ResourceLocalService getResourceLocalService() {
+	public com.liferay.portal.kernel.service.ResourceLocalService
+		getResourceLocalService() {
+
 		return resourceLocalService;
 	}
 
@@ -736,7 +816,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @param resourceLocalService the resource local service
 	 */
 	public void setResourceLocalService(
-		com.liferay.portal.kernel.service.ResourceLocalService resourceLocalService) {
+		com.liferay.portal.kernel.service.ResourceLocalService
+			resourceLocalService) {
+
 		this.resourceLocalService = resourceLocalService;
 	}
 
@@ -745,7 +827,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the user local service
 	 */
-	public com.liferay.portal.kernel.service.UserLocalService getUserLocalService() {
+	public com.liferay.portal.kernel.service.UserLocalService
+		getUserLocalService() {
+
 		return userLocalService;
 	}
 
@@ -756,6 +840,7 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	public void setUserLocalService(
 		com.liferay.portal.kernel.service.UserLocalService userLocalService) {
+
 		this.userLocalService = userLocalService;
 	}
 
@@ -782,7 +867,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 *
 	 * @return the expando row local service
 	 */
-	public com.liferay.expando.kernel.service.ExpandoRowLocalService getExpandoRowLocalService() {
+	public com.liferay.expando.kernel.service.ExpandoRowLocalService
+		getExpandoRowLocalService() {
+
 		return expandoRowLocalService;
 	}
 
@@ -792,7 +879,9 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 * @param expandoRowLocalService the expando row local service
 	 */
 	public void setExpandoRowLocalService(
-		com.liferay.expando.kernel.service.ExpandoRowLocalService expandoRowLocalService) {
+		com.liferay.expando.kernel.service.ExpandoRowLocalService
+			expandoRowLocalService) {
+
 		this.expandoRowLocalService = expandoRowLocalService;
 	}
 
@@ -812,11 +901,13 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	public void setExpandoRowPersistence(
 		ExpandoRowPersistence expandoRowPersistence) {
+
 		this.expandoRowPersistence = expandoRowPersistence;
 	}
 
 	public void afterPropertiesSet() {
-		persistedModelLocalServiceRegistry.register("com.liferay.commerce.price.list.model.CommercePriceListAccountRel",
+		persistedModelLocalServiceRegistry.register(
+			"com.liferay.commerce.price.list.model.CommercePriceListAccountRel",
 			commercePriceListAccountRelLocalService);
 	}
 
@@ -850,15 +941,16 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 	 */
 	protected void runSQL(String sql) {
 		try {
-			DataSource dataSource = commercePriceListAccountRelPersistence.getDataSource();
+			DataSource dataSource =
+				commercePriceListAccountRelPersistence.getDataSource();
 
 			DB db = DBManagerUtil.getDB();
 
 			sql = db.buildSQL(sql);
 			sql = PortalUtil.transformSQL(sql);
 
-			SqlUpdate sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(dataSource,
-					sql);
+			SqlUpdate sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(
+				dataSource, sql);
 
 			sqlUpdate.update();
 		}
@@ -867,44 +959,103 @@ public abstract class CommercePriceListAccountRelLocalServiceBaseImpl
 		}
 	}
 
-	@BeanReference(type = com.liferay.commerce.price.list.service.CommercePriceEntryLocalService.class)
-	protected com.liferay.commerce.price.list.service.CommercePriceEntryLocalService commercePriceEntryLocalService;
+	@BeanReference(
+		type = com.liferay.commerce.price.list.service.CommercePriceEntryLocalService.class
+	)
+	protected
+		com.liferay.commerce.price.list.service.CommercePriceEntryLocalService
+			commercePriceEntryLocalService;
+
 	@BeanReference(type = CommercePriceEntryPersistence.class)
 	protected CommercePriceEntryPersistence commercePriceEntryPersistence;
-	@BeanReference(type = com.liferay.commerce.price.list.service.CommercePriceListLocalService.class)
-	protected com.liferay.commerce.price.list.service.CommercePriceListLocalService commercePriceListLocalService;
+
+	@BeanReference(
+		type = com.liferay.commerce.price.list.service.CommercePriceListLocalService.class
+	)
+	protected
+		com.liferay.commerce.price.list.service.CommercePriceListLocalService
+			commercePriceListLocalService;
+
 	@BeanReference(type = CommercePriceListPersistence.class)
 	protected CommercePriceListPersistence commercePriceListPersistence;
+
 	@BeanReference(type = CommercePriceListFinder.class)
 	protected CommercePriceListFinder commercePriceListFinder;
+
 	@BeanReference(type = CommercePriceListAccountRelLocalService.class)
-	protected CommercePriceListAccountRelLocalService commercePriceListAccountRelLocalService;
+	protected CommercePriceListAccountRelLocalService
+		commercePriceListAccountRelLocalService;
+
 	@BeanReference(type = CommercePriceListAccountRelPersistence.class)
-	protected CommercePriceListAccountRelPersistence commercePriceListAccountRelPersistence;
-	@BeanReference(type = com.liferay.commerce.price.list.service.CommercePriceListUserSegmentEntryRelLocalService.class)
-	protected com.liferay.commerce.price.list.service.CommercePriceListUserSegmentEntryRelLocalService commercePriceListUserSegmentEntryRelLocalService;
-	@BeanReference(type = CommercePriceListUserSegmentEntryRelPersistence.class)
-	protected CommercePriceListUserSegmentEntryRelPersistence commercePriceListUserSegmentEntryRelPersistence;
-	@BeanReference(type = com.liferay.commerce.price.list.service.CommerceTierPriceEntryLocalService.class)
-	protected com.liferay.commerce.price.list.service.CommerceTierPriceEntryLocalService commerceTierPriceEntryLocalService;
+	protected CommercePriceListAccountRelPersistence
+		commercePriceListAccountRelPersistence;
+
+	@BeanReference(
+		type = com.liferay.commerce.price.list.service.CommercePriceListCommerceAccountGroupRelLocalService.class
+	)
+	protected com.liferay.commerce.price.list.service.
+		CommercePriceListCommerceAccountGroupRelLocalService
+			commercePriceListCommerceAccountGroupRelLocalService;
+
+	@BeanReference(
+		type = CommercePriceListCommerceAccountGroupRelPersistence.class
+	)
+	protected CommercePriceListCommerceAccountGroupRelPersistence
+		commercePriceListCommerceAccountGroupRelPersistence;
+
+	@BeanReference(
+		type = com.liferay.commerce.price.list.service.CommerceTierPriceEntryLocalService.class
+	)
+	protected
+		com.liferay.commerce.price.list.service.
+			CommerceTierPriceEntryLocalService
+				commerceTierPriceEntryLocalService;
+
 	@BeanReference(type = CommerceTierPriceEntryPersistence.class)
-	protected CommerceTierPriceEntryPersistence commerceTierPriceEntryPersistence;
-	@ServiceReference(type = com.liferay.counter.kernel.service.CounterLocalService.class)
-	protected com.liferay.counter.kernel.service.CounterLocalService counterLocalService;
-	@ServiceReference(type = com.liferay.portal.kernel.service.ClassNameLocalService.class)
-	protected com.liferay.portal.kernel.service.ClassNameLocalService classNameLocalService;
+	protected CommerceTierPriceEntryPersistence
+		commerceTierPriceEntryPersistence;
+
+	@ServiceReference(
+		type = com.liferay.counter.kernel.service.CounterLocalService.class
+	)
+	protected com.liferay.counter.kernel.service.CounterLocalService
+		counterLocalService;
+
+	@ServiceReference(
+		type = com.liferay.portal.kernel.service.ClassNameLocalService.class
+	)
+	protected com.liferay.portal.kernel.service.ClassNameLocalService
+		classNameLocalService;
+
 	@ServiceReference(type = ClassNamePersistence.class)
 	protected ClassNamePersistence classNamePersistence;
-	@ServiceReference(type = com.liferay.portal.kernel.service.ResourceLocalService.class)
-	protected com.liferay.portal.kernel.service.ResourceLocalService resourceLocalService;
-	@ServiceReference(type = com.liferay.portal.kernel.service.UserLocalService.class)
-	protected com.liferay.portal.kernel.service.UserLocalService userLocalService;
+
+	@ServiceReference(
+		type = com.liferay.portal.kernel.service.ResourceLocalService.class
+	)
+	protected com.liferay.portal.kernel.service.ResourceLocalService
+		resourceLocalService;
+
+	@ServiceReference(
+		type = com.liferay.portal.kernel.service.UserLocalService.class
+	)
+	protected com.liferay.portal.kernel.service.UserLocalService
+		userLocalService;
+
 	@ServiceReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
-	@ServiceReference(type = com.liferay.expando.kernel.service.ExpandoRowLocalService.class)
-	protected com.liferay.expando.kernel.service.ExpandoRowLocalService expandoRowLocalService;
+
+	@ServiceReference(
+		type = com.liferay.expando.kernel.service.ExpandoRowLocalService.class
+	)
+	protected com.liferay.expando.kernel.service.ExpandoRowLocalService
+		expandoRowLocalService;
+
 	@ServiceReference(type = ExpandoRowPersistence.class)
 	protected ExpandoRowPersistence expandoRowPersistence;
+
 	@ServiceReference(type = PersistedModelLocalServiceRegistry.class)
-	protected PersistedModelLocalServiceRegistry persistedModelLocalServiceRegistry;
+	protected PersistedModelLocalServiceRegistry
+		persistedModelLocalServiceRegistry;
+
 }

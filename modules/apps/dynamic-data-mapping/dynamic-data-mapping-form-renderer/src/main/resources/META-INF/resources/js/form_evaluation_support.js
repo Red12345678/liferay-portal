@@ -81,6 +81,7 @@ AUI.add(
 							if (field !== trigger) {
 								if (fieldContext.valueChanged && !Util.compare(field.get('value'), fieldContext.value)) {
 									field.setValue(fieldContext.value);
+									field.fire('fieldValueChange', fieldContext);
 								}
 
 								field.set('errorMessage', '');

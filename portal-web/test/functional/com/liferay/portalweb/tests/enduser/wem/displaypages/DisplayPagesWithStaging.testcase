@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Display Pages";
@@ -31,14 +32,15 @@ definition {
 	test AssertDisplayPagesAreOnlyEditableInStagingView {
 		SitePages.openPagesAdmin(siteURLKey = "test-site-name-staging");
 
-		AssertVisible(locator1 = "NavBar#NAV_ITEM_LINK", key_navItem = "Display Pages");
+		AssertVisible(
+			key_navItem = "Display Pages",
+			locator1 = "NavBar#NAV_ITEM_LINK");
 
 		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
 
 		AssertElementNotPresent(
-			locator1 = "NavBar#NAV_ITEM_LINK",
-			key_navItem = "Display Pages"
-		);
+			key_navItem = "Display Pages",
+			locator1 = "NavBar#NAV_ITEM_LINK");
 	}
 
 	@description = "This tests one of the workarounds of LPS-92522."
@@ -46,8 +48,7 @@ definition {
 	test PublishDisplayPageWithFragment {
 		FragmentsAdmin.openFragmentsAdmin(siteURLKey = "test-site-name-staging");
 
-		FragmentsAdmin.importCollectionFromDependenciesFolder(
-			collectionZipFile = "fragment-collection.zip");
+		FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "fragment-collection.zip");
 
 		DisplayPagesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name-staging");
 
@@ -65,4 +66,5 @@ definition {
 
 		AssertConsoleTextNotPresent(value1 = "PortletDataException");
 	}
+
 }

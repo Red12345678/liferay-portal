@@ -14,18 +14,16 @@
 
 package com.liferay.commerce.product.service.impl;
 
-import com.liferay.commerce.product.constants.CPActionKeys;
-import com.liferay.commerce.product.constants.CPConstants;
+import com.liferay.commerce.product.exception.NoSuchCPDefinitionException;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPDefinitionSpecificationOptionValue;
-import com.liferay.commerce.product.model.CPSpecificationOption;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.base.CPDefinitionSpecificationOptionValueServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermissionFactory;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
@@ -48,8 +46,8 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 				double priority, ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionSpecificationOptionValueLocalService.
 			addCPDefinitionSpecificationOptionValue(
@@ -67,10 +65,9 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 				cpDefinitionSpecificationOptionValuePersistence.
 					findByPrimaryKey(cpDefinitionSpecificationOptionValueId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(),
-			cpDefinitionSpecificationOptionValue.getCPDefinition(),
-			ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionSpecificationOptionValue.getCPDefinitionId(),
+			ActionKeys.VIEW);
 
 		cpDefinitionSpecificationOptionValueLocalService.
 			deleteCPDefinitionSpecificationOptionValue(
@@ -89,12 +86,9 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 					fetchCPDefinitionSpecificationOptionValue(
 						cpDefinitionSpecificationOptionValueId);
 
-		if (cpDefinitionSpecificationOptionValue != null) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(),
-				cpDefinitionSpecificationOptionValue.getCPDefinition(),
-				ActionKeys.VIEW);
-		}
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionSpecificationOptionValue.getCPDefinitionId(),
+			ActionKeys.VIEW);
 
 		return cpDefinitionSpecificationOptionValue;
 	}
@@ -111,31 +105,11 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 					getCPDefinitionSpecificationOptionValue(
 						cpDefinitionSpecificationOptionValueId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(),
+		_checkCommerceCatalogPermissionByCPDefinitionId(
 			cpDefinitionSpecificationOptionValue.getCPDefinitionId(),
 			ActionKeys.VIEW);
 
 		return cpDefinitionSpecificationOptionValue;
-	}
-
-	@Override
-	public List<CPDefinitionSpecificationOptionValue>
-			getCPDefinitionSpecificationOptionValues(
-				long cpSpecificationOptionId, int start, int end)
-		throws PortalException {
-
-		CPSpecificationOption cpSpecificationOption =
-			cpSpecificationOptionLocalService.getCPSpecificationOption(
-				cpSpecificationOptionId);
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), cpSpecificationOption.getGroupId(),
-			CPActionKeys.MANAGE_COMMERCE_PRODUCT_SPECIFICATION_OPTIONS);
-
-		return cpDefinitionSpecificationOptionValueLocalService.
-			getCPSpecificationOptionDefinitionValues(
-				cpSpecificationOptionId, start, end);
 	}
 
 	@Override
@@ -146,8 +120,8 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 					orderByComparator)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionSpecificationOptionValueLocalService.
 			getCPDefinitionSpecificationOptionValues(
@@ -160,8 +134,8 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 				long cpDefinitionId, long cpOptionCategoryId)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionSpecificationOptionValueLocalService.
 			getCPDefinitionSpecificationOptionValues(
@@ -170,20 +144,14 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 
 	@Override
 	public int getCPDefinitionSpecificationOptionValuesCount(
-			long cpSpecificationOptionId)
+			long cpDefinitionId)
 		throws PortalException {
 
-		CPSpecificationOption cpSpecificationOption =
-			cpSpecificationOptionLocalService.getCPSpecificationOption(
-				cpSpecificationOptionId);
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), cpSpecificationOption.getGroupId(),
-			CPActionKeys.MANAGE_COMMERCE_PRODUCT_SPECIFICATION_OPTIONS);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionSpecificationOptionValueLocalService.
-			getCPSpecificationOptionDefinitionValuesCount(
-				cpSpecificationOptionId);
+			getCPDefinitionSpecificationOptionValuesCount(cpDefinitionId);
 	}
 
 	@Override
@@ -200,9 +168,8 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 					getCPDefinitionSpecificationOptionValue(
 						cpDefinitionSpecificationOptionValueId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(),
-			cpDefinitionSpecificationOptionValue.getCPDefinition(),
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionSpecificationOptionValue.getCPDefinitionId(),
 			ActionKeys.UPDATE);
 
 		return cpDefinitionSpecificationOptionValueLocalService.
@@ -211,15 +178,34 @@ public class CPDefinitionSpecificationOptionValueServiceImpl
 				valueMap, priority, serviceContext);
 	}
 
-	private static volatile ModelResourcePermission<CPDefinition>
-		_cpDefinitionModelResourcePermission =
+	private void _checkCommerceCatalogPermissionByCPDefinitionId(
+			long cpDefinitionId, String actionId)
+		throws PortalException {
+
+		CPDefinition cpDefinition = cpDefinitionLocalService.fetchCPDefinition(
+			cpDefinitionId);
+
+		if (cpDefinition == null) {
+			throw new NoSuchCPDefinitionException();
+		}
+
+		CommerceCatalog commerceCatalog =
+			commerceCatalogLocalService.fetchCommerceCatalogByGroupId(
+				cpDefinition.getGroupId());
+
+		if (commerceCatalog == null) {
+			throw new PrincipalException();
+		}
+
+		_commerceCatalogModelResourcePermission.check(
+			getPermissionChecker(), commerceCatalog, actionId);
+	}
+
+	private static volatile ModelResourcePermission<CommerceCatalog>
+		_commerceCatalogModelResourcePermission =
 			ModelResourcePermissionFactory.getInstance(
 				CPDefinitionSpecificationOptionValueServiceImpl.class,
-				"_cpDefinitionModelResourcePermission", CPDefinition.class);
-	private static volatile PortletResourcePermission
-		_portletResourcePermission =
-			PortletResourcePermissionFactory.getInstance(
-				CPDefinitionSpecificationOptionValueServiceImpl.class,
-				"_portletResourcePermission", CPConstants.RESOURCE_NAME);
+				"_commerceCatalogModelResourcePermission",
+				CommerceCatalog.class);
 
 }

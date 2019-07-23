@@ -62,7 +62,8 @@ public interface CPContentHelper {
 		throws PortalException;
 
 	public CPCatalogEntry getCPCatalogEntry(
-		HttpServletRequest httpServletRequest);
+			HttpServletRequest httpServletRequest)
+		throws PortalException;
 
 	public Object getCPContentContributorValue(
 			String contributorKey, HttpServletRequest httpServletRequest)
@@ -77,7 +78,7 @@ public interface CPContentHelper {
 			getCPDefinitionSpecificationOptionValues(long cpDefinitionId)
 		throws PortalException;
 
-	public List<CPOptionCategory> getCPOptionCategories(long groupId);
+	public List<CPOptionCategory> getCPOptionCategories(long companyId);
 
 	public List<CPType> getCPTypes();
 
@@ -111,8 +112,9 @@ public interface CPContentHelper {
 		throws Exception;
 
 	public ResourceURL getViewAttachmentURL(
-		LiferayPortletRequest liferayPortletRequest,
-		LiferayPortletResponse liferayPortletResponse);
+			LiferayPortletRequest liferayPortletRequest,
+			LiferayPortletResponse liferayPortletResponse)
+		throws PortalException;
 
 	public boolean hasCPDefinitionSpecificationOptionValues(long cpDefinitionId)
 		throws PortalException;

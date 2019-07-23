@@ -15,16 +15,20 @@
 package com.liferay.commerce.discount.internal.search;
 
 import com.liferay.commerce.discount.model.CommerceDiscount;
-import com.liferay.commerce.discount.model.CommerceDiscountUserSegmentRel;
+import com.liferay.commerce.discount.model.CommerceDiscountCommerceAccountGroupRel;
+import com.liferay.commerce.discount.service.CommerceDiscountCommerceAccountGroupRelLocalService;
 import com.liferay.commerce.discount.service.CommerceDiscountLocalService;
-import com.liferay.commerce.discount.service.CommerceDiscountUserSegmentRelLocalService;
 import com.liferay.commerce.discount.target.CommerceDiscountOrderTarget;
 import com.liferay.commerce.discount.target.CommerceDiscountProductTarget;
 import com.liferay.commerce.discount.target.CommerceDiscountTarget;
 import com.liferay.commerce.discount.target.CommerceDiscountTargetRegistry;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.product.model.CPDefinition;
+import com.liferay.commerce.product.model.CommerceChannel;
+import com.liferay.commerce.product.model.CommerceChannelRel;
 import com.liferay.commerce.product.service.CPDefinitionLocalService;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
+import com.liferay.commerce.product.service.CommerceChannelRelLocalService;
 import com.liferay.commerce.service.CommerceOrderLocalService;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -42,9 +46,9 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.kernel.search.filter.MissingFilter;
 import com.liferay.portal.kernel.search.filter.TermFilter;
 import com.liferay.portal.kernel.search.filter.TermsFilter;
-import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -82,6 +86,8 @@ public class CommerceDiscountIndexer extends BaseIndexer<CommerceDiscount> {
 
 	public static final String FIELD_COUPON_CODE = "couponCode";
 
+	public static final String FIELD_GROUP_IDS = "groupIds";
+
 	public static final String FIELD_TARGET_TYPE = "targetType";
 
 	public static final String FIELD_USE_COUPON_CODE = "useCouponCode";
@@ -89,8 +95,7 @@ public class CommerceDiscountIndexer extends BaseIndexer<CommerceDiscount> {
 	public CommerceDiscountIndexer() {
 		setDefaultSelectedFieldNames(
 			Field.COMPANY_ID, Field.ENTRY_CLASS_NAME, Field.ENTRY_CLASS_PK,
-			Field.GROUP_ID, Field.MODIFIED_DATE, Field.NAME,
-			Field.SCOPE_GROUP_ID, Field.UID);
+			Field.MODIFIED_DATE, Field.NAME, Field.UID);
 		setFilterSearch(true);
 	}
 
@@ -129,32 +134,30 @@ public class CommerceDiscountIndexer extends BaseIndexer<CommerceDiscount> {
 				BooleanClauseOccur.MUST_NOT);
 		}
 
-		long[] commerceUserSegmentEntryIds = GetterUtil.getLongValues(
-			searchContext.getAttribute("commerceUserSegmentEntryIds"), null);
+		long[] commerceAccountGroupIds = GetterUtil.getLongValues(
+			searchContext.getAttribute("commerceAccountGroupIds"), null);
 
-		if ((commerceUserSegmentEntryIds != null) &&
-			(commerceUserSegmentEntryIds.length > 0)) {
+		if ((commerceAccountGroupIds != null) &&
+			(commerceAccountGroupIds.length > 0)) {
 
 			TermsSetFilterBuilder termsSetFilterBuilder =
 				_filterBuilders.termsSetFilterBuilder();
 
-			termsSetFilterBuilder.setFieldName("commerceUserSegmentEntryIds");
+			termsSetFilterBuilder.setFieldName("commerceAccountGroupIds");
 			termsSetFilterBuilder.setMinimumShouldMatchField(
-				"commerceUserSegmentEntryIds_required_matches");
+				"commerceAccountGroupIds_required_matches");
 
 			List<String> values = new ArrayList<>(
-				commerceUserSegmentEntryIds.length);
+				commerceAccountGroupIds.length);
 
-			for (long commerceUserSegmentEntryId :
-					commerceUserSegmentEntryIds) {
-
-				values.add(String.valueOf(commerceUserSegmentEntryId));
+			for (long commerceAccountGroupId : commerceAccountGroupIds) {
+				values.add(String.valueOf(commerceAccountGroupId));
 			}
 
 			termsSetFilterBuilder.setValues(values);
 
 			Filter termFilter = new TermFilter(
-				"commerceUserSegmentEntryIds_required_matches", "0");
+				"commerceAccountGroupIds_required_matches", "0");
 
 			BooleanFilter fieldBooleanFilter = new BooleanFilter();
 
@@ -164,6 +167,26 @@ public class CommerceDiscountIndexer extends BaseIndexer<CommerceDiscount> {
 
 			contextBooleanFilter.add(
 				fieldBooleanFilter, BooleanClauseOccur.MUST);
+		}
+
+		long[] groupIds = GetterUtil.getLongValues(
+			searchContext.getAttribute(FIELD_GROUP_IDS), null);
+
+		if ((groupIds != null) && (groupIds.length > 0)) {
+			BooleanFilter groupBooleanFilter = new BooleanFilter();
+
+			for (long groupId : groupIds) {
+				Filter termFilter = new TermFilter(
+					FIELD_GROUP_IDS, String.valueOf(groupId));
+
+				groupBooleanFilter.add(termFilter, BooleanClauseOccur.SHOULD);
+			}
+
+			groupBooleanFilter.add(
+				new MissingFilter(FIELD_GROUP_IDS), BooleanClauseOccur.SHOULD);
+
+			contextBooleanFilter.add(
+				groupBooleanFilter, BooleanClauseOccur.MUST);
 		}
 
 		boolean active = GetterUtil.getBoolean(
@@ -295,25 +318,56 @@ public class CommerceDiscountIndexer extends BaseIndexer<CommerceDiscount> {
 		document.addKeyword(
 			FIELD_USE_COUPON_CODE, commerceDiscount.isUseCouponCode());
 
-		List<CommerceDiscountUserSegmentRel> commerceDiscountUserSegmentRels =
-			_commerceDiscountUserSegmentRelLocalService.
-				getCommerceDiscountUserSegmentRels(
-					commerceDiscount.getCommerceDiscountId(), QueryUtil.ALL_POS,
-					QueryUtil.ALL_POS, null);
+		List<CommerceDiscountCommerceAccountGroupRel>
+			commerceDiscountCommerceAccountGroupRels =
+				_commerceDiscountCommerceAccountGroupRelLocalService.
+					getCommerceDiscountCommerceAccountGroupRels(
+						commerceDiscount.getCommerceDiscountId(),
+						QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
-		Stream<CommerceDiscountUserSegmentRel> stream =
-			commerceDiscountUserSegmentRels.stream();
+		Stream<CommerceDiscountCommerceAccountGroupRel>
+			commerceDiscountCommerceAccountGroupRelStream =
+				commerceDiscountCommerceAccountGroupRels.stream();
 
-		LongStream longStream = stream.mapToLong(
-			CommerceDiscountUserSegmentRel::getCommerceUserSegmentEntryId);
+		LongStream commerceAccountGroupIdStream =
+			commerceDiscountCommerceAccountGroupRelStream.mapToLong(
+				CommerceDiscountCommerceAccountGroupRel::
+					getCommerceAccountGroupId);
 
-		long[] commerceUserSegmentEntryIds = longStream.toArray();
+		long[] commerceAccountGroupIds = commerceAccountGroupIdStream.toArray();
 
+		document.addNumber("commerceAccountGroupIds", commerceAccountGroupIds);
 		document.addNumber(
-			"commerceUserSegmentEntryIds", commerceUserSegmentEntryIds);
-		document.addNumber(
-			"commerceUserSegmentEntryIds_required_matches",
-			commerceUserSegmentEntryIds.length);
+			"commerceAccountGroupIds_required_matches",
+			commerceAccountGroupIds.length);
+
+		List<Long> groupIdList = new ArrayList<>();
+
+		List<CommerceChannelRel> commerceChannelRels =
+			_commerceChannelRelLocalService.getCommerceChannelRels(
+				commerceDiscount.getModelClassName(),
+				commerceDiscount.getCommerceDiscountId(), QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null);
+
+		for (CommerceChannelRel commerceChannelRel : commerceChannelRels) {
+			CommerceChannel commerceChannel =
+				_commerceChannelLocalService.fetchCommerceChannel(
+					commerceChannelRel.getCommerceChannelId());
+
+			if (commerceChannel == null) {
+				continue;
+			}
+
+			groupIdList.add(commerceChannel.getGroupId());
+		}
+
+		Stream<Long> stream = groupIdList.stream();
+
+		long[] groupIds = stream.mapToLong(
+			l -> l
+		).toArray();
+
+		document.addNumber(FIELD_GROUP_IDS, groupIds);
 
 		if (_log.isDebugEnabled()) {
 			_log.debug(
@@ -321,13 +375,19 @@ public class CommerceDiscountIndexer extends BaseIndexer<CommerceDiscount> {
 		}
 
 		if (commerceDiscountTarget instanceof CommerceDiscountProductTarget) {
-			((CommerceDiscountProductTarget)commerceDiscountTarget).
-				contributeDocument(document, commerceDiscount);
+			CommerceDiscountProductTarget commerceDiscountProductTarget =
+				(CommerceDiscountProductTarget)commerceDiscountTarget;
+
+			commerceDiscountProductTarget.contributeDocument(
+				document, commerceDiscount);
 		}
 
 		if (commerceDiscountTarget instanceof CommerceDiscountOrderTarget) {
-			((CommerceDiscountOrderTarget)commerceDiscountTarget).
-				contributeDocument(document, commerceDiscount);
+			CommerceDiscountOrderTarget commerceDiscountOrderTarget =
+				(CommerceDiscountOrderTarget)commerceDiscountTarget;
+
+			commerceDiscountOrderTarget.contributeDocument(
+				document, commerceDiscount);
 		}
 
 		return document;
@@ -440,7 +500,14 @@ public class CommerceDiscountIndexer extends BaseIndexer<CommerceDiscount> {
 		CommerceDiscountIndexer.class);
 
 	@Reference
-	private ClassNameLocalService _classNameLocalService;
+	private CommerceChannelLocalService _commerceChannelLocalService;
+
+	@Reference
+	private CommerceChannelRelLocalService _commerceChannelRelLocalService;
+
+	@Reference
+	private CommerceDiscountCommerceAccountGroupRelLocalService
+		_commerceDiscountCommerceAccountGroupRelLocalService;
 
 	@Reference
 	private CommerceDiscountLocalService _commerceDiscountLocalService;
@@ -452,10 +519,6 @@ public class CommerceDiscountIndexer extends BaseIndexer<CommerceDiscount> {
 
 	@Reference
 	private CommerceDiscountTargetRegistry _commerceDiscountTargetRegistry;
-
-	@Reference
-	private CommerceDiscountUserSegmentRelLocalService
-		_commerceDiscountUserSegmentRelLocalService;
 
 	@Reference
 	private CommerceOrderLocalService _commerceOrderLocalService;

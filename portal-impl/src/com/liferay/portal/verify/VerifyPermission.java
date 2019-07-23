@@ -92,11 +92,9 @@ public class VerifyPermission extends VerifyProcess {
 				ResourcePermissionLocalServiceUtil.getActionableDynamicQuery();
 
 			actionableDynamicQuery.setAddCriteriaMethod(
-				dynamicQuery -> {
-					dynamicQuery.add(
-						RestrictionsFactoryUtil.eq(
-							"name", Organization.class.getName()));
-				});
+				dynamicQuery -> dynamicQuery.add(
+					RestrictionsFactoryUtil.eq(
+						"name", Organization.class.getName())));
 			actionableDynamicQuery.setPerformActionMethod(
 				(ResourcePermission resourcePermission) -> {
 					long oldActionIds = resourcePermission.getActionIds();

@@ -20,7 +20,6 @@ import com.liferay.commerce.product.definitions.web.internal.util.CPDefinitionsP
 import com.liferay.commerce.product.definitions.web.portlet.action.ActionHelper;
 import com.liferay.commerce.product.definitions.web.servlet.taglib.ui.CPDefinitionScreenNavigationConstants;
 import com.liferay.commerce.product.item.selector.criterion.CPSpecificationOptionItemSelectorCriterion;
-import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPDefinitionSpecificationOptionValue;
 import com.liferay.commerce.product.model.CPOptionCategory;
 import com.liferay.commerce.product.service.CPDefinitionSpecificationOptionValueService;
@@ -32,11 +31,12 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
+import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
-import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -57,8 +57,6 @@ public class CPDefinitionSpecificationOptionValueDisplayContext
 
 	public CPDefinitionSpecificationOptionValueDisplayContext(
 			ActionHelper actionHelper, HttpServletRequest httpServletRequest,
-			ModelResourcePermission<CPDefinition>
-				cpDefinitionModelResourcePermission,
 			CPDefinitionSpecificationOptionValueService
 				cpDefinitionSpecificationOptionValueService,
 			CPOptionCategoryService cpOptionCategoryService,
@@ -71,8 +69,6 @@ public class CPDefinitionSpecificationOptionValueDisplayContext
 
 		setDefaultOrderByCol("priority");
 
-		_cpDefinitionModelResourcePermission =
-			cpDefinitionModelResourcePermission;
 		_cpDefinitionSpecificationOptionValueService =
 			cpDefinitionSpecificationOptionValueService;
 		_cpOptionCategoryService = cpOptionCategoryService;
@@ -112,8 +108,13 @@ public class CPDefinitionSpecificationOptionValueDisplayContext
 	public List<CPOptionCategory> getCPOptionCategories()
 		throws PortalException {
 
-		return _cpOptionCategoryService.getCPOptionCategories(
-			getScopeGroupId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		BaseModelSearchResult<CPOptionCategory>
+			cpOptionCategoryBaseModelSearchResult =
+				_cpOptionCategoryService.searchCPOptionCategories(
+					cpRequestHelper.getCompanyId(), null, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null);
+
+		return cpOptionCategoryBaseModelSearchResult.getBaseModels();
 	}
 
 	public String getCPOptionCategoryTitle(
@@ -142,6 +143,9 @@ public class CPDefinitionSpecificationOptionValueDisplayContext
 			return cpOptionCategory.getTitle(themeDisplay.getLocale());
 		}
 		catch (PrincipalException pe) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(pe, pe);
+			}
 		}
 
 		return StringPool.BLANK;
@@ -224,20 +228,9 @@ public class CPDefinitionSpecificationOptionValueDisplayContext
 		return searchContainer;
 	}
 
-	public boolean hasEditPermission() throws PortalException {
-		return _cpDefinitionModelResourcePermission.contains(
-			cpRequestHelper.getPermissionChecker(), getCPDefinition(),
-			ActionKeys.UPDATE);
-	}
+	private static final Log _log = LogFactoryUtil.getLog(
+		CPDefinitionSpecificationOptionValueDisplayContext.class);
 
-	public boolean hasViewPermission() throws PortalException {
-		return _cpDefinitionModelResourcePermission.contains(
-			cpRequestHelper.getPermissionChecker(), getCPDefinition(),
-			ActionKeys.VIEW);
-	}
-
-	private final ModelResourcePermission<CPDefinition>
-		_cpDefinitionModelResourcePermission;
 	private CPDefinitionSpecificationOptionValue
 		_cpDefinitionSpecificationOptionValue;
 	private final CPDefinitionSpecificationOptionValueService

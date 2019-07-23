@@ -25,9 +25,9 @@ import com.liferay.commerce.product.data.source.CPDataSourceResult;
 import com.liferay.commerce.product.type.CPType;
 import com.liferay.commerce.product.type.CPTypeServicesTracker;
 import com.liferay.commerce.product.util.CPDefinitionHelper;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.SearchContext;
@@ -88,7 +88,6 @@ public class CPPublisherDisplayContext extends BaseCPPublisherDisplayContext {
 
 		if (isSelectionStyleDynamic()) {
 			cpDataSourceResult = _getDynamicCPDataSourceResult(
-				cpContentRequestHelper.getScopeGroupId(),
 				_searchContainer.getStart(), _searchContainer.getEnd());
 		}
 		else if (isSelectionStyleDataSource()) {
@@ -166,15 +165,12 @@ public class CPPublisherDisplayContext extends BaseCPPublisherDisplayContext {
 		return _searchContainer;
 	}
 
-	private CPDataSourceResult _getDynamicCPDataSourceResult(
-			long groupId, int start, int end)
+	private CPDataSourceResult _getDynamicCPDataSourceResult(int start, int end)
 		throws Exception {
 
 		SearchContext searchContext = new SearchContext();
 
 		LinkedHashMap<String, Object> params = new LinkedHashMap<>();
-
-		params.put("keywords", StringPool.STAR);
 
 		Map<String, Serializable> attributes = new HashMap<>();
 
@@ -185,14 +181,13 @@ public class CPPublisherDisplayContext extends BaseCPPublisherDisplayContext {
 		searchContext.setAttributes(attributes);
 
 		searchContext.setCompanyId(cpContentRequestHelper.getCompanyId());
-		searchContext.setGroupIds(new long[] {groupId});
-
-		searchContext.setKeywords(StringPool.STAR);
 
 		CPQuery cpQuery = new CPQuery();
 
+		Company company = cpContentRequestHelper.getCompany();
+
 		cpPublisherWebHelper.setCategoriesAndTags(
-			cpContentRequestHelper.getScopeGroupId(), cpQuery,
+			company.getGroupId(), cpQuery,
 			cpContentRequestHelper.getPortletPreferences());
 
 		cpPublisherWebHelper.setOrdering(

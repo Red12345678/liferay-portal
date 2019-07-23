@@ -26,6 +26,8 @@ import com.liferay.commerce.frontend.Pagination;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.order.content.web.internal.frontend.util.CommerceOrderClayTableUtil;
 import com.liferay.commerce.order.content.web.internal.model.Order;
+import com.liferay.commerce.product.model.CommerceChannel;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.commerce.service.CommerceOrderService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -37,6 +39,7 @@ import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -104,8 +107,16 @@ public class CommercePendingOrderClayTable
 
 		OrderFilterImpl orderFilter = (OrderFilterImpl)filter;
 
+		CommerceChannel commerceChannel =
+			_commerceChannelLocalService.fetchCommerceChannelBySiteGroupId(
+				themeDisplay.getScopeGroupId());
+
+		if (commerceChannel == null) {
+			return 0;
+		}
+
 		return _commerceOrderService.getPendingCommerceOrdersCount(
-			themeDisplay.getScopeGroupId(), orderFilter.getAccountId(),
+			commerceChannel.getGroupId(), orderFilter.getAccountId(),
 			filter.getKeywords());
 	}
 
@@ -146,9 +157,17 @@ public class CommercePendingOrderClayTable
 
 		OrderFilterImpl orderFilter = (OrderFilterImpl)filter;
 
+		CommerceChannel commerceChannel =
+			_commerceChannelLocalService.fetchCommerceChannelBySiteGroupId(
+				themeDisplay.getScopeGroupId());
+
+		if (commerceChannel == null) {
+			return Collections.emptyList();
+		}
+
 		List<CommerceOrder> commerceOrders =
 			_commerceOrderService.getPendingCommerceOrders(
-				themeDisplay.getScopeGroupId(), orderFilter.getAccountId(),
+				commerceChannel.getGroupId(), orderFilter.getAccountId(),
 				filter.getKeywords(), pagination.getStartPosition(),
 				pagination.getEndPosition());
 
@@ -163,6 +182,9 @@ public class CommercePendingOrderClayTable
 
 	@Reference
 	private ClayTableSchemaBuilderFactory _clayTableSchemaBuilderFactory;
+
+	@Reference
+	private CommerceChannelLocalService _commerceChannelLocalService;
 
 	@Reference
 	private CommerceOrderService _commerceOrderService;

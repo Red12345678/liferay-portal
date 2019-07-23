@@ -17,7 +17,6 @@ package com.liferay.commerce.product.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.commerce.product.model.CPTaxCategory;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -33,12 +32,12 @@ import java.util.Date;
  * The cache model class for representing CPTaxCategory in entity cache.
  *
  * @author Marco Leo
- * @see CPTaxCategory
  * @generated
  */
 @ProviderType
-public class CPTaxCategoryCacheModel implements CacheModel<CPTaxCategory>,
-	Externalizable {
+public class CPTaxCategoryCacheModel
+	implements CacheModel<CPTaxCategory>, Externalizable {
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -49,7 +48,8 @@ public class CPTaxCategoryCacheModel implements CacheModel<CPTaxCategory>,
 			return false;
 		}
 
-		CPTaxCategoryCacheModel cpTaxCategoryCacheModel = (CPTaxCategoryCacheModel)obj;
+		CPTaxCategoryCacheModel cpTaxCategoryCacheModel =
+			(CPTaxCategoryCacheModel)obj;
 
 		if (CPTaxCategoryId == cpTaxCategoryCacheModel.CPTaxCategoryId) {
 			return true;
@@ -65,12 +65,10 @@ public class CPTaxCategoryCacheModel implements CacheModel<CPTaxCategory>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{CPTaxCategoryId=");
 		sb.append(CPTaxCategoryId);
-		sb.append(", groupId=");
-		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
 		sb.append(", userId=");
@@ -95,7 +93,6 @@ public class CPTaxCategoryCacheModel implements CacheModel<CPTaxCategory>,
 		CPTaxCategoryImpl cpTaxCategoryImpl = new CPTaxCategoryImpl();
 
 		cpTaxCategoryImpl.setCPTaxCategoryId(CPTaxCategoryId);
-		cpTaxCategoryImpl.setGroupId(groupId);
 		cpTaxCategoryImpl.setCompanyId(companyId);
 		cpTaxCategoryImpl.setUserId(userId);
 
@@ -143,8 +140,6 @@ public class CPTaxCategoryCacheModel implements CacheModel<CPTaxCategory>,
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		CPTaxCategoryId = objectInput.readLong();
 
-		groupId = objectInput.readLong();
-
 		companyId = objectInput.readLong();
 
 		userId = objectInput.readLong();
@@ -156,11 +151,8 @@ public class CPTaxCategoryCacheModel implements CacheModel<CPTaxCategory>,
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		objectOutput.writeLong(CPTaxCategoryId);
-
-		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(companyId);
 
@@ -192,7 +184,6 @@ public class CPTaxCategoryCacheModel implements CacheModel<CPTaxCategory>,
 	}
 
 	public long CPTaxCategoryId;
-	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
@@ -200,4 +191,5 @@ public class CPTaxCategoryCacheModel implements CacheModel<CPTaxCategory>,
 	public long modifiedDate;
 	public String name;
 	public String description;
+
 }

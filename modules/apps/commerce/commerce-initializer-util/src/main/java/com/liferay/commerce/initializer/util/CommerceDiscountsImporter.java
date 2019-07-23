@@ -16,8 +16,8 @@ package com.liferay.commerce.initializer.util;
 
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.asset.kernel.service.AssetCategoryLocalService;
+import com.liferay.commerce.discount.constants.CommerceDiscountConstants;
 import com.liferay.commerce.discount.model.CommerceDiscount;
-import com.liferay.commerce.discount.model.CommerceDiscountConstants;
 import com.liferay.commerce.discount.service.CommerceDiscountLocalService;
 import com.liferay.commerce.discount.service.CommerceDiscountRelLocalService;
 import com.liferay.portal.kernel.dao.orm.Criterion;
@@ -80,7 +80,8 @@ public class CommerceDiscountsImporter {
 		boolean active = jsonObject.getBoolean("active");
 
 		return _commerceDiscountLocalService.addCommerceDiscount(
-			title, CommerceDiscountConstants.TARGET_CATEGORIES, useCouponCode,
+			serviceContext.getUserId(), title,
+			CommerceDiscountConstants.TARGET_CATEGORIES, useCouponCode,
 			couponCode, usePercentage, maximumDiscountAmount, level1,
 			BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO,
 			CommerceDiscountConstants.LIMITATION_TYPE_UNLIMITED, 0, active, 1,
@@ -94,9 +95,9 @@ public class CommerceDiscountsImporter {
 		CommerceDiscount commerceDiscount = _addCommerceDiscount(
 			jsonObject, serviceContext);
 
-		JSONArray jsonArray = jsonObject.getJSONArray("categories");
+		JSONArray categories = jsonObject.getJSONArray("categories");
 
-		if (jsonArray.length() > 0) {
+		if (categories.length() > 0) {
 			DynamicQuery dynamicQuery =
 				_assetCategoryLocalService.dynamicQuery();
 
@@ -107,8 +108,8 @@ public class CommerceDiscountsImporter {
 				_assetCategoryLocalService.dynamicQuery(
 					dynamicQuery.add(criterion));
 
-			for (int i = 0; i < jsonArray.length(); i++) {
-				String category = jsonArray.getString(i);
+			for (int i = 0; i < categories.length(); i++) {
+				String category = categories.getString(i);
 
 				for (AssetCategory assetCategory : assetCategories) {
 					String name = assetCategory.getName();

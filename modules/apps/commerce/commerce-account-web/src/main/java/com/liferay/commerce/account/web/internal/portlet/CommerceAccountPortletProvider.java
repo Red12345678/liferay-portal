@@ -18,10 +18,8 @@ import com.liferay.commerce.account.constants.CommerceAccountPortletKeys;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.BasePortletProvider;
-import com.liferay.portal.kernel.portlet.EditPortletProvider;
 import com.liferay.portal.kernel.portlet.ManagePortletProvider;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
-import com.liferay.portal.kernel.portlet.ViewPortletProvider;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -40,11 +38,10 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = "model.class.name=com.liferay.commerce.account.model.CommerceAccount",
-	service = {EditPortletProvider.class, ManagePortletProvider.class}
+	service = ManagePortletProvider.class
 )
 public class CommerceAccountPortletProvider
-	extends BasePortletProvider
-	implements EditPortletProvider, ManagePortletProvider, ViewPortletProvider {
+	extends BasePortletProvider implements ManagePortletProvider {
 
 	@Override
 	public String getPortletName() {
@@ -52,12 +49,14 @@ public class CommerceAccountPortletProvider
 	}
 
 	@Override
-	public PortletURL getPortletURL(HttpServletRequest request, Group group)
+	public PortletURL getPortletURL(
+			HttpServletRequest httpServletRequest, Group group)
 		throws PortalException {
 
 		if (group == null) {
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-				WebKeys.THEME_DISPLAY);
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)httpServletRequest.getAttribute(
+					WebKeys.THEME_DISPLAY);
 
 			group = themeDisplay.getScopeGroup();
 		}
@@ -66,7 +65,8 @@ public class CommerceAccountPortletProvider
 			group.getGroupId(), getPortletName());
 
 		return PortletURLFactoryUtil.create(
-			request, getPortletName(), plid, PortletRequest.RENDER_PHASE);
+			httpServletRequest, getPortletName(), plid,
+			PortletRequest.RENDER_PHASE);
 	}
 
 	@Reference

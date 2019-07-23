@@ -14,20 +14,20 @@
 
 package com.liferay.commerce.product.service.impl;
 
-import com.liferay.commerce.product.constants.CPActionKeys;
-import com.liferay.commerce.product.constants.CPConstants;
+import com.liferay.commerce.product.exception.NoSuchCPDefinitionException;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CProduct;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.base.CPInstanceServiceBaseImpl;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermissionFactory;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.UnicodeProperties;
@@ -35,6 +35,8 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import java.math.BigDecimal;
 
 import java.util.List;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 /**
  * @author Marco Leo
@@ -44,7 +46,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 
 	@Override
 	public CPInstance addCPInstance(
-			long cpDefinitionId, String sku, String gtin,
+			long cpDefinitionId, long groupId, String sku, String gtin,
 			String manufacturerPartNumber, boolean purchasable, String json,
 			boolean published, int displayDateMonth, int displayDateDay,
 			int displayDateYear, int displayDateHour, int displayDateMinute,
@@ -54,15 +56,16 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.addCPInstance(
-			cpDefinitionId, sku, gtin, manufacturerPartNumber, purchasable,
-			json, published, displayDateMonth, displayDateDay, displayDateYear,
-			displayDateHour, displayDateMinute, expirationDateMonth,
-			expirationDateDay, expirationDateYear, expirationDateHour,
-			expirationDateMinute, neverExpire, serviceContext);
+			cpDefinitionId, groupId, sku, gtin, manufacturerPartNumber,
+			purchasable, json, published, displayDateMonth, displayDateDay,
+			displayDateYear, displayDateHour, displayDateMinute,
+			expirationDateMonth, expirationDateDay, expirationDateYear,
+			expirationDateHour, expirationDateMinute, neverExpire,
+			serviceContext);
 	}
 
 	@Override
@@ -70,8 +73,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			long cpDefinitionId, ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		cpInstanceLocalService.buildCPInstances(cpDefinitionId, serviceContext);
 	}
@@ -80,9 +83,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 	public void deleteCPInstance(long cpInstanceId) throws PortalException {
 		CPInstance cpInstance = cpInstanceService.getCPInstance(cpInstanceId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpInstance.getCPDefinitionId(),
-			ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		cpInstanceLocalService.deleteCPInstance(cpInstance);
 	}
@@ -97,9 +99,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 				companyId, externalReferenceCode);
 
 		if (cpInstance != null) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cpInstance.getCPDefinitionId(),
-				ActionKeys.VIEW);
+			_checkCommerceCatalogPermissionByCPDefinitionId(
+				cpInstance.getCPDefinitionId(), ActionKeys.VIEW);
 		}
 
 		return cpInstance;
@@ -113,9 +114,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			cpInstanceId);
 
 		if (cpInstance != null) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cpInstance.getCPDefinitionId(),
-				ActionKeys.VIEW);
+			_checkCommerceCatalogPermissionByCPDefinitionId(
+				cpInstance.getCPDefinitionId(), ActionKeys.VIEW);
 		}
 
 		return cpInstance;
@@ -132,9 +132,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			return null;
 		}
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cProduct.getPublishedCPDefinitionId(),
-			ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cProduct.getPublishedCPDefinitionId(), ActionKeys.VIEW);
 
 		return cpInstanceLocalService.fetchCProductInstance(
 			cProductId, cpInstanceUuid);
@@ -146,8 +145,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			OrderByComparator<CPInstance> orderByComparator)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpInstanceLocalService.getCPDefinitionInstances(
 			cpDefinitionId, status, start, end, orderByComparator);
@@ -157,8 +156,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 	public int getCPDefinitionInstancesCount(long cpDefinitionId, int status)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpInstanceLocalService.getCPDefinitionInstancesCount(
 			cpDefinitionId, status);
@@ -169,9 +168,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		CPInstance cpInstance = cpInstanceLocalService.getCPInstance(
 			cpInstanceId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpInstance.getCPDefinitionId(),
-			ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpInstance.getCPDefinitionId(), ActionKeys.VIEW);
 
 		return cpInstance;
 	}
@@ -182,8 +180,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			OrderByComparator<CPInstance> orderByComparator)
 		throws PortalException {
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
+		_checkCommerceCatalogPermission(groupId, ActionKeys.VIEW);
 
 		return cpInstanceLocalService.getCPInstances(
 			groupId, status, start, end, orderByComparator);
@@ -193,30 +190,24 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 	public int getCPInstancesCount(long groupId, int status)
 		throws PortalException {
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
+		_checkCommerceCatalogPermission(groupId, ActionKeys.VIEW);
 
 		return cpInstanceLocalService.getCPInstancesCount(groupId, status);
 	}
 
 	@Override
 	public BaseModelSearchResult<CPInstance> searchCPDefinitionInstances(
-			long companyId, long groupId, long cpDefinitionId, String keywords,
-			int status, int start, int end, Sort sort)
+			long companyId, long cpDefinitionId, String keywords, int status,
+			int start, int end, Sort sort)
 		throws PortalException {
 
 		if (cpDefinitionId > 0) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
-		}
-		else {
-			_portletResourcePermission.check(
-				getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
+			_checkCommerceCatalogPermissionByCPDefinitionId(
+				cpDefinitionId, ActionKeys.VIEW);
 		}
 
 		return cpInstanceLocalService.searchCPDefinitionInstances(
-			companyId, groupId, cpDefinitionId, keywords, status, start, end,
-			sort);
+			companyId, cpDefinitionId, keywords, status, start, end, sort);
 	}
 
 	@Override
@@ -225,11 +216,31 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			int start, int end, Sort sort)
 		throws PortalException {
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId, CPActionKeys.MANAGE_CATALOG);
+		_checkCommerceCatalogPermission(groupId, ActionKeys.VIEW);
 
 		return cpInstanceLocalService.searchCPInstances(
-			companyId, groupId, keywords, status, start, end, sort);
+			companyId, new long[] {groupId}, keywords, status, start, end,
+			sort);
+	}
+
+	@Override
+	public BaseModelSearchResult<CPInstance> searchCPInstances(
+			long companyId, String keywords, int status, int start, int end,
+			Sort sort)
+		throws PortalException {
+
+		List<CommerceCatalog> commerceCatalogs =
+			commerceCatalogService.getCommerceCatalogs(
+				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		Stream<CommerceCatalog> stream = commerceCatalogs.stream();
+
+		LongStream longStream = stream.mapToLong(CommerceCatalog::getGroupId);
+
+		long[] groupIds = longStream.toArray();
+
+		return cpInstanceLocalService.searchCPInstances(
+			companyId, groupIds, keywords, status, start, end, sort);
 	}
 
 	@Override
@@ -247,9 +258,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		CPInstance cpInstance = cpInstanceLocalService.getCPInstance(
 			cpInstanceId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpInstance.getCPDefinitionId(),
-			ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.updateCPInstance(
 			cpInstanceId, sku, gtin, manufacturerPartNumber, purchasable,
@@ -268,9 +278,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		CPInstance cpInstance = cpInstanceLocalService.getCPInstance(
 			cpInstanceId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpInstance.getCPDefinitionId(),
-			ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.updatePricingInfo(
 			cpInstanceId, price, promoPrice, cost, serviceContext);
@@ -285,9 +294,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		CPInstance cpInstance = cpInstanceLocalService.getCPInstance(
 			cpInstanceId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpInstance.getCPDefinitionId(),
-			ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.updateShippingInfo(
 			cpInstanceId, width, height, depth, weight, serviceContext);
@@ -305,9 +313,8 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 		CPInstance cpInstance = cpInstanceLocalService.getCPInstance(
 			cpInstanceId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpInstance.getCPDefinitionId(),
-			ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpInstance.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.updateSubscriptionInfo(
 			cpInstanceId, overrideSubscriptionInfo, subscriptionEnabled,
@@ -318,7 +325,7 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 
 	@Override
 	public CPInstance upsertCPInstance(
-			long cpDefinitionId, String sku, String gtin,
+			long cpDefinitionId, long groupId, String sku, String gtin,
 			String manufacturerPartNumber, boolean purchasable, String json,
 			double width, double height, double depth, double weight,
 			BigDecimal price, BigDecimal promoPrice, BigDecimal cost,
@@ -330,40 +337,60 @@ public class CPInstanceServiceImpl extends CPInstanceServiceBaseImpl {
 			boolean neverExpire, ServiceContext serviceContext)
 		throws PortalException {
 
-		CPInstance cpInstance =
-			cpInstanceLocalService.fetchByExternalReferenceCode(
-				serviceContext.getCompanyId(), externalReferenceCode);
-
-		if (cpInstance == null) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cpDefinitionId,
-				CPActionKeys.ADD_COMMERCE_PRODUCT_INSTANCE);
-		}
-		else {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cpInstance.getCPDefinitionId(),
-				CPActionKeys.UPDATE_COMMERCE_PRODUCT_INSTANCE);
-		}
+		_checkCommerceCatalogPermission(groupId, ActionKeys.UPDATE);
 
 		return cpInstanceLocalService.upsertCPInstance(
-			cpDefinitionId, sku, gtin, manufacturerPartNumber, purchasable,
-			json, width, height, depth, weight, price, promoPrice, cost,
-			published, externalReferenceCode, displayDateMonth, displayDateDay,
-			displayDateYear, displayDateHour, displayDateMinute,
+			cpDefinitionId, groupId, sku, gtin, manufacturerPartNumber,
+			purchasable, json, width, height, depth, weight, price, promoPrice,
+			cost, published, externalReferenceCode, displayDateMonth,
+			displayDateDay, displayDateYear, displayDateHour, displayDateMinute,
 			expirationDateMonth, expirationDateDay, expirationDateYear,
 			expirationDateHour, expirationDateMinute, neverExpire,
 			serviceContext);
 	}
 
-	private static volatile ModelResourcePermission<CPDefinition>
-		_cpDefinitionModelResourcePermission =
+	private void _checkCommerceCatalogPermission(long groupId, String actionId)
+		throws PortalException {
+
+		CommerceCatalog commerceCatalog =
+			commerceCatalogLocalService.fetchCommerceCatalogByGroupId(groupId);
+
+		if (commerceCatalog == null) {
+			throw new PrincipalException();
+		}
+
+		_commerceCatalogModelResourcePermission.check(
+			getPermissionChecker(), commerceCatalog, actionId);
+	}
+
+	private void _checkCommerceCatalogPermissionByCPDefinitionId(
+			long cpDefinitionId, String actionId)
+		throws PortalException {
+
+		CPDefinition cpDefinition = cpDefinitionLocalService.fetchCPDefinition(
+			cpDefinitionId);
+
+		if (cpDefinition == null) {
+			throw new NoSuchCPDefinitionException();
+		}
+
+		CommerceCatalog commerceCatalog =
+			commerceCatalogLocalService.fetchCommerceCatalogByGroupId(
+				cpDefinition.getGroupId());
+
+		if (commerceCatalog == null) {
+			throw new PrincipalException();
+		}
+
+		_commerceCatalogModelResourcePermission.check(
+			getPermissionChecker(), commerceCatalog, actionId);
+	}
+
+	private static volatile ModelResourcePermission<CommerceCatalog>
+		_commerceCatalogModelResourcePermission =
 			ModelResourcePermissionFactory.getInstance(
 				CPInstanceServiceImpl.class,
-				"_cpDefinitionModelResourcePermission", CPDefinition.class);
-	private static volatile PortletResourcePermission
-		_portletResourcePermission =
-			PortletResourcePermissionFactory.getInstance(
-				CPDefinitionServiceImpl.class, "_portletResourcePermission",
-				CPConstants.RESOURCE_NAME);
+				"_commerceCatalogModelResourcePermission",
+				CommerceCatalog.class);
 
 }

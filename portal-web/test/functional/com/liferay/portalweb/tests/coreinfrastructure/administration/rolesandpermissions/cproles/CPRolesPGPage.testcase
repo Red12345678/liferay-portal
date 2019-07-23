@@ -1,5 +1,6 @@
 @component-name = "portal-permissions"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.component.names = "Roles";
@@ -26,10 +27,11 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
-		SitePages.gotoPageMenuItem(menuItem = "Permissions", pageName = "Welcome");
+		SitePages.gotoPageMenuItem(
+			menuItem = "Permissions",
+			pageName = "Welcome");
 
 		IFrame.selectPermissionsFrame();
 
@@ -39,4 +41,5 @@ definition {
 
 		AssertChecked(locator1 = "Permissions#INLINE_PERMISSIONS_VIEW_CHECKBOX");
 	}
+
 }

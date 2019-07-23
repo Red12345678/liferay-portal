@@ -31,11 +31,10 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.service.persistence.impl.TableMapper;
 import com.liferay.portal.kernel.service.persistence.impl.TableMapperFactory;
@@ -5697,7 +5696,7 @@ public class AssetTagPersistenceImpl
 
 		assetTag.setUuid(uuid);
 
-		assetTag.setCompanyId(companyProvider.getCompanyId());
+		assetTag.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return assetTag;
 	}
@@ -6502,7 +6501,7 @@ public class AssetTagPersistenceImpl
 
 		if (assetTag == null) {
 			assetTagToAssetEntryTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, assetEntryPK);
+				CompanyThreadLocal.getCompanyId(), pk, assetEntryPK);
 		}
 		else {
 			assetTagToAssetEntryTableMapper.addTableMapping(
@@ -6524,7 +6523,8 @@ public class AssetTagPersistenceImpl
 
 		if (assetTag == null) {
 			assetTagToAssetEntryTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, assetEntry.getPrimaryKey());
+				CompanyThreadLocal.getCompanyId(), pk,
+				assetEntry.getPrimaryKey());
 		}
 		else {
 			assetTagToAssetEntryTableMapper.addTableMapping(
@@ -6545,7 +6545,7 @@ public class AssetTagPersistenceImpl
 		AssetTag assetTag = fetchByPrimaryKey(pk);
 
 		if (assetTag == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = assetTag.getCompanyId();
@@ -6662,7 +6662,7 @@ public class AssetTagPersistenceImpl
 		AssetTag assetTag = fetchByPrimaryKey(pk);
 
 		if (assetTag == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = assetTag.getCompanyId();
@@ -6892,9 +6892,6 @@ public class AssetTagPersistenceImpl
 
 		TableMapperFactory.removeTableMapper("AssetEntries_AssetTags");
 	}
-
-	@BeanReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@BeanReference(type = AssetEntryPersistence.class)
 	protected AssetEntryPersistence assetEntryPersistence;

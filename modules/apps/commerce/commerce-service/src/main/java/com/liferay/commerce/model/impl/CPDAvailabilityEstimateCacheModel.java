@@ -17,7 +17,6 @@ package com.liferay.commerce.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.commerce.model.CPDAvailabilityEstimate;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -33,12 +32,12 @@ import java.util.Date;
  * The cache model class for representing CPDAvailabilityEstimate in entity cache.
  *
  * @author Alessio Antonio Rendina
- * @see CPDAvailabilityEstimate
  * @generated
  */
 @ProviderType
-public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabilityEstimate>,
-	Externalizable {
+public class CPDAvailabilityEstimateCacheModel
+	implements CacheModel<CPDAvailabilityEstimate>, Externalizable {
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -49,9 +48,12 @@ public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabi
 			return false;
 		}
 
-		CPDAvailabilityEstimateCacheModel cpdAvailabilityEstimateCacheModel = (CPDAvailabilityEstimateCacheModel)obj;
+		CPDAvailabilityEstimateCacheModel cpdAvailabilityEstimateCacheModel =
+			(CPDAvailabilityEstimateCacheModel)obj;
 
-		if (CPDAvailabilityEstimateId == cpdAvailabilityEstimateCacheModel.CPDAvailabilityEstimateId) {
+		if (CPDAvailabilityEstimateId ==
+				cpdAvailabilityEstimateCacheModel.CPDAvailabilityEstimateId) {
+
 			return true;
 		}
 
@@ -65,14 +67,12 @@ public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabi
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(21);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
 		sb.append(", CPDAvailabilityEstimateId=");
 		sb.append(CPDAvailabilityEstimateId);
-		sb.append(", groupId=");
-		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
 		sb.append(", userId=");
@@ -96,7 +96,8 @@ public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabi
 
 	@Override
 	public CPDAvailabilityEstimate toEntityModel() {
-		CPDAvailabilityEstimateImpl cpdAvailabilityEstimateImpl = new CPDAvailabilityEstimateImpl();
+		CPDAvailabilityEstimateImpl cpdAvailabilityEstimateImpl =
+			new CPDAvailabilityEstimateImpl();
 
 		if (uuid == null) {
 			cpdAvailabilityEstimateImpl.setUuid("");
@@ -105,8 +106,8 @@ public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabi
 			cpdAvailabilityEstimateImpl.setUuid(uuid);
 		}
 
-		cpdAvailabilityEstimateImpl.setCPDAvailabilityEstimateId(CPDAvailabilityEstimateId);
-		cpdAvailabilityEstimateImpl.setGroupId(groupId);
+		cpdAvailabilityEstimateImpl.setCPDAvailabilityEstimateId(
+			CPDAvailabilityEstimateId);
 		cpdAvailabilityEstimateImpl.setCompanyId(companyId);
 		cpdAvailabilityEstimateImpl.setUserId(userId);
 
@@ -131,15 +132,16 @@ public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabi
 			cpdAvailabilityEstimateImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
-		cpdAvailabilityEstimateImpl.setCommerceAvailabilityEstimateId(commerceAvailabilityEstimateId);
+		cpdAvailabilityEstimateImpl.setCommerceAvailabilityEstimateId(
+			commerceAvailabilityEstimateId);
 		cpdAvailabilityEstimateImpl.setCProductId(CProductId);
 
 		if (lastPublishDate == Long.MIN_VALUE) {
 			cpdAvailabilityEstimateImpl.setLastPublishDate(null);
 		}
 		else {
-			cpdAvailabilityEstimateImpl.setLastPublishDate(new Date(
-					lastPublishDate));
+			cpdAvailabilityEstimateImpl.setLastPublishDate(
+				new Date(lastPublishDate));
 		}
 
 		cpdAvailabilityEstimateImpl.resetOriginalValues();
@@ -152,8 +154,6 @@ public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabi
 		uuid = objectInput.readUTF();
 
 		CPDAvailabilityEstimateId = objectInput.readLong();
-
-		groupId = objectInput.readLong();
 
 		companyId = objectInput.readLong();
 
@@ -169,8 +169,7 @@ public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabi
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		if (uuid == null) {
 			objectOutput.writeUTF("");
 		}
@@ -179,8 +178,6 @@ public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabi
 		}
 
 		objectOutput.writeLong(CPDAvailabilityEstimateId);
-
-		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(companyId);
 
@@ -204,7 +201,6 @@ public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabi
 
 	public String uuid;
 	public long CPDAvailabilityEstimateId;
-	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
@@ -213,4 +209,5 @@ public class CPDAvailabilityEstimateCacheModel implements CacheModel<CPDAvailabi
 	public long commerceAvailabilityEstimateId;
 	public long CProductId;
 	public long lastPublishDate;
+
 }

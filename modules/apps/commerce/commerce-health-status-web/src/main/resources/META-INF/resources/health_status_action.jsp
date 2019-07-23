@@ -27,14 +27,14 @@ String fixIssueButton = "fixIssueButton" + row.getRowId();
 %>
 
 <c:if test="<%= commerceHealthStatusDisplayContext.hasManageCommerceHealthStatusPermission() %>">
-	<aui:button disabled="<%= commerceHealthStatus.isFixed(themeDisplay.getScopeGroupId()) %>" name="<%= fixIssueButton %>" value="fix-issue" />
+	<aui:button disabled="<%= commerceHealthStatus.isFixed(company.getCompanyId(), themeDisplay.getScopeGroupId()) %>" name="<%= fixIssueButton %>" value="fix-issue" />
 
 	<aui:script use="aui-io-request,aui-parse-content,liferay-notification">
 		A.one('#<portlet:namespace /><%= fixIssueButton %>').on(
 			'click',
 			function(event) {
 				var data = {
-					'<%= PortalUtil.getPortletNamespace(CommerceAdminPortletKeys.COMMERCE_ADMIN) %>key': '<%= commerceHealthStatus.getKey() %>'
+					'<portlet:namespace/>key': '<%= commerceHealthStatus.getKey() %>'
 				};
 
 				this.attr('disabled', true);
@@ -48,7 +48,7 @@ String fixIssueButton = "fixIssueButton" + row.getRowId();
 				iconTimesContainer.addClass('hide');
 
 				A.io.request(
-					'<liferay-portlet:actionURL name="fixCommerceHealthStatusIssue" portletName="<%= CommerceAdminPortletKeys.COMMERCE_ADMIN %>" />',
+					'<liferay-portlet:actionURL name="fixCommerceHealthStatusIssue" portletName="<%= portletDisplay.getPortletName() %>" />',
 					{
 						data: data,
 						on: {

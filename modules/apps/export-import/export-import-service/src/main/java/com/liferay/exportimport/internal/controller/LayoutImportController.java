@@ -322,10 +322,8 @@ public class LayoutImportController implements ImportController {
 			(Map<Long, Layout>)portletDataContext.getNewPrimaryKeysMap(
 				Layout.class + ".layout");
 
-		if (_log.isDebugEnabled()) {
-			if (!portletElements.isEmpty()) {
-				_log.debug("Deleting portlet data");
-			}
+		if (_log.isDebugEnabled() && !portletElements.isEmpty()) {
+			_log.debug("Deleting portlet data");
 		}
 
 		for (Element portletElement : portletElements) {
@@ -786,10 +784,8 @@ public class LayoutImportController implements ImportController {
 
 		List<Element> layoutElements = layoutsElement.elements();
 
-		if (_log.isDebugEnabled()) {
-			if (!layoutElements.isEmpty()) {
-				_log.debug("Importing layouts");
-			}
+		if (_log.isDebugEnabled() && !layoutElements.isEmpty()) {
+			_log.debug("Importing layouts");
 		}
 
 		List<String> sourceLayoutsUuids = new ArrayList<>();
@@ -800,10 +796,8 @@ public class LayoutImportController implements ImportController {
 
 		// Import portlets
 
-		if (_log.isDebugEnabled()) {
-			if (!portletElements.isEmpty()) {
-				_log.debug("Importing portlets");
-			}
+		if (_log.isDebugEnabled() && !portletElements.isEmpty()) {
+			_log.debug("Importing portlets");
 		}
 
 		Map<Long, Layout> layouts =

@@ -51,10 +51,6 @@ public class UpgradeOracleTest {
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		_db = DBManagerUtil.getDB();
-
-		if (_db.getDBType() != DBType.ORACLE) {
-			return;
-		}
 	}
 
 	@Before

@@ -28,11 +28,13 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
 <%@ page import="com.liferay.commerce.account.model.CommerceAccount" %><%@
+page import="com.liferay.commerce.account.model.CommerceAccountGroup" %><%@
 page import="com.liferay.commerce.currency.model.CommerceCurrency" %><%@
 page import="com.liferay.commerce.price.list.constants.CommercePriceListPortletKeys" %><%@
 page import="com.liferay.commerce.price.list.constants.CommercePriceListWebKeys" %><%@
 page import="com.liferay.commerce.price.list.exception.CommercePriceListCurrencyException" %><%@
 page import="com.liferay.commerce.price.list.exception.CommercePriceListExpirationDateException" %><%@
+page import="com.liferay.commerce.price.list.exception.CommercePriceListParentPriceListGroupIdException" %><%@
 page import="com.liferay.commerce.price.list.exception.DuplicateCommercePriceEntryException" %><%@
 page import="com.liferay.commerce.price.list.exception.DuplicateCommerceTierPriceEntryException" %><%@
 page import="com.liferay.commerce.price.list.exception.NoSuchPriceEntryException" %><%@
@@ -41,7 +43,7 @@ page import="com.liferay.commerce.price.list.exception.NoSuchTierPriceEntryExcep
 page import="com.liferay.commerce.price.list.model.CommercePriceEntry" %><%@
 page import="com.liferay.commerce.price.list.model.CommercePriceList" %><%@
 page import="com.liferay.commerce.price.list.model.CommercePriceListAccountRel" %><%@
-page import="com.liferay.commerce.price.list.model.CommercePriceListUserSegmentEntryRel" %><%@
+page import="com.liferay.commerce.price.list.model.CommercePriceListCommerceAccountGroupRel" %><%@
 page import="com.liferay.commerce.price.list.model.CommerceTierPriceEntry" %><%@
 page import="com.liferay.commerce.price.list.web.internal.display.context.CPInstanceCommercePriceEntryDisplayContext" %><%@
 page import="com.liferay.commerce.price.list.web.internal.display.context.CPInstanceCommerceTierPriceEntryDisplayContext" %><%@
@@ -54,10 +56,11 @@ page import="com.liferay.commerce.price.list.web.internal.servlet.taglib.ui.Comm
 page import="com.liferay.commerce.product.constants.CPPortletKeys" %><%@
 page import="com.liferay.commerce.product.definitions.web.servlet.taglib.ui.CPDefinitionScreenNavigationConstants" %><%@
 page import="com.liferay.commerce.product.exception.NoSuchCPInstanceException" %><%@
+page import="com.liferay.commerce.product.exception.NoSuchCatalogException" %><%@
 page import="com.liferay.commerce.product.model.CPDefinition" %><%@
 page import="com.liferay.commerce.product.model.CPInstance" %><%@
+page import="com.liferay.commerce.product.model.CommerceCatalog" %><%@
 page import="com.liferay.commerce.product.util.CPNavigationItemRegistryUtil" %><%@
-page import="com.liferay.commerce.user.segment.model.CommerceUserSegmentEntry" %><%@
 page import="com.liferay.frontend.taglib.clay.servlet.taglib.util.NavigationItem" %><%@
 page import="com.liferay.petra.string.StringPool" %><%@
 page import="com.liferay.portal.kernel.dao.search.ResultRow" %><%@

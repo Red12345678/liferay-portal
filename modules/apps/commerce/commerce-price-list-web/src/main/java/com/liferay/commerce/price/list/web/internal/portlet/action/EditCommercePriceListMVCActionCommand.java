@@ -16,13 +16,15 @@ package com.liferay.commerce.price.list.web.internal.portlet.action;
 
 import com.liferay.commerce.price.list.constants.CommercePriceListPortletKeys;
 import com.liferay.commerce.price.list.exception.CommercePriceListCurrencyException;
+import com.liferay.commerce.price.list.exception.CommercePriceListParentPriceListGroupIdException;
 import com.liferay.commerce.price.list.exception.NoSuchPriceListException;
 import com.liferay.commerce.price.list.model.CommercePriceList;
 import com.liferay.commerce.price.list.model.CommercePriceListAccountRel;
-import com.liferay.commerce.price.list.model.CommercePriceListUserSegmentEntryRel;
+import com.liferay.commerce.price.list.model.CommercePriceListCommerceAccountGroupRel;
 import com.liferay.commerce.price.list.service.CommercePriceListAccountRelService;
+import com.liferay.commerce.price.list.service.CommercePriceListCommerceAccountGroupRelService;
 import com.liferay.commerce.price.list.service.CommercePriceListService;
-import com.liferay.commerce.price.list.service.CommercePriceListUserSegmentEntryRelService;
+import com.liferay.commerce.product.exception.NoSuchCatalogException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
@@ -35,7 +37,6 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -115,7 +116,11 @@ public class EditCommercePriceListMVCActionCommand
 
 				actionResponse.setRenderParameter("mvcPath", "/error.jsp");
 			}
-			else if (e instanceof CommercePriceListCurrencyException) {
+			else if (e instanceof CommercePriceListCurrencyException ||
+					 e instanceof
+						 CommercePriceListParentPriceListGroupIdException ||
+					 e instanceof NoSuchCatalogException) {
+
 				SessionErrors.add(actionRequest, e.getClass());
 
 				String redirect = ParamUtil.getString(
@@ -158,10 +163,10 @@ public class EditCommercePriceListMVCActionCommand
 
 		long parentCommercePriceListId = ParamUtil.getLong(
 			actionRequest, "parentCommercePriceListId");
-
 		long commerceCurrencyId = ParamUtil.getLong(
 			actionRequest, "commerceCurrencyId");
-
+		long commerceCatalogGroupId = ParamUtil.getLong(
+			actionRequest, "commerceCatalogGroupId");
 		String name = ParamUtil.getString(actionRequest, "name");
 		double priority = ParamUtil.getDouble(actionRequest, "priority");
 
@@ -205,10 +210,11 @@ public class EditCommercePriceListMVCActionCommand
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			CommercePriceList.class.getName(), actionRequest);
 
-		CommercePriceList commercePriceList = null;
+		CommercePriceList commercePriceList;
 
 		if (commercePriceListId <= 0) {
 			commercePriceList = _commercePriceListService.addCommercePriceList(
+				commerceCatalogGroupId, serviceContext.getUserId(),
 				commerceCurrencyId, parentCommercePriceListId, name, priority,
 				displayDateMonth, displayDateDay, displayDateYear,
 				displayDateHour, displayDateMinute, expirationDateMonth,
@@ -229,7 +235,7 @@ public class EditCommercePriceListMVCActionCommand
 		if (commercePriceList != null) {
 			updateCommercePriceListAccountRels(
 				actionRequest, commercePriceList);
-			updateCommercePriceListUserSegmentEntryRels(
+			updateCommercePriceListCommerceAccountGroupRels(
 				actionRequest, commercePriceList);
 		}
 
@@ -277,47 +283,46 @@ public class EditCommercePriceListMVCActionCommand
 		}
 	}
 
-	protected void updateCommercePriceListUserSegmentEntryRels(
+	protected void updateCommercePriceListCommerceAccountGroupRels(
 			ActionRequest actionRequest, CommercePriceList commercePriceList)
 		throws PortalException {
 
-		long[] addCommerceUserSegmentEntryIds = ParamUtil.getLongValues(
-			actionRequest, "addCommerceUserSegmentEntryIds");
+		long[] addCommerceAccountGroupIds = ParamUtil.getLongValues(
+			actionRequest, "addCommerceAccountGroupIds");
 
-		long[] deleteCommercePriceListUserSegmentEntryRelIds =
+		long[] deleteCommercePriceListCommerceAccountGroupRelIds =
 			ParamUtil.getLongValues(
-				actionRequest, "deleteCommercePriceListUserSegmentEntryRelIds");
+				actionRequest,
+				"deleteCommercePriceListCommerceAccountGroupRelIds");
 
-		if (deleteCommercePriceListUserSegmentEntryRelIds.length > 0) {
-			for (long deleteCommercePriceListUserSegmentEntryRelId :
-					deleteCommercePriceListUserSegmentEntryRelIds) {
+		if (deleteCommercePriceListCommerceAccountGroupRelIds.length > 0) {
+			for (long deleteCommercePriceListCommerceAccountGroupRelId :
+					deleteCommercePriceListCommerceAccountGroupRelIds) {
 
-				_commercePriceListUserSegmentEntryRelService.
-					deleteCommercePriceListUserSegmentEntryRel(
-						deleteCommercePriceListUserSegmentEntryRelId);
+				_commercePriceListCommerceAccountGroupRelService.
+					deleteCommercePriceListCommerceAccountGroupRel(
+						deleteCommercePriceListCommerceAccountGroupRelId);
 			}
 		}
 
-		if (addCommerceUserSegmentEntryIds.length > 0) {
+		if (addCommerceAccountGroupIds.length > 0) {
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
-				CommercePriceListUserSegmentEntryRel.class.getName(),
+				CommercePriceListCommerceAccountGroupRel.class.getName(),
 				actionRequest);
 
-			for (long addCommerceUserSegmentEntryId :
-					addCommerceUserSegmentEntryIds) {
-
-				CommercePriceListUserSegmentEntryRel
-					commercePriceListUserSegmentEntryRel =
-						_commercePriceListUserSegmentEntryRelService.
-							fetchCommercePriceListUserSegmentEntryRel(
+			for (long addCommerceAccountGroupId : addCommerceAccountGroupIds) {
+				CommercePriceListCommerceAccountGroupRel
+					commercePriceListAccountGroupEntryRel =
+						_commercePriceListCommerceAccountGroupRelService.
+							fetchCommercePriceListCommerceAccountGroupRel(
 								commercePriceList.getCommercePriceListId(),
-								addCommerceUserSegmentEntryId);
+								addCommerceAccountGroupId);
 
-				if (commercePriceListUserSegmentEntryRel == null) {
-					_commercePriceListUserSegmentEntryRelService.
-						addCommercePriceListUserSegmentEntryRel(
+				if (commercePriceListAccountGroupEntryRel == null) {
+					_commercePriceListCommerceAccountGroupRelService.
+						addCommercePriceListCommerceAccountGroupRel(
 							commercePriceList.getCommercePriceListId(),
-							addCommerceUserSegmentEntryId, 0, serviceContext);
+							addCommerceAccountGroupId, 0, serviceContext);
 				}
 			}
 		}
@@ -328,13 +333,10 @@ public class EditCommercePriceListMVCActionCommand
 		_commercePriceListAccountRelService;
 
 	@Reference
+	private CommercePriceListCommerceAccountGroupRelService
+		_commercePriceListCommerceAccountGroupRelService;
+
+	@Reference
 	private CommercePriceListService _commercePriceListService;
-
-	@Reference
-	private CommercePriceListUserSegmentEntryRelService
-		_commercePriceListUserSegmentEntryRelService;
-
-	@Reference
-	private Portal _portal;
 
 }

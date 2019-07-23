@@ -1,3 +1,7 @@
+// Compatibility layer components config
+
+@import "_compat_settings";
+
 // Map Bootstrap 4 Variables to Bootstrap 3 equivalent
 
 $btn-box-shadow: none !default;
@@ -26,3 +30,348 @@ $management-bar-desktop-padding-vertical: (($management-bar-desktop-height - $ma
 // Panels
 
 $panel-title-text-transform: !default;
+
+// 7.2 Focus Style Reset
+
+@if ($compat-atlas-focus-styles) {
+	$white: #FFF !default !global;
+
+	$primary: #0B5FFF !default !global;
+	$primary-d1: darken($primary, 5.10) !default !global;
+	$primary-d2: darken($primary, 10) !default !global;
+	$primary-l1: lighten($primary, 22.94) !default !global;
+	$primary-l2: lighten($primary, 32.94) !default !global;
+	$primary-l3: lighten($primary, 44.90) !default !global;
+
+	$secondary: #6B6C7E !default !global;
+	$secondary-d1: darken(saturate($secondary, 4.82), 20) !default !global;
+	$secondary-d2: darken(saturate($secondary, 5.36), 23.92) !default !global;
+	$secondary-l1: lighten(saturate(adjust-hue($secondary, -3), 5.39), 23.92) !default !global;
+	$secondary-l2: lighten(saturate(adjust-hue($secondary, -2), 5.48), 37.06) !default !global;
+	$secondary-l3: lighten(saturate(adjust-hue($secondary, 3), 6.13), 46.08) !default !global;
+
+	$info: #2E5AAC !default !global;
+	$info-d1: darken($info, 5.10) !default !global;
+	$info-d2: darken($info, 10) !default !global;
+	$info-l1: lighten(saturate($info, 0.59), 28.04) !default !global;
+	$info-l2: lighten(desaturate($info, 3.25), 52.94) !default !global;
+
+	$success: #287D3D !default !global;
+	$success-d1: darken($success, 5.10) !default !global;
+	$success-d2: darken($success, 10) !default !global;
+	$success-l1: lighten(desaturate($success, 0.14), 24.90) !default !global;
+	$success-l2: lighten(desaturate($success, 1.52), 62.94) !default !global;
+
+	$warning: #B95000 !default !global;
+	$warning-d1: darken($warning, 5.10) !default !global;
+	$warning-d2: darken($warning, 10) !default !global;
+	$warning-l1: lighten($warning, 24.90) !default !global;
+	$warning-l2: lighten($warning, 60) !default !global;
+
+	$danger: #DA1414 !default !global;
+	$danger-d1: darken($danger, 5.10) !default !global;
+	$danger-d2: darken($danger, 10) !default !global;
+	$danger-l1: lighten(desaturate($danger, 0.25), 28.04) !default !global;
+	$danger-l2: lighten(saturate($danger, 5.04), 50) !default !global;
+
+	$light: #F1F2F5 !default !global;
+	$light-d1: darken($light, 5.10) !default !global;
+	$light-d2: darken($light, 10) !default !global;
+	$light-l1: lighten(desaturate(adjust-hue($light, -15), 2.38), 1.96) !default !global;
+	$light-l2: lighten(desaturate(adjust-hue($light, -225), 16.67), 4.71) !default !global;
+
+	$dark: #272833 !default !global;
+	$dark-d1: darken($dark, 5.10) !default !global;
+	$dark-d2: darken($dark, 10) !default !global;
+	$dark-l1: lighten(saturate($dark, 0.18), 4.12) !default !global;
+	$dark-l2: lighten(desaturate($dark, 0.36), 8.04) !default !global;
+
+	$component-active-color: $white !default !global;
+	$component-active-bg: $primary !default !global;
+	$input-btn-focus-width: .2rem !default !global;
+	$input-btn-focus-color: rgba($component-active-bg, .25) !default !global;
+
+	$component-focus-box-shadow: 0 0 0 $input-btn-focus-width $input-btn-focus-color !default !global;
+
+	$label-base: () !default !global;
+	$label-base: map-merge((
+		transition: null,
+		focus-border-color: $primary-l1,
+		focus-box-shadow: 0 0 0 1px $primary-l1,
+	), $label-base);
+
+	$btn-primary: () !default !global;
+	$btn-primary: map-merge((
+		focus-box-shadow: 0 0 0 2px rgba($primary-d1, 0.5),
+		active-focus-box-shadow: 0 0 0 2px rgba($primary-d1, 0.5),
+	), $btn-primary);
+
+	$btn-secondary: () !default !global;
+	$btn-secondary: map-merge((
+		focus-box-shadow: 0 0 0 2px rgba($secondary-l2, 0.5),
+		active-focus-box-shadow: 0 0 0 2px rgba($secondary-l2, 0.5),
+	), $btn-secondary);
+
+	$btn-success: () !default !global;
+	$btn-success: map-merge((
+		focus-box-shadow: 0 0 0 2px rgba($success-d1, 0.5),
+		active-focus-box-shadow: 0 0 0 2px rgba($success-d1, 0.5),
+	), $btn-success);
+
+	$btn-info: () !default !global;
+	$btn-info: map-merge((
+		focus-box-shadow: 0 0 0 2px rgba($info-d1, 0.5),
+		active-focus-box-shadow: 0 0 0 2px rgba($info-d1, 0.5),
+	), $btn-info);
+
+	$btn-warning: () !default !global;
+	$btn-warning: map-merge((
+		focus-box-shadow: 0 0 0 2px rgba($warning-d1, 0.5),
+		active-focus-box-shadow: 0 0 0 2px rgba($warning-d1, 0.5),
+	), $btn-warning);
+
+	$btn-danger: () !default !global;
+	$btn-danger: map-merge((
+		focus-box-shadow: 0 0 0 2px rgba($danger-d1, 0.5),
+		active-focus-box-shadow: 0 0 0 2px rgba($danger-d1, 0.5),
+	), $btn-danger);
+
+	$btn-light: () !default !global;
+	$btn-light: map-merge((
+		focus-box-shadow: 0 0 0 2px rgba($light-d1, 0.5),
+		active-focus-box-shadow: 0 0 0 2px rgba($light-d1, 0.5),
+	), $btn-light);
+
+	$btn-dark: () !default !global;
+	$btn-dark: map-merge((
+		focus-box-shadow: 0 0 0 2px rgba($dark-d1, 0.5),
+		active-focus-box-shadow: 0 0 0 2px rgba($dark-d1, 0.5),
+	), $btn-dark);
+
+	$btn-outline-primary: () !default !global;
+	$btn-outline-primary: map-merge((
+		focus-box-shadow: 0 0 0 2px rgba($primary-d1, 0.25),
+		active-focus-box-shadow: 0 0 0 2px rgba($primary-d1, 0.25),
+	), $btn-outline-primary);
+
+	$card-interactive-primary: () !default !global;
+	$card-interactive-primary: map-merge((
+		hover-box-shadow: 0 0 0 2px #FFF#{','} 0 0 0 4px #719AFF,
+	), $card-interactive-primary);
+
+	$dropdown-item-base: () !default !global;
+	$dropdown-item-base: map-merge((
+		focus-border-radius: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $dropdown-item-base);
+
+	$input-focus-box-shadow: 0 0 rgba(0, 0, 0, 0) !default !global;
+
+	$custom-control-indicator-focus-box-shadow: 0 0 0 1px $white, 0 0 0 2px $primary-l1 !default !global;
+
+	$component-link: () !default !global;
+	$component-link: map-merge((
+		border-radius: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $component-link);
+
+	$link-primary: () !default !global;
+	$link-primary: map-merge((
+		border-radius: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $link-primary);
+
+	$link-secondary: () !default !global;
+	$link-secondary: map-merge((
+		border-radius: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $link-secondary);
+
+	$component-title-link: () !default !global;
+	$component-title-link: map-merge((
+		border-radius: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $component-title-link);
+
+	$component-subtitle-link: () !default !global;
+	$component-subtitle-link: map-merge((
+		border-radius: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $component-subtitle-link);
+
+	$component-action: () !default !global;
+	$component-action: map-merge((
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $component-action);
+
+	$link-outline-primary: () !default !global;
+	$link-outline-primary: map-merge((
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $link-outline-primary);
+
+	$link-outline-secondary: () !default !global;
+	$link-outline-secondary: map-merge((
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $link-outline-secondary);
+
+	$list-group-title-link: () !default !global;
+	$list-group-title-link: map-merge((
+		border-radius: null,
+		display: null,
+		max-width: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $list-group-title-link);
+
+	$list-group-subtitle-link: () !default !global;
+	$list-group-subtitle-link: map-merge((
+		border-radius: null,
+		display: null,
+		max-width: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $list-group-subtitle-link);
+
+	$list-group-text-link: () !default !global;
+	$list-group-text-link: map-merge((
+		border-radius: null,
+		display: null,
+		max-width: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $list-group-text-link);
+
+	$list-group-subtext-link: () !default !global;
+	$list-group-subtext-link: map-merge((
+		border-radius: null,
+		display: null,
+		max-width: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $list-group-subtext-link);
+
+	$application-bar-base: () !default !global;
+	$application-bar-base: map-merge((
+		link-outline: null,
+		link-transition: null,
+		link-focus-box-shadow: null,
+		link-disabled-box-shadow: null,
+	), $application-bar-base);
+
+	$management-bar-base: () !default !global;
+	$management-bar-base: map-merge((
+		link-outline: null,
+		link-transition: null,
+		link-focus-box-shadow: null,
+		link-disabled-box-shadow: null,
+	), $management-bar-base);
+
+	$navigation-bar-base: () !default !global;
+	$navigation-bar-base: map-merge((
+		link-outline: null,
+		link-transition: null,
+		link-focus-box-shadow: null,
+		link-disabled-box-shadow: null,
+	), $navigation-bar-base);
+
+	$panel-header-link: () !default !global;
+	$panel-header-link: map-merge((
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $panel-header-link);
+
+	$panel-unstyled-header-link: () !default !global;
+	$panel-unstyled-header-link: map-merge((
+		border-radius: null,
+		focus-box-shadow: null,
+	), $panel-unstyled-header-link);
+
+	$sheet-subtitle-link: () !default !global;
+	$sheet-subtitle-link: map-merge((
+		border-radius: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $sheet-subtitle-link);
+
+	$table-head-link: () !default !global;
+	$table-head-link: map-merge((
+		border-radius: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $table-head-link);
+
+	$table-title-link: () !default !global;
+	$table-title-link: map-merge((
+		border-radius: null,
+		display: null,
+		max-width: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $table-title-link);
+
+	$table-action-link: () !default !global;
+	$table-action-link: map-merge((
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $table-action-link);
+
+	$table-link: () !default !global;
+	$table-link: map-merge((
+		border-radius: null,
+		display: null,
+		max-width: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $table-link);
+
+	$table-list-title-link: () !default !global;
+	$table-list-title-link: map-merge((
+		border-radius: null,
+		display: null,
+		max-width: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $table-list-title-link);
+
+	$table-list-link: () !default !global;
+	$table-list-link: map-merge((
+		border-radius: null,
+		display: null,
+		max-width: null,
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $table-list-link);
+
+	$table-list-action-link: () !default !global;
+	$table-list-action-link: map-merge((
+		transition: null,
+		focus-box-shadow: null,
+		focus-outline: null,
+	), $table-list-action-link);
+}

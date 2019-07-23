@@ -186,7 +186,6 @@ public class SessionTreeJSClickAction extends Action {
 				return;
 			}
 			catch (ConcurrentModificationException cme) {
-				continue;
 			}
 		}
 	}

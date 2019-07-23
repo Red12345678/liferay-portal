@@ -18,6 +18,7 @@ import com.liferay.headless.delivery.dto.v1_0.BlogPostingImage;
 import com.liferay.headless.delivery.resource.v1_0.BlogPostingImageResource;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
@@ -26,17 +27,20 @@ import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Generated;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import javax.validation.constraints.NotNull;
 
@@ -62,6 +66,7 @@ public abstract class BaseBlogPostingImageResourceImpl
 
 	@Override
 	@DELETE
+	@Operation(description = "Deletes the blog post's image.")
 	@Parameters(
 		value = {@Parameter(in = ParameterIn.PATH, name = "blogPostingImageId")}
 	)
@@ -76,6 +81,9 @@ public abstract class BaseBlogPostingImageResourceImpl
 
 	@Override
 	@GET
+	@Operation(
+		description = "Retrieves the blog post's image. The binary image is returned as a relative URL to the image itself."
+	)
 	@Parameters(
 		value = {@Parameter(in = ParameterIn.PATH, name = "blogPostingImageId")}
 	)
@@ -92,6 +100,9 @@ public abstract class BaseBlogPostingImageResourceImpl
 
 	@Override
 	@GET
+	@Operation(
+		description = "Retrieves the Site's blog post images. Results can be paginated, filtered, searched, and sorted."
+	)
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "siteId"),
@@ -117,6 +128,9 @@ public abstract class BaseBlogPostingImageResourceImpl
 
 	@Override
 	@Consumes("multipart/form-data")
+	@Operation(
+		description = "Creates a blog post image. The request body must be `multipart/form-data` with two parts, the file's bytes (`file`), and an optional JSON string (`blogPostingImage`) with the metadata."
+	)
 	@POST
 	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "siteId")})
 	@Path("/sites/{siteId}/blog-posting-images")
@@ -130,8 +144,32 @@ public abstract class BaseBlogPostingImageResourceImpl
 		return new BlogPostingImage();
 	}
 
+	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {
+		this.contextAcceptLanguage = contextAcceptLanguage;
+	}
+
 	public void setContextCompany(Company contextCompany) {
 		this.contextCompany = contextCompany;
+	}
+
+	public void setContextHttpServletRequest(
+		HttpServletRequest contextHttpServletRequest) {
+
+		this.contextHttpServletRequest = contextHttpServletRequest;
+	}
+
+	public void setContextHttpServletResponse(
+		HttpServletResponse contextHttpServletResponse) {
+
+		this.contextHttpServletResponse = contextHttpServletResponse;
+	}
+
+	public void setContextUriInfo(UriInfo contextUriInfo) {
+		this.contextUriInfo = contextUriInfo;
+	}
+
+	public void setContextUser(User contextUser) {
+		this.contextUser = contextUser;
 	}
 
 	protected void preparePatch(
@@ -140,7 +178,7 @@ public abstract class BaseBlogPostingImageResourceImpl
 	}
 
 	protected <T, R> List<R> transform(
-		Collection<T> collection,
+		java.util.Collection<T> collection,
 		UnsafeFunction<T, R, Exception> unsafeFunction) {
 
 		return TransformUtil.transform(collection, unsafeFunction);
@@ -154,7 +192,7 @@ public abstract class BaseBlogPostingImageResourceImpl
 	}
 
 	protected <T, R> R[] transformToArray(
-		Collection<T> collection,
+		java.util.Collection<T> collection,
 		UnsafeFunction<T, R, Exception> unsafeFunction, Class<?> clazz) {
 
 		return TransformUtil.transformToArray(
@@ -167,13 +205,11 @@ public abstract class BaseBlogPostingImageResourceImpl
 		return TransformUtil.transformToList(array, unsafeFunction);
 	}
 
-	@Context
 	protected AcceptLanguage contextAcceptLanguage;
-
-	@Context
 	protected Company contextCompany;
-
-	@Context
+	protected HttpServletRequest contextHttpServletRequest;
+	protected HttpServletResponse contextHttpServletResponse;
 	protected UriInfo contextUriInfo;
+	protected User contextUser;
 
 }

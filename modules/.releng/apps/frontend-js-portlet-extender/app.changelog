@@ -19,3 +19,14 @@ app.artifacts-1.0.1=\
 app.change.log-1.0.1=LPS-83285 LPS-84977
 
 app.git.id-1.0.1=65b93e4e55d764909b46adfd4321f10e5a547222
+
+#
+# Liferay App Version 1.1.0
+#
+
+app.artifacts-1.1.0=\
+	com.liferay.frontend.js.portlet.extender-1.0.9.jar
+
+app.change.log-1.1.0=LPS-83285 LPS-84119 LPS-84977 LPS-87270 LPS-95253 LPS-95355
+
+app.git.id-1.1.0=be820fa1707fc4f06d0a48df06c046027bb9a339

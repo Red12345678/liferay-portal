@@ -18,20 +18,14 @@ import com.liferay.commerce.account.model.CommerceAccount;
 import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.model.CommerceOrder;
-import com.liferay.commerce.price.list.model.CommercePriceList;
-import com.liferay.commerce.price.list.service.CommercePriceListLocalServiceUtil;
-import com.liferay.commerce.product.model.CPRule;
-import com.liferay.commerce.user.segment.service.CommerceUserSegmentEntryLocalServiceUtil;
+import com.liferay.commerce.product.model.CommerceChannel;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.User;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * @author Luca Pellizzon
+ * @author Alessio Antonio Rendina
  */
 public class TestCommerceContext implements CommerceContext {
 
@@ -40,6 +34,7 @@ public class TestCommerceContext implements CommerceContext {
 		CommerceAccount commerceAccount, CommerceOrder commerceOrder) {
 
 		_commerceCurrency = commerceCurrency;
+		_commerceChannel = null;
 		_contextUser = contextUser;
 		_contextGroup = contextGroup;
 		_commerceAccount = commerceAccount;
@@ -49,6 +44,20 @@ public class TestCommerceContext implements CommerceContext {
 	@Override
 	public CommerceAccount getCommerceAccount() {
 		return _commerceAccount;
+	}
+
+	@Override
+	public long[] getCommerceAccountGroupIds() {
+		return new long[0];
+	}
+
+	@Override
+	public long getCommerceChannelGroupId() throws PortalException {
+		if (_commerceChannel == null) {
+			return 0;
+		}
+
+		return _commerceChannel.getGroupId();
 	}
 
 	@Override
@@ -62,39 +71,8 @@ public class TestCommerceContext implements CommerceContext {
 	}
 
 	@Override
-	public Optional<CommercePriceList> getCommercePriceList()
-		throws PortalException {
-
-		if (_commerceAccount == null) {
-			return Optional.empty();
-		}
-
-		return CommercePriceListLocalServiceUtil.getCommercePriceList(
-			_contextGroup.getGroupId(), _commerceAccount.getCommerceAccountId(),
-			getCommerceUserSegmentEntryIds());
-	}
-
-	@Override
 	public int getCommerceSiteType() {
 		return 0;
-	}
-
-	@Override
-	public long[] getCommerceUserSegmentEntryIds() throws PortalException {
-		if (_contextUser == null) {
-			return new long[0];
-		}
-
-		return CommerceUserSegmentEntryLocalServiceUtil.
-			getCommerceUserSegmentEntryIds(
-				_contextGroup.getGroupId(),
-				_commerceAccount.getCommerceAccountId(),
-				_contextUser.getUserId());
-	}
-
-	@Override
-	public List<CPRule> getCPRules() {
-		return Collections.emptyList();
 	}
 
 	@Override
@@ -102,12 +80,8 @@ public class TestCommerceContext implements CommerceContext {
 		return _contextGroup.getGroupId();
 	}
 
-	@Override
-	public long getUserId() {
-		return _contextUser.getUserId();
-	}
-
 	private final CommerceAccount _commerceAccount;
+	private final CommerceChannel _commerceChannel;
 	private final CommerceCurrency _commerceCurrency;
 	private final CommerceOrder _commerceOrder;
 	private final Group _contextGroup;

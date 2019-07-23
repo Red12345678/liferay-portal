@@ -1,5 +1,6 @@
 @component-name = "portal-plugins-deployment"
 definition {
+
 	property testray.main.component.name = "Plugin Installer";
 
 	setUp {
@@ -16,23 +17,21 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Message Boards Subscription Manager"
-		);
+			portlet = "Message Boards Subscription Manager");
 
 		ProductMenu.gotoPortlet(
 			category = "Apps",
 			panel = "Control Panel",
-			portlet = "App Manager"
-		);
+			portlet = "App Manager");
 
 		AppManager.uninstallAppCP(appName = "${appName}");
 
 		ProductMenu.gotoPortlet(
 			category = "Apps",
 			panel = "Control Panel",
-			portlet = "App Manager"
-		);
+			portlet = "App Manager");
 
 		AppManager.viewUninstallAppCP(appName = "${appName}");
 	}
+
 }

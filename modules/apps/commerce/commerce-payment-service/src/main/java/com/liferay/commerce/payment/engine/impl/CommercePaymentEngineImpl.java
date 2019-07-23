@@ -33,6 +33,8 @@ import com.liferay.commerce.service.CommerceOrderPaymentLocalService;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -115,7 +117,7 @@ public class CommercePaymentEngineImpl implements CommercePaymentEngine {
 				null, Collections.emptyList(), cancelRecurringPayment);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			_log.error(e, e);
 		}
 
 		return _commercePaymentUtils.emptyResult(commerceOrderId);
@@ -276,6 +278,13 @@ public class CommercePaymentEngineImpl implements CommercePaymentEngine {
 		return commercePaymentMethod.getPaymentType();
 	}
 
+	/**
+	 * @param commerceOrderId
+	 * @return
+	 * @throws PortalException
+	 * @deprecated As of Mueller (7.2.x), this method is being replaced
+	 */
+	@Deprecated
 	@Override
 	public List<CommercePaymentMethod> getEnabledCommercePaymentMethodsForOrder(
 			long commerceOrderId)
@@ -305,6 +314,36 @@ public class CommercePaymentEngineImpl implements CommercePaymentEngine {
 			_commercePaymentMethodGroupRelLocalService.
 				getCommercePaymentMethodGroupRels(
 					commerceOrder.getGroupId(), true),
+			subscriptionOrder);
+	}
+
+	@Override
+	public List<CommercePaymentMethod> getEnabledCommercePaymentMethodsForOrder(
+			long groupId, long commerceOrderId)
+		throws PortalException {
+
+		CommerceOrder commerceOrder =
+			_commerceOrderLocalService.getCommerceOrder(commerceOrderId);
+
+		boolean subscriptionOrder = commerceOrder.isSubscriptionOrder();
+
+		CommerceAddress commerceAddress = commerceOrder.getBillingAddress();
+
+		if (commerceAddress == null) {
+			commerceAddress = commerceOrder.getShippingAddress();
+		}
+
+		if (commerceAddress != null) {
+			return _getCommercePaymentMethodsList(
+				_commercePaymentMethodGroupRelLocalService.
+					getCommercePaymentMethodGroupRels(
+						groupId, commerceAddress.getCommerceCountryId(), true),
+				subscriptionOrder);
+		}
+
+		return _getCommercePaymentMethodsList(
+			_commercePaymentMethodGroupRelLocalService.
+				getCommercePaymentMethodGroupRels(groupId, true),
 			subscriptionOrder);
 	}
 
@@ -609,6 +648,9 @@ public class CommercePaymentEngineImpl implements CommercePaymentEngine {
 
 		return commercePaymentMethods;
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		CommercePaymentEngineImpl.class);
 
 	@Reference
 	private CommerceOrderLocalService _commerceOrderLocalService;

@@ -710,7 +710,7 @@ public class FileEntryStagedModelDataHandler
 		ddmFormValues =
 			_ddmFormValuesExportImportContentProcessor.
 				replaceExportContentReferences(
-					portletDataContext, fileEntry, ddmFormValues, false, false);
+					portletDataContext, fileEntry, ddmFormValues, true, false);
 
 		portletDataContext.addZipEntry(
 			ddmFormValuesPath,

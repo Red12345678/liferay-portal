@@ -26,7 +26,6 @@ import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceShippingEngine;
 import com.liferay.commerce.model.CommerceShippingMethod;
 import com.liferay.commerce.model.CommerceShippingOption;
-import com.liferay.commerce.order.web.security.permission.resource.CommerceOrderPermission;
 import com.liferay.commerce.service.CommerceOrderLocalService;
 import com.liferay.commerce.service.CommerceOrderService;
 import com.liferay.commerce.service.CommerceShippingMethodLocalService;
@@ -38,6 +37,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -126,13 +126,43 @@ public class ShippingMethodCommerceCheckoutStep
 					_commercePriceFormatter, _commerceShippingEngineRegistry,
 					_commerceShippingMethodLocalService, httpServletRequest);
 
-		httpServletRequest.setAttribute(
-			CommerceCheckoutWebKeys.COMMERCE_CHECKOUT_STEP_DISPLAY_CONTEXT,
-			shippingMethodCheckoutStepDisplayContext);
+		CommerceOrder commerceOrder =
+			shippingMethodCheckoutStepDisplayContext.getCommerceOrder();
 
-		_jspRenderer.renderJSP(
-			httpServletRequest, httpServletResponse,
-			"/checkout_step/shipping_method.jsp");
+		if (!commerceOrder.isOpen()) {
+			httpServletRequest.setAttribute(
+				CommerceCheckoutWebKeys.COMMERCE_CHECKOUT_STEP_ORDER_DETAIL_URL,
+				_commerceCheckoutStepHelper.getOrderDetailURL(
+					httpServletRequest, commerceOrder));
+
+			_jspRenderer.renderJSP(
+				httpServletRequest, httpServletResponse, "/error.jsp");
+		}
+		else {
+			httpServletRequest.setAttribute(
+				CommerceCheckoutWebKeys.COMMERCE_CHECKOUT_STEP_DISPLAY_CONTEXT,
+				shippingMethodCheckoutStepDisplayContext);
+
+			_jspRenderer.renderJSP(
+				httpServletRequest, httpServletResponse,
+				"/checkout_step/shipping_method.jsp");
+		}
+	}
+
+	@Override
+	public boolean showControls(
+		HttpServletRequest httpServletRequest,
+		HttpServletResponse httpServletResponse) {
+
+		CommerceOrder commerceOrder =
+			(CommerceOrder)httpServletRequest.getAttribute(
+				CommerceCheckoutWebKeys.COMMERCE_ORDER);
+
+		if (!commerceOrder.isOpen()) {
+			return false;
+		}
+
+		return super.showControls(httpServletRequest, httpServletResponse);
 	}
 
 	protected BigDecimal getShippingAmount(
@@ -174,6 +204,16 @@ public class ShippingMethodCommerceCheckoutStep
 				"\" for shipping method ", commerceShippingMethodId));
 	}
 
+	@Reference(
+		target = "(model.class.name=com.liferay.commerce.model.CommerceOrder)",
+		unbind = "-"
+	)
+	protected void setModelResourcePermission(
+		ModelResourcePermission<CommerceOrder> modelResourcePermission) {
+
+		_commerceOrderModelResourcePermission = modelResourcePermission;
+	}
+
 	protected void updateCommerceOrderShippingMethod(
 			ActionRequest actionRequest)
 		throws Exception {
@@ -201,7 +241,7 @@ public class ShippingMethodCommerceCheckoutStep
 		PermissionChecker permissionChecker =
 			PermissionCheckerFactoryUtil.create(themeDisplay.getUser());
 
-		if (!CommerceOrderPermission.contains(
+		if (!_commerceOrderModelResourcePermission.contains(
 				permissionChecker, commerceOrder, ActionKeys.UPDATE)) {
 
 			return;
@@ -229,6 +269,9 @@ public class ShippingMethodCommerceCheckoutStep
 
 	@Reference
 	private CommerceOrderLocalService _commerceOrderLocalService;
+
+	private ModelResourcePermission<CommerceOrder>
+		_commerceOrderModelResourcePermission;
 
 	@Reference
 	private CommerceOrderService _commerceOrderService;

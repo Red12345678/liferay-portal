@@ -41,33 +41,31 @@ CPDefinitionsDisplayContext cpDefinitionsDisplayContext = (CPDefinitionsDisplayC
 				selectedDisplayStyle="<%= cpDefinitionsDisplayContext.getDisplayStyle() %>"
 			/>
 
-			<c:if test="<%= cpDefinitionsDisplayContext.hasPermission(CPActionKeys.ADD_COMMERCE_PRODUCT_DEFINITION) %>">
-				<liferay-frontend:add-menu
-					inline="<%= true %>"
-				>
+			<liferay-frontend:add-menu
+				inline="<%= true %>"
+			>
 
-					<%
-					for (CPType curCPType : cpDefinitionsDisplayContext.getCPTypes()) {
-					%>
+				<%
+				for (CPType curCPType : cpDefinitionsDisplayContext.getCPTypes()) {
+				%>
 
-						<liferay-portlet:renderURL var="addProductDefinitionURL">
-							<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD %>" />
-							<portlet:param name="mvcRenderCommandName" value="editProductDefinition" />
-							<portlet:param name="backURL" value="<%= PortalUtil.getCurrentCompleteURL(request) %>" />
-							<portlet:param name="productTypeName" value="<%= curCPType.getName() %>" />
-						</liferay-portlet:renderURL>
+					<liferay-portlet:renderURL var="addProductDefinitionURL">
+						<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD %>" />
+						<portlet:param name="mvcRenderCommandName" value="editProductDefinition" />
+						<portlet:param name="backURL" value="<%= PortalUtil.getCurrentCompleteURL(request) %>" />
+						<portlet:param name="productTypeName" value="<%= curCPType.getName() %>" />
+					</liferay-portlet:renderURL>
 
-						<liferay-frontend:add-menu-item
-							title="<%= curCPType.getLabel(locale) %>"
-							url="<%= addProductDefinitionURL.toString() %>"
-						/>
+					<liferay-frontend:add-menu-item
+						title="<%= curCPType.getLabel(locale) %>"
+						url="<%= addProductDefinitionURL.toString() %>"
+					/>
 
-					<%
-					}
-					%>
+				<%
+				}
+				%>
 
-				</liferay-frontend:add-menu>
-			</c:if>
+			</liferay-frontend:add-menu>
 		</liferay-frontend:management-bar-buttons>
 
 		<liferay-frontend:management-bar-filters>
@@ -95,8 +93,8 @@ CPDefinitionsDisplayContext cpDefinitionsDisplayContext = (CPDefinitionsDisplayC
 
 			<liferay-frontend:management-bar-button
 				href='<%= "javascript:" + renderResponse.getNamespace() + "deleteCPDefinitions();" %>'
-				icon='<%= TrashUtil.isTrashEnabled(scopeGroupId) ? "trash" : "times" %>'
-				label='<%= TrashUtil.isTrashEnabled(scopeGroupId) ? "recycle-bin" : "delete" %>'
+				icon='<%= "times" %>'
+				label='<%= "delete" %>'
 			/>
 		</liferay-frontend:management-bar-action-buttons>
 	</liferay-frontend:management-bar>
@@ -107,7 +105,7 @@ CPDefinitionsDisplayContext cpDefinitionsDisplayContext = (CPDefinitionsDisplayC
 
 <liferay-portlet:resourceURL id="cpDefinitionsFacets" var="cpDefinitionsFacetsURL" />
 
-<aui:script require="commerce-product-definitions-web@1.1.9/DefinitionToolbarFilter.es as DefinitionToolbarFilter">
+<aui:script require="commerce-product-definitions-web@2.0.3/DefinitionToolbarFilter.es as DefinitionToolbarFilter">
 	var definitionToolbarFilter = new DefinitionToolbarFilter.default(
 		{
 			categorySelectorURL: '<%= cpDefinitionsDisplayContext.getCategorySelectorURL(renderResponse.getNamespace() + "selectCategory") %>',
@@ -124,11 +122,11 @@ CPDefinitionsDisplayContext cpDefinitionsDisplayContext = (CPDefinitionsDisplayC
 
 <aui:script>
 	function <portlet:namespace />deleteCPDefinitions() {
-		if (<%= TrashUtil.isTrashEnabled(scopeGroupId) %> || confirm('<liferay-ui:message key="are-you-sure-you-want-to-delete-the-selected-products" />')) {
+		if (confirm('<liferay-ui:message key="are-you-sure-you-want-to-delete-the-selected-products" />')) {
 			var form = AUI.$(document.<portlet:namespace />fm);
 
 			form.attr('method', 'post');
-			form.fm('<%= Constants.CMD %>').val('<%= TrashUtil.isTrashEnabled(scopeGroupId) ? Constants.MOVE_TO_TRASH : Constants.DELETE %>');
+			form.fm('<%= Constants.CMD %>').val('<%= Constants.DELETE %>');
 			form.fm('deleteCPDefinitionIds').val(Liferay.Util.listCheckedExcept(form, '<portlet:namespace />allRowIds'));
 
 			submitForm(form, '<portlet:actionURL name="editProductDefinition" />');

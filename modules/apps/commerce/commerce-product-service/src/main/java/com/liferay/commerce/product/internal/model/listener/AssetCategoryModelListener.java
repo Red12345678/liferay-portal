@@ -18,12 +18,12 @@ import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.commerce.product.service.CPAttachmentFileEntryLocalService;
 import com.liferay.commerce.product.service.CPDisplayLayoutLocalService;
 import com.liferay.commerce.product.service.CPFriendlyURLEntryLocalService;
-import com.liferay.commerce.product.service.CPRuleAssetCategoryRelLocalService;
 import com.liferay.portal.kernel.exception.ModelListenerException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.BaseModelListener;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.ModelListener;
 
 import org.osgi.service.component.annotations.Component;
@@ -42,9 +42,9 @@ public class AssetCategoryModelListener
 
 		try {
 			_cpFriendlyURLEntryLocalService.addCPFriendlyURLEntries(
-				assetCategory.getGroupId(), assetCategory.getCompanyId(),
-				AssetCategory.class, assetCategory.getCategoryId(),
-				assetCategory.getTitleMap());
+				GroupConstants.DEFAULT_LIVE_GROUP_ID,
+				assetCategory.getCompanyId(), AssetCategory.class,
+				assetCategory.getCategoryId(), assetCategory.getTitleMap());
 		}
 		catch (PortalException pe) {
 			if (_log.isWarnEnabled()) {
@@ -65,10 +65,6 @@ public class AssetCategoryModelListener
 			_cpFriendlyURLEntryLocalService.deleteCPFriendlyURLEntries(
 				assetCategory.getGroupId(), AssetCategory.class,
 				assetCategory.getCategoryId());
-
-			_cpRuleAssetCategoryRelLocalService.
-				deleteCPRuleAssetCategoryRelsByAssetCategoryId(
-					assetCategory.getCategoryId());
 		}
 		catch (PortalException pe) {
 			if (_log.isWarnEnabled()) {
@@ -89,9 +85,5 @@ public class AssetCategoryModelListener
 
 	@Reference
 	private CPFriendlyURLEntryLocalService _cpFriendlyURLEntryLocalService;
-
-	@Reference
-	private CPRuleAssetCategoryRelLocalService
-		_cpRuleAssetCategoryRelLocalService;
 
 }

@@ -1,4 +1,5 @@
 definition {
+
 	var ddlDataDefinitionDescription = "Data Definition Description";
 	var ddlDataDefinitionName = "Data Definition Name";
 	var ddlListName = "List Name";
@@ -8,9 +9,7 @@ definition {
 
 		DDLNavigator.gotoListRecords(ddlListName = "${ddlListName}");
 
-		DDLNavigator.gotoAddListRecord(
-			ddlDataDefinitionName = "${ddlDataDefinitionName}"
-		);
+		DDLNavigator.gotoAddListRecord(ddlDataDefinitionName = "${ddlDataDefinitionName}");
 	}
 
 	macro addPGViaAP {
@@ -18,10 +17,11 @@ definition {
 
 		DDLRecord.populateFieldText(
 			ddlRecordFieldData = "${ddlRecordFieldData}",
-			fieldName = "${fieldName}"
-		);
+			fieldName = "${fieldName}");
 
-		AssertClick(locator1 = "Button#PUBLISH", value1 = "Publish");
+		AssertClick(
+			locator1 = "Button#PUBLISH",
+			value1 = "Publish");
 	}
 
 	macro addRepeatableField {
@@ -41,16 +41,19 @@ definition {
 
 		AssertClick(
 			locator1 = "DDLEditRecord#DOCUMENTS_AND_MEDIA_CLEAR_BUTTON",
-			value1 = "Clear"
-		);
+			value1 = "Clear");
 	}
 
 	macro deleteCP {
 		var key_ddlListName = "${ddlListName}";
 
-		AssertTextEquals(locator1 = "DDL#LIST_TABLE_NAME", value1 = "${ddlListName}");
+		AssertTextEquals(
+			locator1 = "DDL#LIST_TABLE_NAME",
+			value1 = "${ddlListName}");
 
-		AssertClick(locator1 = "DDL#LIST_TABLE_NAME", value1 = "${ddlListName}");
+		AssertClick(
+			locator1 = "DDL#LIST_TABLE_NAME",
+			value1 = "${ddlListName}");
 
 		var key_ddlRecordFieldData = "${ddlRecordFieldData}";
 
@@ -60,16 +63,13 @@ definition {
 
 		MenuItem.clickNoError(menuItem = "Delete");
 
-		AssertConfirm(
-			value1 = "Are you sure you want to delete this? It will be deleted immediately."
-		);
+		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "Message#EMPTY_INFO",
-			value1 = "no"
-		);
+			value1 = "no");
 	}
 
 	macro deleteRepeatableField {
@@ -84,29 +84,29 @@ definition {
 
 		MenuItem.clickNoError(menuItem = "Delete");
 
-		AssertConfirm(
-			value1 = "Are you sure you want to delete this? It will be deleted immediately."
-		);
+		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
 
 		Alert.viewSuccessMessage();
 
 		AssertTextEquals(
 			locator1 = "Message#EMPTY_INFO",
-			value1 = "There are no records."
-		);
+			value1 = "There are no records.");
 	}
 
 	macro editCP {
 		var key_ddlListName = "${ddlListName}";
 
-		AssertTextEquals(locator1 = "DDL#LIST_TABLE_NAME", value1 = "${ddlListName}");
+		AssertTextEquals(
+			locator1 = "DDL#LIST_TABLE_NAME",
+			value1 = "${ddlListName}");
 
-		AssertClick(locator1 = "DDL#LIST_TABLE_NAME", value1 = "${ddlListName}");
+		AssertClick(
+			locator1 = "DDL#LIST_TABLE_NAME",
+			value1 = "${ddlListName}");
 
 		AssertTextEquals(
 			locator1 = "DDL#RECORD_TABLE_COLUMN_ONE_RECORD_1",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 
 		Click(locator1 = "DDL#RECORD_TABLE_ELLIPSIS_1");
 
@@ -122,19 +122,23 @@ definition {
 	macro editViaRecordViewCP {
 		var key_ddlListName = "${ddlListName}";
 
-		AssertTextEquals(locator1 = "DDL#LIST_TABLE_NAME", value1 = "${ddlListName}");
+		AssertTextEquals(
+			locator1 = "DDL#LIST_TABLE_NAME",
+			value1 = "${ddlListName}");
 
-		AssertClick(locator1 = "DDL#LIST_TABLE_NAME", value1 = "${ddlListName}");
+		AssertClick(
+			locator1 = "DDL#LIST_TABLE_NAME",
+			value1 = "${ddlListName}");
 
-		AssertElementPresent.assertVisible(
-			locator1 = "DDL#RECORD_TABLE_COLUMN_ONE_RECORD_1"
-		);
+		AssertElementPresent.assertVisible(locator1 = "DDL#RECORD_TABLE_COLUMN_ONE_RECORD_1");
 
 		Click(locator1 = "DDL#RECORD_TABLE_ELLIPSIS_1");
 
 		MenuItem.click(menuItem = "View");
 
-		AssertClick(locator1 = "Button#EDIT", value1 = "Edit");
+		AssertClick(
+			locator1 = "Button#EDIT",
+			value1 = "Edit");
 	}
 
 	macro editViaRecordViewPG {
@@ -142,7 +146,9 @@ definition {
 
 		MenuItem.click(menuItem = "View");
 
-		AssertClick(locator1 = "Button#EDIT", value1 = "Edit");
+		AssertClick(
+			locator1 = "Button#EDIT",
+			value1 = "Edit");
 	}
 
 	macro expandInfo {
@@ -164,29 +170,28 @@ definition {
 
 		AssertClick(
 			locator1 = "DDLEditRecord#LINK_TO_PAGE_NAV_ITEM",
-			value1 = "${pagePrivacy} Pages"
-		);
+			value1 = "${pagePrivacy} Pages");
 	}
 
 	macro gotoLinkToPageSelect {
 		var key_fieldName = "${fieldName}";
 
-		AssertClick(locator1 = "Button#LINK_TO_PAGE_SELECT_PAGE", value1 = "Select");
+		AssertClick(
+			locator1 = "Button#SELECT_CONTENT",
+			value1 = "Select");
 	}
 
 	macro gotoRecordPreview {
 		AssertClick(
 			locator1 = "DDL#RECORD_TABLE_COLUMN_ONE_PREVIEW_1",
-			value1 = "(Preview)"
-		);
+			value1 = "(Preview)");
 	}
 
 	macro populateFieldBoolean {
 		DDLRecord.viewFieldLabel(
 			fieldFieldLabel = "${fieldFieldLabel}",
 			fieldName = "${fieldName}",
-			fieldShowLabel = "${fieldShowLabel}"
-		);
+			fieldShowLabel = "${fieldShowLabel}");
 
 		var key_fieldName = "${fieldName}";
 
@@ -214,13 +219,17 @@ definition {
 	macro populateFieldDate {
 		var key_fieldName = "${fieldName}";
 
-		Type(locator1 = "TextInput#DDM", value1 = "${ddlRecordFieldData}");
+		Type(
+			locator1 = "TextInput#DDM",
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro populateFieldDecimal {
 		var key_fieldName = "${fieldName}";
 
-		Type(locator1 = "TextInput#DDM", value1 = "${ddlRecordFieldData}");
+		Type(
+			locator1 = "TextInput#DDM",
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro populateFieldDocumentsAndMediaChooseFromDocumentLibrary {
@@ -231,36 +240,42 @@ definition {
 
 			AssertClick(
 				locator1 = "DDLEditRecord#DOCUMENTS_AND_MEDIA_CHILD_FIELD_CHOOSE_FROM_DOCUMENT_LIBRARY_BUTTON_",
-				value1 = "Select"
-			);
+				value1 = "Select");
 		}
 		else {
-			AssertClick(locator1 = "Button#LINK_TO_PAGE_SELECT_PAGE", value1 = "Select");
+			AssertClick(
+				locator1 = "Button#SELECT_CONTENT",
+				value1 = "Select");
 		}
 
 		SelectFrame(locator1 = "DocumentsAndMediaSelectDocument#SELECT_DOCUMENT_IFRAME");
 
 		if ("${userRole}" == "Guest") {
-			AssertTextEquals(locator1 = "Button#SIGN_IN", value1 = "Sign In");
+			AssertTextEquals(
+				locator1 = "Button#SIGN_IN",
+				value1 = "Sign In");
 		}
 		else {
 			UploadCommonFile.uploadCommonFileHidden(
 				locator1 = "DocumentsAndMediaSelectDocument#SELECT_FILE_BUTTON",
-				value1 = "${document}"
-			);
+				value1 = "${document}");
 
 			Pause(locator1 = "1000");
 
 			SelectFrameTop(value1 = "relative=top");
 
-			AssertClick(locator1 = "Button#ADD", value1 = "Add");
+			AssertClick(
+				locator1 = "Button#ADD",
+				value1 = "Add");
 		}
 	}
 
 	macro populateFieldGeolocation {
 		var key_fieldName = "${fieldName}";
 
-		AssertClick(locator1 = "DDLEditRecord#FIELD_LABEL", value1 = "${fieldName}");
+		AssertClick(
+			locator1 = "DDLEditRecord#FIELD_LABEL",
+			value1 = "${fieldName}");
 
 		Pause(locator1 = "2000");
 
@@ -272,14 +287,15 @@ definition {
 
 		Type.typeEditor(
 			locator1 = "DDLEditRecord#HTML_FIELD",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro populateFieldInteger {
 		var key_fieldName = "${fieldName}";
 
-		Type(locator1 = "TextInput#DDM", value1 = "${ddlRecordFieldData}");
+		Type(
+			locator1 = "TextInput#DDM",
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro populateFieldLinkToPage {
@@ -289,20 +305,25 @@ definition {
 
 		DDLRecord.selectLinkToPageRadio(
 			ddlRecordFieldData = "${ddlRecordFieldData}",
-			parentPage = "${parentPage}"
-		);
+			parentPage = "${parentPage}");
 
-		AssertClick(locator1 = "Button#SELECT", value1 = "Select");
+		AssertClick(
+			locator1 = "Button#SELECT",
+			value1 = "Select");
 
 		var key_fieldName = "${fieldName}";
 
-		AssertTextEquals(locator1 = "TextInput#DDM", value1 = "${ddlRecordFieldData}");
+		AssertTextEquals(
+			locator1 = "TextInput#DDM",
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro populateFieldNumber {
 		var key_fieldName = "${fieldName}";
 
-		Type(locator1 = "TextInput#DDM", value1 = "${ddlRecordFieldData}");
+		Type(
+			locator1 = "TextInput#DDM",
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro populateFieldRadio {
@@ -311,8 +332,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "DDLEditRecord#RADIO_OPTION_LABEL",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 
 		Click(locator1 = "DDLEditRecord#RADIO_OPTION_RADIO");
 	}
@@ -320,7 +340,9 @@ definition {
 	macro populateFieldSelect {
 		var key_fieldName = "${fieldName}";
 
-		Select(locator1 = "DDMField#SELECT", value1 = "${ddlRecordFieldData}");
+		Select(
+			locator1 = "DDMField#SELECT",
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro populateFieldSelectViaSpreadsheetView {
@@ -331,21 +353,23 @@ definition {
 
 		Select(
 			locator1 = "DDMEditStructure#FORM_FIELD_SELECT",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 
-		Click(locator1 = "Button#SAVE", value1 = "Save");
+		Click(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
 		AssertTextEquals(
 			locator1 = "DDLSpreadsheet#RECORD_TABLE_FIELD_ENTRY",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro populateFieldText {
 		var key_fieldName = "${fieldName}";
 
-		Type(locator1 = "TextInput#DDM", value1 = "${ddlRecordFieldData}");
+		Type(
+			locator1 = "TextInput#DDM",
+			value1 = "${ddlRecordFieldData}");
 
 		var i = "1";
 
@@ -355,8 +379,7 @@ definition {
 			if (IsElementPresent(locator1 = "xpath=(//div[@data-fieldname='${key_fieldName}']/a[contains(@class,'ddm-repeatable-add-button')])[${i}]")) {
 				Type(
 					locator1 = "xpath=(//div[@data-fieldname='${key_fieldName}'][${i}]//a[contains(@class,'ddm-repeatable-add-button')]/../div//input)",
-					value1 = "${ddlRecordFieldData} ${i}"
-				);
+					value1 = "${ddlRecordFieldData} ${i}");
 			}
 		}
 	}
@@ -366,16 +389,14 @@ definition {
 
 		Type(
 			locator1 = "DDLEditRecord#TEXT_BOX_FIELD",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro populateFieldTextViaSpreadsheetView {
 		DDLRecord.populateFieldTextViaSpreadsheetViewCmd(
 			ddlRecordFieldData = "${ddlRecordFieldData}",
 			ddlRecordRow = "${ddlRecordRow}",
-			fieldName = "${fieldName}"
-		);
+			fieldName = "${fieldName}");
 	}
 
 	macro populateFieldTextViaSpreadsheetViewCmd {
@@ -386,29 +407,30 @@ definition {
 
 		Type(
 			locator1 = "DDMEditStructure#FORM_FIELD_FIELD",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 
-		Click(locator1 = "Button#SAVE", value1 = "Save");
+		Click(
+			locator1 = "Button#SAVE",
+			value1 = "Save");
 
 		AssertTextEquals(
 			locator1 = "DDLSpreadsheet#RECORD_TABLE_FIELD_ENTRY",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro populateFieldWebContentChooseFromWebContentLibrary {
 		var key_fieldName = "${fieldName}";
 		var key_webContentTitle = "${webContentTitle}";
 
-		AssertClick(locator1 = "Button#LINK_TO_PAGE_SELECT_PAGE", value1 = "Select");
+		AssertClick(
+			locator1 = "Button#SELECT_CONTENT",
+			value1 = "Select");
 
 		SelectFrame(locator1 = "IFrame#DIALOG");
 
 		AssertClick(
 			locator1 = "Link#WEB_CONTENT_ARTICLE",
-			value1 = "${webContentTitle}"
-		);
+			value1 = "${webContentTitle}");
 
 		SelectFrame(value1 = "relative=top");
 	}
@@ -416,7 +438,9 @@ definition {
 	macro populateTranslationFieldText {
 		var key_fieldName = "${fieldName}";
 
-		Type(locator1 = "TextInput#DDM", value1 = "${ddlRecordFieldData}");
+		Type(
+			locator1 = "TextInput#DDM",
+			value1 = "${ddlRecordFieldData}");
 
 		var i = "1";
 
@@ -426,14 +450,15 @@ definition {
 			if (IsElementPresent(locator1 = "xpath=(//div[@data-fieldname='Text']//input)[${i}]")) {
 				Type(
 					locator1 = "xpath=(//div[@data-fieldname='Text']//input)[${i}]",
-					value1 = "${ddlRecordFieldData} ${i}"
-				);
+					value1 = "${ddlRecordFieldData} ${i}");
 			}
 		}
 	}
 
 	macro saveAsDraftCP {
-		AssertClick(locator1 = "Button#SAVE_AS_DRAFT", value1 = "Save as Draft");
+		AssertClick(
+			locator1 = "Button#SAVE_AS_DRAFT",
+			value1 = "Save as Draft");
 
 		Alert.viewSuccessMessage();
 	}
@@ -461,13 +486,11 @@ definition {
 
 		DDLRecord.viewFieldLabel(
 			fieldFieldLabel = "${fieldFieldLabel}",
-			fieldName = "${fieldName}"
-		);
+			fieldName = "${fieldName}");
 
 		AssertTextEquals(
 			locator1 = "TextInput#DDM",
-			value1 = "${ddlRecordFieldDataEdit}"
-		);
+			value1 = "${ddlRecordFieldDataEdit}");
 
 		AssertElementNotPresent(locator1 = "DDL#RECORD_TABLE_ENTRY");
 
@@ -484,8 +507,7 @@ definition {
 		else {
 			AssertTextEquals(
 				locator1 = "DDL#RECORD_TABLE_ENTRY",
-				value1 = "${ddlRecordFieldData}"
-			);
+				value1 = "${ddlRecordFieldData}");
 		}
 
 		if (isSet(ddlRecordNestedFieldData)) {
@@ -497,8 +519,7 @@ definition {
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "View",
-			rowEntry = "${ddlRecordFieldData}"
-		);
+			rowEntry = "${ddlRecordFieldData}");
 
 		var key_ddlRecordFieldData = "${ddlRecordFieldData}";
 		var key_fieldFieldLabel = "${fieldFieldLabel}";
@@ -506,14 +527,12 @@ definition {
 		if ("${ddlRecordFieldData}" == "") {
 			AssertTextEquals.assertPartialText(
 				locator1 = "DDLRecord#FIELD",
-				value1 = "${fieldFieldLabel}${ddlRecordFieldData}"
-			);
+				value1 = "${fieldFieldLabel}${ddlRecordFieldData}");
 		}
 		else {
 			DDLRecord.viewPopulatedField(
 				ddlRecordFieldData = "${ddlRecordFieldData}",
-				fieldFieldLabel = "${fieldFieldLabel}"
-			);
+				fieldFieldLabel = "${fieldFieldLabel}");
 		}
 
 		if (isSet(ddlRecordNestedFieldData)) {
@@ -522,14 +541,12 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "DDLRecord#FIELD_NESTED",
-				value1 = "${nestedFieldFieldLabel} ${ddlRecordNestedFieldData}"
-			);
+				value1 = "${nestedFieldFieldLabel} ${ddlRecordNestedFieldData}");
 
 			AssertCssValue(
 				locator1 = "DDLRecord#FIELD_NESTED",
 				locator2 = "margin-left",
-				value1 = "15px"
-			);
+				value1 = "15px");
 		}
 	}
 
@@ -539,8 +556,7 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "DDLEditRecord#PARAGRAPH_FIELD",
-				value1 = "${fieldText}"
-			);
+				value1 = "${fieldText}");
 		}
 
 		if ("${field}" == "Separator") {
@@ -557,8 +573,7 @@ definition {
 		else {
 			AssertTextEquals(
 				locator1 = "DDLEditRecord#FIELD_LABEL",
-				value1 = "${fieldFieldLabel}"
-			);
+				value1 = "${fieldFieldLabel}");
 		}
 	}
 
@@ -568,8 +583,7 @@ definition {
 		if (!("${fieldShowLabel}" == "No")) {
 			AssertTextEquals(
 				locator1 = "DDLEditRecord#FIELD_LABEL",
-				value1 = "${fieldFieldLabel}"
-			);
+				value1 = "${fieldFieldLabel}");
 		}
 		else {
 			AssertElementNotPresent(locator1 = "DDLEditRecord#FIELD_LABEL");
@@ -585,34 +599,45 @@ definition {
 		}
 
 		if ("${field}" == "Date") {
-			AssertTextEquals(locator1 = "TextInput#DDM", value1 = "${fieldPredefinedValue}");
+			AssertTextEquals(
+				locator1 = "TextInput#DDM",
+				value1 = "${fieldPredefinedValue}");
 		}
 
 		if ("${field}" == "Decimal") {
-			AssertTextEquals(locator1 = "TextInput#DDM", value1 = "${fieldPredefinedValue}");
+			AssertTextEquals(
+				locator1 = "TextInput#DDM",
+				value1 = "${fieldPredefinedValue}");
 		}
 
 		if ("${field}" == "Documents and Media") {
-			AssertTextEquals(locator1 = "TextInput#DDM", value1 = "${fieldPredefinedValue}");
+			AssertTextEquals(
+				locator1 = "TextInput#DDM",
+				value1 = "${fieldPredefinedValue}");
 		}
 
 		if ("${field}" == "HTML") {
 			AssertTextEquals(
 				locator1 = "DDLEditRecord#HTML_FIELD",
-				value1 = "${fieldPredefinedValue}"
-			);
+				value1 = "${fieldPredefinedValue}");
 		}
 
 		if ("${field}" == "Integer") {
-			AssertTextEquals(locator1 = "TextInput#DDM", value1 = "${fieldPredefinedValue}");
+			AssertTextEquals(
+				locator1 = "TextInput#DDM",
+				value1 = "${fieldPredefinedValue}");
 		}
 
 		if ("${field}" == "Link to Page") {
-			AssertTextEquals(locator1 = "TextInput#DDM", value1 = "${fieldPredefinedValue}");
+			AssertTextEquals(
+				locator1 = "TextInput#DDM",
+				value1 = "${fieldPredefinedValue}");
 		}
 
 		if ("${field}" == "Number") {
-			AssertTextEquals(locator1 = "TextInput#DDM", value1 = "${fieldPredefinedValue}");
+			AssertTextEquals(
+				locator1 = "TextInput#DDM",
+				value1 = "${fieldPredefinedValue}");
 		}
 
 		if ("${field}" == "Radio") {
@@ -624,48 +649,41 @@ definition {
 		if ("${field}" == "Select") {
 			AssertTextEquals(
 				locator1 = "DDMField#SELECT",
-				value1 = "${fieldPredefinedValue}"
-			);
+				value1 = "${fieldPredefinedValue}");
 		}
 
 		if ("${field}" == "Text") {
-			AssertTextEquals(locator1 = "TextInput#DDM", value1 = "${fieldPredefinedValue}");
+			AssertTextEquals(
+				locator1 = "TextInput#DDM",
+				value1 = "${fieldPredefinedValue}");
 		}
 
 		if ("${field}" == "Text Box") {
 			AssertTextEquals(
 				locator1 = "DDLEditRecord#TEXT_BOX_FIELD",
-				value1 = "${fieldPredefinedValue}"
-			);
+				value1 = "${fieldPredefinedValue}");
 		}
 	}
 
 	macro viewFieldRepeatedNotPresent {
 		AssertTextEquals(
 			locator1 = "xpath=(//div[@data-fieldname='${fieldName}'][1]//a[contains(@class,'ddm-repeatable-add-button')]/../div//input)",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 
-		AssertElementNotPresent(
-			locator1 = "xpath=(//div[@data-fieldname='${fieldName}'][2]//a[contains(@class,'ddm-repeatable-add-button')]/../div//input)"
-		);
+		AssertElementNotPresent(locator1 = "xpath=(//div[@data-fieldname='${fieldName}'][2]//a[contains(@class,'ddm-repeatable-add-button')]/../div//input)");
 
-		AssertElementNotPresent(
-			locator1 = "xpath=(//div[@data-fieldname='${fieldName}'][3]//a[contains(@class,'ddm-repeatable-add-button')]/../div//input)"
-		);
+		AssertElementNotPresent(locator1 = "xpath=(//div[@data-fieldname='${fieldName}'][3]//a[contains(@class,'ddm-repeatable-add-button')]/../div//input)");
 	}
 
 	macro viewFirstFieldCP {
 		AssertTextEquals(
 			locator1 = "DDL#RECORD_TABLE_COLUMN_ONE_NAME",
-			value1 = "${fieldFieldLabel}"
-		);
+			value1 = "${fieldFieldLabel}");
 
 		if (isSet(workflowStatus)) {
 			AssertTextEquals(
 				locator1 = "DDL#RECORD_TABLE_COLUMN_TWO_RECORD_1_WORKFLOW_STATUS",
-				value1 = "Pending"
-			);
+				value1 = "Pending");
 		}
 
 		if ("${field}" == "HTML") {
@@ -673,16 +691,14 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "DDL#RECORD_TABLE_PREVIEW",
-				value1 = "${ddlRecordFieldData}"
-			);
+				value1 = "${ddlRecordFieldData}");
 
 			Click(locator1 = "DDL#RECORD_TABLE_PREVIEW_CLOSE");
 		}
 		else {
 			AssertTextEquals(
 				locator1 = "DDL#RECORD_TABLE_COLUMN_ONE_RECORD_1",
-				value1 = "${ddlRecordFieldData}"
-			);
+				value1 = "${ddlRecordFieldData}");
 		}
 
 		Click(locator1 = "DDL#RECORD_TABLE_ELLIPSIS_1");
@@ -692,11 +708,12 @@ definition {
 		if (isSet(workflowStatus)) {
 			AssertTextEquals(
 				locator1 = "DDLRecord#WORKFLOW_STATUS",
-				value1 = "Pending (${workflowStatus})"
-			);
+				value1 = "Pending (${workflowStatus})");
 		}
 		else {
-			AssertTextEquals(locator1 = "DDLRecord#WORKFLOW_STATUS", value1 = "Approved");
+			AssertTextEquals(
+				locator1 = "DDLRecord#WORKFLOW_STATUS",
+				value1 = "Approved");
 		}
 
 		if ("${field}" == "Boolean") {
@@ -711,44 +728,37 @@ definition {
 		if ("${fieldShowLabel}" == "No") {
 			AssertTextEquals(
 				locator1 = "DDLRecord#FIELD_1",
-				value1 = "${ddlRecordFieldData}"
-			);
+				value1 = "${ddlRecordFieldData}");
 		}
 		else {
 			AssertTextEquals(
 				locator1 = "DDLRecord#FIELD_1",
-				value1 = "${fieldFieldLabel} ${ddlRecordFieldData}"
-			);
+				value1 = "${fieldFieldLabel} ${ddlRecordFieldData}");
 		}
 	}
 
 	macro viewFirstRecordSearchResult {
 		AssertTextEquals(
 			locator1 = "Portlet#H3_HEADER",
-			value1 = "New Data Definition Name for List: ${ddlListName}"
-		);
+			value1 = "New Data Definition Name for List: ${ddlListName}");
 
 		AssertTextEquals(
 			locator1 = "DDLRecord#FIELD_1",
-			value1 = "${field} ${ddlRecordFieldData}"
-		);
+			value1 = "${field} ${ddlRecordFieldData}");
 	}
 
 	macro viewGeolocationRecord {
 		AssertTextEquals(
 			locator1 = "DDL#RECORD_TABLE_COLUMN_ONE_NAME",
-			value1 = "${fieldFieldLabel}"
-		);
+			value1 = "${fieldFieldLabel}");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "DDL#RECORD_TABLE_COLUMN_ONE_RECORD_1",
-			value1 = "Latitude:"
-		);
+			value1 = "Latitude:");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "DDL#RECORD_TABLE_COLUMN_ONE_RECORD_1",
-			value1 = "Longitude:"
-		);
+			value1 = "Longitude:");
 	}
 
 	macro viewInvalidHTMLfield {
@@ -771,10 +781,11 @@ definition {
 
 		AssertClick(
 			locator1 = "DDLEditRecord#LINK_TO_PAGE_LINK",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 
-		AssertVisible(locator1 = "Home#PAGE_ACTIVE", value1 = "${ddlRecordFieldData}");
+		AssertVisible(
+			locator1 = "Home#PAGE_ACTIVE",
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro viewNestedFields {
@@ -802,8 +813,7 @@ definition {
 	macro viewNoRecords {
 		AssertTextEquals(
 			locator1 = "Message#EMPTY_INFO",
-			value1 = "There are no records."
-		);
+			value1 = "There are no records.");
 	}
 
 	macro viewPGViaAP {
@@ -812,13 +822,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "AP#ASSET_ABSTRACT_TITLE",
-			value1 = "${ddlListName}"
-		);
+			value1 = "${ddlListName}");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "AP#ASSET_ABSTRACT_DESCRIPTION",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 	}
 
 	macro viewPopulatedField {
@@ -826,8 +834,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "DDLRecord#FIELD",
-			value1 = "${fieldFieldLabel} ${ddlRecordFieldData}"
-		);
+			value1 = "${fieldFieldLabel} ${ddlRecordFieldData}");
 	}
 
 	macro viewSecondFieldCP {
@@ -836,52 +843,44 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "DDL#RECORD_TABLE_ENTRY_2",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "View",
-			rowEntry = "${ddlRecordFieldData}"
-		);
+			rowEntry = "${ddlRecordFieldData}");
 
 		if ("${ddlRecordFieldData}" == "") {
 			AssertTextEquals.assertPartialText(
 				locator1 = "DDLRecord#FIELD",
-				value1 = "${fieldFieldLabel}${ddlRecordFieldData}"
-			);
+				value1 = "${fieldFieldLabel}${ddlRecordFieldData}");
 		}
 		else {
 			DDLRecord.viewPopulatedField(
 				ddlRecordFieldData = "${ddlRecordFieldData}",
-				fieldFieldLabel = "${fieldFieldLabel}"
-			);
+				fieldFieldLabel = "${fieldFieldLabel}");
 		}
 	}
 
 	macro viewSecondRecordSearchResult {
 		AssertTextEquals(
 			locator1 = "Portlet#H3_HEADER",
-			value1 = "New Data Definition Name for List: ${ddlListName}"
-		);
+			value1 = "New Data Definition Name for List: ${ddlListName}");
 
 		AssertTextEquals(
 			locator1 = "DDLRecord#FIELD_2",
-			value1 = "${field} ${ddlRecordFieldData}"
-		);
+			value1 = "${field} ${ddlRecordFieldData}");
 	}
 
 	macro viewSecondRecordViaDDLDisplayTemplate {
 		AssertTextEquals(
 			locator1 = "Portlet#H2_HEADER",
-			value1 = "${ddlListName}"
-		);
+			value1 = "${ddlListName}");
 
 		var key_fieldFieldLabel = "${fieldFieldLabel}";
 
 		AssertTextEquals(
 			locator1 = "DDL#RECORD_TABLE_COLUMN_NAME",
-			value1 = "${fieldFieldLabel}"
-		);
+			value1 = "${fieldFieldLabel}");
 
 		Click(locator1 = "DDL#RECORD_TABLE_ELLIPSIS_1");
 
@@ -889,8 +888,7 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "DDLRecord#FIELD_2",
-			value1 = "${fieldFieldLabel} ${ddlRecordFieldData}"
-		);
+			value1 = "${fieldFieldLabel} ${ddlRecordFieldData}");
 	}
 
 	macro viewSelectedLinkToPage {
@@ -900,7 +898,9 @@ definition {
 
 		AssertChecked(locator1 = "DDLEditRecord#LINK_TO_PAGE_PAGE_RADIO");
 
-		AssertClick(locator1 = "Button#CANCEL", value1 = "Cancel");
+		AssertClick(
+			locator1 = "Button#CANCEL",
+			value1 = "Cancel");
 	}
 
 	macro viewStatusViaDDLDisplayTable {
@@ -909,26 +909,22 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "DDL#RECORD_TABLE_WORKFLOW_STATUS",
-			value1 = "${workflowStatus}"
-		);
+			value1 = "${workflowStatus}");
 	}
 
 	macro viewTextFieldRepeated {
 		AssertTextEquals(
 			locator1 = "xpath=(//div[@data-fieldname='Text'][1]//a[contains(@class,'ddm-repeatable-add-button')]/../div//input)",
-			value1 = "${ddlRecordFieldData1}"
-		);
+			value1 = "${ddlRecordFieldData1}");
 
 		AssertTextEquals(
 			locator1 = "xpath=(//div[@data-fieldname='Text'][2]//a[contains(@class,'ddm-repeatable-add-button')]/../div//input)",
-			value1 = "${ddlRecordFieldData2}"
-		);
+			value1 = "${ddlRecordFieldData2}");
 
 		if (isSet(ddlRecordFieldData3)) {
 			AssertTextEquals(
 				locator1 = "xpath=(//div[@data-fieldname='Text'][3]//a[contains(@class,'ddm-repeatable-add-button')]/../div//input)",
-				value1 = "${ddlRecordFieldData3}"
-			);
+				value1 = "${ddlRecordFieldData3}");
 		}
 		else {
 			AssertElementNotPresent(locator1 = "xpath=(//div[@data-fieldname='Text'])[3]");
@@ -937,9 +933,8 @@ definition {
 
 	macro viewTranslationNotAvailable {
 		AssertElementNotPresent(
-			locator1 = "Translation#AVAILABLE_TRANSLATION",
-			key_localizedLanguage = "${localizedLanguage}"
-		);
+			key_localizedLanguage = "${localizedLanguage}",
+			locator1 = "Translation#AVAILABLE_TRANSLATION");
 	}
 
 	macro viewViaAnchorLink {
@@ -947,27 +942,23 @@ definition {
 
 		AssertClick(
 			locator1 = "DDL#RECORD_TABLE_COLUMN_ONE_RECORD_1",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "DDLRecord#FIELD_1",
-			value1 = "${fieldFieldLabel} ${ddlRecordFieldData}"
-		);
+			value1 = "${fieldFieldLabel} ${ddlRecordFieldData}");
 	}
 
 	macro viewViaDDLDisplayPG {
 		AssertTextEquals(
 			locator1 = "Portlet#H2_HEADER",
-			value1 = "${ddlListName}"
-		);
+			value1 = "${ddlListName}");
 
 		var key_fieldFieldLabel = "${fieldFieldLabel}";
 
 		AssertTextEquals(
 			locator1 = "DDL#RECORD_TABLE_COLUMN_NAME",
-			value1 = "${fieldFieldLabel}"
-		);
+			value1 = "${fieldFieldLabel}");
 
 		var key_ddlRecordFieldData = "${key_ddlRecordFieldData}";
 
@@ -976,16 +967,14 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "DDL#RECORD_TABLE_ENTRY",
-				value1 = "${ddlRecordFieldDataTableDisplay}"
-			);
+				value1 = "${ddlRecordFieldDataTableDisplay}");
 		}
 		else {
 			var key_ddlRecordFieldData = "${ddlRecordFieldData}";
 
 			AssertTextEquals(
 				locator1 = "DDL#RECORD_TABLE_ENTRY",
-				value1 = "${ddlRecordFieldData}"
-			);
+				value1 = "${ddlRecordFieldData}");
 		}
 
 		if ("${userRole}" == "Guest") {
@@ -1012,13 +1001,11 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "DDLRecord#FIELD_1",
-			value1 = "${fieldFieldLabel}"
-		);
+			value1 = "${fieldFieldLabel}");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "DDLRecord#FIELD_1",
-			value1 = "${ddlRecordFieldData}"
-		);
+			value1 = "${ddlRecordFieldData}");
 
 		if (isSet(ddlRecordNestedFieldData)) {
 			var key_ddlRecordFieldData = "${ddlRecordNestedFieldData}";
@@ -1026,14 +1013,12 @@ definition {
 
 			AssertTextEquals(
 				locator1 = "DDLRecord#FIELD_NESTED",
-				value1 = "${nestedFieldFieldLabel} ${ddlRecordNestedFieldData}"
-			);
+				value1 = "${nestedFieldFieldLabel} ${ddlRecordNestedFieldData}");
 
 			AssertCssValue(
 				locator1 = "DDLRecord#FIELD_NESTED",
 				locator2 = "margin-left",
-				value1 = "15px"
-			);
+				value1 = "15px");
 		}
 	}
 
@@ -1047,8 +1032,8 @@ definition {
 		else {
 			AssertTextEquals(
 				locator1 = "DDL#RECORD_TABLE_ENTRY",
-				value1 = "${ddlRecordFieldData}"
-			);
+				value1 = "${ddlRecordFieldData}");
 		}
 	}
+
 }

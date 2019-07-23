@@ -1,10 +1,10 @@
 dependencies {
-	compileOnly group: "com.liferay", name: "biz.aQute.bndlib", version: "4.2.0-20190219.175746-114-LIFERAY-CACHED"
+	compileOnly group: "com.liferay", name: "biz.aQute.bndlib", version: "4.2.0-20190219.175746-114-LIFERAY-CACHED.LIFERAY-PATCHED-1"
 	compileOnly group: "com.liferay", name: "com.liferay.ant.bnd", version: "3.0.7"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.string", version: "2.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.portal.osgi.web.wab.generator.api", version: "1.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.whip", version: "1.0.1"
-	compileOnly group: "com.liferay", name: "org.apache.felix.fileinstall", version: "3.6.4.LIFERAY-PATCHED-1"
+	compileOnly group: "com.liferay", name: "org.apache.felix.fileinstall", version: "3.6.4.LIFERAY-PATCHED-2"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.impl", version: "3.0.0"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel", version: "3.0.0"
 	compileOnly group: "com.liferay.portal", name: "com.liferay.util.java", version: "3.0.0"

@@ -17,7 +17,6 @@ package com.liferay.commerce.product.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.commerce.product.model.CPDefinition;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -33,12 +32,12 @@ import java.util.Date;
  * The cache model class for representing CPDefinition in entity cache.
  *
  * @author Marco Leo
- * @see CPDefinition
  * @generated
  */
 @ProviderType
-public class CPDefinitionCacheModel implements CacheModel<CPDefinition>,
-	Externalizable {
+public class CPDefinitionCacheModel
+	implements CacheModel<CPDefinition>, Externalizable {
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -49,7 +48,8 @@ public class CPDefinitionCacheModel implements CacheModel<CPDefinition>,
 			return false;
 		}
 
-		CPDefinitionCacheModel cpDefinitionCacheModel = (CPDefinitionCacheModel)obj;
+		CPDefinitionCacheModel cpDefinitionCacheModel =
+			(CPDefinitionCacheModel)obj;
 
 		if (CPDefinitionId == cpDefinitionCacheModel.CPDefinitionId) {
 			return true;
@@ -65,7 +65,7 @@ public class CPDefinitionCacheModel implements CacheModel<CPDefinition>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(79);
+		StringBundler sb = new StringBundler(83);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -135,6 +135,10 @@ public class CPDefinitionCacheModel implements CacheModel<CPDefinition>,
 		sb.append(subscriptionTypeSettings);
 		sb.append(", maxSubscriptionCycles=");
 		sb.append(maxSubscriptionCycles);
+		sb.append(", accountGroupFilterEnabled=");
+		sb.append(accountGroupFilterEnabled);
+		sb.append(", channelFilterEnabled=");
+		sb.append(channelFilterEnabled);
 		sb.append(", version=");
 		sb.append(version);
 		sb.append(", status=");
@@ -261,10 +265,14 @@ public class CPDefinitionCacheModel implements CacheModel<CPDefinition>,
 			cpDefinitionImpl.setSubscriptionTypeSettings("");
 		}
 		else {
-			cpDefinitionImpl.setSubscriptionTypeSettings(subscriptionTypeSettings);
+			cpDefinitionImpl.setSubscriptionTypeSettings(
+				subscriptionTypeSettings);
 		}
 
 		cpDefinitionImpl.setMaxSubscriptionCycles(maxSubscriptionCycles);
+		cpDefinitionImpl.setAccountGroupFilterEnabled(
+			accountGroupFilterEnabled);
+		cpDefinitionImpl.setChannelFilterEnabled(channelFilterEnabled);
 		cpDefinitionImpl.setVersion(version);
 		cpDefinitionImpl.setStatus(status);
 		cpDefinitionImpl.setStatusByUserId(statusByUserId);
@@ -347,6 +355,10 @@ public class CPDefinitionCacheModel implements CacheModel<CPDefinition>,
 
 		maxSubscriptionCycles = objectInput.readLong();
 
+		accountGroupFilterEnabled = objectInput.readBoolean();
+
+		channelFilterEnabled = objectInput.readBoolean();
+
 		version = objectInput.readInt();
 
 		status = objectInput.readInt();
@@ -357,8 +369,7 @@ public class CPDefinitionCacheModel implements CacheModel<CPDefinition>,
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		if (uuid == null) {
 			objectOutput.writeUTF("");
 		}
@@ -458,6 +469,10 @@ public class CPDefinitionCacheModel implements CacheModel<CPDefinition>,
 
 		objectOutput.writeLong(maxSubscriptionCycles);
 
+		objectOutput.writeBoolean(accountGroupFilterEnabled);
+
+		objectOutput.writeBoolean(channelFilterEnabled);
+
 		objectOutput.writeInt(version);
 
 		objectOutput.writeInt(status);
@@ -508,9 +523,12 @@ public class CPDefinitionCacheModel implements CacheModel<CPDefinition>,
 	public String subscriptionType;
 	public String subscriptionTypeSettings;
 	public long maxSubscriptionCycles;
+	public boolean accountGroupFilterEnabled;
+	public boolean channelFilterEnabled;
 	public int version;
 	public int status;
 	public long statusByUserId;
 	public String statusByUserName;
 	public long statusDate;
+
 }

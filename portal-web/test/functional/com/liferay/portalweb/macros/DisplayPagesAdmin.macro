@@ -1,4 +1,5 @@
 definition {
+
 	macro add {
 		LexiconEntry.gotoAdd();
 
@@ -10,16 +11,15 @@ definition {
 	macro markDisplayPageAsDefault {
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Mark As Default",
-			rowEntry = "${rowEntry}"
-		);
+			rowEntry = "${rowEntry}");
 
-		AssertVisible(locator1 = "Card#STICKER", key_cardText = "${rowEntry}");
+		AssertVisible(
+			key_cardText = "${rowEntry}",
+			locator1 = "Card#STICKER");
 	}
 
 	macro openDisplayPagesAdmin {
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "group/${siteURLKey}/~/control_panel/manage?p_p_id=com_liferay_layout_admin_web_portlet_GroupPagesPortlet&amp;_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_tabs1=display-pages"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "group/${siteURLKey}/~/control_panel/manage?p_p_id=com_liferay_layout_admin_web_portlet_GroupPagesPortlet&amp;_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_tabs1=display-pages");
 	}
 
 	macro viewPGViaAP {
@@ -28,21 +28,21 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "AP#ASSET_ABSTRACT_TITLE",
-			value1 = "${webContentTitle}"
-		);
+			value1 = "${webContentTitle}");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "AP#ASSET_ABSTRACT_DESCRIPTION",
-			value1 = "${webContentContent}"
-		);
+			value1 = "${webContentContent}");
 
-		AssertClick(locator1 = "AP#ASSET_ABSTRACT_TITLE", value1 = "${webContentTitle}");
+		AssertClick(
+			locator1 = "AP#ASSET_ABSTRACT_TITLE",
+			value1 = "${webContentTitle}");
 
 		for (var content : list "${contentList}") {
 			AssertElementPresent(
-				locator1 = "Fragment#EDITABLE_FIELD_CONTENT",
-				key_text = "${content}"
-			);
+				key_text = "${content}",
+				locator1 = "Fragment#EDITABLE_FIELD_CONTENT");
 		}
 	}
+
 }

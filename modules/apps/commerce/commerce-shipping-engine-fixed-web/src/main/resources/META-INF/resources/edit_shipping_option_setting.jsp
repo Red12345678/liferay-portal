@@ -95,15 +95,15 @@ PortalUtil.addPortletBreadcrumbEntry(request, title, StringPool.BLANK, data);
 					</div>
 
 					<div class="col-md-6">
-						<aui:select bean="<%= commerceShippingFixedOptionRel %>" label="warehouse" model="<%= CommerceShippingFixedOptionRel.class %>" name="commerceWarehouseId" showEmptyOption="<%= true %>">
+						<aui:select bean="<%= commerceShippingFixedOptionRel %>" label="warehouse" model="<%= CommerceShippingFixedOptionRel.class %>" name="commerceInventoryWarehouseId" showEmptyOption="<%= true %>">
 
 							<%
-							List<CommerceWarehouse> commerceWarehouses = commerceShippingFixedOptionRelsDisplayContext.getCommerceWarehouses();
+							List<CommerceInventoryWarehouse> commerceInventoryWarehouses = commerceShippingFixedOptionRelsDisplayContext.getCommerceInventoryWarehouses();
 
-							for (CommerceWarehouse commerceWarehouse : commerceWarehouses) {
+							for (CommerceInventoryWarehouse commerceInventoryWarehouse : commerceInventoryWarehouses) {
 							%>
 
-								<aui:option label="<%= commerceWarehouse.getName() %>" value="<%= commerceWarehouse.getCommerceWarehouseId() %>" />
+								<aui:option label="<%= commerceInventoryWarehouse.getName() %>" value="<%= commerceInventoryWarehouse.getCommerceInventoryWarehouseId() %>" />
 
 							<%
 							}
@@ -196,7 +196,7 @@ PortalUtil.addPortletBreadcrumbEntry(request, title, StringPool.BLANK, data);
 					Liferay.Service(
 						'/commerce.commercecountry/get-commerce-countries',
 						{
-							groupId: <%= scopeGroupId %>,
+							companyId: <%= company.getCompanyId() %>,
 							active: true
 						},
 						callback

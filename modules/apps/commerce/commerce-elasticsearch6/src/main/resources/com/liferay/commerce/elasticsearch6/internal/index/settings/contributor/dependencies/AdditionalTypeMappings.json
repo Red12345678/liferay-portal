@@ -46,7 +46,7 @@
 			"store": true,
 			"type": "keyword"
 		},
-		"commerceUserSegmentEntryIds_required_matches": {
+		"commerceAccountGroupIds_required_matches": {
 			"store": true,
 			"type": "integer"
 		},
@@ -69,6 +69,10 @@
 		"criterionType_user_required_matches": {
 			"store": true,
 			"type": "integer"
+		},
+		"entryModelClassName": {
+			"store": true,
+			"type": "keyword"
 		},
 		"optionsNames": {
 			"store": true,

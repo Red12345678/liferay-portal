@@ -1,4 +1,5 @@
 definition {
+
 	macro addEntry {
 		Pause(locator1 = "3000");
 
@@ -11,8 +12,7 @@ definition {
 		CommerceEntry.addOptionsEntry(
 			optionDescription = "${optionDescription}",
 			optionFieldType = "${optionFieldType}",
-			optionName = "${optionName}"
-		);
+			optionName = "${optionName}");
 	}
 
 	macro addOptionValueEntry {
@@ -22,8 +22,7 @@ definition {
 
 		CommerceEntry.addOptionValue(
 			valueName = "${optionValueName}",
-			valuePriority = "${optionValuePriority}"
-		);
+			valuePriority = "${optionValuePriority}");
 
 		CommerceEntry.saveEntry();
 	}
@@ -39,4 +38,5 @@ definition {
 
 		AssertConfirm.waitForConfirmation(value1 = "Are you sure to delete?");
 	}
+
 }

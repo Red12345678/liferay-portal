@@ -45,7 +45,8 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + CommerceAdminPortletKeys.COMMERCE_ADMIN,
+		"javax.portlet.name=" + CommerceAdminPortletKeys.COMMERCE_ADMIN_GROUP_INSTANCE,
+		"javax.portlet.name=" + CommerceAdminPortletKeys.COMMERCE_ADMIN_VIRTUAL_INSTANCE,
 		"mvc.command.name=fixCommerceHealthStatusIssue"
 	},
 	service = MVCActionCommand.class
@@ -76,10 +77,11 @@ public class FixCommerceHealthStatusIssueMVCActionCommand
 
 				Thread.sleep(2000);
 
-				long groupId = _portal.getScopeGroupId(httpServletRequest);
-
 				jsonObject.put(
-					"success", commerceHealthStatus.isFixed(groupId));
+					"success",
+					commerceHealthStatus.isFixed(
+						_portal.getCompanyId(httpServletRequest),
+						_portal.getScopeGroupId(httpServletRequest)));
 			}
 		}
 		catch (Exception e) {

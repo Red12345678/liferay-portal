@@ -1616,18 +1616,18 @@ public class CMISRepository extends BaseCmisRepository {
 			ContentStream contentStream)
 		throws PrincipalException {
 
-		if (properties != null) {
-			if (!allowableActionsSet.contains(Action.CAN_UPDATE_PROPERTIES)) {
-				throw new PrincipalException.MustHavePermission(
-					0, Action.CAN_UPDATE_PROPERTIES.toString());
-			}
+		if ((properties != null) &&
+			!allowableActionsSet.contains(Action.CAN_UPDATE_PROPERTIES)) {
+
+			throw new PrincipalException.MustHavePermission(
+				0, Action.CAN_UPDATE_PROPERTIES.toString());
 		}
 
-		if (contentStream != null) {
-			if (!allowableActionsSet.contains(Action.CAN_SET_CONTENT_STREAM)) {
-				throw new PrincipalException.MustHavePermission(
-					0, Action.CAN_SET_CONTENT_STREAM.toString());
-			}
+		if ((contentStream != null) &&
+			!allowableActionsSet.contains(Action.CAN_SET_CONTENT_STREAM)) {
+
+			throw new PrincipalException.MustHavePermission(
+				0, Action.CAN_SET_CONTENT_STREAM.toString());
 		}
 	}
 
@@ -1835,8 +1835,7 @@ public class CMISRepository extends BaseCmisRepository {
 
 		hits.setDocs(
 			documents.toArray(
-				new com.liferay.portal.kernel.search.Document
-					[documents.size()]));
+				new com.liferay.portal.kernel.search.Document[0]));
 		hits.setLength(total);
 		hits.setQuery(query);
 		hits.setQueryTerms(new String[0]);

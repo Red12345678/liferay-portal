@@ -99,6 +99,7 @@ AUI.add(
 									editorConfig: {
 										extraPlugins: 'ae_placeholder,ae_selectionregion,ae_uicore',
 										removePlugins: 'contextmenu,elementspath,image,link,liststyle,resize,tabletools,toolbar',
+										spritemap: Liferay.ThemeDisplay.getPathThemeImages() + '/lexicon/icons.svg',
 										srcNode: editorNode,
 										toolbars: {
 											add: {
@@ -113,7 +114,6 @@ AUI.add(
 									namespace: name,
 									onBlurMethod: A.bind(instance._afterBlur, instance),
 									onChangeMethod: A.bind(instance._onChangeEditor, instance),
-									onFocusMethod: A.bind(instance._afterFocus, instance),
 									plugins: [],
 									textMode: false
 								}

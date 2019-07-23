@@ -122,7 +122,7 @@ definition {
 			roleType = "site"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -220,7 +220,7 @@ definition {
 				userScreenName = "usersn${number}"
 			);
 
-			ProductMenu.gotoSite(site = "Site Name");
+			Navigator.openSiteURL(siteName = "Site Name");
 
 			ProductMenu.gotoPortlet(
 				category = "Members",
@@ -250,7 +250,7 @@ definition {
 
 		User.loginPG(password = "test", userEmailAddress = "user1@liferay.com");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -281,7 +281,7 @@ definition {
 
 		User.loginPG(password = "test", userEmailAddress = "user2@liferay.com");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -319,7 +319,7 @@ definition {
 			roleTitle = "Regular Role Name"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -361,7 +361,7 @@ definition {
 
 		User.loginPG(password = "test", userEmailAddress = "user1@liferay.com");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -376,7 +376,7 @@ definition {
 			webContentTitleEdit = "WC WebContent Title Edit"
 		);
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -570,7 +570,7 @@ definition {
 
 		SitePages.addPublicPage(pageName = "Web Content Display Page");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -593,7 +593,7 @@ definition {
 
 		WebContentStructures.saveCP(structureName = "WC Structure Name");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -622,11 +622,11 @@ definition {
 
 		SelectFrameTop();
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Web Content Display");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		WebContent.addStructuredPGViaWCD(
 			structureName = "WC Structure Name",
@@ -660,7 +660,7 @@ definition {
 
 		SitePages.addPublicPage(pageName = "Web Content Display Page");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -683,7 +683,7 @@ definition {
 
 		WebContentStructures.saveCP(structureName = "WC Structure Name");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -713,11 +713,11 @@ definition {
 
 		SelectFrameTop();
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Web Content Display");
 
-		ProductMenu.gotoSite(site = "Test Site Name");
+		Navigator.openSiteURL(siteName = "Test Site Name");
 
 		WebContent.addStructuredPGViaWCD(
 			structureName = "WC Structure Name",
@@ -1070,7 +1070,7 @@ definition {
 			WebContentStructures.viewCP(structureName = "${structureName}");
 		}
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1212,7 +1212,7 @@ definition {
 	test AddWebContentViaWCDWithGlobalStructureAndLocalTemplate {
 		property testray.component.names = "Web Content Administration";
 
-		ProductMenu.gotoSite(site = "Global");
+		SitePages.openPagesAdmin(siteURLKey = "global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1282,7 +1282,7 @@ definition {
 	test AddWebContentWithGlobalStructureAndEditedDefaultValues {
 		property testray.component.names = "Web Content Administration";
 
-		ProductMenu.gotoSite(site = "Global");
+		SitePages.openPagesAdmin(siteURLKey = "global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1310,7 +1310,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		SitePages.openPagesAdmin(siteURLKey = "global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1333,7 +1333,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Global");
+		SitePages.openPagesAdmin(siteURLKey = "global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1565,7 +1565,7 @@ definition {
 	test EditArticleMadeFromGlobalStructure {
 		property testray.component.names = "Web Content Administration";
 
-		ProductMenu.gotoSite(site = "Global");
+		SitePages.openPagesAdmin(siteURLKey = "global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1588,7 +1588,7 @@ definition {
 
 		WebContentStructures.saveCP(structureName = "Global WC Structure Name");
 
-		ProductMenu.gotoSite(site = "Global");
+		SitePages.openPagesAdmin(siteURLKey = "global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1728,7 +1728,7 @@ definition {
 	test EditGlobalWebContentTemplate {
 		property testray.component.names = "Web Content Administration";
 
-		ProductMenu.gotoSite(site = "Global");
+		SitePages.openPagesAdmin(siteURLKey = "global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -1751,7 +1751,7 @@ definition {
 
 		WebContentStructures.saveCP(structureName = "Global WC Structure Name");
 
-		ProductMenu.gotoSite(site = "Global");
+		SitePages.openPagesAdmin(siteURLKey = "global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2045,13 +2045,93 @@ definition {
 		}
 	}
 
+	@description = "This is a use case for LPS-95441."
+	@priority = "3"
+	test ExportWebContentWithEditedStructure {
+		JSONGroup.addGroup(groupName = "Test Site Name");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Test Site Name",
+			layoutName = "Test Page");
+
+		Navigator.openSiteURL(siteName = "Test Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Content",
+			panel = "Site Administration",
+			portlet = "Web Content");
+
+		NavItem.gotoStructures();
+
+		WebContentStructures.addCP(
+			structureDescription = "Structure Description",
+			structureName = "Structure Name");
+
+		DynamicDataMapping.addField(
+			field = "Text",
+			fieldFieldLabel = "Text",
+			fieldName = "TestName");
+
+		WebContentStructures.saveCP(structureName = "Structure Name");
+
+		WebContentStructures.viewCP(
+			structureDescription = "Structure Description",
+			structureName = "Structure Name");
+
+		Navigator.openSiteURL(siteName = "Test Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Content",
+			panel = "Site Administration",
+			portlet = "Web Content");
+
+		NavItem.gotoTemplates();
+
+		WebContentTemplates.addCP(
+			structureName = "Structure Name",
+			templateDescription = "Template Description",
+			templateFieldNames = "Text",
+			templateName = "Template Name");
+
+		WebContent.openWebContentAdmin(siteURLKey = "test-site-name");
+
+		WebContentNavigator.gotoAddWithStructureCP(structureName = "Structure Name");
+
+		WebContent.addWithStructureCP(
+			description = "WC WebContent 1 Description",
+			fieldName = "TestName",
+			webContentTitle = "WC WebContent 1 Title");
+
+		PortletEntry.publish();
+
+		WebContent.viewTitle(webContentTitle = "WC WebContent 1 Title");
+
+		NavItem.gotoStructures();
+
+		WebContentNavigator.gotoEditStructure(structureName = "Structure Name");
+
+		DynamicDataMapping.deleteField(fieldFieldLabel = "Text");
+
+		DynamicDataMapping.addField(
+			field = "Web Content",
+			fieldFieldLabel = "Web Content",
+			fieldName = "TestName");
+
+		WebContentStructures.saveCP(structureName = "Structure Name");
+
+		WebContent.openWebContentAdmin(siteURLKey = "test-site-name");
+
+		LAR.exportPortlet(larFileName = "WebContent_portlet.lar");
+	}
+
 	@priority = "5"
 	test ImportAndUseGlobalStructureAndTemplate {
+		property test.name.skip.portal.instance = "WebContentUseCase#ImportAndUseGlobalStructureAndTemplate";
 		property testray.component.names = "Training";
 
 		JSONGroup.addGroup(groupName = "Site Name");
 
-		ProductMenu.gotoSite(site = "Global");
+		SitePages.openPagesAdmin(siteURLKey = "global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2506,7 +2586,7 @@ definition {
 
 		Site.addBlankCP(parentSiteName = "Site Name", siteName = "Child SiteName");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		SitePages.openPagesAdmin(siteURLKey = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2545,7 +2625,7 @@ definition {
 			templateName = "WC Template Name"
 		);
 
-		ProductMenu.gotoSite(site = "Child SiteName");
+		SitePages.openPagesAdmin(siteURLKey = "Child SiteName");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
@@ -2596,7 +2676,7 @@ definition {
 	test ViewGlobalStructureViaAddMenuInLiferaySite {
 		property testray.component.names = "Web Content Administration";
 
-		ProductMenu.gotoSite(site = "Global");
+		SitePages.openPagesAdmin(siteURLKey = "global");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",

@@ -26,16 +26,15 @@ import java.util.List;
  * This class is used by SOAP remote services, specifically {@link com.liferay.commerce.product.service.http.CPTaxCategoryServiceSoap}.
  *
  * @author Marco Leo
- * @see com.liferay.commerce.product.service.http.CPTaxCategoryServiceSoap
  * @generated
  */
 @ProviderType
 public class CPTaxCategorySoap implements Serializable {
+
 	public static CPTaxCategorySoap toSoapModel(CPTaxCategory model) {
 		CPTaxCategorySoap soapModel = new CPTaxCategorySoap();
 
 		soapModel.setCPTaxCategoryId(model.getCPTaxCategoryId());
-		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setUserName(model.getUserName());
@@ -75,7 +74,8 @@ public class CPTaxCategorySoap implements Serializable {
 	}
 
 	public static CPTaxCategorySoap[] toSoapModels(List<CPTaxCategory> models) {
-		List<CPTaxCategorySoap> soapModels = new ArrayList<CPTaxCategorySoap>(models.size());
+		List<CPTaxCategorySoap> soapModels = new ArrayList<CPTaxCategorySoap>(
+			models.size());
 
 		for (CPTaxCategory model : models) {
 			soapModels.add(toSoapModel(model));
@@ -101,14 +101,6 @@ public class CPTaxCategorySoap implements Serializable {
 
 	public void setCPTaxCategoryId(long CPTaxCategoryId) {
 		_CPTaxCategoryId = CPTaxCategoryId;
-	}
-
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	public void setGroupId(long groupId) {
-		_groupId = groupId;
 	}
 
 	public long getCompanyId() {
@@ -168,7 +160,6 @@ public class CPTaxCategorySoap implements Serializable {
 	}
 
 	private long _CPTaxCategoryId;
-	private long _groupId;
 	private long _companyId;
 	private long _userId;
 	private String _userName;
@@ -176,4 +167,5 @@ public class CPTaxCategorySoap implements Serializable {
 	private Date _modifiedDate;
 	private String _name;
 	private String _description;
+
 }

@@ -231,7 +231,6 @@
 	<classpathentry kind="lib" path="lib/portal/jodd-upload.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jrcs-diff.jar"/>
 	<classpathentry kind="lib" path="lib/portal/json-java.jar"/>
-	<classpathentry kind="lib" path="lib/portal/json-schema-validator.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jsr107cache.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jstl-api.jar"/>
 	<classpathentry kind="lib" path="lib/portal/jstl-impl.jar"/>

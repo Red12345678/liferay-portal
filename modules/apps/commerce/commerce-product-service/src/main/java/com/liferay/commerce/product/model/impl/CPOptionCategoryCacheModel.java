@@ -17,7 +17,6 @@ package com.liferay.commerce.product.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.commerce.product.model.CPOptionCategory;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -33,12 +32,12 @@ import java.util.Date;
  * The cache model class for representing CPOptionCategory in entity cache.
  *
  * @author Marco Leo
- * @see CPOptionCategory
  * @generated
  */
 @ProviderType
-public class CPOptionCategoryCacheModel implements CacheModel<CPOptionCategory>,
-	Externalizable {
+public class CPOptionCategoryCacheModel
+	implements CacheModel<CPOptionCategory>, Externalizable {
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -49,9 +48,12 @@ public class CPOptionCategoryCacheModel implements CacheModel<CPOptionCategory>,
 			return false;
 		}
 
-		CPOptionCategoryCacheModel cpOptionCategoryCacheModel = (CPOptionCategoryCacheModel)obj;
+		CPOptionCategoryCacheModel cpOptionCategoryCacheModel =
+			(CPOptionCategoryCacheModel)obj;
 
-		if (CPOptionCategoryId == cpOptionCategoryCacheModel.CPOptionCategoryId) {
+		if (CPOptionCategoryId ==
+				cpOptionCategoryCacheModel.CPOptionCategoryId) {
+
 			return true;
 		}
 
@@ -65,14 +67,12 @@ public class CPOptionCategoryCacheModel implements CacheModel<CPOptionCategory>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
 		sb.append(", CPOptionCategoryId=");
 		sb.append(CPOptionCategoryId);
-		sb.append(", groupId=");
-		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
 		sb.append(", userId=");
@@ -110,7 +110,6 @@ public class CPOptionCategoryCacheModel implements CacheModel<CPOptionCategory>,
 		}
 
 		cpOptionCategoryImpl.setCPOptionCategoryId(CPOptionCategoryId);
-		cpOptionCategoryImpl.setGroupId(groupId);
 		cpOptionCategoryImpl.setCompanyId(companyId);
 		cpOptionCategoryImpl.setUserId(userId);
 
@@ -176,8 +175,6 @@ public class CPOptionCategoryCacheModel implements CacheModel<CPOptionCategory>,
 
 		CPOptionCategoryId = objectInput.readLong();
 
-		groupId = objectInput.readLong();
-
 		companyId = objectInput.readLong();
 
 		userId = objectInput.readLong();
@@ -193,8 +190,7 @@ public class CPOptionCategoryCacheModel implements CacheModel<CPOptionCategory>,
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		if (uuid == null) {
 			objectOutput.writeUTF("");
 		}
@@ -203,8 +199,6 @@ public class CPOptionCategoryCacheModel implements CacheModel<CPOptionCategory>,
 		}
 
 		objectOutput.writeLong(CPOptionCategoryId);
-
-		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(companyId);
 
@@ -248,7 +242,6 @@ public class CPOptionCategoryCacheModel implements CacheModel<CPOptionCategory>,
 
 	public String uuid;
 	public long CPOptionCategoryId;
-	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
@@ -259,4 +252,5 @@ public class CPOptionCategoryCacheModel implements CacheModel<CPOptionCategory>,
 	public double priority;
 	public String key;
 	public long lastPublishDate;
+
 }

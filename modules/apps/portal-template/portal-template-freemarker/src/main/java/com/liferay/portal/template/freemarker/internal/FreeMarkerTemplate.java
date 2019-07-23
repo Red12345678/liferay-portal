@@ -57,13 +57,16 @@ public class FreeMarkerTemplate extends AbstractSingleResourceTemplate {
 		TemplateResource templateResource,
 		TemplateResource errorTemplateResource, Map<String, Object> context,
 		Configuration configuration,
-		TemplateContextHelper templateContextHelper, long interval) {
+		TemplateContextHelper templateContextHelper, long interval,
+		boolean restricted, ObjectWrapper objectWrapper) {
 
 		super(
 			templateResource, errorTemplateResource, context,
-			templateContextHelper, TemplateConstants.LANG_TYPE_FTL, interval);
+			templateContextHelper, TemplateConstants.LANG_TYPE_FTL, interval,
+			restricted);
 
 		_configuration = configuration;
+		_objectWrapper = objectWrapper;
 	}
 
 	@Override
@@ -120,10 +123,10 @@ public class FreeMarkerTemplate extends AbstractSingleResourceTemplate {
 				getTemplateResourceUUID(templateResource),
 				TemplateConstants.DEFAUT_ENCODING);
 
+			template.setObjectWrapper(_objectWrapper);
+
 			template.process(
-				new CachableDefaultMapAdapter(
-					context, template.getObjectWrapper()),
-				writer);
+				new CachableDefaultMapAdapter(context, _objectWrapper), writer);
 		}
 		finally {
 			TemplateResourceThreadLocal.setTemplateResource(
@@ -136,6 +139,7 @@ public class FreeMarkerTemplate extends AbstractSingleResourceTemplate {
 		};
 
 	private final Configuration _configuration;
+	private final ObjectWrapper _objectWrapper;
 
 	private class CachableDefaultMapAdapter
 		extends WrappingTemplateModel

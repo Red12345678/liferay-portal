@@ -190,6 +190,8 @@ class ImageEditor extends Component {
 	 * @see http://kangax.github.io/jstests/toDataUrl_mime_type_test/
 	 */
 	normalizeCanvasMimeType_(mimeType) {
+		mimeType = mimeType.toLowerCase();
+
 		return mimeType.replace('jpg', 'jpeg');
 	}
 

@@ -30,6 +30,8 @@ AUI.add(
 						instance._eventHandlers.push(
 							instance.bindContainerEvent('click', instance._onClickRefresh, '.icon-refresh')
 						);
+
+						instance.after('render', instance._afterCaptchaRender);
 					},
 
 					getChangeEventName: function() {
@@ -65,6 +67,20 @@ AUI.add(
 					},
 
 					showErrorMessage: Lang.emptyFn,
+
+					_afterCaptchaRender: function() {
+						var instance = this;
+
+						var container = instance.get('container');
+
+						var captchaNode = container.one('.captcha');
+
+						if (captchaNode) {
+							var baseURL = captchaNode.attr('src');
+
+							captchaNode.attr('src', Lang.String.unescapeEntities(baseURL));
+						}
+					},
 
 					_getContext: function(context) {
 						var instance = this;

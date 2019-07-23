@@ -49,6 +49,16 @@ definition {
 		}
 	}
 
+	macro getSiteViaEnvironment {
+		var testRunEnvironment = PropsUtil.get("test.run.environment");
+		if ("${testRunEnvironment}" == "EE") {
+			return "Liferay DXP";
+		}
+		else {
+			return "Liferay";
+		}
+	}
+
 	macro getTestName {
 		var testName = PropsUtil.get("test.name");
 		var testName = RegexUtil.replace("${testName}", "[^\.]*\.(.*)", "1");
@@ -64,4 +74,5 @@ definition {
 			SignIn.signInPortalInstanceSetUp();
 		}
 	}
+
 }

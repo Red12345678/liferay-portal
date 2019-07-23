@@ -18,13 +18,17 @@ import com.liferay.commerce.product.exception.NoSuchCPDefinitionException;
 import com.liferay.commerce.product.model.CPAttachmentFileEntryConstants;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPDefinitionOptionRel;
+import com.liferay.commerce.product.model.CPDefinitionSpecificationOptionValue;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.CPAttachmentFileEntryService;
 import com.liferay.commerce.product.service.CPDefinitionLinkService;
 import com.liferay.commerce.product.service.CPDefinitionOptionRelService;
 import com.liferay.commerce.product.service.CPDefinitionOptionValueRelService;
 import com.liferay.commerce.product.service.CPDefinitionService;
+import com.liferay.commerce.product.service.CPDefinitionSpecificationOptionValueService;
 import com.liferay.commerce.product.service.CPInstanceService;
 import com.liferay.commerce.product.service.CPOptionService;
+import com.liferay.commerce.product.service.CommerceCatalogLocalService;
 import com.liferay.commerce.service.CPDefinitionInventoryService;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Attachment;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.Category;
@@ -33,6 +37,7 @@ import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductConfiguration
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductOption;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductOptionValue;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductShippingConfiguration;
+import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductSpecification;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductSubscriptionConfiguration;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductTaxConfiguration;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.RelatedProduct;
@@ -43,6 +48,7 @@ import com.liferay.headless.commerce.admin.catalog.internal.util.v1_0.ProductCon
 import com.liferay.headless.commerce.admin.catalog.internal.util.v1_0.ProductOptionUtil;
 import com.liferay.headless.commerce.admin.catalog.internal.util.v1_0.ProductOptionValueUtil;
 import com.liferay.headless.commerce.admin.catalog.internal.util.v1_0.ProductShippingConfigurationUtil;
+import com.liferay.headless.commerce.admin.catalog.internal.util.v1_0.ProductSpecificationUtil;
 import com.liferay.headless.commerce.admin.catalog.internal.util.v1_0.ProductSubscriptionConfigurationUtil;
 import com.liferay.headless.commerce.admin.catalog.internal.util.v1_0.ProductTaxConfigurationUtil;
 import com.liferay.headless.commerce.admin.catalog.internal.util.v1_0.ProductUtil;
@@ -56,6 +62,7 @@ import com.liferay.headless.commerce.core.util.DateConfig;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.headless.commerce.core.util.ServiceContextHelper;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
@@ -133,23 +140,6 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 	}
 
 	@Override
-	public Page<Product> getCatalogSiteProductsPage(
-			Long siteId, Pagination pagination)
-		throws Exception {
-
-		List<CPDefinition> cpDefinitions =
-			_cpDefinitionService.getCPDefinitions(
-				siteId, WorkflowConstants.STATUS_APPROVED,
-				pagination.getStartPosition(), pagination.getEndPosition(),
-				null);
-
-		int totalItems = _cpDefinitionService.getCPDefinitionsCount(
-			siteId, WorkflowConstants.STATUS_APPROVED);
-
-		return Page.of(_toProducts(cpDefinitions), pagination, totalItems);
-	}
-
-	@Override
 	public Product getProduct(Long id) throws Exception {
 		CPDefinition cpDefinition =
 			_cpDefinitionService.fetchCPDefinitionByCProductId(id);
@@ -194,6 +184,21 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 	}
 
 	@Override
+	public Page<Product> getProductsPage(Pagination pagination)
+		throws Exception {
+
+		BaseModelSearchResult<CPDefinition> cpDefinitionBaseModelSearchResult =
+			_cpDefinitionService.searchCPDefinitions(
+				contextCompany.getCompanyId(), null, null, null,
+				pagination.getStartPosition(), pagination.getEndPosition(),
+				null);
+
+		return Page.of(
+			_toProducts(cpDefinitionBaseModelSearchResult.getBaseModels()),
+			pagination, cpDefinitionBaseModelSearchResult.getLength());
+	}
+
+	@Override
 	public Response patchProduct(Long id, Product product) throws Exception {
 		CPDefinition cpDefinition =
 			_cpDefinitionService.fetchCPDefinitionByCProductId(id);
@@ -234,10 +239,8 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 	}
 
 	@Override
-	public Product postCatalogSiteProduct(Long siteId, Product product)
-		throws Exception {
-
-		CPDefinition cpDefinition = _upsertProduct(siteId, product);
+	public Product postProduct(Product product) throws Exception {
+		CPDefinition cpDefinition = _upsertProduct(product);
 
 		DTOConverter productDTOConverter =
 			_dtoConverterRegistry.getDTOConverter(CPDefinition.class.getName());
@@ -246,6 +249,45 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 			new DefaultDTOConverterContext(
 				contextAcceptLanguage.getPreferredLocale(),
 				cpDefinition.getCPDefinitionId()));
+	}
+
+	private ProductShippingConfiguration _getProductShippingConfiguration(
+		Product product) {
+
+		ProductShippingConfiguration shippingConfiguration =
+			product.getShippingConfiguration();
+
+		if (shippingConfiguration != null) {
+			return shippingConfiguration;
+		}
+
+		return new ProductShippingConfiguration();
+	}
+
+	private ProductSubscriptionConfiguration
+		_getProductSubscriptionConfiguration(Product product) {
+
+		ProductSubscriptionConfiguration subscriptionConfiguration =
+			product.getSubscriptionConfiguration();
+
+		if (subscriptionConfiguration != null) {
+			return subscriptionConfiguration;
+		}
+
+		return new ProductSubscriptionConfiguration();
+	}
+
+	private ProductTaxConfiguration _getProductTaxConfiguration(
+		Product product) {
+
+		ProductTaxConfiguration taxConfiguration =
+			product.getTaxConfiguration();
+
+		if (taxConfiguration != null) {
+			return taxConfiguration;
+		}
+
+		return new ProductTaxConfiguration();
 	}
 
 	private List<Product> _toProducts(List<CPDefinition> cpDefinitions)
@@ -351,6 +393,38 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 			}
 		}
 
+		// Product specifications
+
+		ProductSpecification[] productSpecifications =
+			product.getProductSpecifications();
+
+		if (productSpecifications != null) {
+			for (ProductSpecification productSpecification :
+					productSpecifications) {
+
+				CPDefinitionSpecificationOptionValue
+					cpDefinitionSpecificationOptionValue =
+						_cpDefinitionSpecificationOptionValueService.
+							fetchCPDefinitionSpecificationOptionValue(
+								productSpecification.getId());
+
+				if (cpDefinitionSpecificationOptionValue == null) {
+					ProductSpecificationUtil.
+						addCPDefinitionSpecificationOptionValue(
+							_cpDefinitionSpecificationOptionValueService,
+							cpDefinition.getCPDefinitionId(),
+							productSpecification, serviceContext);
+				}
+				else {
+					ProductSpecificationUtil.
+						updateCPDefinitionSpecificationOptionValue(
+							_cpDefinitionSpecificationOptionValueService,
+							cpDefinitionSpecificationOptionValue,
+							productSpecification, serviceContext);
+				}
+			}
+		}
+
 		// Product options
 
 		ProductOption[] productOptions = product.getOptions();
@@ -401,8 +475,7 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 		if (skus != null) {
 			for (Sku sku : skus) {
 				SkuUtil.upsertCPInstance(
-					_cpInstanceService, sku, cpDefinition.getCPDefinitionId(),
-					serviceContext);
+					_cpInstanceService, sku, cpDefinition, serviceContext);
 			}
 		}
 
@@ -477,13 +550,11 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 		return cpDefinition;
 	}
 
-	private CPDefinition _upsertProduct(Long siteId, Product product)
-		throws Exception {
-
+	private CPDefinition _upsertProduct(Product product) throws Exception {
 		boolean neverExpire = Boolean.TRUE;
 
-		ServiceContext serviceContext = _serviceContextHelper.getServiceContext(
-			siteId);
+		ServiceContext serviceContext =
+			_serviceContextHelper.getServiceContext();
 
 		Calendar displayCalendar = CalendarFactoryUtil.getCalendar(
 			serviceContext.getTimeZone());
@@ -498,11 +569,18 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 		DateConfig expirationDateConfig = new DateConfig(expirationCalendar);
 
 		ProductShippingConfiguration shippingConfiguration =
-			product.getShippingConfiguration();
-		ProductTaxConfiguration taxConfiguration =
-			product.getTaxConfiguration();
+			_getProductShippingConfiguration(product);
+		ProductSubscriptionConfiguration subscriptionConfiguration =
+			_getProductSubscriptionConfiguration(product);
+		ProductTaxConfiguration taxConfiguration = _getProductTaxConfiguration(
+			product);
+
+		CommerceCatalog commerceCatalog =
+			_commerceCatalogLocalService.getCommerceCatalog(
+				product.getCatalogId());
 
 		CPDefinition cpDefinition = _cpDefinitionService.upsertCPDefinition(
+			commerceCatalog.getGroupId(), _user.getUserId(),
 			LanguageUtils.getLocalizedMap(product.getName()),
 			LanguageUtils.getLocalizedMap(product.getShortDescription()),
 			LanguageUtils.getLocalizedMap(product.getDescription()), null,
@@ -527,6 +605,13 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 			expirationDateConfig.getDay(), expirationDateConfig.getYear(),
 			expirationDateConfig.getHour(), expirationDateConfig.getMinute(),
 			neverExpire, product.getDefaultSku(),
+			GetterUtil.getBoolean(subscriptionConfiguration.getEnable(), false),
+			GetterUtil.getInteger(subscriptionConfiguration.getLength(), 0),
+			GetterUtil.getString(
+				subscriptionConfiguration.getSubscriptionTypeAsString()),
+			null,
+			GetterUtil.getLong(
+				subscriptionConfiguration.getNumberOfLength(), 0L),
 			product.getExternalReferenceCode(), serviceContext);
 
 		// Workflow
@@ -544,7 +629,7 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 
 		Map<String, ?> expando = product.getExpando();
 
-		if (!expando.isEmpty()) {
+		if ((expando != null) && !expando.isEmpty()) {
 			ExpandoUtil.updateExpando(
 				serviceContext.getCompanyId(), CPDefinition.class,
 				cpDefinition.getPrimaryKey(), expando);
@@ -559,6 +644,9 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 
 	@Reference
 	private ClassNameLocalService _classNameLocalService;
+
+	@Reference
+	private CommerceCatalogLocalService _commerceCatalogLocalService;
 
 	@Reference
 	private CPAttachmentFileEntryService _cpAttachmentFileEntryService;
@@ -578,6 +666,10 @@ public class ProductResourceImpl extends BaseProductResourceImpl {
 
 	@Reference
 	private CPDefinitionService _cpDefinitionService;
+
+	@Reference
+	private CPDefinitionSpecificationOptionValueService
+		_cpDefinitionSpecificationOptionValueService;
 
 	@Reference
 	private CPInstanceService _cpInstanceService;

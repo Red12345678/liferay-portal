@@ -23,11 +23,8 @@ import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.order.CommerceOrderHttpHelper;
-import com.liferay.commerce.price.list.model.CommercePriceList;
-import com.liferay.commerce.price.list.service.CommercePriceListLocalService;
-import com.liferay.commerce.product.model.CPRule;
-import com.liferay.commerce.product.service.CPRuleLocalService;
-import com.liferay.commerce.user.segment.util.CommerceUserSegmentHelper;
+import com.liferay.commerce.product.model.CommerceChannel;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -35,33 +32,27 @@ import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
 import com.liferay.portal.kernel.util.Portal;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Marco Leo
+ * @author Alessio Antonio Rendina
  */
 public class CommerceContextHttpImpl implements CommerceContext {
 
 	public CommerceContextHttpImpl(
 		HttpServletRequest httpServletRequest,
 		CommerceAccountHelper commerceAccountHelper,
+		CommerceChannelLocalService commerceChannelLocalService,
 		CommerceCurrencyLocalService commerceCurrencyLocalService,
 		CommerceOrderHttpHelper commerceOrderHttpHelper,
-		CommercePriceListLocalService commercePriceListLocalService,
-		CommerceUserSegmentHelper commerceUserSegmentHelper,
-		ConfigurationProvider configurationProvider,
-		CPRuleLocalService cpRuleLocalService, Portal portal) {
+		ConfigurationProvider configurationProvider, Portal portal) {
 
 		_httpServletRequest = httpServletRequest;
 		_commerceAccountHelper = commerceAccountHelper;
+		_commerceChannelLocalService = commerceChannelLocalService;
 		_commerceCurrencyLocalService = commerceCurrencyLocalService;
 		_commerceOrderHttpHelper = commerceOrderHttpHelper;
-		_commercePriceListLocalService = commercePriceListLocalService;
-		_commerceUserSegmentHelper = commerceUserSegmentHelper;
-		_cpRuleLocalService = cpRuleLocalService;
 		_portal = portal;
 
 		try {
@@ -90,15 +81,51 @@ public class CommerceContextHttpImpl implements CommerceContext {
 	}
 
 	@Override
+	public long[] getCommerceAccountGroupIds() throws PortalException {
+		if (_commerceAccountGroupIds != null) {
+			return _commerceAccountGroupIds;
+		}
+
+		CommerceAccount commerceAccount = getCommerceAccount();
+
+		if (commerceAccount == null) {
+			return new long[0];
+		}
+
+		_commerceAccountGroupIds =
+			_commerceAccountHelper.getCommerceAccountGroupIds(
+				commerceAccount.getCommerceAccountId());
+
+		return _commerceAccountGroupIds;
+	}
+
+	@Override
+	public long getCommerceChannelGroupId() throws PortalException {
+		return _commerceChannelLocalService.
+			getCommerceChannelGroupIdBySiteGroupId(getSiteGroupId());
+	}
+
+	@Override
 	public CommerceCurrency getCommerceCurrency() throws PortalException {
 		if (_commerceCurrency != null) {
 			return _commerceCurrency;
 		}
 
-		long groupId = _portal.getScopeGroupId(_httpServletRequest);
+		CommerceChannel commerceChannel =
+			_commerceChannelLocalService.fetchCommerceChannelBySiteGroupId(
+				_portal.getScopeGroupId(_httpServletRequest));
 
-		_commerceCurrency =
-			_commerceCurrencyLocalService.fetchPrimaryCommerceCurrency(groupId);
+		if (commerceChannel == null) {
+			_commerceCurrency =
+				_commerceCurrencyLocalService.fetchPrimaryCommerceCurrency(
+					_portal.getCompanyId(_httpServletRequest));
+		}
+		else {
+			_commerceCurrency =
+				_commerceCurrencyLocalService.getCommerceCurrency(
+					_portal.getCompanyId(_httpServletRequest),
+					commerceChannel.getCommerceCurrencyCode());
+		}
 
 		return _commerceCurrency;
 	}
@@ -116,30 +143,6 @@ public class CommerceContextHttpImpl implements CommerceContext {
 	}
 
 	@Override
-	public Optional<CommercePriceList> getCommercePriceList()
-		throws PortalException {
-
-		if (_commercePriceList != null) {
-			return _commercePriceList;
-		}
-
-		long groupId = _portal.getScopeGroupId(_httpServletRequest);
-
-		CommerceAccount commerceAccount = getCommerceAccount();
-
-		if (commerceAccount == null) {
-			return Optional.empty();
-		}
-
-		_commercePriceList =
-			_commercePriceListLocalService.getCommercePriceList(
-				groupId, commerceAccount.getCommerceAccountId(),
-				getCommerceUserSegmentEntryIds());
-
-		return _commercePriceList;
-	}
-
-	@Override
 	public int getCommerceSiteType() {
 		if (_commerceAccountGroupServiceConfiguration == null) {
 			return CommerceAccountConstants.SITE_TYPE_B2C;
@@ -149,59 +152,23 @@ public class CommerceContextHttpImpl implements CommerceContext {
 	}
 
 	@Override
-	public long[] getCommerceUserSegmentEntryIds() throws PortalException {
-		if (_commerceUserSegmentEntryIds != null) {
-			return _commerceUserSegmentEntryIds;
-		}
-
-		_commerceUserSegmentEntryIds =
-			_commerceUserSegmentHelper.getCommerceUserSegmentIds(
-				_httpServletRequest);
-
-		return _commerceUserSegmentEntryIds;
-	}
-
-	@Override
-	public List<CPRule> getCPRules() throws PortalException {
-		if (_cpRules != null) {
-			return _cpRules;
-		}
-
-		long groupId = _portal.getScopeGroupId(_httpServletRequest);
-
-		_cpRules = _cpRuleLocalService.getCPRules(
-			groupId, getCommerceUserSegmentEntryIds());
-
-		return null;
-	}
-
-	@Override
 	public long getSiteGroupId() throws PortalException {
 		return _portal.getScopeGroupId(_httpServletRequest);
-	}
-
-	@Override
-	public long getUserId() {
-		return _portal.getUserId(_httpServletRequest);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		CommerceContextHttpImpl.class);
 
 	private CommerceAccount _commerceAccount;
+	private long[] _commerceAccountGroupIds;
 	private CommerceAccountGroupServiceConfiguration
 		_commerceAccountGroupServiceConfiguration;
 	private final CommerceAccountHelper _commerceAccountHelper;
+	private final CommerceChannelLocalService _commerceChannelLocalService;
 	private CommerceCurrency _commerceCurrency;
 	private final CommerceCurrencyLocalService _commerceCurrencyLocalService;
 	private CommerceOrder _commerceOrder;
 	private final CommerceOrderHttpHelper _commerceOrderHttpHelper;
-	private Optional<CommercePriceList> _commercePriceList;
-	private final CommercePriceListLocalService _commercePriceListLocalService;
-	private long[] _commerceUserSegmentEntryIds;
-	private final CommerceUserSegmentHelper _commerceUserSegmentHelper;
-	private final CPRuleLocalService _cpRuleLocalService;
-	private List<CPRule> _cpRules;
 	private final HttpServletRequest _httpServletRequest;
 	private final Portal _portal;
 

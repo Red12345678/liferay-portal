@@ -17,7 +17,6 @@ package com.liferay.commerce.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.commerce.model.CommerceCountry;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -33,12 +32,12 @@ import java.util.Date;
  * The cache model class for representing CommerceCountry in entity cache.
  *
  * @author Alessio Antonio Rendina
- * @see CommerceCountry
  * @generated
  */
 @ProviderType
-public class CommerceCountryCacheModel implements CacheModel<CommerceCountry>,
-	Externalizable {
+public class CommerceCountryCacheModel
+	implements CacheModel<CommerceCountry>, Externalizable {
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -49,7 +48,8 @@ public class CommerceCountryCacheModel implements CacheModel<CommerceCountry>,
 			return false;
 		}
 
-		CommerceCountryCacheModel commerceCountryCacheModel = (CommerceCountryCacheModel)obj;
+		CommerceCountryCacheModel commerceCountryCacheModel =
+			(CommerceCountryCacheModel)obj;
 
 		if (commerceCountryId == commerceCountryCacheModel.commerceCountryId) {
 			return true;
@@ -65,14 +65,12 @@ public class CommerceCountryCacheModel implements CacheModel<CommerceCountry>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
 		sb.append(", commerceCountryId=");
 		sb.append(commerceCountryId);
-		sb.append(", groupId=");
-		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
 		sb.append(", userId=");
@@ -120,7 +118,6 @@ public class CommerceCountryCacheModel implements CacheModel<CommerceCountry>,
 		}
 
 		commerceCountryImpl.setCommerceCountryId(commerceCountryId);
-		commerceCountryImpl.setGroupId(groupId);
 		commerceCountryImpl.setCompanyId(companyId);
 		commerceCountryImpl.setUserId(userId);
 
@@ -192,8 +189,6 @@ public class CommerceCountryCacheModel implements CacheModel<CommerceCountry>,
 
 		commerceCountryId = objectInput.readLong();
 
-		groupId = objectInput.readLong();
-
 		companyId = objectInput.readLong();
 
 		userId = objectInput.readLong();
@@ -219,8 +214,7 @@ public class CommerceCountryCacheModel implements CacheModel<CommerceCountry>,
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		if (uuid == null) {
 			objectOutput.writeUTF("");
 		}
@@ -229,8 +223,6 @@ public class CommerceCountryCacheModel implements CacheModel<CommerceCountry>,
 		}
 
 		objectOutput.writeLong(commerceCountryId);
-
-		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(companyId);
 
@@ -283,7 +275,6 @@ public class CommerceCountryCacheModel implements CacheModel<CommerceCountry>,
 
 	public String uuid;
 	public long commerceCountryId;
-	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
@@ -299,4 +290,5 @@ public class CommerceCountryCacheModel implements CacheModel<CommerceCountry>,
 	public double priority;
 	public boolean active;
 	public long lastPublishDate;
+
 }

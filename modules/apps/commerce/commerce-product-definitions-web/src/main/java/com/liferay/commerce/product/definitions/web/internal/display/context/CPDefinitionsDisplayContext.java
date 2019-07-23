@@ -22,43 +22,30 @@ import com.liferay.commerce.product.definitions.web.internal.util.CPDefinitionsP
 import com.liferay.commerce.product.definitions.web.portlet.action.ActionHelper;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPInstance;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.CPDefinitionService;
-import com.liferay.commerce.product.util.CPDefinitionHelper;
+import com.liferay.commerce.product.service.CommerceCatalogService;
 import com.liferay.frontend.taglib.servlet.taglib.ManagementBarFilterItem;
-import com.liferay.item.selector.ItemSelector;
-import com.liferay.item.selector.ItemSelectorReturnType;
-import com.liferay.item.selector.criteria.UUIDItemSelectorReturnType;
-import com.liferay.layout.item.selector.criterion.LayoutItemSelectorCriterion;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
-import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
-import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Sort;
-import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalServiceUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.taglib.util.CustomAttributesUtil;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletURL;
@@ -73,13 +60,9 @@ public class CPDefinitionsDisplayContext
 	extends BaseCPDefinitionsSearchContainerDisplayContext<CPDefinition> {
 
 	public CPDefinitionsDisplayContext(
-			ActionHelper actionHelper, HttpServletRequest httpServletRequest,
-			CPDefinitionHelper cpDefinitionHelper,
-			ModelResourcePermission<CPDefinition>
-				cpDefinitionModelResourcePermission,
-			CPDefinitionService cpDefinitionService, ItemSelector itemSelector,
-			PortletResourcePermission portletResourcePermission)
-		throws PortalException {
+		ActionHelper actionHelper, HttpServletRequest httpServletRequest,
+		CommerceCatalogService commerceCatalogService,
+		CPDefinitionService cpDefinitionService) {
 
 		super(
 			actionHelper, httpServletRequest,
@@ -87,12 +70,14 @@ public class CPDefinitionsDisplayContext
 
 		setDefaultOrderByType("desc");
 
-		_cpDefinitionHelper = cpDefinitionHelper;
-		_cpDefinitionModelResourcePermission =
-			cpDefinitionModelResourcePermission;
+		_commerceCatalogService = commerceCatalogService;
 		_cpDefinitionService = cpDefinitionService;
-		_itemSelector = itemSelector;
-		_portletResourcePermission = portletResourcePermission;
+	}
+
+	public CommerceCatalog fetchCommerceCatalogByGroupId(long groupId)
+		throws PortalException {
+
+		return _commerceCatalogService.fetchCommerceCatalogByGroupId(groupId);
 	}
 
 	public String getCategorySelectorURL(String eventName) throws Exception {
@@ -113,71 +98,10 @@ public class CPDefinitionsDisplayContext
 		return portletURL.toString();
 	}
 
-	public String getItemSelectorUrl() {
-		RequestBackedPortletURLFactory requestBackedPortletURLFactory =
-			RequestBackedPortletURLFactoryUtil.create(
-				cpRequestHelper.getRenderRequest());
-
-		LayoutItemSelectorCriterion layoutItemSelectorCriterion =
-			new LayoutItemSelectorCriterion();
-
-		layoutItemSelectorCriterion.setShowHiddenPages(true);
-
-		layoutItemSelectorCriterion.setDesiredItemSelectorReturnTypes(
-			Collections.<ItemSelectorReturnType>singletonList(
-				new UUIDItemSelectorReturnType()));
-
-		PortletURL itemSelectorURL = _itemSelector.getItemSelectorURL(
-			requestBackedPortletURLFactory, "selectDisplayPage",
-			layoutItemSelectorCriterion);
-
-		return itemSelectorURL.toString();
-	}
-
-	public String getLayoutBreadcrumb(Layout layout) throws Exception {
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
-		Locale locale = themeDisplay.getLocale();
-
-		List<Layout> ancestors = layout.getAncestors();
-
-		StringBundler sb = new StringBundler(4 * ancestors.size() + 5);
-
-		if (layout.isPrivateLayout()) {
-			sb.append(LanguageUtil.get(httpServletRequest, "private-pages"));
-		}
-		else {
-			sb.append(LanguageUtil.get(httpServletRequest, "public-pages"));
-		}
-
-		sb.append(StringPool.SPACE);
-		sb.append(StringPool.GREATER_THAN);
-		sb.append(StringPool.SPACE);
-
-		Collections.reverse(ancestors);
-
-		for (Layout ancestor : ancestors) {
-			sb.append(HtmlUtil.escape(ancestor.getName(locale)));
-			sb.append(StringPool.SPACE);
-			sb.append(StringPool.GREATER_THAN);
-			sb.append(StringPool.SPACE);
-		}
-
-		sb.append(HtmlUtil.escape(layout.getName(locale)));
-
-		return sb.toString();
-	}
-
-	public String getLayoutUuid() throws PortalException {
-		long cpDefinitionId = getCPDefinitionId();
-
-		if (cpDefinitionId <= 0) {
-			return null;
-		}
-
-		return _cpDefinitionService.getLayoutUuid(cpDefinitionId);
+	public List<CommerceCatalog> getCommerceCatalogs() throws PortalException {
+		return _commerceCatalogService.searchCommerceCatalogs(
+			cpRequestHelper.getCompanyId(), null, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 	}
 
 	@Override
@@ -244,21 +168,6 @@ public class CPDefinitionsDisplayContext
 		return portletURL;
 	}
 
-	public String getProductURL(CPDefinition cpDefinition)
-		throws PortalException {
-
-		if (cpDefinition == null) {
-			return StringPool.BLANK;
-		}
-
-		ThemeDisplay themeDisplay =
-			(ThemeDisplay)httpServletRequest.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
-		return _cpDefinitionHelper.getFriendlyURL(
-			cpDefinition.getCPDefinitionId(), themeDisplay);
-	}
-
 	@Override
 	public SearchContainer<CPDefinition> getSearchContainer()
 		throws PortalException {
@@ -294,9 +203,9 @@ public class CPDefinitionsDisplayContext
 
 		BaseModelSearchResult<CPDefinition> cpDefinitionBaseModelSearchResult =
 			_cpDefinitionService.searchCPDefinitions(
-				themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(),
-				getKeywords(), filterFields, filtersValues,
-				searchContainer.getStart(), searchContainer.getEnd(), sort);
+				themeDisplay.getCompanyId(), getKeywords(), filterFields,
+				filtersValues, searchContainer.getStart(),
+				searchContainer.getEnd(), sort);
 
 		searchContainer.setTotal(cpDefinitionBaseModelSearchResult.getLength());
 		searchContainer.setResults(
@@ -322,7 +231,7 @@ public class CPDefinitionsDisplayContext
 
 		List<AssetVocabulary> vocabularies =
 			AssetVocabularyServiceUtil.getGroupVocabularies(
-				themeDisplay.getScopeGroupId());
+				themeDisplay.getCompanyGroupId());
 
 		return ListUtil.toString(
 			vocabularies, AssetVocabulary.VOCABULARY_ID_ACCESSOR);
@@ -352,41 +261,19 @@ public class CPDefinitionsDisplayContext
 			getCPDefinitionId(), null);
 	}
 
-	public boolean hasDeletePermission(long cpDefinitionId)
+	public boolean isSelectedCatalog(CommerceCatalog commerceCatalog)
 		throws PortalException {
 
-		return _cpDefinitionModelResourcePermission.contains(
-			cpRequestHelper.getPermissionChecker(), cpDefinitionId,
-			ActionKeys.DELETE);
+		CPDefinition cpDefinition = getCPDefinition();
+
+		if (commerceCatalog.getGroupId() == cpDefinition.getGroupId()) {
+			return true;
+		}
+
+		return false;
 	}
 
-	public boolean hasEditPermission(long cpDefinitionId)
-		throws PortalException {
-
-		return _cpDefinitionModelResourcePermission.contains(
-			cpRequestHelper.getPermissionChecker(), cpDefinitionId,
-			ActionKeys.UPDATE);
-	}
-
-	public boolean hasPermission(String actionId) {
-		return _portletResourcePermission.contains(
-			cpRequestHelper.getPermissionChecker(),
-			cpRequestHelper.getScopeGroupId(), actionId);
-	}
-
-	public boolean hasViewPermission(long cpDefinitionId)
-		throws PortalException {
-
-		return _cpDefinitionModelResourcePermission.contains(
-			cpRequestHelper.getPermissionChecker(), cpDefinitionId,
-			ActionKeys.VIEW);
-	}
-
-	private final CPDefinitionHelper _cpDefinitionHelper;
-	private final ModelResourcePermission<CPDefinition>
-		_cpDefinitionModelResourcePermission;
+	private final CommerceCatalogService _commerceCatalogService;
 	private final CPDefinitionService _cpDefinitionService;
-	private final ItemSelector _itemSelector;
-	private final PortletResourcePermission _portletResourcePermission;
 
 }

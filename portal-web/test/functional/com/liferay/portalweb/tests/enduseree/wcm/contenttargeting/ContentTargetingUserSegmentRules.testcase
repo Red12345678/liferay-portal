@@ -1,5 +1,6 @@
 @component-name = "extra-apps-content-targeting"
 definition {
+
 	property custom.properties = "layout.parallel.render.enable=false";
 	property extraapps.plugins.includes = "content-targeting";
 	property ignore.errors = "IX_DC6100CC";
@@ -21,29 +22,25 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.addBlankCP(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Test Page Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		ContentTargetingUserSegment.addCP(
 			userSegmentDescription = "User Segment Description",
-			userSegmentName = "User Segment Name"
-		);
+			userSegmentName = "User Segment Name");
 
 		PortletEntry.save();
 	}
@@ -57,8 +54,7 @@ definition {
 		else {
 			User.logoutAndLoginPG(
 				userLoginEmailAddress = "test@liferay.com",
-				userLoginFullName = "Test Test"
-			);
+				userLoginFullName = "Test Test");
 
 			Site.tearDownCP();
 		}
@@ -71,15 +67,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "Web Content Content",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 
 		PortletEntry.publish();
 
@@ -88,38 +82,32 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addBehaviorContentVisitedRuleCP(
 			contentVisitedContent = "Basic Web Content",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			viewUserSegmentRuleList = "Content Visited",
-			webContentTitle = "Web Content Title"
-		);
+			webContentTitle = "Web Content Title");
 	}
 
 	@priority = "5"
@@ -129,37 +117,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addBehaviorPageVisitedRuleCP(
-			friendlyURL = "/test-page-name"
-		);
+		ContentTargetingUserSegment.addBehaviorPageVisitedRuleCP(friendlyURL = "/test-page-name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			friendlyURL = "/test-page-name",
-			viewUserSegmentRuleList = "Page Visited"
-		);
+			viewUserSegmentRuleList = "Page Visited");
 	}
 
 	@priority = "5"
@@ -169,39 +150,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addBehaviorPreviouslyVisitedSiteRuleCP(
 			condition = "Contains",
-			conditionValue = "able.com"
-		);
+			conditionValue = "able.com");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			condition = "Contains",
 			conditionValue = "able.com",
-			viewUserSegmentRuleList = "Previously Visited Site"
-		);
+			viewUserSegmentRuleList = "Previously Visited Site");
 	}
 
 	@priority = "5"
@@ -211,39 +186,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addBehaviorPreviouslyVisitedSiteRuleCP(
 			condition = "Starts with",
-			conditionValue = "http://www.able.com"
-		);
+			conditionValue = "http://www.able.com");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			condition = "Starts with",
 			conditionValue = "http://www.able.com",
-			viewUserSegmentRuleList = "Previously Visited Site"
-		);
+			viewUserSegmentRuleList = "Previously Visited Site");
 	}
 
 	@priority = "5"
@@ -253,35 +222,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addBehaviorScorePointsRuleCP(scorePoints = "100");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			scorePoints = "100",
-			viewUserSegmentRuleList = "Score Points"
-		);
+			viewUserSegmentRuleList = "Score Points");
 	}
 
 	@priority = "4"
@@ -291,15 +255,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		WebContentNavigator.gotoAddCP();
 
 		WebContent.addCP(
 			webContentContent = "Web Content Content 1",
-			webContentTitle = "Web Content Title 1"
-		);
+			webContentTitle = "Web Content Title 1");
 
 		PortletEntry.publish();
 
@@ -309,8 +271,7 @@ definition {
 
 		WebContent.addCP(
 			webContentContent = "Web Content Content 2",
-			webContentTitle = "Web Content Title 2"
-		);
+			webContentTitle = "Web Content Title 2");
 
 		PortletEntry.publish();
 
@@ -319,46 +280,39 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		for (var webContentTitle : list "Web Content Title 1,Web Content Title 2") {
 			ContentTargetingUserSegment.addBehaviorContentVisitedRuleCP(
 				contentVisitedContent = "Basic Web Content",
-				webContentTitle = "${webContentTitle}"
-			);
+				webContentTitle = "${webContentTitle}");
 		}
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			viewUserSegmentRuleList = "Content Visited",
-			webContentTitle = "Web Content Title 1"
-		);
+			webContentTitle = "Web Content Title 1");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			ruleInstance = "2",
 			viewUserSegmentRuleList = "Content Visited",
-			webContentTitle = "Web Content Title 2"
-		);
+			webContentTitle = "Web Content Title 2");
 	}
 
 	@priority = "4"
@@ -368,53 +322,44 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Site Page Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		for (var friendlyURL : list "/test-page-name,/site-page-name") {
-			ContentTargetingUserSegment.addBehaviorPageVisitedRuleCP(
-				friendlyURL = "${friendlyURL}"
-			);
+			ContentTargetingUserSegment.addBehaviorPageVisitedRuleCP(friendlyURL = "${friendlyURL}");
 		}
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			friendlyURL = "/test-page-name",
-			viewUserSegmentRuleList = "Page Visited"
-		);
+			viewUserSegmentRuleList = "Page Visited");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			friendlyURL = "/site-page-name",
 			ruleInstance = "2",
-			viewUserSegmentRuleList = "Page Visited"
-		);
+			viewUserSegmentRuleList = "Page Visited");
 	}
 
 	@priority = "4"
@@ -424,62 +369,53 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Usercustomfield",
 			customFieldType = "Text Field - Indexed",
-			resourceName = "User"
-		);
+			resourceName = "User");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		for (var customFieldValue : list "User Custom Field Value 1,User Custom Field Value 2") {
 			ContentTargetingUserSegment.addUserAttributesCustomFieldCP(
 				customFieldKey = "usercustomfield",
-				customFieldValue = "${customFieldValue}"
-			);
+				customFieldValue = "${customFieldValue}");
 		}
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			customFieldKey = "usercustomfield",
 			customFieldValue = "User Custom Field Value 1",
-			viewUserSegmentRuleList = "Custom Field"
-		);
+			viewUserSegmentRuleList = "Custom Field");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			customFieldKey = "usercustomfield",
 			customFieldValue = "User Custom Field Value 2",
 			ruleInstance = "2",
-			viewUserSegmentRuleList = "Custom Field"
-		);
+			viewUserSegmentRuleList = "Custom Field");
 	}
 
 	@priority = "4"
@@ -490,29 +426,26 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Users",
 				panel = "Control Panel",
-				portlet = "Users and Organizations"
-			);
+				portlet = "Users and Organizations");
 
-			Organization.addCP(orgName = "${orgName}", orgType = "Organization");
+			Organization.addCP(
+				orgName = "${orgName}",
+				orgType = "Organization");
 		}
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		for (var organizationName : list "Organization Name 1,Organization Name 2") {
-			ContentTargetingUserSegment.addUserAttributesOrganizationMemberRuleCP(
-				organizationName = "${organizationName}"
-			);
+			ContentTargetingUserSegment.addUserAttributesOrganizationMemberRuleCP(organizationName = "${organizationName}");
 		}
 
 		PortletEntry.save();
@@ -520,24 +453,20 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			organizationName = "Organization Name 1",
-			viewUserSegmentRuleList = "Organization Member"
-		);
+			viewUserSegmentRuleList = "Organization Member");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			organizationName = "Organization Name 2",
 			ruleInstance = "2",
-			viewUserSegmentRuleList = "Organization Member"
-		);
+			viewUserSegmentRuleList = "Organization Member");
 	}
 
 	@priority = "4"
@@ -548,59 +477,53 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Users",
 				panel = "Control Panel",
-				portlet = "Users and Organizations"
-			);
+				portlet = "Users and Organizations");
 
-			Organization.addCP(orgName = "${orgName}", orgType = "Organization");
+			Organization.addCP(
+				orgName = "${orgName}",
+				orgType = "Organization");
 		}
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		for (var organizationName : list "Organization Name 1,Organization Name 2") {
 			ContentTargetingUserSegment.addUserAttributesOrganizationRoleRuleCP(
 				organizationName = "${organizationName}",
-				organizationRole = "Organization Owner"
-			);
+				organizationRole = "Organization Owner");
 		}
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			organizationName = "Organization Name 1",
 			organizationRole = "Organization Owner",
-			viewUserSegmentRuleList = "Organization Role"
-		);
+			viewUserSegmentRuleList = "Organization Role");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			organizationName = "Organization Name 2",
 			organizationRole = "Organization Owner",
 			ruleInstance = "2",
-			viewUserSegmentRuleList = "Organization Role"
-		);
+			viewUserSegmentRuleList = "Organization Role");
 	}
 
 	@priority = "4"
@@ -610,45 +533,37 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		for (var regularRole : list "Administrator,Power User") {
-			ContentTargetingUserSegment.addUserAttributesRegularRoleRuleCP(
-				regularRole = "${regularRole}"
-			);
+			ContentTargetingUserSegment.addUserAttributesRegularRoleRuleCP(regularRole = "${regularRole}");
 		}
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			regularRole = "Administrator",
-			viewUserSegmentRuleList = "Regular Role"
-		);
+			viewUserSegmentRuleList = "Regular Role");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			regularRole = "Power User",
 			ruleInstance = "2",
-			viewUserSegmentRuleList = "Regular Role"
-		);
+			viewUserSegmentRuleList = "Regular Role");
 	}
 
 	@priority = "4"
@@ -658,47 +573,39 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
 		for (var selectSiteMemberSite : list "Site Name,${siteName}") {
-			ContentTargetingUserSegment.addUserAttributesSiteMemberRuleCP(
-				selectSiteMemberSite = "${selectSiteMemberSite}"
-			);
+			ContentTargetingUserSegment.addUserAttributesSiteMemberRuleCP(selectSiteMemberSite = "${selectSiteMemberSite}");
 		}
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			selectSiteMemberSite = "Site Name",
-			viewUserSegmentRuleList = "Site Member"
-		);
+			viewUserSegmentRuleList = "Site Member");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			ruleInstance = "2",
 			selectSiteMemberSite = "${siteName}",
-			viewUserSegmentRuleList = "Site Member"
-		);
+			viewUserSegmentRuleList = "Site Member");
 	}
 
 	@priority = "4"
@@ -708,48 +615,41 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		for (var siteRole : list "Site Administrator,Site Owner") {
 			ContentTargetingUserSegment.addUserAttributesSiteRoleRuleCP(
 				siteRole = "${siteRole}",
-				siteRoleSite = "Site Name"
-			);
+				siteRoleSite = "Site Name");
 		}
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			siteRole = "Site Administrator",
 			siteRoleSite = "Site Name",
-			viewUserSegmentRuleList = "Site Role"
-		);
+			viewUserSegmentRuleList = "Site Role");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			ruleInstance = "2",
 			siteRole = "Site Owner",
 			siteRoleSite = "Site Name",
-			viewUserSegmentRuleList = "Site Role"
-		);
+			viewUserSegmentRuleList = "Site Role");
 	}
 
 	@priority = "4"
@@ -760,56 +660,47 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Users",
 				panel = "Control Panel",
-				portlet = "User Groups"
-			);
+				portlet = "User Groups");
 
 			UserGroup.addCP(userGroupName = "${userGroupName}");
 		}
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		for (var userGroupName : list "User Group Name 1,User Group Name 2") {
-			ContentTargetingUserSegment.addUserAttributesUserGroupMemberRuleCP(
-				userGroupName = "${userGroupName}"
-			);
+			ContentTargetingUserSegment.addUserAttributesUserGroupMemberRuleCP(userGroupName = "${userGroupName}");
 		}
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			userGroupName = "User Group Name 1",
-			viewUserSegmentRuleList = "User Group Member"
-		);
+			viewUserSegmentRuleList = "User Group Member");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			ruleInstance = "2",
 			userGroupName = "User Group Name 2",
-			viewUserSegmentRuleList = "User Group Member"
-		);
+			viewUserSegmentRuleList = "User Group Member");
 	}
 
 	@priority = "5"
@@ -819,39 +710,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addSocialFacebookAgeRuleCP(
 			facebookOlderThanAge = "18",
-			facebookYoungerThanAge = "50"
-		);
+			facebookYoungerThanAge = "50");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			facebookOlderThanAge = "18",
 			facebookYoungerThanAge = "50",
-			viewUserSegmentRuleList = "Facebook Age"
-		);
+			viewUserSegmentRuleList = "Facebook Age");
 	}
 
 	@priority = "5"
@@ -861,37 +746,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addSocialFacebookCityRuleCP(
-			facebookCity = "Diamond Bar"
-		);
+		ContentTargetingUserSegment.addSocialFacebookCityRuleCP(facebookCity = "Diamond Bar");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			facebookCity = "Diamond Bar",
-			viewUserSegmentRuleList = "Facebook City"
-		);
+			viewUserSegmentRuleList = "Facebook City");
 	}
 
 	@priority = "5"
@@ -901,39 +779,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addSocialFacebookEducationRuleCP(
 			facebookCollegeHighSchoolName = "UC Irvine",
-			facebookEducationLevel = "College"
-		);
+			facebookEducationLevel = "College");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			facebookCollegeHighSchoolName = "UC Irvine",
 			facebookEducationLevel = "College",
-			viewUserSegmentRuleList = "Facebook Education"
-		);
+			viewUserSegmentRuleList = "Facebook Education");
 	}
 
 	@priority = "5"
@@ -943,39 +815,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addSocialFacebookFriendsRuleCP(
 			moreLessThan = "More",
-			numberOfFriends = "50"
-		);
+			numberOfFriends = "50");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			moreLessThan = "More",
 			numberOfFriends = "50",
-			viewUserSegmentRuleList = "Facebook Friends"
-		);
+			viewUserSegmentRuleList = "Facebook Friends");
 	}
 
 	@priority = "5"
@@ -985,37 +851,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addSocialFacebookGenderRuleCP(
-			facebookGenderRadio = "Male"
-		);
+		ContentTargetingUserSegment.addSocialFacebookGenderRuleCP(facebookGenderRadio = "Male");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			facebookGenderRadio = "Male",
-			viewUserSegmentRuleList = "Facebook Gender"
-		);
+			viewUserSegmentRuleList = "Facebook Gender");
 	}
 
 	@priority = "5"
@@ -1025,37 +884,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addSocialFacebookPageLikeRuleCP(
-			facebookURL = "liferay"
-		);
+		ContentTargetingUserSegment.addSocialFacebookPageLikeRuleCP(facebookURL = "liferay");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			facebookURL = "liferay",
-			viewUserSegmentRuleList = "Facebook Page Like"
-		);
+			viewUserSegmentRuleList = "Facebook Page Like");
 	}
 
 	@priority = "5"
@@ -1065,37 +917,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addSystemAttributesBrowserRuleCP(
-			browserName = "Firefox"
-		);
+		ContentTargetingUserSegment.addSystemAttributesBrowserRuleCP(browserName = "Firefox");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			browserName = "Firefox",
-			viewUserSegmentRuleList = "Browser"
-		);
+			viewUserSegmentRuleList = "Browser");
 	}
 
 	@priority = "5"
@@ -1105,48 +950,39 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Mobile Device Families"
-		);
+			portlet = "Mobile Device Families");
 
 		MobileDevice.addDeviceFamilyCP(
 			classificationName = "Classification Name",
-			deviceFamilyName = "Device Family Name"
-		);
+			deviceFamilyName = "Device Family Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addSystemAttributesDeviceRuleCP(
-			deviceFamilyName = "Device Family Name"
-		);
+		ContentTargetingUserSegment.addSystemAttributesDeviceRuleCP(deviceFamilyName = "Device Family Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			deviceFamilyName = "Device Family Name",
-			viewUserSegmentRuleList = "Device"
-		);
+			viewUserSegmentRuleList = "Device");
 	}
 
 	@priority = "5"
@@ -1156,39 +992,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addSystemAttributesLocationRuleCP(
 			countryName = "Spain",
-			regionName = "Madrid"
-		);
+			regionName = "Madrid");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			countryName = "Spain",
 			regionName = "Madrid",
-			viewUserSegmentRuleList = "Location"
-		);
+			viewUserSegmentRuleList = "Location");
 	}
 
 	@priority = "5"
@@ -1198,37 +1028,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addSystemAttributesOperatingSystemRuleCP(
-			operatingSystemName = "Mac"
-		);
+		ContentTargetingUserSegment.addSystemAttributesOperatingSystemRuleCP(operatingSystemName = "Mac");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			operatingSystemName = "Mac",
-			viewUserSegmentRuleList = "Operating System"
-		);
+			viewUserSegmentRuleList = "Operating System");
 	}
 
 	@priority = "5"
@@ -1238,39 +1061,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addSystemAttributesTimeRuleCP(
 			endTime = "11:30 PM",
-			startTime = "10:30 AM"
-		);
+			startTime = "10:30 AM");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			endTime = "11:30 PM",
 			startTime = "10:30 AM",
-			viewUserSegmentRuleList = "Access Time"
-		);
+			viewUserSegmentRuleList = "Access Time");
 	}
 
 	@priority = "5"
@@ -1280,39 +1097,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addUserAttributesAgeRuleCP(
 			olderThanAge = "21",
-			youngerThanAge = "99"
-		);
+			youngerThanAge = "99");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			olderThanAge = "21",
 			viewUserSegmentRuleList = "Age",
-			youngerThanAge = "99"
-		);
+			youngerThanAge = "99");
 	}
 
 	@priority = "5"
@@ -1322,53 +1133,45 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Custom Fields"
-		);
+			portlet = "Custom Fields");
 
 		CustomFields.addCP(
 			customFieldName = "Usercustomfield",
 			customFieldType = "Text Field - Indexed",
-			resourceName = "User"
-		);
+			resourceName = "User");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addUserAttributesCustomFieldCP(
 			customFieldKey = "usercustomfield",
-			customFieldValue = "User Custom Field Value"
-		);
+			customFieldValue = "User Custom Field Value");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			customFieldKey = "usercustomfield",
 			customFieldValue = "User Custom Field Value",
-			viewUserSegmentRuleList = "Custom Field"
-		);
+			viewUserSegmentRuleList = "Custom Field");
 	}
 
 	@priority = "5"
@@ -1378,37 +1181,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addUserAttributesGenderRuleCP(
-			genderRadio = "Female"
-		);
+		ContentTargetingUserSegment.addUserAttributesGenderRuleCP(genderRadio = "Female");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			genderRadio = "Female",
-			viewUserSegmentRuleList = "Gender"
-		);
+			viewUserSegmentRuleList = "Gender");
 	}
 
 	@priority = "5"
@@ -1418,47 +1214,41 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		Organization.addCP(orgName = "Organization Name", orgType = "Organization");
+		Organization.addCP(
+			orgName = "Organization Name",
+			orgType = "Organization");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addUserAttributesOrganizationMemberRuleCP(
-			organizationName = "Organization Name"
-		);
+		ContentTargetingUserSegment.addUserAttributesOrganizationMemberRuleCP(organizationName = "Organization Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			organizationName = "Organization Name",
-			viewUserSegmentRuleList = "Organization Member"
-		);
+			viewUserSegmentRuleList = "Organization Member");
 
 		Organization.tearDownCP();
 	}
@@ -1470,49 +1260,44 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		Organization.addCP(orgName = "Organization Name", orgType = "Organization");
+		Organization.addCP(
+			orgName = "Organization Name",
+			orgType = "Organization");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addUserAttributesOrganizationRoleRuleCP(
 			organizationName = "Organization Name",
-			organizationRole = "Organization Owner"
-		);
+			organizationRole = "Organization Owner");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			organizationName = "Organization Name",
 			organizationRole = "Organization Owner",
-			viewUserSegmentRuleList = "Organization Role"
-		);
+			viewUserSegmentRuleList = "Organization Role");
 
 		Organization.tearDownCP();
 	}
@@ -1524,37 +1309,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addUserAttributesRegularRoleRuleCP(
-			regularRole = "Guest"
-		);
+		ContentTargetingUserSegment.addUserAttributesRegularRoleRuleCP(regularRole = "Guest");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			regularRole = "Guest",
-			viewUserSegmentRuleList = "Regular Role"
-		);
+			viewUserSegmentRuleList = "Regular Role");
 	}
 
 	@priority = "5"
@@ -1564,37 +1342,30 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addUserAttributesSiteMemberRuleCP(
-			selectSiteMemberSite = "Site Name"
-		);
+		ContentTargetingUserSegment.addUserAttributesSiteMemberRuleCP(selectSiteMemberSite = "Site Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			selectSiteMemberSite = "Site Name",
-			viewUserSegmentRuleList = "Site Member"
-		);
+			viewUserSegmentRuleList = "Site Member");
 	}
 
 	@priority = "5"
@@ -1606,39 +1377,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addUserAttributesSiteRoleRuleCP(
 			siteRole = "Site Owner",
-			siteRoleSite = "${siteName}"
-		);
+			siteRoleSite = "${siteName}");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			siteRole = "Site Owner",
 			siteRoleSite = "${siteName}",
-			viewUserSegmentRuleList = "Site Role"
-		);
+			viewUserSegmentRuleList = "Site Role");
 	}
 
 	@priority = "5"
@@ -1648,47 +1413,39 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "User Groups"
-		);
+			portlet = "User Groups");
 
 		UserGroup.addCP(userGroupName = "User Group Name");
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.addUserAttributesUserGroupMemberRuleCP(
-			userGroupName = "User Group Name"
-		);
+		ContentTargetingUserSegment.addUserAttributesUserGroupMemberRuleCP(userGroupName = "User Group Name");
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.viewRulesCP(
 			userGroupName = "User Group Name",
-			viewUserSegmentRuleList = "User Group Member"
-		);
+			viewUserSegmentRuleList = "User Group Member");
 	}
 
 	@priority = "5"
@@ -1698,33 +1455,28 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
 		ContentTargetingUserSegment.addUserAttributesUserSignedInRuleCP();
 
 		PortletEntry.save();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Audience Targeting"
-		);
+			portlet = "Audience Targeting");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "User Segment Name"
-		);
+			rowEntry = "User Segment Name");
 
-		ContentTargetingUserSegment.viewRulesCP(
-			viewUserSegmentRuleList = "User Signed In"
-		);
+		ContentTargetingUserSegment.viewRulesCP(viewUserSegmentRuleList = "User Signed In");
 	}
+
 }

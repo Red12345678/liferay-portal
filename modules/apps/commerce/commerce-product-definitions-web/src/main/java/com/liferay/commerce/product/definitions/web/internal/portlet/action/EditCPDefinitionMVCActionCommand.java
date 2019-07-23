@@ -20,6 +20,8 @@ import com.liferay.asset.kernel.model.AssetEntry;
 import com.liferay.asset.kernel.model.AssetLink;
 import com.liferay.asset.kernel.service.AssetEntryLocalService;
 import com.liferay.asset.kernel.service.AssetLinkLocalService;
+import com.liferay.commerce.account.model.CommerceAccountGroupRel;
+import com.liferay.commerce.account.service.CommerceAccountGroupRelService;
 import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.definitions.web.servlet.taglib.ui.CPDefinitionScreenNavigationConstants;
 import com.liferay.commerce.product.exception.CPDefinitionMetaDescriptionException;
@@ -27,20 +29,27 @@ import com.liferay.commerce.product.exception.CPDefinitionMetaKeywordsException;
 import com.liferay.commerce.product.exception.CPDefinitionMetaTitleException;
 import com.liferay.commerce.product.exception.CPFriendlyURLEntryException;
 import com.liferay.commerce.product.exception.NoSuchCPDefinitionException;
+import com.liferay.commerce.product.exception.NoSuchCatalogException;
 import com.liferay.commerce.product.model.CPDefinition;
+import com.liferay.commerce.product.model.CPInstanceConstants;
+import com.liferay.commerce.product.model.CommerceChannelRel;
 import com.liferay.commerce.product.service.CPDefinitionService;
+import com.liferay.commerce.product.service.CommerceChannelRelService;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.model.TrashedModel;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.TransactionConfig;
+import com.liferay.portal.kernel.transaction.TransactionInvokerUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.LocalizationUtil;
@@ -50,14 +59,13 @@ import com.liferay.portal.kernel.util.PropertiesParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.trash.kernel.service.TrashEntryService;
-import com.liferay.trash.kernel.util.TrashUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -79,8 +87,7 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 
-	protected void deleteCPDefinitions(
-			ActionRequest actionRequest, boolean moveToTrash)
+	protected void deleteCPDefinitions(ActionRequest actionRequest)
 		throws Exception {
 
 		long[] deleteCPDefinitionIds = null;
@@ -97,28 +104,8 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 				0L);
 		}
 
-		List<TrashedModel> trashedModels = new ArrayList<>();
-
 		for (long deleteCPDefinitionId : deleteCPDefinitionIds) {
-			if (moveToTrash) {
-				CPDefinition cpDefinition =
-					_cpDefinitionService.moveCPDefinitionToTrash(
-						deleteCPDefinitionId);
-
-				trashedModels.add(cpDefinition);
-			}
-			else {
-				_cpDefinitionService.deleteCPDefinition(deleteCPDefinitionId);
-			}
-		}
-
-		if (moveToTrash && !trashedModels.isEmpty()) {
-			TrashUtil.addTrashSessionMessages(actionRequest, trashedModels);
-
-			SessionMessages.add(
-				actionRequest,
-				_portal.getPortletId(actionRequest) +
-					SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+			_cpDefinitionService.deleteCPDefinition(deleteCPDefinitionId);
 		}
 	}
 
@@ -140,10 +127,7 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 				sendRedirect(actionRequest, actionResponse, redirect);
 			}
 			else if (cmd.equals(Constants.DELETE)) {
-				deleteCPDefinitions(actionRequest, false);
-			}
-			else if (cmd.equals(Constants.MOVE_TO_TRASH)) {
-				deleteCPDefinitions(actionRequest, true);
+				deleteCPDefinitions(actionRequest);
 			}
 			else if (cmd.equals("updateCategorization")) {
 				CPDefinition cpDefinition = updateCategorization(actionRequest);
@@ -154,6 +138,20 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 						CATEGORY_KEY_CATEGORIZATION);
 
 				sendRedirect(actionRequest, actionResponse, redirect);
+			}
+			else if (cmd.equals("updateAccountGroups")) {
+				Callable<Object> cpDefinitionAccountGroupsCallable =
+					new CPDefinitionAccountGroupsCallable(actionRequest);
+
+				TransactionInvokerUtil.invoke(
+					_transactionConfig, cpDefinitionAccountGroupsCallable);
+			}
+			else if (cmd.equals("updateChannels")) {
+				Callable<Object> cpDefinitionChannelsCallable =
+					new CPDefinitionChannelsCallable(actionRequest);
+
+				TransactionInvokerUtil.invoke(
+					_transactionConfig, cpDefinitionChannelsCallable);
 			}
 			else if (cmd.equals("updateCPDisplayLayout")) {
 				updateCPDisplayLayout(actionRequest);
@@ -167,34 +165,29 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 			else if (cmd.equals("updateTaxCategoryInfo")) {
 				updateTaxCategoryInfo(actionRequest);
 			}
-			else if (cmd.equals(Constants.RESTORE)) {
-				restoreTrashEntries(actionRequest);
-			}
 		}
-		catch (Exception e) {
-			if (e instanceof NoSuchCPDefinitionException ||
-				e instanceof PrincipalException) {
+		catch (Throwable t) {
+			if (t instanceof NoSuchCPDefinitionException ||
+				t instanceof PrincipalException) {
 
-				SessionErrors.add(actionRequest, e.getClass());
+				SessionErrors.add(actionRequest, t.getClass());
 
 				actionResponse.setRenderParameter("mvcPath", "/error.jsp");
 			}
-			else if (e instanceof AssetCategoryException ||
-					 e instanceof AssetTagException ||
-					 e instanceof CPDefinitionMetaDescriptionException ||
-					 e instanceof CPDefinitionMetaKeywordsException ||
-					 e instanceof CPDefinitionMetaTitleException ||
-					 e instanceof CPFriendlyURLEntryException) {
+			else if (t instanceof AssetCategoryException ||
+					 t instanceof AssetTagException ||
+					 t instanceof CPDefinitionMetaDescriptionException ||
+					 t instanceof CPDefinitionMetaKeywordsException ||
+					 t instanceof CPDefinitionMetaTitleException ||
+					 t instanceof CPFriendlyURLEntryException ||
+					 t instanceof NoSuchCatalogException) {
 
-				SessionErrors.add(actionRequest, e.getClass(), e);
+				SessionErrors.add(actionRequest, t.getClass(), t);
 
 				String redirect = ParamUtil.getString(
 					actionRequest, "redirect");
 
 				sendRedirect(actionRequest, actionResponse, redirect);
-			}
-			else {
-				throw e;
 			}
 		}
 	}
@@ -276,15 +269,50 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 		return portletURL.toString();
 	}
 
-	protected void restoreTrashEntries(ActionRequest actionRequest)
-		throws Exception {
+	protected void reindexCPDefinition(long cpDefinitionId)
+		throws PortalException {
 
-		long[] restoreTrashEntryIds = StringUtil.split(
-			ParamUtil.getString(actionRequest, "restoreTrashEntryIds"), 0L);
+		CPDefinition cpDefinition = _cpDefinitionService.getCPDefinition(
+			cpDefinitionId);
 
-		for (long restoreTrashEntryId : restoreTrashEntryIds) {
-			_trashEntryService.restoreEntry(restoreTrashEntryId);
+		Indexer<CPDefinition> indexer = IndexerRegistryUtil.nullSafeGetIndexer(
+			CPDefinition.class);
+
+		indexer.reindex(cpDefinition);
+	}
+
+	protected void updateAccountGroups(ActionRequest actionRequest)
+		throws PortalException {
+
+		long cpDefinitionId = ParamUtil.getLong(
+			actionRequest, "cpDefinitionId");
+
+		long[] commerceAccountGroupIds = StringUtil.split(
+			ParamUtil.getString(actionRequest, "commerceAccountGroupIds"), 0L);
+
+		boolean accountGroupFilterEnabled = ParamUtil.getBoolean(
+			actionRequest, "accountGroupFilterEnabled");
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			CommerceAccountGroupRel.class.getName(), actionRequest);
+
+		_commerceAccountGroupRelService.deleteCommerceAccountGroupRels(
+			CPDefinition.class.getName(), cpDefinitionId);
+
+		for (long commerceAccountGroupId : commerceAccountGroupIds) {
+			if (commerceAccountGroupId == 0) {
+				continue;
+			}
+
+			_commerceAccountGroupRelService.addCommerceAccountGroupRel(
+				CPDefinition.class.getName(), cpDefinitionId,
+				commerceAccountGroupId, serviceContext);
 		}
+
+		_cpDefinitionService.updateCPDefinitionAccountGroupFilter(
+			cpDefinitionId, accountGroupFilterEnabled);
+
+		reindexCPDefinition(cpDefinitionId);
 	}
 
 	protected CPDefinition updateCategorization(ActionRequest actionRequest)
@@ -300,12 +328,48 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 			cpDefinitionId, serviceContext);
 	}
 
+	protected void updateChannels(ActionRequest actionRequest)
+		throws PortalException {
+
+		long cpDefinitionId = ParamUtil.getLong(
+			actionRequest, "cpDefinitionId");
+
+		long[] commerceChannelIds = StringUtil.split(
+			ParamUtil.getString(actionRequest, "commerceChannelIds"), 0L);
+
+		boolean channelFilterEnabled = ParamUtil.getBoolean(
+			actionRequest, "channelFilterEnabled");
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			CommerceChannelRel.class.getName(), actionRequest);
+
+		_commerceChannelRelService.deleteCommerceChannelRels(
+			CPDefinition.class.getName(), cpDefinitionId);
+
+		for (long commerceChannelId : commerceChannelIds) {
+			if (commerceChannelId == 0) {
+				continue;
+			}
+
+			_commerceChannelRelService.addCommerceChannelRel(
+				CPDefinition.class.getName(), cpDefinitionId, commerceChannelId,
+				serviceContext);
+		}
+
+		_cpDefinitionService.updateCPDefinitionChannelFilter(
+			cpDefinitionId, channelFilterEnabled);
+
+		reindexCPDefinition(cpDefinitionId);
+	}
+
 	protected CPDefinition updateCPDefinition(ActionRequest actionRequest)
 		throws Exception {
 
 		long cpDefinitionId = ParamUtil.getLong(
 			actionRequest, "cpDefinitionId");
 
+		long commerceCatalogGroupId = ParamUtil.getLong(
+			actionRequest, "commerceCatalogGroupId");
 		Map<Locale, String> nameMap = LocalizationUtil.getLocalizationMap(
 			actionRequest, "nameMapAsXML");
 		Map<Locale, String> shortDescriptionMap =
@@ -375,13 +439,16 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 			// Add commerce product definition
 
 			cpDefinition = _cpDefinitionService.addCPDefinition(
-				nameMap, shortDescriptionMap, descriptionMap, urlTitleMap,
-				metaTitleMap, metaDescriptionMap, metaKeywordsMap,
-				productTypeName, true, null, published, displayDateMonth,
-				displayDateDay, displayDateYear, displayDateHour,
-				displayDateMinute, expirationDateMonth, expirationDateDay,
-				expirationDateYear, expirationDateHour, expirationDateMinute,
-				neverExpire, serviceContext);
+				commerceCatalogGroupId, serviceContext.getUserId(), nameMap,
+				shortDescriptionMap, descriptionMap, urlTitleMap, metaTitleMap,
+				metaDescriptionMap, metaKeywordsMap, productTypeName, true,
+				true, false, false, 0D, 0D, 0D, 0D, 0D, 0L, false, false, null,
+				published, displayDateMonth, displayDateDay, displayDateYear,
+				displayDateHour, displayDateMinute, expirationDateMonth,
+				expirationDateDay, expirationDateYear, expirationDateHour,
+				expirationDateMinute, neverExpire,
+				CPInstanceConstants.DEFAULT_SKU, false, 0, null, null, 0L, null,
+				serviceContext);
 		}
 		else {
 
@@ -494,6 +561,10 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 			cpDefinitionId, cpTaxCategoryId, taxExempt, telcoOrElectronics);
 	}
 
+	private static final TransactionConfig _transactionConfig =
+		TransactionConfig.Factory.create(
+			Propagation.REQUIRED, new Class<?>[] {Exception.class});
+
 	@Reference
 	private AssetEntryLocalService _assetEntryLocalService;
 
@@ -501,12 +572,50 @@ public class EditCPDefinitionMVCActionCommand extends BaseMVCActionCommand {
 	private AssetLinkLocalService _assetLinkLocalService;
 
 	@Reference
+	private CommerceAccountGroupRelService _commerceAccountGroupRelService;
+
+	@Reference
+	private CommerceChannelRelService _commerceChannelRelService;
+
+	@Reference
 	private CPDefinitionService _cpDefinitionService;
 
 	@Reference
 	private Portal _portal;
 
-	@Reference
-	private TrashEntryService _trashEntryService;
+	private class CPDefinitionAccountGroupsCallable
+		implements Callable<Object> {
+
+		@Override
+		public Object call() throws Exception {
+			updateAccountGroups(_actionRequest);
+
+			return null;
+		}
+
+		private CPDefinitionAccountGroupsCallable(ActionRequest actionRequest) {
+			_actionRequest = actionRequest;
+		}
+
+		private final ActionRequest _actionRequest;
+
+	}
+
+	private class CPDefinitionChannelsCallable implements Callable<Object> {
+
+		@Override
+		public Object call() throws Exception {
+			updateChannels(_actionRequest);
+
+			return null;
+		}
+
+		private CPDefinitionChannelsCallable(ActionRequest actionRequest) {
+			_actionRequest = actionRequest;
+		}
+
+		private final ActionRequest _actionRequest;
+
+	}
 
 }

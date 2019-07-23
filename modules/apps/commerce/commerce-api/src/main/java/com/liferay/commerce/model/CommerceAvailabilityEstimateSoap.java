@@ -26,18 +26,20 @@ import java.util.List;
  * This class is used by SOAP remote services, specifically {@link com.liferay.commerce.service.http.CommerceAvailabilityEstimateServiceSoap}.
  *
  * @author Alessio Antonio Rendina
- * @see com.liferay.commerce.service.http.CommerceAvailabilityEstimateServiceSoap
  * @generated
  */
 @ProviderType
 public class CommerceAvailabilityEstimateSoap implements Serializable {
+
 	public static CommerceAvailabilityEstimateSoap toSoapModel(
 		CommerceAvailabilityEstimate model) {
-		CommerceAvailabilityEstimateSoap soapModel = new CommerceAvailabilityEstimateSoap();
+
+		CommerceAvailabilityEstimateSoap soapModel =
+			new CommerceAvailabilityEstimateSoap();
 
 		soapModel.setUuid(model.getUuid());
-		soapModel.setCommerceAvailabilityEstimateId(model.getCommerceAvailabilityEstimateId());
-		soapModel.setGroupId(model.getGroupId());
+		soapModel.setCommerceAvailabilityEstimateId(
+			model.getCommerceAvailabilityEstimateId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setUserName(model.getUserName());
@@ -52,7 +54,9 @@ public class CommerceAvailabilityEstimateSoap implements Serializable {
 
 	public static CommerceAvailabilityEstimateSoap[] toSoapModels(
 		CommerceAvailabilityEstimate[] models) {
-		CommerceAvailabilityEstimateSoap[] soapModels = new CommerceAvailabilityEstimateSoap[models.length];
+
+		CommerceAvailabilityEstimateSoap[] soapModels =
+			new CommerceAvailabilityEstimateSoap[models.length];
 
 		for (int i = 0; i < models.length; i++) {
 			soapModels[i] = toSoapModel(models[i]);
@@ -63,10 +67,12 @@ public class CommerceAvailabilityEstimateSoap implements Serializable {
 
 	public static CommerceAvailabilityEstimateSoap[][] toSoapModels(
 		CommerceAvailabilityEstimate[][] models) {
+
 		CommerceAvailabilityEstimateSoap[][] soapModels = null;
 
 		if (models.length > 0) {
-			soapModels = new CommerceAvailabilityEstimateSoap[models.length][models[0].length];
+			soapModels = new CommerceAvailabilityEstimateSoap
+				[models.length][models[0].length];
 		}
 		else {
 			soapModels = new CommerceAvailabilityEstimateSoap[0][0];
@@ -81,13 +87,16 @@ public class CommerceAvailabilityEstimateSoap implements Serializable {
 
 	public static CommerceAvailabilityEstimateSoap[] toSoapModels(
 		List<CommerceAvailabilityEstimate> models) {
-		List<CommerceAvailabilityEstimateSoap> soapModels = new ArrayList<CommerceAvailabilityEstimateSoap>(models.size());
+
+		List<CommerceAvailabilityEstimateSoap> soapModels =
+			new ArrayList<CommerceAvailabilityEstimateSoap>(models.size());
 
 		for (CommerceAvailabilityEstimate model : models) {
 			soapModels.add(toSoapModel(model));
 		}
 
-		return soapModels.toArray(new CommerceAvailabilityEstimateSoap[soapModels.size()]);
+		return soapModels.toArray(
+			new CommerceAvailabilityEstimateSoap[soapModels.size()]);
 	}
 
 	public CommerceAvailabilityEstimateSoap() {
@@ -115,15 +124,8 @@ public class CommerceAvailabilityEstimateSoap implements Serializable {
 
 	public void setCommerceAvailabilityEstimateId(
 		long commerceAvailabilityEstimateId) {
+
 		_commerceAvailabilityEstimateId = commerceAvailabilityEstimateId;
-	}
-
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	public void setGroupId(long groupId) {
-		_groupId = groupId;
 	}
 
 	public long getCompanyId() {
@@ -192,7 +194,6 @@ public class CommerceAvailabilityEstimateSoap implements Serializable {
 
 	private String _uuid;
 	private long _commerceAvailabilityEstimateId;
-	private long _groupId;
 	private long _companyId;
 	private long _userId;
 	private String _userName;
@@ -201,4 +202,5 @@ public class CommerceAvailabilityEstimateSoap implements Serializable {
 	private String _title;
 	private double _priority;
 	private Date _lastPublishDate;
+
 }

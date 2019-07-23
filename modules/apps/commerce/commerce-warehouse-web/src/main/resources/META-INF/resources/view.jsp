@@ -17,22 +17,26 @@
 <%@ include file="/init.jsp" %>
 
 <%
-CommerceWarehousesDisplayContext commerceWarehousesDisplayContext = (CommerceWarehousesDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
+CommerceInventoryWarehousesDisplayContext commerceInventoryWarehousesDisplayContext = (CommerceInventoryWarehousesDisplayContext)request.getAttribute(WebKeys.PORTLET_DISPLAY_CONTEXT);
 %>
 
-<c:if test="<%= commerceWarehousesDisplayContext.hasManageCommerceWarehousePermission() %>">
+<c:if test="<%= commerceInventoryWarehousesDisplayContext.hasManageCommerceInventoryWarehousePermission() %>">
 
 	<%
-	long commerceCountryId = commerceWarehousesDisplayContext.getCommerceCountryId();
-	List<ManagementBarFilterItem> managementBarFilterItems = commerceWarehousesDisplayContext.getManagementBarFilterItems();
+	String commerceCountryTwoLettersIsoCode = commerceInventoryWarehousesDisplayContext.getCommerceCountryTwoLettersIsoCode();
+	List<ManagementBarFilterItem> managementBarFilterItems = commerceInventoryWarehousesDisplayContext.getManagementBarFilterItems();
 
 	String managementBarFilterValue = null;
 
-	for (ManagementBarFilterItem managementBarFilterItem : managementBarFilterItems) {
-		if (commerceCountryId == Long.valueOf(managementBarFilterItem.getId())) {
-			managementBarFilterValue = managementBarFilterItem.getLabel();
+	if (Validator.isNotNull(commerceCountryTwoLettersIsoCode)) {
+		CommerceCountry commerceCountry = commerceInventoryWarehousesDisplayContext.getCommerceCountry(commerceCountryTwoLettersIsoCode);
 
-			break;
+		for (ManagementBarFilterItem managementBarFilterItem : managementBarFilterItems) {
+			if (commerceCountry.getCommerceCountryId() == Long.valueOf(managementBarFilterItem.getId())) {
+				managementBarFilterValue = managementBarFilterItem.getLabel();
+
+				break;
+			}
 		}
 	}
 	%>
@@ -42,12 +46,12 @@ CommerceWarehousesDisplayContext commerceWarehousesDisplayContext = (CommerceWar
 	</liferay-ui:error>
 
 	<liferay-frontend:management-bar
-		searchContainerId="commerceWarehouses"
+		searchContainerId="commerceInventoryWarehouses"
 	>
 		<liferay-frontend:management-bar-filters>
 			<liferay-frontend:management-bar-navigation
 				navigationKeys='<%= new String[] {"all", "active", "inactive"} %>'
-				portletURL="<%= commerceWarehousesDisplayContext.getPortletURL() %>"
+				portletURL="<%= commerceInventoryWarehousesDisplayContext.getPortletURL() %>"
 			/>
 
 			<liferay-frontend:management-bar-filter
@@ -57,14 +61,14 @@ CommerceWarehousesDisplayContext commerceWarehousesDisplayContext = (CommerceWar
 			/>
 
 			<liferay-frontend:management-bar-sort
-				orderByCol="<%= commerceWarehousesDisplayContext.getOrderByCol() %>"
-				orderByType="<%= commerceWarehousesDisplayContext.getOrderByType() %>"
+				orderByCol="<%= commerceInventoryWarehousesDisplayContext.getOrderByCol() %>"
+				orderByType="<%= commerceInventoryWarehousesDisplayContext.getOrderByType() %>"
 				orderColumns='<%= new String[] {"city", "name"} %>'
-				portletURL="<%= commerceWarehousesDisplayContext.getPortletURL() %>"
+				portletURL="<%= commerceInventoryWarehousesDisplayContext.getPortletURL() %>"
 			/>
 
 			<li>
-				<aui:form action="<%= String.valueOf(commerceWarehousesDisplayContext.getPortletURL()) %>" name="searchFm">
+				<aui:form action="<%= String.valueOf(commerceInventoryWarehousesDisplayContext.getPortletURL()) %>" name="searchFm">
 					<liferay-ui:input-search
 						markupView="lexicon"
 					/>
@@ -75,14 +79,14 @@ CommerceWarehousesDisplayContext commerceWarehousesDisplayContext = (CommerceWar
 		<liferay-frontend:management-bar-buttons>
 			<liferay-frontend:management-bar-display-buttons
 				displayViews='<%= new String[] {"list"} %>'
-				portletURL="<%= commerceWarehousesDisplayContext.getPortletURL() %>"
+				portletURL="<%= commerceInventoryWarehousesDisplayContext.getPortletURL() %>"
 				selectedDisplayStyle="list"
 			/>
 
-			<portlet:renderURL var="addCommerceWarehouseURL">
-				<portlet:param name="mvcRenderCommandName" value="editCommerceWarehouse" />
+			<portlet:renderURL var="addCommerceInventoryWarehouseURL">
+				<portlet:param name="mvcRenderCommandName" value="editCommerceInventoryWarehouse" />
 				<portlet:param name="redirect" value="<%= currentURL %>" />
-				<portlet:param name="commerceCountryId" value="<%= String.valueOf(commerceCountryId) %>" />
+				<portlet:param name="commerceCountryId" value="<%= String.valueOf(commerceCountryTwoLettersIsoCode) %>" />
 			</portlet:renderURL>
 
 			<liferay-frontend:add-menu
@@ -90,7 +94,7 @@ CommerceWarehousesDisplayContext commerceWarehousesDisplayContext = (CommerceWar
 			>
 				<liferay-frontend:add-menu-item
 					title='<%= LanguageUtil.get(request, "add-warehouse") %>'
-					url="<%= addCommerceWarehouseURL.toString() %>"
+					url="<%= addCommerceInventoryWarehouseURL.toString() %>"
 				/>
 			</liferay-frontend:add-menu>
 		</liferay-frontend:management-bar-buttons>
@@ -98,34 +102,34 @@ CommerceWarehousesDisplayContext commerceWarehousesDisplayContext = (CommerceWar
 
 	<div class="container-fluid-1280">
 		<liferay-ui:search-container
-			id="commerceWarehouses"
-			searchContainer="<%= commerceWarehousesDisplayContext.getSearchContainer() %>"
+			id="commerceInventoryWarehouses"
+			searchContainer="<%= commerceInventoryWarehousesDisplayContext.getSearchContainer() %>"
 		>
 			<liferay-ui:search-container-row
-				className="com.liferay.commerce.model.CommerceWarehouse"
-				keyProperty="commerceWarehouseId"
-				modelVar="commerceWarehouse"
+				className="com.liferay.commerce.inventory.model.CommerceInventoryWarehouse"
+				keyProperty="commerceInventoryWarehouseId"
+				modelVar="commerceInventoryWarehouse"
 			>
 
 				<%
 				PortletURL rowURL = renderResponse.createRenderURL();
 
-				rowURL.setParameter("mvcRenderCommandName", "editCommerceWarehouse");
+				rowURL.setParameter("mvcRenderCommandName", "editCommerceInventoryWarehouse");
 				rowURL.setParameter("redirect", currentURL);
-				rowURL.setParameter("commerceWarehouseId", String.valueOf(commerceWarehouse.getCommerceWarehouseId()));
+				rowURL.setParameter("commerceInventoryWarehouseId", String.valueOf(commerceInventoryWarehouse.getCommerceInventoryWarehouseId()));
 				%>
 
 				<liferay-ui:search-container-column-text
 					cssClass="important table-cell-content"
 					href="<%= rowURL %>"
 					name="name"
-					value="<%= HtmlUtil.escape(commerceWarehouse.getName()) %>"
+					value="<%= HtmlUtil.escape(commerceInventoryWarehouse.getName()) %>"
 				/>
 
 				<liferay-ui:search-container-column-text
 					cssClass="table-cell-content"
 					name="city"
-					value="<%= HtmlUtil.escape(commerceWarehouse.getCity()) %>"
+					value="<%= HtmlUtil.escape(commerceInventoryWarehouse.getCity()) %>"
 				/>
 
 				<liferay-ui:search-container-column-text
@@ -133,7 +137,7 @@ CommerceWarehousesDisplayContext commerceWarehousesDisplayContext = (CommerceWar
 					name="active"
 				>
 					<c:choose>
-						<c:when test="<%= commerceWarehouse.isActive() %>">
+						<c:when test="<%= commerceInventoryWarehouse.isActive() %>">
 							<liferay-ui:icon
 								cssClass="commerce-admin-icon-check"
 								icon="check"

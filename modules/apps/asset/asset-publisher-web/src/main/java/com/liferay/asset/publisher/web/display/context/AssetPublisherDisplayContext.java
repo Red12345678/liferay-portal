@@ -1008,7 +1008,8 @@ public class AssetPublisherDisplayContext {
 
 	public String getVocabularyIds() throws Exception {
 		List<AssetVocabulary> vocabularies =
-			AssetVocabularyServiceUtil.getGroupsVocabularies(getGroupIds());
+			AssetVocabularyServiceUtil.getGroupsVocabularies(
+				getReferencedModelsGroupIds());
 
 		return ListUtil.toString(
 			vocabularies, AssetVocabulary.VOCABULARY_ID_ACCESSOR);

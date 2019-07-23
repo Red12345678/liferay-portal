@@ -14,11 +14,14 @@
 	}
 
 	&__image {
+		border-radius: 50%;
 		grid-area: image;
+		height: 40px;
+		overflow: hidden;
 		position: relative;
 
 		img {
-			border-radius: 50%;
+			height: auto;
 			width: 100%;
 		}
 

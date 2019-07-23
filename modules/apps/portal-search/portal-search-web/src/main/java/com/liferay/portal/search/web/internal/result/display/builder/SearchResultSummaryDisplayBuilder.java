@@ -277,9 +277,8 @@ public class SearchResultSummaryDisplayBuilder {
 			searchResultSummaryDisplayContext.setAssetCategoriesOrTagsVisible(
 				true);
 			searchResultSummaryDisplayContext.setFieldAssetCategoryIds(
-				Field.ASSET_CATEGORY_IDS);
-			searchResultSummaryDisplayContext.setFieldAssetTagNames(
-				Field.ASSET_TAG_NAMES);
+				"category");
+			searchResultSummaryDisplayContext.setFieldAssetTagNames("tag");
 		}
 	}
 
@@ -428,9 +427,8 @@ public class SearchResultSummaryDisplayBuilder {
 		};
 
 		_searchResultImageContributorsStream.forEach(
-			searchResultImageContributor -> {
-				searchResultImageContributor.contribute(searchResultImage);
-			});
+			searchResultImageContributor ->
+				searchResultImageContributor.contribute(searchResultImage));
 	}
 
 	protected void buildLocaleReminder(

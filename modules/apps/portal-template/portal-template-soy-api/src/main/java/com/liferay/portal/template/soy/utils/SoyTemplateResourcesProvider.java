@@ -22,7 +22,10 @@ import org.osgi.framework.Bundle;
 
 /**
  * @author Miguel Pastor
+ * @deprecated As of Mueller (7.2.x), see {@link
+ *             com.liferay.portal.template.soy.util.SoyTemplateResourcesProvider}
  */
+@Deprecated
 public interface SoyTemplateResourcesProvider {
 
 	public List<TemplateResource> getAllTemplateResources();

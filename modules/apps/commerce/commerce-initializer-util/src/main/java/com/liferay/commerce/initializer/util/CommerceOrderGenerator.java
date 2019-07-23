@@ -23,8 +23,11 @@ import com.liferay.commerce.account.service.CommerceAccountUserRelLocalService;
 import com.liferay.commerce.constants.CommerceOrderConstants;
 import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.context.CommerceContextFactory;
+import com.liferay.commerce.currency.model.CommerceCurrency;
+import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngine;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngineRegistry;
+import com.liferay.commerce.inventory.engine.CommerceInventoryEngine;
 import com.liferay.commerce.model.CPDefinitionInventory;
 import com.liferay.commerce.model.CommerceAddress;
 import com.liferay.commerce.model.CommerceOrder;
@@ -37,8 +40,8 @@ import com.liferay.commerce.product.catalog.CPSku;
 import com.liferay.commerce.product.data.source.CPDataSourceResult;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.service.CPInstanceLocalService;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.commerce.product.util.CPDefinitionHelper;
-import com.liferay.commerce.product.util.CPRulesThreadLocal;
 import com.liferay.commerce.service.CPDefinitionInventoryLocalService;
 import com.liferay.commerce.service.CommerceAddressLocalService;
 import com.liferay.commerce.service.CommerceOrderItemLocalService;
@@ -74,7 +77,6 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,23 +131,30 @@ public class CommerceOrderGenerator {
 
 		// Add commerce order
 
+		CommerceCurrency commerceCurrency =
+			_commerceCurrencyLocalService.fetchPrimaryCommerceCurrency(
+				commerceAccount.getCompanyId());
+
 		CommerceOrder commerceOrder =
 			_commerceOrderLocalService.addCommerceOrder(
-				groupId, commerceAccountUserRel.getCommerceAccountUserId(),
-				commerceAccountUserRel.getCommerceAccountId());
+				commerceAccountUserRel.getCommerceAccountUserId(),
+				_commerceChannelLocalService.
+					getCommerceChannelGroupIdBySiteGroupId(groupId),
+				commerceAccountUserRel.getCommerceAccountId(),
+				commerceCurrency.getCommerceCurrencyId());
 
 		// Commerce order items
 
 		CommerceContext commerceContext = _commerceContextFactory.create(
-			groupId, commerceAccountUserRel.getCommerceAccountUserId(),
+			commerceOrder.getCompanyId(), groupId,
+			commerceAccountUserRel.getCommerceAccountUserId(),
 			commerceOrder.getCommerceOrderId(),
 			commerceAccountUserRel.getCommerceAccountId());
 
 		ServiceContext serviceContext = _getServiceContext(commerceOrder);
 
 		_generateCommerceOrderItems(
-			commerceOrder.getCommerceOrderId(), cpCatalogEntries,
-			commerceContext, serviceContext);
+			commerceOrder, cpCatalogEntries, commerceContext, serviceContext);
 
 		// Recalculate Price
 
@@ -156,7 +165,7 @@ public class CommerceOrderGenerator {
 
 		List<CommerceAddress> commerceAddresses =
 			_commerceAddressLocalService.getCommerceAddresses(
-				groupId, CommerceAccount.class.getName(),
+				CommerceAccount.class.getName(),
 				commerceAccount.getCommerceAccountId(), 0, 1, null);
 
 		if (commerceAddresses.isEmpty()) {
@@ -168,6 +177,9 @@ public class CommerceOrderGenerator {
 		}
 
 		CommerceAddress commerceAddress = commerceAddresses.get(0);
+
+		commerceOrder.setShippingAddressId(
+			commerceAddress.getCommerceAddressId());
 
 		// Commerce shipping options
 
@@ -211,7 +223,7 @@ public class CommerceOrderGenerator {
 	}
 
 	private void _generateCommerceOrderItems(
-			long commerceOrderId, List<CPCatalogEntry> cpCatalogEntries,
+			CommerceOrder commerceOrder, List<CPCatalogEntry> cpCatalogEntries,
 			CommerceContext commerceContext, ServiceContext serviceContext)
 		throws PortalException {
 
@@ -250,11 +262,11 @@ public class CommerceOrderGenerator {
 						cpInstance, cpDefinitionInventoryEngine));
 
 				_commerceOrderItemLocalService.addCommerceOrderItem(
-					commerceOrderId, cpInstance.getCPInstanceId(), quantity, 0,
+					commerceOrder.getCommerceOrderId(),
+					cpInstance.getCPInstanceId(), quantity, 0,
 					cpInstance.getJson(), commerceContext, serviceContext);
 			}
 			catch (Exception e) {
-				continue;
 			}
 		}
 	}
@@ -383,8 +395,9 @@ public class CommerceOrderGenerator {
 			CPDefinitionInventoryEngine cpDefinitionInventoryEngine)
 		throws PortalException {
 
-		int stockQuantity = cpDefinitionInventoryEngine.getStockQuantity(
-			cpInstance);
+		int stockQuantity = _commerceInventoryEngine.getStockQuantity(
+			cpInstance.getCompanyId(), cpInstance.getSku());
+
 		int maxOrderQuantity = cpDefinitionInventoryEngine.getMaxOrderQuantity(
 			cpInstance);
 
@@ -409,7 +422,8 @@ public class CommerceOrderGenerator {
 		Group group = _groupLocalService.getGroup(groupId);
 
 		searchContext.setCompanyId(group.getCompanyId());
-		searchContext.setGroupIds(new long[] {group.getGroupId()});
+
+		searchContext.setAttribute("commerceChannelGroupId", groupId);
 
 		return searchContext;
 	}
@@ -457,8 +471,6 @@ public class CommerceOrderGenerator {
 
 		User user = roleUsers.get(0);
 
-		CPRulesThreadLocal.setCPRules(new ArrayList<>());
-
 		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
 			user);
 
@@ -485,7 +497,16 @@ public class CommerceOrderGenerator {
 	private CommerceAddressLocalService _commerceAddressLocalService;
 
 	@Reference
+	private CommerceChannelLocalService _commerceChannelLocalService;
+
+	@Reference
 	private CommerceContextFactory _commerceContextFactory;
+
+	@Reference
+	private CommerceCurrencyLocalService _commerceCurrencyLocalService;
+
+	@Reference
+	private CommerceInventoryEngine _commerceInventoryEngine;
 
 	@Reference
 	private CommerceOrderItemLocalService _commerceOrderItemLocalService;

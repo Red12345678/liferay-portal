@@ -14,6 +14,7 @@
 
 package com.liferay.oauth2.provider.rest.spi.scope.checker.container.request.filter;
 
+import com.liferay.oauth2.provider.scope.liferay.OAuth2ProviderScopeLiferayAccessControlContext;
 import com.liferay.oauth2.provider.scope.liferay.OAuth2ProviderScopeLiferayConstants;
 import com.liferay.portal.kernel.security.access.control.AccessControlUtil;
 import com.liferay.portal.kernel.security.auth.AccessControlContext;
@@ -35,19 +36,25 @@ public abstract class BaseScopeCheckerContainerRequestFilter
 
 	@Override
 	public void filter(ContainerRequestContext containerRequestContext) {
-		if (isOAuth2AuthVerified()) {
-			if (!isContainerRequestContextAllowed(containerRequestContext)) {
-				containerRequestContext.abortWith(
-					Response.status(
-						Response.Status.FORBIDDEN
-					).build());
-			}
+		if (OAuth2ProviderScopeLiferayAccessControlContext.
+				isOAuth2AuthVerified() &&
+			!isContainerRequestContextAllowed(containerRequestContext)) {
+
+			containerRequestContext.abortWith(
+				Response.status(
+					Response.Status.FORBIDDEN
+				).build());
 		}
 	}
 
 	protected abstract boolean isContainerRequestContextAllowed(
 		ContainerRequestContext containerRequestContext);
 
+	/**
+	 * @deprecated As of Judson (7.1.x), replaced by {@link
+	 * OAuth2ProviderScopeLiferayAccessControlContext#isOAuth2AuthVerified()}
+	 */
+	@Deprecated
 	protected boolean isOAuth2AuthVerified() {
 		AccessControlContext accessControlContext =
 			AccessControlUtil.getAccessControlContext();

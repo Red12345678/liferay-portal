@@ -14,48 +14,44 @@
 
 package com.liferay.portal.json;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import com.github.fge.jackson.JsonLoader;
-import com.github.fge.jsonschema.core.report.ProcessingReport;
-import com.github.fge.jsonschema.main.JsonSchema;
-import com.github.fge.jsonschema.main.JsonSchemaFactory;
-
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONValidator;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * @author Pablo Carvalho
+ * @deprecated As of Judson (7.1.x), with no direct replacement
  */
+@Deprecated
 public class JSONValidatorImpl implements JSONValidator {
 
-	public JSONValidatorImpl(String json) throws JSONException {
-		try {
-			JsonSchemaFactory jsonSchemaFactory = JsonSchemaFactory.byDefault();
-
-			JsonNode jsonNode = JsonLoader.fromString(json);
-
-			_jsonSchema = jsonSchemaFactory.getJsonSchema(jsonNode);
-		}
-		catch (Exception e) {
-			throw new JSONException(e);
-		}
+	public JSONValidatorImpl(String json) {
 	}
 
 	@Override
-	public boolean isValid(String json) throws JSONException {
+	public boolean isValid(String json) {
+		if (Validator.isNull(json)) {
+			return false;
+		}
+
 		try {
-			JsonNode jsonNode = JsonLoader.fromString(json);
+			json = json.trim();
 
-			ProcessingReport processingReport = _jsonSchema.validate(jsonNode);
+			if (json.startsWith("{")) {
+				new JSONObjectImpl(json);
 
-			return processingReport.isSuccess();
+				return true;
+			}
+			else if (json.startsWith("[")) {
+				new JSONArrayImpl(json);
+
+				return true;
+			}
 		}
-		catch (Exception e) {
-			throw new JSONException(e);
+		catch (JSONException jsone) {
 		}
+
+		return false;
 	}
-
-	private final JsonSchema _jsonSchema;
 
 }

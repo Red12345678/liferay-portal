@@ -35,6 +35,35 @@ components:
                     readOnly: true
                     type: string
             type: object
+        CustomField:
+            # @review
+            description: Represents the value of each custom field. Fields can contain different information types (e.g., geolocation, strings, etc.).
+            properties:
+                customValue:
+                    properties:
+                        data:
+                            description: The field's content for simple types.
+                            type: object
+                        geo:
+                            description: A point determined by latitude and longitude.
+                            properties:
+                                latitude:
+                                    description: The latitude of a point in space.
+                                    format: double
+                                    type: number
+                                longitude:
+                                    description: The longitude of a point in space.
+                                    format: double
+                                    type: number
+                            type: object
+                    type: object
+                dataType:
+                    description: The field type (e.g., image, text, etc.).
+                    readOnly: true
+                    type: string
+                name:
+                    description: The field's internal name. This is valid for comparisons and unique in the structured content.
+                    type: string
         EmailAddress:
             description: Represents an email address. Properties follow the [email](https://schema.org/email) specification.
             properties:
@@ -92,6 +121,10 @@ components:
                             type: array
                     readOnly: true
                     type: object
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dateCreated:
                     description: The organization's creation date.
                     format: date-time
@@ -460,6 +493,10 @@ components:
                             readOnly: true
                             type: array
                     type: object
+                customFields:
+                    items:
+                        $ref: "#/components/schemas/CustomField"
+                    type: array
                 dashboardURL:
                     description: A relative URL to the user's dashboard.
                     readOnly: true
@@ -566,6 +603,7 @@ openapi: 3.0.1
 paths:
     "/email-addresses/{emailAddressId}":
         get:
+            description: Retrieves the email address.
             operationId: getEmailAddress
             parameters:
                 - in: path
@@ -587,6 +625,7 @@ paths:
             tags: ["EmailAddress"]
     "/my-user-account":
         get:
+            description: Retrieves information about the user who made the request.
             operationId: getMyUserAccount
             responses:
                 200:
@@ -601,6 +640,7 @@ paths:
             tags: ["UserAccount"]
     "/organizations":
         get:
+            description: Retrieves the organizations. Results can be paginated, filtered, searched, and sorted.
             operationId: getOrganizationsPage
             parameters:
                 - in: query
@@ -640,6 +680,7 @@ paths:
             tags: ["Organization"]
     "/organizations/{organizationId}":
         get:
+            description: Retrieves the organization.
             operationId: getOrganization
             parameters:
                 - in: path
@@ -661,6 +702,7 @@ paths:
             tags: ["Organization"]
     "/organizations/{organizationId}/email-addresses":
         get:
+            description: Retrieves the organization's email addresses.
             operationId: getOrganizationEmailAddressesPage
             parameters:
                 - in: path
@@ -686,6 +728,7 @@ paths:
             tags: ["EmailAddress"]
     "/organizations/{organizationId}/phones":
         get:
+            description: Retrieves the organization's phone numbers.
             operationId: getOrganizationPhonesPage
             parameters:
                 - in: path
@@ -711,6 +754,7 @@ paths:
             tags: ["Phone"]
     "/organizations/{organizationId}/postal-addresses":
         get:
+            description: Retrieves the organization's postal addresses.
             operationId: getOrganizationPostalAddressesPage
             parameters:
                 - in: path
@@ -736,6 +780,7 @@ paths:
             tags: ["PostalAddress"]
     "/organizations/{organizationId}/user-accounts":
         get:
+            description: Retrieves the organization's members (users). Results can be paginated, filtered, searched, and sorted.
             operationId: getOrganizationUserAccountsPage
             parameters:
                 - in: path
@@ -781,6 +826,7 @@ paths:
             tags: ["UserAccount"]
     "/organizations/{organizationId}/web-urls":
         get:
+            description: Retrieves the organization's URLs.
             operationId: getOrganizationWebUrlsPage
             parameters:
                 - in: path
@@ -806,6 +852,7 @@ paths:
             tags: ["WebUrl"]
     "/organizations/{parentOrganizationId}/organizations":
         get:
+            description: Retrieves the parent organization's child organizations. Results can be paginated, filtered, searched, and sorted.
             operationId: getOrganizationOrganizationsPage
             parameters:
                 - in: path
@@ -851,6 +898,7 @@ paths:
             tags: ["Organization"]
     "/phones/{phoneId}":
         get:
+            description: Retrieves the phone number.
             operationId: getPhone
             parameters:
                 - in: path
@@ -872,6 +920,7 @@ paths:
             tags: ["Phone"]
     "/postal-addresses/{postalAddressId}":
         get:
+            description: Retrieves the postal address.
             operationId: getPostalAddress
             parameters:
                 - in: path
@@ -893,6 +942,7 @@ paths:
             tags: ["PostalAddress"]
     "/roles":
         get:
+            description: Retrieves the portal instance's roles. Results can be paginated.
             operationId: getRolesPage
             parameters:
                 - in: query
@@ -920,6 +970,7 @@ paths:
             tags: ["Role"]
     "/roles/{roleId}":
         get:
+            description: Retrieves the role.
             operationId: getRole
             parameters:
                 - in: path
@@ -1041,6 +1092,7 @@ paths:
             tags: ["Segment"]
     "/user-accounts":
         get:
+            description: Retrieves the user accounts. Results can be paginated, filtered, searched, and sorted.
             operationId: getUserAccountsPage
             parameters:
                 - in: query
@@ -1080,6 +1132,7 @@ paths:
             tags: ["UserAccount"]
     "/user-accounts/{userAccountId}":
         get:
+            description: Retrieves the user account.
             operationId: getUserAccount
             parameters:
                 - in: path
@@ -1101,6 +1154,7 @@ paths:
             tags: ["UserAccount"]
     "/user-accounts/{userAccountId}/email-addresses":
         get:
+            description: Retrieves the user's email addresses.
             operationId: getUserAccountEmailAddressesPage
             parameters:
                 - in: path
@@ -1126,6 +1180,7 @@ paths:
             tags: ["EmailAddress"]
     "/user-accounts/{userAccountId}/phones":
         get:
+            description: Retrieves the user's phone numbers.
             operationId: getUserAccountPhonesPage
             parameters:
                 - in: path
@@ -1151,6 +1206,7 @@ paths:
             tags: ["Phone"]
     "/user-accounts/{userAccountId}/postal-addresses":
         get:
+            description: Retrieves the user's postal addresses.
             operationId: getUserAccountPostalAddressesPage
             parameters:
                 - in: path
@@ -1176,6 +1232,7 @@ paths:
             tags: ["PostalAddress"]
     "/user-accounts/{userAccountId}/web-urls":
         get:
+            description: Retrieves the user's URLs.
             operationId: getUserAccountWebUrlsPage
             parameters:
                 - in: path
@@ -1201,6 +1258,7 @@ paths:
             tags: ["WebUrl"]
     "/web-sites/{webSiteId}/user-accounts":
         get:
+            description: Retrieves the Site members' user accounts. Results can be paginated, filtered, searched, and sorted.
             operationId: getWebSiteUserAccountsPage
             parameters:
                 - in: path
@@ -1246,6 +1304,7 @@ paths:
             tags: ["UserAccount"]
     "/web-urls/{webUrlId}":
         get:
+            description: Retrieves the web URL.
             operationId: getWebUrl
             parameters:
                 - in: path

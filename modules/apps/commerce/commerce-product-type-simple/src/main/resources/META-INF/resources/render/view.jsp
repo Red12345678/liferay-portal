@@ -38,7 +38,7 @@ long cpDefinitionId = cpCatalogEntry.getCPDefinitionId();
 							%>
 
 								<div class="card thumb" data-url="<%= cpMedia.getUrl() %>">
-									<img class="center-block img-responsive" src="<%= cpMedia.getUrl() %>">
+									<img class="center-block img-responsive" src="<%= cpMedia.getUrl() %>" />
 								</div>
 
 							<%
@@ -50,7 +50,7 @@ long cpDefinitionId = cpCatalogEntry.getCPDefinitionId();
 
 					<div class="col-lg-10 col-md-9 col-xs-10 full-image">
 						<c:if test="<%= Validator.isNotNull(cpCatalogEntry.getDefaultImageFileUrl()) %>">
-							<img class="center-block img-responsive" id="<portlet:namespace />full-image" src="<%= cpCatalogEntry.getDefaultImageFileUrl() %>">
+							<img class="center-block img-responsive" id="<portlet:namespace />full-image" src="<%= cpCatalogEntry.getDefaultImageFileUrl() %>" />
 						</c:if>
 					</div>
 				</div>
@@ -113,7 +113,7 @@ long cpDefinitionId = cpCatalogEntry.getCPDefinitionId();
 
 	<%
 	List<CPDefinitionSpecificationOptionValue> cpDefinitionSpecificationOptionValues = cpContentHelper.getCPDefinitionSpecificationOptionValues(cpDefinitionId);
-	List<CPOptionCategory> cpOptionCategories = cpContentHelper.getCPOptionCategories(scopeGroupId);
+	List<CPOptionCategory> cpOptionCategories = cpContentHelper.getCPOptionCategories(company.getCompanyId());
 	List<CPMedia> cpMediaEntries = cpContentHelper.getCPAttachmentFileEntries(cpDefinitionId, themeDisplay);
 	%>
 
@@ -161,8 +161,8 @@ long cpDefinitionId = cpCatalogEntry.getCPDefinitionId();
 										%>
 
 											<tr>
-												<td><%= cpSpecificationOption.getTitle(languageId) %></td>
-												<td><%= cpDefinitionSpecificationOptionValue.getValue(languageId) %></td>
+												<td><%= HtmlUtil.escape(cpSpecificationOption.getTitle(languageId)) %></td>
+												<td><%= HtmlUtil.escape(cpDefinitionSpecificationOptionValue.getValue(languageId)) %></td>
 											</tr>
 
 										<%
@@ -192,8 +192,8 @@ long cpDefinitionId = cpCatalogEntry.getCPDefinitionId();
 											%>
 
 												<tr>
-													<td><%= cpSpecificationOption.getTitle(languageId) %></td>
-													<td><%= cpDefinitionSpecificationOptionValue.getValue(languageId) %></td>
+													<td><%= HtmlUtil.escape(cpSpecificationOption.getTitle(languageId)) %></td>
+													<td><%= HtmlUtil.escape(cpDefinitionSpecificationOptionValue.getValue(languageId)) %></td>
 												</tr>
 
 											<%

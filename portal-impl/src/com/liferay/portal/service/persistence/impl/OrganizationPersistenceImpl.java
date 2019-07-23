@@ -29,11 +29,10 @@ import com.liferay.portal.kernel.exception.NoSuchOrganizationException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Organization;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.GroupPersistence;
 import com.liferay.portal.kernel.service.persistence.OrganizationPersistence;
 import com.liferay.portal.kernel.service.persistence.UserPersistence;
@@ -9328,7 +9327,7 @@ public class OrganizationPersistenceImpl
 
 		organization.setUuid(uuid);
 
-		organization.setCompanyId(companyProvider.getCompanyId());
+		organization.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return organization;
 	}
@@ -10176,7 +10175,7 @@ public class OrganizationPersistenceImpl
 
 		if (organization == null) {
 			organizationToGroupTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, groupPK);
+				CompanyThreadLocal.getCompanyId(), pk, groupPK);
 		}
 		else {
 			organizationToGroupTableMapper.addTableMapping(
@@ -10196,7 +10195,7 @@ public class OrganizationPersistenceImpl
 
 		if (organization == null) {
 			organizationToGroupTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, group.getPrimaryKey());
+				CompanyThreadLocal.getCompanyId(), pk, group.getPrimaryKey());
 		}
 		else {
 			organizationToGroupTableMapper.addTableMapping(
@@ -10217,7 +10216,7 @@ public class OrganizationPersistenceImpl
 		Organization organization = fetchByPrimaryKey(pk);
 
 		if (organization == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = organization.getCompanyId();
@@ -10333,7 +10332,7 @@ public class OrganizationPersistenceImpl
 		Organization organization = fetchByPrimaryKey(pk);
 
 		if (organization == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = organization.getCompanyId();
@@ -10488,7 +10487,7 @@ public class OrganizationPersistenceImpl
 
 		if (organization == null) {
 			organizationToUserTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, userPK);
+				CompanyThreadLocal.getCompanyId(), pk, userPK);
 		}
 		else {
 			organizationToUserTableMapper.addTableMapping(
@@ -10508,7 +10507,7 @@ public class OrganizationPersistenceImpl
 
 		if (organization == null) {
 			organizationToUserTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, user.getPrimaryKey());
+				CompanyThreadLocal.getCompanyId(), pk, user.getPrimaryKey());
 		}
 		else {
 			organizationToUserTableMapper.addTableMapping(
@@ -10529,7 +10528,7 @@ public class OrganizationPersistenceImpl
 		Organization organization = fetchByPrimaryKey(pk);
 
 		if (organization == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = organization.getCompanyId();
@@ -10640,7 +10639,7 @@ public class OrganizationPersistenceImpl
 		Organization organization = fetchByPrimaryKey(pk);
 
 		if (organization == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = organization.getCompanyId();
@@ -10941,9 +10940,6 @@ public class OrganizationPersistenceImpl
 		TableMapperFactory.removeTableMapper("Groups_Orgs");
 		TableMapperFactory.removeTableMapper("Users_Orgs");
 	}
-
-	@BeanReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@BeanReference(type = GroupPersistence.class)
 	protected GroupPersistence groupPersistence;

@@ -126,6 +126,10 @@ public class SearchBarPortlet extends MVCPortlet {
 			getKeywordsParameterName(
 				searchSettings, searchBarPortletPreferences, themeDisplay));
 
+		SearchOptionalUtil.copy(
+			searchSettings::getPaginationStartParameterName,
+			searchBarPortletDisplayBuilder::setPaginationStartParameterName);
+
 		String scopeParameterName =
 			searchBarPortletPreferences.getScopeParameterName();
 

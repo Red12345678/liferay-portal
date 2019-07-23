@@ -26,18 +26,17 @@ import java.util.List;
  * This class is used by SOAP remote services, specifically {@link com.liferay.commerce.product.service.http.CPOptionValueServiceSoap}.
  *
  * @author Marco Leo
- * @see com.liferay.commerce.product.service.http.CPOptionValueServiceSoap
  * @generated
  */
 @ProviderType
 public class CPOptionValueSoap implements Serializable {
+
 	public static CPOptionValueSoap toSoapModel(CPOptionValue model) {
 		CPOptionValueSoap soapModel = new CPOptionValueSoap();
 
 		soapModel.setUuid(model.getUuid());
 		soapModel.setExternalReferenceCode(model.getExternalReferenceCode());
 		soapModel.setCPOptionValueId(model.getCPOptionValueId());
-		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setUserName(model.getUserName());
@@ -80,7 +79,8 @@ public class CPOptionValueSoap implements Serializable {
 	}
 
 	public static CPOptionValueSoap[] toSoapModels(List<CPOptionValue> models) {
-		List<CPOptionValueSoap> soapModels = new ArrayList<CPOptionValueSoap>(models.size());
+		List<CPOptionValueSoap> soapModels = new ArrayList<CPOptionValueSoap>(
+			models.size());
 
 		for (CPOptionValue model : models) {
 			soapModels.add(toSoapModel(model));
@@ -122,14 +122,6 @@ public class CPOptionValueSoap implements Serializable {
 
 	public void setCPOptionValueId(long CPOptionValueId) {
 		_CPOptionValueId = CPOptionValueId;
-	}
-
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	public void setGroupId(long groupId) {
-		_groupId = groupId;
 	}
 
 	public long getCompanyId() {
@@ -215,7 +207,6 @@ public class CPOptionValueSoap implements Serializable {
 	private String _uuid;
 	private String _externalReferenceCode;
 	private long _CPOptionValueId;
-	private long _groupId;
 	private long _companyId;
 	private long _userId;
 	private String _userName;
@@ -226,4 +217,5 @@ public class CPOptionValueSoap implements Serializable {
 	private double _priority;
 	private String _key;
 	private Date _lastPublishDate;
+
 }

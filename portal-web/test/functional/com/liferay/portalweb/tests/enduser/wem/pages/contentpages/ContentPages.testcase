@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Content Pages";
@@ -13,9 +14,7 @@ definition {
 
 		FragmentsAdmin.openFragmentsAdmin(siteURLKey = "test-site-name");
 
-		FragmentsAdmin.importCollectionFromDependenciesFolder(
-			collectionZipFile = "fragment-collection.zip"
-		);
+		FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "fragment-collection.zip");
 	}
 
 	tearDown {
@@ -41,50 +40,41 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Rich Text"
-		);
+			fragmentName = "Rich Text");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Button"
-		);
+			fragmentName = "Button");
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name/test-content-page-name"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-content-page-name");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 			key_fragmentClass = "rich-text",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Submit",
 			key_fragmentClass = "footer",
-			key_position = "3"
-		);
+			key_position = "3",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Cancel",
 			key_fragmentClass = "footer",
-			key_position = "3"
-		);
+			key_position = "3",
+			locator1 = "Fragment#FRAGMENT");
 
 		for (var button : list "Submit,Cancel") {
 			Button.viewPresent(button = "${button}");
@@ -104,8 +94,7 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Button"
-		);
+			fragmentName = "Button");
 
 		Button.clickPublish();
 
@@ -114,10 +103,11 @@ definition {
 		ContentPages.addPage(
 			collectionName = "Page Template Collection",
 			pageName = "Test Page Name",
-			pageTemplateName = "Page Template Name"
-		);
+			pageTemplateName = "Page Template Name");
 
-		Navigator.gotoSitePage(pageName = "Test Page Name", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Test Page Name",
+			siteName = "Test Site Name");
 
 		for (var button : list "Submit,Cancel") {
 			Button.viewPresent(button = "${button}");
@@ -139,25 +129,20 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Content"
-		);
+			fragmentName = "Content");
 
 		PageEditor.editFragmentText(
 			fragmentName = "Content",
 			id = "content",
-			text = "New editable fragment text"
-		);
+			text = "New editable fragment text");
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name/test-content-page-name"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-content-page-name");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "New editable fragment text",
 			key_fragmentClass = "body",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 	}
 
 	@description = "Edit an existing content page that has fragments. This testcase covers the bug found in LPS-85872."
@@ -171,56 +156,48 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Rich Text"
-		);
+			fragmentName = "Rich Text");
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name/test-content-page-name"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-content-page-name");
 
 		ContentPages.gotoEdit();
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Content"
-		);
+			fragmentName = "Content");
 
 		PageEditor.editFragmentText(
 			fragmentName = "Rich Text",
 			id = "rich-text",
-			text = "New editable fragment text"
-		);
+			text = "New editable fragment text");
 
-		PageEditor.moveFragment(direction = "down", fragmentName = "Title");
+		PageEditor.moveFragment(
+			direction = "down",
+			fragmentName = "Title");
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name/test-content-page-name"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-content-page-name");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "New editable fragment text",
 			key_fragmentClass = "rich-text",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet",
 			key_fragmentClass = "header",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tempus eleifend lacus nec porttitor. Vestibulum pharetra ullamcorper felis volutpat commodo. Nam id ipsum placerat, hendrerit orci eu, congue nisi. Proin.",
 			key_fragmentClass = "body",
-			key_position = "3"
-		);
+			key_position = "3",
+			locator1 = "Fragment#FRAGMENT");
 	}
+
 }

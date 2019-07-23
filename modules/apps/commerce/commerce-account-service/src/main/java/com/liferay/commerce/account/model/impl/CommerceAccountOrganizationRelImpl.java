@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.service.OrganizationLocalServiceUtil;
 
 /**
- * @author Marco Leo
  * @author Alessio Antonio Rendina
  */
 @ProviderType

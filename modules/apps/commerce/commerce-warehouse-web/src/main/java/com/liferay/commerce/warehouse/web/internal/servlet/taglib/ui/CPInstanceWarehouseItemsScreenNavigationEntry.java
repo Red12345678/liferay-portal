@@ -14,21 +14,18 @@
 
 package com.liferay.commerce.warehouse.web.internal.servlet.taglib.ui;
 
-import com.liferay.commerce.constants.CommerceConstants;
+import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseItemService;
+import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseService;
 import com.liferay.commerce.product.definitions.web.servlet.taglib.ui.CPInstanceScreenNavigationConstants;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.service.CPInstanceService;
-import com.liferay.commerce.service.CommerceWarehouseItemService;
-import com.liferay.commerce.service.CommerceWarehouseService;
-import com.liferay.commerce.warehouse.web.internal.display.context.CommerceWarehouseItemsDisplayContext;
+import com.liferay.commerce.warehouse.web.internal.display.context.CommerceInventoryWarehouseItemsDisplayContext;
 import com.liferay.frontend.taglib.servlet.taglib.ScreenNavigationEntry;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -95,17 +92,16 @@ public class CPInstanceWarehouseItemsScreenNavigationEntry
 		throws IOException {
 
 		try {
-			CommerceWarehouseItemsDisplayContext
-				commerceWarehouseItemsDisplayContext =
-					new CommerceWarehouseItemsDisplayContext(
-						_commerceWarehouseItemService,
-						_commerceWarehouseService, _configurationProvider,
-						_cpInstanceService, httpServletRequest, _portal,
-						_portletResourcePermission);
+			CommerceInventoryWarehouseItemsDisplayContext
+				commerceInventoryWarehouseItemsDisplayContext =
+					new CommerceInventoryWarehouseItemsDisplayContext(
+						_commerceInventoryWarehouseItemService,
+						_commerceInventoryWarehouseService, _cpInstanceService,
+						httpServletRequest, _portal);
 
 			httpServletRequest.setAttribute(
 				WebKeys.PORTLET_DISPLAY_CONTEXT,
-				commerceWarehouseItemsDisplayContext);
+				commerceInventoryWarehouseItemsDisplayContext);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -120,13 +116,12 @@ public class CPInstanceWarehouseItemsScreenNavigationEntry
 		CPInstanceWarehouseItemsScreenNavigationEntry.class);
 
 	@Reference
-	private CommerceWarehouseItemService _commerceWarehouseItemService;
+	private CommerceInventoryWarehouseItemService
+		_commerceInventoryWarehouseItemService;
 
 	@Reference
-	private CommerceWarehouseService _commerceWarehouseService;
-
-	@Reference
-	private ConfigurationProvider _configurationProvider;
+	private CommerceInventoryWarehouseService
+		_commerceInventoryWarehouseService;
 
 	@Reference
 	private CPInstanceService _cpInstanceService;
@@ -136,11 +131,6 @@ public class CPInstanceWarehouseItemsScreenNavigationEntry
 
 	@Reference
 	private Portal _portal;
-
-	@Reference(
-		target = "(resource.name=" + CommerceConstants.RESOURCE_NAME + ")"
-	)
-	private PortletResourcePermission _portletResourcePermission;
 
 	@Reference(
 		target = "(osgi.web.symbolicname=com.liferay.commerce.warehouse.web)"

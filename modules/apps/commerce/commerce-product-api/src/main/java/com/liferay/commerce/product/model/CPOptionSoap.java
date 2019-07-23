@@ -26,18 +26,17 @@ import java.util.List;
  * This class is used by SOAP remote services, specifically {@link com.liferay.commerce.product.service.http.CPOptionServiceSoap}.
  *
  * @author Marco Leo
- * @see com.liferay.commerce.product.service.http.CPOptionServiceSoap
  * @generated
  */
 @ProviderType
 public class CPOptionSoap implements Serializable {
+
 	public static CPOptionSoap toSoapModel(CPOption model) {
 		CPOptionSoap soapModel = new CPOptionSoap();
 
 		soapModel.setUuid(model.getUuid());
 		soapModel.setExternalReferenceCode(model.getExternalReferenceCode());
 		soapModel.setCPOptionId(model.getCPOptionId());
-		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setUserName(model.getUserName());
@@ -83,7 +82,8 @@ public class CPOptionSoap implements Serializable {
 	}
 
 	public static CPOptionSoap[] toSoapModels(List<CPOption> models) {
-		List<CPOptionSoap> soapModels = new ArrayList<CPOptionSoap>(models.size());
+		List<CPOptionSoap> soapModels = new ArrayList<CPOptionSoap>(
+			models.size());
 
 		for (CPOption model : models) {
 			soapModels.add(toSoapModel(model));
@@ -125,14 +125,6 @@ public class CPOptionSoap implements Serializable {
 
 	public void setCPOptionId(long CPOptionId) {
 		_CPOptionId = CPOptionId;
-	}
-
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	public void setGroupId(long groupId) {
-		_groupId = groupId;
 	}
 
 	public long getCompanyId() {
@@ -254,7 +246,6 @@ public class CPOptionSoap implements Serializable {
 	private String _uuid;
 	private String _externalReferenceCode;
 	private long _CPOptionId;
-	private long _groupId;
 	private long _companyId;
 	private long _userId;
 	private String _userName;
@@ -268,4 +259,5 @@ public class CPOptionSoap implements Serializable {
 	private boolean _skuContributor;
 	private String _key;
 	private Date _lastPublishDate;
+
 }

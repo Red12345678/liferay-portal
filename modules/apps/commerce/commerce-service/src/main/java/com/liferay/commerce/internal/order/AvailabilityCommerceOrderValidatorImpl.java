@@ -17,6 +17,7 @@ package com.liferay.commerce.internal.order;
 import com.liferay.commerce.constants.CommerceOrderConstants;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngine;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngineRegistry;
+import com.liferay.commerce.inventory.engine.CommerceInventoryEngine;
 import com.liferay.commerce.model.CPDefinitionInventory;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderItem;
@@ -93,8 +94,9 @@ public class AvailabilityCommerceOrderValidatorImpl
 			return new CommerceOrderValidatorResult(true);
 		}
 
-		int availableQuantity = cpDefinitionInventoryEngine.getStockQuantity(
-			cpInstance);
+		int availableQuantity = _commerceInventoryEngine.getStockQuantity(
+			cpInstance.getCompanyId(), commerceOrder.getGroupId(),
+			cpInstance.getSku());
 
 		int orderQuantity =
 			_commerceOrderItemLocalService.getCPInstanceQuantity(
@@ -143,8 +145,9 @@ public class AvailabilityCommerceOrderValidatorImpl
 			return new CommerceOrderValidatorResult(true);
 		}
 
-		int availableQuantity = cpDefinitionInventoryEngine.getStockQuantity(
-			cpInstance);
+		int availableQuantity = _commerceInventoryEngine.getStockQuantity(
+			cpInstance.getCompanyId(), commerceOrderItem.getGroupId(),
+			cpInstance.getSku());
 
 		int orderQuantity =
 			_commerceOrderItemLocalService.getCPInstanceQuantity(
@@ -166,6 +169,9 @@ public class AvailabilityCommerceOrderValidatorImpl
 
 		return LanguageUtil.get(resourceBundle, key);
 	}
+
+	@Reference
+	private CommerceInventoryEngine _commerceInventoryEngine;
 
 	@Reference
 	private CommerceOrderItemLocalService _commerceOrderItemLocalService;

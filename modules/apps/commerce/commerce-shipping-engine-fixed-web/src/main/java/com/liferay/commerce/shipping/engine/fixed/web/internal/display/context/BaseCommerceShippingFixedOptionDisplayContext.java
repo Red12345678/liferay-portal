@@ -14,7 +14,6 @@
 
 package com.liferay.commerce.shipping.engine.fixed.web.internal.display.context;
 
-import com.liferay.commerce.constants.CommerceActionKeys;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.commerce.model.CommerceShippingMethod;
@@ -166,15 +165,6 @@ public abstract class BaseCommerceShippingFixedOptionDisplayContext<T> {
 	public abstract SearchContainer<T> getSearchContainer()
 		throws PortalException;
 
-	public boolean hasManageCommerceShipmentsPermission() {
-		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		return portletResourcePermission.contains(
-			themeDisplay.getPermissionChecker(), themeDisplay.getScopeGroupId(),
-			CommerceActionKeys.MANAGE_COMMERCE_SHIPMENTS);
-	}
-
 	public BigDecimal round(BigDecimal value) {
 		CommerceCurrency commerceCurrency = getCommerceCurrency();
 
@@ -198,7 +188,7 @@ public abstract class BaseCommerceShippingFixedOptionDisplayContext<T> {
 			WebKeys.THEME_DISPLAY);
 
 		return commerceCurrencyLocalService.fetchPrimaryCommerceCurrency(
-			themeDisplay.getScopeGroupId());
+			themeDisplay.getCompanyId());
 	}
 
 	protected String getSelectedScreenNavigationCategoryKey() {

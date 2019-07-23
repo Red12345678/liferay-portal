@@ -33,6 +33,8 @@ public interface CPCatalogEntry {
 
 	public String getDescription();
 
+	public long getGroupId();
+
 	public double getHeight();
 
 	public String getMetaDescription(String languageId);

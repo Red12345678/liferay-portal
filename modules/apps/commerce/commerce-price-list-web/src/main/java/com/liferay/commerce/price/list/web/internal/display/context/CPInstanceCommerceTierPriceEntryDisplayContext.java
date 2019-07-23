@@ -31,7 +31,7 @@ import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
+import com.liferay.portal.kernel.service.permission.PortalPermissionUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -56,8 +56,7 @@ public class CPInstanceCommerceTierPriceEntryDisplayContext
 		ActionHelper actionHelper,
 		CommercePriceListActionHelper commercePriceListActionHelper,
 		CommerceTierPriceEntryService commercePriceEntryService,
-		HttpServletRequest httpServletRequest,
-		PortletResourcePermission portletResourcePermission) {
+		HttpServletRequest httpServletRequest) {
 
 		super(
 			actionHelper, httpServletRequest,
@@ -65,7 +64,6 @@ public class CPInstanceCommerceTierPriceEntryDisplayContext
 
 		_commercePriceListActionHelper = commercePriceListActionHelper;
 		_commerceTierPriceEntryService = commercePriceEntryService;
-		_portletResourcePermission = portletResourcePermission;
 
 		setDefaultOrderByCol("create-date");
 		setDefaultOrderByType("desc");
@@ -322,9 +320,8 @@ public class CPInstanceCommerceTierPriceEntryDisplayContext
 	}
 
 	public boolean hasManageCommercePriceListPermission() {
-		return _portletResourcePermission.contains(
+		return PortalPermissionUtil.contains(
 			cpRequestHelper.getPermissionChecker(),
-			cpRequestHelper.getScopeGroupId(),
 			CommercePriceListActionKeys.MANAGE_COMMERCE_PRICE_LISTS);
 	}
 
@@ -332,6 +329,5 @@ public class CPInstanceCommerceTierPriceEntryDisplayContext
 	private CommerceTierPriceEntry _commerceTierPriceEntry;
 	private final CommerceTierPriceEntryService _commerceTierPriceEntryService;
 	private CPInstance _cpInstance;
-	private final PortletResourcePermission _portletResourcePermission;
 
 }

@@ -15,18 +15,12 @@
 package com.liferay.headless.commerce.admin.site.setting.internal.graphql.query.v1_0;
 
 import com.liferay.headless.commerce.admin.site.setting.dto.v1_0.AvailabilityEstimate;
-import com.liferay.headless.commerce.admin.site.setting.dto.v1_0.CatalogRule;
-import com.liferay.headless.commerce.admin.site.setting.dto.v1_0.Category;
 import com.liferay.headless.commerce.admin.site.setting.dto.v1_0.MeasurementUnit;
 import com.liferay.headless.commerce.admin.site.setting.dto.v1_0.TaxCategory;
-import com.liferay.headless.commerce.admin.site.setting.dto.v1_0.UserSegment;
-import com.liferay.headless.commerce.admin.site.setting.dto.v1_0.UserSegmentCriterion;
 import com.liferay.headless.commerce.admin.site.setting.dto.v1_0.Warehouse;
 import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.AvailabilityEstimateResource;
-import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.CatalogRuleResource;
 import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.MeasurementUnitResource;
 import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.TaxCategoryResource;
-import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.UserSegmentResource;
 import com.liferay.headless.commerce.admin.site.setting.resource.v1_0.WarehouseResource;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
@@ -60,14 +54,6 @@ public class Query {
 			availabilityEstimateResourceComponentServiceObjects;
 	}
 
-	public static void setCatalogRuleResourceComponentServiceObjects(
-		ComponentServiceObjects<CatalogRuleResource>
-			catalogRuleResourceComponentServiceObjects) {
-
-		_catalogRuleResourceComponentServiceObjects =
-			catalogRuleResourceComponentServiceObjects;
-	}
-
 	public static void setMeasurementUnitResourceComponentServiceObjects(
 		ComponentServiceObjects<MeasurementUnitResource>
 			measurementUnitResourceComponentServiceObjects) {
@@ -82,14 +68,6 @@ public class Query {
 
 		_taxCategoryResourceComponentServiceObjects =
 			taxCategoryResourceComponentServiceObjects;
-	}
-
-	public static void setUserSegmentResourceComponentServiceObjects(
-		ComponentServiceObjects<UserSegmentResource>
-			userSegmentResourceComponentServiceObjects) {
-
-		_userSegmentResourceComponentServiceObjects =
-			userSegmentResourceComponentServiceObjects;
 	}
 
 	public static void setWarehouseResourceComponentServiceObjects(
@@ -115,10 +93,11 @@ public class Query {
 
 	@GraphQLField
 	@GraphQLInvokeDetached
-	public Collection<AvailabilityEstimate> getAvailabilityEstimates(
-			@GraphQLName("groupId") Long groupId,
-			@GraphQLName("pageSize") int pageSize,
-			@GraphQLName("page") int page)
+	public Collection<AvailabilityEstimate>
+			getCommerceAdminSiteSettingGroupAvailabilityEstimatePage(
+				@GraphQLName("groupId") Long groupId,
+				@GraphQLName("pageSize") int pageSize,
+				@GraphQLName("page") int page)
 		throws Exception {
 
 		return _applyComponentServiceObjects(
@@ -126,97 +105,9 @@ public class Query {
 			this::_populateResourceContext,
 			availabilityEstimateResource -> {
 				Page paginationPage =
-					availabilityEstimateResource.getAvailabilityEstimates(
-						groupId, Pagination.of(pageSize, page));
-
-				return paginationPage.getItems();
-			});
-	}
-
-	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection<Category> getCatalogRuleCategories(
-			@GraphQLName("id") Long id, @GraphQLName("pageSize") int pageSize,
-			@GraphQLName("page") int page)
-		throws Exception {
-
-		return _applyComponentServiceObjects(
-			_catalogRuleResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			catalogRuleResource -> {
-				Page paginationPage =
-					catalogRuleResource.getCatalogRuleCategories(
-						id, Pagination.of(pageSize, page));
-
-				return paginationPage.getItems();
-			});
-	}
-
-	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection<UserSegment> getCatalogRuleUserSegments(
-			@GraphQLName("id") Long id, @GraphQLName("pageSize") int pageSize,
-			@GraphQLName("page") int page)
-		throws Exception {
-
-		return _applyComponentServiceObjects(
-			_catalogRuleResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			catalogRuleResource -> {
-				Page paginationPage =
-					catalogRuleResource.getCatalogRuleUserSegments(
-						id, Pagination.of(pageSize, page));
-
-				return paginationPage.getItems();
-			});
-	}
-
-	@GraphQLField
-	@GraphQLInvokeDetached
-	public CatalogRule getCatalogRule(@GraphQLName("id") Long id)
-		throws Exception {
-
-		return _applyComponentServiceObjects(
-			_catalogRuleResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			catalogRuleResource -> catalogRuleResource.getCatalogRule(id));
-	}
-
-	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection<CatalogRule> getCatalogRules(
-			@GraphQLName("groupId") Long groupId,
-			@GraphQLName("pageSize") int pageSize,
-			@GraphQLName("page") int page)
-		throws Exception {
-
-		return _applyComponentServiceObjects(
-			_catalogRuleResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			catalogRuleResource -> {
-				Page paginationPage = catalogRuleResource.getCatalogRules(
-					groupId, Pagination.of(pageSize, page));
-
-				return paginationPage.getItems();
-			});
-	}
-
-	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection<MeasurementUnit> getMeasurementUnits(
-			@GraphQLName("groupId") Long groupId,
-			@GraphQLName("type") Integer type,
-			@GraphQLName("pageSize") int pageSize,
-			@GraphQLName("page") int page)
-		throws Exception {
-
-		return _applyComponentServiceObjects(
-			_measurementUnitResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			measurementUnitResource -> {
-				Page paginationPage =
-					measurementUnitResource.getMeasurementUnits(
-						groupId, type, Pagination.of(pageSize, page));
+					availabilityEstimateResource.
+						getCommerceAdminSiteSettingGroupAvailabilityEstimatePage(
+							groupId, Pagination.of(pageSize, page));
 
 				return paginationPage.getItems();
 			});
@@ -236,18 +127,22 @@ public class Query {
 
 	@GraphQLField
 	@GraphQLInvokeDetached
-	public Collection<TaxCategory> getTaxCategories(
-			@GraphQLName("groupId") Long groupId,
-			@GraphQLName("pageSize") int pageSize,
-			@GraphQLName("page") int page)
+	public Collection<MeasurementUnit>
+			getCommerceAdminSiteSettingGroupMeasurementUnitPage(
+				@GraphQLName("groupId") Long groupId,
+				@GraphQLName("type") Integer type,
+				@GraphQLName("pageSize") int pageSize,
+				@GraphQLName("page") int page)
 		throws Exception {
 
 		return _applyComponentServiceObjects(
-			_taxCategoryResourceComponentServiceObjects,
+			_measurementUnitResourceComponentServiceObjects,
 			this::_populateResourceContext,
-			taxCategoryResource -> {
-				Page paginationPage = taxCategoryResource.getTaxCategories(
-					groupId, Pagination.of(pageSize, page));
+			measurementUnitResource -> {
+				Page paginationPage =
+					measurementUnitResource.
+						getCommerceAdminSiteSettingGroupMeasurementUnitPage(
+							groupId, type, Pagination.of(pageSize, page));
 
 				return paginationPage.getItems();
 			});
@@ -266,82 +161,21 @@ public class Query {
 
 	@GraphQLField
 	@GraphQLInvokeDetached
-	public Collection<UserSegment> getUserSegments(
-			@GraphQLName("groupId") Long groupId,
-			@GraphQLName("pageSize") int pageSize,
-			@GraphQLName("page") int page)
+	public Collection<TaxCategory>
+			getCommerceAdminSiteSettingGroupTaxCategoryPage(
+				@GraphQLName("groupId") Long groupId,
+				@GraphQLName("pageSize") int pageSize,
+				@GraphQLName("page") int page)
 		throws Exception {
 
 		return _applyComponentServiceObjects(
-			_userSegmentResourceComponentServiceObjects,
+			_taxCategoryResourceComponentServiceObjects,
 			this::_populateResourceContext,
-			userSegmentResource -> {
-				Page paginationPage = userSegmentResource.getUserSegments(
-					groupId, Pagination.of(pageSize, page));
-
-				return paginationPage.getItems();
-			});
-	}
-
-	@GraphQLField
-	@GraphQLInvokeDetached
-	public UserSegmentCriterion getUserSegmentCriterion(
-			@GraphQLName("criterionId") Long criterionId,
-			@GraphQLName("id") Long id)
-		throws Exception {
-
-		return _applyComponentServiceObjects(
-			_userSegmentResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			userSegmentResource -> userSegmentResource.getUserSegmentCriterion(
-				criterionId, id));
-	}
-
-	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection<UserSegmentCriterion> getUserSegmentCriteria(
-			@GraphQLName("id") Long id, @GraphQLName("pageSize") int pageSize,
-			@GraphQLName("page") int page)
-		throws Exception {
-
-		return _applyComponentServiceObjects(
-			_userSegmentResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			userSegmentResource -> {
+			taxCategoryResource -> {
 				Page paginationPage =
-					userSegmentResource.getUserSegmentCriteria(
-						id, Pagination.of(pageSize, page));
-
-				return paginationPage.getItems();
-			});
-	}
-
-	@GraphQLField
-	@GraphQLInvokeDetached
-	public UserSegment getUserSegment(@GraphQLName("id") Long id)
-		throws Exception {
-
-		return _applyComponentServiceObjects(
-			_userSegmentResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			userSegmentResource -> userSegmentResource.getUserSegment(id));
-	}
-
-	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection<Warehouse> getWarehouses(
-			@GraphQLName("groupId") Long groupId,
-			@GraphQLName("active") Boolean active,
-			@GraphQLName("pageSize") int pageSize,
-			@GraphQLName("page") int page)
-		throws Exception {
-
-		return _applyComponentServiceObjects(
-			_warehouseResourceComponentServiceObjects,
-			this::_populateResourceContext,
-			warehouseResource -> {
-				Page paginationPage = warehouseResource.getWarehouses(
-					groupId, active, Pagination.of(pageSize, page));
+					taxCategoryResource.
+						getCommerceAdminSiteSettingGroupTaxCategoryPage(
+							groupId, Pagination.of(pageSize, page));
 
 				return paginationPage.getItems();
 			});
@@ -354,6 +188,28 @@ public class Query {
 			_warehouseResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			warehouseResource -> warehouseResource.getWarehouse(id));
+	}
+
+	@GraphQLField
+	@GraphQLInvokeDetached
+	public Collection<Warehouse> getCommerceAdminSiteSettingGroupWarehousePage(
+			@GraphQLName("groupId") Long groupId,
+			@GraphQLName("active") Boolean active,
+			@GraphQLName("pageSize") int pageSize,
+			@GraphQLName("page") int page)
+		throws Exception {
+
+		return _applyComponentServiceObjects(
+			_warehouseResourceComponentServiceObjects,
+			this::_populateResourceContext,
+			warehouseResource -> {
+				Page paginationPage =
+					warehouseResource.
+						getCommerceAdminSiteSettingGroupWarehousePage(
+							groupId, active, Pagination.of(pageSize, page));
+
+				return paginationPage.getItems();
+			});
 	}
 
 	private <T, R, E1 extends Throwable, E2 extends Throwable> R
@@ -385,15 +241,6 @@ public class Query {
 	}
 
 	private void _populateResourceContext(
-			CatalogRuleResource catalogRuleResource)
-		throws Exception {
-
-		catalogRuleResource.setContextCompany(
-			CompanyLocalServiceUtil.getCompany(
-				CompanyThreadLocal.getCompanyId()));
-	}
-
-	private void _populateResourceContext(
 			MeasurementUnitResource measurementUnitResource)
 		throws Exception {
 
@@ -411,15 +258,6 @@ public class Query {
 				CompanyThreadLocal.getCompanyId()));
 	}
 
-	private void _populateResourceContext(
-			UserSegmentResource userSegmentResource)
-		throws Exception {
-
-		userSegmentResource.setContextCompany(
-			CompanyLocalServiceUtil.getCompany(
-				CompanyThreadLocal.getCompanyId()));
-	}
-
 	private void _populateResourceContext(WarehouseResource warehouseResource)
 		throws Exception {
 
@@ -430,14 +268,10 @@ public class Query {
 
 	private static ComponentServiceObjects<AvailabilityEstimateResource>
 		_availabilityEstimateResourceComponentServiceObjects;
-	private static ComponentServiceObjects<CatalogRuleResource>
-		_catalogRuleResourceComponentServiceObjects;
 	private static ComponentServiceObjects<MeasurementUnitResource>
 		_measurementUnitResourceComponentServiceObjects;
 	private static ComponentServiceObjects<TaxCategoryResource>
 		_taxCategoryResourceComponentServiceObjects;
-	private static ComponentServiceObjects<UserSegmentResource>
-		_userSegmentResourceComponentServiceObjects;
 	private static ComponentServiceObjects<WarehouseResource>
 		_warehouseResourceComponentServiceObjects;
 

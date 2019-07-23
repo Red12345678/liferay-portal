@@ -80,7 +80,6 @@ public class RemoteJaxrsWhiteboardTestBundleActivator
 				serviceRegistration.unregister();
 			}
 			catch (Exception e) {
-				continue;
 			}
 		}
 	}

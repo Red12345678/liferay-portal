@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Sort;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -46,15 +45,13 @@ public class CPSpecificationOptionDisplayContext
 
 	public CPSpecificationOptionDisplayContext(
 			ActionHelper actionHelper, HttpServletRequest httpServletRequest,
-			PortletResourcePermission portletResourcePermission,
 			CPOptionCategoryService cpOptionCategoryService,
 			CPSpecificationOptionService cpSpecificationOptionService)
 		throws PortalException {
 
 		super(
 			actionHelper, httpServletRequest,
-			CPSpecificationOption.class.getSimpleName(),
-			portletResourcePermission);
+			CPSpecificationOption.class.getSimpleName());
 
 		setDefaultOrderByCol("label");
 
@@ -65,8 +62,13 @@ public class CPSpecificationOptionDisplayContext
 	public List<CPOptionCategory> getCPOptionCategories()
 		throws PortalException {
 
-		return _cpOptionCategoryService.getCPOptionCategories(
-			getScopeGroupId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		BaseModelSearchResult<CPOptionCategory>
+			cpOptionCategoryBaseModelSearchResult =
+				_cpOptionCategoryService.searchCPOptionCategories(
+					cpRequestHelper.getCompanyId(), null, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null);
+
+		return cpOptionCategoryBaseModelSearchResult.getBaseModels();
 	}
 
 	public String getCPOptionCategoryTitle(
@@ -77,10 +79,9 @@ public class CPSpecificationOptionDisplayContext
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-		long cpOptionCategoryId = cpSpecificationOption.getCPOptionCategoryId();
-
 		CPOptionCategory cpOptionCategory =
-			_cpOptionCategoryService.fetchCPOptionCategory(cpOptionCategoryId);
+			_cpOptionCategoryService.fetchCPOptionCategory(
+				cpSpecificationOption.getCPOptionCategoryId());
 
 		if (cpOptionCategory != null) {
 			return cpOptionCategory.getTitle(themeDisplay.getLocale());
@@ -135,33 +136,16 @@ public class CPSpecificationOptionDisplayContext
 			facetable = true;
 		}
 
-		int total;
-		List<CPSpecificationOption> results;
+		BaseModelSearchResult<CPSpecificationOption>
+			cpSpecificationOptionBaseModelSearchResult =
+				_cpSpecificationOptionService.searchCPSpecificationOptions(
+					cpRequestHelper.getCompanyId(), facetable, getKeywords(),
+					searchContainer.getStart(), searchContainer.getEnd(), sort);
 
-		if (!isSearch() && (facetable == null) && (orderByComparator != null)) {
-			total =
-				_cpSpecificationOptionService.getCPSpecificationOptionsCount(
-					getScopeGroupId());
-
-			results = _cpSpecificationOptionService.getCPSpecificationOptions(
-				getScopeGroupId(), searchContainer.getStart(),
-				searchContainer.getEnd(), orderByComparator);
-		}
-		else {
-			BaseModelSearchResult<CPSpecificationOption>
-				cpSpecificationOptionBaseModelSearchResult =
-					_cpSpecificationOptionService.searchCPSpecificationOptions(
-						cpRequestHelper.getCompanyId(), getScopeGroupId(),
-						facetable, getKeywords(), searchContainer.getStart(),
-						searchContainer.getEnd(), sort);
-
-			total = cpSpecificationOptionBaseModelSearchResult.getLength();
-			results =
-				cpSpecificationOptionBaseModelSearchResult.getBaseModels();
-		}
-
-		searchContainer.setTotal(total);
-		searchContainer.setResults(results);
+		searchContainer.setTotal(
+			cpSpecificationOptionBaseModelSearchResult.getLength());
+		searchContainer.setResults(
+			cpSpecificationOptionBaseModelSearchResult.getBaseModels());
 
 		return searchContainer;
 	}

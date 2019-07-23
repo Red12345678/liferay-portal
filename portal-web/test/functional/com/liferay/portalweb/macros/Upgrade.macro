@@ -1013,6 +1013,278 @@ definition {
 		FormsAdmin.viewNoFormEntries();
 	}
 
+	macro viewAndEditUser {
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.viewCP(
+			userBirthday = "09/09/1999",
+			userEmailAddress = "user@liferay.com",
+			userFirstName = "userfn",
+			userJobTitle = "PhD",
+			userLastName = "userln",
+			userScreenName = "usersn");
+
+		AssertTextEquals(
+			key_tagName = "tag1",
+			locator1 = "AssetCategorization#TAG",
+			value1 = "tag1");
+
+		AssertTextEquals(
+			locator1 = "TextArea#COMMENTS",
+			value1 = "This is a pre-upgrade comment!");
+
+		UserNavigator.gotoContact();
+
+		User.viewAddress(
+			addressType = "Business",
+			city = "Walnut",
+			country = "United States",
+			postalCode = "91789",
+			region = "California",
+			street1 = "1220 Brea Canyon Rd");
+
+		Navigator.gotoNavNested(navNested = "Contact Information");
+
+		User.viewContactInformation(
+			number = "555-555-5555",
+			numberType = "Business",
+			searchContainerType = "phonesSearchContainer");
+
+		User.viewContactInformation(
+			addressCount = "10",
+			addressPrefix = "test",
+			searchContainerType = "emailAddressesSearchContainer");
+
+		User.viewContactInformation(
+			searchContainerType = "websitesSearchContainer",
+			url = "https://www.google.com/",
+			websiteType = "Other");
+
+		User.viewContactInformation(skype = "orgusersnskype");
+
+		UserNavigator.gotoPreferences();
+
+		for (var announcementType : list "General,News,Test") {
+			var key_announcementType = "${announcementType}";
+			var key_notificationType = "Email";
+
+			AssertChecked(locator1 = "UsersAndOrganizationsEditUser#ALERTS_AND_ANNOUNCEMENTS_DELIVERY_CHECKBOX");
+		}
+
+		Navigator.gotoNavNested(navNested = "Display Settings");
+
+		if (IsTextNotEqual(locator1 = "Select#LOS_ANGELES_TIME_ZONE", value1 = "(UTC -07:00) Pacific Daylight Time")) {
+			AssertSelectedLabel(
+				locator1 = "Select#TIME_ZONE",
+				value1 = "(UTC -08:00) Pacific Standard Time");
+		}
+		else {
+			AssertSelectedLabel(
+				locator1 = "Select#TIME_ZONE",
+				value1 = "(UTC -07:00) Pacific Daylight Time");
+		}
+
+		AssertTextEquals(
+			locator1 = "UsersAndOrganizationsEditUser#DISPLAY_SETTINGS_GREETING_FIELD",
+			value1 = "Welcome Organization Usersn! This is a pre-upgrade edit!");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.gotoEditCP(userScreenName = "usersn");
+
+		UserNavigator.gotoOrganizations();
+
+		AssertTextEquals(
+			key_orgName = "Organization1",
+			locator1 = "ContentRow#ORGANIZATION_TABLE_NAME",
+			value1 = "Organization1");
+
+		User.viewUserInfomationSitesCP(siteName = "Test Site Name");
+
+		User.viewUserInfomationRolesCP(roleTitle = "Administrator");
+
+		AssertTextEquals(
+			key_roleTitle = "Organization Administrator",
+			locator1 = "Permissions#CONTENT_PERMISSIONS_ROLE_NAME",
+			value1 = "Organization Administrator");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.editPasswordCP(
+			requirePasswordReset = "true",
+			userEmailAddress = "user@liferay.com",
+			userScreenName = "usersn");
+
+		User.logoutPG();
+
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "user@liferay.com");
+
+		UserBar.gotoProfile();
+
+		BlogsEntry.viewEntry(
+			entryContent = "Usersn Blog Entry Content",
+			entryTitle = "Usersn Blog Entry Title");
+
+		UserBar.gotoDashboard();
+
+		AssertClick(
+			key_pageName = "Documents and Media",
+			locator1 = "Home#PAGE",
+			value1 = "Documents and Media");
+
+		DMDocument.viewPG(dmDocumentTitle = "Document txt Title");
+
+		Navigator.gotoBack();
+
+		DMDocument.viewPG(dmDocumentTitle = "Document doc Title");
+
+		User.logoutAndLoginPG(
+			userLoginEmailAddress = "test@liferay.com",
+			userLoginFullName = "Test Test");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.gotoEditCP(userScreenName = "usersn");
+
+		Button.click(button = "Delete");
+
+		User.editDetailsViaMyAccount(
+			userFirstNameEdit = "userfn1",
+			userLastNameEdit = "userln1",
+			userScreenNameEdit = "usersn1");
+
+		Type(
+			locator1 = "TextArea#COMMENTS",
+			value1 = "This is a post-upgrade comment!");
+
+		PortletEntry.save();
+
+		UserNavigator.gotoContact();
+
+		User.addAddressViaMyAccount(
+			userAddressCity = "Diamond Bar",
+			userAddressCountry = "United States",
+			userAddressPostalCode = "91765",
+			userAddressRegion = "California",
+			userAddressStreet1 = "1400 Montefino Ave",
+			userAddressType = "Personal");
+
+		User.editUserDisplaySettingsTimeZonePacific(displaySettingsGreeting = "Welcome Organization Usersn! This is a post-upgrade edit!");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.viewCP(
+			userEmailAddress = "user@liferay.com",
+			userFirstName = "userfn1",
+			userLastName = "userln1",
+			userScreenName = "usersn1");
+
+		AssertTextEquals(
+			locator1 = "TextArea#COMMENTS",
+			value1 = "This is a post-upgrade comment!");
+
+		UserNavigator.gotoContact();
+
+		User.viewAddress(
+			addressType = "Personal",
+			city = "Diamond Bar",
+			country = "United States",
+			postalCode = "91765",
+			region = "California",
+			street1 = "1400 Montefino Ave");
+
+		UserNavigator.gotoDisplaySettings();
+
+		AssertTextEquals(
+			locator1 = "UsersAndOrganizationsEditUser#DISPLAY_SETTINGS_GREETING_FIELD",
+			value1 = "Welcome Organization Usersn! This is a post-upgrade edit!");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.gotoEditCP(userScreenName = "usersn1");
+
+		AssetCategorization.removeTag(tagName = "tag1");
+
+		PortletEntry.save();
+
+		UserNavigator.gotoOrganizations();
+
+		Click(locator1 = "Icon#TIMES");
+
+		PortletEntry.save();
+
+		UserNavigator.gotoMemberships();
+
+		Click(locator1 = "Icon#TIMES");
+
+		PortletEntry.save();
+
+		UserNavigator.gotoRoles();
+
+		Click(locator1 = "Icon#TIMES");
+
+		PortletEntry.save();
+
+		UserNavigator.gotoContact();
+
+		User.removeContactInformation(rowEntry = "addresses");
+
+		Navigator.gotoNavNested(navNested = "Contact Information");
+
+		User.removeContactInformation(rowEntry = "phoneNumbers");
+
+		User.removeContactInformation(rowEntry = "additionalEmailAddresses");
+
+		User.removeContactInformation(rowEntry = "websites");
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.deactivateCP(userFirstName = "userfn1");
+
+		User.deleteCP();
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		User.searchCP(searchTerm = "usersn");
+
+		User.viewNoUsersFoundCP();
+
+		ProductMenu.gotoPortlet(
+			category = "Users",
+			panel = "Control Panel",
+			portlet = "Users and Organizations");
+
+		UsersAndOrganizationsNavigator.gotoOrganizations();
+
+		Organization.deleteCP(orgName = "Organization1");
+	}
+
 	macro viewAssetPublisher {
 		Navigator.gotoPage(pageName = "Asset Publisher");
 
@@ -1032,6 +1304,19 @@ definition {
 				categoryName = "${categoryName}",
 				vocabularyName = "Vocabulary Name"
 			);
+		}
+
+		if (IsElementPresent(locator1 = "Home#PAGE_4")) {
+			Click(locator1 = "Home#PAGE_4");
+
+			AssertTextEquals(
+				key_portletName = "Asset Publisher",
+				locator1 = "Portlet#TITLE",
+				value1 = "Asset Publisher");
+
+			AssetPublisherPortlet.viewAssetPG(
+				assetContent = "Web Content Content",
+				assetTitle = "Web Content Title");
 		}
 	}
 
@@ -1116,6 +1401,97 @@ definition {
 			appStatus = "Active",
 			searchTerm = "Drools"
 		);
+	}
+
+	macro viewInstanceSettings {
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "Instance Settings");
+
+		FormFields.viewTextValue(
+			fieldName = "homeURL",
+			fieldValue = "/web/test/home");
+
+		FormFields.viewTextValue(
+			fieldName = "default-logout-page",
+			fieldValue = "/web/test/home");
+
+		FormFields.viewTextValue(
+			fieldName = "default-landing-page",
+			fieldValue = "/web/test/home");
+
+		Panel.expandPanel(panel = "Authentication");
+
+		AssertSelectedLabel(
+			locator1 = "PortalSettingsAuthentication#AUTHENTICATION_GENERAL_HOW_DO_USERS_AUTHENTICATE_SELECT",
+			value1 = "By Screen Name");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "company-security-auto-login");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "company-security-send-password");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "company-security-send-password-reset-link");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "company-security-strangers");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "company-security-strangers-with-mx");
+
+		Panel.expandPanel(panel = "Users");
+
+		FormFields.viewCheckboxChecked(fieldName = "users-screen-name-always-autogenerate");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "field-enable-com-liferay-portal-kernel-model-Contact-birthday");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "field-enable-com-liferay-portal-kernel-model-Contact-male");
+
+		AssertClick(
+			locator1 = "NavTab#RESERVED_CREDENTIALS",
+			value1 = "Reserved Credentials");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "reserved-screen-names",
+			fieldValue = "usersn");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "reserved-email-addresses",
+			fieldValue = "userea@liferay.com");
+
+		AssertClick(
+			locator1 = "NavTab#DEFAULT_USER_ASSOCIATIONS",
+			value1 = "Default User Associations");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "default-group-names",
+			fieldValue = "Liferay");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "default-role-names",
+			fieldValue = "Administrator");
+
+		Panel.expandPanel(panel = "Email Notifications");
+
+		FormFields.viewTextValue(
+			fieldName = "email-from-name",
+			fieldValue = "Test Test");
+
+		Panel.expandPanel(panel = "Content Sharing");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "sites-content-sharing-through-administrators-enabled");
+
+		AssertSelectedLabel(
+			locator1 = "PortalSettingsContentSharing#CONTENT_SHARING_SELECTOR",
+			value1 = "Disabled by Default");
+
+		Navigator.gotoNavTab(navTab = "Miscellaneous");
+
+		AssertTextEquals(
+			locator1 = "LanguageConfiguration#LANGUAGES_CURRENT",
+			value1 = "Spanish (Spain) English (United States)");
+
+		AssertSelectedLabel(
+			locator1 = "Select#TIME_ZONE",
+			value1 = "(UTC +03:00) Eastern European Time");
 	}
 
 	macro viewMessageBoards {
@@ -1321,6 +1697,202 @@ definition {
 		);
 
 		NestedPortlets.viewPG(portletColumnNumberTo = "1", portletName = "Blogs");
+	}
+
+	macro viewSystemSettings {
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "System Settings");
+
+		SystemSettings.gotoConfiguration(
+			configurationCategory = "Web Content",
+			configurationName = "Web Content",
+			configurationScope = "Virtual Instance Scope");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "addDefaultStructures");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "charactersblacklist",
+			fieldValue = "test");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "errorTemplateFTL",
+			fieldValue = "errortest.ftl");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "errorTemplateVM",
+			fieldValue = "errortest.vm");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "errorTemplateXSL",
+			fieldValue = "errortest.xsl");
+
+		FormFields.viewTextValue(
+			fieldName = "checkInterval",
+			fieldValue = "5");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "customTokenNames",
+			fieldValue = "Custom Token Name1");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "customTokenValues",
+			fieldValue = "Custom Token Value1");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "articleCommentsEnabled");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "databaseContentKeywordSearchEnabled");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "expireAllArticleVersionsEnabled");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "articleViewPermissionsCheckEnabled");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "System Settings");
+
+		SystemSettings.gotoConfiguration(
+			configurationCategory = "Web Content",
+			configurationName = "Administration",
+			configurationScope = "System Scope");
+
+		FormFields.viewCheckboxChecked(fieldName = "changeableDefaultLanguage");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "defaultDisplayView",
+			fieldValue = "list");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "journalArticleForceAutogenerateId");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "journalArticlesSearchWithIndex");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "System Settings");
+
+		SystemSettings.gotoConfiguration(
+			configurationCategory = "Web Content",
+			configurationName = "Service",
+			configurationScope = "Site Scope");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "emailFromName",
+			fieldValue = "test name");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "emailFromAddress",
+			fieldValue = "test@liferay.com");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "emailArticleAddedEnabled");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "emailArticleUpdatedEnabled");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "System Settings");
+
+		SystemSettings.gotoConfiguration(
+			configurationCategory = "Wiki",
+			configurationName = "Wiki Service",
+			configurationScope = "Site Scope");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "emailFromAddress",
+			fieldValue = "test@liferay.com");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "emailFromName",
+			fieldValue = "test name");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "emailPageAddedEnabled");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "emailPageUpdatedEnabled");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "frontPageName",
+			fieldValue = "TestFrontPage");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "getCreoleEditor",
+			fieldValue = "ckeditor_creole");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "getHTMLEditor",
+			fieldValue = "creole");
+
+		FormFields.viewTextMultilineValue(
+			fieldName = "initialNodeName",
+			fieldValue = "TestMainNode");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "pageCommentsEnabled");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "pageMinorEditAddSocialActivity");
+
+		FormFields.viewTextValue(
+			fieldName = "rssAbstractLength",
+			fieldValue = "500");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "System Settings");
+
+		SystemSettings.gotoConfiguration(
+			configurationCategory = "Wiki",
+			configurationName = "Widgets Display",
+			configurationScope = "Widget Scope");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "enableCommentRatings");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "enableComments");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "enableHighlighting");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "enablePageRatings");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "enableRelatedAssets");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "System Settings");
+
+		SystemSettings.gotoConfiguration(
+			configurationCategory = "Dynamic Data Mapping",
+			configurationName = "Dynamic Data Mapping Service",
+			configurationScope = "Site Scope");
+
+		FormFields.viewRepeatableTextMultilineValue(
+			fieldName = "smallImageExtensions",
+			fieldValue = ".svg",
+			repeatableFieldNumber = "4");
+
+		FormFields.viewRepeatableTextMultilineValue(
+			fieldName = "smallImageExtensions",
+			fieldValue = "*",
+			repeatableFieldNumber = "5");
+
+		FormFields.viewTextValue(
+			fieldName = "smallImageMaxSize",
+			fieldValue = "5120");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "System Settings");
+
+		SystemSettings.gotoConfiguration(
+			configurationCategory = "Dynamic Data Mapping",
+			configurationName = "Dynamic Data Mapping Web",
+			configurationScope = "System Scope");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "autogenerateStructureKey");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "autogenerateTemplateKey");
 	}
 
 	macro viewUpgrade {

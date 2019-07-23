@@ -1383,6 +1383,11 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 		return groupPersistence.fetchByPrimaryKey(groupId);
 	}
 
+	@Override
+	public Group fetchGroup(long companyId, long classNameId, long classPK) {
+		return groupPersistence.fetchByC_C_C(companyId, classNameId, classPK);
+	}
+
 	/**
 	 * Returns the group with the matching group key by first searching the
 	 * system groups and then using the finder cache.
@@ -4307,12 +4312,10 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 			// Filter by active
 
-			if (active != null) {
-				if (active != isLiveGroupActive(group)) {
-					iterator.remove();
+			if ((active != null) && (active != isLiveGroupActive(group))) {
+				iterator.remove();
 
-					continue;
-				}
+				continue;
 			}
 
 			// Filter by excluded group IDs
@@ -4373,12 +4376,10 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 			// Filter by site
 
-			if (site != null) {
-				if (site != group.isSite()) {
-					iterator.remove();
+			if ((site != null) && (site != group.isSite())) {
+				iterator.remove();
 
-					continue;
-				}
+				continue;
 			}
 
 			// Filter by type and types
@@ -4393,8 +4394,6 @@ public class GroupLocalServiceImpl extends GroupLocalServiceBaseImpl {
 
 			if ((types != null) && !types.contains(type)) {
 				iterator.remove();
-
-				continue;
 			}
 		}
 

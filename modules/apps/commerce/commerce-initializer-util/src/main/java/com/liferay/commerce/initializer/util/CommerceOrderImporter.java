@@ -178,7 +178,7 @@ public class CommerceOrderImporter {
 
 		CommerceOrder commerceOrder =
 			_commerceOrderLocalService.addCommerceOrder(
-				serviceContext.getScopeGroupId(), userId,
+				userId, serviceContext.getScopeGroupId(),
 				commerceAccount.getCommerceAccountId());
 
 		// We upate the order create date to the one in the dataset
@@ -190,8 +190,8 @@ public class CommerceOrderImporter {
 		// Create CommerceContext
 
 		CommerceContext commerceContext = _commerceContextFactory.create(
-			serviceContext.getScopeGroupId(), serviceContext.getUserId(),
-			commerceOrder.getCommerceOrderId(),
+			serviceContext.getCompanyId(), serviceContext.getScopeGroupId(),
+			serviceContext.getUserId(), commerceOrder.getCommerceOrderId(),
 			commerceAccount.getCommerceAccountId());
 
 		// Create CommerceOrderItem

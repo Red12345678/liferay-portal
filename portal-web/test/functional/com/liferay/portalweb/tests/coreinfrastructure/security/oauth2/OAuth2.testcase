@@ -136,6 +136,53 @@ definition {
 			callbackURI = "http://www.liferay.com"
 		);
 
+		Navigator.gotoNavItem(navItem = "Scopes");
+
+		for (var resourcePanel : list "Analytics,Portal Services") {
+			var key_panel = "${resourcePanel}";
+
+			AssertElementPresent(locator1 = "OAuth2#ADMIN_RESOURCE_PANEL_COLLAPSED");
+		}
+
+		User.logoutPG();
+
+		User.loginPG(
+			nodePort = "9080",
+			password = "test",
+			userEmailAddress = "test@liferay.com");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "OAuth 2 Administration");
+
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Edit",
+			rowEntry = "OAuth Application");
+
+		Navigator.gotoNavItem(navItem = "Scopes");
+
+		for (var resourcePanel : list "Analytics,Portal Services") {
+			var key_panel = "${resourcePanel}";
+
+			AssertElementPresent(locator1 = "OAuth2#ADMIN_RESOURCE_PANEL_COLLAPSED");
+		}
+
+		User.logoutPG(nodePort = "9080");
+
+		User.loginPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "OAuth 2 Administration");
+
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Edit",
+			rowEntry = "OAuth Application");
+
 		OAuth2.inputApplicationValues(
 			clientId = "abc123",
 			clientSecret = "abc123"
@@ -159,7 +206,9 @@ definition {
 	}
 
 	test EditApplicationScopes {
-		property prepare.oauth2.global.scopes = "true";
+		property liferay.dependency.jars = "com.liferay.oauth2.provider.scope.sample.qa.jar";
+		property osgi.module.configuration.file.names = "com.liferay.oauth2.provider.scope.internal.configuration.ConfigurableScopeMapperConfiguration-default.config";
+		property osgi.module.configurations = "mapping=[&quot;example-scope-1,example-scope-2\=everything&quot;]${line.separator}osgi.jaxrs.name=&quot;liferay-oauth2-scope-sample-qa-app&quot;${line.separator}passthrough=&quot;true&quot;";
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
@@ -260,6 +309,15 @@ definition {
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 		property environment.acceptance = "true";
 		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "OAuth2#ViewAndRevokeGrantedAuthorizations";
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "Search"
+		);
+
+		SearchAdministration.executeSearchActions(actionsDescription = "Reindex all search indexes.");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",

@@ -41,10 +41,8 @@ public class TestScreenNameValidator implements ScreenNameValidator {
 
 	@Override
 	public boolean validate(long companyId, String screenName) {
-		if (companyId == 1) {
-			if (screenName.equals("lftest")) {
-				return true;
-			}
+		if ((companyId == 1) && screenName.equals("lftest")) {
+			return true;
 		}
 
 		return false;

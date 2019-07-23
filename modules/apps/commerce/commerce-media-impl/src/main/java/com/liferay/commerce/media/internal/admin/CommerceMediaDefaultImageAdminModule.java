@@ -15,19 +15,18 @@
 package com.liferay.commerce.media.internal.admin;
 
 import com.liferay.commerce.admin.CommerceAdminModule;
+import com.liferay.commerce.admin.constants.CommerceAdminConstants;
 import com.liferay.commerce.media.internal.display.context.CommerceMediaDefaultImageDisplayContext;
+import com.liferay.commerce.product.configuration.AttachmentsConfiguration;
 import com.liferay.commerce.product.constants.CPActionKeys;
-import com.liferay.commerce.product.constants.CPConstants;
-import com.liferay.commerce.product.definitions.web.configuration.AttachmentsConfiguration;
 import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.item.selector.ItemSelector;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
+import com.liferay.portal.kernel.service.permission.PortalPermissionUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -52,9 +51,10 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alec Sloan
+ * @author Alessio Antonio Rendina
  */
 @Component(
-	configurationPid = "com.liferay.commerce.product.definitions.web.configuration.AttachmentsConfiguration",
+	configurationPid = "com.liferay.commerce.product.configuration.AttachmentsConfiguration",
 	immediate = true,
 	property = "commerce.admin.module.key=" + CommerceMediaDefaultImageAdminModule.KEY,
 	service = CommerceAdminModule.class
@@ -80,12 +80,15 @@ public class CommerceMediaDefaultImageAdminModule
 	}
 
 	@Override
-	public boolean isVisible(long groupId) {
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
+	public int getType() {
+		return CommerceAdminConstants.COMMERCE_ADMIN_TYPE_VIRTUAL_INSTANCE;
+	}
 
-		return _portletResourcePermission.contains(
-			permissionChecker, groupId, CPActionKeys.MANAGE_CATALOG);
+	@Override
+	public boolean isVisible(long groupId) {
+		return PortalPermissionUtil.contains(
+			PermissionThreadLocal.getPermissionChecker(),
+			CPActionKeys.ADD_COMMERCE_CATALOG);
 	}
 
 	@Override
@@ -100,8 +103,7 @@ public class CommerceMediaDefaultImageAdminModule
 			commerceMediaDefaultImageDisplayContext =
 				new CommerceMediaDefaultImageDisplayContext(
 					_attachmentsConfiguration, _configurationProvider,
-					_dlAppService, _itemSelector, _portletResourcePermission,
-					httpServletRequest);
+					_dlAppService, _itemSelector, httpServletRequest);
 
 		httpServletRequest.setAttribute(
 			WebKeys.PORTLET_DISPLAY_CONTEXT,
@@ -137,9 +139,6 @@ public class CommerceMediaDefaultImageAdminModule
 
 	@Reference
 	private Portal _portal;
-
-	@Reference(target = "(resource.name=" + CPConstants.RESOURCE_NAME + ")")
-	private PortletResourcePermission _portletResourcePermission;
 
 	@Reference(
 		target = "(osgi.web.symbolicname=com.liferay.commerce.media.impl)"

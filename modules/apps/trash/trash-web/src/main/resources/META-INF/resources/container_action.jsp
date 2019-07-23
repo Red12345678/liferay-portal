@@ -44,7 +44,7 @@ TrashRenderer trashRenderer = trashDisplayContext.getTrashRenderer();
 						url="<%= restoreEntryURL.toString() %>"
 					/>
 				</c:when>
-				<c:when test="<%= !trashHandler.isRestorable(trashEntry.getClassPK()) && trashHandler.isMovable() %>">
+				<c:when test="<%= !trashHandler.isRestorable(trashEntry.getClassPK()) && trashHandler.isMovable(trashEntry.getClassPK()) %>">
 
 					<%
 					String trashHandlerEntryContainerModelClassName = trashHandler.getContainerModelClassName(trashEntry.getClassPK());
@@ -70,7 +70,7 @@ TrashRenderer trashRenderer = trashDisplayContext.getTrashRenderer();
 				</c:when>
 			</c:choose>
 
-			<c:if test="<%= trashHandler.isDeletable() %>">
+			<c:if test="<%= trashHandler.isDeletable(trashRenderer.getClassPK()) %>">
 				<portlet:actionURL name="deleteEntries" var="deleteEntryURL">
 					<portlet:param name="redirect" value="<%= trashDisplayContext.getViewContentRedirectURL() %>" />
 					<portlet:param name="trashEntryId" value="<%= String.valueOf(trashEntry.getEntryId()) %>" />
@@ -89,7 +89,7 @@ TrashRenderer trashRenderer = trashDisplayContext.getTrashRenderer();
 			</c:if>
 		</c:when>
 		<c:otherwise>
-			<c:if test="<%= trashHandler.isMovable() %>">
+			<c:if test="<%= trashHandler.isMovable(trashRenderer.getClassPK()) %>">
 
 				<%
 				String containerModelClassName = trashHandler.getContainerModelClassName(trashDisplayContext.getClassPK());
@@ -116,7 +116,7 @@ TrashRenderer trashRenderer = trashDisplayContext.getTrashRenderer();
 				/>
 			</c:if>
 
-			<c:if test="<%= trashHandler.isDeletable() %>">
+			<c:if test="<%= trashHandler.isDeletable(trashRenderer.getClassPK()) %>">
 				<portlet:actionURL name="deleteEntries" var="deleteEntryURL">
 					<portlet:param name="redirect" value="<%= trashDisplayContext.getViewContentRedirectURL() %>" />
 					<portlet:param name="className" value="<%= trashRenderer.getClassName() %>" />

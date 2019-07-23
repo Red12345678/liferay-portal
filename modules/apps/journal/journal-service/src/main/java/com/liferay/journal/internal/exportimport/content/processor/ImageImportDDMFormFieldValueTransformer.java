@@ -24,13 +24,16 @@ import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.StagedModel;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Element;
@@ -77,11 +80,22 @@ public class ImageImportDDMFormFieldValueTransformer
 		for (Locale locale : value.getAvailableLocales()) {
 			String valueString = value.getString(locale);
 
-			JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-				valueString);
+			JSONObject jsonObject = null;
+
+			try {
+				jsonObject = JSONFactoryUtil.createJSONObject(valueString);
+			}
+			catch (JSONException jsone) {
+				if (_log.isDebugEnabled()) {
+					_log.debug("Unable to parse JSON", jsone);
+				}
+
+				continue;
+			}
 
 			FileEntry importedFileEntry = fetchImportedFileEntry(
-				_portletDataContext, jsonObject.getLong("fileEntryId"));
+				_portletDataContext, jsonObject.getLong("fileEntryId"),
+				jsonObject.getString("uuid"));
 
 			if (importedFileEntry == null) {
 				continue;
@@ -115,35 +129,56 @@ public class ImageImportDDMFormFieldValueTransformer
 	}
 
 	protected FileEntry fetchImportedFileEntry(
-			PortletDataContext portletDataContext, long oldClassPK)
+			PortletDataContext portletDataContext, long oldClassPK, String uuid)
 		throws PortalException {
 
-		Map<Long, Long> fileEntryPKs =
-			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
-				DLFileEntry.class);
+		try {
+			Map<Long, Long> fileEntryPKs =
+				(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
+					DLFileEntry.class);
 
-		Long classPK = fileEntryPKs.get(oldClassPK);
+			Long classPK = fileEntryPKs.get(oldClassPK);
 
-		if (classPK == null) {
-			return null;
+			if (classPK == null) {
+				if (Validator.isNotNull(uuid)) {
+					return _dlAppService.getFileEntryByUuidAndGroupId(
+						uuid, portletDataContext.getScopeGroupId());
+				}
+
+				return null;
+			}
+
+			return _dlAppService.getFileEntry(classPK);
+		}
+		catch (PortalException pe) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("Unable to find file entry", pe);
+			}
 		}
 
-		return _dlAppService.getFileEntry(classPK);
+		return null;
 	}
 
 	protected String toJSON(FileEntry fileEntry, String type, String alt) {
 		JournalArticle article = (JournalArticle)_stagedModel;
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-
-		jsonObject.put("alt", alt);
-		jsonObject.put("fileEntryId", fileEntry.getFileEntryId());
-		jsonObject.put("groupId", fileEntry.getGroupId());
-		jsonObject.put("name", fileEntry.getFileName());
-		jsonObject.put("resourcePrimKey", article.getResourcePrimKey());
-		jsonObject.put("title", fileEntry.getTitle());
-		jsonObject.put("type", type);
-		jsonObject.put("uuid", fileEntry.getUuid());
+		JSONObject jsonObject = JSONUtil.put(
+			"alt", alt
+		).put(
+			"fileEntryId", fileEntry.getFileEntryId()
+		).put(
+			"groupId", fileEntry.getGroupId()
+		).put(
+			"name", fileEntry.getFileName()
+		).put(
+			"resourcePrimKey", article.getResourcePrimKey()
+		).put(
+			"title", fileEntry.getTitle()
+		).put(
+			"type", type
+		).put(
+			"uuid", fileEntry.getUuid()
+		);
 
 		return jsonObject.toString();
 	}

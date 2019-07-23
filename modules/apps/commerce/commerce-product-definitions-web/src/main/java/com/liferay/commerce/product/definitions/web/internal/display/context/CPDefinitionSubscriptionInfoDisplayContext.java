@@ -16,17 +16,13 @@ package com.liferay.commerce.product.definitions.web.internal.display.context;
 
 import com.liferay.commerce.product.definitions.web.portlet.action.ActionHelper;
 import com.liferay.commerce.product.definitions.web.servlet.taglib.ui.CPDefinitionScreenNavigationConstants;
-import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.service.CPDefinitionService;
-import com.liferay.commerce.product.util.CPDefinitionHelper;
+import com.liferay.commerce.product.service.CommerceCatalogService;
 import com.liferay.commerce.product.util.CPSubscriptionType;
 import com.liferay.commerce.product.util.CPSubscriptionTypeJSPContributor;
 import com.liferay.commerce.product.util.CPSubscriptionTypeJSPContributorRegistry;
 import com.liferay.commerce.product.util.CPSubscriptionTypeRegistry;
-import com.liferay.item.selector.ItemSelector;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 
 import java.util.List;
 
@@ -41,21 +37,16 @@ public class CPDefinitionSubscriptionInfoDisplayContext
 	extends CPDefinitionsDisplayContext {
 
 	public CPDefinitionSubscriptionInfoDisplayContext(
-			ActionHelper actionHelper, HttpServletRequest httpServletRequest,
-			CPDefinitionHelper cpDefinitionHelper,
-			ModelResourcePermission<CPDefinition>
-				cpDefinitionModelResourcePermission,
-			CPDefinitionService cpDefinitionService, ItemSelector itemSelector,
-			PortletResourcePermission portletResourcePermission,
-			CPSubscriptionTypeJSPContributorRegistry
-				cpSubscriptionTypeJSPContributorRegistry,
-			CPSubscriptionTypeRegistry cpSubscriptionTypeRegistry)
-		throws PortalException {
+		ActionHelper actionHelper, HttpServletRequest httpServletRequest,
+		CommerceCatalogService commerceCatalogService,
+		CPDefinitionService cpDefinitionService,
+		CPSubscriptionTypeJSPContributorRegistry
+			cpSubscriptionTypeJSPContributorRegistry,
+		CPSubscriptionTypeRegistry cpSubscriptionTypeRegistry) {
 
 		super(
-			actionHelper, httpServletRequest, cpDefinitionHelper,
-			cpDefinitionModelResourcePermission, cpDefinitionService,
-			itemSelector, portletResourcePermission);
+			actionHelper, httpServletRequest, commerceCatalogService,
+			cpDefinitionService);
 
 		_cpSubscriptionTypeJSPContributorRegistry =
 			cpSubscriptionTypeJSPContributorRegistry;

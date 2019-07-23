@@ -54,7 +54,6 @@ public class BundleResolverClassLoader extends ClassLoader {
 				return bundle.loadClass(name);
 			}
 			catch (ClassNotFoundException cnfe) {
-				continue;
 			}
 		}
 

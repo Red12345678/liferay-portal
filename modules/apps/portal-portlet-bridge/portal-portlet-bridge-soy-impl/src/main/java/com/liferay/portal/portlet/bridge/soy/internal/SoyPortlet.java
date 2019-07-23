@@ -50,10 +50,10 @@ import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.portlet.bridge.soy.SoyPortletRegister;
-import com.liferay.portal.portlet.bridge.soy.internal.util.SoyContextFactoryUtil;
 import com.liferay.portal.portlet.bridge.soy.internal.util.SoyTemplateResourcesProviderUtil;
 import com.liferay.portal.template.soy.constants.SoyTemplateConstants;
-import com.liferay.portal.template.soy.utils.SoyContext;
+import com.liferay.portal.template.soy.util.SoyContext;
+import com.liferay.portal.template.soy.util.SoyContextFactoryUtil;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -289,10 +289,10 @@ public class SoyPortlet extends MVCPortlet {
 			throw new PortletException(e);
 		}
 
-		if (clearRequestParameters) {
-			if (lifecycle.equals(PortletRequest.RENDER_PHASE)) {
-				portletResponse.setProperty("clear-request-parameters", "true");
-			}
+		if (clearRequestParameters &&
+			lifecycle.equals(PortletRequest.RENDER_PHASE)) {
+
+			portletResponse.setProperty("clear-request-parameters", "true");
 		}
 	}
 

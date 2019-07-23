@@ -211,28 +211,46 @@ AUI.add(
 								containerId: container.get('id')
 							}
 						);
+
+						var formNode = instance.getFormNode();
+
+						if (formNode) {
+							var ddmFormBuilderAppNode = formNode.one('.ddm-form-builder-app');
+
+							if (ddmFormBuilderAppNode) {
+								ddmFormBuilderAppNode.removeClass('ddm-form-builder-app-not-ready');
+							}
+						}
 					},
 
 					_valueEditingLanguageId: function() {
 						var instance = this;
 
-						var portletNamespace = instance.get('portletNamespace');
+						var languageId;
 
-						var languageId = instance._getURLParameter(portletNamespace, 'languageId');
+						var formNode = instance.getFormNode();
+
+						if (formNode && formNode.hasChildNodes()) {
+							var languageIdNodeId = instance.get('portletNamespace') + 'languageId';
+
+							formNode.get('children').some(
+								function(node) {
+									if (node.get('id') === languageIdNodeId) {
+										languageId = node.val();
+
+										return true;
+									}
+
+									return false;
+								}
+							);
+						}
 
 						if (!languageId) {
 							languageId = instance.get('defaultLanguageId');
 						}
 
 						return languageId;
-					},
-
-					_getURLParameter: function(portletNamespace, parameterName) {
-						var currentUrl = window.location.href;
-
-						var url = new A.Url(currentUrl);
-
-						return url.getParameter(portletNamespace + parameterName);
 					},
 
 					_onLiferaySubmitForm: function(event) {

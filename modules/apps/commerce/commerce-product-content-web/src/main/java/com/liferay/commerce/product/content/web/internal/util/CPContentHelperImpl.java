@@ -14,6 +14,9 @@
 
 package com.liferay.commerce.product.content.web.internal.util;
 
+import com.liferay.commerce.account.model.CommerceAccount;
+import com.liferay.commerce.constants.CommerceWebKeys;
+import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.media.CommerceCatalogDefaultImage;
 import com.liferay.commerce.media.CommerceMediaResolver;
 import com.liferay.commerce.product.catalog.CPCatalogEntry;
@@ -31,9 +34,11 @@ import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPDefinitionSpecificationOptionValue;
 import com.liferay.commerce.product.model.CPInstance;
 import com.liferay.commerce.product.model.CPOptionCategory;
-import com.liferay.commerce.product.service.CPAttachmentFileEntryService;
-import com.liferay.commerce.product.service.CPDefinitionSpecificationOptionValueService;
+import com.liferay.commerce.product.model.CProduct;
+import com.liferay.commerce.product.service.CPAttachmentFileEntryLocalService;
+import com.liferay.commerce.product.service.CPDefinitionSpecificationOptionValueLocalService;
 import com.liferay.commerce.product.service.CPOptionCategoryLocalService;
+import com.liferay.commerce.product.service.CProductLocalService;
 import com.liferay.commerce.product.type.CPType;
 import com.liferay.commerce.product.type.CPTypeServicesTracker;
 import com.liferay.commerce.product.util.CPContentContributor;
@@ -44,11 +49,15 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -114,7 +123,7 @@ public class CPContentHelperImpl implements CPContentHelper {
 				long cpDefinitionId, long cpOptionCategoryId)
 		throws PortalException {
 
-		return _cpCatalogEntrySpecificationOptionValueService.
+		return _cpCatalogEntrySpecificationOptionValueLocalService.
 			getCPDefinitionSpecificationOptionValues(
 				cpDefinitionId, cpOptionCategoryId);
 	}
@@ -129,7 +138,7 @@ public class CPContentHelperImpl implements CPContentHelper {
 		long classNameId = _portal.getClassNameId(CPDefinition.class);
 
 		List<CPAttachmentFileEntry> cpAttachmentFileEntries =
-			_cpAttachmentFileEntryService.getCPAttachmentFileEntries(
+			_cpAttachmentFileEntryLocalService.getCPAttachmentFileEntries(
 				classNameId, cpDefinitionId,
 				CPAttachmentFileEntryConstants.TYPE_OTHER,
 				WorkflowConstants.STATUS_APPROVED, QueryUtil.ALL_POS,
@@ -146,10 +155,48 @@ public class CPContentHelperImpl implements CPContentHelper {
 
 	@Override
 	public CPCatalogEntry getCPCatalogEntry(
-		HttpServletRequest httpServletRequest) {
+			HttpServletRequest httpServletRequest)
+		throws PortalException {
 
-		return (CPCatalogEntry)httpServletRequest.getAttribute(
-			CPWebKeys.CP_CATALOG_ENTRY);
+		CPCatalogEntry cpCatalogEntry =
+			(CPCatalogEntry)httpServletRequest.getAttribute(
+				CPWebKeys.CP_CATALOG_ENTRY);
+
+		CommerceContext commerceContext =
+			(CommerceContext)httpServletRequest.getAttribute(
+				CommerceWebKeys.COMMERCE_CONTEXT);
+
+		CommerceAccount commerceAccount = commerceContext.getCommerceAccount();
+
+		long commerceAccountId = 0;
+
+		if (commerceAccount != null) {
+			commerceAccountId = commerceAccount.getCommerceAccountId();
+		}
+
+		if (cpCatalogEntry == null) {
+			long productId = ParamUtil.getLong(httpServletRequest, "productId");
+
+			try {
+				CProduct cProduct = _cProductLocalService.fetchCProduct(
+					productId);
+
+				if (cProduct == null) {
+					return null;
+				}
+
+				cpCatalogEntry = _cpDefinitionHelper.getCPCatalogEntry(
+					commerceAccountId,
+					commerceContext.getCommerceChannelGroupId(),
+					cProduct.getPublishedCPDefinitionId(),
+					_portal.getLocale(httpServletRequest));
+			}
+			catch (PortalException pe) {
+				_log.error(pe, pe);
+			}
+		}
+
+		return cpCatalogEntry;
 	}
 
 	@Override
@@ -208,16 +255,16 @@ public class CPContentHelperImpl implements CPContentHelper {
 			getCPDefinitionSpecificationOptionValues(long cpDefinitionId)
 		throws PortalException {
 
-		return _cpCatalogEntrySpecificationOptionValueService.
+		return _cpCatalogEntrySpecificationOptionValueLocalService.
 			getCPDefinitionSpecificationOptionValues(
 				cpDefinitionId,
 				CPOptionCategoryConstants.DEFAULT_CP_OPTION_CATEGORY_ID);
 	}
 
 	@Override
-	public List<CPOptionCategory> getCPOptionCategories(long groupId) {
+	public List<CPOptionCategory> getCPOptionCategories(long companyId) {
 		return _cpOptionCategoryLocalService.getCPOptionCategories(
-			groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
 
 	@Override
@@ -280,7 +327,7 @@ public class CPContentHelperImpl implements CPContentHelper {
 		long classNameId = _portal.getClassNameId(CPDefinition.class);
 
 		List<CPAttachmentFileEntry> cpAttachmentFileEntries =
-			_cpAttachmentFileEntryService.getCPAttachmentFileEntries(
+			_cpAttachmentFileEntryLocalService.getCPAttachmentFileEntries(
 				classNameId, cpDefinitionId,
 				CPAttachmentFileEntryConstants.TYPE_IMAGE,
 				WorkflowConstants.STATUS_APPROVED, QueryUtil.ALL_POS,
@@ -293,9 +340,11 @@ public class CPContentHelperImpl implements CPContentHelper {
 		}
 
 		if (cpMedias.isEmpty()) {
+			Company company = themeDisplay.getCompany();
+
 			FileEntry fileEntry = FileEntryUtil.fetchByPrimaryKey(
 				_catalogCommerceMediaDefaultImage.getDefaultCatalogFileEntryId(
-					themeDisplay.getScopeGroupId()));
+					company.getGroupId()));
 
 			if (fileEntry != null) {
 				cpMedias.add(new CPMediaImpl(fileEntry, themeDisplay));
@@ -349,8 +398,9 @@ public class CPContentHelperImpl implements CPContentHelper {
 
 	@Override
 	public ResourceURL getViewAttachmentURL(
-		LiferayPortletRequest liferayPortletRequest,
-		LiferayPortletResponse liferayPortletResponse) {
+			LiferayPortletRequest liferayPortletRequest,
+			LiferayPortletResponse liferayPortletResponse)
+		throws PortalException {
 
 		ResourceURL resourceURL = liferayPortletResponse.createResourceURL();
 
@@ -374,7 +424,7 @@ public class CPContentHelperImpl implements CPContentHelper {
 
 		List<CPDefinitionSpecificationOptionValue>
 			cpDefinitionSpecificationOptionValues =
-				_cpCatalogEntrySpecificationOptionValueService.
+				_cpCatalogEntrySpecificationOptionValueLocalService.
 					getCPDefinitionSpecificationOptionValues(
 						cpDefinitionId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
 						null);
@@ -427,6 +477,9 @@ public class CPContentHelperImpl implements CPContentHelper {
 			renderResponse);
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		CPContentHelperImpl.class);
+
 	@Reference
 	private CommerceCatalogDefaultImage _catalogCommerceMediaDefaultImage;
 
@@ -434,11 +487,12 @@ public class CPContentHelperImpl implements CPContentHelper {
 	private CommerceMediaResolver _commerceMediaResolver;
 
 	@Reference
-	private CPAttachmentFileEntryService _cpAttachmentFileEntryService;
+	private CPAttachmentFileEntryLocalService
+		_cpAttachmentFileEntryLocalService;
 
 	@Reference
-	private CPDefinitionSpecificationOptionValueService
-		_cpCatalogEntrySpecificationOptionValueService;
+	private CPDefinitionSpecificationOptionValueLocalService
+		_cpCatalogEntrySpecificationOptionValueLocalService;
 
 	@Reference
 	private CPContentContributorRegistry _cpContentContributorRegistry;
@@ -454,6 +508,9 @@ public class CPContentHelperImpl implements CPContentHelper {
 
 	@Reference
 	private CPOptionCategoryLocalService _cpOptionCategoryLocalService;
+
+	@Reference
+	private CProductLocalService _cProductLocalService;
 
 	@Reference
 	private CPTypeServicesTracker _cpTypeServicesTracker;

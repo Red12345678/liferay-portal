@@ -18,6 +18,7 @@ import com.liferay.headless.admin.taxonomy.dto.v1_0.TaxonomyVocabulary;
 import com.liferay.headless.admin.taxonomy.resource.v1_0.TaxonomyVocabularyResource;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
@@ -25,17 +26,20 @@ import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Generated;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import javax.validation.constraints.NotNull;
 
@@ -63,6 +67,9 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 
 	@Override
 	@GET
+	@Operation(
+		description = "Retrieves a Site's taxonomy vocabularies. Results can be paginated, filtered, searched, and sorted."
+	)
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "siteId"),
@@ -88,6 +95,7 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 
 	@Override
 	@Consumes({"application/json", "application/xml"})
+	@Operation(description = "Inserts a new taxonomy vocabulary in a Site.")
 	@POST
 	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "siteId")})
 	@Path("/sites/{siteId}/taxonomy-vocabularies")
@@ -103,6 +111,9 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 
 	@Override
 	@DELETE
+	@Operation(
+		description = "Deletes the taxonomy vocabulary and returns a 204 if the operation succeeds."
+	)
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "taxonomyVocabularyId")
@@ -119,6 +130,7 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 
 	@Override
 	@GET
+	@Operation(description = "Retrieves a taxonomy vocabulary.")
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "taxonomyVocabularyId")
@@ -137,6 +149,9 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 
 	@Override
 	@Consumes({"application/json", "application/xml"})
+	@Operation(
+		description = "Updates only the fields received in the request body. Any other fields are left untouched."
+	)
 	@PATCH
 	@Parameters(
 		value = {
@@ -202,6 +217,9 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 
 	@Override
 	@Consumes({"application/json", "application/xml"})
+	@Operation(
+		description = "Replaces the taxonomy vocabulary with the information sent in the request body. Any missing fields are deleted unless they are required."
+	)
 	@PUT
 	@Parameters(
 		value = {
@@ -220,8 +238,32 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 		return new TaxonomyVocabulary();
 	}
 
+	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {
+		this.contextAcceptLanguage = contextAcceptLanguage;
+	}
+
 	public void setContextCompany(Company contextCompany) {
 		this.contextCompany = contextCompany;
+	}
+
+	public void setContextHttpServletRequest(
+		HttpServletRequest contextHttpServletRequest) {
+
+		this.contextHttpServletRequest = contextHttpServletRequest;
+	}
+
+	public void setContextHttpServletResponse(
+		HttpServletResponse contextHttpServletResponse) {
+
+		this.contextHttpServletResponse = contextHttpServletResponse;
+	}
+
+	public void setContextUriInfo(UriInfo contextUriInfo) {
+		this.contextUriInfo = contextUriInfo;
+	}
+
+	public void setContextUser(User contextUser) {
+		this.contextUser = contextUser;
 	}
 
 	protected void preparePatch(
@@ -230,7 +272,7 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 	}
 
 	protected <T, R> List<R> transform(
-		Collection<T> collection,
+		java.util.Collection<T> collection,
 		UnsafeFunction<T, R, Exception> unsafeFunction) {
 
 		return TransformUtil.transform(collection, unsafeFunction);
@@ -244,7 +286,7 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 	}
 
 	protected <T, R> R[] transformToArray(
-		Collection<T> collection,
+		java.util.Collection<T> collection,
 		UnsafeFunction<T, R, Exception> unsafeFunction, Class<?> clazz) {
 
 		return TransformUtil.transformToArray(
@@ -257,13 +299,11 @@ public abstract class BaseTaxonomyVocabularyResourceImpl
 		return TransformUtil.transformToList(array, unsafeFunction);
 	}
 
-	@Context
 	protected AcceptLanguage contextAcceptLanguage;
-
-	@Context
 	protected Company contextCompany;
-
-	@Context
+	protected HttpServletRequest contextHttpServletRequest;
+	protected HttpServletResponse contextHttpServletResponse;
 	protected UriInfo contextUriInfo;
+	protected User contextUser;
 
 }

@@ -240,10 +240,8 @@ public class TOCTOUTest extends BaseClientTestCase {
 
 			registerJaxRsApplication(
 				new TestRunnablePostHandlingApplication(
-					() -> {
-						registerJaxRsApplication(
-							application, "annotated2", properties);
-					}),
+					() -> registerJaxRsApplication(
+						application, "annotated2", properties)),
 				"annotated", properties);
 
 			updateOAuth2ApplicationScopeAliases(oAuth2Application);

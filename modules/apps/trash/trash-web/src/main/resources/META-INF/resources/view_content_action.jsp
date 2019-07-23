@@ -49,7 +49,7 @@ TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(className);
 	message="<%= StringPool.BLANK %>"
 	showWhenSingleIcon="<%= true %>"
 >
-	<c:if test="<%= trashHandler.isMovable() %>">
+	<c:if test="<%= trashHandler.isMovable(classPK) %>">
 		<portlet:renderURL var="moveURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 			<portlet:param name="mvcPath" value="/view_container_model.jsp" />
 			<portlet:param name="redirect" value="<%= redirect %>" />
@@ -69,7 +69,7 @@ TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(className);
 		/>
 	</c:if>
 
-	<c:if test="<%= trashHandler.isDeletable() %>">
+	<c:if test="<%= trashHandler.isDeletable(classPK) %>">
 		<portlet:actionURL name="deleteEntries" var="deleteEntryURL">
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="className" value="<%= className %>" />

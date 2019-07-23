@@ -78,13 +78,9 @@ public class OpenAPIResourceImpl {
 		{
 			add(AvailabilityEstimateResourceImpl.class);
 
-			add(CatalogRuleResourceImpl.class);
-
 			add(MeasurementUnitResourceImpl.class);
 
 			add(TaxCategoryResourceImpl.class);
-
-			add(UserSegmentResourceImpl.class);
 
 			add(WarehouseResourceImpl.class);
 

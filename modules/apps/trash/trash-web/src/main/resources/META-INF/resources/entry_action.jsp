@@ -53,7 +53,7 @@ else {
 				url="<%= restoreEntryURL.toString() %>"
 			/>
 		</c:when>
-		<c:when test="<%= !trashHandler.isRestorable(trashEntry.getClassPK()) && trashHandler.isMovable() %>">
+		<c:when test="<%= !trashHandler.isRestorable(trashEntry.getClassPK()) && trashHandler.isMovable(trashEntry.getClassPK()) %>">
 			<portlet:renderURL var="moveURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 				<portlet:param name="mvcPath" value="/view_container_model.jsp" />
 				<portlet:param name="classNameId" value="<%= String.valueOf(trashEntry.getClassNameId()) %>" />
@@ -73,12 +73,14 @@ else {
 		</c:when>
 	</c:choose>
 
-	<portlet:actionURL name="deleteEntries" var="deleteEntryURL">
-		<portlet:param name="redirect" value="<%= currentURL %>" />
-		<portlet:param name="trashEntryId" value="<%= String.valueOf(trashEntry.getEntryId()) %>" />
-	</portlet:actionURL>
+	<c:if test="<%= trashHandler.isDeletable(trashEntry.getClassPK()) %>">
+		<portlet:actionURL name="deleteEntries" var="deleteEntryURL">
+			<portlet:param name="redirect" value="<%= currentURL %>" />
+			<portlet:param name="trashEntryId" value="<%= String.valueOf(trashEntry.getEntryId()) %>" />
+		</portlet:actionURL>
 
-	<liferay-ui:icon-delete
-		url="<%= deleteEntryURL %>"
-	/>
+		<liferay-ui:icon-delete
+			url="<%= deleteEntryURL %>"
+		/>
+	</c:if>
 </liferay-ui:icon-menu>

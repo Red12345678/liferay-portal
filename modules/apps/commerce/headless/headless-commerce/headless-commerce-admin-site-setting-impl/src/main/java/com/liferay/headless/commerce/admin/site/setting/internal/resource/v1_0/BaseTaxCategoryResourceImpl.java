@@ -59,9 +59,55 @@ public abstract class BaseTaxCategoryResourceImpl
 	implements TaxCategoryResource {
 
 	@Override
+	@DELETE
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
+	@Path("/taxCategory/{id}")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "TaxCategory")})
+	public Response deleteTaxCategory(
+			@NotNull @Parameter(hidden = true) @PathParam("id") Long id)
+		throws Exception {
+
+		Response.ResponseBuilder responseBuilder = Response.ok();
+
+		return responseBuilder.build();
+	}
+
+	@Override
+	@GET
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
+	@Path("/taxCategory/{id}")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "TaxCategory")})
+	public TaxCategory getTaxCategory(
+			@NotNull @Parameter(hidden = true) @PathParam("id") Long id)
+		throws Exception {
+
+		return new TaxCategory();
+	}
+
+	@Override
+	@Consumes({"application/json", "application/xml"})
+	@PUT
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
+	@Path("/taxCategory/{id}")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "TaxCategory")})
+	public Response putTaxCategory(
+			@NotNull @Parameter(hidden = true) @PathParam("id") Long id,
+			TaxCategory taxCategory)
+		throws Exception {
+
+		Response.ResponseBuilder responseBuilder = Response.ok();
+
+		return responseBuilder.build();
+	}
+
+	@Override
 	@GET
 	@Parameters(
 		value = {
+			@Parameter(in = ParameterIn.PATH, name = "groupId"),
 			@Parameter(in = ParameterIn.QUERY, name = "page"),
 			@Parameter(in = ParameterIn.QUERY, name = "pageSize")
 		}
@@ -69,8 +115,9 @@ public abstract class BaseTaxCategoryResourceImpl
 	@Path("/commerceAdminSiteSetting/{groupId}/taxCategory/")
 	@Produces({"application/json", "application/xml"})
 	@Tags(value = {@Tag(name = "TaxCategory")})
-	public Page<TaxCategory> getTaxCategories(
-			@NotNull @PathParam("groupId") Long groupId,
+	public Page<TaxCategory> getCommerceAdminSiteSettingGroupTaxCategoryPage(
+			@NotNull @Parameter(hidden = true) @PathParam("groupId") Long
+				groupId,
 			@Context Pagination pagination)
 		throws Exception {
 
@@ -80,61 +127,25 @@ public abstract class BaseTaxCategoryResourceImpl
 	@Override
 	@Consumes({"application/json", "application/xml"})
 	@POST
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "groupId")})
 	@Path("/commerceAdminSiteSetting/{groupId}/taxCategory/")
 	@Produces({"application/json", "application/xml"})
 	@Tags(value = {@Tag(name = "TaxCategory")})
-	public TaxCategory upsertTaxCategory(
-			@NotNull @PathParam("groupId") Long groupId,
+	public TaxCategory postCommerceAdminSiteSettingGroupTaxCategory(
+			@NotNull @Parameter(hidden = true) @PathParam("groupId") Long
+				groupId,
 			TaxCategory taxCategory)
 		throws Exception {
 
 		return new TaxCategory();
 	}
 
-	@Override
-	@DELETE
-	@Path("/taxCategory/{id}")
-	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "TaxCategory")})
-	public Response deleteTaxCategory(@NotNull @PathParam("id") Long id)
-		throws Exception {
-
-		Response.ResponseBuilder responseBuilder = Response.ok();
-
-		return responseBuilder.build();
-	}
-
-	@Override
-	@GET
-	@Path("/taxCategory/{id}")
-	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "TaxCategory")})
-	public TaxCategory getTaxCategory(@NotNull @PathParam("id") Long id)
-		throws Exception {
-
-		return new TaxCategory();
-	}
-
-	@Override
-	@Consumes({"application/json", "application/xml"})
-	@PUT
-	@Path("/taxCategory/{id}")
-	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "TaxCategory")})
-	public Response updateTaxCategory(
-			@NotNull @PathParam("id") Long id, TaxCategory taxCategory)
-		throws Exception {
-
-		Response.ResponseBuilder responseBuilder = Response.ok();
-
-		return responseBuilder.build();
-	}
-
 	public void setContextCompany(Company contextCompany) {
 		this.contextCompany = contextCompany;
 	}
 
-	protected void preparePatch(TaxCategory taxCategory) {
+	protected void preparePatch(
+		TaxCategory taxCategory, TaxCategory existingTaxCategory) {
 	}
 
 	protected <T, R> List<R> transform(

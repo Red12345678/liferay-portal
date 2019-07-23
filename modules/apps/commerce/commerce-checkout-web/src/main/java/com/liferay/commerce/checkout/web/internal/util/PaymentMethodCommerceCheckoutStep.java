@@ -23,12 +23,11 @@ import com.liferay.commerce.constants.CommerceWebKeys;
 import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.exception.CommerceOrderPaymentMethodException;
 import com.liferay.commerce.model.CommerceOrder;
-import com.liferay.commerce.order.web.security.permission.resource.CommerceOrderPermission;
 import com.liferay.commerce.payment.engine.CommercePaymentEngine;
 import com.liferay.commerce.service.CommerceOrderLocalService;
 import com.liferay.commerce.service.CommerceOrderService;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -119,6 +118,16 @@ public class PaymentMethodCommerceCheckoutStep
 			"/checkout_step/payment_method.jsp");
 	}
 
+	@Reference(
+		target = "(model.class.name=com.liferay.commerce.model.CommerceOrder)",
+		unbind = "-"
+	)
+	protected void setModelResourcePermission(
+		ModelResourcePermission<CommerceOrder> modelResourcePermission) {
+
+		_commerceOrderModelResourcePermission = modelResourcePermission;
+	}
+
 	protected void updateCommerceOrderPaymentMethod(ActionRequest actionRequest)
 		throws Exception {
 
@@ -141,11 +150,8 @@ public class PaymentMethodCommerceCheckoutStep
 		CommerceOrder commerceOrder = _commerceOrderService.getCommerceOrder(
 			commerceOrderId);
 
-		PermissionChecker permissionChecker =
-			themeDisplay.getPermissionChecker();
-
-		if (!CommerceOrderPermission.contains(
-				permissionChecker, commerceOrder,
+		if (!_commerceOrderModelResourcePermission.contains(
+				themeDisplay.getPermissionChecker(), commerceOrder,
 				CommerceOrderActionKeys.CHECKOUT_COMMERCE_ORDER)) {
 
 			return;
@@ -167,6 +173,9 @@ public class PaymentMethodCommerceCheckoutStep
 
 	@Reference
 	private CommerceOrderLocalService _commerceOrderLocalService;
+
+	private ModelResourcePermission<CommerceOrder>
+		_commerceOrderModelResourcePermission;
 
 	@Reference
 	private CommerceOrderService _commerceOrderService;

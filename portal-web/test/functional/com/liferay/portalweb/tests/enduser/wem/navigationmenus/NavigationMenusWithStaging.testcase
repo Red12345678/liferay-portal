@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Navigation";
@@ -13,26 +14,21 @@ definition {
 
 		JSONLayout.addPublicLayout(
 			groupName = "Test Site Name",
-			layoutName = "Test Page 1"
-		);
+			layoutName = "Test Page 1");
 
 		JSONLayout.addPublicLayout(
 			groupName = "Test Site Name",
-			layoutName = "Test Page 2"
-		);
+			layoutName = "Test Page 2");
 
 		JSONLayout.addPublicLayout(
 			groupName = "Test Site Name",
-			layoutName = "Test Page 3"
-		);
+			layoutName = "Test Page 3");
 
 		Staging.openStagingAdmin(siteURLKey = "test-site-name");
 
 		Staging.activateStagingCP(siteName = "Test Site Name");
 
-		NavigationMenusAdmin.openNavigationMenusAdmin(
-			siteURLKey = "test-site-name-staging"
-		);
+		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name-staging");
 
 		NavigationMenusAdmin.addMenu(menuName = "Test Navigation Menu Name");
 	}
@@ -55,37 +51,33 @@ definition {
 
 		Staging.publishCustomPublication();
 
-		NavigationMenusAdmin.openNavigationMenusAdmin(
-			siteURLKey = "test-site-name-staging"
-		);
+		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name-staging");
 
 		AssertVisible(
-			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME_LINK",
-			key_rowEntry = "Test Navigation Menu Name"
-		);
+			key_rowEntry = "Test Navigation Menu Name",
+			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME_LINK");
 
 		LexiconEntry.openEntryMenu(rowEntry = "Test Navigation Menu Name");
 
-		AssertVisible(locator1 = "MenuItem#ANY_MENU_ITEM", key_menuItem = "Edit");
+		AssertVisible(
+			key_menuItem = "Edit",
+			locator1 = "MenuItem#ANY_MENU_ITEM");
 
 		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name");
 
 		AssertVisible(
-			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME",
-			key_rowEntry = "Test Navigation Menu Name"
-		);
+			key_rowEntry = "Test Navigation Menu Name",
+			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME");
 
 		AssertElementNotPresent(
-			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME_LINK",
-			key_rowEntry = "Test Navigation Menu Name"
-		);
+			key_rowEntry = "Test Navigation Menu Name",
+			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME_LINK");
 
 		LexiconEntry.openEntryMenu(rowEntry = "Test Navigation Menu Name");
 
 		AssertElementNotPresent(
-			locator1 = "MenuItem#ANY_MENU_ITEM",
-			key_menuItem = "Edit"
-		);
+			key_menuItem = "Edit",
+			locator1 = "MenuItem#ANY_MENU_ITEM");
 	}
 
 	@description = "Deleted Navigation menus will not appear in live after publish. This case covers LPS-89358."
@@ -151,13 +143,14 @@ definition {
 	@description = "Edits to navigation menus will appear in live until after publish. This test has the Navigation Menu widget display a specific navigation menu and covers LPS-86525."
 	@priority = "5"
 	test PublishEditedNavigationMenu {
-		NavigationMenusAdmin.addItem(item = "Page", pageNames = "Test Page 1");
+		NavigationMenusAdmin.addItem(
+			item = "Page",
+			pageNames = "Test Page 1");
 
 		NavigationMenusAdmin.addItem(
 			item = "URL",
 			url = "https://www.liferay.com/",
-			urlName = "Liferay"
-		);
+			urlName = "Liferay");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-staging");
 
@@ -171,62 +164,83 @@ definition {
 
 		Staging.publishCustomPublication();
 
-		NavigationMenusAdmin.openNavigationMenusAdmin(
-			siteURLKey = "test-site-name-staging"
-		);
+		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name-staging");
 
 		LexiconEntry.gotoEntry(rowEntry = "Test Navigation Menu Name");
 
-		NavigationMenusAdmin.addItem(item = "Page", pageNames = "Test Page 3");
+		NavigationMenusAdmin.addItem(
+			item = "Page",
+			pageNames = "Test Page 3");
 
 		NavigationMenusAdmin.deleteItem(itemName = "Test Page 1");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-staging");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertVisible(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertVisible(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertVisible(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertVisible(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
 		Staging.openStagingAdmin(siteURLKey = "test-site-name-staging");
 
 		LexiconEntry.gotoAdd();
 
-		Check(
-			locator1 = "StagingPublishToLive#DELETIONS_REPLICATE_INDIVIDUAL_DELETIONS_CHECKBOX"
-		);
+		Check(locator1 = "StagingPublishToLive#DELETIONS_REPLICATE_INDIVIDUAL_DELETIONS_CHECKBOX");
 
 		AssertClickNoError(
 			locator1 = "Staging#STAGING_PUBLISH_TO_LIVE_BUTTON",
-			value1 = "Publish to Live"
-		);
+			value1 = "Publish to Live");
 
 		Pause(locator1 = "30000");
 
-		AssertTextEquals(locator1 = "Staging#PROCESS_RESULT", value1 = "SUCCESSFUL");
+		AssertTextEquals(
+			locator1 = "Staging#PROCESS_RESULT",
+			value1 = "SUCCESSFUL");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertVisible(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertVisible(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		Click(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
 		AssertLocation.assertPartialLocation(value1 = "web/test-site-name/test-page-3");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		Click(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
 		AssertLocation(value1 = "https://www.liferay.com/");
 	}
@@ -234,22 +248,20 @@ definition {
 	@description = "Edits to navigation menus will appear in live until after publish. This test has the navigation menu widget display the primary navigation menu and covers LPS-86529."
 	@priority = "5"
 	test PublishEditedPrimaryNavigationMenu {
-		NavigationMenusAdmin.addItem(item = "Page", pageNames = "Test Page 1");
+		NavigationMenusAdmin.addItem(
+			item = "Page",
+			pageNames = "Test Page 1");
 
 		NavigationMenusAdmin.addItem(
 			item = "URL",
 			url = "https://www.liferay.com/",
-			urlName = "Liferay"
-		);
+			urlName = "Liferay");
 
-		NavigationMenusAdmin.openNavigationMenusAdmin(
-			siteURLKey = "test-site-name-staging"
-		);
+		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name-staging");
 
 		NavigationMenusAdmin.configureMenuType(
 			menuType = "Primary Navigation",
-			navigationMenu = "Test Navigation Menu Name"
-		);
+			navigationMenu = "Test Navigation Menu Name");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-staging");
 
@@ -263,62 +275,83 @@ definition {
 
 		Staging.publishCustomPublication();
 
-		NavigationMenusAdmin.openNavigationMenusAdmin(
-			siteURLKey = "test-site-name-staging"
-		);
+		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name-staging");
 
 		LexiconEntry.gotoEntry(rowEntry = "Test Navigation Menu Name");
 
-		NavigationMenusAdmin.addItem(item = "Page", pageNames = "Test Page 3");
+		NavigationMenusAdmin.addItem(
+			item = "Page",
+			pageNames = "Test Page 3");
 
 		NavigationMenusAdmin.deleteItem(itemName = "Test Page 1");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-staging");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertVisible(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertVisible(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertVisible(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertVisible(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
 		Staging.openStagingAdmin(siteURLKey = "test-site-name-staging");
 
 		LexiconEntry.gotoAdd();
 
-		Check(
-			locator1 = "StagingPublishToLive#DELETIONS_REPLICATE_INDIVIDUAL_DELETIONS_CHECKBOX"
-		);
+		Check(locator1 = "StagingPublishToLive#DELETIONS_REPLICATE_INDIVIDUAL_DELETIONS_CHECKBOX");
 
 		AssertClickNoError(
 			locator1 = "Staging#STAGING_PUBLISH_TO_LIVE_BUTTON",
-			value1 = "Publish to Live"
-		);
+			value1 = "Publish to Live");
 
 		Pause(locator1 = "30000");
 
-		AssertTextEquals(locator1 = "Staging#PROCESS_RESULT", value1 = "SUCCESSFUL");
+		AssertTextEquals(
+			locator1 = "Staging#PROCESS_RESULT",
+			value1 = "SUCCESSFUL");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertVisible(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertVisible(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		Click(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
 		AssertLocation.assertPartialLocation(value1 = "web/test-site-name/test-page-3");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		Click(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
 		AssertLocation(value1 = "https://www.liferay.com/");
 	}
@@ -326,13 +359,14 @@ definition {
 	@description = "Navigation menus can be published to live and do not appear in live until published. This test has the navigation menu widget display a specific navigation menu. This test covers LPS-86142."
 	@priority = "5"
 	test PublishNavigationMenu {
-		NavigationMenusAdmin.addItem(item = "Page", pageNames = "Test Page 1");
+		NavigationMenusAdmin.addItem(
+			item = "Page",
+			pageNames = "Test Page 1");
 
 		NavigationMenusAdmin.addItem(
 			item = "URL",
 			url = "https://www.liferay.com/",
-			urlName = "Liferay"
-		);
+			urlName = "Liferay");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-staging");
 
@@ -342,40 +376,57 @@ definition {
 
 		Portlet.saveAndCloseConfig();
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertVisible(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertVisible(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 2");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 2",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		Click(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertLocation.assertPartialLocation(
-			value1 = "web/test-site-name-staging/test-page-1"
-		);
+		AssertLocation.assertPartialLocation(value1 = "web/test-site-name-staging/test-page-1");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		Click(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
 		AssertLocation(value1 = "https://www.liferay.com/");
 
 		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name");
 
 		AssertElementNotPresent(
-			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME",
-			key_rowEntry = "Test Navigation Menu Name"
-		);
+			key_rowEntry = "Test Navigation Menu Name",
+			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertVisible(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 2");
+		AssertVisible(
+			key_pageName = "Test Page 2",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertVisible(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertElementNotPresent(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
 		Staging.openStagingAdmin(siteURLKey = "test-site-name-staging");
 
@@ -384,25 +435,36 @@ definition {
 		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name");
 
 		AssertVisible(
-			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME",
-			key_rowEntry = "Test Navigation Menu Name"
-		);
+			key_rowEntry = "Test Navigation Menu Name",
+			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertVisible(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertVisible(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 2");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 2",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		Click(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
 		AssertLocation.assertPartialLocation(value1 = "web/test-site-name/test-page-1");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		Click(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
 		AssertLocation(value1 = "https://www.liferay.com/");
 	}
@@ -412,8 +474,7 @@ definition {
 	test PublishNavigationMenuWithDeletedPages {
 		NavigationMenusAdmin.addItem(
 			item = "Page",
-			pageNames = "Test Page 1,Test Page 2,Test Page 3"
-		);
+			pageNames = "Test Page 1,Test Page 2,Test Page 3");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-staging");
 
@@ -433,53 +494,56 @@ definition {
 
 		if (IsElementPresent(locator1 = "StagingPublishToLive#PAGES_TO_PUBLISH_CHECKBOX_CHECKED", key_entryName = "Test Page 3")) {
 			Click(
-				locator1 = "StagingPublishToLive#PAGES_TO_PUBLISH_CHECKBOX_CHECKED",
-				key_entryName = "Test Page 3"
-			);
+				key_entryName = "Test Page 3",
+				locator1 = "StagingPublishToLive#PAGES_TO_PUBLISH_CHECKBOX_CHECKED");
 		}
 
 		AssertVisible(
-			locator1 = "StagingPublishToLive#PAGES_TO_PUBLISH_CHECKBOX_UNCHECKED",
-			key_entryName = "Test Page 3"
-		);
+			key_entryName = "Test Page 3",
+			locator1 = "StagingPublishToLive#PAGES_TO_PUBLISH_CHECKBOX_UNCHECKED");
 
 		AssertClickNoError(
 			locator1 = "Staging#STAGING_PUBLISH_TO_LIVE_BUTTON",
-			value1 = "Publish to Live"
-		);
+			value1 = "Publish to Live");
 
 		Pause(locator1 = "30000");
 
-		AssertTextEquals(locator1 = "Staging#PROCESS_RESULT", value1 = "SUCCESSFUL");
+		AssertTextEquals(
+			locator1 = "Staging#PROCESS_RESULT",
+			value1 = "SUCCESSFUL");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertVisible(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 2");
+		AssertVisible(
+			key_pageName = "Test Page 2",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 	}
 
 	@description = "Navigation menus can be published to live and do not appear in live until published. This test has the navigation menu widget display the primary navigation menu."
 	@priority = "5"
 	test PublishPrimaryNavigationMenu {
-		NavigationMenusAdmin.addItem(item = "Page", pageNames = "Test Page 1");
+		NavigationMenusAdmin.addItem(
+			item = "Page",
+			pageNames = "Test Page 1");
 
 		NavigationMenusAdmin.addItem(
 			item = "URL",
 			url = "https://www.liferay.com/",
-			urlName = "Liferay"
-		);
+			urlName = "Liferay");
 
-		NavigationMenusAdmin.openNavigationMenusAdmin(
-			siteURLKey = "test-site-name-staging"
-		);
+		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name-staging");
 
 		NavigationMenusAdmin.configureMenuType(
 			menuType = "Primary Navigation",
-			navigationMenu = "Test Navigation Menu Name"
-		);
+			navigationMenu = "Test Navigation Menu Name");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-staging");
 
@@ -489,38 +553,55 @@ definition {
 
 		Portlet.saveAndCloseConfig();
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertVisible(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertVisible(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 2");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 2",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		Click(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertLocation.assertPartialLocation(
-			value1 = "web/test-site-name-staging/test-page-1"
-		);
+		AssertLocation.assertPartialLocation(value1 = "web/test-site-name-staging/test-page-1");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		Click(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
 		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name");
 
 		AssertElementNotPresent(
-			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME",
-			key_rowEntry = "Test Navigation Menu Name"
-		);
+			key_rowEntry = "Test Navigation Menu Name",
+			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertVisible(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 2");
+		AssertVisible(
+			key_pageName = "Test Page 2",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertVisible(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertElementNotPresent(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
 		Staging.openStagingAdmin(siteURLKey = "test-site-name-staging");
 
@@ -529,25 +610,36 @@ definition {
 		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name");
 
 		AssertVisible(
-			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME",
-			key_rowEntry = "Test Navigation Menu Name"
-		);
+			key_rowEntry = "Test Navigation Menu Name",
+			locator1 = "ContentRow#ENTRY_CONTENT_ENTRY_NAME");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertVisible(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		AssertVisible(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 2");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 2",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		Click(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
 		AssertLocation.assertPartialLocation(value1 = "web/test-site-name/test-page-1");
 
-		Click(locator1 = "Home#PAGE", key_pageName = "Liferay");
+		Click(
+			key_pageName = "Liferay",
+			locator1 = "Home#PAGE");
 
 		AssertLocation(value1 = "https://www.liferay.com/");
 	}
@@ -557,17 +649,13 @@ definition {
 	test PublishPrimaryNavigationMenuWithDeletedPages {
 		NavigationMenusAdmin.addItem(
 			item = "Page",
-			pageNames = "Test Page 1,Test Page 2,Test Page 3"
-		);
+			pageNames = "Test Page 1,Test Page 2,Test Page 3");
 
-		NavigationMenusAdmin.openNavigationMenusAdmin(
-			siteURLKey = "test-site-name-staging"
-		);
+		NavigationMenusAdmin.openNavigationMenusAdmin(siteURLKey = "test-site-name-staging");
 
 		NavigationMenusAdmin.configureMenuType(
 			menuType = "Primary Navigation",
-			navigationMenu = "Test Navigation Menu Name"
-		);
+			navigationMenu = "Test Navigation Menu Name");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-staging");
 
@@ -587,31 +675,37 @@ definition {
 
 		if (IsElementPresent(locator1 = "StagingPublishToLive#PAGES_TO_PUBLISH_CHECKBOX_CHECKED", key_entryName = "Test Page 3")) {
 			Click(
-				locator1 = "StagingPublishToLive#PAGES_TO_PUBLISH_CHECKBOX_CHECKED",
-				key_entryName = "Test Page 3"
-			);
+				key_entryName = "Test Page 3",
+				locator1 = "StagingPublishToLive#PAGES_TO_PUBLISH_CHECKBOX_CHECKED");
 		}
 
 		AssertVisible(
-			locator1 = "StagingPublishToLive#PAGES_TO_PUBLISH_CHECKBOX_UNCHECKED",
-			key_entryName = "Test Page 3"
-		);
+			key_entryName = "Test Page 3",
+			locator1 = "StagingPublishToLive#PAGES_TO_PUBLISH_CHECKBOX_UNCHECKED");
 
 		AssertClickNoError(
 			locator1 = "Staging#STAGING_PUBLISH_TO_LIVE_BUTTON",
-			value1 = "Publish to Live"
-		);
+			value1 = "Publish to Live");
 
 		Pause(locator1 = "30000");
 
-		AssertTextEquals(locator1 = "Staging#PROCESS_RESULT", value1 = "SUCCESSFUL");
+		AssertTextEquals(
+			locator1 = "Staging#PROCESS_RESULT",
+			value1 = "SUCCESSFUL");
 
 		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 1");
+		AssertVisible(
+			key_pageName = "Test Page 1",
+			locator1 = "Home#PAGE");
 
-		AssertVisible(locator1 = "Home#PAGE", key_pageName = "Test Page 2");
+		AssertVisible(
+			key_pageName = "Test Page 2",
+			locator1 = "Home#PAGE");
 
-		AssertElementNotPresent(locator1 = "Home#PAGE", key_pageName = "Test Page 3");
+		AssertElementNotPresent(
+			key_pageName = "Test Page 3",
+			locator1 = "Home#PAGE");
 	}
+
 }

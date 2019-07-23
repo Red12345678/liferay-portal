@@ -148,6 +148,8 @@ definition {
 
 	@priority = "5"
 	test AddJoinXORWorkflowDefinitionViaViewTab {
+		property test.name.skip.portal.instance = "Kaleodesigner#AddJoinXORWorkflowDefinitionViaViewTab";
+
 		property portal.acceptance = "true";
 		property testray.component.names = "Training";
 
@@ -244,6 +246,8 @@ definition {
 
 	@priority = "5"
 	test AddNewWorkflowDefinitionViaViewTab {
+		property test.name.skip.portal.instance = "Kaleodesigner#AddNewWorkflowDefinitionViaViewTab";
+		
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
@@ -710,6 +714,8 @@ definition {
 	@description = "This is a use case for LPS-71924."
 	@priority = "5"
 	test PublishDefaultWorkflowDefinition {
+		property test.name.skip.portal.instance = "Kaleodesigner#PublishDefaultWorkflowDefinition";
+
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",

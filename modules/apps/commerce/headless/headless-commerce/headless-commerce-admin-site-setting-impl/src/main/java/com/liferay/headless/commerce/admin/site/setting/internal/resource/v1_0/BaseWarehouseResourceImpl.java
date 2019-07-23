@@ -59,9 +59,56 @@ import javax.ws.rs.core.UriInfo;
 public abstract class BaseWarehouseResourceImpl implements WarehouseResource {
 
 	@Override
+	@DELETE
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
+	@Path("/warehouse/{id}")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "Warehouse")})
+	public Response deleteWarehouse(
+			@NotNull @Parameter(hidden = true) @PathParam("id") Long id)
+		throws Exception {
+
+		Response.ResponseBuilder responseBuilder = Response.ok();
+
+		return responseBuilder.build();
+	}
+
+	@Override
+	@GET
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
+	@Path("/warehouse/{id}")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "Warehouse")})
+	public Warehouse getWarehouse(
+			@NotNull @Parameter(hidden = true) @PathParam("id") Long id)
+		throws Exception {
+
+		return new Warehouse();
+	}
+
+	@Override
+	@Consumes({"application/json", "application/xml"})
+	@PUT
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "id")})
+	@Path("/warehouse/{id}")
+	@Produces({"application/json", "application/xml"})
+	@Tags(value = {@Tag(name = "Warehouse")})
+	public Response putWarehouse(
+			@NotNull @Parameter(hidden = true) @PathParam("id") Long id,
+			Warehouse warehouse)
+		throws Exception {
+
+		Response.ResponseBuilder responseBuilder = Response.ok();
+
+		return responseBuilder.build();
+	}
+
+	@Override
 	@GET
 	@Parameters(
 		value = {
+			@Parameter(in = ParameterIn.PATH, name = "groupId"),
+			@Parameter(in = ParameterIn.QUERY, name = "active"),
 			@Parameter(in = ParameterIn.QUERY, name = "page"),
 			@Parameter(in = ParameterIn.QUERY, name = "pageSize")
 		}
@@ -69,9 +116,10 @@ public abstract class BaseWarehouseResourceImpl implements WarehouseResource {
 	@Path("/commerceAdminSiteSetting/{groupId}/warehouse/")
 	@Produces({"application/json", "application/xml"})
 	@Tags(value = {@Tag(name = "Warehouse")})
-	public Page<Warehouse> getWarehouses(
-			@NotNull @PathParam("groupId") Long groupId,
-			@QueryParam("active") Boolean active,
+	public Page<Warehouse> getCommerceAdminSiteSettingGroupWarehousePage(
+			@NotNull @Parameter(hidden = true) @PathParam("groupId") Long
+				groupId,
+			@Parameter(hidden = true) @QueryParam("active") Boolean active,
 			@Context Pagination pagination)
 		throws Exception {
 
@@ -81,60 +129,25 @@ public abstract class BaseWarehouseResourceImpl implements WarehouseResource {
 	@Override
 	@Consumes({"application/json", "application/xml"})
 	@POST
+	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "groupId")})
 	@Path("/commerceAdminSiteSetting/{groupId}/warehouse/")
 	@Produces({"application/json", "application/xml"})
 	@Tags(value = {@Tag(name = "Warehouse")})
-	public Warehouse upsertWarehouse(
-			@NotNull @PathParam("groupId") Long groupId, Warehouse warehouse)
+	public Warehouse postCommerceAdminSiteSettingGroupWarehouse(
+			@NotNull @Parameter(hidden = true) @PathParam("groupId") Long
+				groupId,
+			Warehouse warehouse)
 		throws Exception {
 
 		return new Warehouse();
-	}
-
-	@Override
-	@DELETE
-	@Path("/warehouse/{id}")
-	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "Warehouse")})
-	public Response deleteWarehouse(@NotNull @PathParam("id") Long id)
-		throws Exception {
-
-		Response.ResponseBuilder responseBuilder = Response.ok();
-
-		return responseBuilder.build();
-	}
-
-	@Override
-	@GET
-	@Path("/warehouse/{id}")
-	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "Warehouse")})
-	public Warehouse getWarehouse(@NotNull @PathParam("id") Long id)
-		throws Exception {
-
-		return new Warehouse();
-	}
-
-	@Override
-	@Consumes({"application/json", "application/xml"})
-	@PUT
-	@Path("/warehouse/{id}")
-	@Produces({"application/json", "application/xml"})
-	@Tags(value = {@Tag(name = "Warehouse")})
-	public Response updateWarehouse(
-			@NotNull @PathParam("id") Long id, Warehouse warehouse)
-		throws Exception {
-
-		Response.ResponseBuilder responseBuilder = Response.ok();
-
-		return responseBuilder.build();
 	}
 
 	public void setContextCompany(Company contextCompany) {
 		this.contextCompany = contextCompany;
 	}
 
-	protected void preparePatch(Warehouse warehouse) {
+	protected void preparePatch(
+		Warehouse warehouse, Warehouse existingWarehouse) {
 	}
 
 	protected <T, R> List<R> transform(

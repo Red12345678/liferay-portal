@@ -29,10 +29,13 @@ import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.content.constants.CPContentWebKeys;
 import com.liferay.commerce.product.content.render.list.entry.CPContentListEntryRenderer;
 import com.liferay.commerce.product.content.util.CPContentHelper;
+import com.liferay.commerce.product.util.CPCompareUtil;
 import com.liferay.commerce.wish.list.model.CommerceWishList;
 import com.liferay.commerce.wish.list.service.CommerceWishListItemService;
 import com.liferay.commerce.wish.list.service.CommerceWishListService;
 import com.liferay.frontend.js.loader.modules.extender.npm.NPMResolver;
+import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.theme.PortletDisplay;
@@ -148,7 +151,19 @@ public class MiniumCPContentListEntryRenderer
 				editCompareProductActionURL.toString());
 		}
 		else {
+			List<Long> cpDefinitionIds = CPCompareUtil.getCPDefinitionIds(
+				httpServletRequest);
+
+			JSONObject jsonObject = _jsonFactory.createJSONObject();
+
+			jsonObject.put("checkboxVisible", true);
+			jsonObject.put("compareAvailable", true);
+			jsonObject.put(
+				"inCompare",
+				cpDefinitionIds.contains(cpCatalogEntry.getCPDefinitionId()));
+
 			context.put("compareCheckboxVisible", true);
+			context.put("compareState", jsonObject);
 			context.put("deleteButtonVisible", false);
 		}
 
@@ -243,11 +258,11 @@ public class MiniumCPContentListEntryRenderer
 		Set<String> dependencies = new HashSet<>();
 
 		dependencies.add(
-			"commerce-frontend-taglib@2.1.0/add_to_cart/AddToCartButton.es");
+			"commerce-frontend-taglib@2.1.5/add_to_cart/AddToCartButton.es");
 		dependencies.add(
-			"commerce-frontend-taglib@2.1.0/compare_checkbox" +
+			"commerce-frontend-taglib@2.1.5/compare_checkbox" +
 				"/CompareCheckbox.es");
-		dependencies.add("commerce-frontend-taglib@2.1.0/price/Price.es");
+		dependencies.add("commerce-frontend-taglib@2.1.5/price/Price.es");
 
 		ComponentDescriptor componentDescriptor = new ComponentDescriptor(
 			"ProductCard.render", moduleName, null, dependencies, false, true,
@@ -263,6 +278,9 @@ public class MiniumCPContentListEntryRenderer
 
 	@Reference
 	private CommerceWishListService _commerceWishListService;
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private NPMResolver _npmResolver;

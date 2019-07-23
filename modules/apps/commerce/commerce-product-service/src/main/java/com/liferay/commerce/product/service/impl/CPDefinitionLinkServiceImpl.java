@@ -14,11 +14,14 @@
 
 package com.liferay.commerce.product.service.impl;
 
+import com.liferay.commerce.product.exception.NoSuchCPDefinitionException;
 import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.model.CPDefinitionLink;
 import com.liferay.commerce.product.model.CProduct;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.base.CPDefinitionLinkServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
@@ -40,8 +43,8 @@ public class CPDefinitionLinkServiceImpl
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		return cpDefinitionLinkLocalService.addCPDefinitionLinkByCProductId(
 			cpDefinitionId, cProductId, priority, type, serviceContext);
@@ -55,15 +58,13 @@ public class CPDefinitionLinkServiceImpl
 			cpDefinitionLinkLocalService.getCPDefinitionLink(
 				cpDefinitionLinkId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionLink.getCPDefinition(),
-			ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionLink.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		CProduct cProduct = cpDefinitionLink.getCProduct();
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cProduct.getPublishedCPDefinitionId(),
-			ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cProduct.getPublishedCPDefinitionId(), ActionKeys.UPDATE);
 
 		cpDefinitionLinkLocalService.deleteCPDefinitionLink(cpDefinitionLinkId);
 	}
@@ -77,15 +78,13 @@ public class CPDefinitionLinkServiceImpl
 				cpDefinitionLinkId);
 
 		if (cpDefinitionLink != null) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cpDefinitionLink.getCPDefinition(),
-				ActionKeys.VIEW);
+			_checkCommerceCatalogPermissionByCPDefinitionId(
+				cpDefinitionLink.getCPDefinitionId(), ActionKeys.VIEW);
 
 			CProduct cProduct = cpDefinitionLink.getCProduct();
 
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), cProduct.getPublishedCPDefinitionId(),
-				ActionKeys.VIEW);
+			_checkCommerceCatalogPermissionByCPDefinitionId(
+				cProduct.getPublishedCPDefinitionId(), ActionKeys.VIEW);
 		}
 
 		return cpDefinitionLink;
@@ -101,13 +100,11 @@ public class CPDefinitionLinkServiceImpl
 
 		CProduct cProduct = cpDefinitionLink.getCProduct();
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cProduct.getPublishedCPDefinitionId(),
-			ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cProduct.getPublishedCPDefinitionId(), ActionKeys.VIEW);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionLink.getCPDefinitionId(),
-			ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionLink.getCPDefinitionId(), ActionKeys.VIEW);
 
 		return cpDefinitionLinkLocalService.getCPDefinitionLink(
 			cpDefinitionLinkId);
@@ -117,8 +114,8 @@ public class CPDefinitionLinkServiceImpl
 	public List<CPDefinitionLink> getCPDefinitionLinks(long cpDefinitionId)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionLinkLocalService.getCPDefinitionLinks(
 			cpDefinitionId);
@@ -129,8 +126,8 @@ public class CPDefinitionLinkServiceImpl
 			long cpDefinitionId, int start, int end)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionLinkLocalService.getCPDefinitionLinks(
 			cpDefinitionId, start, end);
@@ -141,8 +138,8 @@ public class CPDefinitionLinkServiceImpl
 			long cpDefinitionId, String type)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionLinkLocalService.getCPDefinitionLinks(
 			cpDefinitionId, type);
@@ -154,8 +151,8 @@ public class CPDefinitionLinkServiceImpl
 			OrderByComparator<CPDefinitionLink> orderByComparator)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionLinkLocalService.getCPDefinitionLinks(
 			cpDefinitionId, type, start, end, orderByComparator);
@@ -165,8 +162,8 @@ public class CPDefinitionLinkServiceImpl
 	public int getCPDefinitionLinksCount(long cpDefinitionId)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionLinkLocalService.getCPDefinitionLinksCount(
 			cpDefinitionId);
@@ -176,8 +173,8 @@ public class CPDefinitionLinkServiceImpl
 	public int getCPDefinitionLinksCount(long cpDefinitionId, String type)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionLinkLocalService.getCPDefinitionLinksCount(
 			cpDefinitionId, type);
@@ -193,15 +190,13 @@ public class CPDefinitionLinkServiceImpl
 			cpDefinitionLinkLocalService.getCPDefinitionLink(
 				cpDefinitionLinkId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionLink.getCPDefinition(),
-			ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionLink.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		CProduct cProduct = cpDefinitionLink.getCProduct();
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cProduct.getPublishedCPDefinitionId(),
-			ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cProduct.getPublishedCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpDefinitionLinkLocalService.updateCPDefinitionLink(
 			cpDefinitionLinkId, priority, serviceContext);
@@ -213,17 +208,41 @@ public class CPDefinitionLinkServiceImpl
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		cpDefinitionLinkLocalService.updateCPDefinitionLinks(
 			cpDefinitionId, cpDefinitionIds2, type, serviceContext);
 	}
 
-	private static volatile ModelResourcePermission<CPDefinition>
-		_cpDefinitionModelResourcePermission =
+	private void _checkCommerceCatalogPermissionByCPDefinitionId(
+			long cpDefinitionId, String actionId)
+		throws PortalException {
+
+		CPDefinition cpDefinition = cpDefinitionLocalService.fetchCPDefinition(
+			cpDefinitionId);
+
+		if (cpDefinition == null) {
+			throw new NoSuchCPDefinitionException();
+		}
+
+		CommerceCatalog commerceCatalog =
+			commerceCatalogLocalService.fetchCommerceCatalogByGroupId(
+				cpDefinition.getGroupId());
+
+		if (commerceCatalog == null) {
+			throw new PrincipalException();
+		}
+
+		_commerceCatalogModelResourcePermission.check(
+			getPermissionChecker(), commerceCatalog, actionId);
+	}
+
+	private static volatile ModelResourcePermission<CommerceCatalog>
+		_commerceCatalogModelResourcePermission =
 			ModelResourcePermissionFactory.getInstance(
 				CPDefinitionLinkServiceImpl.class,
-				"_cpDefinitionModelResourcePermission", CPDefinition.class);
+				"_commerceCatalogModelResourcePermission",
+				CommerceCatalog.class);
 
 }

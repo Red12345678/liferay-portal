@@ -19,6 +19,7 @@ import com.liferay.headless.delivery.dto.v1_0.Rating;
 import com.liferay.headless.delivery.resource.v1_0.MessageBoardThreadResource;
 import com.liferay.petra.function.UnsafeFunction;
 import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.search.filter.Filter;
 import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
@@ -26,17 +27,20 @@ import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.util.TransformUtil;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Generated;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import javax.validation.constraints.NotNull;
 
@@ -64,6 +68,9 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@GET
+	@Operation(
+		description = "Retrieves the message board section's threads. Results can be paginated, filtered, searched, and sorted."
+	)
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "messageBoardSectionId"),
@@ -93,6 +100,9 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@Consumes({"application/json", "application/xml"})
+	@Operation(
+		description = "Creates a new message board thread inside a section."
+	)
 	@POST
 	@Parameters(
 		value = {
@@ -115,6 +125,9 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@DELETE
+	@Operation(
+		description = "Deletes the message board thread and returns a 204 if the operation succeeds."
+	)
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "messageBoardThreadId")
@@ -131,6 +144,7 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@GET
+	@Operation(description = "Retrieves the message board thread.")
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "messageBoardThreadId")
@@ -149,6 +163,9 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@Consumes({"application/json", "application/xml"})
+	@Operation(
+		description = "Updates only the fields received in the request body, leaving any other fields untouched."
+	)
 	@PATCH
 	@Parameters(
 		value = {
@@ -235,6 +252,9 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@Consumes({"application/json", "application/xml"})
+	@Operation(
+		description = "Replaces the message board thread with the information sent in the request body. Any missing fields are deleted, unless they are required."
+	)
 	@PUT
 	@Parameters(
 		value = {
@@ -255,6 +275,9 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@DELETE
+	@Operation(
+		description = "Deletes the message board thread's rating and returns a 204 if the operation succeeds."
+	)
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "messageBoardThreadId")
@@ -271,6 +294,7 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@GET
+	@Operation(description = "Retrieves the message board thread's rating.")
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "messageBoardThreadId")
@@ -289,6 +313,7 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@Consumes({"application/json", "application/xml"})
+	@Operation(description = "Creates the message board thread's rating.")
 	@POST
 	@Parameters(
 		value = {
@@ -309,6 +334,9 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@Consumes({"application/json", "application/xml"})
+	@Operation(
+		description = "Replaces the rating with the information sent in the request body. Any missing fields are deleted, unless they are required."
+	)
 	@PUT
 	@Parameters(
 		value = {
@@ -329,6 +357,9 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@GET
+	@Operation(
+		description = "Retrieves the Site's message board threads. Results can be paginated, filtered, searched, flattened, and sorted."
+	)
 	@Parameters(
 		value = {
 			@Parameter(in = ParameterIn.PATH, name = "siteId"),
@@ -356,6 +387,7 @@ public abstract class BaseMessageBoardThreadResourceImpl
 
 	@Override
 	@Consumes({"application/json", "application/xml"})
+	@Operation(description = "Creates a new message board thread.")
 	@POST
 	@Parameters(value = {@Parameter(in = ParameterIn.PATH, name = "siteId")})
 	@Path("/sites/{siteId}/message-board-threads")
@@ -369,8 +401,32 @@ public abstract class BaseMessageBoardThreadResourceImpl
 		return new MessageBoardThread();
 	}
 
+	public void setContextAcceptLanguage(AcceptLanguage contextAcceptLanguage) {
+		this.contextAcceptLanguage = contextAcceptLanguage;
+	}
+
 	public void setContextCompany(Company contextCompany) {
 		this.contextCompany = contextCompany;
+	}
+
+	public void setContextHttpServletRequest(
+		HttpServletRequest contextHttpServletRequest) {
+
+		this.contextHttpServletRequest = contextHttpServletRequest;
+	}
+
+	public void setContextHttpServletResponse(
+		HttpServletResponse contextHttpServletResponse) {
+
+		this.contextHttpServletResponse = contextHttpServletResponse;
+	}
+
+	public void setContextUriInfo(UriInfo contextUriInfo) {
+		this.contextUriInfo = contextUriInfo;
+	}
+
+	public void setContextUser(User contextUser) {
+		this.contextUser = contextUser;
 	}
 
 	protected void preparePatch(
@@ -379,7 +435,7 @@ public abstract class BaseMessageBoardThreadResourceImpl
 	}
 
 	protected <T, R> List<R> transform(
-		Collection<T> collection,
+		java.util.Collection<T> collection,
 		UnsafeFunction<T, R, Exception> unsafeFunction) {
 
 		return TransformUtil.transform(collection, unsafeFunction);
@@ -393,7 +449,7 @@ public abstract class BaseMessageBoardThreadResourceImpl
 	}
 
 	protected <T, R> R[] transformToArray(
-		Collection<T> collection,
+		java.util.Collection<T> collection,
 		UnsafeFunction<T, R, Exception> unsafeFunction, Class<?> clazz) {
 
 		return TransformUtil.transformToArray(
@@ -406,13 +462,11 @@ public abstract class BaseMessageBoardThreadResourceImpl
 		return TransformUtil.transformToList(array, unsafeFunction);
 	}
 
-	@Context
 	protected AcceptLanguage contextAcceptLanguage;
-
-	@Context
 	protected Company contextCompany;
-
-	@Context
+	protected HttpServletRequest contextHttpServletRequest;
+	protected HttpServletResponse contextHttpServletResponse;
 	protected UriInfo contextUriInfo;
+	protected User contextUser;
 
 }

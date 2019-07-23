@@ -22,9 +22,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.string.StringBundler;
-
-import graphql.annotations.annotationTypes.GraphQLField;
-import graphql.annotations.annotationTypes.GraphQLName;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLField;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLName;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -199,6 +198,34 @@ public class MessageBoardMessage {
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	protected Creator creator;
 
+	@Schema
+	public CustomField[] getCustomFields() {
+		return customFields;
+	}
+
+	public void setCustomFields(CustomField[] customFields) {
+		this.customFields = customFields;
+	}
+
+	@JsonIgnore
+	public void setCustomFields(
+		UnsafeSupplier<CustomField[], Exception> customFieldsUnsafeSupplier) {
+
+		try {
+			customFields = customFieldsUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected CustomField[] customFields;
+
 	@Schema(description = "The date the message was created.")
 	public Date getDateCreated() {
 		return dateCreated;
@@ -368,6 +395,36 @@ public class MessageBoardMessage {
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected String[] keywords;
+
+	@Schema(
+		description = "The ID of the Message Board Thread to which this message is scoped."
+	)
+	public Long getMessageBoardThreadId() {
+		return messageBoardThreadId;
+	}
+
+	public void setMessageBoardThreadId(Long messageBoardThreadId) {
+		this.messageBoardThreadId = messageBoardThreadId;
+	}
+
+	@JsonIgnore
+	public void setMessageBoardThreadId(
+		UnsafeSupplier<Long, Exception> messageBoardThreadIdUnsafeSupplier) {
+
+		try {
+			messageBoardThreadId = messageBoardThreadIdUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	protected Long messageBoardThreadId;
 
 	@Schema(description = "The number of the message's attachments.")
 	public Integer getNumberOfMessageBoardAttachments() {
@@ -633,6 +690,26 @@ public class MessageBoardMessage {
 			sb.append(String.valueOf(creator));
 		}
 
+		if (customFields != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"customFields\": ");
+
+			sb.append("[");
+
+			for (int i = 0; i < customFields.length; i++) {
+				sb.append(String.valueOf(customFields[i]));
+
+				if ((i + 1) < customFields.length) {
+					sb.append(", ");
+				}
+			}
+
+			sb.append("]");
+		}
+
 		if (dateCreated != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -721,6 +798,16 @@ public class MessageBoardMessage {
 			}
 
 			sb.append("]");
+		}
+
+		if (messageBoardThreadId != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"messageBoardThreadId\": ");
+
+			sb.append(messageBoardThreadId);
 		}
 
 		if (numberOfMessageBoardAttachments != null) {

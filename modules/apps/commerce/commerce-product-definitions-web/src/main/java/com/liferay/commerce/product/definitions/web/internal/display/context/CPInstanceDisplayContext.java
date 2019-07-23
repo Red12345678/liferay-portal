@@ -32,9 +32,6 @@ import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Sort;
-import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.taglib.DynamicIncludeUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -69,12 +66,9 @@ public class CPInstanceDisplayContext
 	public CPInstanceDisplayContext(
 			ActionHelper actionHelper, HttpServletRequest httpServletRequest,
 			CommercePriceFormatter commercePriceFormatter,
-			ModelResourcePermission<CPDefinition>
-				cpDefinitionModelResourcePermission,
 			CPDefinitionOptionRelService cpDefinitionOptionRelService,
 			CPInstanceService cpInstanceService,
-			CPInstanceHelper cpInstanceHelper,
-			PortletResourcePermission portletResourcePermission)
+			CPInstanceHelper cpInstanceHelper)
 		throws PortalException {
 
 		super(
@@ -83,12 +77,9 @@ public class CPInstanceDisplayContext
 		setDefaultOrderByCol("sku");
 
 		this.commercePriceFormatter = commercePriceFormatter;
-		this.cpDefinitionModelResourcePermission =
-			cpDefinitionModelResourcePermission;
 		_cpDefinitionOptionRelService = cpDefinitionOptionRelService;
 		_cpInstanceService = cpInstanceService;
 		_cpInstanceHelper = cpInstanceHelper;
-		_portletResourcePermission = portletResourcePermission;
 	}
 
 	public Map<CPDefinitionOptionRel, List<CPDefinitionOptionValueRel>>
@@ -105,11 +96,11 @@ public class CPInstanceDisplayContext
 			cpInstance.getJson());
 	}
 
-	public String formatPrice(long groupId, BigDecimal price)
+	public String formatPrice(long companyId, BigDecimal price)
 		throws PortalException {
 
 		return commercePriceFormatter.format(
-			groupId, price, cpRequestHelper.getLocale());
+			companyId, price, cpRequestHelper.getLocale());
 	}
 
 	public List<CPDefinitionOptionRel> getCPDefinitionOptionRels()
@@ -182,10 +173,16 @@ public class CPInstanceDisplayContext
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
+		CPDefinition cpDefinition = getCPDefinition();
+
+		if (cpDefinition == null) {
+			return managementBarFilterItems;
+		}
+
 		int workflowDefinitionLinksCount =
 			WorkflowDefinitionLinkLocalServiceUtil.
 				getWorkflowDefinitionLinksCount(
-					themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(),
+					themeDisplay.getCompanyId(), cpDefinition.getGroupId(),
 					CPInstance.class.getName());
 
 		if (workflowDefinitionLinksCount == 0) {
@@ -282,9 +279,9 @@ public class CPInstanceDisplayContext
 
 			BaseModelSearchResult<CPInstance> cpInstanceBaseModelSearchResult =
 				_cpInstanceService.searchCPDefinitionInstances(
-					themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(),
-					cpDefinitionId, getKeywords(), getStatus(),
-					searchContainer.getStart(), searchContainer.getEnd(), sort);
+					themeDisplay.getCompanyId(), cpDefinitionId, getKeywords(),
+					getStatus(), searchContainer.getStart(),
+					searchContainer.getEnd(), sort);
 
 			searchContainer.setTotal(
 				cpInstanceBaseModelSearchResult.getLength());
@@ -329,26 +326,6 @@ public class CPInstanceDisplayContext
 		return DynamicIncludeUtil.hasDynamicInclude(key);
 	}
 
-	public boolean hasEditPermission(long cpDefinitionId)
-		throws PortalException {
-
-		return cpDefinitionModelResourcePermission.contains(
-			cpRequestHelper.getPermissionChecker(), cpDefinitionId,
-			ActionKeys.UPDATE);
-	}
-
-	public boolean hasPermission(String actionId) {
-		return _portletResourcePermission.contains(
-			cpRequestHelper.getPermissionChecker(),
-			cpRequestHelper.getScopeGroupId(), actionId);
-	}
-
-	public boolean hasViewPermission() throws PortalException {
-		return cpDefinitionModelResourcePermission.contains(
-			cpRequestHelper.getPermissionChecker(), getCPDefinition(),
-			ActionKeys.VIEW);
-	}
-
 	public String renderOptions(
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws PortalException {
@@ -361,13 +338,10 @@ public class CPInstanceDisplayContext
 	}
 
 	protected final CommercePriceFormatter commercePriceFormatter;
-	protected final ModelResourcePermission<CPDefinition>
-		cpDefinitionModelResourcePermission;
 
 	private final CPDefinitionOptionRelService _cpDefinitionOptionRelService;
 	private CPInstance _cpInstance;
 	private final CPInstanceHelper _cpInstanceHelper;
 	private final CPInstanceService _cpInstanceService;
-	private final PortletResourcePermission _portletResourcePermission;
 
 }

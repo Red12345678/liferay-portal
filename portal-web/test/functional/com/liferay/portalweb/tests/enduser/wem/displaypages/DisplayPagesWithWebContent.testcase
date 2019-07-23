@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Display Pages";
@@ -13,9 +14,7 @@ definition {
 
 		FragmentsAdmin.openFragmentsAdmin(siteURLKey = "test-site-name");
 
-		FragmentsAdmin.importCollectionFromDependenciesFolder(
-			collectionZipFile = "fragment-collection.zip"
-		);
+		FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "fragment-collection.zip");
 
 		DisplayPagesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
@@ -23,30 +22,25 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Rich Text"
-		);
+			fragmentName = "Rich Text");
 
 		PageEditorMapping.selectAssetType(
 			assetType = "Web Content Article",
-			subType = "Basic Web Content"
-		);
+			subType = "Basic Web Content");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Title",
 			id = "title",
-			itemName = "Title"
-		);
+			itemName = "Title");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Rich Text",
 			id = "rich-text",
-			itemName = "content"
-		);
+			itemName = "content");
 
 		Button.clickPublish();
 	}
@@ -73,28 +67,23 @@ definition {
 
 		WebContent.addCP(
 			webContentContent = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 
 		PortletEntry.publish();
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name/-/webcontent-title"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/-/webcontent-title");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Title",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Content",
 			key_fragmentClass = "rich-text",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#FRAGMENT");
 	}
 
 	@description = "Display pages can be viewed through the asset publisher widget."
@@ -108,53 +97,49 @@ definition {
 
 		WebContent.addCP(
 			webContentContent = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 
 		WebContent.editDisplayPage(
 			pageName = "Display Page Name",
-			pageType = "Display Pages"
-		);
+			pageType = "Display Pages");
 
 		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
 
 		SitePages.addPublicPage(pageName = "Site Page Name");
 
-		Navigator.gotoSitePage(pageName = "Site Page Name", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page Name",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
-		AssetPublisherPortlet.configureAssetLinkBehaviorPG(
-			assetLinkBehavior = "View in Context"
-		);
+		AssetPublisherPortlet.configureAssetLinkBehaviorPG(assetLinkBehavior = "View in Context");
 
 		AssertTextEquals(
+			key_assetTitle = "Webcontent Title",
 			locator1 = "AP#ASSET_ABSTRACT_TITLE",
-			value1 = "Webcontent Title",
-			key_assetTitle = "Webcontent Title"
-		);
+			value1 = "Webcontent Title");
 
 		AssertTextEquals.assertPartialText(
+			key_assetTitle = "Webcontent Title",
 			locator1 = "AP#ASSET_ABSTRACT_DESCRIPTION",
-			value1 = "Webcontent Content",
-			key_assetTitle = "Webcontent Title"
-		);
+			value1 = "Webcontent Content");
 
-		Click(locator1 = "AP#ASSET_ABSTRACT_TITLE", key_assetTitle = "Webcontent Title");
+		Click(
+			key_assetTitle = "Webcontent Title",
+			locator1 = "AP#ASSET_ABSTRACT_TITLE");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Title",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Content",
 			key_fragmentClass = "rich-text",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#FRAGMENT");
 	}
 
 	@description = "Display pages can be viewed through friendly URL."
@@ -166,31 +151,25 @@ definition {
 
 		WebContent.addCP(
 			webContentContent = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 
 		WebContent.editDisplayPage(
 			pageName = "Display Page Name",
-			pageType = "Display Pages"
-		);
+			pageType = "Display Pages");
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name/-/webcontent-title"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/-/webcontent-title");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Title",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Content",
 			key_fragmentClass = "rich-text",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#FRAGMENT");
 	}
 
 	@description = "A selected display page should override the default display page."
@@ -202,30 +181,25 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Rich Text"
-		);
+			fragmentName = "Rich Text");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		PageEditorMapping.selectAssetType(
 			assetType = "Web Content Article",
-			subType = "Basic Web Content"
-		);
+			subType = "Basic Web Content");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Rich Text",
 			id = "rich-text",
-			itemName = "content"
-		);
+			itemName = "content");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Title",
 			id = "title",
-			itemName = "Title"
-		);
+			itemName = "Title");
 
 		Button.clickPublish();
 
@@ -235,31 +209,25 @@ definition {
 
 		WebContent.addCP(
 			webContentContent = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 
 		WebContent.editDisplayPage(
 			pageName = "Non-Default Display Page",
-			pageType = "Display Pages"
-		);
+			pageType = "Display Pages");
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name/-/webcontent-title"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/-/webcontent-title");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Content",
 			key_fragmentClass = "rich-text",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Title",
 			key_fragmentClass = "header",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#FRAGMENT");
 	}
 
 	@description = "When no display page is selected, assets should not be displayed through the default display page."
@@ -273,8 +241,7 @@ definition {
 
 		WebContent.addCP(
 			webContentContent = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 
 		Panel.expandPanel(panel = "Display Page");
 
@@ -282,9 +249,7 @@ definition {
 
 		PortletEntry.publish();
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name/-/webcontent-title"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/-/webcontent-title");
 
 		AssertTextPresent(value1 = "The requested resource could not be found.");
 
@@ -292,45 +257,43 @@ definition {
 
 		SitePages.addPublicPage(pageName = "Site Page Name");
 
-		Navigator.gotoSitePage(pageName = "Site Page Name", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page Name",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
-		AssetPublisherPortlet.configureAssetLinkBehaviorPG(
-			assetLinkBehavior = "View in Context"
-		);
+		AssetPublisherPortlet.configureAssetLinkBehaviorPG(assetLinkBehavior = "View in Context");
 
 		AssertTextEquals(
+			key_assetTitle = "Webcontent Title",
 			locator1 = "AP#ASSET_ABSTRACT_TITLE",
-			value1 = "Webcontent Title",
-			key_assetTitle = "Webcontent Title"
-		);
+			value1 = "Webcontent Title");
 
 		AssertTextEquals.assertPartialText(
+			key_assetTitle = "Webcontent Title",
 			locator1 = "AP#ASSET_ABSTRACT_DESCRIPTION",
-			value1 = "Webcontent Content",
-			key_assetTitle = "Webcontent Title"
-		);
+			value1 = "Webcontent Content");
 
-		Click(locator1 = "AP#ASSET_ABSTRACT_TITLE", key_assetTitle = "Webcontent Title");
+		Click(
+			key_assetTitle = "Webcontent Title",
+			locator1 = "AP#ASSET_ABSTRACT_TITLE");
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "AP#ASSET_ABSTRACT_DETAIL_CONTENT",
-			value1 = "Webcontent Content"
-		);
+			value1 = "Webcontent Content");
 
 		AssertElementNotPresent(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Title",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertElementNotPresent(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Webcontent Content",
 			key_fragmentClass = "rich-text",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#FRAGMENT");
 	}
+
 }

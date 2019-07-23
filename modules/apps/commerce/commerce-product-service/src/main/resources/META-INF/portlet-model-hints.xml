@@ -1,6 +1,50 @@
 <?xml version="1.0"?>
 
 <model-hints>
+	<model name="com.liferay.commerce.product.model.CommerceCatalog">
+		<field name="externalReferenceCode" type="String" />
+		<field name="commerceCatalogId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String" />
+		<field name="commerceCurrencyCode" type="String" />
+		<field name="catalogDefaultLanguageId" type="String" />
+		<field name="system" type="boolean" />
+	</model>
+	<model name="com.liferay.commerce.product.model.CommerceChannel">
+		<field name="externalReferenceCode" type="String" />
+		<field name="commerceChannelId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="siteGroupId" type="long" />
+		<field name="name" type="String">
+			<validator name="required" />
+		</field>
+		<field name="type" type="String">
+			<validator name="required" />
+		</field>
+		<field name="typeSettings" type="String" />
+		<field name="commerceCurrencyCode" type="String">
+			<validator name="required" />
+		</field>
+	</model>
+	<model name="com.liferay.commerce.product.model.CommerceChannelRel">
+		<field name="commerceChannelRelId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="classNameId" type="long" />
+		<field name="classPK" type="long" />
+		<field name="commerceChannelId" type="long" />
+	</model>
 	<model name="com.liferay.commerce.product.model.CPAttachmentFileEntry">
 		<field name="uuid" type="String" />
 		<field name="externalReferenceCode" type="String" />
@@ -79,6 +123,8 @@
 			<hint-collection name="CLOB" />
 		</field>
 		<field name="maxSubscriptionCycles" type="long" />
+		<field name="accountGroupFilterEnabled" type="boolean" />
+		<field name="channelFilterEnabled" type="boolean" />
 		<field name="version" type="int" />
 		<field name="status" type="int" />
 		<field name="statusByUserId" type="long" />
@@ -202,7 +248,9 @@
 		<field name="modifiedDate" type="Date" />
 		<field name="classNameId" type="long" />
 		<field name="classPK" type="long" />
-		<field name="layoutUuid" type="String" />
+		<field name="layoutUuid" type="String">
+			<validator name="required" />
+		</field>
 	</model>
 	<model name="com.liferay.commerce.product.model.CPFriendlyURLEntry">
 		<field name="uuid" type="String" />
@@ -311,7 +359,6 @@
 		<field name="uuid" type="String" />
 		<field name="externalReferenceCode" type="String" />
 		<field name="CPOptionId" type="long" />
-		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="userId" type="long" />
 		<field name="userName" type="String" />
@@ -337,7 +384,6 @@
 	<model name="com.liferay.commerce.product.model.CPOptionCategory">
 		<field name="uuid" type="String" />
 		<field name="CPOptionCategoryId" type="long" />
-		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="userId" type="long" />
 		<field name="userName" type="String" />
@@ -359,7 +405,6 @@
 		<field name="uuid" type="String" />
 		<field name="externalReferenceCode" type="String" />
 		<field name="CPOptionValueId" type="long" />
-		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="userId" type="long" />
 		<field name="userName" type="String" />
@@ -390,49 +435,9 @@
 		<field name="publishedCPDefinitionId" type="long" />
 		<field name="latestVersion" type="int" />
 	</model>
-	<model name="com.liferay.commerce.product.model.CPRule">
-		<field name="CPRuleId" type="long" />
-		<field name="groupId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="userId" type="long" />
-		<field name="userName" type="String" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
-		<field name="name" type="String">
-			<validator name="required" />
-		</field>
-		<field name="active" type="boolean" />
-		<field name="type" type="String" />
-		<field name="typeSettings" type="String">
-			<hint-collection name="CLOB" />
-		</field>
-	</model>
-	<model name="com.liferay.commerce.product.model.CPRuleAssetCategoryRel">
-		<field name="CPRuleAssetCategoryRelId" type="long" />
-		<field name="groupId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="userId" type="long" />
-		<field name="userName" type="String" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
-		<field name="CPRuleId" type="long" />
-		<field name="assetCategoryId" type="long" />
-	</model>
-	<model name="com.liferay.commerce.product.model.CPRuleUserSegmentRel">
-		<field name="CPRuleUserSegmentRelId" type="long" />
-		<field name="groupId" type="long" />
-		<field name="companyId" type="long" />
-		<field name="userId" type="long" />
-		<field name="userName" type="String" />
-		<field name="createDate" type="Date" />
-		<field name="modifiedDate" type="Date" />
-		<field name="CPRuleId" type="long" />
-		<field name="commerceUserSegmentEntryId" type="long" />
-	</model>
 	<model name="com.liferay.commerce.product.model.CPSpecificationOption">
 		<field name="uuid" type="String" />
 		<field name="CPSpecificationOptionId" type="long" />
-		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="userId" type="long" />
 		<field name="userName" type="String" />
@@ -453,7 +458,6 @@
 	</model>
 	<model name="com.liferay.commerce.product.model.CPTaxCategory">
 		<field name="CPTaxCategoryId" type="long" />
-		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="userId" type="long" />
 		<field name="userName" type="String" />

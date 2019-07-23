@@ -162,8 +162,13 @@
 							instance._bindBrowseButton(event.editor, dialogDefinition, 'info', 'audioselector', 'url');
 						}
 						else if (dialogName === 'image') {
-							instance._bindBrowseButton(event.editor, dialogDefinition, 'info', 'imageselector', 'txtUrl');
-							instance._bindBrowseButton(event.editor, dialogDefinition, 'Link', 'imageselector', 'txtUrl');
+							instance._bindBrowseButton(event.editor, dialogDefinition, 'Link', 'linkselector', 'txtUrl');
+
+							dialogDefinition.getContents('info').remove('browse');
+
+							dialogDefinition.onLoad = function() {
+								this.getContentElement('info', 'txtUrl').getInputElement().setAttribute('readOnly', true);
+							};
 						}
 						else if (dialogName === 'video') {
 							instance._bindBrowseButton(event.editor, dialogDefinition, 'info', 'videoselector', 'poster');
@@ -410,15 +415,31 @@
 
 									if (instance._isEmptySelection(editor)) {
 										if (IE9AndLater) {
-											var emptySelectionMarkup = '<br />';
-
 											var usingAlloyEditor = typeof AlloyEditor == 'undefined';
 
 											if (!usingAlloyEditor) {
+												var emptySelectionMarkup = '&nbsp;';
+
 												emptySelectionMarkup = elementOuterHtml + emptySelectionMarkup;
+
+												editor.insertHtml(emptySelectionMarkup);
 											}
 
-											editor.insertHtml(emptySelectionMarkup);
+											var element = new CKEDITOR.dom.element('br');
+
+											editor.insertElement(element);
+											editor.getSelection();
+
+											editor.fire(
+												'editorInteraction',
+												{
+													nativeEvent: {},
+													selectionData: {
+														element: element,
+														region: element.getClientRect()
+													}
+												}
+											);
 										}
 										else {
 											editor.execCommand('enter');

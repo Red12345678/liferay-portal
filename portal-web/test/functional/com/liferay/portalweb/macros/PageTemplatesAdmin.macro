@@ -1,4 +1,5 @@
 definition {
+
 	macro _gotoAddCollection {
 		if (IsElementPresent(locator1 = "NavNested#NAV_NESTED_PLUS")) {
 			Click(locator1 = "NavNested#NAV_NESTED_PLUS");
@@ -33,8 +34,7 @@ definition {
 
 		Collection.editCollection(
 			collectionDescription = "${collectionDescription}",
-			collectionName = "${collectionName}"
-		);
+			collectionName = "${collectionName}");
 
 		Button.clickSave();
 	}
@@ -43,24 +43,24 @@ definition {
 		Click.pauseClickAt(locator1 = "ControlMenu#EDIT_COG");
 
 		Click(
-			locator1 = "SitePagesEditPage#LAYOUT_CARD",
-			key_columnName = "${columnName}"
-		);
+			key_columnName = "${columnName}",
+			locator1 = "SitePagesEditPage#LAYOUT_CARD");
 
 		PortletEntry.save();
 	}
 
 	macro openPageTemplatesAdmin {
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "group/${siteURLKey}/~/control_panel/manage?p_p_id=com_liferay_layout_admin_web_portlet_GroupPagesPortlet&amp;_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_tabs1=page-templates"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "group/${siteURLKey}/~/control_panel/manage?p_p_id=com_liferay_layout_admin_web_portlet_GroupPagesPortlet&amp;_com_liferay_layout_admin_web_portlet_GroupPagesPortlet_tabs1=page-templates");
 	}
 
 	macro rename {
-		LexiconEntry.gotoEntryMenuItem(menuItem = "Rename", rowEntry = "${rowEntry}");
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Rename",
+			rowEntry = "${rowEntry}");
 
 		PortletEntry.inputName(name = "${pageTemplateName}");
 
 		Modal.save();
 	}
+
 }

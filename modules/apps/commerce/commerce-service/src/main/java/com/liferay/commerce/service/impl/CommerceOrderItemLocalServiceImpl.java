@@ -18,12 +18,17 @@ import com.liferay.commerce.configuration.CommerceOrderConfiguration;
 import com.liferay.commerce.context.CommerceContext;
 import com.liferay.commerce.currency.model.CommerceMoney;
 import com.liferay.commerce.discount.CommerceDiscountValue;
+import com.liferay.commerce.exception.CommerceOrderItemRequestedDeliveryDateException;
 import com.liferay.commerce.exception.CommerceOrderValidatorException;
 import com.liferay.commerce.exception.GuestCartItemMaxAllowedException;
+import com.liferay.commerce.exception.NoSuchOrderItemException;
 import com.liferay.commerce.internal.search.CommerceOrderItemIndexer;
+import com.liferay.commerce.inventory.model.CommerceInventoryBookedQuantity;
+import com.liferay.commerce.inventory.model.CommerceInventoryWarehouseItem;
+import com.liferay.commerce.inventory.service.CommerceInventoryBookedQuantityLocalService;
+import com.liferay.commerce.inventory.service.CommerceInventoryWarehouseItemLocalService;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.model.CommerceOrderItem;
-import com.liferay.commerce.model.CommerceWarehouseItem;
 import com.liferay.commerce.order.CommerceOrderValidatorRegistry;
 import com.liferay.commerce.order.CommerceOrderValidatorResult;
 import com.liferay.commerce.price.CommerceProductPrice;
@@ -55,12 +60,14 @@ import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 
 import java.math.BigDecimal;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -201,6 +208,19 @@ public class CommerceOrderItemLocalServiceImpl
 		commerceOrderLocalService.recalculatePrice(
 			commerceOrder.getCommerceOrderId(), commerceContext);
 
+		if (commerceOrderItem.getBookedQuantityId() > 0) {
+			CommerceInventoryBookedQuantity commerceInventoryBookedQuantity =
+				_commerceInventoryBookedQuantityLocalService.
+					fetchCommerceInventoryBookedQuantity(
+						commerceOrderItem.getBookedQuantityId());
+
+			if (commerceInventoryBookedQuantity != null) {
+				_commerceInventoryBookedQuantityLocalService.
+					deleteCommerceInventoryBookedQuantity(
+						commerceInventoryBookedQuantity);
+			}
+		}
+
 		return commerceOrderItem;
 	}
 
@@ -257,6 +277,28 @@ public class CommerceOrderItemLocalServiceImpl
 	}
 
 	@Override
+	public int getCommerceInventoryWarehouseItemQuantity(
+			long commerceOrderItemId, long commerceInventoryWarehouseId)
+		throws PortalException {
+
+		CommerceOrderItem commerceOrderItem =
+			commerceOrderItemPersistence.findByPrimaryKey(commerceOrderItemId);
+
+		CPInstance cpInstance = commerceOrderItem.getCPInstance();
+
+		CommerceInventoryWarehouseItem commerceInventoryWarehouseItem =
+			_commerceInventoryWarehouseItemLocalService.
+				fetchCommerceInventoryWarehouseItem(
+					commerceInventoryWarehouseId, cpInstance.getSku());
+
+		if (commerceInventoryWarehouseItem == null) {
+			return 0;
+		}
+
+		return commerceInventoryWarehouseItem.getQuantity();
+	}
+
+	@Override
 	public List<CommerceOrderItem> getCommerceOrderItems(
 		long commerceOrderId, int start, int end) {
 
@@ -300,25 +342,6 @@ public class CommerceOrderItemLocalServiceImpl
 	public int getCommerceOrderItemsQuantity(long commerceOrderId) {
 		return commerceOrderItemFinder.getCommerceOrderItemsQuantity(
 			commerceOrderId);
-	}
-
-	@Override
-	public int getCommerceWarehouseItemQuantity(
-			long commerceOrderItemId, long commerceWarehouseId)
-		throws PortalException {
-
-		CommerceOrderItem commerceOrderItem =
-			commerceOrderItemPersistence.findByPrimaryKey(commerceOrderItemId);
-
-		CommerceWarehouseItem commerceWarehouseItem =
-			commerceWarehouseItemLocalService.fetchCommerceWarehouseItem(
-				commerceWarehouseId, commerceOrderItem.getCPInstanceId());
-
-		if (commerceWarehouseItem == null) {
-			return 0;
-		}
-
-		return commerceWarehouseItem.getQuantity();
 	}
 
 	@Override
@@ -434,6 +457,52 @@ public class CommerceOrderItemLocalServiceImpl
 		return commerceOrderItem;
 	}
 
+	@Override
+	public CommerceOrderItem updateCommerceOrderItem(
+			long commerceOrderItemId, long bookedQuantityId)
+		throws NoSuchOrderItemException {
+
+		CommerceOrderItem commerceOrderItem =
+			commerceOrderItemPersistence.findByPrimaryKey(commerceOrderItemId);
+
+		commerceOrderItem.setBookedQuantityId(bookedQuantityId);
+
+		return commerceOrderItemPersistence.update(commerceOrderItem);
+	}
+
+	@Indexable(type = IndexableType.REINDEX)
+	@Override
+	public CommerceOrderItem updateCommerceOrderItemInfo(
+			long commerceOrderItemId, String deliveryGroup,
+			long shippingAddressId, String printedNote,
+			int requestedDeliveryDateMonth, int requestedDeliveryDateDay,
+			int requestedDeliveryDateYear, int requestedDeliveryDateHour,
+			int requestedDeliveryDateMinute, ServiceContext serviceContext)
+		throws PortalException {
+
+		User user = userLocalService.getUser(serviceContext.getUserId());
+
+		CommerceOrderItem commerceOrderItem =
+			commerceOrderItemPersistence.findByPrimaryKey(commerceOrderItemId);
+
+		Date requestedDeliveryDate = PortalUtil.getDate(
+			requestedDeliveryDateMonth, requestedDeliveryDateDay,
+			requestedDeliveryDateYear, requestedDeliveryDateHour,
+			requestedDeliveryDateMinute, user.getTimeZone(),
+			CommerceOrderItemRequestedDeliveryDateException.class);
+
+		if (requestedDeliveryDate.before(new Date())) {
+			throw new CommerceOrderItemRequestedDeliveryDateException();
+		}
+
+		commerceOrderItem.setDeliveryGroup(deliveryGroup);
+		commerceOrderItem.setShippingAddressId(shippingAddressId);
+		commerceOrderItem.setPrintedNote(printedNote);
+		commerceOrderItem.setRequestedDeliveryDate(requestedDeliveryDate);
+
+		return commerceOrderItemPersistence.update(commerceOrderItem);
+	}
+
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
 	public CommerceOrderItem updateCommerceOrderItemPrice(
@@ -457,9 +526,7 @@ public class CommerceOrderItemLocalServiceImpl
 		_setCommerceOrderItemDiscountValue(
 			commerceOrderItem, commerceProductPrice.getDiscountValue());
 
-		commerceOrderItemPersistence.update(commerceOrderItem);
-
-		return commerceOrderItem;
+		return commerceOrderItemPersistence.update(commerceOrderItem);
 	}
 
 	@Override
@@ -473,13 +540,17 @@ public class CommerceOrderItemLocalServiceImpl
 			commerceOrderId, cpInstanceId, QueryUtil.ALL_POS,
 			QueryUtil.ALL_POS);
 
-		if (!commerceOrderItems.isEmpty()) {
-			CommerceOrderItem commerceOrderItem = commerceOrderItems.get(0);
+		for (CommerceOrderItem commerceOrderItem : commerceOrderItems) {
+			if (json.equals(commerceOrderItem.getJson()) ||
+				(json.equals("[]") &&
+				 Validator.isBlank(commerceOrderItem.getJson()))) {
 
-			return commerceOrderItemLocalService.updateCommerceOrderItem(
-				commerceOrderItem.getCommerceOrderItemId(),
-				commerceOrderItem.getQuantity() + quantity,
-				commerceOrderItem.getJson(), commerceContext, serviceContext);
+				return commerceOrderItemLocalService.updateCommerceOrderItem(
+					commerceOrderItem.getCommerceOrderItemId(),
+					commerceOrderItem.getQuantity() + quantity,
+					commerceOrderItem.getJson(), commerceContext,
+					serviceContext);
+			}
 		}
 
 		return addCommerceOrderItem(
@@ -656,6 +727,14 @@ public class CommerceOrderItemLocalServiceImpl
 	private static final String[] _SELECTED_FIELD_NAMES = {
 		Field.ENTRY_CLASS_PK, Field.COMPANY_ID
 	};
+
+	@ServiceReference(type = CommerceInventoryBookedQuantityLocalService.class)
+	private CommerceInventoryBookedQuantityLocalService
+		_commerceInventoryBookedQuantityLocalService;
+
+	@ServiceReference(type = CommerceInventoryWarehouseItemLocalService.class)
+	private CommerceInventoryWarehouseItemLocalService
+		_commerceInventoryWarehouseItemLocalService;
 
 	@ServiceReference(type = CommerceOrderConfiguration.class)
 	private CommerceOrderConfiguration _commerceOrderConfiguration;

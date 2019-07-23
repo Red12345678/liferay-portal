@@ -53,7 +53,12 @@ public class MessageBoardThreadResourceTest
 	}
 
 	@Override
-	protected MessageBoardThread randomMessageBoardThread() {
+	protected String[] getIgnoredEntityFieldNames() {
+		return new String[] {"creatorId", "messageBoardSectionId"};
+	}
+
+	@Override
+	protected MessageBoardThread randomMessageBoardThread() throws Exception {
 		MessageBoardThread messageBoardThread =
 			super.randomMessageBoardThread();
 

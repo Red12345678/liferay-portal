@@ -23,6 +23,7 @@ import com.liferay.document.library.kernel.service.DLAppService;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldType;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
+import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.storage.Fields;
@@ -40,6 +41,7 @@ import com.liferay.headless.delivery.internal.dto.v1_0.util.AggregateRatingUtil;
 import com.liferay.headless.delivery.internal.dto.v1_0.util.ContentDocumentUtil;
 import com.liferay.headless.delivery.internal.dto.v1_0.util.ContentStructureUtil;
 import com.liferay.headless.delivery.internal.dto.v1_0.util.CreatorUtil;
+import com.liferay.headless.delivery.internal.dto.v1_0.util.CustomFieldsUtil;
 import com.liferay.headless.delivery.internal.dto.v1_0.util.RelatedContentUtil;
 import com.liferay.headless.delivery.internal.resource.v1_0.BaseStructuredContentResourceImpl;
 import com.liferay.journal.model.JournalArticle;
@@ -115,6 +117,10 @@ public class StructuredContentDTOConverter implements DTOConverter {
 				creator = CreatorUtil.toCreator(
 					_portal,
 					_userLocalService.getUserById(journalArticle.getUserId()));
+				customFields = CustomFieldsUtil.toCustomFields(
+					JournalArticle.class.getName(), journalArticle.getId(),
+					journalArticle.getCompanyId(),
+					dtoConverterContext.getLocale());
 				dateCreated = journalArticle.getCreateDate();
 				dateModified = journalArticle.getModifiedDate();
 				datePublished = journalArticle.getDisplayDate();
@@ -185,6 +191,13 @@ public class StructuredContentDTOConverter implements DTOConverter {
 				value = _toValue(
 					ddmFormFieldValue, dlAppService, journalArticleService,
 					layoutLocalService, locale);
+
+				setLabel(
+					() -> {
+						LocalizedValue localizedValue = ddmFormField.getLabel();
+
+						return localizedValue.getString(locale);
+					});
 			}
 		};
 	}

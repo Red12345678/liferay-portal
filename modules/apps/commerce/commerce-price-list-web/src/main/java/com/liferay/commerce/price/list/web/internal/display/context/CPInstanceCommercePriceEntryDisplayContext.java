@@ -36,7 +36,7 @@ import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactory;
 import com.liferay.portal.kernel.portlet.RequestBackedPortletURLFactoryUtil;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
+import com.liferay.portal.kernel.service.permission.PortalPermissionUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -62,8 +62,7 @@ public class CPInstanceCommercePriceEntryDisplayContext
 		CommercePriceEntryService commercePriceEntryService,
 		CommercePriceFormatter commercePriceFormatter,
 		CommercePriceListActionHelper commercePriceListActionHelper,
-		HttpServletRequest httpServletRequest, ItemSelector itemSelector,
-		PortletResourcePermission portletResourcePermission) {
+		HttpServletRequest httpServletRequest, ItemSelector itemSelector) {
 
 		super(
 			actionHelper, httpServletRequest,
@@ -73,7 +72,6 @@ public class CPInstanceCommercePriceEntryDisplayContext
 		_commercePriceFormatter = commercePriceFormatter;
 		_commercePriceListActionHelper = commercePriceListActionHelper;
 		_itemSelector = itemSelector;
-		_portletResourcePermission = portletResourcePermission;
 
 		setDefaultOrderByCol("create-date");
 		setDefaultOrderByType("desc");
@@ -255,9 +253,8 @@ public class CPInstanceCommercePriceEntryDisplayContext
 	}
 
 	public boolean hasManageCommercePriceListPermission() {
-		return _portletResourcePermission.contains(
+		return PortalPermissionUtil.contains(
 			cpRequestHelper.getPermissionChecker(),
-			cpRequestHelper.getScopeGroupId(),
 			CommercePriceListActionKeys.MANAGE_COMMERCE_PRICE_LISTS);
 	}
 
@@ -291,6 +288,5 @@ public class CPInstanceCommercePriceEntryDisplayContext
 	private final CommercePriceListActionHelper _commercePriceListActionHelper;
 	private CPInstance _cpInstance;
 	private final ItemSelector _itemSelector;
-	private final PortletResourcePermission _portletResourcePermission;
 
 }

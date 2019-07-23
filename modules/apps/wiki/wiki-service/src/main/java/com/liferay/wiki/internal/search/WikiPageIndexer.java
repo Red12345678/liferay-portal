@@ -295,9 +295,8 @@ public class WikiPageIndexer
 
 		actionableDynamicQuery.setCompanyId(companyId);
 		actionableDynamicQuery.setPerformActionMethod(
-			(WikiNode node) -> {
-				reindexPages(companyId, node.getGroupId(), node.getNodeId());
-			});
+			(WikiNode node) -> reindexPages(
+				companyId, node.getGroupId(), node.getNodeId()));
 
 		actionableDynamicQuery.performActions();
 	}

@@ -82,6 +82,8 @@ AUI.add(
 							eventHandles.push(buttonRow.delegate(STR_CLICK, instance._onButtonClick, 'button', instance));
 						}
 
+						eventHandles.push(Liferay.on('inputLocalized:localeChanged', instance._onLocaleChange.bind(instance)));
+
 						instance._eventHandles = eventHandles;
 					},
 
@@ -178,6 +180,18 @@ AUI.add(
 						var actionName = instance.one(SELECTOR_ACTION_NAME, form).val();
 
 						instance._saveArticle(actionName);
+					},
+
+					_onLocaleChange: function(event) {
+						var defaultLanguageId = themeDisplay.getDefaultLanguageId();
+						var instance = this;
+						var selectedLanguageId = event.source && event.source.getSelectedLanguageId();
+
+						if (selectedLanguageId) {
+							instance._updateLocalizableInput('descriptionMapAsXML', defaultLanguageId, selectedLanguageId);
+
+							instance._updateLocalizableInput('titleMapAsXML', defaultLanguageId, selectedLanguageId);
+						}
 					},
 
 					_previewArticle: function(event) {
@@ -278,6 +292,24 @@ AUI.add(
 									}
 								}
 							);
+						}
+					},
+
+					_updateLocalizableInput: function(componentId, defaultLanguageId, selectedLanguageId) {
+						var instance = this;
+
+						var inputComponent = Liferay.component(instance.ns(componentId));
+
+						if (inputComponent) {
+							var inputSelectedValue = inputComponent.getValue(selectedLanguageId);
+
+							if (inputSelectedValue === '') {
+								var inputDefaultValue = inputComponent.getValue(defaultLanguageId);
+
+								inputComponent.updateInputLanguage(inputDefaultValue);
+
+								inputComponent.selectFlag(selectedLanguageId);
+							}
 						}
 					},
 

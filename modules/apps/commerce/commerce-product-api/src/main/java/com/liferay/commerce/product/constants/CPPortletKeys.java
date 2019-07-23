@@ -20,6 +20,14 @@ package com.liferay.commerce.product.constants;
  */
 public class CPPortletKeys {
 
+	public static final String COMMERCE_CATALOGS =
+		"com_liferay_commerce_catalog_web_internal_portlet_" +
+			"CommerceCatalogsPortlet";
+
+	public static final String COMMERCE_CHANNELS =
+		"com_liferay_commerce_channel_web_internal_portlet_" +
+			"CommerceChannelsPortlet";
+
 	public static final String COMMERCE_SUBSCRIPTION_CONTENT_WEB =
 		"com_liferay_commerce_subscription_web_internal_portlet_" +
 			"CommerceSubscriptionContentPortlet";
@@ -31,10 +39,6 @@ public class CPPortletKeys {
 	public static final String CP_ASSET_CATEGORIES_NAVIGATION =
 		"com_liferay_commerce_product_asset_categories_navigation_web" +
 			"_internal_portlet_CPAssetCategoriesNavigationPortlet";
-
-	public static final String CP_CATALOG_RULE =
-		"com_liferay_commerce_product_catalog_rule_web_internal_portlet_" +
-			"CPCatalogRulePortlet";
 
 	public static final String CP_CATEGORY_CONTENT_WEB =
 		"com_liferay_commerce_product_content_web_internal_portlet_" +

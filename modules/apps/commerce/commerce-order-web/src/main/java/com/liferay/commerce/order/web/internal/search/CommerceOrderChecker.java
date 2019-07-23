@@ -15,12 +15,11 @@
 package com.liferay.commerce.order.web.internal.search;
 
 import com.liferay.commerce.model.CommerceOrder;
-import com.liferay.commerce.order.web.security.permission.resource.CommerceOrderPermission;
+import com.liferay.commerce.order.web.internal.security.permission.resource.CommerceOrderPermission;
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 
 import javax.portlet.PortletResponse;
@@ -39,11 +38,9 @@ public class CommerceOrderChecker extends EmptyOnClickRowChecker {
 		CommerceOrder commerceOrder = (CommerceOrder)object;
 
 		try {
-			PermissionChecker permissionChecker =
-				PermissionThreadLocal.getPermissionChecker();
-
 			return !CommerceOrderPermission.contains(
-				permissionChecker, commerceOrder, ActionKeys.DELETE);
+				PermissionThreadLocal.getPermissionChecker(), commerceOrder,
+				ActionKeys.DELETE);
 		}
 		catch (Exception e) {
 			_log.error(e, e);

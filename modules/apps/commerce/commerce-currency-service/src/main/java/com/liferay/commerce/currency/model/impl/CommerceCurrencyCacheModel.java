@@ -17,7 +17,6 @@ package com.liferay.commerce.currency.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.commerce.currency.model.CommerceCurrency;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -35,12 +34,12 @@ import java.util.Date;
  * The cache model class for representing CommerceCurrency in entity cache.
  *
  * @author Andrea Di Giorgi
- * @see CommerceCurrency
  * @generated
  */
 @ProviderType
-public class CommerceCurrencyCacheModel implements CacheModel<CommerceCurrency>,
-	Externalizable {
+public class CommerceCurrencyCacheModel
+	implements CacheModel<CommerceCurrency>, Externalizable {
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -51,9 +50,12 @@ public class CommerceCurrencyCacheModel implements CacheModel<CommerceCurrency>,
 			return false;
 		}
 
-		CommerceCurrencyCacheModel commerceCurrencyCacheModel = (CommerceCurrencyCacheModel)obj;
+		CommerceCurrencyCacheModel commerceCurrencyCacheModel =
+			(CommerceCurrencyCacheModel)obj;
 
-		if (commerceCurrencyId == commerceCurrencyCacheModel.commerceCurrencyId) {
+		if (commerceCurrencyId ==
+				commerceCurrencyCacheModel.commerceCurrencyId) {
+
 			return true;
 		}
 
@@ -67,14 +69,12 @@ public class CommerceCurrencyCacheModel implements CacheModel<CommerceCurrency>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(39);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
 		sb.append(", commerceCurrencyId=");
 		sb.append(commerceCurrencyId);
-		sb.append(", groupId=");
-		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
 		sb.append(", userId=");
@@ -124,7 +124,6 @@ public class CommerceCurrencyCacheModel implements CacheModel<CommerceCurrency>,
 		}
 
 		commerceCurrencyImpl.setCommerceCurrencyId(commerceCurrencyId);
-		commerceCurrencyImpl.setGroupId(groupId);
 		commerceCurrencyImpl.setCompanyId(companyId);
 		commerceCurrencyImpl.setUserId(userId);
 
@@ -201,11 +200,10 @@ public class CommerceCurrencyCacheModel implements CacheModel<CommerceCurrency>,
 	@Override
 	public void readExternal(ObjectInput objectInput)
 		throws ClassNotFoundException, IOException {
+
 		uuid = objectInput.readUTF();
 
 		commerceCurrencyId = objectInput.readLong();
-
-		groupId = objectInput.readLong();
 
 		companyId = objectInput.readLong();
 
@@ -232,8 +230,7 @@ public class CommerceCurrencyCacheModel implements CacheModel<CommerceCurrency>,
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		if (uuid == null) {
 			objectOutput.writeUTF("");
 		}
@@ -242,8 +239,6 @@ public class CommerceCurrencyCacheModel implements CacheModel<CommerceCurrency>,
 		}
 
 		objectOutput.writeLong(commerceCurrencyId);
-
-		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(companyId);
 
@@ -303,7 +298,6 @@ public class CommerceCurrencyCacheModel implements CacheModel<CommerceCurrency>,
 
 	public String uuid;
 	public long commerceCurrencyId;
-	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
@@ -320,4 +314,5 @@ public class CommerceCurrencyCacheModel implements CacheModel<CommerceCurrency>,
 	public double priority;
 	public boolean active;
 	public long lastPublishDate;
+
 }

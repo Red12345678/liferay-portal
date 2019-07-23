@@ -17,7 +17,6 @@ package com.liferay.commerce.product.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.commerce.product.model.CPOptionValue;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -33,12 +32,12 @@ import java.util.Date;
  * The cache model class for representing CPOptionValue in entity cache.
  *
  * @author Marco Leo
- * @see CPOptionValue
  * @generated
  */
 @ProviderType
-public class CPOptionValueCacheModel implements CacheModel<CPOptionValue>,
-	Externalizable {
+public class CPOptionValueCacheModel
+	implements CacheModel<CPOptionValue>, Externalizable {
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -49,7 +48,8 @@ public class CPOptionValueCacheModel implements CacheModel<CPOptionValue>,
 			return false;
 		}
 
-		CPOptionValueCacheModel cpOptionValueCacheModel = (CPOptionValueCacheModel)obj;
+		CPOptionValueCacheModel cpOptionValueCacheModel =
+			(CPOptionValueCacheModel)obj;
 
 		if (CPOptionValueId == cpOptionValueCacheModel.CPOptionValueId) {
 			return true;
@@ -65,7 +65,7 @@ public class CPOptionValueCacheModel implements CacheModel<CPOptionValue>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -73,8 +73,6 @@ public class CPOptionValueCacheModel implements CacheModel<CPOptionValue>,
 		sb.append(externalReferenceCode);
 		sb.append(", CPOptionValueId=");
 		sb.append(CPOptionValueId);
-		sb.append(", groupId=");
-		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
 		sb.append(", userId=");
@@ -119,7 +117,6 @@ public class CPOptionValueCacheModel implements CacheModel<CPOptionValue>,
 		}
 
 		cpOptionValueImpl.setCPOptionValueId(CPOptionValueId);
-		cpOptionValueImpl.setGroupId(groupId);
 		cpOptionValueImpl.setCompanyId(companyId);
 		cpOptionValueImpl.setUserId(userId);
 
@@ -181,8 +178,6 @@ public class CPOptionValueCacheModel implements CacheModel<CPOptionValue>,
 
 		CPOptionValueId = objectInput.readLong();
 
-		groupId = objectInput.readLong();
-
 		companyId = objectInput.readLong();
 
 		userId = objectInput.readLong();
@@ -199,8 +194,7 @@ public class CPOptionValueCacheModel implements CacheModel<CPOptionValue>,
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		if (uuid == null) {
 			objectOutput.writeUTF("");
 		}
@@ -216,8 +210,6 @@ public class CPOptionValueCacheModel implements CacheModel<CPOptionValue>,
 		}
 
 		objectOutput.writeLong(CPOptionValueId);
-
-		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(companyId);
 
@@ -257,7 +249,6 @@ public class CPOptionValueCacheModel implements CacheModel<CPOptionValue>,
 	public String uuid;
 	public String externalReferenceCode;
 	public long CPOptionValueId;
-	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
@@ -268,4 +259,5 @@ public class CPOptionValueCacheModel implements CacheModel<CPOptionValue>,
 	public double priority;
 	public String key;
 	public long lastPublishDate;
+
 }

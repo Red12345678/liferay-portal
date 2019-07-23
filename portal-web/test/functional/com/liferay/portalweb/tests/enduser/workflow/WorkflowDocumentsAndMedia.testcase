@@ -1,5 +1,6 @@
 @component-name = "portal-workflow"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Workflow";
@@ -24,8 +25,7 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Content",
 				panel = "Site Administration",
-				portlet = "Documents and Media"
-			);
+				portlet = "Documents and Media");
 
 			Workflow.configureWorkflowViaPortlet(workflowDefinition = "No Workflow");
 
@@ -35,73 +35,63 @@ definition {
 
 	@priority = "5"
 	test ApproveInDMFolderCustomWorkflow {
+		property test.name.skip.portal.instance = "WorkflowDocumentsAndMedia#ApproveInDMFolderCustomWorkflow";
+
 		property portal.release = "false";
 		property testray.component.names = "Training";
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		Organization.addCP(
 			orgName = "Space Program Academy of Continuing Education",
-			orgType = "Organization"
-		);
+			orgType = "Organization");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		UsersAndOrganizationsNavigator.gotoOrganizations();
 
-		Organization.addSiteCP(
-			orgName = "Space Program Academy of Continuing Education"
-		);
+		Organization.addSiteCP(orgName = "Space Program Academy of Continuing Education");
 
 		ProductMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
-			portlet = "Sites"
-		);
+			portlet = "Sites");
 
 		Site.viewCP(
 			siteMember = "Organization",
 			siteName = "Space Program Academy of Continuing Education",
-			siteType = "Private"
-		);
+			siteType = "Private");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.addCP(
 			userEmailAddress = "userea@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "userea@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		UsersAndOrganizationsNavigator.gotoOrganizations();
 
@@ -109,73 +99,64 @@ definition {
 			orgName = "Space Program Academy of Continuing Education",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Workflow"
-		);
+			portlet = "Workflow");
 
 		Workflow.uploadDefinition(
 			workflowDefinitionFile = "advanced-governors-review.xml",
-			workflowDefinitionTitle = "Quarterly Reports Review Process"
-		);
+			workflowDefinitionTitle = "Quarterly Reports Review Process");
 
 		Workflow.viewDefinition(
 			workflowDefinitionName = "Quarterly Reports Review Process",
 			workflowDefinitionTitle = "Quarterly Reports Review Process",
-			workflowDefinitionVersionNumber = "1"
-		);
+			workflowDefinitionVersionNumber = "1");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
-		User.assignRegularRoleCP(roleTitle = "Board Member", userScreenName = "usersn");
+		User.assignRegularRoleCP(
+			roleTitle = "Board Member",
+			userScreenName = "usersn");
 
-		ProductMenu.gotoSite(site = "Space Program Academy of Continuing Education");
+		Navigator.openSiteURL(siteName = "Space Program Academy of Continuing Education");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMFolder.addCP(
 			dmFolderDescription = "Financial Reports Description",
-			dmFolderName = "Financial Reports"
-		);
+			dmFolderName = "Financial Reports");
 
 		DMFolder.configureWorkflowCP(
 			dmFolderName = "Financial Reports",
 			workflowDefinition = "Quarterly Reports Review Process",
-			workflowRestriction = "Default Workflow"
-		);
+			workflowRestriction = "Default Workflow");
 
 		for (var entryCount : list "1,2,3") {
 			ProductMenu.gotoPortlet(
 				category = "Content",
 				panel = "Site Administration",
-				portlet = "Documents and Media"
-			);
+				portlet = "Documents and Media");
 
 			DMFolder.viewCP(dmFolderName = "Financial Reports");
 
 			DMDocument.addWithWorkflowCP(
 				dmDocumentDescription = "DM Document Description",
 				dmDocumentFile = "Document_${entryCount}.doc",
-				dmDocumentTitle = "Document_${entryCount}.doc"
-			);
+				dmDocumentTitle = "Document_${entryCount}.doc");
 		}
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "userea@liferay.com",
-			userLoginFullName = "userfn userln"
-		);
+			userLoginFullName = "userfn userln");
 
 		Navigator.openURL();
 
@@ -185,29 +166,25 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "My Account",
 				panel = "User",
-				portlet = "My Workflow Tasks"
-			);
+				portlet = "My Workflow Tasks");
 
 			Workflow.assignToMeTaskByActions(
 				workflowAssetTitle = "Document_1.doc",
 				workflowAssetType = "Document",
-				workflowTask = "Board Member Review ${i}"
-			);
+				workflowTask = "Board Member Review ${i}");
 
 			Navigator.openURL();
 
 			ProductMenu.gotoPortlet(
 				category = "My Account",
 				panel = "User",
-				portlet = "My Workflow Tasks"
-			);
+				portlet = "My Workflow Tasks");
 
 			Workflow.approveTaskByActions(
 				boardWorkflowTask = "${i}",
 				workflowAssetTitle = "Document_1.doc",
 				workflowAssetType = "Document",
-				workflowTask = "Board Member Review ${i}"
-			);
+				workflowTask = "Board Member Review ${i}");
 		}
 
 		for (var i : list "1,2,3,4") {
@@ -216,14 +193,12 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "My Account",
 				panel = "User",
-				portlet = "My Workflow Tasks"
-			);
+				portlet = "My Workflow Tasks");
 
 			Workflow.assignToMeTaskByActions(
 				workflowAssetTitle = "Document_2.doc",
 				workflowAssetType = "Document",
-				workflowTask = "Board Member Review ${i}"
-			);
+				workflowTask = "Board Member Review ${i}");
 
 			Navigator.openURL();
 
@@ -232,15 +207,13 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "My Account",
 				panel = "User",
-				portlet = "My Workflow Tasks"
-			);
+				portlet = "My Workflow Tasks");
 
 			Workflow.approveTaskByActions(
 				boardWorkflowTask = "${i}",
 				workflowAssetTitle = "Document_2.doc",
 				workflowAssetType = "Document",
-				workflowTask = "Board Member Review ${i}"
-			);
+				workflowTask = "Board Member Review ${i}");
 		}
 
 		for (var i : list "1,2,3,4") {
@@ -249,14 +222,12 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "My Account",
 				panel = "User",
-				portlet = "My Workflow Tasks"
-			);
+				portlet = "My Workflow Tasks");
 
 			Workflow.assignToMeTaskByActions(
 				workflowAssetTitle = "Document_3.doc",
 				workflowAssetType = "Document",
-				workflowTask = "Board Member Review ${i}"
-			);
+				workflowTask = "Board Member Review ${i}");
 
 			Navigator.openURL();
 
@@ -265,39 +236,34 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "My Account",
 				panel = "User",
-				portlet = "My Workflow Tasks"
-			);
+				portlet = "My Workflow Tasks");
 
 			Workflow.approveTaskByActions(
 				boardWorkflowTask = "${i}",
 				workflowAssetTitle = "Document_3.doc",
 				workflowAssetType = "Document",
-				workflowTask = "Board Member Review ${i}"
-			);
+				workflowTask = "Board Member Review ${i}");
 		}
 
 		User.logoutAndLoginPG(
 			userLoginEmailAddress = "test@liferay.com",
-			userLoginFullName = "Test Test"
-		);
+			userLoginFullName = "Test Test");
 
 		Navigator.openURL();
 
-		ProductMenu.gotoSite(site = "Space Program Academy of Continuing Education");
+		Navigator.openSiteURL(siteName = "Space Program Academy of Continuing Education");
 
 		for (var entryCount : list "1,2,3") {
 			ProductMenu.gotoPortlet(
 				category = "Content",
 				panel = "Site Administration",
-				portlet = "Documents and Media"
-			);
+				portlet = "Documents and Media");
 
 			DMFolder.viewCP(dmFolderName = "Financial Reports");
 
 			DMDocument.viewCPStatus(
 				dmDocumentStatus = "Approved",
-				dmDocumentTitle = "Document_${entryCount}.doc"
-			);
+				dmDocumentTitle = "Document_${entryCount}.doc");
 		}
 	}
 
@@ -306,39 +272,33 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		Workflow.configureWorkflowViaFolderInfo(workflowDefinition = "Single Approver");
 
 		DMFolder.addCP(
 			dmFolderDescription = "DM Folder Description",
-			dmFolderName = "DM Folder Name"
-		);
+			dmFolderName = "DM Folder Name");
 
 		DMFolder.configureWorkflowCP(
 			dmFolderName = "DM Folder Name",
 			workflowDefinition = "Single Approver",
-			workflowRestriction = "Default Workflow"
-		);
+			workflowRestriction = "Default Workflow");
 
 		DMFolder.configureWorkflowCP(
 			dmFolderName = "DM Folder Name",
-			workflowRestriction = "Parent Folder"
-		);
+			workflowRestriction = "Parent Folder");
 
 		DMFolder.configureWorkflowCP(
 			dmDocumentTypeName = "Marketing Banner",
 			dmFolderName = "DM Folder Name",
 			workflowDefinition = "Single Approver",
-			workflowRestriction = "Specific Restrictions"
-		);
+			workflowRestriction = "Specific Restrictions");
 
 		DMFolder.configureWorkflowCP(
 			dmFolderName = "DM Folder Name",
 			workflowDefinition = "No Workflow",
-			workflowRestriction = "Default Workflow"
-		);
+			workflowRestriction = "Default Workflow");
 	}
 
 	@description = "This is a use case for LPS-60870."
@@ -352,67 +312,62 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Categorization",
 			panel = "Site Administration",
-			portlet = "Categories"
-		);
+			portlet = "Categories");
 
 		Vocabulary.addCP(vocabularyName = "Vocabulary Name");
 
-		Category.addCP(categoryName = "legal", vocabularyName = "Vocabulary Name");
+		Category.addCP(
+			categoryName = "legal",
+			vocabularyName = "Vocabulary Name");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Categorization",
 			panel = "Site Administration",
-			portlet = "Categories"
-		);
+			portlet = "Categories");
 
-		Category.addCP(categoryName = "Other", vocabularyName = "Vocabulary Name");
+		Category.addCP(
+			categoryName = "Other",
+			vocabularyName = "Vocabulary Name");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMFolder.addCP(
 			dmFolderDescription = "DM Folder Description",
-			dmFolderName = "DM Folder Name"
-		);
+			dmFolderName = "DM Folder Name");
 
 		DMFolder.configureWorkflowCP(
 			dmFolderName = "DM Folder Name",
 			workflowDefinition = "Single Approver",
-			workflowRestriction = "Default Workflow"
-		);
+			workflowRestriction = "Default Workflow");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMFolder.viewCP(
 			dmDocumentTitle = "DM Folder Name",
-			dmFolderName = "DM Folder Name"
-		);
+			dmFolderName = "DM Folder Name");
 
 		DMNavigator.gotoAddDocumentType();
 
 		DMDocument.editDocument(
 			dmDocumentDescription = "DM Document Description",
 			dmDocumentFile = "Document_1.doc",
-			dmDocumentTitle = "DM Document Title"
-		);
+			dmDocumentTitle = "DM Document Title");
 
 		DMDocument.addCategories(
 			categoryNameList = "legal,Other",
-			vocabularyName = "Vocabulary Name"
-		);
+			vocabularyName = "Vocabulary Name");
 
 		Button.clickSubmitForPublication();
 
@@ -423,38 +378,32 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "My Account",
 			panel = "User",
-			portlet = "My Workflow Tasks"
-		);
+			portlet = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "DM Document Title",
 			workflowAssetType = "Document",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "DM Document Title",
 			workflowAssetType = "Document",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Documents and Media"
-		);
+			portlet = "Documents and Media");
 
 		DMFolder.viewCP(
 			dmDocumentTitle = "DM Folder Name",
-			dmFolderName = "DM Folder Name"
-		);
+			dmFolderName = "DM Folder Name");
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "DM Document Title"
-		);
+			rowEntry = "DM Document Title");
 
 		DMDocument.viewCategories(categoryNameList = "legal,Other");
 
@@ -464,8 +413,7 @@ definition {
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "DM Document Title"
-		);
+			rowEntry = "DM Document Title");
 
 		DMDocument.viewCategories(categoryNameList = "legal,Other");
 
@@ -473,8 +421,7 @@ definition {
 
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "Edit",
-			rowEntry = "DM Document Title"
-		);
+			rowEntry = "DM Document Title");
 
 		DMDocument.viewCategories(categoryNameList = "legal,Other");
 
@@ -483,24 +430,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "My Account",
 			panel = "User",
-			portlet = "My Workflow Tasks"
-		);
+			portlet = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "DM Document Title",
 			workflowAssetType = "Document",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.viewTaskAssignedToMeDetails(
 			workflowAssetContent = "DM Document Title",
 			workflowAssetTitle = "DM Document Title",
 			workflowAssetType = "Document",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.gotoPreviewEdit();
 
 		DMDocument.viewCategories(categoryNameList = "legal,Other");
 	}
+
 }

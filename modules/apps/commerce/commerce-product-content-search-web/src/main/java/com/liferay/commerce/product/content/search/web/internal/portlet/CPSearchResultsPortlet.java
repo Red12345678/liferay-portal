@@ -15,6 +15,8 @@
 package com.liferay.commerce.product.content.search.web.internal.portlet;
 
 import com.liferay.asset.kernel.model.AssetCategory;
+import com.liferay.commerce.account.model.CommerceAccount;
+import com.liferay.commerce.account.util.CommerceAccountHelper;
 import com.liferay.commerce.product.constants.CPPortletKeys;
 import com.liferay.commerce.product.content.constants.CPContentWebKeys;
 import com.liferay.commerce.product.content.render.list.CPContentListRendererRegistry;
@@ -23,7 +25,9 @@ import com.liferay.commerce.product.content.search.web.internal.configuration.CP
 import com.liferay.commerce.product.content.search.web.internal.display.context.CPSearchResultsDisplayContext;
 import com.liferay.commerce.product.content.util.CPContentHelper;
 import com.liferay.commerce.product.model.CPDefinition;
+import com.liferay.commerce.product.model.CommerceChannel;
 import com.liferay.commerce.product.search.CPDefinitionIndexer;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.commerce.product.type.CPTypeServicesTracker;
 import com.liferay.commerce.product.util.CPDefinitionHelper;
 import com.liferay.petra.string.StringPool;
@@ -183,11 +187,15 @@ public class CPSearchResultsPortlet
 		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
+		CommerceChannel commerceChannel =
+			_commerceChannelLocalService.fetchCommerceChannelBySiteGroupId(
+				themeDisplay.getScopeGroupId());
+
 		Optional<String> parameterValueOptional =
 			portletSharedSearchSettings.getParameter("q");
 
 		portletSharedSearchSettings.setKeywords(
-			parameterValueOptional.orElse(StringPool.STAR));
+			parameterValueOptional.orElse(StringPool.BLANK));
 
 		portletSharedSearchSettings.addCondition(
 			new BooleanClauseImpl<Query>(
@@ -210,24 +218,37 @@ public class CPSearchResultsPortlet
 		SearchContext searchContext =
 			portletSharedSearchSettings.getSearchContext();
 
-		searchContext.setAttribute(
-			CPDefinitionIndexer.ATTRIBUTE_FILTER_BY_CP_RULES, Boolean.TRUE);
+		searchContext.setEntryClassNames(
+			new String[] {CPDefinition.class.getName()});
+
 		searchContext.setAttribute(
 			CPDefinitionIndexer.FIELD_PUBLISHED, Boolean.TRUE);
+
+		if (commerceChannel != null) {
+			searchContext.setAttribute(
+				"commerceChannelGroupId", commerceChannel.getGroupId());
+		}
+
+		CommerceAccount commerceAccount =
+			_commerceAccountHelper.getCurrentCommerceAccount(
+				_portal.getHttpServletRequest(renderRequest));
+
+		if (commerceAccount != null) {
+			long[] commerceAccountGroupIds =
+				_commerceAccountHelper.getCommerceAccountGroupIds(
+					commerceAccount.getCommerceAccountId());
+
+			searchContext.setAttribute(
+				"commerceAccountGroupIds", commerceAccountGroupIds);
+		}
+
+		searchContext.setAttribute("secure", Boolean.TRUE);
 
 		QueryConfig queryConfig = portletSharedSearchSettings.getQueryConfig();
 
 		queryConfig.setHighlightEnabled(false);
 
-		searchContext.setGroupIds(new long[] {themeDisplay.getScopeGroupId()});
 		searchContext.setSorts(SortFactoryUtil.create(Field.NAME, false));
-
-		portletSharedSearchSettings.addCondition(
-			new BooleanClauseImpl<Query>(
-				new TermQueryImpl(
-					Field.GROUP_ID,
-					String.valueOf(themeDisplay.getScopeGroupId())),
-				BooleanClauseOccur.MUST));
 
 		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
 
@@ -243,6 +264,12 @@ public class CPSearchResultsPortlet
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		CPSearchResultsPortlet.class);
+
+	@Reference
+	private CommerceAccountHelper _commerceAccountHelper;
+
+	@Reference
+	private CommerceChannelLocalService _commerceChannelLocalService;
 
 	@Reference
 	private CPContentHelper _cpContentHelper;

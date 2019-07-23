@@ -329,7 +329,7 @@ public class SiteTeamsDisplayContext {
 			return _keywords;
 		}
 
-		_keywords = ParamUtil.getString(_request, "keywords");
+		_keywords = ParamUtil.getString(_renderRequest, "keywords");
 
 		return _keywords;
 	}

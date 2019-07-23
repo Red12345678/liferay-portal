@@ -190,13 +190,11 @@ public class DDMFormTemplateContextFactoryHelper {
 				entry -> isSelectField(ddmFormFields.get(entry.getKey())));
 
 			outputParametersStream.forEach(
-				entry -> {
-					dataProviderSettings.put(
-						entry.getKey(),
-						createDataProviderSettingsMap(
-							dataProviderInstanceUUID, entry.getValue(),
-							inputParameters));
-				});
+				entry -> dataProviderSettings.put(
+					entry.getKey(),
+					createDataProviderSettingsMap(
+						dataProviderInstanceUUID, entry.getValue(),
+						inputParameters)));
 		}
 	}
 

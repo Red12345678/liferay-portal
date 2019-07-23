@@ -93,6 +93,11 @@ public class DatabaseCPCatalogEntryImpl implements CPCatalogEntry {
 	}
 
 	@Override
+	public long getGroupId() {
+		return _cpDefinition.getGroupId();
+	}
+
+	@Override
 	public double getHeight() {
 		return _cpDefinition.getHeight();
 	}

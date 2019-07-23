@@ -497,10 +497,8 @@ public class HttpImpl implements Http {
 				completeURL, sessionId);
 		}
 
-		if (_log.isWarnEnabled()) {
-			if (completeURL.contains("?&")) {
-				_log.warn("Invalid url " + completeURL);
-			}
+		if (_log.isWarnEnabled() && completeURL.contains("?&")) {
+			_log.warn("Invalid url " + completeURL);
 		}
 
 		return completeURL;
@@ -1087,11 +1085,11 @@ public class HttpImpl implements Http {
 			if (pos == -1) {
 				sb.append(StringPool.SLASH);
 				sb.append(uriPart);
-			}
-			else if (pos == 0) {
+
 				continue;
 			}
-			else {
+
+			if (pos != 0) {
 				sb.append(StringPool.SLASH);
 				sb.append(uriPart.substring(0, pos));
 			}

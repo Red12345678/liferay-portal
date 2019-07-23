@@ -1,9 +1,9 @@
 definition {
+
 	macro gotoPagesPG {
 		LexiconEntry.gotoEntryMenuItem(
 			menuItem = "${menuItem}",
-			rowEntry = "${siteName}"
-		);
+			rowEntry = "${siteName}");
 
 		SelectWindow.selectPopUp(locator1 = "null");
 
@@ -24,16 +24,15 @@ definition {
 		Navigator.gotoNavItem(navItem = "${navItem}");
 
 		AssertElementNotPresent(
-			locator1 = "Icon#ROW_VERTICAL_ELLIPSIS",
-			key_rowEntry = "${siteName}"
-		);
+			key_rowEntry = "${siteName}",
+			locator1 = "Icon#ROW_VERTICAL_ELLIPSIS");
 	}
 
 	macro viewTags {
 		AssertTextEquals(
+			key_tagName = "${tagName}",
 			locator1 = "Tags#VIEW_TAGS_VIA_MY_SITES",
-			value1 = "${tagName}",
-			key_tagName = "${tagName}"
-		);
+			value1 = "${tagName}");
 	}
+
 }

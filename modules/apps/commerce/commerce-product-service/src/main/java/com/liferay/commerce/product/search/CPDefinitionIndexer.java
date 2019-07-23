@@ -14,13 +14,9 @@
 
 package com.liferay.commerce.product.search;
 
+import com.liferay.commerce.account.model.CommerceAccountGroupRel;
+import com.liferay.commerce.account.service.CommerceAccountGroupRelService;
 import com.liferay.commerce.media.CommerceMediaResolver;
-import com.liferay.commerce.product.catalog.rule.CPRuleType;
-import com.liferay.commerce.product.catalog.rule.CPRuleTypeRegistry;
-import com.liferay.commerce.product.configuration.CPRuleGroupServiceConfiguration;
-import com.liferay.commerce.product.constants.CPActionKeys;
-import com.liferay.commerce.product.constants.CPConstants;
-import com.liferay.commerce.product.constants.CPRuleConstants;
 import com.liferay.commerce.product.links.CPDefinitionLinkTypeRegistry;
 import com.liferay.commerce.product.model.CPAttachmentFileEntry;
 import com.liferay.commerce.product.model.CPDefinition;
@@ -29,21 +25,23 @@ import com.liferay.commerce.product.model.CPDefinitionOptionRel;
 import com.liferay.commerce.product.model.CPDefinitionOptionValueRel;
 import com.liferay.commerce.product.model.CPDefinitionSpecificationOptionValue;
 import com.liferay.commerce.product.model.CPOption;
-import com.liferay.commerce.product.model.CPRule;
 import com.liferay.commerce.product.model.CPSpecificationOption;
 import com.liferay.commerce.product.model.CProduct;
+import com.liferay.commerce.product.model.CommerceChannel;
+import com.liferay.commerce.product.model.CommerceChannelRel;
 import com.liferay.commerce.product.service.CPDefinitionLinkLocalService;
 import com.liferay.commerce.product.service.CPDefinitionLocalService;
 import com.liferay.commerce.product.service.CPFriendlyURLEntryLocalService;
 import com.liferay.commerce.product.service.CPInstanceLocalService;
-import com.liferay.commerce.product.util.CPRulesThreadLocal;
+import com.liferay.commerce.product.service.CommerceChannelRelLocalService;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Group;
-import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
@@ -54,16 +52,13 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.search.filter.BooleanFilter;
+import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.kernel.search.filter.TermFilter;
 import com.liferay.portal.kernel.search.filter.TermsFilter;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
-import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.ClassNameLocalService;
-import com.liferay.portal.kernel.service.GroupLocalService;
-import com.liferay.portal.kernel.settings.GroupServiceSettingsLocator;
+import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -78,6 +73,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -87,13 +83,20 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Marco Leo
+ * @author Alessio Antonio Rendina
  */
 @Component(immediate = true, service = Indexer.class)
 public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 
-	public static final String ATTRIBUTE_FILTER_BY_CP_RULES = "filterByCPRules";
-
 	public static final String CLASS_NAME = CPDefinition.class.getName();
+
+	public static final String FIELD_ACCOUNT_GROUP_FILTER_ENABLED =
+		"accountGroupFilterEnabled";
+
+	public static final String FIELD_CHANNEL_FILTER_ENABLED =
+		"channelFilterEnabled";
+
+	public static final String FIELD_CHANNEL_GROUP_IDS = "channelGroupIds";
 
 	public static final String FIELD_DEFAULT_IMAGE_FILE_ENTRY_ID =
 		"defaultImageFileEntryId";
@@ -178,11 +181,6 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 			contextBooleanFilter.add(
 				statusesTermsFilter, BooleanClauseOccur.MUST);
 		}
-		else {
-			contextBooleanFilter.addTerm(
-				Field.STATUS, String.valueOf(WorkflowConstants.STATUS_IN_TRASH),
-				BooleanClauseOccur.MUST_NOT);
-		}
 
 		Map<String, Serializable> attributes = searchContext.getAttributes();
 
@@ -211,14 +209,6 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 			contextBooleanFilter.add(linkFilter, BooleanClauseOccur.MUST);
 		}
 
-		if (GetterUtil.getBoolean(
-				attributes.get(ATTRIBUTE_FILTER_BY_CP_RULES))) {
-
-			long[] groupIds = searchContext.getGroupIds();
-
-			addCPRulesFilters(contextBooleanFilter, groupIds[0]);
-		}
-
 		if (attributes.containsKey("excludedCPDefinitionId")) {
 			String excludedCPDefinitionId = String.valueOf(
 				attributes.get("excludedCPDefinitionId"));
@@ -226,6 +216,91 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 			contextBooleanFilter.addTerm(
 				Field.ENTRY_CLASS_PK, excludedCPDefinitionId,
 				BooleanClauseOccur.MUST_NOT);
+		}
+
+		if (GetterUtil.getBoolean(attributes.get("secure"))) {
+			long commerceChannelId = GetterUtil.getLong(
+				attributes.get("commerceChannelGroupId"));
+
+			BooleanFilter channelBooleanFiler = new BooleanFilter();
+
+			BooleanFilter channelFilterEnableBooleanFiler = new BooleanFilter();
+
+			channelFilterEnableBooleanFiler.addTerm(
+				FIELD_CHANNEL_FILTER_ENABLED, Boolean.TRUE.toString(),
+				BooleanClauseOccur.MUST);
+
+			if (commerceChannelId > 0) {
+				channelFilterEnableBooleanFiler.addTerm(
+					FIELD_CHANNEL_GROUP_IDS, String.valueOf(commerceChannelId),
+					BooleanClauseOccur.MUST);
+			}
+			else {
+				channelFilterEnableBooleanFiler.addTerm(
+					FIELD_CHANNEL_GROUP_IDS, "-1", BooleanClauseOccur.MUST);
+			}
+
+			channelBooleanFiler.add(
+				channelFilterEnableBooleanFiler, BooleanClauseOccur.SHOULD);
+			channelBooleanFiler.addTerm(
+				FIELD_CHANNEL_FILTER_ENABLED, Boolean.FALSE.toString(),
+				BooleanClauseOccur.SHOULD);
+
+			contextBooleanFilter.add(
+				channelBooleanFiler, BooleanClauseOccur.MUST);
+
+			long[] commerceAccountGroupIds = GetterUtil.getLongValues(
+				searchContext.getAttribute("commerceAccountGroupIds"), null);
+
+			BooleanFilter accountGroupsBooleanFilter = new BooleanFilter();
+
+			BooleanFilter accountGroupsFilteEnableBooleanFilter =
+				new BooleanFilter();
+
+			accountGroupsFilteEnableBooleanFilter.addTerm(
+				FIELD_ACCOUNT_GROUP_FILTER_ENABLED, Boolean.TRUE.toString(),
+				BooleanClauseOccur.MUST);
+
+			if ((commerceAccountGroupIds != null) &&
+				(commerceAccountGroupIds.length > 0)) {
+
+				BooleanFilter accountGroupIdsBooleanFilter =
+					new BooleanFilter();
+
+				for (long commerceAccountGroupId : commerceAccountGroupIds) {
+					Filter termFilter = new TermFilter(
+						"commerceAccountGroupIds",
+						String.valueOf(commerceAccountGroupId));
+
+					accountGroupIdsBooleanFilter.add(
+						termFilter, BooleanClauseOccur.SHOULD);
+				}
+
+				accountGroupsFilteEnableBooleanFilter.add(
+					accountGroupIdsBooleanFilter, BooleanClauseOccur.MUST);
+			}
+			else {
+				accountGroupsFilteEnableBooleanFilter.addTerm(
+					"commerceAccountGroupIds", "-1", BooleanClauseOccur.MUST);
+			}
+
+			accountGroupsBooleanFilter.add(
+				accountGroupsFilteEnableBooleanFilter,
+				BooleanClauseOccur.SHOULD);
+			accountGroupsBooleanFilter.addTerm(
+				FIELD_ACCOUNT_GROUP_FILTER_ENABLED, Boolean.FALSE.toString(),
+				BooleanClauseOccur.SHOULD);
+
+			contextBooleanFilter.add(
+				accountGroupsBooleanFilter, BooleanClauseOccur.MUST);
+		}
+		else {
+			long[] groupIds = searchContext.getGroupIds();
+
+			if ((groupIds == null) || (groupIds.length == 0)) {
+				contextBooleanFilter.addTerm(
+					Field.GROUP_ID, "-1", BooleanClauseOccur.MUST);
+			}
 		}
 	}
 
@@ -261,70 +336,6 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 		}
 	}
 
-	protected void addCPRulesFilters(BooleanFilter booleanFilter, long groupId)
-		throws PortalException {
-
-		Group group = _groupLocalService.getGroup(groupId);
-
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
-
-		if (permissionChecker.isCompanyAdmin(group.getCompanyId()) ||
-			permissionChecker.isGroupAdmin(groupId) ||
-			_portletResourcePermission.contains(
-				permissionChecker, groupId, CPActionKeys.MANAGE_CATALOG)) {
-
-			return;
-		}
-
-		List<CPRule> cpRules = CPRulesThreadLocal.getCPRules();
-
-		if (ListUtil.isEmpty(cpRules)) {
-			booleanFilter.addTerm(
-				Field.ENTRY_CLASS_PK, "-1", BooleanClauseOccur.MUST);
-		}
-		else {
-			BooleanFilter cpRulesBooleanFilter = new BooleanFilter();
-
-			BooleanClauseOccur booleanClauseOccur = BooleanClauseOccur.MUST;
-
-			try {
-				CPRuleGroupServiceConfiguration
-					cpRuleGroupServiceConfiguration =
-						_configurationProvider.getConfiguration(
-							CPRuleGroupServiceConfiguration.class,
-							new GroupServiceSettingsLocator(
-								groupId, CPRuleConstants.SERVICE_NAME));
-
-				if ((cpRuleGroupServiceConfiguration != null) &&
-					(cpRuleGroupServiceConfiguration.
-						catalogRuleApplicationType() ==
-							CPRuleConstants.APPLICATION_TYPE_ANY)) {
-
-					booleanClauseOccur = BooleanClauseOccur.SHOULD;
-				}
-			}
-			catch (PortalException pe) {
-				_log.error(pe, pe);
-			}
-
-			for (CPRule cpRule : cpRules) {
-				BooleanFilter cpRuleBooleanFilter = new BooleanFilter();
-
-				CPRuleType cpRuleType = _cpRuleTypeRegistry.getCPRuleType(
-					cpRule.getType());
-
-				cpRuleType.postProcessContextBooleanFilter(
-					cpRuleBooleanFilter, cpRule);
-
-				cpRulesBooleanFilter.add(
-					cpRuleBooleanFilter, booleanClauseOccur);
-			}
-
-			booleanFilter.add(cpRulesBooleanFilter, BooleanClauseOccur.MUST);
-		}
-	}
-
 	@Override
 	protected void doDelete(CPDefinition cpDefinition) throws Exception {
 		deleteDocument(
@@ -353,7 +364,7 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 
 		Map<String, String> languageIdToUrlTitleMap =
 			_cpFriendlyURLEntryLocalService.getLanguageIdToUrlTitleMap(
-				cpDefinition.getGroupId(), classNameId,
+				GroupConstants.DEFAULT_LIVE_GROUP_ID, classNameId,
 				cpDefinition.getCPDefinitionId());
 
 		for (String languageId : languageIds) {
@@ -418,6 +429,37 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 		document.addText(
 			FIELD_SHORT_DESCRIPTION,
 			cpDefinition.getShortDescription(cpDefinitionDefaultLanguageId));
+
+		List<Long> channelGroupIds = new ArrayList<>();
+
+		for (CommerceChannelRel commerceChannelRel :
+				_commerceChannelRelLocalService.getCommerceChannelRels(
+					cpDefinition.getModelClassName(),
+					cpDefinition.getCPDefinitionId(), QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null)) {
+
+			CommerceChannel commerceChannel =
+				commerceChannelRel.getCommerceChannel();
+
+			channelGroupIds.add(commerceChannel.getGroupId());
+		}
+
+		document.addNumber(
+			FIELD_CHANNEL_GROUP_IDS, ArrayUtil.toLongArray(channelGroupIds));
+
+		List<CommerceAccountGroupRel> commerceAccountGroupRels =
+			_commerceAccountGroupRelService.getCommerceAccountGroupRels(
+				CPDefinition.class.getName(), cpDefinition.getCPDefinitionId(),
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+
+		Stream<CommerceAccountGroupRel> stream =
+			commerceAccountGroupRels.stream();
+
+		long[] commerceAccountGroupIds = stream.mapToLong(
+			CommerceAccountGroupRel::getCommerceAccountGroupId
+		).toArray();
+
+		document.addNumber("commerceAccountGroupIds", commerceAccountGroupIds);
 
 		List<String> optionNames = new ArrayList<>();
 		List<Long> optionIds = new ArrayList<>();
@@ -484,6 +526,13 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 
 		document.addKeyword(
 			FIELD_EXTERNAL_REFERENCE_CODE, cProduct.getExternalReferenceCode());
+
+		document.addKeyword(
+			FIELD_ACCOUNT_GROUP_FILTER_ENABLED,
+			cpDefinition.isAccountGroupFilterEnabled());
+		document.addKeyword(
+			FIELD_CHANNEL_FILTER_ENABLED,
+			cpDefinition.isChannelFilterEnabled());
 
 		document.addKeyword(
 			FIELD_IS_IGNORE_SKU_COMBINATIONS,
@@ -613,10 +662,12 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 		}
 
 		if (cpAttachmentFileEntryId == 0) {
+			Company company = _companyLocalService.getCompany(
+				cpDefinition.getCompanyId());
+
 			document.addKeyword(
 				FIELD_DEFAULT_IMAGE_FILE_URL,
-				_commerceMediaResolver.getDefaultUrl(
-					cpDefinition.getGroupId()));
+				_commerceMediaResolver.getDefaultUrl(company.getGroupId()));
 		}
 		else {
 			document.addKeyword(
@@ -633,10 +684,6 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 		}
 		else {
 			document.addKeyword(Field.HIDDEN, true);
-		}
-
-		for (CPRuleType cpRuleType : _cpRuleTypeRegistry.getCPRuleTypes()) {
-			cpRuleType.contributeDocument(document, cpDefinition);
 		}
 
 		if (_log.isDebugEnabled()) {
@@ -737,10 +784,16 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 	private ClassNameLocalService _classNameLocalService;
 
 	@Reference
+	private CommerceAccountGroupRelService _commerceAccountGroupRelService;
+
+	@Reference
+	private CommerceChannelRelLocalService _commerceChannelRelLocalService;
+
+	@Reference
 	private CommerceMediaResolver _commerceMediaResolver;
 
 	@Reference
-	private ConfigurationProvider _configurationProvider;
+	private CompanyLocalService _companyLocalService;
 
 	@Reference
 	private CPDefinitionLinkLocalService _cpDefinitionLinkLocalService;
@@ -758,15 +811,6 @@ public class CPDefinitionIndexer extends BaseIndexer<CPDefinition> {
 	private CPInstanceLocalService _cpInstanceLocalService;
 
 	@Reference
-	private CPRuleTypeRegistry _cpRuleTypeRegistry;
-
-	@Reference
-	private GroupLocalService _groupLocalService;
-
-	@Reference
 	private IndexWriterHelper _indexWriterHelper;
-
-	@Reference(target = "(resource.name=" + CPConstants.RESOURCE_NAME + ")")
-	private PortletResourcePermission _portletResourcePermission;
 
 }

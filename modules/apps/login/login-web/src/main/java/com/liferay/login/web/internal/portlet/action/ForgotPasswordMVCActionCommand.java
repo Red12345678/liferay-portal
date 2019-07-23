@@ -20,7 +20,6 @@ import com.liferay.login.web.internal.constants.LoginPortletKeys;
 import com.liferay.login.web.internal.portlet.util.LoginUtil;
 import com.liferay.portal.kernel.captcha.CaptchaConfigurationException;
 import com.liferay.portal.kernel.captcha.CaptchaException;
-import com.liferay.portal.kernel.captcha.CaptchaTextException;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.RequiredReminderQueryException;
 import com.liferay.portal.kernel.exception.SendPasswordException;
@@ -154,8 +153,7 @@ public class ForgotPasswordMVCActionCommand extends BaseMVCActionCommand {
 			}
 		}
 		catch (Exception e) {
-			if (e instanceof CaptchaConfigurationException ||
-				e instanceof CaptchaTextException ||
+			if (e instanceof CaptchaException ||
 				e instanceof UserEmailAddressException) {
 
 				SessionErrors.add(actionRequest, e.getClass());
@@ -168,6 +166,12 @@ public class ForgotPasswordMVCActionCommand extends BaseMVCActionCommand {
 					 e instanceof UserReminderQueryException) {
 
 				if (PropsValues.LOGIN_SECURE_FORGOT_PASSWORD) {
+					HttpServletRequest httpServletRequest =
+						_portal.getHttpServletRequest(actionRequest);
+
+					SessionMessages.add(
+						httpServletRequest, "forgotPasswordSent");
+
 					sendRedirect(actionRequest, actionResponse, null);
 				}
 				else {
@@ -297,7 +301,7 @@ public class ForgotPasswordMVCActionCommand extends BaseMVCActionCommand {
 		HttpServletRequest request = _portal.getHttpServletRequest(
 			actionRequest);
 
-		SessionMessages.add(request, "passwordSent");
+		SessionMessages.add(request, "forgotPasswordSent");
 
 		sendRedirect(actionRequest, actionResponse, null);
 	}

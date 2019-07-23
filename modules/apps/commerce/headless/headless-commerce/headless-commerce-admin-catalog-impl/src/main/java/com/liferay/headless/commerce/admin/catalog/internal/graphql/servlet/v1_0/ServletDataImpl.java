@@ -17,6 +17,7 @@ package com.liferay.headless.commerce.admin.catalog.internal.graphql.servlet.v1_
 import com.liferay.headless.commerce.admin.catalog.internal.graphql.mutation.v1_0.Mutation;
 import com.liferay.headless.commerce.admin.catalog.internal.graphql.query.v1_0.Query;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.AttachmentResource;
+import com.liferay.headless.commerce.admin.catalog.resource.v1_0.CatalogResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.CategoryResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionCategoryResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.OptionResource;
@@ -26,12 +27,12 @@ import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductOptionRe
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductOptionValueResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductShippingConfigurationResource;
+import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductSpecificationResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductSubscriptionConfigurationResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.ProductTaxConfigurationResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.RelatedProductResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.SkuResource;
 import com.liferay.headless.commerce.admin.catalog.resource.v1_0.SpecificationResource;
-import com.liferay.headless.commerce.admin.catalog.resource.v1_0.SpecificationValueResource;
 import com.liferay.portal.vulcan.graphql.servlet.ServletData;
 
 import javax.annotation.Generated;
@@ -55,6 +56,8 @@ public class ServletDataImpl implements ServletData {
 	public void activate(BundleContext bundleContext) {
 		Mutation.setAttachmentResourceComponentServiceObjects(
 			_attachmentResourceComponentServiceObjects);
+		Mutation.setCatalogResourceComponentServiceObjects(
+			_catalogResourceComponentServiceObjects);
 		Mutation.setCategoryResourceComponentServiceObjects(
 			_categoryResourceComponentServiceObjects);
 		Mutation.setOptionResourceComponentServiceObjects(
@@ -73,6 +76,8 @@ public class ServletDataImpl implements ServletData {
 			_productOptionValueResourceComponentServiceObjects);
 		Mutation.setProductShippingConfigurationResourceComponentServiceObjects(
 			_productShippingConfigurationResourceComponentServiceObjects);
+		Mutation.setProductSpecificationResourceComponentServiceObjects(
+			_productSpecificationResourceComponentServiceObjects);
 		Mutation.
 			setProductSubscriptionConfigurationResourceComponentServiceObjects(
 				_productSubscriptionConfigurationResourceComponentServiceObjects);
@@ -84,11 +89,11 @@ public class ServletDataImpl implements ServletData {
 			_skuResourceComponentServiceObjects);
 		Mutation.setSpecificationResourceComponentServiceObjects(
 			_specificationResourceComponentServiceObjects);
-		Mutation.setSpecificationValueResourceComponentServiceObjects(
-			_specificationValueResourceComponentServiceObjects);
 
 		Query.setAttachmentResourceComponentServiceObjects(
 			_attachmentResourceComponentServiceObjects);
+		Query.setCatalogResourceComponentServiceObjects(
+			_catalogResourceComponentServiceObjects);
 		Query.setCategoryResourceComponentServiceObjects(
 			_categoryResourceComponentServiceObjects);
 		Query.setOptionResourceComponentServiceObjects(
@@ -107,6 +112,8 @@ public class ServletDataImpl implements ServletData {
 			_productOptionValueResourceComponentServiceObjects);
 		Query.setProductShippingConfigurationResourceComponentServiceObjects(
 			_productShippingConfigurationResourceComponentServiceObjects);
+		Query.setProductSpecificationResourceComponentServiceObjects(
+			_productSpecificationResourceComponentServiceObjects);
 		Query.
 			setProductSubscriptionConfigurationResourceComponentServiceObjects(
 				_productSubscriptionConfigurationResourceComponentServiceObjects);
@@ -118,8 +125,6 @@ public class ServletDataImpl implements ServletData {
 			_skuResourceComponentServiceObjects);
 		Query.setSpecificationResourceComponentServiceObjects(
 			_specificationResourceComponentServiceObjects);
-		Query.setSpecificationValueResourceComponentServiceObjects(
-			_specificationValueResourceComponentServiceObjects);
 	}
 
 	@Override
@@ -140,6 +145,10 @@ public class ServletDataImpl implements ServletData {
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<AttachmentResource>
 		_attachmentResourceComponentServiceObjects;
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<CatalogResource>
+		_catalogResourceComponentServiceObjects;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<CategoryResource>
@@ -178,6 +187,10 @@ public class ServletDataImpl implements ServletData {
 		_productShippingConfigurationResourceComponentServiceObjects;
 
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
+	private ComponentServiceObjects<ProductSpecificationResource>
+		_productSpecificationResourceComponentServiceObjects;
+
+	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<ProductSubscriptionConfigurationResource>
 		_productSubscriptionConfigurationResourceComponentServiceObjects;
 
@@ -196,9 +209,5 @@ public class ServletDataImpl implements ServletData {
 	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
 	private ComponentServiceObjects<SpecificationResource>
 		_specificationResourceComponentServiceObjects;
-
-	@Reference(scope = ReferenceScope.PROTOTYPE_REQUIRED)
-	private ComponentServiceObjects<SpecificationValueResource>
-		_specificationValueResourceComponentServiceObjects;
 
 }

@@ -51,10 +51,10 @@ for (int i = 0; i < categoryKeys.length; i++) {
 		>
 
 			<%
-			for (String categoryKey : filterCategoryKeys) {
-				List<FormNavigatorEntry<Object>> formNavigatorEntries = FormNavigatorEntryUtil.getFormNavigatorEntries(id, categoryKey, user, formModelBean);
+			for (int k = 0; k < filterCategoryKeys.size(); k++) {
+				List<FormNavigatorEntry<Object>> formNavigatorEntries = FormNavigatorEntryUtil.getFormNavigatorEntries(id, filterCategoryKeys.get(k), user, formModelBean);
 
-				request.setAttribute("currentTab", categoryKey);
+				request.setAttribute("currentTab", filterCategoryLabels.get(k));
 			%>
 
 				<liferay-ui:section>

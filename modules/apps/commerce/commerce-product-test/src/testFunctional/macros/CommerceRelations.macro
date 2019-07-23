@@ -1,4 +1,5 @@
 definition {
+
 	macro assignAllRelationsToProductsEntry {
 		Click(locator1 = "CommerceEntry#ADD_BUTTON");
 
@@ -6,7 +7,9 @@ definition {
 
 		CommerceItemSelector.selectAlleEntries();
 
-		Click(locator1 = "ItemSelector#ADD_BUTTON", value1 = "Add");
+		Click(
+			locator1 = "ItemSelector#ADD_BUTTON",
+			value1 = "Add");
 	}
 
 	macro assignMultipleRelationToProductsEntry {
@@ -18,7 +21,9 @@ definition {
 			CommerceItemSelector.selectEntry(entryName = "${entriesNames}");
 		}
 
-		Click(locator1 = "ItemSelector#ADD_BUTTON", value1 = "Add");
+		Click(
+			locator1 = "ItemSelector#ADD_BUTTON",
+			value1 = "Add");
 	}
 
 	macro assignSingleRelationToProductsEntry {
@@ -28,6 +33,9 @@ definition {
 
 		CommerceItemSelector.selectEntry(entryName = "${entryName}");
 
-		Click(locator1 = "ItemSelector#ADD_BUTTON", value1 = "Add");
+		Click(
+			locator1 = "ItemSelector#ADD_BUTTON",
+			value1 = "Add");
 	}
+
 }

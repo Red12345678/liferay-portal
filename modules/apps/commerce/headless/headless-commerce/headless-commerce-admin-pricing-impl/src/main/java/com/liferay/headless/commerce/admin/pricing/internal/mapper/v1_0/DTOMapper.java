@@ -17,76 +17,29 @@ package com.liferay.headless.commerce.admin.pricing.internal.mapper.v1_0;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.discount.model.CommerceDiscount;
 import com.liferay.commerce.discount.model.CommerceDiscountRule;
-import com.liferay.commerce.discount.model.CommerceDiscountUserSegmentRel;
 import com.liferay.commerce.price.list.model.CommercePriceEntry;
 import com.liferay.commerce.price.list.model.CommercePriceList;
 import com.liferay.commerce.price.list.model.CommerceTierPriceEntry;
 import com.liferay.commerce.product.model.CPInstance;
-import com.liferay.commerce.user.segment.model.CommerceUserSegmentCriterion;
-import com.liferay.commerce.user.segment.model.CommerceUserSegmentEntry;
+import com.liferay.commerce.product.model.CommerceCatalog;
+import com.liferay.commerce.product.service.CommerceCatalogLocalService;
 import com.liferay.headless.commerce.admin.pricing.dto.v1_0.Discount;
 import com.liferay.headless.commerce.admin.pricing.dto.v1_0.DiscountRule;
 import com.liferay.headless.commerce.admin.pricing.dto.v1_0.PriceEntry;
 import com.liferay.headless.commerce.admin.pricing.dto.v1_0.PriceList;
 import com.liferay.headless.commerce.admin.pricing.dto.v1_0.TierPrice;
-import com.liferay.headless.commerce.admin.pricing.dto.v1_0.UserSegment;
-import com.liferay.headless.commerce.admin.pricing.dto.v1_0.UserSegmentCriterion;
-import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Alessio Antonio Rendina
  */
 @Component(immediate = true, service = DTOMapper.class)
 public class DTOMapper {
-
-	public UserSegment[] modelsToUserSegmentArray(
-		List<CommerceDiscountUserSegmentRel> commerceDiscountUserSegmentRels) {
-
-		if (commerceDiscountUserSegmentRels == null) {
-			return null;
-		}
-
-		List<UserSegment> userSegments = new ArrayList<>();
-
-		for (CommerceDiscountUserSegmentRel commerceDiscountUserSegmentRel :
-				commerceDiscountUserSegmentRels) {
-
-			userSegments.add(modelToDTO(commerceDiscountUserSegmentRel));
-		}
-
-		Stream<UserSegment> stream = userSegments.stream();
-
-		return stream.toArray(UserSegment[]::new);
-	}
-
-	public UserSegmentCriterion[] modelsToUserSegmentCriterionArray(
-		List<CommerceUserSegmentCriterion> commerceUserSegmentCriteria) {
-
-		if (commerceUserSegmentCriteria == null) {
-			return null;
-		}
-
-		List<UserSegmentCriterion> userSegmentCriteria = new ArrayList<>();
-
-		for (CommerceUserSegmentCriterion commerceUserSegmentCriterion :
-				commerceUserSegmentCriteria) {
-
-			userSegmentCriteria.add(modelToDTO(commerceUserSegmentCriterion));
-		}
-
-		Stream<UserSegmentCriterion> stream = userSegmentCriteria.stream();
-
-		return stream.toArray(UserSegmentCriterion[]::new);
-	}
 
 	public Discount modelToDTO(CommerceDiscount commerceDiscount) {
 		Discount discount = new Discount();
@@ -95,7 +48,6 @@ public class DTOMapper {
 		discount.setCouponCode(commerceDiscount.getCouponCode());
 		discount.setDisplayDate(commerceDiscount.getDisplayDate());
 		discount.setExpirationDate(commerceDiscount.getExpirationDate());
-		discount.setGroupId(commerceDiscount.getGroupId());
 		discount.setId(commerceDiscount.getCommerceDiscountId());
 		discount.setLimitationTimes(commerceDiscount.getLimitationTimes());
 		discount.setLimitationType(commerceDiscount.getLimitationType());
@@ -110,9 +62,6 @@ public class DTOMapper {
 		discount.setTitle(commerceDiscount.getTitle());
 		discount.setUseCouponCode(commerceDiscount.isUseCouponCode());
 		discount.setUsePercentage(commerceDiscount.isUsePercentage());
-		discount.setUserSegments(
-			modelsToUserSegmentArray(
-				commerceDiscount.getCommerceDiscountUserSegmentRels()));
 
 		return discount;
 	}
@@ -127,20 +76,6 @@ public class DTOMapper {
 		discountRule.setTypeSettings(commerceDiscountRule.getTypeSettings());
 
 		return discountRule;
-	}
-
-	public UserSegment modelToDTO(
-		CommerceDiscountUserSegmentRel commerceDiscountUserSegmentRel) {
-
-		try {
-			return modelToDTO(
-				commerceDiscountUserSegmentRel.getCommerceUserSegmentEntry());
-		}
-		catch (Exception e) {
-			_log.error("Cannot instantiate UserSegment ", e);
-
-			throw new RuntimeException(e);
-		}
 	}
 
 	public PriceEntry modelToDTO(CommercePriceEntry commercePriceEntry)
@@ -173,6 +108,19 @@ public class DTOMapper {
 
 		try {
 			priceList.setActive(!commercePriceList.isInactive());
+
+			CommerceCatalog commerceCatalog =
+				_commerceCatalogLocalService.fetchCommerceCatalogByGroupId(
+					commercePriceList.getGroupId());
+
+			long catalogId = 0;
+
+			if (commerceCatalog != null) {
+				commerceCatalog.getCommerceCatalogId();
+			}
+
+			priceList.setCatalogId(catalogId);
+
 			priceList.setCommercePriceListId(
 				commercePriceList.getCommercePriceListId());
 			CommerceCurrency commerceCurrency =
@@ -184,7 +132,6 @@ public class DTOMapper {
 			priceList.setExpirationDate(commercePriceList.getExpirationDate());
 			priceList.setExternalReferenceCode(
 				commercePriceList.getExternalReferenceCode());
-			priceList.setGroupId(commercePriceList.getGroupId());
 			priceList.setId(commercePriceList.getCommercePriceListId());
 			priceList.setName(commercePriceList.getName());
 			priceList.setPriority(commercePriceList.getPriority());
@@ -221,53 +168,9 @@ public class DTOMapper {
 		return tierPrice;
 	}
 
-	public UserSegmentCriterion modelToDTO(
-		CommerceUserSegmentCriterion commerceUserSegmentCriterion) {
-
-		UserSegmentCriterion userSegmentCriterion = new UserSegmentCriterion();
-
-		if (commerceUserSegmentCriterion == null) {
-			return userSegmentCriterion;
-		}
-
-		userSegmentCriterion.setCommerceUserSegmentEntryId(
-			commerceUserSegmentCriterion.getCommerceUserSegmentEntryId());
-		userSegmentCriterion.setId(
-			commerceUserSegmentCriterion.getCommerceUserSegmentCriterionId());
-		userSegmentCriterion.setPriority(
-			commerceUserSegmentCriterion.getPriority());
-		userSegmentCriterion.setType(commerceUserSegmentCriterion.getType());
-		userSegmentCriterion.setTypeSettings(
-			commerceUserSegmentCriterion.getTypeSettings());
-
-		return userSegmentCriterion;
-	}
-
-	public UserSegment modelToDTO(
-		CommerceUserSegmentEntry commerceUserSegmentEntry) {
-
-		UserSegment userSegment = new UserSegment();
-
-		if (commerceUserSegmentEntry == null) {
-			return userSegment;
-		}
-
-		userSegment.setActive(commerceUserSegmentEntry.isActive());
-		userSegment.setCriteria(
-			modelsToUserSegmentCriterionArray(
-				commerceUserSegmentEntry.getCommerceUserSegmentCriteria()));
-		userSegment.setId(
-			commerceUserSegmentEntry.getCommerceUserSegmentEntryId());
-		userSegment.setKey(commerceUserSegmentEntry.getKey());
-		userSegment.setName(
-			LanguageUtils.getLanguageIdMap(
-				commerceUserSegmentEntry.getNameMap()));
-		userSegment.setPriority(commerceUserSegmentEntry.getPriority());
-		userSegment.setSystem(commerceUserSegmentEntry.isSystem());
-
-		return userSegment;
-	}
-
 	private static final Log _log = LogFactoryUtil.getLog(DTOMapper.class);
+
+	@Reference
+	private CommerceCatalogLocalService _commerceCatalogLocalService;
 
 }

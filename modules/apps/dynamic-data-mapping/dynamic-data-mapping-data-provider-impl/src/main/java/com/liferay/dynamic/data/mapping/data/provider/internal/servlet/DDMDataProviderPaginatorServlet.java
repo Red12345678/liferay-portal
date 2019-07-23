@@ -72,11 +72,9 @@ public class DDMDataProviderPaginatorServlet extends HttpServlet {
 		Iterator<String> iterator = inputParametersJSONObject.keys();
 
 		iterator.forEachRemaining(
-			inputParameterName -> {
-				ddmDataProviderRequest.queryString(
-					inputParameterName,
-					inputParametersJSONObject.getString(inputParameterName));
-			});
+			inputParameterName -> ddmDataProviderRequest.queryString(
+				inputParameterName,
+				inputParametersJSONObject.getString(inputParameterName)));
 	}
 
 	@Override

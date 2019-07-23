@@ -28,17 +28,16 @@ import java.util.List;
  * This class is used by SOAP remote services, specifically {@link com.liferay.commerce.currency.service.http.CommerceCurrencyServiceSoap}.
  *
  * @author Andrea Di Giorgi
- * @see com.liferay.commerce.currency.service.http.CommerceCurrencyServiceSoap
  * @generated
  */
 @ProviderType
 public class CommerceCurrencySoap implements Serializable {
+
 	public static CommerceCurrencySoap toSoapModel(CommerceCurrency model) {
 		CommerceCurrencySoap soapModel = new CommerceCurrencySoap();
 
 		soapModel.setUuid(model.getUuid());
 		soapModel.setCommerceCurrencyId(model.getCommerceCurrencyId());
-		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setUserName(model.getUserName());
@@ -59,8 +58,11 @@ public class CommerceCurrencySoap implements Serializable {
 		return soapModel;
 	}
 
-	public static CommerceCurrencySoap[] toSoapModels(CommerceCurrency[] models) {
-		CommerceCurrencySoap[] soapModels = new CommerceCurrencySoap[models.length];
+	public static CommerceCurrencySoap[] toSoapModels(
+		CommerceCurrency[] models) {
+
+		CommerceCurrencySoap[] soapModels =
+			new CommerceCurrencySoap[models.length];
 
 		for (int i = 0; i < models.length; i++) {
 			soapModels[i] = toSoapModel(models[i]);
@@ -71,10 +73,12 @@ public class CommerceCurrencySoap implements Serializable {
 
 	public static CommerceCurrencySoap[][] toSoapModels(
 		CommerceCurrency[][] models) {
+
 		CommerceCurrencySoap[][] soapModels = null;
 
 		if (models.length > 0) {
-			soapModels = new CommerceCurrencySoap[models.length][models[0].length];
+			soapModels =
+				new CommerceCurrencySoap[models.length][models[0].length];
 		}
 		else {
 			soapModels = new CommerceCurrencySoap[0][0];
@@ -89,7 +93,9 @@ public class CommerceCurrencySoap implements Serializable {
 
 	public static CommerceCurrencySoap[] toSoapModels(
 		List<CommerceCurrency> models) {
-		List<CommerceCurrencySoap> soapModels = new ArrayList<CommerceCurrencySoap>(models.size());
+
+		List<CommerceCurrencySoap> soapModels =
+			new ArrayList<CommerceCurrencySoap>(models.size());
 
 		for (CommerceCurrency model : models) {
 			soapModels.add(toSoapModel(model));
@@ -123,14 +129,6 @@ public class CommerceCurrencySoap implements Serializable {
 
 	public void setCommerceCurrencyId(long commerceCurrencyId) {
 		_commerceCurrencyId = commerceCurrencyId;
-	}
-
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	public void setGroupId(long groupId) {
-		_groupId = groupId;
 	}
 
 	public long getCompanyId() {
@@ -271,7 +269,6 @@ public class CommerceCurrencySoap implements Serializable {
 
 	private String _uuid;
 	private long _commerceCurrencyId;
-	private long _groupId;
 	private long _companyId;
 	private long _userId;
 	private String _userName;
@@ -288,4 +285,5 @@ public class CommerceCurrencySoap implements Serializable {
 	private double _priority;
 	private boolean _active;
 	private Date _lastPublishDate;
+
 }

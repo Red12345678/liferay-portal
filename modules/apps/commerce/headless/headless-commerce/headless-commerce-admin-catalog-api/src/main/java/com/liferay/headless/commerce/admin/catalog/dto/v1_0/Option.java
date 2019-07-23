@@ -53,8 +53,8 @@ public class Option {
 
 	public static enum FieldType {
 
-		SELECT("select"), RADIO("radio"), DATE("date"), CHECKBOX("checkbox"),
-		CHECKBOX_MULTIPLE("checkbox_multiple"), NUMERIC("numeric");
+		CHECKBOX("checkbox"), CHECKBOX_MULTIPLE("checkbox_multiple"),
+		DATE("date"), NUMERIC("numeric"), RADIO("radio"), SELECT("select");
 
 		@JsonCreator
 		public static FieldType create(String value) {
@@ -84,6 +84,34 @@ public class Option {
 		private final String _value;
 
 	}
+
+	@Schema
+	public Long getCatalogId() {
+		return catalogId;
+	}
+
+	public void setCatalogId(Long catalogId) {
+		this.catalogId = catalogId;
+	}
+
+	@JsonIgnore
+	public void setCatalogId(
+		UnsafeSupplier<Long, Exception> catalogIdUnsafeSupplier) {
+
+		try {
+			catalogId = catalogIdUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected Long catalogId;
 
 	@Schema
 	public Map<String, String> getDescription() {
@@ -347,34 +375,6 @@ public class Option {
 	protected Boolean required;
 
 	@Schema
-	public Long getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(Long siteId) {
-		this.siteId = siteId;
-	}
-
-	@JsonIgnore
-	public void setSiteId(
-		UnsafeSupplier<Long, Exception> siteIdUnsafeSupplier) {
-
-		try {
-			siteId = siteIdUnsafeSupplier.get();
-		}
-		catch (RuntimeException re) {
-			throw re;
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Long siteId;
-
-	@Schema
 	public Boolean getSkuContributor() {
 		return skuContributor;
 	}
@@ -456,6 +456,16 @@ public class Option {
 		StringBundler sb = new StringBundler();
 
 		sb.append("{");
+
+		if (catalogId != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"catalogId\": ");
+
+			sb.append(catalogId);
+		}
 
 		if (description != null) {
 			if (sb.length() > 1) {
@@ -557,16 +567,6 @@ public class Option {
 			sb.append("\"required\": ");
 
 			sb.append(required);
-		}
-
-		if (siteId != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"siteId\": ");
-
-			sb.append(siteId);
 		}
 
 		if (skuContributor != null) {

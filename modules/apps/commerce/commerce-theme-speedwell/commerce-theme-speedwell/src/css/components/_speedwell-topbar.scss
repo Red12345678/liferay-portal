@@ -1,0 +1,34 @@
+.speedwell-topbar {
+  align-items: center;
+  background-color: #fff;
+  display: grid;
+  grid-template-columns: 1fr 200px 1fr;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: $liferay-topbar-size;
+  z-index: 100;
+
+  @media (max-width: 767px) {
+    top: 48px;
+  }
+
+  &__menu {
+    justify-content: left;
+  }
+
+  &__logo {
+    justify-content: center;
+    text-align: center
+  }
+
+  &__actions {
+    display: inline-grid;
+    grid-auto-flow: column;
+    justify-content: right;
+  }
+
+  &__search {
+    // position: absolute;
+  }
+}

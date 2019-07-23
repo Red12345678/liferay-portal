@@ -19,14 +19,17 @@ import com.liferay.dynamic.data.mapping.io.DDMFormJSONDeserializer;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMStructure;
 import com.liferay.dynamic.data.mapping.model.DDMStructureConstants;
+import com.liferay.dynamic.data.mapping.model.DDMTemplate;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.dynamic.data.mapping.test.util.DDMStructureTestHelper;
 import com.liferay.dynamic.data.mapping.test.util.DDMTemplateTestUtil;
+import com.liferay.headless.delivery.client.dto.v1_0.ContentField;
 import com.liferay.headless.delivery.client.dto.v1_0.StructuredContent;
+import com.liferay.headless.delivery.client.dto.v1_0.Value;
+import com.liferay.headless.delivery.client.resource.v1_0.StructuredContentResource;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalFolder;
 import com.liferay.journal.test.util.JournalTestUtil;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
@@ -67,6 +70,9 @@ public class StructuredContentResourceTest
 		_ddmStructure = _addDDMStructure(testGroup);
 		_irrelevantDDMStructure = _addDDMStructure(irrelevantGroup);
 
+		_ddmTemplate = _addDDMTemplate(_ddmStructure);
+		_addDDMTemplate(_irrelevantDDMStructure);
+
 		_journalFolder = JournalTestUtil.addFolder(
 			testGroup.getGroupId(), RandomTestUtil.randomString());
 		_irrelevantJournalFolder = JournalTestUtil.addFolder(
@@ -89,31 +95,56 @@ public class StructuredContentResourceTest
 	public void testGetSiteStructuredContentWithDifferentLocale()
 		throws Exception {
 
-		StructuredContent structuredContent = invokePostSiteStructuredContent(
-			testGroup.getGroupId(), randomStructuredContent());
+		StructuredContent structuredContent =
+			structuredContentResource.postSiteStructuredContent(
+				testGroup.getGroupId(), randomStructuredContent());
 
 		String title = structuredContent.getTitle();
 
-		testLocale = LocaleUtil.FRANCE;
+		StructuredContentResource.Builder builder =
+			StructuredContentResource.builder();
+
+		StructuredContentResource frenchStructuredContentResource =
+			builder.locale(
+				LocaleUtil.FRANCE
+			).build();
 
 		String frenchTitle = RandomTestUtil.randomString();
 
 		structuredContent.setTitle(frenchTitle);
 
-		invokePutStructuredContent(
+		frenchStructuredContentResource.putStructuredContent(
 			structuredContent.getId(), structuredContent);
 
-		structuredContent = invokeGetStructuredContent(
-			structuredContent.getId());
+		structuredContent =
+			frenchStructuredContentResource.getStructuredContent(
+				structuredContent.getId());
 
 		Assert.assertEquals(frenchTitle, structuredContent.getTitle());
 
-		testLocale = LocaleUtil.getDefault();
-
-		structuredContent = invokeGetStructuredContent(
+		structuredContent = structuredContentResource.getStructuredContent(
 			structuredContent.getId());
 
 		Assert.assertEquals(title, structuredContent.getTitle());
+	}
+
+	@Override
+	@Test
+	public void testGetStructuredContentRenderedContentTemplate()
+		throws Exception {
+
+		StructuredContent structuredContent =
+			testGetSiteStructuredContentByKey_addStructuredContent();
+
+		ContentField[] contentFields = structuredContent.getContentFields();
+
+		Value value = contentFields[0].getValue();
+
+		Assert.assertEquals(
+			"<div>" + value.getData() + "</div>",
+			structuredContentResource.
+				getStructuredContentRenderedContentTemplate(
+					structuredContent.getId(), _ddmTemplate.getTemplateId()));
 	}
 
 	@Override
@@ -122,7 +153,14 @@ public class StructuredContentResourceTest
 	}
 
 	@Override
-	protected StructuredContent randomIrrelevantStructuredContent() {
+	protected String[] getIgnoredEntityFieldNames() {
+		return new String[] {"contentStructureId", "creatorId"};
+	}
+
+	@Override
+	protected StructuredContent randomIrrelevantStructuredContent()
+		throws Exception {
+
 		StructuredContent structuredContent = randomStructuredContent();
 
 		structuredContent.setContentStructureId(
@@ -132,9 +170,22 @@ public class StructuredContentResourceTest
 	}
 
 	@Override
-	protected StructuredContent randomStructuredContent() {
+	protected StructuredContent randomStructuredContent() throws Exception {
 		StructuredContent structuredContent = super.randomStructuredContent();
 
+		structuredContent.setContentFields(
+			new ContentField[] {
+				new ContentField() {
+					{
+						name = "MyText";
+						value = new Value() {
+							{
+								data = RandomTestUtil.randomString(10);
+							}
+						};
+					}
+				}
+			});
 		structuredContent.setContentStructureId(_ddmStructure.getStructureId());
 
 		return structuredContent;
@@ -146,7 +197,7 @@ public class StructuredContentResourceTest
 				Long contentStructureId, StructuredContent structuredContent)
 		throws Exception {
 
-		return invokePostSiteStructuredContent(
+		return structuredContentResource.postSiteStructuredContent(
 			testGroup.getGroupId(), structuredContent);
 	}
 
@@ -177,22 +228,24 @@ public class StructuredContentResourceTest
 			new DDMStructureTestHelper(
 				PortalUtil.getClassNameId(JournalArticle.class), group);
 
-		DDMStructure ddmStructure = ddmStructureTestHelper.addStructure(
+		return ddmStructureTestHelper.addStructure(
 			PortalUtil.getClassNameId(JournalArticle.class),
 			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
 			_deserialize(_read("test-structured-content-structure.json")),
 			StorageType.JSON.getValue(), DDMStructureConstants.TYPE_DEFAULT);
+	}
 
-		DDMTemplateTestUtil.addTemplate(
+	private DDMTemplate _addDDMTemplate(DDMStructure ddmStructure)
+		throws Exception {
+
+		return DDMTemplateTestUtil.addTemplate(
 			ddmStructure.getGroupId(), ddmStructure.getStructureId(),
 			PortalUtil.getClassNameId(JournalArticle.class),
 			TemplateConstants.LANG_TYPE_VM,
 			_read("test-structured-content-template.xsl"), LocaleUtil.US);
-
-		return ddmStructure;
 	}
 
-	private DDMForm _deserialize(String content) throws PortalException {
+	private DDMForm _deserialize(String content) throws Exception {
 		return _ddmFormJSONDeserializer.deserialize(content);
 	}
 
@@ -207,6 +260,7 @@ public class StructuredContentResourceTest
 
 	private DDMFormJSONDeserializer _ddmFormJSONDeserializer;
 	private DDMStructure _ddmStructure;
+	private DDMTemplate _ddmTemplate;
 	private DDMStructure _irrelevantDDMStructure;
 	private JournalFolder _irrelevantJournalFolder;
 	private JournalFolder _journalFolder;

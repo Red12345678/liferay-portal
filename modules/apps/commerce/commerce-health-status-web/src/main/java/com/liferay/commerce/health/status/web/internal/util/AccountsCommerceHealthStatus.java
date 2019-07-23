@@ -17,14 +17,12 @@ package com.liferay.commerce.health.status.web.internal.util;
 import com.liferay.commerce.account.constants.CommerceAccountConstants;
 import com.liferay.commerce.account.util.CommerceAccountRoleHelper;
 import com.liferay.commerce.health.status.CommerceHealthStatus;
-import com.liferay.commerce.health.status.web.internal.constants.CommerceHealthStatusConstants;
+import com.liferay.commerce.health.status.constants.CommerceHealthStatusConstants;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
@@ -102,11 +100,17 @@ public class AccountsCommerceHealthStatus implements CommerceHealthStatus {
 	}
 
 	@Override
-	public boolean isFixed(long groupId) throws PortalException {
-		Group group = _groupLocalService.getGroup(groupId);
+	public int getType() {
+		return CommerceHealthStatusConstants.
+			COMMERCE_HEALTH_STATUS_TYPE_VIRTUAL_INSTANCE;
+	}
+
+	@Override
+	public boolean isFixed(long companyId, long groupId)
+		throws PortalException {
 
 		Role role = _roleLocalService.fetchRole(
-			group.getCompanyId(),
+			companyId,
 			CommerceAccountConstants.ACCOUNT_ADMINISTRATOR_ROLE_NAME);
 
 		if (role != null) {
@@ -125,9 +129,6 @@ public class AccountsCommerceHealthStatus implements CommerceHealthStatus {
 
 	@Reference
 	private CommerceAccountRoleHelper _commerceAccountRoleHelper;
-
-	@Reference
-	private GroupLocalService _groupLocalService;
 
 	@Reference
 	private RoleLocalService _roleLocalService;

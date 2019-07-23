@@ -14,6 +14,7 @@
 
 package com.liferay.portal.comment.display.context.util;
 
+import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -76,6 +77,10 @@ public class DiscussionTaglibHelper {
 		return _redirect;
 	}
 
+	public String getSubscriptionClassName() {
+		return _CLASS_NAME + StringPool.UNDERLINE + getClassName();
+	}
+
 	public long getUserId() {
 		if (_userId == null) {
 			_userId = GetterUtil.getLong(_getAttribute("userId"));
@@ -126,6 +131,9 @@ public class DiscussionTaglibHelper {
 
 		return (String)request.getAttribute(_PREFIX + name);
 	}
+
+	private static final String _CLASS_NAME =
+		"com.liferay.message.boards.model.MBDiscussion";
 
 	private static final String _LEGACY_PREFIX = "liferay-ui:discussion:";
 

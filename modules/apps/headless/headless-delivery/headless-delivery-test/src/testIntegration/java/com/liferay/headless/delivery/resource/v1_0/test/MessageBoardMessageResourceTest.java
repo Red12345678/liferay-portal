@@ -57,12 +57,18 @@ public class MessageBoardMessageResourceTest
 	}
 
 	@Override
+	protected String[] getIgnoredEntityFieldNames() {
+		return new String[] {"creatorId", "messageBoardSectionId"};
+	}
+
+	@Override
 	protected MessageBoardMessage
 			testDeleteMessageBoardMessage_addMessageBoardMessage()
 		throws Exception {
 
-		return invokePostMessageBoardThreadMessageBoardMessage(
-			_mbThread.getThreadId(), randomMessageBoardMessage());
+		return messageBoardMessageResource.
+			postMessageBoardThreadMessageBoardMessage(
+				_mbThread.getThreadId(), randomMessageBoardMessage());
 	}
 
 	@Override
@@ -70,8 +76,9 @@ public class MessageBoardMessageResourceTest
 			testDeleteMessageBoardMessageMyRating_addMessageBoardMessage()
 		throws Exception {
 
-		return invokePostMessageBoardThreadMessageBoardMessage(
-			_mbThread.getThreadId(), randomMessageBoardMessage());
+		return messageBoardMessageResource.
+			postMessageBoardThreadMessageBoardMessage(
+				_mbThread.getThreadId(), randomMessageBoardMessage());
 	}
 
 	@Override
@@ -79,8 +86,9 @@ public class MessageBoardMessageResourceTest
 			testGetMessageBoardMessage_addMessageBoardMessage()
 		throws Exception {
 
-		return invokePostMessageBoardThreadMessageBoardMessage(
-			_mbThread.getThreadId(), randomMessageBoardMessage());
+		return messageBoardMessageResource.
+			postMessageBoardThreadMessageBoardMessage(
+				_mbThread.getThreadId(), randomMessageBoardMessage());
 	}
 
 	@Override
@@ -102,9 +110,10 @@ public class MessageBoardMessageResourceTest
 			testPatchMessageBoardMessage_addMessageBoardMessage()
 		throws Exception {
 
-		return invokePostMessageBoardThreadMessageBoardMessage(
-			testGetMessageBoardThreadMessageBoardMessagesPage_getMessageBoardThreadId(),
-			randomMessageBoardMessage());
+		return messageBoardMessageResource.
+			postMessageBoardThreadMessageBoardMessage(
+				testGetMessageBoardThreadMessageBoardMessagesPage_getMessageBoardThreadId(),
+				randomMessageBoardMessage());
 	}
 
 	@Override
@@ -112,9 +121,10 @@ public class MessageBoardMessageResourceTest
 			testPutMessageBoardMessage_addMessageBoardMessage()
 		throws Exception {
 
-		return invokePostMessageBoardThreadMessageBoardMessage(
-			testGetMessageBoardThreadMessageBoardMessagesPage_getMessageBoardThreadId(),
-			randomMessageBoardMessage());
+		return messageBoardMessageResource.
+			postMessageBoardThreadMessageBoardMessage(
+				testGetMessageBoardThreadMessageBoardMessagesPage_getMessageBoardThreadId(),
+				randomMessageBoardMessage());
 	}
 
 	private MBThread _mbThread;

@@ -41,7 +41,7 @@
 </tr>
 <tr>
 	<td>LIST_GROUP_ITEM_ROW_ENTRY</td>
-	<td>xpath=(//li[contains(@class,'list-group-item')])[${key_index}]</td>
+	<td>xpath=(//li[contains(@class,'layout-drag-item')])[${key_index}]</td>
 	<td></td>
 </tr>
 <tr>

@@ -1,4 +1,5 @@
 definition {
+
 	macro gotoContact {
 		Navigator.gotoNavUnderline(navUnderline = "Contact");
 	}
@@ -54,9 +55,9 @@ definition {
 
 		AssertClick(
 			locator1 = "UsersAndOrganizations#USER_TABLE_SCREEN_NAME",
-			value1 = "${userScreenName}"
-		);
+			value1 = "${userScreenName}");
 
 		Pause(locator1 = "1000");
 	}
+
 }

@@ -777,6 +777,10 @@ public interface JournalArticleLocalService
 	public JournalArticle fetchArticleByUrlTitle(long groupId, String urlTitle);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public JournalArticle fetchArticleByUrlTitle(
+		long groupId, String urlTitle, double version);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public JournalArticle fetchDisplayArticle(long groupId, String articleId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

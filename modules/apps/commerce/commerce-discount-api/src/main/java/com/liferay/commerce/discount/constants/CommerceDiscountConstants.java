@@ -15,10 +15,30 @@
 package com.liferay.commerce.discount.constants;
 
 /**
- * @author Alessio Antonio Rendina
+ * @author Andrea Di Giorgi
  */
 public class CommerceDiscountConstants {
 
-	public static final String RESOURCE_NAME = "com.liferay.commerce.discount";
+	public static final String LIMITATION_TYPE_LIMITED = "limited";
+
+	public static final String LIMITATION_TYPE_LIMITED_FOR_USERS =
+		"limited-for-users";
+
+	public static final String LIMITATION_TYPE_UNLIMITED = "unlimited";
+
+	public static final String[] LIMITATION_TYPES = {
+		LIMITATION_TYPE_UNLIMITED, LIMITATION_TYPE_LIMITED,
+		LIMITATION_TYPE_LIMITED_FOR_USERS
+	};
+
+	public static final String TARGET_CATEGORIES = "categories";
+
+	public static final String TARGET_PRODUCT = "product";
+
+	public static final String TARGET_SHIPPING = "shipping";
+
+	public static final String TARGET_SUBTOTAL = "subtotal";
+
+	public static final String TARGET_TOTAL = "total";
 
 }

@@ -975,10 +975,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 			autoScreenName, screenName, emailAddress, openId, firstName,
 			middleName, lastName, organizationIds, locale);
 
-		if (!autoPassword) {
-			if (Validator.isNull(password1) || Validator.isNull(password2)) {
-				throw new UserPasswordException.MustNotBeNull(userId);
-			}
+		if (!autoPassword &&
+			(Validator.isNull(password1) || Validator.isNull(password2))) {
+
+			throw new UserPasswordException.MustNotBeNull(userId);
 		}
 
 		if (autoScreenName) {
@@ -1572,10 +1572,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 				}
 			}
 			else {
-				if (!PropsValues.PORTAL_JAAS_STRICT_PASSWORD) {
-					if (userPassword.equals(encPassword)) {
-						return true;
-					}
+				if (!PropsValues.PORTAL_JAAS_STRICT_PASSWORD &&
+					userPassword.equals(encPassword)) {
+
+					return true;
 				}
 
 				userPassword = PasswordEncryptorUtil.encrypt(
@@ -4636,13 +4636,10 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 				autoScreenName, screenName, emailAddress, openId, firstName,
 				middleName, lastName, null, locale);
 
-			if (!autoPassword) {
-				if (Validator.isNull(password1) ||
-					Validator.isNull(password2)) {
+			if (!autoPassword &&
+				(Validator.isNull(password1) || Validator.isNull(password2))) {
 
-					throw new UserPasswordException.MustNotBeNull(
-						user.getUserId());
-				}
+				throw new UserPasswordException.MustNotBeNull(user.getUserId());
 			}
 
 			if (autoScreenName) {
@@ -6142,13 +6139,12 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		// Check if user should be forced to change password on first login
 
 		if (passwordPolicy.isChangeable() &&
-			passwordPolicy.isChangeRequired()) {
+			passwordPolicy.isChangeRequired() &&
+			(user.getLastLoginDate() == null)) {
 
-			if (user.getLastLoginDate() == null) {
-				user.setPasswordReset(true);
+			user.setPasswordReset(true);
 
-				user = userPersistence.update(user);
-			}
+			user = userPersistence.update(user);
 		}
 
 		return user;
@@ -6838,14 +6834,12 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		if (!user.isDefaultUser()) {
 			if (Validator.isNotNull(emailAddress) &&
 				!StringUtil.equalsIgnoreCase(
-					user.getEmailAddress(), emailAddress)) {
+					user.getEmailAddress(), emailAddress) &&
+				(userPersistence.fetchByC_EA(
+					user.getCompanyId(), emailAddress) != null)) {
 
-				if (userPersistence.fetchByC_EA(
-						user.getCompanyId(), emailAddress) != null) {
-
-					throw new UserEmailAddressException.MustNotBeDuplicate(
-						user.getCompanyId(), userId, emailAddress);
-				}
+				throw new UserEmailAddressException.MustNotBeDuplicate(
+					user.getCompanyId(), userId, emailAddress);
 			}
 
 			validateFullName(
@@ -6926,14 +6920,12 @@ public class UserLocalServiceImpl extends UserLocalServiceBaseImpl {
 		validateEmailAddress(user.getCompanyId(), emailAddress2);
 
 		if (!StringUtil.equalsIgnoreCase(
-				emailAddress1, user.getEmailAddress())) {
+				emailAddress1, user.getEmailAddress()) &&
+			(userPersistence.fetchByC_EA(user.getCompanyId(), emailAddress1) !=
+				null)) {
 
-			if (userPersistence.fetchByC_EA(
-					user.getCompanyId(), emailAddress1) != null) {
-
-				throw new UserEmailAddressException.MustNotBeDuplicate(
-					user.getCompanyId(), user.getUserId(), emailAddress1);
-			}
+			throw new UserEmailAddressException.MustNotBeDuplicate(
+				user.getCompanyId(), user.getUserId(), emailAddress1);
 		}
 	}
 

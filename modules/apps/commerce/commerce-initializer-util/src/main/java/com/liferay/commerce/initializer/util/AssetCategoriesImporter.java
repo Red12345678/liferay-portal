@@ -24,7 +24,9 @@ import com.liferay.commerce.product.model.CPFriendlyURLEntry;
 import com.liferay.commerce.product.service.CPFriendlyURLEntryLocalService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.Role;
 import com.liferay.portal.kernel.model.RoleConstants;
@@ -34,6 +36,7 @@ import com.liferay.portal.kernel.service.ResourcePermissionLocalService;
 import com.liferay.portal.kernel.service.RoleLocalService;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
@@ -86,7 +89,12 @@ public class AssetCategoriesImporter {
 		AssetVocabulary assetVocabulary = _addAssetVocabulary(
 			assetVocabularyName, serviceContext);
 
+		updateAssetVocabularyPermissions(assetVocabulary);
+
 		for (int i = 0; i < jsonArray.length(); i++) {
+
+			// Asset category
+
 			String title = null;
 			String imageFileName = null;
 
@@ -105,9 +113,81 @@ public class AssetCategoriesImporter {
 				imageDependenciesPath, imageFileName, serviceContext);
 
 			assetCategories.add(assetCategory);
+
+			// Permissions
+
+			if (jsonObject == null) {
+				continue;
+			}
+
+			JSONArray permissionsJSONArray = jsonObject.getJSONArray(
+				"Permissions");
+
+			if ((permissionsJSONArray != null) &&
+				(permissionsJSONArray.length() > 0)) {
+
+				updatePermissions(
+					assetCategory.getCompanyId(),
+					assetCategory.getModelClassName(),
+					String.valueOf(assetCategory.getCategoryId()),
+					permissionsJSONArray);
+			}
 		}
 
 		return assetCategories;
+	}
+
+	protected void updateAssetVocabularyPermissions(
+			AssetVocabulary assetVocabulary)
+		throws PortalException {
+
+		JSONArray jsonArray = _jsonFactory.createJSONArray();
+
+		JSONObject jsonObject = _jsonFactory.createJSONObject();
+
+		jsonObject.put("RoleName", "User");
+		jsonObject.put("Scope", 4);
+
+		JSONArray actionIdsJSONArray = _jsonFactory.createJSONArray();
+
+		actionIdsJSONArray.put("VIEW");
+
+		jsonObject.put("ActionIds", actionIdsJSONArray);
+
+		jsonArray.put(jsonObject);
+
+		updatePermissions(
+			assetVocabulary.getCompanyId(), assetVocabulary.getModelClassName(),
+			String.valueOf(assetVocabulary.getVocabularyId()), jsonArray);
+	}
+
+	protected void updatePermissions(
+			long companyId, String name, String primKey, JSONArray jsonArray)
+		throws PortalException {
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+			int scope = jsonObject.getInt("Scope");
+
+			String roleName = jsonObject.getString("RoleName");
+
+			Role role = _roleLocalService.getRole(companyId, roleName);
+
+			String[] actionIds = new String[0];
+
+			JSONArray actionIdsJSONArray = jsonObject.getJSONArray("ActionIds");
+
+			if (actionIdsJSONArray != null) {
+				for (int j = 0; j < actionIdsJSONArray.length(); j++) {
+					actionIds = ArrayUtil.append(
+						actionIds, actionIdsJSONArray.getString(j));
+				}
+			}
+
+			_resourcePermissionLocalService.setResourcePermissions(
+				companyId, name, scope, primKey, role.getRoleId(), actionIds);
+		}
 	}
 
 	private AssetCategory _addAssetCategory(
@@ -139,7 +219,7 @@ public class AssetCategoriesImporter {
 
 		List<CPFriendlyURLEntry> cpFriendlyURLEntries =
 			_cpFriendlyURLEntryLocalService.getCPFriendlyURLEntries(
-				serviceContext.getScopeGroupId(), classNameId,
+				GroupConstants.DEFAULT_LIVE_GROUP_ID, classNameId,
 				assetCategory.getCategoryId());
 
 		if (cpFriendlyURLEntries.isEmpty()) {
@@ -147,9 +227,9 @@ public class AssetCategoriesImporter {
 				assetCategory);
 
 			_cpFriendlyURLEntryLocalService.addCPFriendlyURLEntries(
-				serviceContext.getScopeGroupId(), serviceContext.getCompanyId(),
-				AssetCategory.class, assetCategory.getCategoryId(),
-				urlTitleMap);
+				GroupConstants.DEFAULT_LIVE_GROUP_ID,
+				serviceContext.getCompanyId(), AssetCategory.class,
+				assetCategory.getCategoryId(), urlTitleMap);
 		}
 
 		// Commerce product attachment file entry
@@ -212,7 +292,7 @@ public class AssetCategoriesImporter {
 			String languageId = LocaleUtil.toLanguageId(titleEntry.getKey());
 
 			String urlTitle = _cpFriendlyURLEntryLocalService.buildUrlTitle(
-				assetCategory.getGroupId(), classNameId,
+				GroupConstants.DEFAULT_LIVE_GROUP_ID, classNameId,
 				assetCategory.getCategoryId(), languageId,
 				titleEntry.getValue());
 
@@ -233,6 +313,9 @@ public class AssetCategoriesImporter {
 
 	@Reference
 	private CPFriendlyURLEntryLocalService _cpFriendlyURLEntryLocalService;
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private Portal _portal;

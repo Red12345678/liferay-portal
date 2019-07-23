@@ -289,6 +289,8 @@ public class LayoutsAdminDisplayContext {
 			"privateLayout", String.valueOf(isPrivateLayout()));
 		copyLayoutURL.setParameter(
 			"layoutId", String.valueOf(layout.getLayoutId()));
+		copyLayoutURL.setParameter(
+			"explicitCreation", String.valueOf(Boolean.TRUE));
 
 		return copyLayoutURL.toString();
 	}

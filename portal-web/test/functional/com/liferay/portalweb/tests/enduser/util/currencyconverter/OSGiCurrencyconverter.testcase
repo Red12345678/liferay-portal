@@ -1,5 +1,6 @@
 @component-name = "portal-util-misc"
 definition {
+
 	property osgi.app.includes = "currency-converter";
 	property portal.release = "true";
 	property portal.upstream = "true";
@@ -13,8 +14,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Build",
 			panel = "Site Administration",
-			portlet = "Pages"
-		);
+			portlet = "Pages");
 
 		SitePages.addPublicPage(pageName = "Currency Converter Page");
 
@@ -40,7 +40,7 @@ definition {
 			currencyDataTo = "EUR",
 			currencyFrom = "USD",
 			currencyTo = "EUR",
-			currencyValue = "4"
-		);
+			currencyValue = "4");
 	}
+
 }

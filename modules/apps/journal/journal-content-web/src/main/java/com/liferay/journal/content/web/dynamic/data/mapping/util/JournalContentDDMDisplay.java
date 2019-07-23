@@ -22,6 +22,8 @@ import com.liferay.journal.constants.JournalContentPortletKeys;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Locale;
 import java.util.Set;
@@ -72,9 +74,16 @@ public class JournalContentDDMDisplay extends BaseDDMDisplay {
 			long classPK, long resourceClassNameId, String portletResource)
 		throws Exception {
 
-		return _ddmDisplay.getEditTemplateBackURL(
-			liferayPortletRequest, liferayPortletResponse, classNameId, classPK,
-			resourceClassNameId, portletResource);
+		String redirect = ParamUtil.getString(
+			liferayPortletRequest, "redirect");
+
+		if (Validator.isNull(redirect)) {
+			redirect = _ddmDisplay.getEditTemplateBackURL(
+				liferayPortletRequest, liferayPortletResponse, classNameId,
+				classPK, resourceClassNameId, portletResource);
+		}
+
+		return redirect;
 	}
 
 	@Override

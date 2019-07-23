@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Image;
 import com.liferay.portal.kernel.model.Layout;
+import com.liferay.portal.kernel.model.LayoutRevision;
 import com.liferay.portal.kernel.model.LayoutSet;
 import com.liferay.portal.kernel.model.LayoutSetBranch;
 import com.liferay.portal.kernel.model.LayoutSetPrototype;
@@ -45,6 +46,7 @@ import com.liferay.portal.kernel.model.adapter.ModelAdapterUtil;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.service.ImageLocalService;
 import com.liferay.portal.kernel.service.LayoutLocalService;
+import com.liferay.portal.kernel.service.LayoutRevisionLocalService;
 import com.liferay.portal.kernel.service.LayoutSetBranchLocalService;
 import com.liferay.portal.kernel.service.LayoutSetLocalService;
 import com.liferay.portal.kernel.service.LayoutSetPrototypeLocalService;
@@ -59,6 +61,7 @@ import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ThemeFactoryUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.sites.kernel.util.Sites;
 import com.liferay.sites.kernel.util.SitesUtil;
@@ -187,7 +190,21 @@ public class StagedLayoutSetStagedModelDataHandler
 			if (!sourceLayoutUuids.contains(layout.getUuid()) &&
 				!layoutPlids.containsValue(layout.getPlid())) {
 
+				String layoutUUID = layout.getUuid();
+				long stagingGroupID = portletDataContext.getSourceGroupId();
+
 				try {
+					Layout stagedLayout =
+						_layoutLocalService.fetchLayoutByUuidAndGroupId(
+							layoutUUID, stagingGroupID,
+							!layout.isPublicLayout());
+
+					if ((stagedLayout != null) &&
+						_isLayoutRevisionInReview(stagedLayout)) {
+
+						continue;
+					}
+
 					_layoutLocalService.deleteLayout(
 						layout, false, serviceContext);
 				}
@@ -787,6 +804,23 @@ public class StagedLayoutSetStagedModelDataHandler
 		}
 	}
 
+	private boolean _isLayoutRevisionInReview(Layout stagedLayout) {
+		List<LayoutRevision> layoutRevisions =
+			_layoutRevisionLocalService.getLayoutRevisions(
+				stagedLayout.getPlid());
+
+		Stream<LayoutRevision> layoutRevisionStream = layoutRevisions.stream();
+
+		if (layoutRevisionStream.anyMatch(
+				revision ->
+					revision.getStatus() == WorkflowConstants.STATUS_PENDING)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		StagedLayoutSetStagedModelDataHandler.class);
 
@@ -805,6 +839,9 @@ public class StagedLayoutSetStagedModelDataHandler
 
 	@Reference
 	private LayoutLocalService _layoutLocalService;
+
+	@Reference
+	private LayoutRevisionLocalService _layoutRevisionLocalService;
 
 	@Reference
 	private LayoutSetBranchLocalService _layoutSetBranchLocalService;

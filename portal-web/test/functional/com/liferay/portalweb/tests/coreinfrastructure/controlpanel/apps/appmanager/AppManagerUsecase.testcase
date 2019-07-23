@@ -1,5 +1,6 @@
 @component-name = "portal-plugins-osgi"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "App Manager";
@@ -20,15 +21,15 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Apps",
 			panel = "Control Panel",
-			portlet = "App Manager"
-		);
+			portlet = "App Manager");
 
 		AppManager.uploadAppCP(
 			appName = "${appName}",
-			warFileName = "${appName}-7.1.0.1.war"
-		);
+			warFileName = "${appName}-7.1.0.1.war");
 
-		AppManager.viewAppCP(appName = "${appName}", appStatus = "Active");
+		AppManager.viewAppCP(
+			appName = "${appName}",
+			appStatus = "Active");
 
 		AppManager.uninstallAppCP(appName = "${appName}");
 
@@ -42,8 +43,7 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Apps",
 			panel = "Control Panel",
-			portlet = "App Manager"
-		);
+			portlet = "App Manager");
 
 		AppManager.selectAppCP(appName = "Independent Modules");
 
@@ -51,4 +51,5 @@ definition {
 
 		AppManager.viewNoAppCP(appName = "Independent Modules");
 	}
+
 }

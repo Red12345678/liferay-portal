@@ -122,15 +122,20 @@ String galleryId = PortalUtil.generateRandomKey(request, "gallery");
 										}
 									).then(
 										function(response) {
-											AddToCartButton.productId = response.cpInstanceId;
-											AddToCartButton.options = JSON.stringify(getFormValues());
-											AddToCartButton.quantity = 0;
-											AddToCartButton.settings = {
-												maxQuantity: 1000,
-												minQuantity: 1,
-												multipleQuantities: 1
-											};
-											AddToCartButton.disabled = false;
+											if (response.cpInstanceExist) {
+												AddToCartButton.productId = response.cpInstanceId;
+												AddToCartButton.options = JSON.stringify(getFormValues());
+												AddToCartButton.quantity = 0;
+												AddToCartButton.settings = {
+													maxQuantity: 1000,
+													minQuantity: 1,
+													multipleQuantities: 1
+												};
+												AddToCartButton.disabled = false;
+											}
+											else {
+												AddToCartButton.disabled = true;
+											}
 
 											document.querySelector('[data-text-cp-instance-sku]').innerHTML = Liferay.Util.escape(response.sku) || '';
 											document.querySelector('[data-text-cp-instance-manufacturer-part-number]').innerHTML = Liferay.Util.escape(response.manufacturerPartNumber) || '';
@@ -233,7 +238,7 @@ String galleryId = PortalUtil.generateRandomKey(request, "gallery");
 
 <%
 List<CPDefinitionSpecificationOptionValue> cpDefinitionSpecificationOptionValues = cpContentHelper.getCPDefinitionSpecificationOptionValues(cpDefinitionId);
-List<CPOptionCategory> cpOptionCategories = cpContentHelper.getCPOptionCategories(scopeGroupId);
+List<CPOptionCategory> cpOptionCategories = cpContentHelper.getCPOptionCategories(company.getCompanyId());
 List<CPMedia> cpAttachmentFileEntries = cpContentHelper.getCPAttachmentFileEntries(cpDefinitionId, themeDisplay);
 %>
 
@@ -261,15 +266,12 @@ List<CPMedia> cpAttachmentFileEntries = cpContentHelper.getCPAttachmentFileEntri
 						}
 						%>
 
-					</dl>
+						<%
+						for (CPOptionCategory cpOptionCategory : cpOptionCategories) {
+							List<CPDefinitionSpecificationOptionValue> categorizedCPDefinitionSpecificationOptionValues = cpContentHelper.getCategorizedCPDefinitionSpecificationOptionValues(cpDefinitionId, cpOptionCategory.getCPOptionCategoryId());
+						%>
 
-					<%
-					for (CPOptionCategory cpOptionCategory : cpOptionCategories) {
-						List<CPDefinitionSpecificationOptionValue> categorizedCPDefinitionSpecificationOptionValues = cpContentHelper.getCategorizedCPDefinitionSpecificationOptionValues(cpDefinitionId, cpOptionCategory.getCPOptionCategoryId());
-					%>
-
-						<c:if test="<%= !categorizedCPDefinitionSpecificationOptionValues.isEmpty() %>">
-							<dl class="autofit-float autofit-row autofit-row-center specification-list">
+							<c:if test="<%= !categorizedCPDefinitionSpecificationOptionValues.isEmpty() %>">
 
 								<%
 								for (CPDefinitionSpecificationOptionValue cpDefinitionSpecificationOptionValue : categorizedCPDefinitionSpecificationOptionValues) {
@@ -287,13 +289,13 @@ List<CPMedia> cpAttachmentFileEntries = cpContentHelper.getCPAttachmentFileEntri
 								}
 								%>
 
-							</dl>
-						</c:if>
+							</c:if>
 
-					<%
-					}
-					%>
+						<%
+						}
+						%>
 
+					</dl>
 				</div>
 			</div>
 		</div>

@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Content Pages";
@@ -15,14 +16,11 @@ definition {
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
-			siteName = "Test Site Name"
-		);
+			siteName = "Test Site Name");
 
 		FragmentsAdmin.openFragmentsAdmin(siteURLKey = "test-site-name-staging");
 
-		FragmentsAdmin.importCollectionFromDependenciesFolder(
-			collectionZipFile = "fragment-collection.zip"
-		);
+		FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "fragment-collection.zip");
 
 		SitePages.openPagesAdmin(siteURLKey = "test-site-name-staging");
 
@@ -30,13 +28,11 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Rich Text"
-		);
+			fragmentName = "Rich Text");
 	}
 
 	tearDown {
@@ -53,33 +49,25 @@ definition {
 	@description = "With page versioning enabled, content pages only appear in live view after being published and should appear properly."
 	@priority = "5"
 	test PublishContentPage {
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name-staging/test-content-page-name"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-staging/test-content-page-name");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 			key_fragmentClass = "rich-text",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#FRAGMENT");
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name/test-content-page-name"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-content-page-name");
 
 		AssertTextPresent(value1 = "The requested resource could not be found.");
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name-staging/test-content-page-name"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name-staging/test-content-page-name");
 
 		Staging.markAsReadyForPublication();
 
@@ -87,22 +75,19 @@ definition {
 
 		Staging.publishToLive();
 
-		Navigator.openWithAppendToBaseURL(
-			urlAppend = "web/test-site-name/test-content-page-name"
-		);
+		Navigator.openWithAppendToBaseURL(urlAppend = "web/test-site-name/test-content-page-name");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Lorem ipsum dolor sit amet",
 			key_fragmentClass = "header",
-			key_position = "1"
-		);
+			key_position = "1",
+			locator1 = "Fragment#FRAGMENT");
 
 		AssertVisible(
-			locator1 = "Fragment#FRAGMENT",
 			key_content = "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
 			key_fragmentClass = "rich-text",
-			key_position = "2"
-		);
+			key_position = "2",
+			locator1 = "Fragment#FRAGMENT");
 	}
+
 }

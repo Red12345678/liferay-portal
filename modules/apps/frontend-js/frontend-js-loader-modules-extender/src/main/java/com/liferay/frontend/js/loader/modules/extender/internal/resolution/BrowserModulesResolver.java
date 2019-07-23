@@ -29,6 +29,7 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -134,7 +135,7 @@ public class BrowserModulesResolver {
 
 		moduleDirNameParts.add(_getFileName(dependency));
 
-		return String.join(StringPool.SLASH, moduleDirNameParts);
+		return StringUtil.merge(moduleDirNameParts, StringPool.SLASH);
 	}
 
 	private List<String> _getDirNameParts(String modulePath) {

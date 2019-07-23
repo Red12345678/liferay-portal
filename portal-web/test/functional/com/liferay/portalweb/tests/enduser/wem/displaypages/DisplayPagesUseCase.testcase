@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Display Pages";
@@ -13,9 +14,7 @@ definition {
 
 		FragmentsAdmin.openFragmentsAdmin(siteURLKey = "test-site-name");
 
-		FragmentsAdmin.importCollectionFromDependenciesFolder(
-			collectionZipFile = "fragment-collection.zip"
-		);
+		FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "fragment-collection.zip");
 
 		DisplayPagesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 	}
@@ -40,37 +39,31 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Multiple Editables"
-		);
+			fragmentName = "Multiple Editables");
 
 		PageEditorMapping.selectAssetType(
 			assetType = "Web Content Article",
-			subType = "Basic Web Content"
-		);
+			subType = "Basic Web Content");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Multiple Editables",
 			id = "test1",
-			itemName = "Title"
-		);
+			itemName = "Title");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Multiple Editables",
 			id = "test2",
-			itemName = "Content"
-		);
+			itemName = "Content");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Multiple Editables",
 			id = "test3",
-			itemName = "Tags"
-		);
+			itemName = "Tags");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Multiple Editables",
 			id = "test4",
-			itemName = "Publish Date"
-		);
+			itemName = "Publish Date");
 
 		Button.clickPublish();
 
@@ -78,8 +71,7 @@ definition {
 
 		WebContent.addArticleCP(
 			webContentContent = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 
 		WebContentNavigator.gotoEditCP(webContentTitle = "Webcontent Title");
 
@@ -89,26 +81,24 @@ definition {
 
 		WebContent.editDisplayPage(
 			pageName = "Display Page Name",
-			pageType = "Display Pages"
-		);
+			pageType = "Display Pages");
 
 		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
 
 		SitePages.addPublicPage(pageName = "Site Page Name");
 
-		Navigator.gotoSitePage(pageName = "Site Page Name", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page Name",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
-		AssetPublisherPortlet.configureAssetLinkBehaviorPG(
-			assetLinkBehavior = "View in Context"
-		);
+		AssetPublisherPortlet.configureAssetLinkBehaviorPG(assetLinkBehavior = "View in Context");
 
 		DisplayPagesAdmin.viewPGViaAP(
 			contentList = "Webcontent Title,Webcontent Content,tag1,tag2,tag3",
 			webContentContent = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 	}
 
 	@description = "Add a fragment with new added structure in it."
@@ -119,29 +109,25 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		NavItem.gotoStructures();
 
 		WebContentStructures.addCP(
 			structureDescription = "WC Structure Description",
-			structureName = "WC Structure Name"
-		);
+			structureName = "WC Structure Name");
 
 		DynamicDataMapping.addField(
 			field = "Text Box",
 			fieldFieldLabel = "Content",
-			fieldName = "Content"
-		);
+			fieldName = "Content");
 
 		WebContentStructures.saveCP(structureName = "WC Structure Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Content",
 			panel = "Site Administration",
-			portlet = "Web Content"
-		);
+			portlet = "Web Content");
 
 		NavItem.gotoTemplates();
 
@@ -149,8 +135,7 @@ definition {
 			structureName = "WC Structure Name",
 			templateDescription = "WC Template Description",
 			templateFieldNames = "Content",
-			templateName = "WC Template Name"
-		);
+			templateName = "WC Template Name");
 
 		DisplayPagesAdmin.openDisplayPagesAdmin(siteURLKey = "test-site-name");
 
@@ -158,37 +143,31 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Multiple Editables"
-		);
+			fragmentName = "Multiple Editables");
 
 		PageEditorMapping.selectAssetType(
 			assetType = "Web Content Article",
-			subType = "WC Structure Name"
-		);
+			subType = "WC Structure Name");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Multiple Editables",
 			id = "test1",
-			itemName = "Title"
-		);
+			itemName = "Title");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Multiple Editables",
 			id = "test2",
-			itemName = "Content"
-		);
+			itemName = "Content");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Multiple Editables",
 			id = "test3",
-			itemName = "Tags"
-		);
+			itemName = "Tags");
 
 		PageEditorMapping.mapEditableTextToAsset(
 			fragmentName = "Multiple Editables",
 			id = "test4",
-			itemName = "Publish Date"
-		);
+			itemName = "Publish Date");
 
 		Button.clickPublish();
 
@@ -199,8 +178,7 @@ definition {
 		WebContent.addWithStructureCP(
 			fieldName = "Content",
 			webContentTextBox = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 
 		WebContent.addWithTagCP(tagNameList = "tag1,tag2,tag3");
 
@@ -208,25 +186,24 @@ definition {
 
 		WebContent.editDisplayPage(
 			pageName = "Display Page Name",
-			pageType = "Display Pages"
-		);
+			pageType = "Display Pages");
 
 		SitePages.openPagesAdmin(siteURLKey = "test-site-name");
 
 		SitePages.addPublicPage(pageName = "Site Page Name");
 
-		Navigator.gotoSitePage(pageName = "Site Page Name", siteName = "Test Site Name");
+		Navigator.gotoSitePage(
+			pageName = "Site Page Name",
+			siteName = "Test Site Name");
 
 		Portlet.addPG(portletName = "Asset Publisher");
 
-		AssetPublisherPortlet.configureAssetLinkBehaviorPG(
-			assetLinkBehavior = "View in Context"
-		);
+		AssetPublisherPortlet.configureAssetLinkBehaviorPG(assetLinkBehavior = "View in Context");
 
 		DisplayPagesAdmin.viewPGViaAP(
 			contentList = "Webcontent Title,Webcontent Content,tag1,tag2,tag3",
 			webContentContent = "Webcontent Content",
-			webContentTitle = "Webcontent Title"
-		);
+			webContentTitle = "Webcontent Title");
 	}
+
 }

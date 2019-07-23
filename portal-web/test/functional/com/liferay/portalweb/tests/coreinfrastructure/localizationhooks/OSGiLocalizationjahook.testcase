@@ -1,5 +1,6 @@
 @component-name = "portal-plugins-osgi"
 definition {
+
 	property portal.release = "false";
 	property portal.upstream = "true";
 	property plugins.deployment.type = "osgi";
@@ -16,6 +17,9 @@ definition {
 		var appName = "Japanese Localization";
 		var portletName = "localization-ja-hook";
 
-		OSGiSmoke.Smoke(appName = "${portletName}", portletName = "${portletName}");
+		OSGiSmoke.Smoke(
+			appName = "${portletName}",
+			portletName = "${portletName}");
 	}
+
 }

@@ -18,8 +18,6 @@ import com.liferay.commerce.account.constants.CommerceAccountPortletKeys;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.portlet.BasePortletProvider;
-import com.liferay.portal.kernel.portlet.EditPortletProvider;
-import com.liferay.portal.kernel.portlet.ManagePortletProvider;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.portlet.ViewPortletProvider;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -43,8 +41,7 @@ import org.osgi.service.component.annotations.Reference;
 	service = ViewPortletProvider.class
 )
 public class CommerceAccountViewPortletProvider
-	extends BasePortletProvider
-	implements EditPortletProvider, ManagePortletProvider, ViewPortletProvider {
+	extends BasePortletProvider implements ViewPortletProvider {
 
 	@Override
 	public String getPortletName() {
@@ -52,12 +49,14 @@ public class CommerceAccountViewPortletProvider
 	}
 
 	@Override
-	public PortletURL getPortletURL(HttpServletRequest request, Group group)
+	public PortletURL getPortletURL(
+			HttpServletRequest httpServletRequest, Group group)
 		throws PortalException {
 
 		if (group == null) {
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-				WebKeys.THEME_DISPLAY);
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)httpServletRequest.getAttribute(
+					WebKeys.THEME_DISPLAY);
 
 			group = themeDisplay.getScopeGroup();
 		}
@@ -66,7 +65,8 @@ public class CommerceAccountViewPortletProvider
 			group.getGroupId(), getPortletName());
 
 		PortletURL portletURL = PortletURLFactoryUtil.create(
-			request, getPortletName(), plid, PortletRequest.RENDER_PHASE);
+			httpServletRequest, getPortletName(), plid,
+			PortletRequest.RENDER_PHASE);
 
 		portletURL.setParameter("mvcRenderCommandName", "viewCommerceAccount");
 

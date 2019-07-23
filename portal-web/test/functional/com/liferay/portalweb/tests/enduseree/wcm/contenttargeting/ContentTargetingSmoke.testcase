@@ -55,7 +55,7 @@ definition {
 	test Smoke {
 		property content.targeting.release = "true";
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",

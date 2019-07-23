@@ -53,10 +53,15 @@ public class CommentResourceTest extends BaseCommentResourceTestCase {
 	}
 
 	@Override
+	protected String[] getIgnoredEntityFieldNames() {
+		return new String[] {"creatorId"};
+	}
+
+	@Override
 	protected Comment testDeleteComment_addComment() throws Exception {
 		BlogsEntry blogsEntry = _addBlogsEntry();
 
-		return invokePostBlogPostingComment(
+		return commentResource.postBlogPostingComment(
 			blogsEntry.getEntryId(), randomComment());
 	}
 
@@ -73,7 +78,7 @@ public class CommentResourceTest extends BaseCommentResourceTestCase {
 	protected Comment testGetComment_addComment() throws Exception {
 		BlogsEntry blogsEntry = _addBlogsEntry();
 
-		return invokePostBlogPostingComment(
+		return commentResource.postBlogPostingComment(
 			blogsEntry.getEntryId(), randomComment());
 	}
 
@@ -83,7 +88,7 @@ public class CommentResourceTest extends BaseCommentResourceTestCase {
 
 		BlogsEntry blogsEntry = _addBlogsEntry();
 
-		Comment comment = invokePostBlogPostingComment(
+		Comment comment = commentResource.postBlogPostingComment(
 			blogsEntry.getEntryId(), randomComment());
 
 		return comment.getId();
@@ -111,10 +116,11 @@ public class CommentResourceTest extends BaseCommentResourceTestCase {
 	protected Comment testPutComment_addComment() throws Exception {
 		BlogsEntry blogsEntry = _addBlogsEntry();
 
-		Comment comment = invokePostBlogPostingComment(
+		Comment comment = commentResource.postBlogPostingComment(
 			blogsEntry.getEntryId(), randomComment());
 
-		return invokePostCommentComment(comment.getId(), randomComment());
+		return commentResource.postCommentComment(
+			comment.getId(), randomComment());
 	}
 
 	private BlogsEntry _addBlogsEntry() throws PortalException {

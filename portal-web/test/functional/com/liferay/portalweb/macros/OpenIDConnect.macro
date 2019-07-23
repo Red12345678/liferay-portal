@@ -1,4 +1,5 @@
 definition {
+
 	macro acceptConditions {
 		if (IsElementPresent.pauseIsElementPresent(locator1 = "GoogleLogin#ALLOW", value1 = "Allow")) {
 			Click(locator1 = "GoogleLogin#ALLOW");
@@ -9,26 +10,36 @@ definition {
 		}
 
 		if (IsElementPresent.pauseIsElementPresent(locator1 = "TextInput#ANSWER")) {
-			Type(locator1 = "TextInput#ANSWER", value1 = "test");
+			Type(
+				locator1 = "TextInput#ANSWER",
+				value1 = "test");
 
-			KeyPress(locator1 = "TextInput#ANSWER", value1 = "\RETURN");
+			KeyPress(
+				locator1 = "TextInput#ANSWER",
+				value1 = "\RETURN");
 		}
 	}
 
 	macro accountSignIn {
 		Navigator.openURL();
 
-		AssertClick(locator1 = "UserBar#USER_SIGN_IN", value1 = "Sign In");
+		AssertClick(
+			locator1 = "UserBar#USER_SIGN_IN",
+			value1 = "Sign In");
 
 		Click(locator1 = "Icon#OPENID_CONNECT");
 
 		Click(locator1 = "Button#SIGN_IN");
 
-		Type(locator1 = "GoogleLogin#LOGIN_EMAIL_FIELD", value1 = "${userEmailAddress}");
+		Type(
+			locator1 = "GoogleLogin#LOGIN_EMAIL_FIELD",
+			value1 = "${userEmailAddress}");
 
 		Click(locator1 = "GoogleLogin#LOGIN_NEXT_BUTTON");
 
-		Type(locator1 = "GoogleLogin#LOGIN_PASSWORD_FIELD", value1 = "${userPassword}");
+		Type(
+			locator1 = "GoogleLogin#LOGIN_PASSWORD_FIELD",
+			value1 = "${userPassword}");
 
 		if (IsElementPresent(locator1 = "GoogleLogin#LOGIN_SIGN_IN_BUTTON")) {
 			Click(locator1 = "GoogleLogin#LOGIN_SIGN_IN_BUTTON");
@@ -42,34 +53,32 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "System Settings"
-		);
+			portlet = "System Settings");
 
 		SystemSettings.gotoConfiguration(
 			configurationCategory = "SSO",
 			configurationName = "OpenID Connect Provider",
-			configurationScope = "System Scope"
-		);
+			configurationScope = "System Scope");
 
 		Click(locator1 = "Button#ADD");
 
-		FormFields.editTextMultiline(fieldName = "providerName", fieldValue = "Google");
+		FormFields.editTextMultiline(
+			fieldName = "providerName",
+			fieldValue = "Google");
 
 		FormFields.editTextMultiline(
 			fieldName = "openIdConnectClientId",
-			fieldValue = "${openIDConnectClientID}"
-		);
+			fieldValue = "${openIDConnectClientID}");
 
 		FormFields.editTextMultiline(
 			fieldName = "openIdConnectClientSecret",
-			fieldValue = "${openIDConnectClientSecret}"
-		);
+			fieldValue = "${openIDConnectClientSecret}");
 
 		FormFields.editTextMultiline(
 			fieldName = "discoveryEndPoint",
-			fieldValue = "https://accounts.google.com/.well-known/openid-configuration"
-		);
+			fieldValue = "https://accounts.google.com/.well-known/openid-configuration");
 
 		PortletEntry.save();
 	}
+
 }

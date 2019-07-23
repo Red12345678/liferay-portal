@@ -25,6 +25,13 @@ import com.liferay.portal.kernel.util.PortalUtil;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.HashSet;
+import java.util.function.Function;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -51,27 +58,37 @@ public class NarrowDownScopeClientTest extends BaseClientTestCase {
 	@Test
 	public void test() throws Exception {
 		Assert.assertEquals(
-			"HEAD",
+			"GET",
 			getToken(
 				"oauthTestApplication", null,
 				getAuthorizationCodeBiFunction(
-					"test@liferay.com", "test", null, "HEAD"),
+					"test@liferay.com", "test", null, "GET"),
 				this::parseScopeString));
 
 		Assert.assertEquals(
-			"HEAD",
+			"GET",
 			getToken(
 				"oauthTestApplication", null,
-				getClientCredentialsResponseBiFunction("HEAD"),
+				getClientCredentialsResponseBiFunction("GET"),
 				this::parseScopeString));
 
-		Assert.assertEquals(
-			"HEAD",
-			getToken(
-				"oauthTestApplication", null,
-				getResourceOwnerPasswordBiFunction(
-					"test@liferay.com", "test", "HEAD"),
-				this::parseScopeString));
+		Response response = getToken(
+			"oauthTestApplication", null,
+			getResourceOwnerPasswordBiFunction(
+				"test@liferay.com", "test", "GET"),
+			Function.identity());
+
+		Assert.assertEquals("GET", parseScopeString(response));
+
+		WebTarget webTarget = getWebTarget("methods");
+
+		Invocation.Builder builder = authorize(
+			webTarget.request(), parseTokenString(response));
+
+		Response postResponse = builder.post(
+			Entity.entity("", MediaType.TEXT_PLAIN_TYPE));
+
+		Assert.assertEquals(403, postResponse.getStatus());
 
 		String scopeString = getToken(
 			"oauthTestApplication", null,
@@ -79,7 +96,7 @@ public class NarrowDownScopeClientTest extends BaseClientTestCase {
 			this::parseScopeString);
 
 		Assert.assertEquals(
-			new HashSet<>(Arrays.asList("HEAD", "GET", "OPTIONS", "POST")),
+			new HashSet<>(Arrays.asList("GET", "POST")),
 			new HashSet<>(Arrays.asList(scopeString.split(" "))));
 
 		Assert.assertEquals(
@@ -87,7 +104,7 @@ public class NarrowDownScopeClientTest extends BaseClientTestCase {
 			getToken(
 				"oauthTestApplication", null,
 				getResourceOwnerPasswordBiFunction(
-					"test@liferay.com", "test", "HEAD GET OPTIONS POST PUT"),
+					"test@liferay.com", "test", "GET POST PUT"),
 				this::parseError));
 	}
 
@@ -112,7 +129,7 @@ public class NarrowDownScopeClientTest extends BaseClientTestCase {
 				Arrays.asList(
 					GrantType.AUTHORIZATION_CODE, GrantType.CLIENT_CREDENTIALS,
 					GrantType.RESOURCE_OWNER_PASSWORD),
-				Arrays.asList("HEAD", "GET", "OPTIONS", "POST"));
+				Arrays.asList("GET", "POST"));
 		}
 
 	}

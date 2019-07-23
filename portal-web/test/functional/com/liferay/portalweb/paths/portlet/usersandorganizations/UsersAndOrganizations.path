@@ -88,6 +88,37 @@
 	<td>//tr[contains(.,'${key_userScreenName}')]/td[7]//span/a[contains(.,'Impersonate User')]</td>
 	<td></td>
 </tr>
+<!--USER_CONTACT_INFORMATION-->
+<tr>
+	<td>USER_CONTACT_INFORMATION_PHONE_NUMBER</td>
+	<td>//fieldset[contains(@id,'phoneNumbers')]//input[contains(@id,'phoneNumber')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>USER_CONTACT_INFORMATION_PHONE_NUMBER_TYPE</td>
+	<td>//fieldset[contains(@id,'phoneNumbers')]//select[contains(@id,'phoneType')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>USER_CONTACT_INFORMATION_EMAIL_ADDRESS</td>
+	<td>//fieldset[contains(@id,'additionalEmailAddresses')]//input[contains(@value,'${key_emailAddress}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>USER_CONTACT_INFORMATION_WEBSITE_URL</td>
+	<td>//fieldset[contains(@id,'websites')]//input[contains(@id,'websiteUrl')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>USER_CONTACT_INFORMATION_WEBSITE_TYPE</td>
+	<td>//fieldset[contains(@id,'websites')]//select[contains(@id,'websiteType')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>USER_CONTACT_INFORMATION_REMOVE_ICON</td>
+	<td>//fieldset[contains(@id,'${key_rowEntry}')]//button[contains(@class,'delete-row')]</td>
+	<td></td>
+</tr>
 </tbody>
 </table>
 </body>

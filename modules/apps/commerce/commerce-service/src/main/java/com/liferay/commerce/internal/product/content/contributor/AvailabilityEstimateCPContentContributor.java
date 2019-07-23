@@ -16,9 +16,12 @@ package com.liferay.commerce.internal.product.content.contributor;
 
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngine;
 import com.liferay.commerce.inventory.CPDefinitionInventoryEngineRegistry;
+import com.liferay.commerce.inventory.engine.CommerceInventoryEngine;
 import com.liferay.commerce.model.CPDefinitionInventory;
 import com.liferay.commerce.product.constants.CPContentContributorConstants;
 import com.liferay.commerce.product.model.CPInstance;
+import com.liferay.commerce.product.model.CommerceChannel;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.commerce.product.util.CPContentContributor;
 import com.liferay.commerce.service.CPDefinitionInventoryLocalService;
 import com.liferay.petra.string.StringPool;
@@ -27,6 +30,7 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 
@@ -69,6 +73,14 @@ public class AvailabilityEstimateCPContentContributor
 			return jsonObject;
 		}
 
+		CommerceChannel commerceChannel =
+			_commerceChannelLocalService.fetchCommerceChannelBySiteGroupId(
+				_portal.getScopeGroupId(httpServletRequest));
+
+		if (commerceChannel == null) {
+			return jsonObject;
+		}
+
 		CPDefinitionInventory cpDefinitionInventory =
 			_cpDefinitionInventoryLocalService.
 				fetchCPDefinitionInventoryByCPDefinitionId(
@@ -80,8 +92,11 @@ public class AvailabilityEstimateCPContentContributor
 
 		boolean available = false;
 
-		if (cpDefinitionInventoryEngine.getStockQuantity(cpInstance) >
-				cpDefinitionInventoryEngine.getMinStockQuantity(cpInstance)) {
+		if (_commerceInventoryEngine.getStockQuantity(
+				cpInstance.getCompanyId(), commerceChannel.getGroupId(),
+				cpInstance.getSku()) >
+					cpDefinitionInventoryEngine.getMinStockQuantity(
+						cpInstance)) {
 
 			available = true;
 		}
@@ -110,6 +125,12 @@ public class AvailabilityEstimateCPContentContributor
 	}
 
 	@Reference
+	private CommerceChannelLocalService _commerceChannelLocalService;
+
+	@Reference
+	private CommerceInventoryEngine _commerceInventoryEngine;
+
+	@Reference
 	private CPDefinitionInventoryEngineRegistry
 		_cpDefinitionInventoryEngineRegistry;
 
@@ -119,5 +140,8 @@ public class AvailabilityEstimateCPContentContributor
 
 	@Reference
 	private JSONFactory _jsonFactory;
+
+	@Reference
+	private Portal _portal;
 
 }

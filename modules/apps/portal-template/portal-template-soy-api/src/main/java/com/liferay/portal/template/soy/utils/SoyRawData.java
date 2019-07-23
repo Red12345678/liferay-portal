@@ -15,8 +15,17 @@
 package com.liferay.portal.template.soy.utils;
 
 /**
+ * This interface can be implemented by any specialized class that is capable
+ * of returning a low level value for the Soy template system. Such low level
+ * value will be passed to Soy engine verbatim, without any smart/additional
+ * type conversion.
+ *
  * @author Leonardo Barros
+ * @review
+ * @deprecated As of Mueller (7.2.x), see {@link
+ *             com.liferay.portal.template.soy.util.SoyRawData}
  */
+@Deprecated
 public interface SoyRawData {
 
 	public Object getValue();

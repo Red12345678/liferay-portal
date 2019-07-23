@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Fragments";
@@ -13,8 +14,7 @@ definition {
 
 		JSONLayout.addPublicLayout(
 			groupName = "Test Site Name",
-			layoutName = "Staging Test Page"
-		);
+			layoutName = "Staging Test Page");
 
 		Staging.openStagingAdmin(siteURLKey = "test-site-name");
 
@@ -38,20 +38,17 @@ definition {
 		JSONFragment.addFragmentCollection(
 			groupKey = "Test Site Name-staging",
 			name = "Collection Name",
-			site = "false"
-		);
+			site = "false");
 
 		JSONFragment.addFragment(
 			collectionName = "Collection Name",
 			groupKey = "Test Site Name-staging",
 			name = "Fragment Name",
-			site = "false"
-		);
+			site = "false");
 
 		JSONFragment.assertFragmentCollectionNotInGroup(
 			collectionName = "Collection Name",
-			groupName = "Test Site Name"
-		);
+			groupName = "Test Site Name");
 
 		Staging.openStagingAdmin(siteURLKey = "test-site-name-staging");
 
@@ -59,14 +56,12 @@ definition {
 
 		JSONFragment.assertFragmentCollectionInGroup(
 			collectionName = "Collection Name",
-			groupName = "Test Site Name"
-		);
+			groupName = "Test Site Name");
 
 		JSONFragment.assertFragmentInGroup(
 			collectionName = "Collection Name",
 			fragmentName = "Fragment Name",
-			groupName = "Test Site Name"
-		);
+			groupName = "Test Site Name");
 	}
 
 	@description = "Page Fragments administration is only be accessible in staging view."
@@ -76,7 +71,9 @@ definition {
 
 		ProductMenuHelper.expandCategory(category = "Build");
 
-		AssertVisible(locator1 = "ProductMenu#PORTLET", key_portlet = "Page Fragments");
+		AssertVisible(
+			key_portlet = "Page Fragments",
+			locator1 = "ProductMenu#PORTLET");
 
 		ProductMenu.gotoLiveSite(site = "Site Name");
 
@@ -85,8 +82,8 @@ definition {
 		ProductMenuHelper.expandCategory(category = "Build");
 
 		AssertElementNotPresent(
-			locator1 = "ProductMenu#PORTLET",
-			key_portlet = "Page Fragments"
-		);
+			key_portlet = "Page Fragments",
+			locator1 = "ProductMenu#PORTLET");
 	}
+
 }

@@ -21,7 +21,6 @@ import com.liferay.commerce.price.list.model.CommerceTierPriceEntry;
 import com.liferay.commerce.price.list.model.impl.CommerceTierPriceEntryImpl;
 import com.liferay.commerce.price.list.model.impl.CommerceTierPriceEntryModelImpl;
 import com.liferay.commerce.price.list.service.persistence.CommerceTierPriceEntryPersistence;
-
 import com.liferay.portal.kernel.dao.orm.EntityCache;
 import com.liferay.portal.kernel.dao.orm.FinderCache;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
@@ -68,55 +67,33 @@ import java.util.Set;
  * </p>
  *
  * @author Alessio Antonio Rendina
- * @see CommerceTierPriceEntryPersistence
- * @see com.liferay.commerce.price.list.service.persistence.CommerceTierPriceEntryUtil
  * @generated
  */
 @ProviderType
-public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<CommerceTierPriceEntry>
+public class CommerceTierPriceEntryPersistenceImpl
+	extends BasePersistenceImpl<CommerceTierPriceEntry>
 	implements CommerceTierPriceEntryPersistence {
+
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify or reference this class directly. Always use {@link CommerceTierPriceEntryUtil} to access the commerce tier price entry persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
+	 * Never modify or reference this class directly. Always use <code>CommerceTierPriceEntryUtil</code> to access the commerce tier price entry persistence. Modify <code>service.xml</code> and rerun ServiceBuilder to regenerate this class.
 	 */
-	public static final String FINDER_CLASS_NAME_ENTITY = CommerceTierPriceEntryImpl.class.getName();
-	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List1";
-	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
-		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
-			new String[] {
-				String.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			CommerceTierPriceEntryModelImpl.UUID_COLUMN_BITMASK |
-			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
-			new String[] { String.class.getName() });
+	public static final String FINDER_CLASS_NAME_ENTITY =
+		CommerceTierPriceEntryImpl.class.getName();
+
+	public static final String FINDER_CLASS_NAME_LIST_WITH_PAGINATION =
+		FINDER_CLASS_NAME_ENTITY + ".List1";
+
+	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION =
+		FINDER_CLASS_NAME_ENTITY + ".List2";
+
+	private FinderPath _finderPathWithPaginationFindAll;
+	private FinderPath _finderPathWithoutPaginationFindAll;
+	private FinderPath _finderPathCountAll;
+	private FinderPath _finderPathWithPaginationFindByUuid;
+	private FinderPath _finderPathWithoutPaginationFindByUuid;
+	private FinderPath _finderPathCountByUuid;
 
 	/**
 	 * Returns all the commerce tier price entries where uuid = &#63;.
@@ -133,7 +110,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Returns a range of all the commerce tier price entries where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -142,8 +119,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByUuid(String uuid, int start,
-		int end) {
+	public List<CommerceTierPriceEntry> findByUuid(
+		String uuid, int start, int end) {
+
 		return findByUuid(uuid, start, end, null);
 	}
 
@@ -151,7 +129,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Returns an ordered range of all the commerce tier price entries where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -161,8 +139,10 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the ordered range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByUuid(String uuid, int start,
-		int end, OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
+	public List<CommerceTierPriceEntry> findByUuid(
+		String uuid, int start, int end,
+		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
+
 		return findByUuid(uuid, start, end, orderByComparator, true);
 	}
 
@@ -170,7 +150,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Returns an ordered range of all the commerce tier price entries where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -181,33 +161,38 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the ordered range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByUuid(String uuid, int start,
-		int end, OrderByComparator<CommerceTierPriceEntry> orderByComparator,
+	public List<CommerceTierPriceEntry> findByUuid(
+		String uuid, int start, int end,
+		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean retrieveFromCache) {
+
+		uuid = Objects.toString(uuid, "");
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
+			finderPath = _finderPathWithoutPaginationFindByUuid;
+			finderArgs = new Object[] {uuid};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+			finderPath = _finderPathWithPaginationFindByUuid;
+			finderArgs = new Object[] {uuid, start, end, orderByComparator};
 		}
 
 		List<CommerceTierPriceEntry> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CommerceTierPriceEntry>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CommerceTierPriceEntry>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
 				for (CommerceTierPriceEntry commerceTierPriceEntry : list) {
-					if (!Objects.equals(uuid, commerceTierPriceEntry.getUuid())) {
+					if (!uuid.equals(commerceTierPriceEntry.getUuid())) {
 						list = null;
 
 						break;
@@ -220,8 +205,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(3);
@@ -231,10 +216,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_UUID_3);
 			}
 			else {
@@ -244,11 +226,10 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			}
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
+			else if (pagination) {
 				query.append(CommerceTierPriceEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -268,16 +249,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				}
 
 				if (!pagination) {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -306,11 +287,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry findByUuid_First(String uuid,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+	public CommerceTierPriceEntry findByUuid_First(
+			String uuid,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByUuid_First(uuid,
-				orderByComparator);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByUuid_First(
+			uuid, orderByComparator);
 
 		if (commerceTierPriceEntry != null) {
 			return commerceTierPriceEntry;
@@ -336,10 +319,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the first matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByUuid_First(String uuid,
+	public CommerceTierPriceEntry fetchByUuid_First(
+		String uuid,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		List<CommerceTierPriceEntry> list = findByUuid(uuid, 0, 1,
-				orderByComparator);
+
+		List<CommerceTierPriceEntry> list = findByUuid(
+			uuid, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -357,11 +342,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry findByUuid_Last(String uuid,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+	public CommerceTierPriceEntry findByUuid_Last(
+			String uuid,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByUuid_Last(uuid,
-				orderByComparator);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByUuid_Last(
+			uuid, orderByComparator);
 
 		if (commerceTierPriceEntry != null) {
 			return commerceTierPriceEntry;
@@ -387,16 +374,18 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the last matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByUuid_Last(String uuid,
+	public CommerceTierPriceEntry fetchByUuid_Last(
+		String uuid,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
+
 		int count = countByUuid(uuid);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CommerceTierPriceEntry> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
+		List<CommerceTierPriceEntry> list = findByUuid(
+			uuid, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -416,10 +405,14 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public CommerceTierPriceEntry[] findByUuid_PrevAndNext(
-		long commerceTierPriceEntryId, String uuid,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+			long commerceTierPriceEntryId, String uuid,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(commerceTierPriceEntryId);
+
+		uuid = Objects.toString(uuid, "");
+
+		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(
+			commerceTierPriceEntryId);
 
 		Session session = null;
 
@@ -428,13 +421,14 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			CommerceTierPriceEntry[] array = new CommerceTierPriceEntryImpl[3];
 
-			array[0] = getByUuid_PrevAndNext(session, commerceTierPriceEntry,
-					uuid, orderByComparator, true);
+			array[0] = getByUuid_PrevAndNext(
+				session, commerceTierPriceEntry, uuid, orderByComparator, true);
 
 			array[1] = commerceTierPriceEntry;
 
-			array[2] = getByUuid_PrevAndNext(session, commerceTierPriceEntry,
-					uuid, orderByComparator, false);
+			array[2] = getByUuid_PrevAndNext(
+				session, commerceTierPriceEntry, uuid, orderByComparator,
+				false);
 
 			return array;
 		}
@@ -446,15 +440,17 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		}
 	}
 
-	protected CommerceTierPriceEntry getByUuid_PrevAndNext(Session session,
-		CommerceTierPriceEntry commerceTierPriceEntry, String uuid,
+	protected CommerceTierPriceEntry getByUuid_PrevAndNext(
+		Session session, CommerceTierPriceEntry commerceTierPriceEntry,
+		String uuid,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -465,10 +461,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 		boolean bindUuid = false;
 
-		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_UUID_1);
-		}
-		else if (uuid.equals("")) {
+		if (uuid.isEmpty()) {
 			query.append(_FINDER_COLUMN_UUID_UUID_3);
 		}
 		else {
@@ -478,7 +471,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		}
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -550,10 +544,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		}
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(commerceTierPriceEntry);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						commerceTierPriceEntry)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -574,8 +569,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public void removeByUuid(String uuid) {
-		for (CommerceTierPriceEntry commerceTierPriceEntry : findByUuid(uuid,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+		for (CommerceTierPriceEntry commerceTierPriceEntry :
+				findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
 			remove(commerceTierPriceEntry);
 		}
 	}
@@ -588,9 +584,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public int countByUuid(String uuid) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+		uuid = Objects.toString(uuid, "");
 
-		Object[] finderArgs = new Object[] { uuid };
+		FinderPath finderPath = _finderPathCountByUuid;
+
+		Object[] finderArgs = new Object[] {uuid};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -601,10 +599,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_UUID_3);
 			}
 			else {
@@ -645,282 +640,15 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "commerceTierPriceEntry.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "commerceTierPriceEntry.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(commerceTierPriceEntry.uuid IS NULL OR commerceTierPriceEntry.uuid = '')";
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			CommerceTierPriceEntryModelImpl.UUID_COLUMN_BITMASK |
-			CommerceTierPriceEntryModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
+	private static final String _FINDER_COLUMN_UUID_UUID_2 =
+		"commerceTierPriceEntry.uuid = ?";
 
-	/**
-	 * Returns the commerce tier price entry where uuid = &#63; and groupId = &#63; or throws a {@link NoSuchTierPriceEntryException} if it could not be found.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the matching commerce tier price entry
-	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
-	 */
-	@Override
-	public CommerceTierPriceEntry findByUUID_G(String uuid, long groupId)
-		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByUUID_G(uuid,
-				groupId);
+	private static final String _FINDER_COLUMN_UUID_UUID_3 =
+		"(commerceTierPriceEntry.uuid IS NULL OR commerceTierPriceEntry.uuid = '')";
 
-		if (commerceTierPriceEntry == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("uuid=");
-			msg.append(uuid);
-
-			msg.append(", groupId=");
-			msg.append(groupId);
-
-			msg.append("}");
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(msg.toString());
-			}
-
-			throw new NoSuchTierPriceEntryException(msg.toString());
-		}
-
-		return commerceTierPriceEntry;
-	}
-
-	/**
-	 * Returns the commerce tier price entry where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
-	 */
-	@Override
-	public CommerceTierPriceEntry fetchByUUID_G(String uuid, long groupId) {
-		return fetchByUUID_G(uuid, groupId, true);
-	}
-
-	/**
-	 * Returns the commerce tier price entry where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @param retrieveFromCache whether to retrieve from the finder cache
-	 * @return the matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
-	 */
-	@Override
-	public CommerceTierPriceEntry fetchByUUID_G(String uuid, long groupId,
-		boolean retrieveFromCache) {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = finderCache.getResult(FINDER_PATH_FETCH_BY_UUID_G,
-					finderArgs, this);
-		}
-
-		if (result instanceof CommerceTierPriceEntry) {
-			CommerceTierPriceEntry commerceTierPriceEntry = (CommerceTierPriceEntry)result;
-
-			if (!Objects.equals(uuid, commerceTierPriceEntry.getUuid()) ||
-					(groupId != commerceTierPriceEntry.getGroupId())) {
-				result = null;
-			}
-		}
-
-		if (result == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_SELECT_COMMERCETIERPRICEENTRY_WHERE);
-
-			boolean bindUuid = false;
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else if (uuid.equals("")) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-			}
-			else {
-				bindUuid = true;
-
-				query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (bindUuid) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				List<CommerceTierPriceEntry> list = q.list();
-
-				if (list.isEmpty()) {
-					finderCache.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs, list);
-				}
-				else {
-					CommerceTierPriceEntry commerceTierPriceEntry = list.get(0);
-
-					result = commerceTierPriceEntry;
-
-					cacheResult(commerceTierPriceEntry);
-				}
-			}
-			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_FETCH_BY_UUID_G, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		if (result instanceof List<?>) {
-			return null;
-		}
-		else {
-			return (CommerceTierPriceEntry)result;
-		}
-	}
-
-	/**
-	 * Removes the commerce tier price entry where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the commerce tier price entry that was removed
-	 */
-	@Override
-	public CommerceTierPriceEntry removeByUUID_G(String uuid, long groupId)
-		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = findByUUID_G(uuid,
-				groupId);
-
-		return remove(commerceTierPriceEntry);
-	}
-
-	/**
-	 * Returns the number of commerce tier price entries where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching commerce tier price entries
-	 */
-	@Override
-	public int countByUUID_G(String uuid, long groupId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
-
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_COMMERCETIERPRICEENTRY_WHERE);
-
-			boolean bindUuid = false;
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else if (uuid.equals("")) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-			}
-			else {
-				bindUuid = true;
-
-				query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (bindUuid) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "commerceTierPriceEntry.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "commerceTierPriceEntry.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(commerceTierPriceEntry.uuid IS NULL OR commerceTierPriceEntry.uuid = '') AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "commerceTierPriceEntry.groupId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			CommerceTierPriceEntryModelImpl.UUID_COLUMN_BITMASK |
-			CommerceTierPriceEntryModelImpl.COMPANYID_COLUMN_BITMASK |
-			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
+	private FinderPath _finderPathWithPaginationFindByUuid_C;
+	private FinderPath _finderPathWithoutPaginationFindByUuid_C;
+	private FinderPath _finderPathCountByUuid_C;
 
 	/**
 	 * Returns all the commerce tier price entries where uuid = &#63; and companyId = &#63;.
@@ -930,16 +658,18 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByUuid_C(String uuid, long companyId) {
-		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
+	public List<CommerceTierPriceEntry> findByUuid_C(
+		String uuid, long companyId) {
+
+		return findByUuid_C(
+			uuid, companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
 	 * Returns a range of all the commerce tier price entries where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -949,8 +679,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByUuid_C(String uuid,
-		long companyId, int start, int end) {
+	public List<CommerceTierPriceEntry> findByUuid_C(
+		String uuid, long companyId, int start, int end) {
+
 		return findByUuid_C(uuid, companyId, start, end, null);
 	}
 
@@ -958,7 +689,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Returns an ordered range of all the commerce tier price entries where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -969,17 +700,19 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the ordered range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByUuid_C(String uuid,
-		long companyId, int start, int end,
+	public List<CommerceTierPriceEntry> findByUuid_C(
+		String uuid, long companyId, int start, int end,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		return findByUuid_C(uuid, companyId, start, end, orderByComparator, true);
+
+		return findByUuid_C(
+			uuid, companyId, start, end, orderByComparator, true);
 	}
 
 	/**
 	 * Returns an ordered range of all the commerce tier price entries where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -991,39 +724,42 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the ordered range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByUuid_C(String uuid,
-		long companyId, int start, int end,
+	public List<CommerceTierPriceEntry> findByUuid_C(
+		String uuid, long companyId, int start, int end,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean retrieveFromCache) {
+
+		uuid = Objects.toString(uuid, "");
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
-			finderArgs = new Object[] { uuid, companyId };
+			finderPath = _finderPathWithoutPaginationFindByUuid_C;
+			finderArgs = new Object[] {uuid, companyId};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderPath = _finderPathWithPaginationFindByUuid_C;
 			finderArgs = new Object[] {
-					uuid, companyId,
-					
-					start, end, orderByComparator
-				};
+				uuid, companyId, start, end, orderByComparator
+			};
 		}
 
 		List<CommerceTierPriceEntry> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CommerceTierPriceEntry>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CommerceTierPriceEntry>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
 				for (CommerceTierPriceEntry commerceTierPriceEntry : list) {
-					if (!Objects.equals(uuid, commerceTierPriceEntry.getUuid()) ||
-							(companyId != commerceTierPriceEntry.getCompanyId())) {
+					if (!uuid.equals(commerceTierPriceEntry.getUuid()) ||
+						(companyId != commerceTierPriceEntry.getCompanyId())) {
+
 						list = null;
 
 						break;
@@ -1036,8 +772,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(4);
@@ -1047,10 +783,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 			}
 			else {
@@ -1062,11 +795,10 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
+			else if (pagination) {
 				query.append(CommerceTierPriceEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1088,16 +820,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				qPos.add(companyId);
 
 				if (!pagination) {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -1127,12 +859,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry findByUuid_C_First(String uuid,
-		long companyId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+	public CommerceTierPriceEntry findByUuid_C_First(
+			String uuid, long companyId,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByUuid_C_First(uuid,
-				companyId, orderByComparator);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByUuid_C_First(
+			uuid, companyId, orderByComparator);
 
 		if (commerceTierPriceEntry != null) {
 			return commerceTierPriceEntry;
@@ -1162,11 +895,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the first matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByUuid_C_First(String uuid,
-		long companyId,
+	public CommerceTierPriceEntry fetchByUuid_C_First(
+		String uuid, long companyId,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		List<CommerceTierPriceEntry> list = findByUuid_C(uuid, companyId, 0, 1,
-				orderByComparator);
+
+		List<CommerceTierPriceEntry> list = findByUuid_C(
+			uuid, companyId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1185,12 +919,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry findByUuid_C_Last(String uuid,
-		long companyId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+	public CommerceTierPriceEntry findByUuid_C_Last(
+			String uuid, long companyId,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByUuid_C_Last(uuid,
-				companyId, orderByComparator);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByUuid_C_Last(
+			uuid, companyId, orderByComparator);
 
 		if (commerceTierPriceEntry != null) {
 			return commerceTierPriceEntry;
@@ -1220,17 +955,18 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the last matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByUuid_C_Last(String uuid,
-		long companyId,
+	public CommerceTierPriceEntry fetchByUuid_C_Last(
+		String uuid, long companyId,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
+
 		int count = countByUuid_C(uuid, companyId);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CommerceTierPriceEntry> list = findByUuid_C(uuid, companyId,
-				count - 1, count, orderByComparator);
+		List<CommerceTierPriceEntry> list = findByUuid_C(
+			uuid, companyId, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1251,10 +987,14 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public CommerceTierPriceEntry[] findByUuid_C_PrevAndNext(
-		long commerceTierPriceEntryId, String uuid, long companyId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+			long commerceTierPriceEntryId, String uuid, long companyId,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(commerceTierPriceEntryId);
+
+		uuid = Objects.toString(uuid, "");
+
+		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(
+			commerceTierPriceEntryId);
 
 		Session session = null;
 
@@ -1263,13 +1003,15 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			CommerceTierPriceEntry[] array = new CommerceTierPriceEntryImpl[3];
 
-			array[0] = getByUuid_C_PrevAndNext(session, commerceTierPriceEntry,
-					uuid, companyId, orderByComparator, true);
+			array[0] = getByUuid_C_PrevAndNext(
+				session, commerceTierPriceEntry, uuid, companyId,
+				orderByComparator, true);
 
 			array[1] = commerceTierPriceEntry;
 
-			array[2] = getByUuid_C_PrevAndNext(session, commerceTierPriceEntry,
-					uuid, companyId, orderByComparator, false);
+			array[2] = getByUuid_C_PrevAndNext(
+				session, commerceTierPriceEntry, uuid, companyId,
+				orderByComparator, false);
 
 			return array;
 		}
@@ -1281,16 +1023,17 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		}
 	}
 
-	protected CommerceTierPriceEntry getByUuid_C_PrevAndNext(Session session,
-		CommerceTierPriceEntry commerceTierPriceEntry, String uuid,
-		long companyId,
+	protected CommerceTierPriceEntry getByUuid_C_PrevAndNext(
+		Session session, CommerceTierPriceEntry commerceTierPriceEntry,
+		String uuid, long companyId,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(5 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -1301,10 +1044,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 		boolean bindUuid = false;
 
-		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-		}
-		else if (uuid.equals("")) {
+		if (uuid.isEmpty()) {
 			query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 		}
 		else {
@@ -1316,7 +1056,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -1390,10 +1131,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(commerceTierPriceEntry);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						commerceTierPriceEntry)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -1415,8 +1157,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public void removeByUuid_C(String uuid, long companyId) {
-		for (CommerceTierPriceEntry commerceTierPriceEntry : findByUuid_C(
-				uuid, companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+		for (CommerceTierPriceEntry commerceTierPriceEntry :
+				findByUuid_C(
+					uuid, companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
+
 			remove(commerceTierPriceEntry);
 		}
 	}
@@ -1430,9 +1175,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public int countByUuid_C(String uuid, long companyId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+		uuid = Objects.toString(uuid, "");
 
-		Object[] finderArgs = new Object[] { uuid, companyId };
+		FinderPath finderPath = _finderPathCountByUuid_C;
+
+		Object[] finderArgs = new Object[] {uuid, companyId};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -1443,10 +1190,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			boolean bindUuid = false;
 
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else if (uuid.equals("")) {
+			if (uuid.isEmpty()) {
 				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 			}
 			else {
@@ -1491,542 +1235,18 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "commerceTierPriceEntry.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "commerceTierPriceEntry.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(commerceTierPriceEntry.uuid IS NULL OR commerceTierPriceEntry.uuid = '') AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "commerceTierPriceEntry.companyId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByGroupId",
-			new String[] {
-				Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID =
-		new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
-			CommerceTierPriceEntryModelImpl.GROUPID_COLUMN_BITMASK |
-			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 =
+		"commerceTierPriceEntry.uuid = ? AND ";
 
-	/**
-	 * Returns all the commerce tier price entries where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the matching commerce tier price entries
-	 */
-	@Override
-	public List<CommerceTierPriceEntry> findByGroupId(long groupId) {
-		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 =
+		"(commerceTierPriceEntry.uuid IS NULL OR commerceTierPriceEntry.uuid = '') AND ";
 
-	/**
-	 * Returns a range of all the commerce tier price entries where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of commerce tier price entries
-	 * @param end the upper bound of the range of commerce tier price entries (not inclusive)
-	 * @return the range of matching commerce tier price entries
-	 */
-	@Override
-	public List<CommerceTierPriceEntry> findByGroupId(long groupId, int start,
-		int end) {
-		return findByGroupId(groupId, start, end, null);
-	}
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 =
+		"commerceTierPriceEntry.companyId = ?";
 
-	/**
-	 * Returns an ordered range of all the commerce tier price entries where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of commerce tier price entries
-	 * @param end the upper bound of the range of commerce tier price entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching commerce tier price entries
-	 */
-	@Override
-	public List<CommerceTierPriceEntry> findByGroupId(long groupId, int start,
-		int end, OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		return findByGroupId(groupId, start, end, orderByComparator, true);
-	}
-
-	/**
-	 * Returns an ordered range of all the commerce tier price entries where groupId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param start the lower bound of the range of commerce tier price entries
-	 * @param end the upper bound of the range of commerce tier price entries (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @param retrieveFromCache whether to retrieve from the finder cache
-	 * @return the ordered range of matching commerce tier price entries
-	 */
-	@Override
-	public List<CommerceTierPriceEntry> findByGroupId(long groupId, int start,
-		int end, OrderByComparator<CommerceTierPriceEntry> orderByComparator,
-		boolean retrieveFromCache) {
-		boolean pagination = true;
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
-		}
-
-		List<CommerceTierPriceEntry> list = null;
-
-		if (retrieveFromCache) {
-			list = (List<CommerceTierPriceEntry>)finderCache.getResult(finderPath,
-					finderArgs, this);
-
-			if ((list != null) && !list.isEmpty()) {
-				for (CommerceTierPriceEntry commerceTierPriceEntry : list) {
-					if ((groupId != commerceTierPriceEntry.getGroupId())) {
-						list = null;
-
-						break;
-					}
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 2));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_COMMERCETIERPRICEENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-			else
-			 if (pagination) {
-				query.append(CommerceTierPriceEntryModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (!pagination) {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end, false);
-
-					Collections.sort(list);
-
-					list = Collections.unmodifiableList(list);
-				}
-				else {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end);
-				}
-
-				cacheResult(list);
-
-				finderCache.putResult(finderPath, finderArgs, list);
-			}
-			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first commerce tier price entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching commerce tier price entry
-	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
-	 */
-	@Override
-	public CommerceTierPriceEntry findByGroupId_First(long groupId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
-		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByGroupId_First(groupId,
-				orderByComparator);
-
-		if (commerceTierPriceEntry != null) {
-			return commerceTierPriceEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append("}");
-
-		throw new NoSuchTierPriceEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the first commerce tier price entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
-	 */
-	@Override
-	public CommerceTierPriceEntry fetchByGroupId_First(long groupId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		List<CommerceTierPriceEntry> list = findByGroupId(groupId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last commerce tier price entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching commerce tier price entry
-	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
-	 */
-	@Override
-	public CommerceTierPriceEntry findByGroupId_Last(long groupId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
-		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByGroupId_Last(groupId,
-				orderByComparator);
-
-		if (commerceTierPriceEntry != null) {
-			return commerceTierPriceEntry;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("groupId=");
-		msg.append(groupId);
-
-		msg.append("}");
-
-		throw new NoSuchTierPriceEntryException(msg.toString());
-	}
-
-	/**
-	 * Returns the last commerce tier price entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
-	 */
-	@Override
-	public CommerceTierPriceEntry fetchByGroupId_Last(long groupId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		int count = countByGroupId(groupId);
-
-		if (count == 0) {
-			return null;
-		}
-
-		List<CommerceTierPriceEntry> list = findByGroupId(groupId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the commerce tier price entries before and after the current commerce tier price entry in the ordered set where groupId = &#63;.
-	 *
-	 * @param commerceTierPriceEntryId the primary key of the current commerce tier price entry
-	 * @param groupId the group ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next commerce tier price entry
-	 * @throws NoSuchTierPriceEntryException if a commerce tier price entry with the primary key could not be found
-	 */
-	@Override
-	public CommerceTierPriceEntry[] findByGroupId_PrevAndNext(
-		long commerceTierPriceEntryId, long groupId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
-		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(commerceTierPriceEntryId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			CommerceTierPriceEntry[] array = new CommerceTierPriceEntryImpl[3];
-
-			array[0] = getByGroupId_PrevAndNext(session,
-					commerceTierPriceEntry, groupId, orderByComparator, true);
-
-			array[1] = commerceTierPriceEntry;
-
-			array[2] = getByGroupId_PrevAndNext(session,
-					commerceTierPriceEntry, groupId, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected CommerceTierPriceEntry getByGroupId_PrevAndNext(Session session,
-		CommerceTierPriceEntry commerceTierPriceEntry, long groupId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
-		boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
-					(orderByComparator.getOrderByFields().length * 3));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_COMMERCETIERPRICEENTRY_WHERE);
-
-		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-		else {
-			query.append(CommerceTierPriceEntryModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(groupId);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(commerceTierPriceEntry);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<CommerceTierPriceEntry> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all the commerce tier price entries where groupId = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 */
-	@Override
-	public void removeByGroupId(long groupId) {
-		for (CommerceTierPriceEntry commerceTierPriceEntry : findByGroupId(
-				groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
-			remove(commerceTierPriceEntry);
-		}
-	}
-
-	/**
-	 * Returns the number of commerce tier price entries where groupId = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @return the number of matching commerce tier price entries
-	 */
-	@Override
-	public int countByGroupId(long groupId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
-
-		Object[] finderArgs = new Object[] { groupId };
-
-		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_COMMERCETIERPRICEENTRY_WHERE);
-
-			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-
-				finderCache.putResult(finderPath, finderArgs, count);
-			}
-			catch (Exception e) {
-				finderCache.removeResult(finderPath, finderArgs);
-
-				throw processException(e);
-			}
-			finally {
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "commerceTierPriceEntry.groupId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
-			new String[] {
-				Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			CommerceTierPriceEntryModelImpl.COMPANYID_COLUMN_BITMASK |
-			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
-			new String[] { Long.class.getName() });
+	private FinderPath _finderPathWithPaginationFindByCompanyId;
+	private FinderPath _finderPathWithoutPaginationFindByCompanyId;
+	private FinderPath _finderPathCountByCompanyId;
 
 	/**
 	 * Returns all the commerce tier price entries where companyId = &#63;.
@@ -2036,15 +1256,15 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public List<CommerceTierPriceEntry> findByCompanyId(long companyId) {
-		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			null);
+		return findByCompanyId(
+			companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
 	 * Returns a range of all the commerce tier price entries where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -2053,8 +1273,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByCompanyId(long companyId,
-		int start, int end) {
+	public List<CommerceTierPriceEntry> findByCompanyId(
+		long companyId, int start, int end) {
+
 		return findByCompanyId(companyId, start, end, null);
 	}
 
@@ -2062,7 +1283,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Returns an ordered range of all the commerce tier price entries where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -2072,9 +1293,10 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the ordered range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByCompanyId(long companyId,
-		int start, int end,
+	public List<CommerceTierPriceEntry> findByCompanyId(
+		long companyId, int start, int end,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
+
 		return findByCompanyId(companyId, start, end, orderByComparator, true);
 	}
 
@@ -2082,7 +1304,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Returns an ordered range of all the commerce tier price entries where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -2093,30 +1315,34 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the ordered range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByCompanyId(long companyId,
-		int start, int end,
+	public List<CommerceTierPriceEntry> findByCompanyId(
+		long companyId, int start, int end,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean retrieveFromCache) {
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
+			finderPath = _finderPathWithoutPaginationFindByCompanyId;
+			finderArgs = new Object[] {companyId};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+			finderPath = _finderPathWithPaginationFindByCompanyId;
+			finderArgs = new Object[] {
+				companyId, start, end, orderByComparator
+			};
 		}
 
 		List<CommerceTierPriceEntry> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CommerceTierPriceEntry>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CommerceTierPriceEntry>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
 				for (CommerceTierPriceEntry commerceTierPriceEntry : list) {
@@ -2133,8 +1359,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(3);
@@ -2145,11 +1371,10 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
+			else if (pagination) {
 				query.append(CommerceTierPriceEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2167,16 +1392,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				qPos.add(companyId);
 
 				if (!pagination) {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -2205,11 +1430,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry findByCompanyId_First(long companyId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+	public CommerceTierPriceEntry findByCompanyId_First(
+			long companyId,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByCompanyId_First(companyId,
-				orderByComparator);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByCompanyId_First(
+			companyId, orderByComparator);
 
 		if (commerceTierPriceEntry != null) {
 			return commerceTierPriceEntry;
@@ -2235,10 +1462,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the first matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByCompanyId_First(long companyId,
+	public CommerceTierPriceEntry fetchByCompanyId_First(
+		long companyId,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		List<CommerceTierPriceEntry> list = findByCompanyId(companyId, 0, 1,
-				orderByComparator);
+
+		List<CommerceTierPriceEntry> list = findByCompanyId(
+			companyId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -2256,11 +1485,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry findByCompanyId_Last(long companyId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+	public CommerceTierPriceEntry findByCompanyId_Last(
+			long companyId,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByCompanyId_Last(companyId,
-				orderByComparator);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByCompanyId_Last(
+			companyId, orderByComparator);
 
 		if (commerceTierPriceEntry != null) {
 			return commerceTierPriceEntry;
@@ -2286,16 +1517,18 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the last matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByCompanyId_Last(long companyId,
+	public CommerceTierPriceEntry fetchByCompanyId_Last(
+		long companyId,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
+
 		int count = countByCompanyId(companyId);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CommerceTierPriceEntry> list = findByCompanyId(companyId,
-				count - 1, count, orderByComparator);
+		List<CommerceTierPriceEntry> list = findByCompanyId(
+			companyId, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -2315,10 +1548,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public CommerceTierPriceEntry[] findByCompanyId_PrevAndNext(
-		long commerceTierPriceEntryId, long companyId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+			long commerceTierPriceEntryId, long companyId,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(commerceTierPriceEntryId);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(
+			commerceTierPriceEntryId);
 
 		Session session = null;
 
@@ -2327,13 +1562,15 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			CommerceTierPriceEntry[] array = new CommerceTierPriceEntryImpl[3];
 
-			array[0] = getByCompanyId_PrevAndNext(session,
-					commerceTierPriceEntry, companyId, orderByComparator, true);
+			array[0] = getByCompanyId_PrevAndNext(
+				session, commerceTierPriceEntry, companyId, orderByComparator,
+				true);
 
 			array[1] = commerceTierPriceEntry;
 
-			array[2] = getByCompanyId_PrevAndNext(session,
-					commerceTierPriceEntry, companyId, orderByComparator, false);
+			array[2] = getByCompanyId_PrevAndNext(
+				session, commerceTierPriceEntry, companyId, orderByComparator,
+				false);
 
 			return array;
 		}
@@ -2350,11 +1587,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		long companyId,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -2366,7 +1604,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -2436,10 +1675,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		qPos.add(companyId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(commerceTierPriceEntry);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						commerceTierPriceEntry)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -2460,8 +1700,10 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public void removeByCompanyId(long companyId) {
-		for (CommerceTierPriceEntry commerceTierPriceEntry : findByCompanyId(
-				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+		for (CommerceTierPriceEntry commerceTierPriceEntry :
+				findByCompanyId(
+					companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+
 			remove(commerceTierPriceEntry);
 		}
 	}
@@ -2474,9 +1716,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public int countByCompanyId(long companyId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
+		FinderPath finderPath = _finderPathCountByCompanyId;
 
-		Object[] finderArgs = new Object[] { companyId };
+		Object[] finderArgs = new Object[] {companyId};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -2517,32 +1759,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "commerceTierPriceEntry.companyId = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMMERCEPRICEENTRYID =
-		new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByCommercePriceEntryId",
-			new String[] {
-				Long.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMMERCEPRICEENTRYID =
-		new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByCommercePriceEntryId",
-			new String[] { Long.class.getName() },
-			CommerceTierPriceEntryModelImpl.COMMERCEPRICEENTRYID_COLUMN_BITMASK |
-			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMMERCEPRICEENTRYID = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByCommercePriceEntryId", new String[] { Long.class.getName() });
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 =
+		"commerceTierPriceEntry.companyId = ?";
+
+	private FinderPath _finderPathWithPaginationFindByCommercePriceEntryId;
+	private FinderPath _finderPathWithoutPaginationFindByCommercePriceEntryId;
+	private FinderPath _finderPathCountByCommercePriceEntryId;
 
 	/**
 	 * Returns all the commerce tier price entries where commercePriceEntryId = &#63;.
@@ -2553,15 +1775,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	@Override
 	public List<CommerceTierPriceEntry> findByCommercePriceEntryId(
 		long commercePriceEntryId) {
-		return findByCommercePriceEntryId(commercePriceEntryId,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+
+		return findByCommercePriceEntryId(
+			commercePriceEntryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
 	 * Returns a range of all the commerce tier price entries where commercePriceEntryId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param commercePriceEntryId the commerce price entry ID
@@ -2572,14 +1795,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	@Override
 	public List<CommerceTierPriceEntry> findByCommercePriceEntryId(
 		long commercePriceEntryId, int start, int end) {
-		return findByCommercePriceEntryId(commercePriceEntryId, start, end, null);
+
+		return findByCommercePriceEntryId(
+			commercePriceEntryId, start, end, null);
 	}
 
 	/**
 	 * Returns an ordered range of all the commerce tier price entries where commercePriceEntryId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param commercePriceEntryId the commerce price entry ID
@@ -2592,15 +1817,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	public List<CommerceTierPriceEntry> findByCommercePriceEntryId(
 		long commercePriceEntryId, int start, int end,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		return findByCommercePriceEntryId(commercePriceEntryId, start, end,
-			orderByComparator, true);
+
+		return findByCommercePriceEntryId(
+			commercePriceEntryId, start, end, orderByComparator, true);
 	}
 
 	/**
 	 * Returns an ordered range of all the commerce tier price entries where commercePriceEntryId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param commercePriceEntryId the commerce price entry ID
@@ -2615,34 +1841,36 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		long commercePriceEntryId, int start, int end,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean retrieveFromCache) {
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMMERCEPRICEENTRYID;
-			finderArgs = new Object[] { commercePriceEntryId };
+			finderPath = _finderPathWithoutPaginationFindByCommercePriceEntryId;
+			finderArgs = new Object[] {commercePriceEntryId};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMMERCEPRICEENTRYID;
+			finderPath = _finderPathWithPaginationFindByCommercePriceEntryId;
 			finderArgs = new Object[] {
-					commercePriceEntryId,
-					
-					start, end, orderByComparator
-				};
+				commercePriceEntryId, start, end, orderByComparator
+			};
 		}
 
 		List<CommerceTierPriceEntry> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CommerceTierPriceEntry>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CommerceTierPriceEntry>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
 				for (CommerceTierPriceEntry commerceTierPriceEntry : list) {
-					if ((commercePriceEntryId != commerceTierPriceEntry.getCommercePriceEntryId())) {
+					if ((commercePriceEntryId !=
+							commerceTierPriceEntry.getCommercePriceEntryId())) {
+
 						list = null;
 
 						break;
@@ -2655,8 +1883,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					3 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(3);
@@ -2664,14 +1892,14 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			query.append(_SQL_SELECT_COMMERCETIERPRICEENTRY_WHERE);
 
-			query.append(_FINDER_COLUMN_COMMERCEPRICEENTRYID_COMMERCEPRICEENTRYID_2);
+			query.append(
+				_FINDER_COLUMN_COMMERCEPRICEENTRYID_COMMERCEPRICEENTRYID_2);
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
+			else if (pagination) {
 				query.append(CommerceTierPriceEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2689,16 +1917,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				qPos.add(commercePriceEntryId);
 
 				if (!pagination) {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -2728,11 +1956,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public CommerceTierPriceEntry findByCommercePriceEntryId_First(
-		long commercePriceEntryId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+			long commercePriceEntryId,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByCommercePriceEntryId_First(commercePriceEntryId,
-				orderByComparator);
+
+		CommerceTierPriceEntry commerceTierPriceEntry =
+			fetchByCommercePriceEntryId_First(
+				commercePriceEntryId, orderByComparator);
 
 		if (commerceTierPriceEntry != null) {
 			return commerceTierPriceEntry;
@@ -2761,8 +1991,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	public CommerceTierPriceEntry fetchByCommercePriceEntryId_First(
 		long commercePriceEntryId,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		List<CommerceTierPriceEntry> list = findByCommercePriceEntryId(commercePriceEntryId,
-				0, 1, orderByComparator);
+
+		List<CommerceTierPriceEntry> list = findByCommercePriceEntryId(
+			commercePriceEntryId, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -2781,11 +2012,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public CommerceTierPriceEntry findByCommercePriceEntryId_Last(
-		long commercePriceEntryId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+			long commercePriceEntryId,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByCommercePriceEntryId_Last(commercePriceEntryId,
-				orderByComparator);
+
+		CommerceTierPriceEntry commerceTierPriceEntry =
+			fetchByCommercePriceEntryId_Last(
+				commercePriceEntryId, orderByComparator);
 
 		if (commerceTierPriceEntry != null) {
 			return commerceTierPriceEntry;
@@ -2814,14 +2047,15 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	public CommerceTierPriceEntry fetchByCommercePriceEntryId_Last(
 		long commercePriceEntryId,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
+
 		int count = countByCommercePriceEntryId(commercePriceEntryId);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CommerceTierPriceEntry> list = findByCommercePriceEntryId(commercePriceEntryId,
-				count - 1, count, orderByComparator);
+		List<CommerceTierPriceEntry> list = findByCommercePriceEntryId(
+			commercePriceEntryId, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -2841,10 +2075,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public CommerceTierPriceEntry[] findByCommercePriceEntryId_PrevAndNext(
-		long commerceTierPriceEntryId, long commercePriceEntryId,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+			long commerceTierPriceEntryId, long commercePriceEntryId,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(commerceTierPriceEntryId);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(
+			commerceTierPriceEntryId);
 
 		Session session = null;
 
@@ -2853,15 +2089,15 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			CommerceTierPriceEntry[] array = new CommerceTierPriceEntryImpl[3];
 
-			array[0] = getByCommercePriceEntryId_PrevAndNext(session,
-					commerceTierPriceEntry, commercePriceEntryId,
-					orderByComparator, true);
+			array[0] = getByCommercePriceEntryId_PrevAndNext(
+				session, commerceTierPriceEntry, commercePriceEntryId,
+				orderByComparator, true);
 
 			array[1] = commerceTierPriceEntry;
 
-			array[2] = getByCommercePriceEntryId_PrevAndNext(session,
-					commerceTierPriceEntry, commercePriceEntryId,
-					orderByComparator, false);
+			array[2] = getByCommercePriceEntryId_PrevAndNext(
+				session, commerceTierPriceEntry, commercePriceEntryId,
+				orderByComparator, false);
 
 			return array;
 		}
@@ -2878,11 +2114,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		long commercePriceEntryId,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(4 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				4 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -2891,10 +2128,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 		query.append(_SQL_SELECT_COMMERCETIERPRICEENTRY_WHERE);
 
-		query.append(_FINDER_COLUMN_COMMERCEPRICEENTRYID_COMMERCEPRICEENTRYID_2);
+		query.append(
+			_FINDER_COLUMN_COMMERCEPRICEENTRYID_COMMERCEPRICEENTRYID_2);
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -2964,10 +2203,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		qPos.add(commercePriceEntryId);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(commerceTierPriceEntry);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						commerceTierPriceEntry)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -2988,8 +2228,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public void removeByCommercePriceEntryId(long commercePriceEntryId) {
-		for (CommerceTierPriceEntry commerceTierPriceEntry : findByCommercePriceEntryId(
-				commercePriceEntryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+		for (CommerceTierPriceEntry commerceTierPriceEntry :
+				findByCommercePriceEntryId(
+					commercePriceEntryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					null)) {
+
 			remove(commerceTierPriceEntry);
 		}
 	}
@@ -3002,9 +2245,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public int countByCommercePriceEntryId(long commercePriceEntryId) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMMERCEPRICEENTRYID;
+		FinderPath finderPath = _finderPathCountByCommercePriceEntryId;
 
-		Object[] finderArgs = new Object[] { commercePriceEntryId };
+		Object[] finderArgs = new Object[] {commercePriceEntryId};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -3013,7 +2256,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			query.append(_SQL_COUNT_COMMERCETIERPRICEENTRY_WHERE);
 
-			query.append(_FINDER_COLUMN_COMMERCEPRICEENTRYID_COMMERCEPRICEENTRYID_2);
+			query.append(
+				_FINDER_COLUMN_COMMERCEPRICEENTRYID_COMMERCEPRICEENTRYID_2);
 
 			String sql = query.toString();
 
@@ -3045,22 +2289,15 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_COMMERCEPRICEENTRYID_COMMERCEPRICEENTRYID_2 =
-		"commerceTierPriceEntry.commercePriceEntryId = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_M = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByC_M",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			CommerceTierPriceEntryModelImpl.COMMERCEPRICEENTRYID_COLUMN_BITMASK |
-			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_M = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_M",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+	private static final String
+		_FINDER_COLUMN_COMMERCEPRICEENTRYID_COMMERCEPRICEENTRYID_2 =
+			"commerceTierPriceEntry.commercePriceEntryId = ?";
+
+	private FinderPath _finderPathFetchByC_M;
+	private FinderPath _finderPathCountByC_M;
 
 	/**
-	 * Returns the commerce tier price entry where commercePriceEntryId = &#63; and minQuantity = &#63; or throws a {@link NoSuchTierPriceEntryException} if it could not be found.
+	 * Returns the commerce tier price entry where commercePriceEntryId = &#63; and minQuantity = &#63; or throws a <code>NoSuchTierPriceEntryException</code> if it could not be found.
 	 *
 	 * @param commercePriceEntryId the commerce price entry ID
 	 * @param minQuantity the min quantity
@@ -3068,10 +2305,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry findByC_M(long commercePriceEntryId,
-		int minQuantity) throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByC_M(commercePriceEntryId,
-				minQuantity);
+	public CommerceTierPriceEntry findByC_M(
+			long commercePriceEntryId, int minQuantity)
+		throws NoSuchTierPriceEntryException {
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByC_M(
+			commercePriceEntryId, minQuantity);
 
 		if (commerceTierPriceEntry == null) {
 			StringBundler msg = new StringBundler(6);
@@ -3104,8 +2343,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByC_M(long commercePriceEntryId,
-		int minQuantity) {
+	public CommerceTierPriceEntry fetchByC_M(
+		long commercePriceEntryId, int minQuantity) {
+
 		return fetchByC_M(commercePriceEntryId, minQuantity, true);
 	}
 
@@ -3118,22 +2358,26 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByC_M(long commercePriceEntryId,
-		int minQuantity, boolean retrieveFromCache) {
-		Object[] finderArgs = new Object[] { commercePriceEntryId, minQuantity };
+	public CommerceTierPriceEntry fetchByC_M(
+		long commercePriceEntryId, int minQuantity, boolean retrieveFromCache) {
+
+		Object[] finderArgs = new Object[] {commercePriceEntryId, minQuantity};
 
 		Object result = null;
 
 		if (retrieveFromCache) {
-			result = finderCache.getResult(FINDER_PATH_FETCH_BY_C_M,
-					finderArgs, this);
+			result = finderCache.getResult(
+				_finderPathFetchByC_M, finderArgs, this);
 		}
 
 		if (result instanceof CommerceTierPriceEntry) {
-			CommerceTierPriceEntry commerceTierPriceEntry = (CommerceTierPriceEntry)result;
+			CommerceTierPriceEntry commerceTierPriceEntry =
+				(CommerceTierPriceEntry)result;
 
-			if ((commercePriceEntryId != commerceTierPriceEntry.getCommercePriceEntryId()) ||
-					(minQuantity != commerceTierPriceEntry.getMinQuantity())) {
+			if ((commercePriceEntryId !=
+					commerceTierPriceEntry.getCommercePriceEntryId()) ||
+				(minQuantity != commerceTierPriceEntry.getMinQuantity())) {
+
 				result = null;
 			}
 		}
@@ -3165,8 +2409,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				List<CommerceTierPriceEntry> list = q.list();
 
 				if (list.isEmpty()) {
-					finderCache.putResult(FINDER_PATH_FETCH_BY_C_M, finderArgs,
-						list);
+					finderCache.putResult(
+						_finderPathFetchByC_M, finderArgs, list);
 				}
 				else {
 					CommerceTierPriceEntry commerceTierPriceEntry = list.get(0);
@@ -3177,7 +2421,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_FETCH_BY_C_M, finderArgs);
+				finderCache.removeResult(_finderPathFetchByC_M, finderArgs);
 
 				throw processException(e);
 			}
@@ -3202,10 +2446,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the commerce tier price entry that was removed
 	 */
 	@Override
-	public CommerceTierPriceEntry removeByC_M(long commercePriceEntryId,
-		int minQuantity) throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = findByC_M(commercePriceEntryId,
-				minQuantity);
+	public CommerceTierPriceEntry removeByC_M(
+			long commercePriceEntryId, int minQuantity)
+		throws NoSuchTierPriceEntryException {
+
+		CommerceTierPriceEntry commerceTierPriceEntry = findByC_M(
+			commercePriceEntryId, minQuantity);
 
 		return remove(commerceTierPriceEntry);
 	}
@@ -3219,9 +2465,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public int countByC_M(long commercePriceEntryId, int minQuantity) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_M;
+		FinderPath finderPath = _finderPathCountByC_M;
 
-		Object[] finderArgs = new Object[] { commercePriceEntryId, minQuantity };
+		Object[] finderArgs = new Object[] {commercePriceEntryId, minQuantity};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -3266,22 +2512,14 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_C_M_COMMERCEPRICEENTRYID_2 = "commerceTierPriceEntry.commercePriceEntryId = ? AND ";
-	private static final String _FINDER_COLUMN_C_M_MINQUANTITY_2 = "commerceTierPriceEntry.minQuantity = ?";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTM = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_LtM",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				
-			Integer.class.getName(), Integer.class.getName(),
-				OrderByComparator.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTM = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_LtM",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+	private static final String _FINDER_COLUMN_C_M_COMMERCEPRICEENTRYID_2 =
+		"commerceTierPriceEntry.commercePriceEntryId = ? AND ";
+
+	private static final String _FINDER_COLUMN_C_M_MINQUANTITY_2 =
+		"commerceTierPriceEntry.minQuantity = ?";
+
+	private FinderPath _finderPathWithPaginationFindByC_LtM;
+	private FinderPath _finderPathWithPaginationCountByC_LtM;
 
 	/**
 	 * Returns all the commerce tier price entries where commercePriceEntryId = &#63; and minQuantity &le; &#63;.
@@ -3291,17 +2529,19 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByC_LtM(long commercePriceEntryId,
-		int minQuantity) {
-		return findByC_LtM(commercePriceEntryId, minQuantity,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	public List<CommerceTierPriceEntry> findByC_LtM(
+		long commercePriceEntryId, int minQuantity) {
+
+		return findByC_LtM(
+			commercePriceEntryId, minQuantity, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 	}
 
 	/**
 	 * Returns a range of all the commerce tier price entries where commercePriceEntryId = &#63; and minQuantity &le; &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param commercePriceEntryId the commerce price entry ID
@@ -3311,8 +2551,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByC_LtM(long commercePriceEntryId,
-		int minQuantity, int start, int end) {
+	public List<CommerceTierPriceEntry> findByC_LtM(
+		long commercePriceEntryId, int minQuantity, int start, int end) {
+
 		return findByC_LtM(commercePriceEntryId, minQuantity, start, end, null);
 	}
 
@@ -3320,7 +2561,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Returns an ordered range of all the commerce tier price entries where commercePriceEntryId = &#63; and minQuantity &le; &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param commercePriceEntryId the commerce price entry ID
@@ -3331,18 +2572,20 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the ordered range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByC_LtM(long commercePriceEntryId,
-		int minQuantity, int start, int end,
+	public List<CommerceTierPriceEntry> findByC_LtM(
+		long commercePriceEntryId, int minQuantity, int start, int end,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		return findByC_LtM(commercePriceEntryId, minQuantity, start, end,
-			orderByComparator, true);
+
+		return findByC_LtM(
+			commercePriceEntryId, minQuantity, start, end, orderByComparator,
+			true);
 	}
 
 	/**
 	 * Returns an ordered range of all the commerce tier price entries where commercePriceEntryId = &#63; and minQuantity &le; &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param commercePriceEntryId the commerce price entry ID
@@ -3354,31 +2597,33 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the ordered range of matching commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findByC_LtM(long commercePriceEntryId,
-		int minQuantity, int start, int end,
+	public List<CommerceTierPriceEntry> findByC_LtM(
+		long commercePriceEntryId, int minQuantity, int start, int end,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean retrieveFromCache) {
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_LTM;
+		finderPath = _finderPathWithPaginationFindByC_LtM;
 		finderArgs = new Object[] {
-				commercePriceEntryId, minQuantity,
-				
-				start, end, orderByComparator
-			};
+			commercePriceEntryId, minQuantity, start, end, orderByComparator
+		};
 
 		List<CommerceTierPriceEntry> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CommerceTierPriceEntry>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CommerceTierPriceEntry>)finderCache.getResult(
+				finderPath, finderArgs, this);
 
 			if ((list != null) && !list.isEmpty()) {
 				for (CommerceTierPriceEntry commerceTierPriceEntry : list) {
-					if ((commercePriceEntryId != commerceTierPriceEntry.getCommercePriceEntryId()) ||
-							(minQuantity < commerceTierPriceEntry.getMinQuantity())) {
+					if ((commercePriceEntryId !=
+							commerceTierPriceEntry.getCommercePriceEntryId()) ||
+						(minQuantity <
+							commerceTierPriceEntry.getMinQuantity())) {
+
 						list = null;
 
 						break;
@@ -3391,8 +2636,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(4 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					4 + (orderByComparator.getOrderByFields().length * 2));
 			}
 			else {
 				query = new StringBundler(4);
@@ -3405,11 +2650,10 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			query.append(_FINDER_COLUMN_C_LTM_MINQUANTITY_2);
 
 			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 			}
-			else
-			 if (pagination) {
+			else if (pagination) {
 				query.append(CommerceTierPriceEntryModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3429,16 +2673,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				qPos.add(minQuantity);
 
 				if (!pagination) {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -3468,12 +2712,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry findByC_LtM_First(long commercePriceEntryId,
-		int minQuantity,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+	public CommerceTierPriceEntry findByC_LtM_First(
+			long commercePriceEntryId, int minQuantity,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByC_LtM_First(commercePriceEntryId,
-				minQuantity, orderByComparator);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByC_LtM_First(
+			commercePriceEntryId, minQuantity, orderByComparator);
 
 		if (commerceTierPriceEntry != null) {
 			return commerceTierPriceEntry;
@@ -3506,8 +2751,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	public CommerceTierPriceEntry fetchByC_LtM_First(
 		long commercePriceEntryId, int minQuantity,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
-		List<CommerceTierPriceEntry> list = findByC_LtM(commercePriceEntryId,
-				minQuantity, 0, 1, orderByComparator);
+
+		List<CommerceTierPriceEntry> list = findByC_LtM(
+			commercePriceEntryId, minQuantity, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -3526,12 +2772,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry findByC_LtM_Last(long commercePriceEntryId,
-		int minQuantity,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+	public CommerceTierPriceEntry findByC_LtM_Last(
+			long commercePriceEntryId, int minQuantity,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByC_LtM_Last(commercePriceEntryId,
-				minQuantity, orderByComparator);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByC_LtM_Last(
+			commercePriceEntryId, minQuantity, orderByComparator);
 
 		if (commerceTierPriceEntry != null) {
 			return commerceTierPriceEntry;
@@ -3561,17 +2808,19 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the last matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByC_LtM_Last(long commercePriceEntryId,
-		int minQuantity,
+	public CommerceTierPriceEntry fetchByC_LtM_Last(
+		long commercePriceEntryId, int minQuantity,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
+
 		int count = countByC_LtM(commercePriceEntryId, minQuantity);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CommerceTierPriceEntry> list = findByC_LtM(commercePriceEntryId,
-				minQuantity, count - 1, count, orderByComparator);
+		List<CommerceTierPriceEntry> list = findByC_LtM(
+			commercePriceEntryId, minQuantity, count - 1, count,
+			orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -3592,11 +2841,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public CommerceTierPriceEntry[] findByC_LtM_PrevAndNext(
-		long commerceTierPriceEntryId, long commercePriceEntryId,
-		int minQuantity,
-		OrderByComparator<CommerceTierPriceEntry> orderByComparator)
+			long commerceTierPriceEntryId, long commercePriceEntryId,
+			int minQuantity,
+			OrderByComparator<CommerceTierPriceEntry> orderByComparator)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(commerceTierPriceEntryId);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = findByPrimaryKey(
+			commerceTierPriceEntryId);
 
 		Session session = null;
 
@@ -3605,13 +2856,15 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			CommerceTierPriceEntry[] array = new CommerceTierPriceEntryImpl[3];
 
-			array[0] = getByC_LtM_PrevAndNext(session, commerceTierPriceEntry,
-					commercePriceEntryId, minQuantity, orderByComparator, true);
+			array[0] = getByC_LtM_PrevAndNext(
+				session, commerceTierPriceEntry, commercePriceEntryId,
+				minQuantity, orderByComparator, true);
 
 			array[1] = commerceTierPriceEntry;
 
-			array[2] = getByC_LtM_PrevAndNext(session, commerceTierPriceEntry,
-					commercePriceEntryId, minQuantity, orderByComparator, false);
+			array[2] = getByC_LtM_PrevAndNext(
+				session, commerceTierPriceEntry, commercePriceEntryId,
+				minQuantity, orderByComparator, false);
 
 			return array;
 		}
@@ -3623,16 +2876,17 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		}
 	}
 
-	protected CommerceTierPriceEntry getByC_LtM_PrevAndNext(Session session,
-		CommerceTierPriceEntry commerceTierPriceEntry,
+	protected CommerceTierPriceEntry getByC_LtM_PrevAndNext(
+		Session session, CommerceTierPriceEntry commerceTierPriceEntry,
 		long commercePriceEntryId, int minQuantity,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean previous) {
+
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
-			query = new StringBundler(5 +
-					(orderByComparator.getOrderByConditionFields().length * 3) +
+			query = new StringBundler(
+				5 + (orderByComparator.getOrderByConditionFields().length * 3) +
 					(orderByComparator.getOrderByFields().length * 3));
 		}
 		else {
@@ -3646,7 +2900,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		query.append(_FINDER_COLUMN_C_LTM_MINQUANTITY_2);
 
 		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+			String[] orderByConditionFields =
+				orderByComparator.getOrderByConditionFields();
 
 			if (orderByConditionFields.length > 0) {
 				query.append(WHERE_AND);
@@ -3718,10 +2973,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		qPos.add(minQuantity);
 
 		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(commerceTierPriceEntry);
+			for (Object orderByConditionValue :
+					orderByComparator.getOrderByConditionValues(
+						commerceTierPriceEntry)) {
 
-			for (Object value : values) {
-				qPos.add(value);
+				qPos.add(orderByConditionValue);
 			}
 		}
 
@@ -3743,9 +2999,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public void removeByC_LtM(long commercePriceEntryId, int minQuantity) {
-		for (CommerceTierPriceEntry commerceTierPriceEntry : findByC_LtM(
-				commercePriceEntryId, minQuantity, QueryUtil.ALL_POS,
-				QueryUtil.ALL_POS, null)) {
+		for (CommerceTierPriceEntry commerceTierPriceEntry :
+				findByC_LtM(
+					commercePriceEntryId, minQuantity, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null)) {
+
 			remove(commerceTierPriceEntry);
 		}
 	}
@@ -3759,9 +3017,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public int countByC_LtM(long commercePriceEntryId, int minQuantity) {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_C_LTM;
+		FinderPath finderPath = _finderPathWithPaginationCountByC_LtM;
 
-		Object[] finderArgs = new Object[] { commercePriceEntryId, minQuantity };
+		Object[] finderArgs = new Object[] {commercePriceEntryId, minQuantity};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -3806,22 +3064,17 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_C_LTM_COMMERCEPRICEENTRYID_2 = "commerceTierPriceEntry.commercePriceEntryId = ? AND ";
-	private static final String _FINDER_COLUMN_C_LTM_MINQUANTITY_2 = "commerceTierPriceEntry.minQuantity <= ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_C_ERC = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
-			CommerceTierPriceEntryImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByC_ERC",
-			new String[] { Long.class.getName(), String.class.getName() },
-			CommerceTierPriceEntryModelImpl.COMPANYID_COLUMN_BITMASK |
-			CommerceTierPriceEntryModelImpl.EXTERNALREFERENCECODE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_ERC = new FinderPath(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_ERC",
-			new String[] { Long.class.getName(), String.class.getName() });
+	private static final String _FINDER_COLUMN_C_LTM_COMMERCEPRICEENTRYID_2 =
+		"commerceTierPriceEntry.commercePriceEntryId = ? AND ";
+
+	private static final String _FINDER_COLUMN_C_LTM_MINQUANTITY_2 =
+		"commerceTierPriceEntry.minQuantity <= ?";
+
+	private FinderPath _finderPathFetchByC_ERC;
+	private FinderPath _finderPathCountByC_ERC;
 
 	/**
-	 * Returns the commerce tier price entry where companyId = &#63; and externalReferenceCode = &#63; or throws a {@link NoSuchTierPriceEntryException} if it could not be found.
+	 * Returns the commerce tier price entry where companyId = &#63; and externalReferenceCode = &#63; or throws a <code>NoSuchTierPriceEntryException</code> if it could not be found.
 	 *
 	 * @param companyId the company ID
 	 * @param externalReferenceCode the external reference code
@@ -3829,10 +3082,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @throws NoSuchTierPriceEntryException if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry findByC_ERC(long companyId,
-		String externalReferenceCode) throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByC_ERC(companyId,
-				externalReferenceCode);
+	public CommerceTierPriceEntry findByC_ERC(
+			long companyId, String externalReferenceCode)
+		throws NoSuchTierPriceEntryException {
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByC_ERC(
+			companyId, externalReferenceCode);
 
 		if (commerceTierPriceEntry == null) {
 			StringBundler msg = new StringBundler(6);
@@ -3865,8 +3120,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByC_ERC(long companyId,
-		String externalReferenceCode) {
+	public CommerceTierPriceEntry fetchByC_ERC(
+		long companyId, String externalReferenceCode) {
+
 		return fetchByC_ERC(companyId, externalReferenceCode, true);
 	}
 
@@ -3879,23 +3135,30 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the matching commerce tier price entry, or <code>null</code> if a matching commerce tier price entry could not be found
 	 */
 	@Override
-	public CommerceTierPriceEntry fetchByC_ERC(long companyId,
-		String externalReferenceCode, boolean retrieveFromCache) {
-		Object[] finderArgs = new Object[] { companyId, externalReferenceCode };
+	public CommerceTierPriceEntry fetchByC_ERC(
+		long companyId, String externalReferenceCode,
+		boolean retrieveFromCache) {
+
+		externalReferenceCode = Objects.toString(externalReferenceCode, "");
+
+		Object[] finderArgs = new Object[] {companyId, externalReferenceCode};
 
 		Object result = null;
 
 		if (retrieveFromCache) {
-			result = finderCache.getResult(FINDER_PATH_FETCH_BY_C_ERC,
-					finderArgs, this);
+			result = finderCache.getResult(
+				_finderPathFetchByC_ERC, finderArgs, this);
 		}
 
 		if (result instanceof CommerceTierPriceEntry) {
-			CommerceTierPriceEntry commerceTierPriceEntry = (CommerceTierPriceEntry)result;
+			CommerceTierPriceEntry commerceTierPriceEntry =
+				(CommerceTierPriceEntry)result;
 
 			if ((companyId != commerceTierPriceEntry.getCompanyId()) ||
-					!Objects.equals(externalReferenceCode,
-						commerceTierPriceEntry.getExternalReferenceCode())) {
+				!Objects.equals(
+					externalReferenceCode,
+					commerceTierPriceEntry.getExternalReferenceCode())) {
+
 				result = null;
 			}
 		}
@@ -3909,10 +3172,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			boolean bindExternalReferenceCode = false;
 
-			if (externalReferenceCode == null) {
-				query.append(_FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_1);
-			}
-			else if (externalReferenceCode.equals("")) {
+			if (externalReferenceCode.isEmpty()) {
 				query.append(_FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_3);
 			}
 			else {
@@ -3941,8 +3201,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				List<CommerceTierPriceEntry> list = q.list();
 
 				if (list.isEmpty()) {
-					finderCache.putResult(FINDER_PATH_FETCH_BY_C_ERC,
-						finderArgs, list);
+					finderCache.putResult(
+						_finderPathFetchByC_ERC, finderArgs, list);
 				}
 				else {
 					if (list.size() > 1) {
@@ -3951,8 +3211,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 						if (_log.isWarnEnabled()) {
 							_log.warn(
 								"CommerceTierPriceEntryPersistenceImpl.fetchByC_ERC(long, String, boolean) with parameters (" +
-								StringUtil.merge(finderArgs) +
-								") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+									StringUtil.merge(finderArgs) +
+										") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
 						}
 					}
 
@@ -3964,7 +3224,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				}
 			}
 			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_FETCH_BY_C_ERC, finderArgs);
+				finderCache.removeResult(_finderPathFetchByC_ERC, finderArgs);
 
 				throw processException(e);
 			}
@@ -3989,10 +3249,12 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the commerce tier price entry that was removed
 	 */
 	@Override
-	public CommerceTierPriceEntry removeByC_ERC(long companyId,
-		String externalReferenceCode) throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = findByC_ERC(companyId,
-				externalReferenceCode);
+	public CommerceTierPriceEntry removeByC_ERC(
+			long companyId, String externalReferenceCode)
+		throws NoSuchTierPriceEntryException {
+
+		CommerceTierPriceEntry commerceTierPriceEntry = findByC_ERC(
+			companyId, externalReferenceCode);
 
 		return remove(commerceTierPriceEntry);
 	}
@@ -4006,9 +3268,11 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public int countByC_ERC(long companyId, String externalReferenceCode) {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_ERC;
+		externalReferenceCode = Objects.toString(externalReferenceCode, "");
 
-		Object[] finderArgs = new Object[] { companyId, externalReferenceCode };
+		FinderPath finderPath = _finderPathCountByC_ERC;
+
+		Object[] finderArgs = new Object[] {companyId, externalReferenceCode};
 
 		Long count = (Long)finderCache.getResult(finderPath, finderArgs, this);
 
@@ -4021,10 +3285,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			boolean bindExternalReferenceCode = false;
 
-			if (externalReferenceCode == null) {
-				query.append(_FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_1);
-			}
-			else if (externalReferenceCode.equals("")) {
+			if (externalReferenceCode.isEmpty()) {
 				query.append(_FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_3);
 			}
 			else {
@@ -4067,23 +3328,27 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_C_ERC_COMPANYID_2 = "commerceTierPriceEntry.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_1 = "commerceTierPriceEntry.externalReferenceCode IS NULL";
-	private static final String _FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_2 = "commerceTierPriceEntry.externalReferenceCode = ?";
-	private static final String _FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_3 = "(commerceTierPriceEntry.externalReferenceCode IS NULL OR commerceTierPriceEntry.externalReferenceCode = '')";
+	private static final String _FINDER_COLUMN_C_ERC_COMPANYID_2 =
+		"commerceTierPriceEntry.companyId = ? AND ";
+
+	private static final String _FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_2 =
+		"commerceTierPriceEntry.externalReferenceCode = ?";
+
+	private static final String _FINDER_COLUMN_C_ERC_EXTERNALREFERENCECODE_3 =
+		"(commerceTierPriceEntry.externalReferenceCode IS NULL OR commerceTierPriceEntry.externalReferenceCode = '')";
 
 	public CommerceTierPriceEntryPersistenceImpl() {
 		setModelClass(CommerceTierPriceEntry.class);
 
+		Map<String, String> dbColumnNames = new HashMap<String, String>();
+
+		dbColumnNames.put("uuid", "uuid_");
+
 		try {
 			Field field = BasePersistenceImpl.class.getDeclaredField(
-					"_dbColumnNames");
+				"_dbColumnNames");
 
 			field.setAccessible(true);
-
-			Map<String, String> dbColumnNames = new HashMap<String, String>();
-
-			dbColumnNames.put("uuid", "uuid_");
 
 			field.set(this, dbColumnNames);
 		}
@@ -4101,27 +3366,26 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public void cacheResult(CommerceTierPriceEntry commerceTierPriceEntry) {
-		entityCache.putResult(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+		entityCache.putResult(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
 			CommerceTierPriceEntryImpl.class,
 			commerceTierPriceEntry.getPrimaryKey(), commerceTierPriceEntry);
 
-		finderCache.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				commerceTierPriceEntry.getUuid(),
-				commerceTierPriceEntry.getGroupId()
-			}, commerceTierPriceEntry);
-
-		finderCache.putResult(FINDER_PATH_FETCH_BY_C_M,
+		finderCache.putResult(
+			_finderPathFetchByC_M,
 			new Object[] {
 				commerceTierPriceEntry.getCommercePriceEntryId(),
 				commerceTierPriceEntry.getMinQuantity()
-			}, commerceTierPriceEntry);
+			},
+			commerceTierPriceEntry);
 
-		finderCache.putResult(FINDER_PATH_FETCH_BY_C_ERC,
+		finderCache.putResult(
+			_finderPathFetchByC_ERC,
 			new Object[] {
 				commerceTierPriceEntry.getCompanyId(),
 				commerceTierPriceEntry.getExternalReferenceCode()
-			}, commerceTierPriceEntry);
+			},
+			commerceTierPriceEntry);
 
 		commerceTierPriceEntry.resetOriginalValues();
 	}
@@ -4134,11 +3398,15 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	@Override
 	public void cacheResult(
 		List<CommerceTierPriceEntry> commerceTierPriceEntries) {
-		for (CommerceTierPriceEntry commerceTierPriceEntry : commerceTierPriceEntries) {
+
+		for (CommerceTierPriceEntry commerceTierPriceEntry :
+				commerceTierPriceEntries) {
+
 			if (entityCache.getResult(
-						CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-						CommerceTierPriceEntryImpl.class,
-						commerceTierPriceEntry.getPrimaryKey()) == null) {
+					CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+					CommerceTierPriceEntryImpl.class,
+					commerceTierPriceEntry.getPrimaryKey()) == null) {
+
 				cacheResult(commerceTierPriceEntry);
 			}
 			else {
@@ -4151,7 +3419,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Clears the cache for all commerce tier price entries.
 	 *
 	 * <p>
-	 * The {@link EntityCache} and {@link FinderCache} are both cleared by this method.
+	 * The <code>EntityCache</code> and <code>FinderCache</code> are both cleared by this method.
 	 * </p>
 	 */
 	@Override
@@ -4167,135 +3435,117 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Clears the cache for the commerce tier price entry.
 	 *
 	 * <p>
-	 * The {@link EntityCache} and {@link FinderCache} are both cleared by this method.
+	 * The <code>EntityCache</code> and <code>FinderCache</code> are both cleared by this method.
 	 * </p>
 	 */
 	@Override
 	public void clearCache(CommerceTierPriceEntry commerceTierPriceEntry) {
-		entityCache.removeResult(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+		entityCache.removeResult(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
 			CommerceTierPriceEntryImpl.class,
 			commerceTierPriceEntry.getPrimaryKey());
 
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
-		clearUniqueFindersCache((CommerceTierPriceEntryModelImpl)commerceTierPriceEntry,
-			true);
+		clearUniqueFindersCache(
+			(CommerceTierPriceEntryModelImpl)commerceTierPriceEntry, true);
 	}
 
 	@Override
 	public void clearCache(
 		List<CommerceTierPriceEntry> commerceTierPriceEntries) {
+
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 
-		for (CommerceTierPriceEntry commerceTierPriceEntry : commerceTierPriceEntries) {
-			entityCache.removeResult(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+		for (CommerceTierPriceEntry commerceTierPriceEntry :
+				commerceTierPriceEntries) {
+
+			entityCache.removeResult(
+				CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
 				CommerceTierPriceEntryImpl.class,
 				commerceTierPriceEntry.getPrimaryKey());
 
-			clearUniqueFindersCache((CommerceTierPriceEntryModelImpl)commerceTierPriceEntry,
-				true);
+			clearUniqueFindersCache(
+				(CommerceTierPriceEntryModelImpl)commerceTierPriceEntry, true);
 		}
 	}
 
 	protected void cacheUniqueFindersCache(
 		CommerceTierPriceEntryModelImpl commerceTierPriceEntryModelImpl) {
+
 		Object[] args = new Object[] {
-				commerceTierPriceEntryModelImpl.getUuid(),
-				commerceTierPriceEntryModelImpl.getGroupId()
-			};
+			commerceTierPriceEntryModelImpl.getCommercePriceEntryId(),
+			commerceTierPriceEntryModelImpl.getMinQuantity()
+		};
 
-		finderCache.putResult(FINDER_PATH_COUNT_BY_UUID_G, args,
-			Long.valueOf(1), false);
-		finderCache.putResult(FINDER_PATH_FETCH_BY_UUID_G, args,
-			commerceTierPriceEntryModelImpl, false);
-
-		args = new Object[] {
-				commerceTierPriceEntryModelImpl.getCommercePriceEntryId(),
-				commerceTierPriceEntryModelImpl.getMinQuantity()
-			};
-
-		finderCache.putResult(FINDER_PATH_COUNT_BY_C_M, args, Long.valueOf(1),
+		finderCache.putResult(
+			_finderPathCountByC_M, args, Long.valueOf(1), false);
+		finderCache.putResult(
+			_finderPathFetchByC_M, args, commerceTierPriceEntryModelImpl,
 			false);
-		finderCache.putResult(FINDER_PATH_FETCH_BY_C_M, args,
-			commerceTierPriceEntryModelImpl, false);
 
 		args = new Object[] {
-				commerceTierPriceEntryModelImpl.getCompanyId(),
-				commerceTierPriceEntryModelImpl.getExternalReferenceCode()
-			};
+			commerceTierPriceEntryModelImpl.getCompanyId(),
+			commerceTierPriceEntryModelImpl.getExternalReferenceCode()
+		};
 
-		finderCache.putResult(FINDER_PATH_COUNT_BY_C_ERC, args,
-			Long.valueOf(1), false);
-		finderCache.putResult(FINDER_PATH_FETCH_BY_C_ERC, args,
-			commerceTierPriceEntryModelImpl, false);
+		finderCache.putResult(
+			_finderPathCountByC_ERC, args, Long.valueOf(1), false);
+		finderCache.putResult(
+			_finderPathFetchByC_ERC, args, commerceTierPriceEntryModelImpl,
+			false);
 	}
 
 	protected void clearUniqueFindersCache(
 		CommerceTierPriceEntryModelImpl commerceTierPriceEntryModelImpl,
 		boolean clearCurrent) {
-		if (clearCurrent) {
-			Object[] args = new Object[] {
-					commerceTierPriceEntryModelImpl.getUuid(),
-					commerceTierPriceEntryModelImpl.getGroupId()
-				};
-
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-		}
-
-		if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-			Object[] args = new Object[] {
-					commerceTierPriceEntryModelImpl.getOriginalUuid(),
-					commerceTierPriceEntryModelImpl.getOriginalGroupId()
-				};
-
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-		}
 
 		if (clearCurrent) {
 			Object[] args = new Object[] {
-					commerceTierPriceEntryModelImpl.getCommercePriceEntryId(),
-					commerceTierPriceEntryModelImpl.getMinQuantity()
-				};
+				commerceTierPriceEntryModelImpl.getCommercePriceEntryId(),
+				commerceTierPriceEntryModelImpl.getMinQuantity()
+			};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_C_M, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_C_M, args);
+			finderCache.removeResult(_finderPathCountByC_M, args);
+			finderCache.removeResult(_finderPathFetchByC_M, args);
 		}
 
 		if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_C_M.getColumnBitmask()) != 0) {
-			Object[] args = new Object[] {
-					commerceTierPriceEntryModelImpl.getOriginalCommercePriceEntryId(),
-					commerceTierPriceEntryModelImpl.getOriginalMinQuantity()
-				};
+			 _finderPathFetchByC_M.getColumnBitmask()) != 0) {
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_C_M, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_C_M, args);
+			Object[] args = new Object[] {
+				commerceTierPriceEntryModelImpl.
+					getOriginalCommercePriceEntryId(),
+				commerceTierPriceEntryModelImpl.getOriginalMinQuantity()
+			};
+
+			finderCache.removeResult(_finderPathCountByC_M, args);
+			finderCache.removeResult(_finderPathFetchByC_M, args);
 		}
 
 		if (clearCurrent) {
 			Object[] args = new Object[] {
-					commerceTierPriceEntryModelImpl.getCompanyId(),
-					commerceTierPriceEntryModelImpl.getExternalReferenceCode()
-				};
+				commerceTierPriceEntryModelImpl.getCompanyId(),
+				commerceTierPriceEntryModelImpl.getExternalReferenceCode()
+			};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_C_ERC, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_C_ERC, args);
+			finderCache.removeResult(_finderPathCountByC_ERC, args);
+			finderCache.removeResult(_finderPathFetchByC_ERC, args);
 		}
 
 		if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_C_ERC.getColumnBitmask()) != 0) {
-			Object[] args = new Object[] {
-					commerceTierPriceEntryModelImpl.getOriginalCompanyId(),
-					commerceTierPriceEntryModelImpl.getOriginalExternalReferenceCode()
-				};
+			 _finderPathFetchByC_ERC.getColumnBitmask()) != 0) {
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_C_ERC, args);
-			finderCache.removeResult(FINDER_PATH_FETCH_BY_C_ERC, args);
+			Object[] args = new Object[] {
+				commerceTierPriceEntryModelImpl.getOriginalCompanyId(),
+				commerceTierPriceEntryModelImpl.
+					getOriginalExternalReferenceCode()
+			};
+
+			finderCache.removeResult(_finderPathCountByC_ERC, args);
+			finderCache.removeResult(_finderPathFetchByC_ERC, args);
 		}
 	}
 
@@ -4307,7 +3557,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public CommerceTierPriceEntry create(long commerceTierPriceEntryId) {
-		CommerceTierPriceEntry commerceTierPriceEntry = new CommerceTierPriceEntryImpl();
+		CommerceTierPriceEntry commerceTierPriceEntry =
+			new CommerceTierPriceEntryImpl();
 
 		commerceTierPriceEntry.setNew(true);
 		commerceTierPriceEntry.setPrimaryKey(commerceTierPriceEntryId);
@@ -4331,6 +3582,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	@Override
 	public CommerceTierPriceEntry remove(long commerceTierPriceEntryId)
 		throws NoSuchTierPriceEntryException {
+
 		return remove((Serializable)commerceTierPriceEntryId);
 	}
 
@@ -4344,21 +3596,23 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	@Override
 	public CommerceTierPriceEntry remove(Serializable primaryKey)
 		throws NoSuchTierPriceEntryException {
+
 		Session session = null;
 
 		try {
 			session = openSession();
 
-			CommerceTierPriceEntry commerceTierPriceEntry = (CommerceTierPriceEntry)session.get(CommerceTierPriceEntryImpl.class,
-					primaryKey);
+			CommerceTierPriceEntry commerceTierPriceEntry =
+				(CommerceTierPriceEntry)session.get(
+					CommerceTierPriceEntryImpl.class, primaryKey);
 
 			if (commerceTierPriceEntry == null) {
 				if (_log.isDebugEnabled()) {
 					_log.debug(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 				}
 
-				throw new NoSuchTierPriceEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
+				throw new NoSuchTierPriceEntryException(
+					_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 			}
 
 			return remove(commerceTierPriceEntry);
@@ -4377,14 +3631,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	@Override
 	protected CommerceTierPriceEntry removeImpl(
 		CommerceTierPriceEntry commerceTierPriceEntry) {
+
 		Session session = null;
 
 		try {
 			session = openSession();
 
 			if (!session.contains(commerceTierPriceEntry)) {
-				commerceTierPriceEntry = (CommerceTierPriceEntry)session.get(CommerceTierPriceEntryImpl.class,
-						commerceTierPriceEntry.getPrimaryKeyObj());
+				commerceTierPriceEntry = (CommerceTierPriceEntry)session.get(
+					CommerceTierPriceEntryImpl.class,
+					commerceTierPriceEntry.getPrimaryKeyObj());
 			}
 
 			if (commerceTierPriceEntry != null) {
@@ -4408,25 +3664,30 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	@Override
 	public CommerceTierPriceEntry updateImpl(
 		CommerceTierPriceEntry commerceTierPriceEntry) {
+
 		boolean isNew = commerceTierPriceEntry.isNew();
 
-		if (!(commerceTierPriceEntry instanceof CommerceTierPriceEntryModelImpl)) {
+		if (!(commerceTierPriceEntry instanceof
+				CommerceTierPriceEntryModelImpl)) {
+
 			InvocationHandler invocationHandler = null;
 
 			if (ProxyUtil.isProxyClass(commerceTierPriceEntry.getClass())) {
-				invocationHandler = ProxyUtil.getInvocationHandler(commerceTierPriceEntry);
+				invocationHandler = ProxyUtil.getInvocationHandler(
+					commerceTierPriceEntry);
 
 				throw new IllegalArgumentException(
 					"Implement ModelWrapper in commerceTierPriceEntry proxy " +
-					invocationHandler.getClass());
+						invocationHandler.getClass());
 			}
 
 			throw new IllegalArgumentException(
 				"Implement ModelWrapper in custom CommerceTierPriceEntry implementation " +
-				commerceTierPriceEntry.getClass());
+					commerceTierPriceEntry.getClass());
 		}
 
-		CommerceTierPriceEntryModelImpl commerceTierPriceEntryModelImpl = (CommerceTierPriceEntryModelImpl)commerceTierPriceEntry;
+		CommerceTierPriceEntryModelImpl commerceTierPriceEntryModelImpl =
+			(CommerceTierPriceEntryModelImpl)commerceTierPriceEntry;
 
 		if (Validator.isNull(commerceTierPriceEntry.getUuid())) {
 			String uuid = PortalUUIDUtil.generate();
@@ -4434,7 +3695,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			commerceTierPriceEntry.setUuid(uuid);
 		}
 
-		ServiceContext serviceContext = ServiceContextThreadLocal.getServiceContext();
+		ServiceContext serviceContext =
+			ServiceContextThreadLocal.getServiceContext();
 
 		Date now = new Date();
 
@@ -4443,8 +3705,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				commerceTierPriceEntry.setCreateDate(now);
 			}
 			else {
-				commerceTierPriceEntry.setCreateDate(serviceContext.getCreateDate(
-						now));
+				commerceTierPriceEntry.setCreateDate(
+					serviceContext.getCreateDate(now));
 			}
 		}
 
@@ -4453,8 +3715,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				commerceTierPriceEntry.setModifiedDate(now);
 			}
 			else {
-				commerceTierPriceEntry.setModifiedDate(serviceContext.getModifiedDate(
-						now));
+				commerceTierPriceEntry.setModifiedDate(
+					serviceContext.getModifiedDate(now));
 			}
 		}
 
@@ -4469,7 +3731,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				commerceTierPriceEntry.setNew(false);
 			}
 			else {
-				commerceTierPriceEntry = (CommerceTierPriceEntry)session.merge(commerceTierPriceEntry);
+				commerceTierPriceEntry = (CommerceTierPriceEntry)session.merge(
+					commerceTierPriceEntry);
 			}
 		}
 		catch (Exception e) {
@@ -4484,149 +3747,138 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		if (!CommerceTierPriceEntryModelImpl.COLUMN_BITMASK_ENABLED) {
 			finderCache.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
-		else
-		 if (isNew) {
+		else if (isNew) {
 			Object[] args = new Object[] {
-					commerceTierPriceEntryModelImpl.getUuid()
-				};
+				commerceTierPriceEntryModelImpl.getUuid()
+			};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-				args);
+			finderCache.removeResult(_finderPathCountByUuid, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByUuid, args);
 
 			args = new Object[] {
+				commerceTierPriceEntryModelImpl.getUuid(),
+				commerceTierPriceEntryModelImpl.getCompanyId()
+			};
+
+			finderCache.removeResult(_finderPathCountByUuid_C, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByUuid_C, args);
+
+			args = new Object[] {
+				commerceTierPriceEntryModelImpl.getCompanyId()
+			};
+
+			finderCache.removeResult(_finderPathCountByCompanyId, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByCompanyId, args);
+
+			args = new Object[] {
+				commerceTierPriceEntryModelImpl.getCommercePriceEntryId()
+			};
+
+			finderCache.removeResult(
+				_finderPathCountByCommercePriceEntryId, args);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindByCommercePriceEntryId, args);
+
+			finderCache.removeResult(_finderPathCountAll, FINDER_ARGS_EMPTY);
+			finderCache.removeResult(
+				_finderPathWithoutPaginationFindAll, FINDER_ARGS_EMPTY);
+		}
+		else {
+			if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByUuid.getColumnBitmask()) !=
+					 0) {
+
+				Object[] args = new Object[] {
+					commerceTierPriceEntryModelImpl.getOriginalUuid()
+				};
+
+				finderCache.removeResult(_finderPathCountByUuid, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid, args);
+
+				args = new Object[] {commerceTierPriceEntryModelImpl.getUuid()};
+
+				finderCache.removeResult(_finderPathCountByUuid, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid, args);
+			}
+
+			if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByUuid_C.getColumnBitmask()) !=
+					 0) {
+
+				Object[] args = new Object[] {
+					commerceTierPriceEntryModelImpl.getOriginalUuid(),
+					commerceTierPriceEntryModelImpl.getOriginalCompanyId()
+				};
+
+				finderCache.removeResult(_finderPathCountByUuid_C, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid_C, args);
+
+				args = new Object[] {
 					commerceTierPriceEntryModelImpl.getUuid(),
 					commerceTierPriceEntryModelImpl.getCompanyId()
 				};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-				args);
+				finderCache.removeResult(_finderPathCountByUuid_C, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByUuid_C, args);
+			}
 
-			args = new Object[] { commerceTierPriceEntryModelImpl.getGroupId() };
+			if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByCompanyId.
+					 getColumnBitmask()) != 0) {
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-				args);
+				Object[] args = new Object[] {
+					commerceTierPriceEntryModelImpl.getOriginalCompanyId()
+				};
 
-			args = new Object[] { commerceTierPriceEntryModelImpl.getCompanyId() };
+				finderCache.removeResult(_finderPathCountByCompanyId, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByCompanyId, args);
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_COMPANYID, args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-				args);
+				args = new Object[] {
+					commerceTierPriceEntryModelImpl.getCompanyId()
+				};
 
-			args = new Object[] {
+				finderCache.removeResult(_finderPathCountByCompanyId, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByCompanyId, args);
+			}
+
+			if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
+				 _finderPathWithoutPaginationFindByCommercePriceEntryId.
+					 getColumnBitmask()) != 0) {
+
+				Object[] args = new Object[] {
+					commerceTierPriceEntryModelImpl.
+						getOriginalCommercePriceEntryId()
+				};
+
+				finderCache.removeResult(
+					_finderPathCountByCommercePriceEntryId, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByCommercePriceEntryId,
+					args);
+
+				args = new Object[] {
 					commerceTierPriceEntryModelImpl.getCommercePriceEntryId()
 				};
 
-			finderCache.removeResult(FINDER_PATH_COUNT_BY_COMMERCEPRICEENTRYID,
-				args);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMMERCEPRICEENTRYID,
-				args);
-
-			finderCache.removeResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY);
-			finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL,
-				FINDER_ARGS_EMPTY);
-		}
-
-		else {
-			if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						commerceTierPriceEntryModelImpl.getOriginalUuid()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { commerceTierPriceEntryModelImpl.getUuid() };
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						commerceTierPriceEntryModelImpl.getOriginalUuid(),
-						commerceTierPriceEntryModelImpl.getOriginalCompanyId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						commerceTierPriceEntryModelImpl.getUuid(),
-						commerceTierPriceEntryModelImpl.getCompanyId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						commerceTierPriceEntryModelImpl.getOriginalGroupId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-
-				args = new Object[] { commerceTierPriceEntryModelImpl.getGroupId() };
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
-					args);
-			}
-
-			if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						commerceTierPriceEntryModelImpl.getOriginalCompanyId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_COMPANYID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						commerceTierPriceEntryModelImpl.getCompanyId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_COMPANYID, args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((commerceTierPriceEntryModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMMERCEPRICEENTRYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						commerceTierPriceEntryModelImpl.getOriginalCommercePriceEntryId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_COMMERCEPRICEENTRYID,
-					args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMMERCEPRICEENTRYID,
-					args);
-
-				args = new Object[] {
-						commerceTierPriceEntryModelImpl.getCommercePriceEntryId()
-					};
-
-				finderCache.removeResult(FINDER_PATH_COUNT_BY_COMMERCEPRICEENTRYID,
-					args);
-				finderCache.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMMERCEPRICEENTRYID,
+				finderCache.removeResult(
+					_finderPathCountByCommercePriceEntryId, args);
+				finderCache.removeResult(
+					_finderPathWithoutPaginationFindByCommercePriceEntryId,
 					args);
 			}
 		}
 
-		entityCache.putResult(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+		entityCache.putResult(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
 			CommerceTierPriceEntryImpl.class,
 			commerceTierPriceEntry.getPrimaryKey(), commerceTierPriceEntry,
 			false);
@@ -4640,7 +3892,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	}
 
 	/**
-	 * Returns the commerce tier price entry with the primary key or throws a {@link com.liferay.portal.kernel.exception.NoSuchModelException} if it could not be found.
+	 * Returns the commerce tier price entry with the primary key or throws a <code>com.liferay.portal.kernel.exception.NoSuchModelException</code> if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the commerce tier price entry
 	 * @return the commerce tier price entry
@@ -4649,22 +3901,24 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	@Override
 	public CommerceTierPriceEntry findByPrimaryKey(Serializable primaryKey)
 		throws NoSuchTierPriceEntryException {
-		CommerceTierPriceEntry commerceTierPriceEntry = fetchByPrimaryKey(primaryKey);
+
+		CommerceTierPriceEntry commerceTierPriceEntry = fetchByPrimaryKey(
+			primaryKey);
 
 		if (commerceTierPriceEntry == null) {
 			if (_log.isDebugEnabled()) {
 				_log.debug(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 			}
 
-			throw new NoSuchTierPriceEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				primaryKey);
+			throw new NoSuchTierPriceEntryException(
+				_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
 		}
 
 		return commerceTierPriceEntry;
 	}
 
 	/**
-	 * Returns the commerce tier price entry with the primary key or throws a {@link NoSuchTierPriceEntryException} if it could not be found.
+	 * Returns the commerce tier price entry with the primary key or throws a <code>NoSuchTierPriceEntryException</code> if it could not be found.
 	 *
 	 * @param commerceTierPriceEntryId the primary key of the commerce tier price entry
 	 * @return the commerce tier price entry
@@ -4672,7 +3926,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public CommerceTierPriceEntry findByPrimaryKey(
-		long commerceTierPriceEntryId) throws NoSuchTierPriceEntryException {
+			long commerceTierPriceEntryId)
+		throws NoSuchTierPriceEntryException {
+
 		return findByPrimaryKey((Serializable)commerceTierPriceEntryId);
 	}
 
@@ -4684,14 +3940,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public CommerceTierPriceEntry fetchByPrimaryKey(Serializable primaryKey) {
-		Serializable serializable = entityCache.getResult(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-				CommerceTierPriceEntryImpl.class, primaryKey);
+		Serializable serializable = entityCache.getResult(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class, primaryKey);
 
 		if (serializable == nullModel) {
 			return null;
 		}
 
-		CommerceTierPriceEntry commerceTierPriceEntry = (CommerceTierPriceEntry)serializable;
+		CommerceTierPriceEntry commerceTierPriceEntry =
+			(CommerceTierPriceEntry)serializable;
 
 		if (commerceTierPriceEntry == null) {
 			Session session = null;
@@ -4699,19 +3957,22 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			try {
 				session = openSession();
 
-				commerceTierPriceEntry = (CommerceTierPriceEntry)session.get(CommerceTierPriceEntryImpl.class,
-						primaryKey);
+				commerceTierPriceEntry = (CommerceTierPriceEntry)session.get(
+					CommerceTierPriceEntryImpl.class, primaryKey);
 
 				if (commerceTierPriceEntry != null) {
 					cacheResult(commerceTierPriceEntry);
 				}
 				else {
-					entityCache.putResult(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-						CommerceTierPriceEntryImpl.class, primaryKey, nullModel);
+					entityCache.putResult(
+						CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+						CommerceTierPriceEntryImpl.class, primaryKey,
+						nullModel);
 				}
 			}
 			catch (Exception e) {
-				entityCache.removeResult(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+				entityCache.removeResult(
+					CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
 					CommerceTierPriceEntryImpl.class, primaryKey);
 
 				throw processException(e);
@@ -4733,24 +3994,28 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	@Override
 	public CommerceTierPriceEntry fetchByPrimaryKey(
 		long commerceTierPriceEntryId) {
+
 		return fetchByPrimaryKey((Serializable)commerceTierPriceEntryId);
 	}
 
 	@Override
 	public Map<Serializable, CommerceTierPriceEntry> fetchByPrimaryKeys(
 		Set<Serializable> primaryKeys) {
+
 		if (primaryKeys.isEmpty()) {
 			return Collections.emptyMap();
 		}
 
-		Map<Serializable, CommerceTierPriceEntry> map = new HashMap<Serializable, CommerceTierPriceEntry>();
+		Map<Serializable, CommerceTierPriceEntry> map =
+			new HashMap<Serializable, CommerceTierPriceEntry>();
 
 		if (primaryKeys.size() == 1) {
 			Iterator<Serializable> iterator = primaryKeys.iterator();
 
 			Serializable primaryKey = iterator.next();
 
-			CommerceTierPriceEntry commerceTierPriceEntry = fetchByPrimaryKey(primaryKey);
+			CommerceTierPriceEntry commerceTierPriceEntry = fetchByPrimaryKey(
+				primaryKey);
 
 			if (commerceTierPriceEntry != null) {
 				map.put(primaryKey, commerceTierPriceEntry);
@@ -4762,8 +4027,9 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 		Set<Serializable> uncachedPrimaryKeys = null;
 
 		for (Serializable primaryKey : primaryKeys) {
-			Serializable serializable = entityCache.getResult(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
-					CommerceTierPriceEntryImpl.class, primaryKey);
+			Serializable serializable = entityCache.getResult(
+				CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+				CommerceTierPriceEntryImpl.class, primaryKey);
 
 			if (serializable != nullModel) {
 				if (serializable == null) {
@@ -4783,8 +4049,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			return map;
 		}
 
-		StringBundler query = new StringBundler((uncachedPrimaryKeys.size() * 2) +
-				1);
+		StringBundler query = new StringBundler(
+			uncachedPrimaryKeys.size() * 2 + 1);
 
 		query.append(_SQL_SELECT_COMMERCETIERPRICEENTRY_WHERE_PKS_IN);
 
@@ -4807,17 +4073,22 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 			Query q = session.createQuery(sql);
 
-			for (CommerceTierPriceEntry commerceTierPriceEntry : (List<CommerceTierPriceEntry>)q.list()) {
-				map.put(commerceTierPriceEntry.getPrimaryKeyObj(),
+			for (CommerceTierPriceEntry commerceTierPriceEntry :
+					(List<CommerceTierPriceEntry>)q.list()) {
+
+				map.put(
+					commerceTierPriceEntry.getPrimaryKeyObj(),
 					commerceTierPriceEntry);
 
 				cacheResult(commerceTierPriceEntry);
 
-				uncachedPrimaryKeys.remove(commerceTierPriceEntry.getPrimaryKeyObj());
+				uncachedPrimaryKeys.remove(
+					commerceTierPriceEntry.getPrimaryKeyObj());
 			}
 
 			for (Serializable primaryKey : uncachedPrimaryKeys) {
-				entityCache.putResult(CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+				entityCache.putResult(
+					CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
 					CommerceTierPriceEntryImpl.class, primaryKey, nullModel);
 			}
 		}
@@ -4845,7 +4116,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Returns a range of all the commerce tier price entries.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of commerce tier price entries
@@ -4861,7 +4132,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Returns an ordered range of all the commerce tier price entries.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of commerce tier price entries
@@ -4870,8 +4141,10 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the ordered range of commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findAll(int start, int end,
+	public List<CommerceTierPriceEntry> findAll(
+		int start, int end,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator) {
+
 		return findAll(start, end, orderByComparator, true);
 	}
 
@@ -4879,7 +4152,7 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Returns an ordered range of all the commerce tier price entries.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link CommerceTierPriceEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>CommerceTierPriceEntryModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of commerce tier price entries
@@ -4889,29 +4162,32 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * @return the ordered range of commerce tier price entries
 	 */
 	@Override
-	public List<CommerceTierPriceEntry> findAll(int start, int end,
+	public List<CommerceTierPriceEntry> findAll(
+		int start, int end,
 		OrderByComparator<CommerceTierPriceEntry> orderByComparator,
 		boolean retrieveFromCache) {
+
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
+			(orderByComparator == null)) {
+
 			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderPath = _finderPathWithoutPaginationFindAll;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
+			finderPath = _finderPathWithPaginationFindAll;
+			finderArgs = new Object[] {start, end, orderByComparator};
 		}
 
 		List<CommerceTierPriceEntry> list = null;
 
 		if (retrieveFromCache) {
-			list = (List<CommerceTierPriceEntry>)finderCache.getResult(finderPath,
-					finderArgs, this);
+			list = (List<CommerceTierPriceEntry>)finderCache.getResult(
+				finderPath, finderArgs, this);
 		}
 
 		if (list == null) {
@@ -4919,13 +4195,13 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			String sql = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 2));
+				query = new StringBundler(
+					2 + (orderByComparator.getOrderByFields().length * 2));
 
 				query.append(_SQL_SELECT_COMMERCETIERPRICEENTRY);
 
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
+				appendOrderByComparator(
+					query, _ORDER_BY_ENTITY_ALIAS, orderByComparator);
 
 				sql = query.toString();
 			}
@@ -4933,7 +4209,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				sql = _SQL_SELECT_COMMERCETIERPRICEENTRY;
 
 				if (pagination) {
-					sql = sql.concat(CommerceTierPriceEntryModelImpl.ORDER_BY_JPQL);
+					sql = sql.concat(
+						CommerceTierPriceEntryModelImpl.ORDER_BY_JPQL);
 				}
 			}
 
@@ -4945,16 +4222,16 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 				Query q = session.createQuery(sql);
 
 				if (!pagination) {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end, false);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end, false);
 
 					Collections.sort(list);
 
 					list = Collections.unmodifiableList(list);
 				}
 				else {
-					list = (List<CommerceTierPriceEntry>)QueryUtil.list(q,
-							getDialect(), start, end);
+					list = (List<CommerceTierPriceEntry>)QueryUtil.list(
+						q, getDialect(), start, end);
 				}
 
 				cacheResult(list);
@@ -4992,8 +4269,8 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 */
 	@Override
 	public int countAll() {
-		Long count = (Long)finderCache.getResult(FINDER_PATH_COUNT_ALL,
-				FINDER_ARGS_EMPTY, this);
+		Long count = (Long)finderCache.getResult(
+			_finderPathCountAll, FINDER_ARGS_EMPTY, this);
 
 		if (count == null) {
 			Session session = null;
@@ -5001,16 +4278,17 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 			try {
 				session = openSession();
 
-				Query q = session.createQuery(_SQL_COUNT_COMMERCETIERPRICEENTRY);
+				Query q = session.createQuery(
+					_SQL_COUNT_COMMERCETIERPRICEENTRY);
 
 				count = (Long)q.uniqueResult();
 
-				finderCache.putResult(FINDER_PATH_COUNT_ALL, FINDER_ARGS_EMPTY,
-					count);
+				finderCache.putResult(
+					_finderPathCountAll, FINDER_ARGS_EMPTY, count);
 			}
 			catch (Exception e) {
-				finderCache.removeResult(FINDER_PATH_COUNT_ALL,
-					FINDER_ARGS_EMPTY);
+				finderCache.removeResult(
+					_finderPathCountAll, FINDER_ARGS_EMPTY);
 
 				throw processException(e);
 			}
@@ -5036,6 +4314,177 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 	 * Initializes the commerce tier price entry persistence.
 	 */
 	public void afterPropertiesSet() {
+		_finderPathWithPaginationFindAll = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+
+		_finderPathWithoutPaginationFindAll = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll",
+			new String[0]);
+
+		_finderPathCountAll = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll",
+			new String[0]);
+
+		_finderPathWithPaginationFindByUuid = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
+			new String[] {
+				String.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByUuid = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] {String.class.getName()},
+			CommerceTierPriceEntryModelImpl.UUID_COLUMN_BITMASK |
+			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
+
+		_finderPathCountByUuid = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] {String.class.getName()});
+
+		_finderPathWithPaginationFindByUuid_C = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByUuid_C = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] {String.class.getName(), Long.class.getName()},
+			CommerceTierPriceEntryModelImpl.UUID_COLUMN_BITMASK |
+			CommerceTierPriceEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
+
+		_finderPathCountByUuid_C = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] {String.class.getName(), Long.class.getName()});
+
+		_finderPathWithPaginationFindByCompanyId = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByCompanyId = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] {Long.class.getName()},
+			CommerceTierPriceEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
+
+		_finderPathCountByCompanyId = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] {Long.class.getName()});
+
+		_finderPathWithPaginationFindByCommercePriceEntryId = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByCommercePriceEntryId",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), OrderByComparator.class.getName()
+			});
+
+		_finderPathWithoutPaginationFindByCommercePriceEntryId = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByCommercePriceEntryId", new String[] {Long.class.getName()},
+			CommerceTierPriceEntryModelImpl.
+				COMMERCEPRICEENTRYID_COLUMN_BITMASK |
+			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
+
+		_finderPathCountByCommercePriceEntryId = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByCommercePriceEntryId", new String[] {Long.class.getName()});
+
+		_finderPathFetchByC_M = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByC_M",
+			new String[] {Long.class.getName(), Integer.class.getName()},
+			CommerceTierPriceEntryModelImpl.
+				COMMERCEPRICEENTRYID_COLUMN_BITMASK |
+			CommerceTierPriceEntryModelImpl.MINQUANTITY_COLUMN_BITMASK);
+
+		_finderPathCountByC_M = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_M",
+			new String[] {Long.class.getName(), Integer.class.getName()});
+
+		_finderPathWithPaginationFindByC_LtM = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_LtM",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+
+		_finderPathWithPaginationCountByC_LtM = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByC_LtM",
+			new String[] {Long.class.getName(), Integer.class.getName()});
+
+		_finderPathFetchByC_ERC = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED,
+			CommerceTierPriceEntryImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByC_ERC",
+			new String[] {Long.class.getName(), String.class.getName()},
+			CommerceTierPriceEntryModelImpl.COMPANYID_COLUMN_BITMASK |
+			CommerceTierPriceEntryModelImpl.
+				EXTERNALREFERENCECODE_COLUMN_BITMASK);
+
+		_finderPathCountByC_ERC = new FinderPath(
+			CommerceTierPriceEntryModelImpl.ENTITY_CACHE_ENABLED,
+			CommerceTierPriceEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_ERC",
+			new String[] {Long.class.getName(), String.class.getName()});
 	}
 
 	public void destroy() {
@@ -5047,20 +4496,42 @@ public class CommerceTierPriceEntryPersistenceImpl extends BasePersistenceImpl<C
 
 	@ServiceReference(type = CompanyProviderWrapper.class)
 	protected CompanyProvider companyProvider;
+
 	@ServiceReference(type = EntityCache.class)
 	protected EntityCache entityCache;
+
 	@ServiceReference(type = FinderCache.class)
 	protected FinderCache finderCache;
-	private static final String _SQL_SELECT_COMMERCETIERPRICEENTRY = "SELECT commerceTierPriceEntry FROM CommerceTierPriceEntry commerceTierPriceEntry";
-	private static final String _SQL_SELECT_COMMERCETIERPRICEENTRY_WHERE_PKS_IN = "SELECT commerceTierPriceEntry FROM CommerceTierPriceEntry commerceTierPriceEntry WHERE commerceTierPriceEntryId IN (";
-	private static final String _SQL_SELECT_COMMERCETIERPRICEENTRY_WHERE = "SELECT commerceTierPriceEntry FROM CommerceTierPriceEntry commerceTierPriceEntry WHERE ";
-	private static final String _SQL_COUNT_COMMERCETIERPRICEENTRY = "SELECT COUNT(commerceTierPriceEntry) FROM CommerceTierPriceEntry commerceTierPriceEntry";
-	private static final String _SQL_COUNT_COMMERCETIERPRICEENTRY_WHERE = "SELECT COUNT(commerceTierPriceEntry) FROM CommerceTierPriceEntry commerceTierPriceEntry WHERE ";
-	private static final String _ORDER_BY_ENTITY_ALIAS = "commerceTierPriceEntry.";
-	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No CommerceTierPriceEntry exists with the primary key ";
-	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No CommerceTierPriceEntry exists with the key {";
-	private static final Log _log = LogFactoryUtil.getLog(CommerceTierPriceEntryPersistenceImpl.class);
-	private static final Set<String> _badColumnNames = SetUtil.fromArray(new String[] {
-				"uuid"
-			});
+
+	private static final String _SQL_SELECT_COMMERCETIERPRICEENTRY =
+		"SELECT commerceTierPriceEntry FROM CommerceTierPriceEntry commerceTierPriceEntry";
+
+	private static final String
+		_SQL_SELECT_COMMERCETIERPRICEENTRY_WHERE_PKS_IN =
+			"SELECT commerceTierPriceEntry FROM CommerceTierPriceEntry commerceTierPriceEntry WHERE commerceTierPriceEntryId IN (";
+
+	private static final String _SQL_SELECT_COMMERCETIERPRICEENTRY_WHERE =
+		"SELECT commerceTierPriceEntry FROM CommerceTierPriceEntry commerceTierPriceEntry WHERE ";
+
+	private static final String _SQL_COUNT_COMMERCETIERPRICEENTRY =
+		"SELECT COUNT(commerceTierPriceEntry) FROM CommerceTierPriceEntry commerceTierPriceEntry";
+
+	private static final String _SQL_COUNT_COMMERCETIERPRICEENTRY_WHERE =
+		"SELECT COUNT(commerceTierPriceEntry) FROM CommerceTierPriceEntry commerceTierPriceEntry WHERE ";
+
+	private static final String _ORDER_BY_ENTITY_ALIAS =
+		"commerceTierPriceEntry.";
+
+	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY =
+		"No CommerceTierPriceEntry exists with the primary key ";
+
+	private static final String _NO_SUCH_ENTITY_WITH_KEY =
+		"No CommerceTierPriceEntry exists with the key {";
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		CommerceTierPriceEntryPersistenceImpl.class);
+
+	private static final Set<String> _badColumnNames = SetUtil.fromArray(
+		new String[] {"uuid"});
+
 }

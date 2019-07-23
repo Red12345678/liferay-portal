@@ -17,7 +17,6 @@ package com.liferay.commerce.product.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.commerce.product.model.CPOption;
-
 import com.liferay.portal.kernel.model.CacheModel;
 import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -33,11 +32,12 @@ import java.util.Date;
  * The cache model class for representing CPOption in entity cache.
  *
  * @author Marco Leo
- * @see CPOption
  * @generated
  */
 @ProviderType
-public class CPOptionCacheModel implements CacheModel<CPOption>, Externalizable {
+public class CPOptionCacheModel
+	implements CacheModel<CPOption>, Externalizable {
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -64,7 +64,7 @@ public class CPOptionCacheModel implements CacheModel<CPOption>, Externalizable 
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(35);
+		StringBundler sb = new StringBundler(33);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -72,8 +72,6 @@ public class CPOptionCacheModel implements CacheModel<CPOption>, Externalizable 
 		sb.append(externalReferenceCode);
 		sb.append(", CPOptionId=");
 		sb.append(CPOptionId);
-		sb.append(", groupId=");
-		sb.append(groupId);
 		sb.append(", companyId=");
 		sb.append(companyId);
 		sb.append(", userId=");
@@ -124,7 +122,6 @@ public class CPOptionCacheModel implements CacheModel<CPOption>, Externalizable 
 		}
 
 		cpOptionImpl.setCPOptionId(CPOptionId);
-		cpOptionImpl.setGroupId(groupId);
 		cpOptionImpl.setCompanyId(companyId);
 		cpOptionImpl.setUserId(userId);
 
@@ -200,8 +197,6 @@ public class CPOptionCacheModel implements CacheModel<CPOption>, Externalizable 
 
 		CPOptionId = objectInput.readLong();
 
-		groupId = objectInput.readLong();
-
 		companyId = objectInput.readLong();
 
 		userId = objectInput.readLong();
@@ -222,8 +217,7 @@ public class CPOptionCacheModel implements CacheModel<CPOption>, Externalizable 
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		if (uuid == null) {
 			objectOutput.writeUTF("");
 		}
@@ -239,8 +233,6 @@ public class CPOptionCacheModel implements CacheModel<CPOption>, Externalizable 
 		}
 
 		objectOutput.writeLong(CPOptionId);
-
-		objectOutput.writeLong(groupId);
 
 		objectOutput.writeLong(companyId);
 
@@ -296,7 +288,6 @@ public class CPOptionCacheModel implements CacheModel<CPOption>, Externalizable 
 	public String uuid;
 	public String externalReferenceCode;
 	public long CPOptionId;
-	public long groupId;
 	public long companyId;
 	public long userId;
 	public String userName;
@@ -310,4 +301,5 @@ public class CPOptionCacheModel implements CacheModel<CPOption>, Externalizable 
 	public boolean skuContributor;
 	public String key;
 	public long lastPublishDate;
+
 }

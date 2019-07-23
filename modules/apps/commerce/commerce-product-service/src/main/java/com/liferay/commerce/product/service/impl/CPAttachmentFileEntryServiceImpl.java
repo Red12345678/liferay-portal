@@ -17,14 +17,17 @@ package com.liferay.commerce.product.service.impl;
 import com.liferay.asset.kernel.model.AssetCategory;
 import com.liferay.commerce.product.constants.CPActionKeys;
 import com.liferay.commerce.product.constants.CPConstants;
+import com.liferay.commerce.product.exception.NoSuchCPDefinitionException;
 import com.liferay.commerce.product.model.CPAttachmentFileEntry;
 import com.liferay.commerce.product.model.CPAttachmentFileEntryConstants;
 import com.liferay.commerce.product.model.CPDefinition;
+import com.liferay.commerce.product.model.CommerceCatalog;
 import com.liferay.commerce.product.service.base.CPAttachmentFileEntryServiceBaseImpl;
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
@@ -96,9 +99,8 @@ public class CPAttachmentFileEntryServiceImpl
 			if (cpDefinitionClassNameId ==
 					cpAttachmentFileEntry.getClassNameId()) {
 
-				_cpDefinitionModelResourcePermission.check(
-					getPermissionChecker(), cpAttachmentFileEntry.getClassPK(),
-					ActionKeys.VIEW);
+				_checkCommerceCatalogPermissionByCPDefinitionId(
+					cpAttachmentFileEntry.getClassPK(), ActionKeys.VIEW);
 			}
 			else {
 				checkCPAttachmentFileEntryPermissions(cpAttachmentFileEntry);
@@ -127,9 +129,8 @@ public class CPAttachmentFileEntryServiceImpl
 			if (cpDefinitionClassNameId ==
 					cpAttachmentFileEntry.getClassNameId()) {
 
-				_cpDefinitionModelResourcePermission.check(
-					getPermissionChecker(), cpAttachmentFileEntry.getClassPK(),
-					ActionKeys.VIEW);
+				_checkCommerceCatalogPermissionByCPDefinitionId(
+					cpAttachmentFileEntry.getClassPK(), ActionKeys.VIEW);
 			}
 			else if (assetCategoryClassNameId ==
 						cpAttachmentFileEntry.getClassNameId()) {
@@ -244,9 +245,8 @@ public class CPAttachmentFileEntryServiceImpl
 			if (cpDefinitionClassNameId ==
 					cpAttachmentFileEntry.getClassNameId()) {
 
-				_cpDefinitionModelResourcePermission.check(
-					getPermissionChecker(), cpAttachmentFileEntry.getClassPK(),
-					ActionKeys.VIEW);
+				_checkCommerceCatalogPermissionByCPDefinitionId(
+					cpAttachmentFileEntry.getClassPK(), ActionKeys.VIEW);
 			}
 			else if (assetCategoryClassNameId ==
 						cpAttachmentFileEntry.getClassNameId()) {
@@ -360,8 +360,7 @@ public class CPAttachmentFileEntryServiceImpl
 			CPDefinition.class);
 
 		if (classNameId == cpDefinitionClassNameId) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), classPK, actionId);
+			_checkCommerceCatalogPermissionByCPDefinitionId(classPK, actionId);
 		}
 	}
 
@@ -373,11 +372,35 @@ public class CPAttachmentFileEntryServiceImpl
 		return CPActionKeys.MANAGE_COMMERCE_PRODUCT_IMAGES;
 	}
 
-	private static volatile ModelResourcePermission<CPDefinition>
-		_cpDefinitionModelResourcePermission =
+	private void _checkCommerceCatalogPermissionByCPDefinitionId(
+			long cpDefinitionId, String actionId)
+		throws PortalException {
+
+		CPDefinition cpDefinition = cpDefinitionLocalService.fetchCPDefinition(
+			cpDefinitionId);
+
+		if (cpDefinition == null) {
+			throw new NoSuchCPDefinitionException();
+		}
+
+		CommerceCatalog commerceCatalog =
+			commerceCatalogLocalService.fetchCommerceCatalogByGroupId(
+				cpDefinition.getGroupId());
+
+		if (commerceCatalog == null) {
+			throw new PrincipalException();
+		}
+
+		_commerceCatalogModelResourcePermission.check(
+			getPermissionChecker(), commerceCatalog, actionId);
+	}
+
+	private static volatile ModelResourcePermission<CommerceCatalog>
+		_commerceCatalogModelResourcePermission =
 			ModelResourcePermissionFactory.getInstance(
 				CPAttachmentFileEntryServiceImpl.class,
-				"_cpDefinitionModelResourcePermission", CPDefinition.class);
+				"_commerceCatalogModelResourcePermission",
+				CommerceCatalog.class);
 	private static volatile ModelResourcePermission<DLFileEntry>
 		_dlFileEntryModelResourcePermission =
 			ModelResourcePermissionFactory.getInstance(

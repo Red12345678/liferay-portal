@@ -35,7 +35,7 @@ String articleImageURL = HtmlUtil.escapeAttribute(assetRenderer.getThumbnailPath
 	<div class="aspect-ratio card-item-first">
 		<c:choose>
 			<c:when test="<%= Validator.isNotNull(articleImageURL) %>">
-				<img alt="thumbnail" class="aspect-ratio-item-center-middle aspect-ratio-item-fluid" src="<%= articleImageURL %>">
+				<img alt="thumbnail" class="aspect-ratio-item-center-middle aspect-ratio-item-fluid" src="<%= articleImageURL %>" />
 			</c:when>
 			<c:otherwise>
 				<div class="aspect-ratio-item-center-middle aspect-ratio-item-fluid card-type-asset-icon">

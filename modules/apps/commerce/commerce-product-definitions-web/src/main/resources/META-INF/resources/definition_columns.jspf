@@ -14,6 +14,10 @@
  */
 --%>
 
+<%
+CommerceCatalog commerceCatalog = cpDefinitionsDisplayContext.fetchCommerceCatalogByGroupId(cpDefinition.getGroupId());
+%>
+
 <c:choose>
 	<c:when test="<%= Validator.isNotNull(thumbnailSrc) %>">
 		<liferay-ui:search-container-column-image
@@ -48,6 +52,12 @@
 	cssClass="table-cell-content"
 	name="sku"
 	value="<%= cpDefinitionsDisplayContext.getSku(cpDefinition, locale) %>"
+/>
+
+<liferay-ui:search-container-column-text
+	cssClass="table-cell-content"
+	name="catalog"
+	value="<%= (commerceCatalog == null) ? StringPool.BLANK : commerceCatalog.getName() %>"
 />
 
 <liferay-ui:search-container-column-date

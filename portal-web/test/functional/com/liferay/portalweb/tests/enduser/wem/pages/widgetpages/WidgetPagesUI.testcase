@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Pages Administration";
@@ -35,11 +36,17 @@ definition {
 
 		SitePages.addPublicPage(pageName = "Site Page 3");
 
-		Page.view(pageName = "Site Page 1", privacy = "Public Pages");
+		Page.view(
+			pageName = "Site Page 1",
+			privacy = "Public Pages");
 
-		Page.view(pageName = "Site Page 2", privacy = "Public Pages");
+		Page.view(
+			pageName = "Site Page 2",
+			privacy = "Public Pages");
 
-		Page.view(pageName = "Site Page 3", privacy = "Public Pages");
+		Page.view(
+			pageName = "Site Page 3",
+			privacy = "Public Pages");
 	}
 
 	@priority = "4"
@@ -49,7 +56,9 @@ definition {
 
 		SitePages.addPrivatePage(pageName = "Site Page");
 
-		Page.view(pageName = "Site Page", privacy = "Private Pages");
+		Page.view(
+			pageName = "Site Page",
+			privacy = "Private Pages");
 	}
 
 	@priority = "5"
@@ -60,9 +69,12 @@ definition {
 
 		SitePages.addPublicChildPage(
 			childPageName = "Site Child Page",
-			parentPageName = "Site Page"
-		);
+			parentPageName = "Site Page");
 
-		Page.view(depth = "2", pageName = "Site Child Page", privacy = "Public Pages");
+		Page.view(
+			depth = "2",
+			pageName = "Site Child Page",
+			privacy = "Public Pages");
 	}
+
 }

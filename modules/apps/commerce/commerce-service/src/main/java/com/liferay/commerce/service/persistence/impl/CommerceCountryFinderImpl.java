@@ -36,11 +36,12 @@ public class CommerceCountryFinderImpl
 	extends CommerceCountryFinderBaseImpl implements CommerceCountryFinder {
 
 	public static final String FIND_BY_COMMERCE_WAREHOUSES =
-		CommerceCountryFinder.class.getName() + ".findByCommerceWarehouses";
+		CommerceCountryFinder.class.getName() +
+			".findByCommerceInventoryWarehouses";
 
 	@Override
-	public List<CommerceCountry> findByCommerceWarehouses(
-		long groupId, boolean all) {
+	public List<CommerceCountry> findByCommerceInventoryWarehouses(
+		long companyId, boolean all) {
 
 		Session session = null;
 
@@ -63,7 +64,7 @@ public class CommerceCountryFinderImpl
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
-			qPos.add(groupId);
+			qPos.add(companyId);
 
 			return (List<CommerceCountry>)QueryUtil.list(
 				q, getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -77,7 +78,7 @@ public class CommerceCountryFinderImpl
 	}
 
 	private static final String _ACTIVE_SQL =
-		"AND (CommerceWarehouse.active_ = true)";
+		"AND (CIWarehouse.active_ = true)";
 
 	private static final String _ALL_SQL = "[$ALL$]";
 

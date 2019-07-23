@@ -44,7 +44,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 
 import java.util.Calendar;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -75,8 +75,9 @@ public class CPAttachmentFileEntryCreator {
 		long classNameId = _portal.getClassNameId(classedModel.getModelClass());
 		long classPK = GetterUtil.getLong(classedModel.getPrimaryKeyObj());
 
-		Map<Locale, String> titleMap = Collections.singletonMap(
-			serviceContext.getLocale(), fileName);
+		Map<Locale, String> titleMap = new HashMap<>();
+
+		titleMap.put(serviceContext.getLocale(), fileName);
 
 		InputStream inputStream = null;
 
@@ -85,9 +86,7 @@ public class CPAttachmentFileEntryCreator {
 
 		URI uri = new URI(uriString);
 
-		String scheme = uri.getScheme();
-
-		if (StringUtil.equalsIgnoreCase(scheme, "file")) {
+		if (StringUtil.equalsIgnoreCase(uri.getScheme(), "file")) {
 			File file = new File(uri.getPath());
 
 			if (file.exists()) {
@@ -117,6 +116,10 @@ public class CPAttachmentFileEntryCreator {
 				DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, fileName);
 		}
 		catch (NoSuchFileEntryException nsfee) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(nsfee, nsfee);
+			}
+
 			file = FileUtil.createTempFile(inputStream);
 
 			fileEntry = TempFileEntryUtil.addTempFileEntry(

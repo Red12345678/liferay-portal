@@ -41,12 +41,10 @@ public class StrutsActionPortletURL extends PortletURLImplWrapper {
 
 	@Override
 	public void setParameter(String name, String value) {
-		if (name.equals("struts_action")) {
-			if (!value.startsWith(_strutsPath)) {
-				int pos = value.lastIndexOf(CharPool.SLASH);
+		if (name.equals("struts_action") && !value.startsWith(_strutsPath)) {
+			int pos = value.lastIndexOf(CharPool.SLASH);
 
-				value = _strutsPath + value.substring(pos + 1);
-			}
+			value = _strutsPath + value.substring(pos + 1);
 		}
 
 		super.setParameter(name, value);

@@ -70,25 +70,23 @@ public class UserVerticalCardTag extends VerticalCardTag {
 			"liferay-frontend:card:colorCssClass",
 			LexiconUtil.getUserColorCssClass(user));
 
-		if (user != null) {
-			if ((user.getPortraitId() > 0) ||
-				!_isImageDefaultUseInitials(user)) {
+		if ((user != null) &&
+			((user.getPortraitId() > 0) || !_isImageDefaultUseInitials(user))) {
 
-				ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-					WebKeys.THEME_DISPLAY);
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+				WebKeys.THEME_DISPLAY);
 
-				try {
-					request.setAttribute(
-						"liferay-frontend:card:portraitURL",
-						user.getPortraitURL(themeDisplay));
-				}
-				catch (PortalException pe) {
+			try {
+				request.setAttribute(
+					"liferay-frontend:card:portraitURL",
+					user.getPortraitURL(themeDisplay));
+			}
+			catch (PortalException pe) {
 
-					// LPS-52675
+				// LPS-52675
 
-					if (_log.isDebugEnabled()) {
-						_log.debug(pe, pe);
-					}
+				if (_log.isDebugEnabled()) {
+					_log.debug(pe, pe);
 				}
 			}
 		}

@@ -28,18 +28,17 @@ import java.util.List;
  * This class is used by SOAP remote services, specifically {@link com.liferay.commerce.price.list.service.http.CommercePriceEntryServiceSoap}.
  *
  * @author Alessio Antonio Rendina
- * @see com.liferay.commerce.price.list.service.http.CommercePriceEntryServiceSoap
  * @generated
  */
 @ProviderType
 public class CommercePriceEntrySoap implements Serializable {
+
 	public static CommercePriceEntrySoap toSoapModel(CommercePriceEntry model) {
 		CommercePriceEntrySoap soapModel = new CommercePriceEntrySoap();
 
 		soapModel.setUuid(model.getUuid());
 		soapModel.setExternalReferenceCode(model.getExternalReferenceCode());
 		soapModel.setCommercePriceEntryId(model.getCommercePriceEntryId());
-		soapModel.setGroupId(model.getGroupId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setUserName(model.getUserName());
@@ -58,7 +57,9 @@ public class CommercePriceEntrySoap implements Serializable {
 
 	public static CommercePriceEntrySoap[] toSoapModels(
 		CommercePriceEntry[] models) {
-		CommercePriceEntrySoap[] soapModels = new CommercePriceEntrySoap[models.length];
+
+		CommercePriceEntrySoap[] soapModels =
+			new CommercePriceEntrySoap[models.length];
 
 		for (int i = 0; i < models.length; i++) {
 			soapModels[i] = toSoapModel(models[i]);
@@ -69,10 +70,12 @@ public class CommercePriceEntrySoap implements Serializable {
 
 	public static CommercePriceEntrySoap[][] toSoapModels(
 		CommercePriceEntry[][] models) {
+
 		CommercePriceEntrySoap[][] soapModels = null;
 
 		if (models.length > 0) {
-			soapModels = new CommercePriceEntrySoap[models.length][models[0].length];
+			soapModels =
+				new CommercePriceEntrySoap[models.length][models[0].length];
 		}
 		else {
 			soapModels = new CommercePriceEntrySoap[0][0];
@@ -87,13 +90,16 @@ public class CommercePriceEntrySoap implements Serializable {
 
 	public static CommercePriceEntrySoap[] toSoapModels(
 		List<CommercePriceEntry> models) {
-		List<CommercePriceEntrySoap> soapModels = new ArrayList<CommercePriceEntrySoap>(models.size());
+
+		List<CommercePriceEntrySoap> soapModels =
+			new ArrayList<CommercePriceEntrySoap>(models.size());
 
 		for (CommercePriceEntry model : models) {
 			soapModels.add(toSoapModel(model));
 		}
 
-		return soapModels.toArray(new CommercePriceEntrySoap[soapModels.size()]);
+		return soapModels.toArray(
+			new CommercePriceEntrySoap[soapModels.size()]);
 	}
 
 	public CommercePriceEntrySoap() {
@@ -129,14 +135,6 @@ public class CommercePriceEntrySoap implements Serializable {
 
 	public void setCommercePriceEntryId(long commercePriceEntryId) {
 		_commercePriceEntryId = commercePriceEntryId;
-	}
-
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	public void setGroupId(long groupId) {
-		_groupId = groupId;
 	}
 
 	public long getCompanyId() {
@@ -242,7 +240,6 @@ public class CommercePriceEntrySoap implements Serializable {
 	private String _uuid;
 	private String _externalReferenceCode;
 	private long _commercePriceEntryId;
-	private long _groupId;
 	private long _companyId;
 	private long _userId;
 	private String _userName;
@@ -255,4 +252,5 @@ public class CommercePriceEntrySoap implements Serializable {
 	private BigDecimal _promoPrice;
 	private boolean _hasTierPrice;
 	private Date _lastPublishDate;
+
 }

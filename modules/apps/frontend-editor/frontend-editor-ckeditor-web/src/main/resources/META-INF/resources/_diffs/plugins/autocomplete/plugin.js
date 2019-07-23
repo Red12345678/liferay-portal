@@ -18,7 +18,7 @@
 						CKEDITOR.scriptLoader.load(
 							dependencies,
 							function() {
-								new Liferay.AutoCompleteCKEditor(
+								var liferayAutoCompleteCKEditor = new Liferay.AutoCompleteCKEditor(
 									A.merge(
 										editor.config.autocomplete,
 										{
@@ -26,7 +26,11 @@
 											width: 300
 										}
 									)
-								).render();
+								);
+
+								liferayAutoCompleteCKEditor.render();
+
+								liferayAutoCompleteCKEditor.detach('valueChange');
 							}
 						);
 					}

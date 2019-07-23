@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.model.LayoutConstants;
 import com.liferay.portal.kernel.model.TrashedModel;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.trash.TrashHandler;
@@ -29,6 +30,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.trash.TrashHelper;
+import com.liferay.trash.constants.TrashActionKeys;
 import com.liferay.trash.kernel.exception.RestoreEntryException;
 import com.liferay.trash.kernel.model.TrashEntry;
 import com.liferay.wiki.constants.WikiPortletKeys;
@@ -181,6 +183,20 @@ public class WikiNodeTrashHandler extends BaseWikiTrashHandler {
 	@Override
 	public boolean isContainerModel() {
 		return true;
+	}
+
+	@Override
+	public boolean isRestorable(long classPK) throws PortalException {
+		WikiNode node = _wikiNodeLocalService.getNode(classPK);
+
+		if (!hasTrashPermission(
+				PermissionThreadLocal.getPermissionChecker(), node.getGroupId(),
+				classPK, TrashActionKeys.RESTORE)) {
+
+			return false;
+		}
+
+		return !node.isInTrashContainer();
 	}
 
 	@Override

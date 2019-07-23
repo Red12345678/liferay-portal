@@ -17,9 +17,12 @@ package com.liferay.commerce.order.web.internal.display.context;
 import com.liferay.commerce.constants.CommerceActionKeys;
 import com.liferay.commerce.model.CommerceOrder;
 import com.liferay.commerce.order.web.internal.display.context.util.CommerceOrderRequestHelper;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.NoSuchWorkflowDefinitionLinkException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.WorkflowDefinitionLink;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.service.WorkflowDefinitionLinkLocalService;
@@ -38,10 +41,12 @@ public class CommerceOrderSettingsDisplayContext {
 	public CommerceOrderSettingsDisplayContext(
 		PortletResourcePermission portletResourcePermission,
 		RenderRequest renderRequest,
+		CommerceChannelLocalService commerceChannelLocalService,
 		WorkflowDefinitionLinkLocalService workflowDefinitionLinkLocalService,
 		WorkflowDefinitionManager workflowDefinitionManager) {
 
 		_portletResourcePermission = portletResourcePermission;
+		_commerceChannelLocalService = commerceChannelLocalService;
 		_workflowDefinitionLinkLocalService =
 			workflowDefinitionLinkLocalService;
 		_workflowDefinitionManager = workflowDefinitionManager;
@@ -64,13 +69,21 @@ public class CommerceOrderSettingsDisplayContext {
 		WorkflowDefinitionLink workflowDefinitionLink = null;
 
 		try {
+			long commerceChannelGroupIdBySiteGroupId =
+				_commerceChannelLocalService.
+					getCommerceChannelGroupIdBySiteGroupId(
+						_commerceOrderRequestHelper.getScopeGroupId());
+
 			workflowDefinitionLink =
 				_workflowDefinitionLinkLocalService.getWorkflowDefinitionLink(
 					_commerceOrderRequestHelper.getCompanyId(),
-					_commerceOrderRequestHelper.getScopeGroupId(),
+					commerceChannelGroupIdBySiteGroupId,
 					CommerceOrder.class.getName(), 0, typePK, true);
 		}
 		catch (NoSuchWorkflowDefinitionLinkException nswdle) {
+			if (_log.isDebugEnabled()) {
+				_log.debug(nswdle, nswdle);
+			}
 		}
 
 		return workflowDefinitionLink;
@@ -83,6 +96,10 @@ public class CommerceOrderSettingsDisplayContext {
 			CommerceActionKeys.MANAGE_COMMERCE_ORDER_WORKFLOWS);
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		CommerceOrderSettingsDisplayContext.class);
+
+	private final CommerceChannelLocalService _commerceChannelLocalService;
 	private final CommerceOrderRequestHelper _commerceOrderRequestHelper;
 	private final PortletResourcePermission _portletResourcePermission;
 	private final WorkflowDefinitionLinkLocalService

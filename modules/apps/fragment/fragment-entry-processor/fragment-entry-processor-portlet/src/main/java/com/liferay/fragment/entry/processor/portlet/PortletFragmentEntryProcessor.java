@@ -156,8 +156,8 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 
 			if (PortletPermissionUtil.contains(
 					themeDisplay.getPermissionChecker(),
-					fragmentEntryLink.getGroupId(), portletName,
-					ActionKeys.CONFIGURATION) &&
+					fragmentEntryLink.getGroupId(), themeDisplay.getPlid(),
+					portletName, ActionKeys.CONFIGURATION, true) &&
 				layout.isTypeControlPanel() &&
 				Objects.equals(mode, FragmentEntryLinkConstants.EDIT)) {
 

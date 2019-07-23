@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
@@ -93,7 +92,8 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 
 		return (Account)accountDTOConverter.toDTO(
 			new DefaultDTOConverterContext(
-				contextAcceptLanguage.getPreferredLocale(), id));
+				contextAcceptLanguage.getPreferredLocale(),
+				GetterUtil.getLong(id)));
 	}
 
 	@Override
@@ -253,9 +253,7 @@ public class AccountResourceImpl extends BaseAccountResourceImpl {
 		}
 
 		if (commerceAccount == null) {
-			throw new ClientErrorException(
-				"Email address should be specified in the request body",
-				Response.Status.CONFLICT);
+			return "";
 		}
 
 		return commerceAccount.getEmail();

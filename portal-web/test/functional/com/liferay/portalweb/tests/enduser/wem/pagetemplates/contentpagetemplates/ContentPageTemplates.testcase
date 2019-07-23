@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Layout Page Templates";
@@ -13,9 +14,7 @@ definition {
 
 		FragmentsAdmin.openFragmentsAdmin(siteURLKey = "test-site-name");
 
-		FragmentsAdmin.importCollectionFromDependenciesFolder(
-			collectionZipFile = "fragment-collection.zip"
-		);
+		FragmentsAdmin.importCollectionFromDependenciesFolder(collectionZipFile = "fragment-collection.zip");
 
 		PageTemplatesAdmin.openPageTemplatesAdmin(siteURLKey = "test-site-name");
 	}
@@ -44,8 +43,7 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Button"
-		);
+			fragmentName = "Button");
 
 		PageEditor.viewAutoSaveMessage();
 
@@ -69,14 +67,12 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Image"
-		);
+			fragmentName = "Image");
 
 		PageEditor.editFragmentImage(
 			fileName = "Document_1.png",
 			fragmentName = "Image",
-			id = "image"
-		);
+			id = "image");
 	}
 
 	@description = "Change a fragment's editable text field."
@@ -90,20 +86,17 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Content"
-		);
+			fragmentName = "Content");
 
 		PageEditor.editFragmentText(
 			fragmentName = "Content",
 			id = "content",
-			text = "Editing Finished"
-		);
+			text = "Editing Finished");
 
 		PageEditor.viewFragmentEditableText(
 			editableText = "Editing Finished",
 			fragmentName = "Content",
-			id = "content"
-		);
+			id = "content");
 	}
 
 	@description = "Delete a page template collection."
@@ -143,14 +136,12 @@ definition {
 	test RenameCollection {
 		PageTemplatesAdmin.addCollection(
 			collectionDescription = "Collection Description Original",
-			collectionName = "Collection Name Original"
-		);
+			collectionName = "Collection Name Original");
 
 		Collection.renameCollection(
 			collectionDescription = "Collection Description New",
 			collectionName = "Collection Name Original",
-			collectionNameEdit = "Collection Name New"
-		);
+			collectionNameEdit = "Collection Name New");
 
 		Collection.viewPresent(collectionName = "Collection Name New");
 	}
@@ -170,8 +161,7 @@ definition {
 
 		PageTemplatesAdmin.rename(
 			pageTemplateName = "Page Template Name New",
-			rowEntry = "Page Template Name"
-		);
+			rowEntry = "Page Template Name");
 
 		LexiconEntry.viewEntryName(rowEntry = "Page Template Name New");
 	}
@@ -189,29 +179,43 @@ definition {
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Title"
-		);
+			fragmentName = "Title");
 
 		PageEditor.addFragment(
 			collectionName = "Collection Name",
-			fragmentName = "Content"
-		);
+			fragmentName = "Content");
 
-		PageEditor.viewFragmentOrder(fragmentName = "Title", position = "0");
+		PageEditor.viewFragmentOrder(
+			fragmentName = "Title",
+			position = "0");
 
-		PageEditor.viewFragmentOrder(fragmentName = "Content", position = "1");
+		PageEditor.viewFragmentOrder(
+			fragmentName = "Content",
+			position = "1");
 
-		PageEditor.moveFragment(direction = "down", fragmentName = "Title");
+		PageEditor.moveFragment(
+			direction = "down",
+			fragmentName = "Title");
 
-		PageEditor.viewFragmentOrder(fragmentName = "Title", position = "1");
+		PageEditor.viewFragmentOrder(
+			fragmentName = "Title",
+			position = "1");
 
-		PageEditor.viewFragmentOrder(fragmentName = "Content", position = "0");
+		PageEditor.viewFragmentOrder(
+			fragmentName = "Content",
+			position = "0");
 
-		PageEditor.moveFragment(direction = "up", fragmentName = "Title");
+		PageEditor.moveFragment(
+			direction = "up",
+			fragmentName = "Title");
 
-		PageEditor.viewFragmentOrder(fragmentName = "Title", position = "0");
+		PageEditor.viewFragmentOrder(
+			fragmentName = "Title",
+			position = "0");
 
-		PageEditor.viewFragmentOrder(fragmentName = "Content", position = "1");
+		PageEditor.viewFragmentOrder(
+			fragmentName = "Content",
+			position = "1");
 	}
 
 	@description = "An unpublished fragment should not show up in the fragments sidebar."
@@ -221,8 +225,7 @@ definition {
 
 		FragmentsAdmin.addCollection(
 			collectionDescription = "Collection Description",
-			collectionName = "New Collection"
-		);
+			collectionName = "New Collection");
 
 		FragmentsAdmin.addFragment(fragmentName = "Fragment Name");
 
@@ -236,4 +239,5 @@ definition {
 
 		PageEditor.viewCollectionNotPresent(collectionName = "New Collection");
 	}
+
 }

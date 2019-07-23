@@ -14,15 +14,21 @@
 
 package com.liferay.commerce.product.type.grouped.service.impl;
 
+import com.liferay.commerce.product.exception.NoSuchCPDefinitionException;
 import com.liferay.commerce.product.model.CPDefinition;
+import com.liferay.commerce.product.model.CommerceCatalog;
+import com.liferay.commerce.product.service.CPDefinitionLocalService;
+import com.liferay.commerce.product.service.CommerceCatalogLocalService;
 import com.liferay.commerce.product.type.grouped.model.CPDefinitionGroupedEntry;
 import com.liferay.commerce.product.type.grouped.service.base.CPDefinitionGroupedEntryServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
 import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.spring.extender.service.ServiceReference;
 
 import java.util.List;
 
@@ -38,12 +44,12 @@ public class CPDefinitionGroupedEntryServiceImpl
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.UPDATE);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.UPDATE);
 
 		for (long entryCPDefinitionId : entryCPDefinitionIds) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(), entryCPDefinitionId, ActionKeys.VIEW);
+			_checkCommerceCatalogPermissionByCPDefinitionId(
+				entryCPDefinitionId, ActionKeys.VIEW);
 		}
 
 		cpDefinitionGroupedEntryLocalService.addCPDefinitionGroupedEntries(
@@ -59,8 +65,7 @@ public class CPDefinitionGroupedEntryServiceImpl
 			cpDefinitionGroupedEntryPersistence.findByPrimaryKey(
 				cpDefinitionGroupedEntryId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(),
+		_checkCommerceCatalogPermissionByCPDefinitionId(
 			cpDefinitionGroupedEntry.getCPDefinitionId(), ActionKeys.UPDATE);
 
 		return cpDefinitionGroupedEntryLocalService.
@@ -73,8 +78,8 @@ public class CPDefinitionGroupedEntryServiceImpl
 			OrderByComparator<CPDefinitionGroupedEntry> orderByComparator)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionGroupedEntryLocalService.
 			getCPDefinitionGroupedEntries(
@@ -85,8 +90,8 @@ public class CPDefinitionGroupedEntryServiceImpl
 	public int getCPDefinitionGroupedEntriesCount(long cpDefinitionId)
 		throws PortalException {
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(), cpDefinitionId, ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionId, ActionKeys.VIEW);
 
 		return cpDefinitionGroupedEntryLocalService.
 			getCPDefinitionGroupedEntriesCount(cpDefinitionId);
@@ -102,12 +107,8 @@ public class CPDefinitionGroupedEntryServiceImpl
 				cpDefinitionGroupedEntryId);
 
 		if (cpDefinitionGroupedEntry != null) {
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(),
-				cpDefinitionGroupedEntry.getCPDefinitionId(), ActionKeys.VIEW);
-			_cpDefinitionModelResourcePermission.check(
-				getPermissionChecker(),
-				cpDefinitionGroupedEntry.getEntryCPDefinition(),
+			_checkCommerceCatalogPermissionByCPDefinitionId(
+				cpDefinitionGroupedEntry.getEntryCPDefinitionId(),
 				ActionKeys.VIEW);
 		}
 
@@ -123,22 +124,49 @@ public class CPDefinitionGroupedEntryServiceImpl
 			cpDefinitionGroupedEntryPersistence.findByPrimaryKey(
 				cpDefinitionGroupedEntryId);
 
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(),
-			cpDefinitionGroupedEntry.getCPDefinitionId(), ActionKeys.UPDATE);
-		_cpDefinitionModelResourcePermission.check(
-			getPermissionChecker(),
-			cpDefinitionGroupedEntry.getEntryCPDefinition(), ActionKeys.VIEW);
+		_checkCommerceCatalogPermissionByCPDefinitionId(
+			cpDefinitionGroupedEntry.getEntryCPDefinitionId(),
+			ActionKeys.UPDATE);
 
 		return cpDefinitionGroupedEntryLocalService.
 			updateCPDefinitionGroupedEntry(
 				cpDefinitionGroupedEntryId, priority, quantity);
 	}
 
-	private static volatile ModelResourcePermission<CPDefinition>
-		_cpDefinitionModelResourcePermission =
+	@ServiceReference(type = CommerceCatalogLocalService.class)
+	protected CommerceCatalogLocalService commerceCatalogLocalService;
+
+	@ServiceReference(type = CPDefinitionLocalService.class)
+	protected CPDefinitionLocalService cpDefinitionLocalService;
+
+	private void _checkCommerceCatalogPermissionByCPDefinitionId(
+			long cpDefinitionId, String actionId)
+		throws PortalException {
+
+		CPDefinition cpDefinition = cpDefinitionLocalService.fetchCPDefinition(
+			cpDefinitionId);
+
+		if (cpDefinition == null) {
+			throw new NoSuchCPDefinitionException();
+		}
+
+		CommerceCatalog commerceCatalog =
+			commerceCatalogLocalService.fetchCommerceCatalogByGroupId(
+				cpDefinition.getGroupId());
+
+		if (commerceCatalog == null) {
+			throw new PrincipalException();
+		}
+
+		_commerceCatalogModelResourcePermission.check(
+			getPermissionChecker(), commerceCatalog, actionId);
+	}
+
+	private static volatile ModelResourcePermission<CommerceCatalog>
+		_commerceCatalogModelResourcePermission =
 			ModelResourcePermissionFactory.getInstance(
 				CPDefinitionGroupedEntryServiceImpl.class,
-				"_cpDefinitionModelResourcePermission", CPDefinition.class);
+				"_commerceCatalogModelResourcePermission",
+				CommerceCatalog.class);
 
 }

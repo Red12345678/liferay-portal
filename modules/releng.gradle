@@ -68,6 +68,8 @@ apply plugin: "de.undercouch.download"
 apply plugin: "java"
 apply plugin: "org.ajoberstar.grgit"
 
+apply from: "releng-pom.gradle"
+
 task buildFixPackChangeLog(type: BuildChangeLogTask)
 task cherryPickArtifacts
 task cleanReleng
@@ -363,6 +365,7 @@ portalArtifactsJar {
 	classifier = null
 	includeEmptyDirs = false
 	version = _getReleaseInfoVersion()
+	zip64 = true
 
 	doFirst {
 		relengPropertiesFiles = _getRelengPropertiesFiles()
@@ -1129,11 +1132,7 @@ private void _downloadFile(String url, File destinationDir) {
 
 	for (int i = 0; i < 3; i++) {
 		try {
-			download {
-				dest destinationDir
-				quiet true
-				src url
-			}
+			FileUtil.get(project, url, project.properties['systemProp.repository.private.username'], project.properties['systemProp.repository.private.password'], file, false, true)
 
 			break
 		}

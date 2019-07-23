@@ -15,18 +15,17 @@
 package com.liferay.commerce.product.service.impl;
 
 import com.liferay.commerce.product.constants.CPActionKeys;
-import com.liferay.commerce.product.constants.CPConstants;
 import com.liferay.commerce.product.model.CPSpecificationOption;
 import com.liferay.commerce.product.service.base.CPSpecificationOptionServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Sort;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
-import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermissionFactory;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermission;
+import com.liferay.portal.kernel.security.permission.resource.ModelResourcePermissionFactory;
 import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.service.permission.PortalPermissionUtil;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -43,29 +42,24 @@ public class CPSpecificationOptionServiceImpl
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), serviceContext.getScopeGroupId(),
-			CPActionKeys.MANAGE_COMMERCE_PRODUCT_SPECIFICATION_OPTIONS);
+		PortalPermissionUtil.check(
+			getPermissionChecker(),
+			CPActionKeys.ADD_COMMERCE_PRODUCT_SPECIFICATION_OPTION);
 
 		return cpSpecificationOptionLocalService.addCPSpecificationOption(
-			cpOptionCategoryId, titleMap, descriptionMap, facetable, key,
-			serviceContext);
+			getUserId(), cpOptionCategoryId, titleMap, descriptionMap,
+			facetable, key, serviceContext);
 	}
 
 	@Override
 	public void deleteCPSpecificationOption(long cpSpecificationOptionId)
 		throws PortalException {
 
-		CPSpecificationOption cpSpecificationOption =
-			cpSpecificationOptionLocalService.getCPSpecificationOption(
-				cpSpecificationOptionId);
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), cpSpecificationOption.getGroupId(),
-			CPActionKeys.MANAGE_COMMERCE_PRODUCT_SPECIFICATION_OPTIONS);
+		_cpSpecificationOptionModelResourcePermission.check(
+			getPermissionChecker(), cpSpecificationOptionId, ActionKeys.DELETE);
 
 		cpSpecificationOptionLocalService.deleteCPSpecificationOption(
-			cpSpecificationOption);
+			cpSpecificationOptionId);
 	}
 
 	@Override
@@ -73,56 +67,22 @@ public class CPSpecificationOptionServiceImpl
 			long cpSpecificationOptionId)
 		throws PortalException {
 
-		CPSpecificationOption cpSpecificationOption =
-			cpSpecificationOptionLocalService.getCPSpecificationOption(
-				cpSpecificationOptionId);
+		_cpSpecificationOptionModelResourcePermission.check(
+			getPermissionChecker(), cpSpecificationOptionId, ActionKeys.VIEW);
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), cpSpecificationOption.getGroupId(),
-			CPActionKeys.MANAGE_COMMERCE_PRODUCT_SPECIFICATION_OPTIONS);
-
-		return cpSpecificationOption;
-	}
-
-	@Override
-	public List<CPSpecificationOption> getCPSpecificationOptions(
-			long groupId, int start, int end,
-			OrderByComparator<CPSpecificationOption> orderByComparator)
-		throws PortalException {
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId,
-			CPActionKeys.MANAGE_COMMERCE_PRODUCT_SPECIFICATION_OPTIONS);
-
-		return cpSpecificationOptionLocalService.getCPSpecificationOptions(
-			groupId, start, end, orderByComparator);
-	}
-
-	@Override
-	public int getCPSpecificationOptionsCount(long groupId)
-		throws PortalException {
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId,
-			CPActionKeys.MANAGE_COMMERCE_PRODUCT_SPECIFICATION_OPTIONS);
-
-		return cpSpecificationOptionLocalService.getCPSpecificationOptionsCount(
-			groupId);
+		return cpSpecificationOptionLocalService.getCPSpecificationOption(
+			cpSpecificationOptionId);
 	}
 
 	@Override
 	public BaseModelSearchResult<CPSpecificationOption>
 			searchCPSpecificationOptions(
-				long companyId, long groupId, Boolean facetable,
-				String keywords, int start, int end, Sort sort)
+				long companyId, Boolean facetable, String keywords, int start,
+				int end, Sort sort)
 		throws PortalException {
 
-		_portletResourcePermission.check(
-			getPermissionChecker(), groupId,
-			CPActionKeys.MANAGE_COMMERCE_PRODUCT_SPECIFICATION_OPTIONS);
-
 		return cpSpecificationOptionLocalService.searchCPSpecificationOptions(
-			companyId, groupId, facetable, keywords, start, end, sort);
+			companyId, facetable, keywords, start, end, sort);
 	}
 
 	@Override
@@ -132,24 +92,19 @@ public class CPSpecificationOptionServiceImpl
 			boolean facetable, String key, ServiceContext serviceContext)
 		throws PortalException {
 
-		CPSpecificationOption cpSpecificationOption =
-			cpSpecificationOptionLocalService.getCPSpecificationOption(
-				cpSpecificationOptionId);
-
-		_portletResourcePermission.check(
-			getPermissionChecker(), cpSpecificationOption.getGroupId(),
-			CPActionKeys.MANAGE_COMMERCE_PRODUCT_SPECIFICATION_OPTIONS);
+		_cpSpecificationOptionModelResourcePermission.check(
+			getPermissionChecker(), cpSpecificationOptionId, ActionKeys.UPDATE);
 
 		return cpSpecificationOptionLocalService.updateCPSpecificationOption(
-			cpSpecificationOption.getCPSpecificationOptionId(),
-			cpOptionCategoryId, titleMap, descriptionMap, facetable, key,
-			serviceContext);
+			cpSpecificationOptionId, cpOptionCategoryId, titleMap,
+			descriptionMap, facetable, key, serviceContext);
 	}
 
-	private static volatile PortletResourcePermission
-		_portletResourcePermission =
-			PortletResourcePermissionFactory.getInstance(
+	private static volatile ModelResourcePermission<CPSpecificationOption>
+		_cpSpecificationOptionModelResourcePermission =
+			ModelResourcePermissionFactory.getInstance(
 				CPSpecificationOptionServiceImpl.class,
-				"_portletResourcePermission", CPConstants.RESOURCE_NAME);
+				"_cpSpecificationOptionModelResourcePermission",
+				CPSpecificationOption.class);
 
 }

@@ -1,5 +1,6 @@
 @component-name = "marketplace"
 definition {
+
 	property marketplace.app.acceptance = "true";
 	property testray.main.component.name = "Marketplace";
 
@@ -8,8 +9,6 @@ definition {
 	}
 
 	tearDown {
-		ProductMenu.gotoSite(portletName = "Sites");
-
 		Site.tearDownCP();
 
 		BlogsEntry.tearDownCP();
@@ -37,4 +36,5 @@ definition {
 
 		Marketplace.smoke();
 	}
+
 }

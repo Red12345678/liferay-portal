@@ -16,7 +16,7 @@ package com.liferay.commerce.initializer.util.internal.osgi.commands;
 
 import com.liferay.commerce.initializer.util.CommerceOrderGenerator;
 import com.liferay.commerce.initializer.util.CommerceShipmentGenerator;
-import com.liferay.commerce.product.util.CPRulesThreadLocal;
+import com.liferay.commerce.product.service.CommerceChannelLocalService;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Role;
@@ -33,7 +33,6 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.site.initializer.SiteInitializer;
 import com.liferay.site.initializer.SiteInitializerRegistry;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.osgi.service.component.annotations.Component;
@@ -76,8 +75,6 @@ public class CommerceOSGiCommands {
 
 		User user = roleUsers.get(0);
 
-		CPRulesThreadLocal.setCPRules(new ArrayList<>());
-
 		PermissionChecker permissionChecker = _permissionCheckerFactory.create(
 			user);
 
@@ -90,6 +87,9 @@ public class CommerceOSGiCommands {
 
 		siteInitializer.initialize(groupId);
 	}
+
+	@Reference
+	private CommerceChannelLocalService _commerceChannelLocalService;
 
 	@Reference
 	private CommerceOrderGenerator _commerceOrderGenerator;

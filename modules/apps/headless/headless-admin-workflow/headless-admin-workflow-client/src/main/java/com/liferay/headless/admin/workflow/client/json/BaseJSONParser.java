@@ -270,8 +270,12 @@ public abstract class BaseJSONParser<T> {
 		}
 	}
 
-	private String _getCapturedSubstring() {
+	private String _getCapturedJSONSubstring() {
 		return _json.substring(_captureStartStack.pop(), _index - 1);
+	}
+
+	private String _getCapturedSubstring() {
+		return _unescape(_getCapturedJSONSubstring());
 	}
 
 	private boolean _ifLastCharMatchesThenRead(char ch) {
@@ -485,7 +489,7 @@ public abstract class BaseJSONParser<T> {
 		if (_isLastChar('}')) {
 			_readNextChar();
 
-			return _getCapturedSubstring();
+			return _getCapturedJSONSubstring();
 		}
 
 		_readWhileLastCharIsWhiteSpace();
@@ -493,7 +497,7 @@ public abstract class BaseJSONParser<T> {
 		if (_isLastChar('}')) {
 			_readNextChar();
 
-			return _getCapturedSubstring();
+			return _getCapturedJSONSubstring();
 		}
 
 		do {
@@ -522,7 +526,7 @@ public abstract class BaseJSONParser<T> {
 				"Expected either ',' or '}', but found '" + _lastChar + "'");
 		}
 
-		return _getCapturedSubstring();
+		return _getCapturedJSONSubstring();
 	}
 
 	private String _readValueAsStringNumber() {
@@ -546,6 +550,12 @@ public abstract class BaseJSONParser<T> {
 
 	private void _setCaptureStart() {
 		_captureStartStack.push(_index - 1);
+	}
+
+	private String _unescape(String string) {
+		string = string.replace("\\\\", "\\");
+
+		return string.replace("\\\"", "\"");
 	}
 
 	private Stack<Integer> _captureStartStack;

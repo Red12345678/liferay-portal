@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Generated("")
 @GraphQLName("Product")
 @JsonFilter("Liferay.Vulcan")
-@Schema(requiredProperties = {"active", "name", "productTypeName"})
+@Schema(requiredProperties = {"active", "catalogId", "name", "productTypeName"})
 @XmlRootElement(name = "Product")
 public class Product {
 
@@ -104,6 +104,35 @@ public class Product {
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected Attachment[] attachments;
+
+	@Schema
+	public Long getCatalogId() {
+		return catalogId;
+	}
+
+	public void setCatalogId(Long catalogId) {
+		this.catalogId = catalogId;
+	}
+
+	@JsonIgnore
+	public void setCatalogId(
+		UnsafeSupplier<Long, Exception> catalogIdUnsafeSupplier) {
+
+		try {
+			catalogId = catalogIdUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	@NotNull
+	protected Long catalogId;
 
 	@Schema
 	public Category[] getCategories() {
@@ -502,6 +531,37 @@ public class Product {
 	protected Long productId;
 
 	@Schema
+	public ProductSpecification[] getProductSpecifications() {
+		return productSpecifications;
+	}
+
+	public void setProductSpecifications(
+		ProductSpecification[] productSpecifications) {
+
+		this.productSpecifications = productSpecifications;
+	}
+
+	@JsonIgnore
+	public void setProductSpecifications(
+		UnsafeSupplier<ProductSpecification[], Exception>
+			productSpecificationsUnsafeSupplier) {
+
+		try {
+			productSpecifications = productSpecificationsUnsafeSupplier.get();
+		}
+		catch (RuntimeException re) {
+			throw re;
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GraphQLField
+	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
+	protected ProductSpecification[] productSpecifications;
+
+	@Schema
 	public String getProductType() {
 		return productType;
 	}
@@ -617,34 +677,6 @@ public class Product {
 	@GraphQLField
 	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
 	protected Map<String, String> shortDescription;
-
-	@Schema
-	public Long getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(Long siteId) {
-		this.siteId = siteId;
-	}
-
-	@JsonIgnore
-	public void setSiteId(
-		UnsafeSupplier<Long, Exception> siteIdUnsafeSupplier) {
-
-		try {
-			siteId = siteIdUnsafeSupplier.get();
-		}
-		catch (RuntimeException re) {
-			throw re;
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@GraphQLField
-	@JsonProperty(access = JsonProperty.Access.READ_WRITE)
-	protected Long siteId;
 
 	@Schema
 	public Sku[] getSkus() {
@@ -846,6 +878,16 @@ public class Product {
 			sb.append("]");
 		}
 
+		if (catalogId != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"catalogId\": ");
+
+			sb.append(catalogId);
+		}
+
 		if (categories != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -1024,6 +1066,26 @@ public class Product {
 			sb.append(productId);
 		}
 
+		if (productSpecifications != null) {
+			if (sb.length() > 1) {
+				sb.append(", ");
+			}
+
+			sb.append("\"productSpecifications\": ");
+
+			sb.append("[");
+
+			for (int i = 0; i < productSpecifications.length; i++) {
+				sb.append(String.valueOf(productSpecifications[i]));
+
+				if ((i + 1) < productSpecifications.length) {
+					sb.append(", ");
+				}
+			}
+
+			sb.append("]");
+		}
+
 		if (productType != null) {
 			if (sb.length() > 1) {
 				sb.append(", ");
@@ -1076,16 +1138,6 @@ public class Product {
 			sb.append("\"shortDescription\": ");
 
 			sb.append(_toJSON(shortDescription));
-		}
-
-		if (siteId != null) {
-			if (sb.length() > 1) {
-				sb.append(", ");
-			}
-
-			sb.append("\"siteId\": ");
-
-			sb.append(siteId);
 		}
 
 		if (skus != null) {

@@ -17,37 +17,28 @@ package com.liferay.commerce.context;
 import com.liferay.commerce.account.model.CommerceAccount;
 import com.liferay.commerce.currency.model.CommerceCurrency;
 import com.liferay.commerce.model.CommerceOrder;
-import com.liferay.commerce.price.list.model.CommercePriceList;
-import com.liferay.commerce.product.model.CPRule;
 import com.liferay.portal.kernel.exception.PortalException;
 
 import java.io.Serializable;
 
-import java.util.List;
-import java.util.Optional;
-
 /**
  * @author Marco Leo
+ * @author Alessio Antonio Rendina
  */
 public interface CommerceContext extends Serializable {
 
 	public CommerceAccount getCommerceAccount() throws PortalException;
 
+	public long[] getCommerceAccountGroupIds() throws PortalException;
+
+	public long getCommerceChannelGroupId() throws PortalException;
+
 	public CommerceCurrency getCommerceCurrency() throws PortalException;
 
 	public CommerceOrder getCommerceOrder() throws PortalException;
 
-	public Optional<CommercePriceList> getCommercePriceList()
-		throws PortalException;
-
 	public int getCommerceSiteType();
 
-	public long[] getCommerceUserSegmentEntryIds() throws PortalException;
-
-	public List<CPRule> getCPRules() throws PortalException;
-
 	public long getSiteGroupId() throws PortalException;
-
-	public long getUserId();
 
 }

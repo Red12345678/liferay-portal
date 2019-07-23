@@ -26,7 +26,7 @@ String type = cpDefinitionLinkDisplayContext.getType();
 PortletURL portletURL = cpDefinitionLinkDisplayContext.getPortletURL();
 %>
 
-<c:if test="<%= cpDefinitionLinkDisplayContext.hasViewPermission() %>">
+<c:if test="<%= CommerceCatalogPermission.contains(permissionChecker, cpDefinition, ActionKeys.VIEW) %>">
 	<liferay-frontend:management-bar
 		includeCheckBox="<%= true %>"
 		searchContainerId="cpDefinitionLinks"
@@ -56,7 +56,7 @@ PortletURL portletURL = cpDefinitionLinkDisplayContext.getPortletURL();
 				<aui:input name="type" type="hidden" value="<%= type %>" />
 			</aui:form>
 
-			<c:if test="<%= cpDefinitionLinkDisplayContext.hasEditPermission() %>">
+			<c:if test="<%= CommerceCatalogPermission.contains(permissionChecker, cpDefinition, ActionKeys.VIEW) %>">
 				<liferay-frontend:add-menu
 					inline="<%= true %>"
 				>
@@ -210,14 +210,7 @@ PortletURL portletURL = cpDefinitionLinkDisplayContext.getPortletURL();
 								var selectedItems = event.newVal;
 
 								if (selectedItems) {
-									A.Array.each(
-										selectedItems,
-										function(item, index, selectedItems) {
-											<portlet:namespace />addCPDefinitionIds.push(item.cpDefinitionId);
-										}
-									);
-
-									$('#<portlet:namespace />cpDefinitionIds').val(<portlet:namespace />addCPDefinitionIds.join(','));
+									$('#<portlet:namespace />cpDefinitionIds').val(selectedItems);
 
 									var addCPDefinitionLinkFm = $('#<portlet:namespace />addCPDefinitionLinkFm');
 

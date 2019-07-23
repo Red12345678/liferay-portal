@@ -23,11 +23,27 @@ public class CommerceAccountConstants {
 	public static final String ACCOUNT_ADMINISTRATOR_ROLE_NAME =
 		"Account Administrator";
 
+	public static final String ACCOUNT_GROUP_GUEST_NAME = "Guest";
+
+	public static final int ACCOUNT_GROUP_TYPE_DYNAMIC = 1;
+
+	public static final int ACCOUNT_GROUP_TYPE_GUEST = 2;
+
+	public static final int ACCOUNT_GROUP_TYPE_STATIC = 0;
+
+	public static final int[] ACCOUNT_GROUP_TYPES = {
+		ACCOUNT_GROUP_TYPE_STATIC, ACCOUNT_GROUP_TYPE_DYNAMIC
+	};
+
 	public static final int ACCOUNT_TYPE_BUSINESS = 2;
 
 	public static final int ACCOUNT_TYPE_GUEST = 0;
 
 	public static final int ACCOUNT_TYPE_PERSONAL = 1;
+
+	public static final int[] ACCOUNT_TYPES = {
+		ACCOUNT_TYPE_PERSONAL, ACCOUNT_TYPE_BUSINESS
+	};
 
 	public static final long DEFAULT_PARENT_ACCOUNT_ID = 0;
 
@@ -44,6 +60,31 @@ public class CommerceAccountConstants {
 	public static final int[] SITE_TYPES = {
 		SITE_TYPE_B2C, SITE_TYPE_B2B, SITE_TYPE_B2C_B2B
 	};
+
+	public static String getAccountGroupTypeLabel(int accountGroupType) {
+		if (accountGroupType == ACCOUNT_GROUP_TYPE_STATIC) {
+			return "static";
+		}
+		else if (accountGroupType == ACCOUNT_GROUP_TYPE_DYNAMIC) {
+			return "dynamic";
+		}
+
+		return null;
+	}
+
+	public static String getAccountTypeLabel(int accountType) {
+		if (accountType == ACCOUNT_TYPE_BUSINESS) {
+			return "business";
+		}
+		else if (accountType == ACCOUNT_TYPE_GUEST) {
+			return "guest";
+		}
+		else if (accountType == ACCOUNT_TYPE_PERSONAL) {
+			return "personal";
+		}
+
+		return null;
+	}
 
 	public static String getSiteTypeLabel(int siteType) {
 		if (siteType == SITE_TYPE_B2C) {

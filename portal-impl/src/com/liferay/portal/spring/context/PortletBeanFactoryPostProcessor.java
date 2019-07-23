@@ -89,7 +89,6 @@ public class PortletBeanFactoryPostProcessor
 				}
 			}
 			catch (BeanIsAbstractException biae) {
-				continue;
 			}
 		}
 	}

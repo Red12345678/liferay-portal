@@ -15,16 +15,15 @@
 package com.liferay.commerce.shipping.web.admin;
 
 import com.liferay.commerce.admin.CommerceAdminModule;
+import com.liferay.commerce.admin.constants.CommerceAdminConstants;
 import com.liferay.commerce.constants.CommerceActionKeys;
 import com.liferay.commerce.constants.CommerceConstants;
-import com.liferay.commerce.service.CommerceShippingMethodLocalService;
 import com.liferay.commerce.service.CommerceShippingMethodService;
 import com.liferay.commerce.shipping.web.internal.display.context.CommerceShippingMethodsDisplayContext;
 import com.liferay.commerce.util.CommerceShippingEngineRegistry;
 import com.liferay.frontend.taglib.servlet.taglib.util.JSPRenderer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.security.permission.resource.PortletResourcePermission;
 import com.liferay.portal.kernel.util.Portal;
@@ -49,6 +48,7 @@ import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Andrea Di Giorgi
+ * @author Alessio Antonio Rendina
  */
 @Component(
 	immediate = true,
@@ -75,12 +75,14 @@ public class ShippingMethodsCommerceAdminModule implements CommerceAdminModule {
 	}
 
 	@Override
-	public boolean isVisible(long groupId) throws PortalException {
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
+	public int getType() {
+		return CommerceAdminConstants.COMMERCE_ADMIN_TYPE_GROUP_INSTANCE;
+	}
 
+	@Override
+	public boolean isVisible(long groupId) throws PortalException {
 		return _portletResourcePermission.contains(
-			permissionChecker, groupId,
+			PermissionThreadLocal.getPermissionChecker(), groupId,
 			CommerceActionKeys.MANAGE_COMMERCE_SHIPPING_METHODS);
 	}
 
@@ -112,10 +114,6 @@ public class ShippingMethodsCommerceAdminModule implements CommerceAdminModule {
 
 	@Reference
 	private CommerceShippingEngineRegistry _commerceShippingEngineRegistry;
-
-	@Reference
-	private CommerceShippingMethodLocalService
-		_commerceShippingMethodLocalService;
 
 	@Reference
 	private CommerceShippingMethodService _commerceShippingMethodService;

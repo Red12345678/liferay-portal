@@ -4,6 +4,130 @@
 <service-builder auto-namespace-tables="false" package-path="com.liferay.commerce.product">
 	<author>Marco Leo</author>
 	<namespace>Commerce</namespace>
+	<entity external-reference-code="true" local-service="true" name="CommerceCatalog" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="commerceCatalogId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="name" type="String" />
+		<column name="commerceCurrencyCode" type="String" />
+		<column name="catalogDefaultLanguageId" type="String" />
+		<column name="system" type="boolean" />
+
+		<!-- Order -->
+
+		<order by="desc">
+			<order-column name="createDate" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
+		</finder>
+		<finder name="C_S" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="system" />
+		</finder>
+
+		<!-- References -->
+
+		<reference entity="Company" package-path="com.liferay.portal" />
+		<reference entity="Group" package-path="com.liferay.portal" />
+	</entity>
+	<entity external-reference-code="true" local-service="true" name="CommerceChannel" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="commerceChannelId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="siteGroupId" type="long" />
+		<column name="name" type="String" />
+		<column name="type" type="String" />
+		<column name="typeSettings" type="String" />
+		<column name="commerceCurrencyCode" type="String" />
+
+		<!-- Order -->
+
+		<order by="desc">
+			<order-column name="createDate" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
+		</finder>
+		<finder name="SiteGroupId" return-type="CommerceChannel">
+			<finder-column name="siteGroupId" />
+		</finder>
+
+		<!-- References -->
+
+		<reference entity="Group" package-path="com.liferay.portal" />
+	</entity>
+	<entity local-service="true" name="CommerceChannelRel" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="commerceChannelRelId" primary="true" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="classNameId" type="long" />
+		<column name="classPK" type="long" />
+		<column name="commerceChannelId" type="long" />
+
+		<!-- Order -->
+
+		<order by="desc">
+			<order-column name="createDate" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="CommerceChannelId" return-type="Collection">
+			<finder-column name="commerceChannelId" />
+		</finder>
+		<finder name="C_C" return-type="Collection">
+			<finder-column name="classNameId" />
+			<finder-column name="classPK" />
+		</finder>
+		<finder name="C_C_C" return-type="CommerceChannelRel" unique="true">
+			<finder-column name="classNameId" />
+			<finder-column name="classPK" />
+			<finder-column name="commerceChannelId" />
+		</finder>
+	</entity>
 	<entity external-reference-code="true" local-service="true" name="CPAttachmentFileEntry" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
@@ -85,7 +209,7 @@
 		<reference entity="DLFileEntry" package-path="com.liferay.portlet.documentlibrary" />
 		<reference entity="ExpandoRow" package-path="com.liferay.portlet.expando" />
 	</entity>
-	<entity local-service="true" name="CPDefinition" remote-service="true" trash-enabled="true" uuid="true">
+	<entity local-service="true" name="CPDefinition" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
 
@@ -130,6 +254,8 @@
 		<column name="subscriptionType" type="String" />
 		<column name="subscriptionTypeSettings" type="String" />
 		<column name="maxSubscriptionCycles" type="long" />
+		<column name="accountGroupFilterEnabled" type="boolean" />
+		<column name="channelFilterEnabled" type="boolean" />
 		<column name="version" type="int" />
 		<column name="status" type="int" />
 		<column name="statusByUserId" type="long" />
@@ -169,10 +295,6 @@
 			<finder-column name="groupId" />
 			<finder-column name="status" />
 		</finder>
-		<finder name="G_NotS" return-type="Collection">
-			<finder-column name="groupId" />
-			<finder-column comparator="!=" name="status" />
-		</finder>
 		<finder name="C_S" return-type="Collection">
 			<finder-column name="CProductId" />
 			<finder-column name="status" />
@@ -184,12 +306,11 @@
 
 		<!-- References -->
 
+		<reference entity="Group" package-path="com.liferay.portal" />
 		<reference entity="WorkflowInstanceLink" package-path="com.liferay.portal" />
-		<reference entity="AssetCategory" package-path="com.liferay.portlet.asset" />
 		<reference entity="AssetEntry" package-path="com.liferay.portlet.asset" />
 		<reference entity="AssetLink" package-path="com.liferay.portlet.asset" />
 		<reference entity="ExpandoRow" package-path="com.liferay.portlet.expando" />
-		<reference entity="TrashEntry" package-path="com.liferay.portlet.trash" />
 	</entity>
 	<entity local-service="true" name="CPDefinitionLink" remote-service="true" uuid="true">
 
@@ -426,7 +547,7 @@
 
 		<reference entity="ExpandoRow" package-path="com.liferay.portlet.expando" />
 	</entity>
-	<entity local-service="true" name="CPDisplayLayout" remote-service="false" uuid="true">
+	<entity local-service="true" name="CPDisplayLayout" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
 
@@ -452,10 +573,21 @@
 
 		<!-- Finder methods -->
 
+		<finder name="GroupId" return-type="Collection">
+			<finder-column name="groupId" />
+		</finder>
+		<finder name="G_C" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="classNameId" />
+		</finder>
 		<finder name="C_C" return-type="CPDisplayLayout" unique="true">
 			<finder-column name="classNameId" />
 			<finder-column name="classPK" />
 		</finder>
+
+		<!-- References -->
+
+		<reference entity="Layout" package-path="com.liferay.portal" />
 	</entity>
 	<entity local-service="true" name="CPFriendlyURLEntry" remote-service="false" uuid="true">
 
@@ -534,7 +666,7 @@
 			<finder-column name="main" />
 		</finder>
 	</entity>
-	<entity external-reference-code="true" local-service="true" name="CPInstance" remote-service="true" trash-enabled="true" uuid="true">
+	<entity external-reference-code="true" local-service="true" name="CPInstance" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
 
@@ -601,13 +733,12 @@
 		<finder name="CPDefinitionId" return-type="Collection">
 			<finder-column name="CPDefinitionId" />
 		</finder>
+		<finder name="CPInstanceUuid" return-type="Collection">
+			<finder-column name="CPInstanceUuid" />
+		</finder>
 		<finder name="G_ST" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="status" />
-		</finder>
-		<finder name="G_NotST" return-type="Collection">
-			<finder-column name="groupId" />
-			<finder-column comparator="!=" name="status" />
 		</finder>
 		<finder name="C_C" return-type="CPInstance" unique="true">
 			<finder-column name="CPDefinitionId" />
@@ -620,10 +751,6 @@
 		<finder name="C_ST" return-type="Collection">
 			<finder-column name="CPDefinitionId" />
 			<finder-column name="status" />
-		</finder>
-		<finder name="C_NotST" return-type="Collection">
-			<finder-column name="CPDefinitionId" />
-			<finder-column comparator="!=" name="status" />
 		</finder>
 		<finder name="LtD_S" return-type="Collection">
 			<finder-column comparator="&lt;" name="displayDate" />
@@ -676,20 +803,20 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
 		</finder>
-		<finder name="G_T" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="C_T" return-type="Collection">
+			<finder-column name="companyId" />
 			<finder-column name="type" />
 		</finder>
-		<finder name="G_K_T" return-type="CPMeasurementUnit" unique="true">
-			<finder-column name="groupId" />
+		<finder name="C_K_T" return-type="CPMeasurementUnit" unique="true">
+			<finder-column name="companyId" />
 			<finder-column case-sensitive="false" name="key" />
 			<finder-column name="type" />
 		</finder>
-		<finder name="G_P_T" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="C_P_T" return-type="Collection">
+			<finder-column name="companyId" />
 			<finder-column name="primary" />
 			<finder-column name="type" />
 		</finder>
@@ -699,10 +826,6 @@
 		<!-- PK fields -->
 
 		<column name="CPOptionId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
 
@@ -731,11 +854,11 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
 		</finder>
-		<finder name="G_K" return-type="CPOption" unique="true">
-			<finder-column name="groupId" />
+		<finder name="C_K" return-type="CPOption" unique="true">
+			<finder-column name="companyId" />
 			<finder-column name="key" />
 		</finder>
 
@@ -748,10 +871,6 @@
 		<!-- PK fields -->
 
 		<column name="CPOptionCategoryId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
 
@@ -778,14 +897,11 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
-		</finder>
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
 		</finder>
-		<finder name="G_K" return-type="CPOptionCategory" unique="true">
-			<finder-column name="groupId" />
+		<finder name="C_K" return-type="CPOptionCategory" unique="true">
+			<finder-column name="companyId" />
 			<finder-column name="key" />
 		</finder>
 	</entity>
@@ -794,10 +910,6 @@
 		<!-- PK fields -->
 
 		<column name="CPOptionValueId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
 
@@ -824,9 +936,6 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
-		</finder>
 		<finder name="CompanyId" return-type="Collection">
 			<finder-column name="companyId" />
 		</finder>
@@ -877,133 +986,11 @@
 			<finder-column name="groupId" />
 		</finder>
 	</entity>
-	<entity local-service="true" name="CPRule" remote-service="true">
-
-		<!-- PK fields -->
-
-		<column name="CPRuleId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
-
-		<!-- Audit fields -->
-
-		<column name="companyId" type="long" />
-		<column name="userId" type="long" />
-		<column name="userName" type="String" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
-
-		<!-- Other fields -->
-
-		<column name="name" type="String" />
-		<column name="active" type="boolean" />
-		<column name="type" type="String" />
-		<column name="typeSettings" type="String" />
-
-		<!-- Order -->
-
-		<order by="desc">
-			<order-column name="createDate" />
-		</order>
-
-		<!-- Finder methods -->
-
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
-		</finder>
-
-		<!-- References -->
-
-		<reference entity="Group" package-path="com.liferay.portal" />
-		<reference entity="ExpandoRow" package-path="com.liferay.portlet.expando" />
-	</entity>
-	<entity local-service="true" name="CPRuleAssetCategoryRel" remote-service="true">
-
-		<!-- PK fields -->
-
-		<column name="CPRuleAssetCategoryRelId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
-
-		<!-- Audit fields -->
-
-		<column name="companyId" type="long" />
-		<column name="userId" type="long" />
-		<column name="userName" type="String" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
-
-		<!-- Other fields -->
-
-		<column name="CPRuleId" type="long" />
-		<column name="assetCategoryId" type="long" />
-
-		<!-- Order -->
-
-		<order by="desc">
-			<order-column name="createDate" />
-		</order>
-
-		<!-- Finder methods -->
-
-		<finder name="CPRuleId" return-type="Collection">
-			<finder-column name="CPRuleId" />
-		</finder>
-		<finder name="AssetCategoryId" return-type="Collection">
-			<finder-column name="assetCategoryId" />
-		</finder>
-	</entity>
-	<entity local-service="true" name="CPRuleUserSegmentRel" remote-service="true">
-
-		<!-- PK fields -->
-
-		<column name="CPRuleUserSegmentRelId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
-
-		<!-- Audit fields -->
-
-		<column name="companyId" type="long" />
-		<column name="userId" type="long" />
-		<column name="userName" type="String" />
-		<column name="createDate" type="Date" />
-		<column name="modifiedDate" type="Date" />
-
-		<!-- Other fields -->
-
-		<column name="CPRuleId" type="long" />
-		<column name="commerceUserSegmentEntryId" type="long" />
-
-		<!-- Order -->
-
-		<order by="desc">
-			<order-column name="createDate" />
-		</order>
-
-		<!-- Finder methods -->
-
-		<finder name="CPRuleId" return-type="Collection">
-			<finder-column name="CPRuleId" />
-		</finder>
-		<finder name="CommerceUserSegmentEntryId" return-type="Collection">
-			<finder-column name="commerceUserSegmentEntryId" />
-		</finder>
-	</entity>
 	<entity local-service="true" name="CPSpecificationOption" remote-service="true" uuid="true">
 
 		<!-- PK fields -->
 
 		<column name="CPSpecificationOptionId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
 
@@ -1030,14 +1017,14 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
 		</finder>
 		<finder name="CPOptionCategoryId" return-type="Collection">
 			<finder-column name="CPOptionCategoryId" />
 		</finder>
-		<finder name="G_K" return-type="CPSpecificationOption" unique="true">
-			<finder-column name="groupId" />
+		<finder name="C_K" return-type="CPSpecificationOption" unique="true">
+			<finder-column name="companyId" />
 			<finder-column name="key" />
 		</finder>
 
@@ -1050,10 +1037,6 @@
 		<!-- PK fields -->
 
 		<column name="CPTaxCategoryId" primary="true" type="long" />
-
-		<!-- Group instance -->
-
-		<column name="groupId" type="long" />
 
 		<!-- Audit fields -->
 
@@ -1076,11 +1059,13 @@
 
 		<!-- Finder methods -->
 
-		<finder name="GroupId" return-type="Collection">
-			<finder-column name="groupId" />
+		<finder name="CompanyId" return-type="Collection">
+			<finder-column name="companyId" />
 		</finder>
 	</entity>
 	<exceptions>
+		<exception>CommerceCatalogProducts</exception>
+		<exception>CommerceCatalogSystem</exception>
 		<exception>CPAttachmentFileEntryDisplayDate</exception>
 		<exception>CPAttachmentFileEntryExpirationDate</exception>
 		<exception>CPAttachmentFileEntryName</exception>
@@ -1093,6 +1078,8 @@
 		<exception>CPDefinitionMetaTitle</exception>
 		<exception>CPDefinitionOptionValueRelKey</exception>
 		<exception>CPDefinitionProductTypeName</exception>
+		<exception>CPDisplayLayoutEntry</exception>
+		<exception>CPDisplayLayoutLayoutUuid</exception>
 		<exception>CPFriendlyURLEntry</exception>
 		<exception>CPInstanceDisplayDate</exception>
 		<exception>CPInstanceExpirationDate</exception>
@@ -1102,10 +1089,11 @@
 		<exception>CPOptionCategoryKey</exception>
 		<exception>CPOptionKey</exception>
 		<exception>CPOptionValueKey</exception>
-		<exception>CPRuleType</exception>
 		<exception>CPSpecificationOptionKey</exception>
 		<exception>CPSpecificationOptionTitle</exception>
 		<exception>CPTaxCategoryName</exception>
+		<exception>DuplicateCommerceChannelRel</exception>
+		<exception>DuplicateCPAttachmentFileEntry</exception>
 		<exception>DuplicateCPFriendlyURLEntry</exception>
 		<exception>DuplicateCProduct</exception>
 		<exception>NoSuchSkuContributorCPDefinitionOptionRel</exception>

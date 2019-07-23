@@ -39,6 +39,10 @@ public class CPDefinitionScreenNavigationConstants {
 	public static final String CATEGORY_KEY_SPECIFICATION_OPTIONS =
 		"specifications";
 
+	public static final String ENTRY_KEY_ACCOUNT_GROUPS = "account-groups";
+
+	public static final String ENTRY_KEY_CHANNELS = "channels";
+
 	public static final String ENTRY_KEY_DISPLAY_PAGE = "display-page";
 
 	public static final String ENTRY_KEY_SHIPPING = "shipping";

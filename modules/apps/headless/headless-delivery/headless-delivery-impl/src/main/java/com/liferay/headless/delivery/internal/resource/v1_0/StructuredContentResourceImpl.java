@@ -29,6 +29,8 @@ import com.liferay.dynamic.data.mapping.storage.Fields;
 import com.liferay.dynamic.data.mapping.util.DDM;
 import com.liferay.dynamic.data.mapping.validator.DDMFormValuesValidationException;
 import com.liferay.dynamic.data.mapping.validator.DDMFormValuesValidator;
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.headless.common.spi.resource.SPIRatingResource;
 import com.liferay.headless.common.spi.service.context.ServiceContextUtil;
 import com.liferay.headless.delivery.dto.v1_0.ContentField;
@@ -36,8 +38,10 @@ import com.liferay.headless.delivery.dto.v1_0.Rating;
 import com.liferay.headless.delivery.dto.v1_0.StructuredContent;
 import com.liferay.headless.delivery.dto.v1_0.converter.DefaultDTOConverterContext;
 import com.liferay.headless.delivery.internal.dto.v1_0.converter.StructuredContentDTOConverter;
+import com.liferay.headless.delivery.internal.dto.v1_0.util.CustomFieldsUtil;
 import com.liferay.headless.delivery.internal.dto.v1_0.util.DDMFormValuesUtil;
 import com.liferay.headless.delivery.internal.dto.v1_0.util.DDMValueUtil;
+import com.liferay.headless.delivery.internal.dto.v1_0.util.EntityFieldsUtil;
 import com.liferay.headless.delivery.internal.dto.v1_0.util.RatingUtil;
 import com.liferay.headless.delivery.internal.odata.entity.v1_0.EntityFieldsProvider;
 import com.liferay.headless.delivery.internal.odata.entity.v1_0.StructuredContentEntityModel;
@@ -54,7 +58,6 @@ import com.liferay.journal.util.JournalConverter;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Sort;
@@ -87,21 +90,19 @@ import com.liferay.portal.vulcan.util.LocalizedMapUtil;
 import com.liferay.portal.vulcan.util.SearchUtil;
 import com.liferay.ratings.kernel.service.RatingsEntryLocalService;
 
+import java.io.Serializable;
+
 import java.time.LocalDateTime;
 
 import java.util.AbstractMap;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -169,7 +170,7 @@ public class StructuredContentResourceImpl
 		List<EntityField> entityFields = null;
 
 		Long contentStructureId = GetterUtil.getLong(
-			(String)multivaluedMap.getFirst("content-structure-id"));
+			(String)multivaluedMap.getFirst("contentStructureId"));
 
 		if (contentStructureId > 0) {
 			DDMStructure ddmStructure = _ddmStructureService.getStructure(
@@ -177,11 +178,13 @@ public class StructuredContentResourceImpl
 
 			entityFields = _entityFieldsProvider.provide(ddmStructure);
 		}
-		else {
-			entityFields = Collections.emptyList();
-		}
 
-		return new StructuredContentEntityModel(entityFields);
+		return new StructuredContentEntityModel(
+			entityFields,
+			EntityFieldsUtil.getEntityFields(
+				_portal.getClassNameId(JournalArticle.class.getName()),
+				contextCompany.getCompanyId(), _expandoColumnLocalService,
+				_expandoTableLocalService));
 	}
 
 	@Override
@@ -286,7 +289,7 @@ public class StructuredContentResourceImpl
 			structuredContentId);
 
 		ThemeDisplay themeDisplay =
-			(ThemeDisplay)_httpServletRequest.getAttribute(
+			(ThemeDisplay)contextHttpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
 		themeDisplay.setScopeGroupId(journalArticle.getGroupId());
@@ -365,8 +368,9 @@ public class StructuredContentResourceImpl
 				0, true, 0, 0, 0, 0, 0, true, true, false, null, null, null,
 				null,
 				ServiceContextUtil.createServiceContext(
-					structuredContent.getKeywords(),
 					structuredContent.getTaxonomyCategoryIds(),
+					structuredContent.getKeywords(),
+					_getExpandoBridgeAttributes(structuredContent),
 					journalArticle.getGroupId(),
 					structuredContent.getViewableByAsString())));
 	}
@@ -454,8 +458,9 @@ public class StructuredContentResourceImpl
 				0, true, 0, 0, 0, 0, 0, true, true, false, null, null, null,
 				null,
 				ServiceContextUtil.createServiceContext(
-					structuredContent.getKeywords(),
 					structuredContent.getTaxonomyCategoryIds(),
+					structuredContent.getKeywords(),
+					_getExpandoBridgeAttributes(structuredContent),
 					journalArticle.getGroupId(),
 					structuredContent.getViewableByAsString())));
 	}
@@ -529,8 +534,9 @@ public class StructuredContentResourceImpl
 				localDateTime.getHour(), localDateTime.getMinute(), 0, 0, 0, 0,
 				0, true, 0, 0, 0, 0, 0, true, true, null,
 				ServiceContextUtil.createServiceContext(
+					structuredContent.getTaxonomyCategoryIds(),
 					structuredContent.getKeywords(),
-					structuredContent.getTaxonomyCategoryIds(), siteId,
+					_getExpandoBridgeAttributes(structuredContent), siteId,
 					structuredContent.getViewableByAsString())));
 	}
 
@@ -616,6 +622,15 @@ public class StructuredContentResourceImpl
 		return ddmTemplate.getTemplateKey();
 	}
 
+	private Map<String, Serializable> _getExpandoBridgeAttributes(
+		StructuredContent structuredContent) {
+
+		return CustomFieldsUtil.toMap(
+			JournalArticle.class.getName(), contextCompany.getCompanyId(),
+			structuredContent.getCustomFields(),
+			contextAcceptLanguage.getPreferredLocale());
+	}
+
 	private List<DDMFormField> _getRootDDMFormFields(
 		DDMStructure ddmStructure) {
 
@@ -629,7 +644,7 @@ public class StructuredContentResourceImpl
 			JournalArticle.class.getName(), _ratingsEntryLocalService,
 			ratingsEntry -> RatingUtil.toRating(
 				_portal, ratingsEntry, _userLocalService),
-			_user);
+			contextUser);
 	}
 
 	private StructuredContent _getStructuredContent(
@@ -638,7 +653,7 @@ public class StructuredContentResourceImpl
 
 		ContentLanguageUtil.addContentLanguageHeader(
 			journalArticle.getAvailableLanguageIds(),
-			journalArticle.getDefaultLanguageId(), _httpServletResponse,
+			journalArticle.getDefaultLanguageId(), contextHttpServletResponse,
 			contextAcceptLanguage.getPreferredLocale());
 
 		return _toStructuredContent(journalArticle);
@@ -839,11 +854,11 @@ public class StructuredContentResourceImpl
 	@Reference
 	private EntityFieldsProvider _entityFieldsProvider;
 
-	@Context
-	private HttpServletRequest _httpServletRequest;
+	@Reference
+	private ExpandoColumnLocalService _expandoColumnLocalService;
 
-	@Context
-	private HttpServletResponse _httpServletResponse;
+	@Reference
+	private ExpandoTableLocalService _expandoTableLocalService;
 
 	@Reference
 	private JournalArticleLocalService _journalArticleLocalService;
@@ -877,9 +892,6 @@ public class StructuredContentResourceImpl
 
 	@Reference
 	private StructuredContentDTOConverter _structuredContentDTOConverter;
-
-	@Context
-	private User _user;
 
 	@Reference
 	private UserLocalService _userLocalService;

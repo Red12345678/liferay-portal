@@ -1,5 +1,6 @@
 @component-name = "portal-workflow"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.component.names = "Users and Organizations";
@@ -33,15 +34,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Workflow"
-		);
+			portlet = "Workflow");
 
 		Navigator.gotoNavItem(navItem = "Schemes");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
-			workflowResourceValue = "User"
-		);
+			workflowResourceValue = "User");
 
 		User.logoutPG();
 
@@ -50,16 +49,16 @@ definition {
 			userFirstName = "userfn",
 			userLastName = "userln",
 			userScreenName = "usersn",
-			workflow = "true"
-		);
+			workflow = "true");
 
-		User.loginUserPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.searchCP(searchTerm = "usersn");
 
@@ -68,40 +67,34 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "My Account",
 			panel = "User",
-			portlet = "My Workflow Tasks"
-		);
+			portlet = "My Workflow Tasks");
 
 		Workflow.assignToMeTaskByActions(
 			workflowAssetTitle = "userfn userln",
 			workflowAssetType = "User",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		Workflow.approveTaskByActions(
 			workflowAssetTitle = "userfn userln",
 			workflowAssetType = "User",
-			workflowTask = "Review"
-		);
+			workflowTask = "Review");
 
 		ProductMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
-			portlet = "Users and Organizations"
-		);
+			portlet = "Users and Organizations");
 
 		User.editPasswordCP(
 			userEmailAddress = "user@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
 		User.logoutAndLoginPG(
 			userFirstName = "userfn",
 			userLastName = "userln",
 			userLoginEmailAddress = "user@liferay.com",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 	}
 
 	@description = "This is a use case for LPS-69190."
@@ -112,15 +105,13 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
-			portlet = "Workflow"
-		);
+			portlet = "Workflow");
 
 		Navigator.gotoNavItem(navItem = "Schemes");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
-			workflowResourceValue = "User"
-		);
+			workflowResourceValue = "User");
 
 		User.logoutPG();
 
@@ -128,10 +119,11 @@ definition {
 			userEmailAddress = "user@liferay.com",
 			userFirstName = "userfn",
 			userLastName = "userln",
-			userScreenName = "usersn"
-		);
+			userScreenName = "usersn");
 
-		User.loginUserPG(password = "test", userEmailAddress = "test@liferay.com");
+		User.loginUserPG(
+			password = "test",
+			userEmailAddress = "test@liferay.com");
 
 		WorkflowAsset.gotoViaNotification(assetType = "User");
 
@@ -141,4 +133,5 @@ definition {
 
 		WorkflowAsset.viewUserDetails(userEmailAddress = "user@liferay.com");
 	}
+
 }

@@ -1,5 +1,5 @@
-create table CNTemplateUserSegmentRel (
-	CNTemplateUserSegmentRelId LONG not null primary key,
+create table CNTemplateCAccountGroupRel (
+	CNTemplateCAccountGroupRelId LONG not null primary key,
 	groupId LONG,
 	companyId LONG,
 	userId LONG,
@@ -7,7 +7,7 @@ create table CNTemplateUserSegmentRel (
 	createDate DATE null,
 	modifiedDate DATE null,
 	commerceNotificationTemplateId LONG,
-	commerceUserSegmentEntryId LONG
+	commerceAccountGroupId LONG
 );
 
 create table CNotificationAttachment (

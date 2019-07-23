@@ -99,6 +99,11 @@ public class IndexCPCatalogEntryImpl implements CPCatalogEntry {
 	}
 
 	@Override
+	public long getGroupId() {
+		return GetterUtil.getLong(_document.get(Field.GROUP_ID));
+	}
+
+	@Override
 	public double getHeight() {
 		return GetterUtil.getDouble(
 			_document.get(CPDefinitionIndexer.FIELD_HEIGHT));

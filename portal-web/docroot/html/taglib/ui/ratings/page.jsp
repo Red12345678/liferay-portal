@@ -108,7 +108,7 @@ if (!inTrash) {
 								<div class="rating-input-container">
 									<label for="<%= ratingId %>"><liferay-ui:message arguments="<%= new Object[] {i, numberOfStars} %>" key='<%= (yourScoreStars == i) ? ((i == 1) ? "you-have-rated-this-x-star-out-of-x" : "you-have-rated-this-x-stars-out-of-x") : ((i == 1) ? "rate-this-x-star-out-of-x" : "rate-this-x-stars-out-of-x") %>' translateArguments="<%= false %>" /></label>
 
-									<input checked="<%= i == yourScoreStars %>" class="rating-input" id="<%= ratingId %>" name="<portlet:namespace />rating" type="radio" value="<%= i %>">
+									<input checked="<%= i == yourScoreStars %>" class="rating-input" id="<%= ratingId %>" name="<portlet:namespace />rating" type="radio" value="<%= i %>" />
 								</div>
 
 							<%
@@ -253,7 +253,7 @@ if (!inTrash) {
 									String ratingId = PortalUtil.generateRandomKey(request, "taglib_ui_ratings_page_rating");
 									%>
 
-									<input class="rating-input" id="<%= ratingId %>" name="<portlet:namespace /><%= ratingIdPrefix %>" type="radio" value="up">
+									<input class="rating-input" id="<%= ratingId %>" name="<portlet:namespace /><%= ratingIdPrefix %>" type="radio" value="up" />
 
 									<c:if test="<%= type.equals(RatingsType.THUMBS.getValue()) %>">
 
@@ -261,7 +261,7 @@ if (!inTrash) {
 										ratingId = PortalUtil.generateRandomKey(request, "taglib_ui_ratings_page_rating");
 										%>
 
-										<input class="rating-input" id="<%= ratingId %>" name="<portlet:namespace /><%= ratingIdPrefix %>" type="radio" value="down">
+										<input class="rating-input" id="<%= ratingId %>" name="<portlet:namespace /><%= ratingIdPrefix %>" type="radio" value="down" />
 									</c:if>
 								</div>
 							</c:otherwise>

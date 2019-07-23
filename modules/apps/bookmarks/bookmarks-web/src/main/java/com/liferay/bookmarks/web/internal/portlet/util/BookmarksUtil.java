@@ -225,8 +225,6 @@ public class BookmarksUtil {
 						"Bookmarks search index is stale and contains entry " +
 							entryClassPK);
 				}
-
-				continue;
 			}
 		}
 

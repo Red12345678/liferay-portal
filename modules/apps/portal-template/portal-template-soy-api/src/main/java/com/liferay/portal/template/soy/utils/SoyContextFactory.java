@@ -18,7 +18,10 @@ import java.util.Map;
 
 /**
  * @author Matthew Tambara
+ * @deprecated As of Mueller (7.2.x), see {@link
+ *             com.liferay.portal.template.soy.util.SoyContextFactory}
  */
+@Deprecated
 public interface SoyContextFactory {
 
 	public SoyContext createSoyContext();

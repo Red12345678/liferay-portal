@@ -15,7 +15,7 @@
 package com.liferay.commerce.health.status.web.internal.util;
 
 import com.liferay.commerce.health.status.CommerceHealthStatus;
-import com.liferay.commerce.health.status.web.internal.constants.CommerceHealthStatusConstants;
+import com.liferay.commerce.health.status.constants.CommerceHealthStatusConstants;
 import com.liferay.commerce.model.CommerceCountry;
 import com.liferay.commerce.service.CommerceCountryLocalService;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -92,10 +92,18 @@ public class CountriesCommerceHealthStatus implements CommerceHealthStatus {
 	}
 
 	@Override
-	public boolean isFixed(long groupId) throws PortalException {
+	public int getType() {
+		return CommerceHealthStatusConstants.
+			COMMERCE_HEALTH_STATUS_TYPE_VIRTUAL_INSTANCE;
+	}
+
+	@Override
+	public boolean isFixed(long companyId, long groupId)
+		throws PortalException {
+
 		List<CommerceCountry> commerceCountries =
 			_commerceCountryLocalService.getCommerceCountries(
-				groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
 		return !commerceCountries.isEmpty();
 	}

@@ -72,9 +72,18 @@ public class CPOptionCategoriesImporter {
 			ServiceContext serviceContext)
 		throws PortalException {
 
+		CPOptionCategory cpOptionCategory;
+
 		Locale locale = LocaleUtil.getSiteDefault();
 
 		String key = jsonObject.getString("Key");
+
+		cpOptionCategory = _cpOptionCategoryLocalService.fetchCPOptionCategory(
+			serviceContext.getCompanyId(), key);
+
+		if (cpOptionCategory != null) {
+			return cpOptionCategory;
+		}
 
 		Map<Locale, String> titleMap = Collections.singletonMap(
 			locale, CommerceInitializerUtil.getValue(jsonObject, "Title", key));
@@ -85,7 +94,8 @@ public class CPOptionCategoriesImporter {
 		double priority = jsonObject.getDouble("Priority", defaultPriority);
 
 		return _cpOptionCategoryLocalService.addCPOptionCategory(
-			titleMap, descriptionMap, priority, key, serviceContext);
+			serviceContext.getUserId(), titleMap, descriptionMap, priority, key,
+			serviceContext);
 	}
 
 	@Reference

@@ -14,12 +14,16 @@
 
 package com.liferay.headless.delivery.internal.resource.v1_0;
 
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.headless.common.spi.resource.SPIRatingResource;
 import com.liferay.headless.common.spi.service.context.ServiceContextUtil;
 import com.liferay.headless.delivery.dto.v1_0.KnowledgeBaseArticle;
 import com.liferay.headless.delivery.dto.v1_0.Rating;
 import com.liferay.headless.delivery.dto.v1_0.converter.DefaultDTOConverterContext;
 import com.liferay.headless.delivery.internal.dto.v1_0.converter.KnowledgeBaseArticleDTOConverter;
+import com.liferay.headless.delivery.internal.dto.v1_0.util.CustomFieldsUtil;
+import com.liferay.headless.delivery.internal.dto.v1_0.util.EntityFieldsUtil;
 import com.liferay.headless.delivery.internal.dto.v1_0.util.RatingUtil;
 import com.liferay.headless.delivery.internal.odata.entity.v1_0.KnowledgeBaseArticleEntityModel;
 import com.liferay.headless.delivery.resource.v1_0.KnowledgeBaseArticleResource;
@@ -29,7 +33,6 @@ import com.liferay.knowledge.base.model.KBFolder;
 import com.liferay.knowledge.base.service.KBArticleService;
 import com.liferay.knowledge.base.service.KBFolderService;
 import com.liferay.petra.function.UnsafeConsumer;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.BooleanClauseOccur;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Field;
@@ -48,9 +51,11 @@ import com.liferay.portal.vulcan.resource.EntityModelResource;
 import com.liferay.portal.vulcan.util.SearchUtil;
 import com.liferay.ratings.kernel.service.RatingsEntryLocalService;
 
+import java.io.Serializable;
+
+import java.util.Map;
 import java.util.Optional;
 
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -86,7 +91,11 @@ public class KnowledgeBaseArticleResourceImpl
 
 	@Override
 	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
-		return _entityModel;
+		return new KnowledgeBaseArticleEntityModel(
+			EntityFieldsUtil.getEntityFields(
+				_portal.getClassNameId(KBArticle.class.getName()),
+				contextCompany.getCompanyId(), _expandoColumnLocalService,
+				_expandoTableLocalService));
 	}
 
 	@Override
@@ -249,15 +258,16 @@ public class KnowledgeBaseArticleResourceImpl
 				knowledgeBaseArticle.getDescription(), null, null, null, null,
 				ServiceContextUtil.createServiceContext(
 					Optional.ofNullable(
-						knowledgeBaseArticle.getKeywords()
-					).orElse(
-						new String[0]
-					),
-					Optional.ofNullable(
 						knowledgeBaseArticle.getTaxonomyCategoryIds()
 					).orElse(
 						new Long[0]
 					),
+					Optional.ofNullable(
+						knowledgeBaseArticle.getKeywords()
+					).orElse(
+						new String[0]
+					),
+					_getExpandoBridgeAttributes(knowledgeBaseArticle),
 					knowledgeBaseArticle.getSiteId(),
 					knowledgeBaseArticle.getViewableByAsString())));
 	}
@@ -271,6 +281,15 @@ public class KnowledgeBaseArticleResourceImpl
 
 		return spiRatingResource.addOrUpdateRating(
 			rating.getRatingValue(), knowledgeBaseArticleId);
+	}
+
+	private Map<String, Serializable> _getExpandoBridgeAttributes(
+		KnowledgeBaseArticle knowledgeBaseArticle) {
+
+		return CustomFieldsUtil.toMap(
+			KBArticle.class.getName(), contextCompany.getCompanyId(),
+			knowledgeBaseArticle.getCustomFields(),
+			contextAcceptLanguage.getPreferredLocale());
 	}
 
 	private KnowledgeBaseArticle _getKnowledgeBaseArticle(
@@ -287,8 +306,9 @@ public class KnowledgeBaseArticleResourceImpl
 				knowledgeBaseArticle.getArticleBody(),
 				knowledgeBaseArticle.getDescription(), null, null, null,
 				ServiceContextUtil.createServiceContext(
+					knowledgeBaseArticle.getTaxonomyCategoryIds(),
 					knowledgeBaseArticle.getKeywords(),
-					knowledgeBaseArticle.getTaxonomyCategoryIds(), siteId,
+					_getExpandoBridgeAttributes(knowledgeBaseArticle), siteId,
 					knowledgeBaseArticle.getViewableByAsString())));
 	}
 
@@ -323,7 +343,7 @@ public class KnowledgeBaseArticleResourceImpl
 			KBArticle.class.getName(), _ratingsEntryLocalService,
 			ratingsEntry -> RatingUtil.toRating(
 				_portal, ratingsEntry, _userLocalService),
-			_user);
+			contextUser);
 	}
 
 	private KnowledgeBaseArticle _toKBArticle(KBArticle kbArticle)
@@ -342,11 +362,15 @@ public class KnowledgeBaseArticleResourceImpl
 
 		return _knowledgeBaseArticleDTOConverter.toDTO(
 			new DefaultDTOConverterContext(
-				null, knowledgeBaseArticleResourcePrimKey));
+				contextAcceptLanguage.getPreferredLocale(),
+				knowledgeBaseArticleResourcePrimKey));
 	}
 
-	private static final EntityModel _entityModel =
-		new KnowledgeBaseArticleEntityModel();
+	@Reference
+	private ExpandoColumnLocalService _expandoColumnLocalService;
+
+	@Reference
+	private ExpandoTableLocalService _expandoTableLocalService;
 
 	@Reference
 	private KBArticleService _kbArticleService;
@@ -362,9 +386,6 @@ public class KnowledgeBaseArticleResourceImpl
 
 	@Reference
 	private RatingsEntryLocalService _ratingsEntryLocalService;
-
-	@Context
-	private User _user;
 
 	@Reference
 	private UserLocalService _userLocalService;

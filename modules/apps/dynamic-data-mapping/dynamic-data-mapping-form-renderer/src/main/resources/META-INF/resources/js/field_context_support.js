@@ -31,6 +31,10 @@ AUI.add(
 
 				instance._eventHandlers = [];
 
+				instance._eventHandlers.push(
+					instance.after('fieldValueChange', A.bind(instance._afterFieldValueChange, instance))
+				);
+
 				instance._stateRepaintableAttributes = {};
 
 				instance.bindFieldClassAttributesStatus(fieldClass);
@@ -100,19 +104,24 @@ AUI.add(
 				var context = instance.get('context');
 
 				if (!Util.compare(value, context[name])) {
-					var localizable = context.localizable;
-
-					instance.set('context.' + name, value);
-
-					if (name === 'value' && localizable === false) {
-						var localizedValue = {};
-
-						var locale = context.locale;
-
-						localizedValue[locale] = value;
-
-						instance.set('context.localizedValue', localizedValue);
+					if (name === 'value') {
+						instance._updateContextValue(value);
 					}
+					else {
+						instance.set('context.' + name, value);
+					}
+				}
+			},
+			
+			_afterFieldValueChange: function(fieldContext) {
+				var instance = this;
+
+				var context = instance.get('context');
+
+				var value = context.value;
+				
+				if (!Util.compare(value, fieldContext.value)) {
+					instance._updateContextValue(fieldContext.value);
 				}
 			},
 
@@ -159,6 +168,26 @@ AUI.add(
 
 				if (!instance._isStateRepaintableAttributeDefined(attributeName)) {
 					instance._stateRepaintableAttributes[attributeName] = value;
+				}
+			},
+			
+			_updateContextValue: function(value) {
+				var instance = this;
+				
+				var context = instance.get('context');
+
+				var localizable = context.localizable;
+				
+				instance.set('context.value', value);
+				
+				if (localizable === false) {
+					var localizedValue = {};
+
+					var locale = context.locale;
+
+					localizedValue[locale] = value;
+
+					instance.set('context.localizedValue', localizedValue);
 				}
 			}
 		};

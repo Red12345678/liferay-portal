@@ -14,23 +14,23 @@
 
 package com.liferay.commerce.product.internal.util.data.provider;
 
-import com.liferay.commerce.product.catalog.rule.CPRuleHelper;
 import com.liferay.commerce.product.model.CPDefinitionOptionRel;
 import com.liferay.commerce.product.model.CPDefinitionOptionValueRel;
+import com.liferay.commerce.product.permission.CommerceProductViewPermission;
 import com.liferay.commerce.product.service.CPDefinitionOptionRelLocalService;
 import com.liferay.commerce.product.util.CPInstanceHelper;
-import com.liferay.commerce.product.util.CPRulesThreadLocal;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProvider;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderContext;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderException;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderRequest;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponse;
 import com.liferay.dynamic.data.mapping.data.provider.DDMDataProviderResponseOutput;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.KeyValuePair;
-import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
@@ -74,25 +74,34 @@ public class CPInstanceOptionsValuesDataProvider implements DDMDataProvider {
 
 		Locale locale = httpServletRequest.getLocale();
 
+		long cpDefinitionId = GetterUtil.getLong(
+			ddmDataProviderRequest.getParameter("cpDefinitionId"));
+
 		long commerceAccountId = GetterUtil.getLong(
 			ddmDataProviderRequest.getParameter("commerceAccountId"));
 
 		long groupId = GetterUtil.getLong(
 			ddmDataProviderRequest.getParameter("groupId"));
 
-		long cpDefinitionId = GetterUtil.getLong(
-			ddmDataProviderRequest.getParameter("cpDefinitionId"));
+		try {
+			if (!_commerceProductViewPermission.contains(
+					PermissionThreadLocal.getPermissionChecker(),
+					commerceAccountId, groupId, cpDefinitionId)) {
+
+				return DDMDataProviderResponse.of();
+			}
+		}
+		catch (PortalException pe) {
+			_log.error(pe, pe);
+
+			return DDMDataProviderResponse.of();
+		}
 
 		if (cpDefinitionId == 0) {
 			return DDMDataProviderResponse.of();
 		}
 
 		try {
-			CPRulesThreadLocal.setCPRules(null);
-
-			_cpRuleHelper.initializeCPRules(
-				_portal.getUserId(httpServletRequest), commerceAccountId,
-				groupId);
 
 			/**
 			 * Extract the filters and the outputs based on fields that were
@@ -208,16 +217,13 @@ public class CPInstanceOptionsValuesDataProvider implements DDMDataProvider {
 		CPInstanceOptionsValuesDataProvider.class);
 
 	@Reference
+	private CommerceProductViewPermission _commerceProductViewPermission;
+
+	@Reference
 	private CPDefinitionOptionRelLocalService
 		_cpDefinitionOptionRelLocalService;
 
 	@Reference
 	private CPInstanceHelper _cpInstanceHelper;
-
-	@Reference
-	private CPRuleHelper _cpRuleHelper;
-
-	@Reference
-	private Portal _portal;
 
 }
