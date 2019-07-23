@@ -1,20 +1,43 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Component from 'metal-component';
 import {Config} from 'metal-state';
 import Soy from 'metal-soy';
 
 import '../fragments/FragmentsEditorSidebarCard.es';
-import {REMOVE_FRAGMENT_ENTRY_LINK, REMOVE_ROW} from '../../../actions/actions.es';
+import {
+	REMOVE_FRAGMENT_ENTRY_LINK,
+	REMOVE_ROW
+} from '../../../actions/actions.es';
 import {removeItem, setIn} from '../../../utils/FragmentsEditorUpdateUtils.es';
-import {EDITABLE_FRAGMENT_ENTRY_PROCESSOR, FRAGMENTS_EDITOR_ITEM_TYPES, FRAGMENTS_EDITOR_ROW_TYPES} from '../../../utils/constants';
+import {
+	EDITABLE_FRAGMENT_ENTRY_PROCESSOR,
+	FRAGMENTS_EDITOR_ITEM_TYPES,
+	FRAGMENTS_EDITOR_ROW_TYPES
+} from '../../../utils/constants';
 import {getConnectedComponent} from '../../../store/ConnectedComponent.es';
-import {getItemPath, getRowFragmentEntryLinkIds} from '../../../utils/FragmentsEditorGetUtils.es';
+import {
+	getItemPath,
+	getRowFragmentEntryLinkIds
+} from '../../../utils/FragmentsEditorGetUtils.es';
 import templates from './SidebarPageStructurePanel.soy';
 
 /**
  * SidebarPageStructurePanel
  */
 class SidebarPageStructurePanel extends Component {
-
 	/**
 	 * @param {Object} state
 	 * @private
@@ -26,20 +49,14 @@ class SidebarPageStructurePanel extends Component {
 		return setIn(
 			state,
 			['structure'],
-			SidebarPageStructurePanel._getTreeNode(
-				state,
-				{
-					children: state.layoutData.structure.map(
-						row => SidebarPageStructurePanel._getRowTree(
-							state,
-							row
-						)
-					),
-					expanded: true,
-					key: 'root',
-					label: Liferay.Language.get('page')
-				}
-			)
+			SidebarPageStructurePanel._getTreeNode(state, {
+				children: state.layoutData.structure.map(row =>
+					SidebarPageStructurePanel._getRowTree(state, row)
+				),
+				expanded: true,
+				key: 'root',
+				label: Liferay.Language.get('page')
+			})
 		);
 	}
 
@@ -51,23 +68,22 @@ class SidebarPageStructurePanel extends Component {
 	 * @static
 	 */
 	static _getColumnTree(state, column) {
-		return SidebarPageStructurePanel._getTreeNode(
-			state,
-			{
-				children: column.fragmentEntryLinkIds.map(
-					fragmentEntryLinkId => state.fragmentEntryLinks[fragmentEntryLinkId]
-				).filter(
-					fragmentEntryLink => fragmentEntryLink
-				).map(
-					fragmentEntryLink => SidebarPageStructurePanel._getFragmentEntryLinkTree(
+		return SidebarPageStructurePanel._getTreeNode(state, {
+			children: column.fragmentEntryLinkIds
+				.map(
+					fragmentEntryLinkId =>
+						state.fragmentEntryLinks[fragmentEntryLinkId]
+				)
+				.filter(fragmentEntryLink => fragmentEntryLink)
+				.map(fragmentEntryLink =>
+					SidebarPageStructurePanel._getFragmentEntryLinkTree(
 						state,
 						fragmentEntryLink
 					)
 				),
-				key: `${FRAGMENTS_EDITOR_ITEM_TYPES.column}-${column.columnId}`,
-				label: Liferay.Language.get('column')
-			}
-		);
+			key: `${FRAGMENTS_EDITOR_ITEM_TYPES.column}-${column.columnId}`,
+			label: Liferay.Language.get('column')
+		});
 	}
 
 	/**
@@ -78,29 +94,25 @@ class SidebarPageStructurePanel extends Component {
 	 * @static
 	 */
 	static _getFragmentEntryLinkTree(state, fragmentEntryLink) {
-		return SidebarPageStructurePanel._getTreeNode(
-			state,
-			{
-				children: Object.keys(
-					fragmentEntryLink.editableValues[EDITABLE_FRAGMENT_ENTRY_PROCESSOR]
-				).map(
-					editableValueKey => SidebarPageStructurePanel._getTreeNode(
-						state,
-						{
-							elementId: `${fragmentEntryLink.fragmentEntryLinkId}-${editableValueKey}`,
-							elementType: FRAGMENTS_EDITOR_ITEM_TYPES.editable,
-							key: `${FRAGMENTS_EDITOR_ITEM_TYPES.editable}-${fragmentEntryLink.fragmentEntryLinkId}-${editableValueKey}`,
-							label: editableValueKey
-						}
-					)
-				),
-				elementId: fragmentEntryLink.fragmentEntryLinkId,
-				elementType: FRAGMENTS_EDITOR_ITEM_TYPES.fragment,
-				key: `${FRAGMENTS_EDITOR_ITEM_TYPES.fragment}-${fragmentEntryLink.fragmentEntryLinkId}`,
-				label: fragmentEntryLink.name,
-				removable: true
-			}
-		);
+		return SidebarPageStructurePanel._getTreeNode(state, {
+			children: Object.keys(
+				fragmentEntryLink.editableValues[
+					EDITABLE_FRAGMENT_ENTRY_PROCESSOR
+				]
+			).map(editableValueKey =>
+				SidebarPageStructurePanel._getTreeNode(state, {
+					elementId: `${fragmentEntryLink.fragmentEntryLinkId}-${editableValueKey}`,
+					elementType: FRAGMENTS_EDITOR_ITEM_TYPES.editable,
+					key: `${FRAGMENTS_EDITOR_ITEM_TYPES.editable}-${fragmentEntryLink.fragmentEntryLinkId}-${editableValueKey}`,
+					label: editableValueKey
+				})
+			),
+			elementId: fragmentEntryLink.fragmentEntryLinkId,
+			elementType: FRAGMENTS_EDITOR_ITEM_TYPES.fragment,
+			key: `${FRAGMENTS_EDITOR_ITEM_TYPES.fragment}-${fragmentEntryLink.fragmentEntryLinkId}`,
+			label: fragmentEntryLink.name,
+			removable: true
+		});
 	}
 
 	/**
@@ -116,9 +128,8 @@ class SidebarPageStructurePanel extends Component {
 		if (row.type === FRAGMENTS_EDITOR_ROW_TYPES.sectionRow) {
 			const [fragmentEntryLinkId] = getRowFragmentEntryLinkIds(row);
 
-			const fragmentEntryLink = state.fragmentEntryLinks[
-				fragmentEntryLinkId
-			];
+			const fragmentEntryLink =
+				state.fragmentEntryLinks[fragmentEntryLinkId];
 
 			if (fragmentEntryLink) {
 				treeNode = SidebarPageStructurePanel._getFragmentEntryLinkTree(
@@ -129,22 +140,16 @@ class SidebarPageStructurePanel extends Component {
 		}
 
 		if (!treeNode) {
-			treeNode = SidebarPageStructurePanel._getTreeNode(
-				state,
-				{
-					children: row.columns.map(
-						column => SidebarPageStructurePanel._getColumnTree(
-							state,
-							column
-						)
-					),
-					elementId: row.rowId,
-					elementType: FRAGMENTS_EDITOR_ITEM_TYPES.row,
-					key: `${FRAGMENTS_EDITOR_ITEM_TYPES.row}-${row.rowId}`,
-					label: Liferay.Language.get('section'),
-					removable: true
-				}
-			);
+			treeNode = SidebarPageStructurePanel._getTreeNode(state, {
+				children: row.columns.map(column =>
+					SidebarPageStructurePanel._getColumnTree(state, column)
+				),
+				elementId: row.rowId,
+				elementType: FRAGMENTS_EDITOR_ITEM_TYPES.row,
+				key: `${FRAGMENTS_EDITOR_ITEM_TYPES.row}-${row.rowId}`,
+				label: Liferay.Language.get('section'),
+				removable: true
+			});
 		}
 
 		return treeNode;
@@ -167,18 +172,17 @@ class SidebarPageStructurePanel extends Component {
 	 */
 	static _getTreeNode(state, data) {
 		return {
-			active: (
+			active:
 				state.activeItemId === data.elementId &&
-				state.activeItemType === data.elementType
-			),
+				state.activeItemType === data.elementType,
 			children: data.children || [],
 			elementId: data.elementId || '',
 			elementType: data.elementType || '',
-			expanded: data.expanded || (state._expandedNodes.indexOf(data.key) !== -1),
-			hovered: (
+			expanded:
+				data.expanded || state._expandedNodes.indexOf(data.key) !== -1,
+			hovered:
 				state.hoveredItemId === data.elementId &&
-				state.hoveredItemType === data.elementType
-			),
+				state.hoveredItemType === data.elementType,
 			key: data.key,
 			label: data.label,
 			removable: data.removable || false
@@ -204,20 +208,19 @@ class SidebarPageStructurePanel extends Component {
 				this.activeItemId,
 				this.activeItemType,
 				this.layoutData.structure
-			).filter(
-				activeItem => (
-					(this.activeItemId !== activeItem.itemId) &&
-					(this.activeItemType !== activeItem.itemType)
+			)
+				.filter(
+					activeItem =>
+						this.activeItemId !== activeItem.itemId &&
+						this.activeItemType !== activeItem.itemType
 				)
-			).forEach(
-				activeItem => {
+				.forEach(activeItem => {
 					const key = `${activeItem.itemType}-${activeItem.itemId}`;
 
 					if (this._expandedNodes.indexOf(key) === -1) {
 						this._expandedNodes = [...this._expandedNodes, key];
 					}
-				}
-			);
+				});
 		}
 	}
 
@@ -227,19 +230,28 @@ class SidebarPageStructurePanel extends Component {
 	 * @review
 	 */
 	_handleElementClick(event) {
-		const {nodeKey} = event.delegateTarget.dataset;
+		const {elementId, elementType, nodeKey} = event.delegateTarget.dataset;
 
 		if (nodeKey) {
 			const nodeKeyIndex = this._expandedNodes.indexOf(nodeKey);
 
 			if (nodeKeyIndex === -1) {
 				this._expandedNodes.push(nodeKey);
-			}
-			else {
+			} else {
 				this._expandedNodes.splice(nodeKeyIndex, 1);
 			}
 
 			this._expandedNodes = this._expandedNodes;
+		}
+
+		if (elementId && elementType) {
+			const element = document.querySelector(
+				`.fragment-entry-link-list [data-fragments-editor-item-id="${elementId}"][data-fragments-editor-item-type="${elementType}"]`
+			);
+
+			if (element) {
+				element.scrollIntoView({behavior: 'smooth', block: 'center'});
+			}
 		}
 	}
 
@@ -262,8 +274,7 @@ class SidebarPageStructurePanel extends Component {
 			removeItemPayload = {
 				rowId: itemId
 			};
-		}
-		else if (itemType === FRAGMENTS_EDITOR_ITEM_TYPES.fragment) {
+		} else if (itemType === FRAGMENTS_EDITOR_ITEM_TYPES.fragment) {
 			removeItemAction = REMOVE_FRAGMENT_ENTRY_LINK;
 
 			removeItemPayload = {
@@ -273,7 +284,6 @@ class SidebarPageStructurePanel extends Component {
 
 		removeItem(this.store, removeItemAction, removeItemPayload);
 	}
-
 }
 
 /**
@@ -283,7 +293,6 @@ class SidebarPageStructurePanel extends Component {
  * @type {!Object}
  */
 SidebarPageStructurePanel.STATE = {
-
 	/**
 	 * List of expanded nodes.
 	 * @default ['root']
@@ -292,8 +301,7 @@ SidebarPageStructurePanel.STATE = {
 	 * @review
 	 * @type {string[]}
 	 */
-	_expandedNodes: Config
-		.arrayOf(Config.string())
+	_expandedNodes: Config.arrayOf(Config.string())
 		.internal()
 		.value(['root'])
 };

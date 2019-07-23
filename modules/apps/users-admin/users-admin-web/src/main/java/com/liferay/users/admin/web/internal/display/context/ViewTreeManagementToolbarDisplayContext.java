@@ -53,6 +53,7 @@ import com.liferay.users.admin.web.internal.search.OrganizationUserChecker;
 import com.liferay.users.admin.web.internal.util.comparator.OrganizationUserNameComparator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -86,79 +87,96 @@ public class ViewTreeManagementToolbarDisplayContext {
 	}
 
 	public List<DropdownItem> getActionDropdownItems() {
-		return new DropdownItemList() {
-			{
-				add(
-					dropdownItem -> {
-						dropdownItem.putData("action", Constants.DELETE);
-						dropdownItem.setHref(
-							StringBundler.concat(
-								"javascript:", _renderResponse.getNamespace(),
-								"delete();"));
-						dropdownItem.setIcon("times-circle");
-						dropdownItem.setLabel(
-							LanguageUtil.get(
-								_httpServletRequest, Constants.DELETE));
-						dropdownItem.setQuickAction(true);
-					});
+		return DropdownItemList.of(
+			() -> {
+				DropdownItem dropdownItem = new DropdownItem();
 
-				if (!Objects.equals(getNavigation(), "active")) {
-					add(
-						dropdownItem -> {
-							dropdownItem.putData("action", Constants.RESTORE);
-							dropdownItem.setHref(
-								StringBundler.concat(
-									"javascript:",
-									_renderResponse.getNamespace(),
-									"deleteUsers('", Constants.RESTORE, "');"));
-							dropdownItem.setIcon("undo");
-							dropdownItem.setLabel(
-								LanguageUtil.get(
-									_httpServletRequest, Constants.RESTORE));
-							dropdownItem.setQuickAction(true);
-						});
+				dropdownItem.putData("action", Constants.DELETE);
+				dropdownItem.setHref(
+					StringBundler.concat(
+						"javascript:", _renderResponse.getNamespace(),
+						"delete();"));
+				dropdownItem.setIcon("times-circle");
+				dropdownItem.setLabel(
+					LanguageUtil.get(_httpServletRequest, Constants.DELETE));
+				dropdownItem.setQuickAction(true);
+
+				return dropdownItem;
+			},
+			() -> {
+				if (Objects.equals(getNavigation(), "active")) {
+					return null;
 				}
 
-				if (!Objects.equals(getNavigation(), "inactive")) {
-					add(
-						dropdownItem -> {
-							dropdownItem.putData(
-								"action", Constants.DEACTIVATE);
-							dropdownItem.setHref(
-								StringBundler.concat(
-									"javascript:",
-									_renderResponse.getNamespace(),
-									"deleteUsers('", Constants.DEACTIVATE,
-									"');"));
-							dropdownItem.setIcon("hidden");
-							dropdownItem.setLabel(
-								LanguageUtil.get(
-									_httpServletRequest, Constants.DEACTIVATE));
-							dropdownItem.setQuickAction(true);
-						});
+				DropdownItem dropdownItem = new DropdownItem();
+
+				dropdownItem.putData("action", Constants.RESTORE);
+				dropdownItem.setHref(
+					StringBundler.concat(
+						"javascript:", _renderResponse.getNamespace(),
+						"deleteUsers('", Constants.RESTORE, "');"));
+				dropdownItem.setIcon("undo");
+				dropdownItem.setLabel(
+					LanguageUtil.get(_httpServletRequest, Constants.RESTORE));
+				dropdownItem.setQuickAction(true);
+
+				return dropdownItem;
+			},
+			() -> {
+				if (Objects.equals(getNavigation(), "inactive")) {
+					return null;
 				}
-			}
-		};
+
+				DropdownItem dropdownItem = new DropdownItem();
+
+				dropdownItem.putData("action", Constants.DEACTIVATE);
+				dropdownItem.setHref(
+					StringBundler.concat(
+						"javascript:", _renderResponse.getNamespace(),
+						"deleteUsers('", Constants.DEACTIVATE, "');"));
+				dropdownItem.setIcon("hidden");
+				dropdownItem.setLabel(
+					LanguageUtil.get(
+						_httpServletRequest, Constants.DEACTIVATE));
+				dropdownItem.setQuickAction(true);
+
+				return dropdownItem;
+			},
+			() -> {
+				DropdownItem dropdownItem = new DropdownItem();
+
+				dropdownItem.putData("action", Constants.REMOVE);
+				dropdownItem.setHref(
+					StringBundler.concat(
+						"javascript:", _renderResponse.getNamespace(),
+						"removeOrganizationsAndUsers();"));
+				dropdownItem.setIcon("minus-circle");
+				dropdownItem.setLabel(
+					LanguageUtil.get(_httpServletRequest, Constants.REMOVE));
+				dropdownItem.setQuickAction(true);
+
+				return dropdownItem;
+			});
 	}
 
-	public List<String> getAvailableActionDropdownItems(
-		Organization organization) {
-
-		return ListUtil.toList(Constants.DELETE);
+	public List<String> getAvailableActions(Organization organization) {
+		return Arrays.asList(Constants.DELETE, Constants.REMOVE);
 	}
 
-	public List<String> getAvailableActionDropdownItems(User user) {
-		List<String> availableActionDropdownItems = new ArrayList<>();
+	public List<String> getAvailableActions(User user) {
+		List<String> availableActions = new ArrayList<>();
 
 		if (user.isActive()) {
-			availableActionDropdownItems.add(Constants.DEACTIVATE);
+			availableActions.add(Constants.DEACTIVATE);
 		}
 		else {
-			availableActionDropdownItems.add(Constants.DELETE);
-			availableActionDropdownItems.add(Constants.RESTORE);
+			availableActions.add(Constants.DELETE);
+			availableActions.add(Constants.RESTORE);
 		}
 
-		return availableActionDropdownItems;
+		availableActions.add(Constants.REMOVE);
+
+		return availableActions;
 	}
 
 	public String getClearResultsURL() {

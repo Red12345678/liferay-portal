@@ -66,7 +66,7 @@ public interface OAuth2ApplicationService extends BaseService {
 		throws PortalException;
 
 	/**
-	 * @deprecated As of Mueller (7.2.x), since 7.2, unused
+	 * @deprecated As of Mueller (7.2.x)
 	 */
 	@Deprecated
 	public OAuth2Application addOAuth2Application(
@@ -123,7 +123,7 @@ public interface OAuth2ApplicationService extends BaseService {
 		throws PortalException;
 
 	/**
-	 * @deprecated As of Mueller (7.2.x), since 7.2, unused
+	 * @deprecated As of Mueller (7.2.x)
 	 */
 	@Deprecated
 	public OAuth2Application updateOAuth2Application(

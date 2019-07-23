@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.search.BaseIndexer;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.IndexWriterHelper;
-import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.Summary;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -36,14 +35,12 @@ import java.util.Locale;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-
 /**
  * @author Scott Lee
  * @author Peter Fellwock
+ * @deprecated As of Judson (7.1.x)
  */
-@Component(immediate = true, service = Indexer.class)
+@Deprecated
 public class MessageIndexer extends BaseIndexer<Message> {
 
 	public static final String CLASS_NAME = Message.class.getName();
@@ -87,18 +84,14 @@ public class MessageIndexer extends BaseIndexer<Message> {
 
 	@Override
 	protected void doReindex(Message message) throws Exception {
-		Document document = getDocument(message);
-
 		indexWriterHelper.updateDocument(
-			getSearchEngineId(), message.getCompanyId(), document,
+			getSearchEngineId(), message.getCompanyId(), getDocument(message),
 			isCommitImmediately());
 	}
 
 	@Override
 	protected void doReindex(String className, long classPK) throws Exception {
-		Message message = messageLocalService.getMessage(classPK);
-
-		doReindex(message);
+		doReindex(messageLocalService.getMessage(classPK));
 	}
 
 	@Override
@@ -116,9 +109,8 @@ public class MessageIndexer extends BaseIndexer<Message> {
 		indexableActionableDynamicQuery.setPerformActionMethod(
 			(Message message) -> {
 				try {
-					Document document = getDocument(message);
-
-					indexableActionableDynamicQuery.addDocuments(document);
+					indexableActionableDynamicQuery.addDocuments(
+						getDocument(message));
 				}
 				catch (PortalException pe) {
 					if (_log.isWarnEnabled()) {
@@ -133,10 +125,7 @@ public class MessageIndexer extends BaseIndexer<Message> {
 		indexableActionableDynamicQuery.performActions();
 	}
 
-	@Reference
 	protected IndexWriterHelper indexWriterHelper;
-
-	@Reference
 	protected MessageLocalService messageLocalService;
 
 	private static final Log _log = LogFactoryUtil.getLog(MessageIndexer.class);

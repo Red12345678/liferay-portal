@@ -51,6 +51,7 @@ import com.liferay.portal.kernel.util.Digester;
 import com.liferay.portal.kernel.util.DigesterUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -66,6 +67,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.portlet.PortletPreferences;
 
@@ -352,9 +354,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 	public List<Layout> getAncestorLayouts(long plid) throws PortalException {
 		Layout layout = layoutLocalService.getLayout(plid);
 
-		List<Layout> ancestors = layout.getAncestors();
-
-		return filterLayouts(ancestors);
+		return filterLayouts(layout.getAncestors());
 	}
 
 	/**
@@ -670,6 +670,17 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 	}
 
 	@Override
+	public List<Layout> getLayouts(
+			long groupId, boolean privateLayout, String type)
+		throws PortalException {
+
+		List<Layout> layouts = layoutLocalService.getLayouts(
+			groupId, privateLayout, type);
+
+		return filterLayouts(layouts);
+	}
+
+	@Override
 	public List<Layout> getLayouts(long groupId, String type) {
 		return layoutPersistence.filterFindByG_T_Head(groupId, type, false);
 	}
@@ -758,10 +769,12 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 
 		LayoutType layoutType = layout.getLayoutType();
 
-		if ((layoutType instanceof LayoutTypePortlet) &&
-			((LayoutTypePortlet)layoutType).hasPortletId(portletId)) {
+		if (layoutType instanceof LayoutTypePortlet) {
+			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet)layoutType;
 
-			return true;
+			if (layoutTypePortlet.hasPortletId(portletId)) {
+				return true;
+			}
 		}
 
 		return false;
@@ -801,7 +814,9 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 
 		Trigger trigger = TriggerFactoryUtil.createTrigger(
 			PortalUUIDUtil.generate(), groupName, schedulerStartDate,
-			schedulerEndDate, cronText);
+			schedulerEndDate, cronText,
+			TimeZone.getTimeZone(
+				MapUtil.getString(parameterMap, "timeZoneId")));
 
 		User user = userPersistence.findByPrimaryKey(getUserId());
 
@@ -869,7 +884,9 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 
 		Trigger trigger = TriggerFactoryUtil.createTrigger(
 			PortalUUIDUtil.generate(), groupName, schedulerStartDate,
-			schedulerEndDate, cronText);
+			schedulerEndDate, cronText,
+			TimeZone.getTimeZone(
+				MapUtil.getString(parameterMap, "timeZoneId")));
 
 		User user = userPersistence.findByPrimaryKey(getUserId());
 
@@ -995,7 +1012,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 	 *         To see how the URL is normalized when accessed see {@link
 	 *         com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil#normalize(
 	 *         String)}.
-	 * @param  iconImage whether the icon image will be updated
+	 * @param  hasIconImage if the layout has a custom icon image
 	 * @param  iconBytes the byte array of the layout's new icon image
 	 * @param  serviceContext the service context to be applied. Can set the
 	 *         modification date and expando bridge attributes for the layout.
@@ -1009,7 +1026,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 			Map<Locale, String> localeTitlesMap,
 			Map<Locale, String> descriptionMap, Map<Locale, String> keywordsMap,
 			Map<Locale, String> robotsMap, String type, boolean hidden,
-			Map<Locale, String> friendlyURLMap, boolean iconImage,
+			Map<Locale, String> friendlyURLMap, boolean hasIconImage,
 			byte[] iconBytes, ServiceContext serviceContext)
 		throws PortalException {
 
@@ -1022,7 +1039,7 @@ public class LayoutServiceImpl extends LayoutServiceBaseImpl {
 		Layout updatedLayout = layoutLocalService.updateLayout(
 			groupId, privateLayout, layoutId, parentLayoutId, localeNamesMap,
 			localeTitlesMap, descriptionMap, keywordsMap, robotsMap, type,
-			hidden, friendlyURLMap, iconImage, iconBytes, serviceContext);
+			hidden, friendlyURLMap, hasIconImage, iconBytes, serviceContext);
 
 		if (!(layout.getLayoutType() instanceof LayoutTypePortlet)) {
 			checkLayoutTypeSettings(

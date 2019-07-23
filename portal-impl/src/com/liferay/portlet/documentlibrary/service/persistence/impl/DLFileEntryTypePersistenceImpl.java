@@ -31,11 +31,10 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.service.persistence.impl.TableMapper;
 import com.liferay.portal.kernel.service.persistence.impl.TableMapperFactory;
@@ -54,7 +53,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -2314,9 +2312,7 @@ public class DLFileEntryTypePersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -2478,9 +2474,7 @@ public class DLFileEntryTypePersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		if (groupIds.length == 1) {
@@ -2670,9 +2664,7 @@ public class DLFileEntryTypePersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		Object[] finderArgs = new Object[] {StringUtil.merge(groupIds)};
@@ -2793,9 +2785,7 @@ public class DLFileEntryTypePersistenceImpl
 			groupIds = new long[0];
 		}
 		else if (groupIds.length > 1) {
-			groupIds = ArrayUtil.unique(groupIds);
-
-			Arrays.sort(groupIds);
+			groupIds = ArrayUtil.sortedUnique(groupIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -3304,7 +3294,7 @@ public class DLFileEntryTypePersistenceImpl
 
 		dlFileEntryType.setUuid(uuid);
 
-		dlFileEntryType.setCompanyId(companyProvider.getCompanyId());
+		dlFileEntryType.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return dlFileEntryType;
 	}
@@ -3956,7 +3946,7 @@ public class DLFileEntryTypePersistenceImpl
 
 		if (dlFileEntryType == null) {
 			dlFileEntryTypeToDLFolderTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, dlFolderPK);
+				CompanyThreadLocal.getCompanyId(), pk, dlFolderPK);
 		}
 		else {
 			dlFileEntryTypeToDLFolderTableMapper.addTableMapping(
@@ -3978,7 +3968,8 @@ public class DLFileEntryTypePersistenceImpl
 
 		if (dlFileEntryType == null) {
 			dlFileEntryTypeToDLFolderTableMapper.addTableMapping(
-				companyProvider.getCompanyId(), pk, dlFolder.getPrimaryKey());
+				CompanyThreadLocal.getCompanyId(), pk,
+				dlFolder.getPrimaryKey());
 		}
 		else {
 			dlFileEntryTypeToDLFolderTableMapper.addTableMapping(
@@ -3999,7 +3990,7 @@ public class DLFileEntryTypePersistenceImpl
 		DLFileEntryType dlFileEntryType = fetchByPrimaryKey(pk);
 
 		if (dlFileEntryType == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = dlFileEntryType.getCompanyId();
@@ -4121,7 +4112,7 @@ public class DLFileEntryTypePersistenceImpl
 		DLFileEntryType dlFileEntryType = fetchByPrimaryKey(pk);
 
 		if (dlFileEntryType == null) {
-			companyId = companyProvider.getCompanyId();
+			companyId = CompanyThreadLocal.getCompanyId();
 		}
 		else {
 			companyId = dlFileEntryType.getCompanyId();
@@ -4330,9 +4321,6 @@ public class DLFileEntryTypePersistenceImpl
 
 		TableMapperFactory.removeTableMapper("DLFileEntryTypes_DLFolders");
 	}
-
-	@BeanReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@BeanReference(type = DLFolderPersistence.class)
 	protected DLFolderPersistence dlFolderPersistence;

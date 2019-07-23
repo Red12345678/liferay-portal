@@ -25,11 +25,10 @@ import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -49,7 +48,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -8469,9 +8467,7 @@ public class SegmentsExperiencePersistenceImpl
 			segmentsEntryIds = new long[0];
 		}
 		else if (segmentsEntryIds.length > 1) {
-			segmentsEntryIds = ArrayUtil.unique(segmentsEntryIds);
-
-			Arrays.sort(segmentsEntryIds);
+			segmentsEntryIds = ArrayUtil.sortedUnique(segmentsEntryIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -8680,9 +8676,7 @@ public class SegmentsExperiencePersistenceImpl
 			segmentsEntryIds = new long[0];
 		}
 		else if (segmentsEntryIds.length > 1) {
-			segmentsEntryIds = ArrayUtil.unique(segmentsEntryIds);
-
-			Arrays.sort(segmentsEntryIds);
+			segmentsEntryIds = ArrayUtil.sortedUnique(segmentsEntryIds);
 		}
 
 		if (segmentsEntryIds.length == 1) {
@@ -8942,9 +8936,7 @@ public class SegmentsExperiencePersistenceImpl
 			segmentsEntryIds = new long[0];
 		}
 		else if (segmentsEntryIds.length > 1) {
-			segmentsEntryIds = ArrayUtil.unique(segmentsEntryIds);
-
-			Arrays.sort(segmentsEntryIds);
+			segmentsEntryIds = ArrayUtil.sortedUnique(segmentsEntryIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -9121,9 +9113,7 @@ public class SegmentsExperiencePersistenceImpl
 			segmentsEntryIds = new long[0];
 		}
 		else if (segmentsEntryIds.length > 1) {
-			segmentsEntryIds = ArrayUtil.unique(segmentsEntryIds);
-
-			Arrays.sort(segmentsEntryIds);
+			segmentsEntryIds = ArrayUtil.sortedUnique(segmentsEntryIds);
 		}
 
 		StringBundler query = new StringBundler();
@@ -9430,7 +9420,7 @@ public class SegmentsExperiencePersistenceImpl
 
 		segmentsExperience.setUuid(uuid);
 
-		segmentsExperience.setCompanyId(companyProvider.getCompanyId());
+		segmentsExperience.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return segmentsExperience;
 	}
@@ -10510,9 +10500,6 @@ public class SegmentsExperiencePersistenceImpl
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
-	@ServiceReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@ServiceReference(type = EntityCache.class)
 	protected EntityCache entityCache;

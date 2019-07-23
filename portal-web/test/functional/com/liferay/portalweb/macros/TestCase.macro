@@ -1,6 +1,6 @@
 definition {
 
-	macro enableMetal{
+	macro enableMetal {
 
 		SystemSettings.openSystemSettingsAdmin();
 
@@ -83,4 +83,5 @@ definition {
 			SignIn.signInPortalInstanceSetUp();
 		}
 	}
+
 }

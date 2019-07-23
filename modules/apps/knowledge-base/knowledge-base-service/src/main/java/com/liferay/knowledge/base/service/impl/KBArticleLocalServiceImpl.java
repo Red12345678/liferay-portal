@@ -1421,10 +1421,10 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			selectedFileName);
 
 		InputStream inputStream = tempFileEntry.getContentStream();
-		String mimeType = tempFileEntry.getMimeType();
 
 		addAttachment(
-			userId, resourcePrimKey, selectedFileName, inputStream, mimeType);
+			userId, resourcePrimKey, selectedFileName, inputStream,
+			tempFileEntry.getMimeType());
 
 		if (tempFileEntry != null) {
 			TempFileEntryUtil.deleteTempFileEntry(
@@ -2073,7 +2073,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	@ServiceReference(type = Portal.class)
 	protected Portal portal;
 
-	@BeanReference(type = PortletFileRepository.class)
+	@ServiceReference(type = PortletFileRepository.class)
 	protected PortletFileRepository portletFileRepository;
 
 	@ServiceReference(type = SubscriptionLocalService.class)

@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Export/Import Framework";
@@ -68,6 +69,7 @@ definition {
 
 		ManagementBar.setFilterAndOrder(filterBy = "Completed");
 
-		ManagementBar.toggleViewOrder(order = "Reverse Sort Direction");
+		ManagementBar.toggleViewOrder(order = "down");
 	}
+
 }

@@ -49,6 +49,12 @@ public class FragmentEntryLocalServiceWrapper
 		return _fragmentEntryLocalService.addFragmentEntry(fragmentEntry);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #addFragmentEntry(long, long, long, String, String, String,
+	 String, int, int, ServiceContext)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry addFragmentEntry(
 			long userId, long groupId, long fragmentCollectionId, String name,
@@ -61,6 +67,12 @@ public class FragmentEntryLocalServiceWrapper
 			serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #addFragmentEntry(long, long, long, String, String, String,
+	 String, int, int, ServiceContext)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry addFragmentEntry(
 			long userId, long groupId, long fragmentCollectionId, String name,
@@ -73,6 +85,12 @@ public class FragmentEntryLocalServiceWrapper
 			serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #addFragmentEntry(long, long, long, String, String, String,
+	 String, int, int, ServiceContext)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry addFragmentEntry(
 			long userId, long groupId, long fragmentCollectionId, String name,
@@ -85,6 +103,12 @@ public class FragmentEntryLocalServiceWrapper
 			type, status, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #addFragmentEntry(long, long, long, String, String, String,
+	 String, int, int, ServiceContext)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry addFragmentEntry(
 			long userId, long groupId, long fragmentCollectionId, String name,
@@ -97,6 +121,12 @@ public class FragmentEntryLocalServiceWrapper
 			status, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #addFragmentEntry(long, long, long, String, String, String,
+	 String, int, int, ServiceContext)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry addFragmentEntry(
 			long userId, long groupId, long fragmentCollectionId,
@@ -109,6 +139,12 @@ public class FragmentEntryLocalServiceWrapper
 			status, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #addFragmentEntry(long, long, long, String, String, String,
+	 String, int, int, ServiceContext)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry addFragmentEntry(
 			long userId, long groupId, long fragmentCollectionId,
@@ -134,6 +170,12 @@ public class FragmentEntryLocalServiceWrapper
 			previewFileEntryId, type, status, serviceContext);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #addFragmentEntry(long, long, long, String, String, String,
+	 String, int, int, ServiceContext)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry addFragmentEntry(
 			long userId, long groupId, long fragmentCollectionId,
@@ -247,6 +289,21 @@ public class FragmentEntryLocalServiceWrapper
 		return _fragmentEntryLocalService.addFragmentEntry(
 			userId, groupId, fragmentCollectionId, fragmentEntryKey, name, css,
 			html, js, previewFileEntryId, status, serviceContext);
+	}
+
+	@Override
+	public com.liferay.fragment.model.FragmentEntry addFragmentEntry(
+			long userId, long groupId, long fragmentCollectionId,
+			String fragmentEntryKey, String name, String css, String html,
+			String js, String configuration, long previewFileEntryId, int type,
+			int status,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _fragmentEntryLocalService.addFragmentEntry(
+			userId, groupId, fragmentCollectionId, fragmentEntryKey, name, css,
+			html, js, configuration, previewFileEntryId, type, status,
+			serviceContext);
 	}
 
 	@Override
@@ -674,6 +731,12 @@ public class FragmentEntryLocalServiceWrapper
 			fragmentEntryId, previewFileEntryId);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #updateFragmentEntry(long, long, String, String, String,
+	 String, String, int)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry updateFragmentEntry(
 			long userId, long fragmentEntryId, String name, String css,
@@ -684,6 +747,12 @@ public class FragmentEntryLocalServiceWrapper
 			userId, fragmentEntryId, name, css, html, js, status);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #updateFragmentEntry(long, long, String, String, String,
+	 String, String, long, int)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry updateFragmentEntry(
 			long userId, long fragmentEntryId, String name, String css,
@@ -693,6 +762,29 @@ public class FragmentEntryLocalServiceWrapper
 		return _fragmentEntryLocalService.updateFragmentEntry(
 			userId, fragmentEntryId, name, css, html, js, previewFileEntryId,
 			status);
+	}
+
+	@Override
+	public com.liferay.fragment.model.FragmentEntry updateFragmentEntry(
+			long userId, long fragmentEntryId, String name, String css,
+			String html, String js, String configuration, int status)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _fragmentEntryLocalService.updateFragmentEntry(
+			userId, fragmentEntryId, name, css, html, js, configuration,
+			status);
+	}
+
+	@Override
+	public com.liferay.fragment.model.FragmentEntry updateFragmentEntry(
+			long userId, long fragmentEntryId, String name, String css,
+			String html, String js, String configuration,
+			long previewFileEntryId, int status)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _fragmentEntryLocalService.updateFragmentEntry(
+			userId, fragmentEntryId, name, css, html, js, configuration,
+			previewFileEntryId, status);
 	}
 
 	@Override

@@ -1,4 +1,18 @@
 /**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+/**
  * @type {object}
  */
 let _store;
@@ -11,11 +25,9 @@ let _store;
  * @review
  */
 function _getFormData(body, portletNamespace, _formData = new FormData()) {
-	Object.entries(body).forEach(
-		([key, value]) => {
-			_formData.append(`${portletNamespace}${key}`, value);
-		}
-	);
+	Object.entries(body).forEach(([key, value]) => {
+		_formData.append(`${portletNamespace}${key}`, value);
+	});
 
 	return _formData;
 }
@@ -28,14 +40,24 @@ function _getFormData(body, portletNamespace, _formData = new FormData()) {
  * @review
  */
 function _fetch(url, body = {}) {
-	return fetch(
-		url,
-		{
-			body: _getFormData(body, _store.getState().portletNamespace),
-			credentials: 'include',
-			method: 'POST'
-		}
-	);
+	return fetch(url, {
+		body: _getFormData(body, _store.getState().portletNamespace),
+		credentials: 'include',
+		method: 'POST'
+	});
+}
+
+/**
+ * @param {string} fragmentEntryLinkId
+ * @param {string} body
+ */
+function addFragmentEntryLinkComment(fragmentEntryLinkId, body) {
+	const state = _store.getState();
+
+	return _fetch(state.addFragmentEntryLinkCommentURL, {
+		fragmentEntryLinkId,
+		body
+	});
 }
 
 /**
@@ -71,17 +93,14 @@ function removeFragmentEntryLinks(
 	const state = _store.getState();
 
 	return Promise.all(
-		fragmentEntryLinkIds.map(
-			fragmentEntryLinkId => _fetch(
-				state.deleteFragmentEntryLinkURL,
-				{
-					classNameId: state.classNameId,
-					classPK: state.classPK,
-					data: JSON.stringify(layoutData),
-					fragmentEntryLinkId,
-					segmentsExperienceId
-				}
-			)
+		fragmentEntryLinkIds.map(fragmentEntryLinkId =>
+			_fetch(state.deleteFragmentEntryLinkURL, {
+				classNameId: state.classNameId,
+				classPK: state.classPK,
+				data: JSON.stringify(layoutData),
+				fragmentEntryLinkId,
+				segmentsExperienceId
+			})
 		)
 	);
 }
@@ -102,13 +121,10 @@ function setStore(store) {
 function updateEditableValues(fragmentEntryLinkId, editableValues) {
 	const state = _store.getState();
 
-	return _fetch(
-		state.editFragmentEntryLinkURL,
-		{
-			editableValues: JSON.stringify(editableValues),
-			fragmentEntryLinkId
-		}
-	);
+	return _fetch(state.editFragmentEntryLinkURL, {
+		editableValues: JSON.stringify(editableValues),
+		fragmentEntryLinkId
+	});
 }
 
 /**
@@ -119,18 +135,16 @@ function updateEditableValues(fragmentEntryLinkId, editableValues) {
 function updatePageEditorLayoutData(layoutData, segmentsExperienceId) {
 	const state = _store.getState();
 
-	return _fetch(
-		state.updateLayoutPageTemplateDataURL,
-		{
-			classNameId: state.classNameId,
-			classPK: state.classPK,
-			data: JSON.stringify(layoutData),
-			segmentsExperienceId
-		}
-	);
+	return _fetch(state.updateLayoutPageTemplateDataURL, {
+		classNameId: state.classNameId,
+		classPK: state.classPK,
+		data: JSON.stringify(layoutData),
+		segmentsExperienceId
+	});
 }
 
 export {
+	addFragmentEntryLinkComment,
 	removeExperience,
 	removeFragmentEntryLinks,
 	setStore,

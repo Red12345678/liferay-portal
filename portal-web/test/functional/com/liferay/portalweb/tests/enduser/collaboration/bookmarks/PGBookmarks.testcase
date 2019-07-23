@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property portal.release = "false";
 	property portal.upstream = "true";
 	property custom.properties = "default.layout.template.id=1_column";
@@ -202,7 +203,7 @@ definition {
 			bookmarkName = "Test Bookmark Name",
 			bookmarkNameEdit = "Test Bookmark Name Edit",
 			bookmarkURL = "https://www.liferay.com",
-			bookmarkURLEdit = "https://dev.liferay.com");
+			bookmarkURLEdit = "https://portal.liferay.dev");
 	}
 
 	@priority = "4"
@@ -303,4 +304,5 @@ definition {
 			searchAssetType = "Bookmarks Entry",
 			searchTerm = '''"Test Bookmark Name"''');
 	}
+
 }

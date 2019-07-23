@@ -73,7 +73,9 @@ public class TrashManagementToolbarDisplayContext
 		};
 	}
 
-	public String getAvailableActions(TrashEntry trashEntry) {
+	public String getAvailableActions(TrashEntry trashEntry)
+		throws PortalException {
+
 		if (_isDeletable(trashEntry)) {
 			return "deleteSelectedEntries";
 		}
@@ -112,11 +114,9 @@ public class TrashManagementToolbarDisplayContext
 					!Objects.equals(getNavigation(), "all")) {
 
 					add(
-						labelItem -> {
-							labelItem.setLabel(
-								ResourceActionsUtil.getModelResource(
-									themeDisplay.getLocale(), getNavigation()));
-						});
+						labelItem -> labelItem.setLabel(
+							ResourceActionsUtil.getModelResource(
+								themeDisplay.getLocale(), getNavigation())));
 				}
 			}
 		};
@@ -187,15 +187,11 @@ public class TrashManagementToolbarDisplayContext
 		return new String[] {"removed-date"};
 	}
 
-	private boolean _isDeletable(TrashEntry trashEntry) {
-		if (trashEntry.getRootEntry() == null) {
-			return true;
-		}
-
+	private boolean _isDeletable(TrashEntry trashEntry) throws PortalException {
 		TrashHandler trashHandler = TrashHandlerRegistryUtil.getTrashHandler(
 			trashEntry.getClassName());
 
-		return trashHandler.isDeletable();
+		return trashHandler.isDeletable(trashEntry.getClassPK());
 	}
 
 }

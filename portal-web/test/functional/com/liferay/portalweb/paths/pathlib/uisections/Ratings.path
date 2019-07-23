@@ -9,13 +9,33 @@
 </thead>
 <tbody>
 <tr>
+	<td>DISPLAY_VOTES</td>
+	<td>//div[contains(@class,'ratings')]//a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>THUMB</td>
+	<td>//div[contains(@class,'ratings')]//a[contains(@class,'${key_ratingResult}')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>THUMB_UP</td>
 	<td>//div[contains(@class,'ratings')]//a[contains(@class,'thumb-up')]</td>
 	<td></td>
 </tr>
 <tr>
+	<td>THUMB_UP_OFF</td>
+	<td>//span[contains(@class,'thumb-up') and contains(@class,'rating-off')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>THUMB_DOWN</td>
 	<td>//div[contains(@class,'ratings')]//a[contains(@class,'thumb-down')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>THUMB_DOWN_OFF</td>
+	<td>//span[contains(@class,'thumb-down') and contains(@class,'rating-off')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -153,6 +173,11 @@
 <tr>
 	<td>AVERAGE_STAR</td>
 	<td>xPath=(//div[contains(@id,'_ratingScore')]//span[@class='rating-element icon-star'])[${key_averageRatingStar}]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>AVERAGE_STAR_DISABLE</td>
+	<td>xPath=(//div[contains(@id,'_ratingScore')]//span[(@class='rating-element icon-star-empty') and (@title='Ratings are disabled in Staging')])[${key_averageDisableStar}]</td>
 	<td></td>
 </tr>
 <tr>

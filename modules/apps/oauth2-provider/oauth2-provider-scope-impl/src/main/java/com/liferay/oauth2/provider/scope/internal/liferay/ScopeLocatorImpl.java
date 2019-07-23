@@ -81,6 +81,36 @@ public class ScopeLocatorImpl implements ScopeLocator {
 
 	@Override
 	public Collection<LiferayOAuth2Scope> getLiferayOAuth2Scopes(
+		long companyId) {
+
+		Collection<LiferayOAuth2Scope> liferayOAuth2Scopes = new ArrayList<>();
+
+		for (String key : _scopeFinderByNameServiceTrackerMap.keySet()) {
+			ScopeFinder scopeFinder =
+				_scopeFindersScopedServiceTrackerMap.getService(companyId, key);
+
+			ServiceReferenceServiceTuple<?, ScopeFinder>
+				serviceReferenceServiceTuple =
+					_scopeFinderByNameServiceTrackerMap.getService(key);
+
+			if (scopeFinder == null) {
+				scopeFinder = serviceReferenceServiceTuple.getService();
+			}
+
+			Bundle bundle = getBundle(
+				serviceReferenceServiceTuple.getServiceReference());
+
+			for (String scope : scopeFinder.findScopes()) {
+				liferayOAuth2Scopes.add(
+					new LiferayOAuth2ScopeImpl(key, bundle, scope));
+			}
+		}
+
+		return liferayOAuth2Scopes;
+	}
+
+	@Override
+	public Collection<LiferayOAuth2Scope> getLiferayOAuth2Scopes(
 		long companyId, String scopesAlias) {
 
 		Set<String> names = _scopeFinderByNameServiceTrackerMap.keySet();
@@ -225,6 +255,10 @@ public class ScopeLocatorImpl implements ScopeLocator {
 		ServiceReferenceServiceTuple<?, ScopeFinder>
 			serviceReferenceServiceTuple =
 				_scopeFinderByNameServiceTrackerMap.getService(applicationName);
+
+		if (serviceReferenceServiceTuple == null) {
+			return Collections.emptyList();
+		}
 
 		PrefixHandlerFactory prefixHandlerFactory =
 			_prefixHandlerFactoriesScopedServiceTrackerMap.getService(

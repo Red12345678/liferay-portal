@@ -28,53 +28,82 @@ if (ctCollection != null) {
 	changeListName = ctCollection.getName();
 	changeListDescription = ctCollection.getDescription();
 }
+
+boolean hasCollision = changeListsDisplayContext.hasCollision(ctCollectionId);
 %>
 
-<div class="change-list-publish-modal modal-body">
+<section class="modal-body">
 	<liferay-portlet:actionURL name="/change_lists/publish_ct_collection" var="publishCollectionURL">
 		<portlet:param name="ctCollectionId" value="<%= String.valueOf(ctCollectionId) %>" />
 	</liferay-portlet:actionURL>
 
 	<aui:form action="<%= publishCollectionURL.toString() %>" method="POST" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "submitForm()" %>'>
-		<h4><liferay-ui:message key="change-list" /></h4>
+		<h4><liferay-ui:message key="change-list-name" />:</h4>
 
 		<div class="sheet-text">
 			<%= HtmlUtil.escape(changeListName) %>
 		</div>
 
-		<h4><liferay-ui:message key="description" /></h4>
+		<h4><liferay-ui:message key="description" />:</h4>
 
 		<div class="sheet-text">
 			<%= HtmlUtil.escape(changeListDescription) %>
 		</div>
 
-		<aui:input label="ignore-collision" name="ignoreCollision" type="checkbox" />
+		<div class="form-group">
+			<label class="toggle-switch">
+				<input <%= !hasCollision ? "disabled" : "" %> class="toggle-switch-check" data-qa-id="ignorecollision-toggle" id="<%= renderResponse.getNamespace() + "ignoreCollision" %>" name="<%= renderResponse.getNamespace() + "ignoreCollision" %>" onclick="<%= renderResponse.getNamespace() + "ignoreCheck();" %>" type="checkbox" />
 
-		<aui:input disabled="<%= true %>" label="schedule-publication" name="schedulePublication" type="checkbox" />
-
-		<aui:button-row>
-			<aui:button onClick='<%= renderResponse.getNamespace() + "closeModal(true);" %>' value="cancel" />
-			<aui:button type="submit" value="publish" />
-		</aui:button-row>
+				<span aria-hidden="true" class="toggle-switch-bar">
+					<span class="toggle-switch-handle"></span>
+				</span>
+				<span class="toggle-label-text">
+					<span class="custom-control-label-text">
+						<liferay-ui:message key="ignore-collision" />
+					</span>
+				</span>
+				<span class="toggle-switch-text toggle-switch-text-right">
+					<liferay-ui:icon-help message="force-overwrite-the-colliding-entries-in-the-production-view-with-this-change-list" />
+				</span>
+			</label>
+		</div>
 	</aui:form>
+</section>
 
-	<script>
-		function <portlet:namespace/>closeModal(destroy) {
-			Liferay.Util.getWindow('<portlet:namespace/>publishIconDialog').hide();
+<footer class="modal-footer publish-modal-footer">
+	<aui:button onClick='<%= renderResponse.getNamespace() + "closeModal(true);" %>' value="cancel" />
+	<aui:button disabled="<%= hasCollision %>" type="submit" value="publish-to-live" />
+</section>
 
-			if (destroy) {
-				Liferay.Util.getWindow('<portlet:namespace/>publishIconDialog').destroy();
-			}
+<script>
+	function <portlet:namespace/>closeModal(destroy) {
+		Liferay.Util.getWindow('<portlet:namespace/>publishIconDialog').hide();
+
+		if (destroy) {
+			Liferay.Util.getWindow('<portlet:namespace/>publishIconDialog').destroy();
 		}
+	}
 
-		function <portlet:namespace/>submitForm(event) {
-			var form = AUI().one('#<portlet:namespace/>fm');
+	function <portlet:namespace/>ignoreCheck() {
+		let btn = document.querySelector('button[type="submit"]');
 
-			Liferay.Util.getOpener().Liferay.fire('<portlet:namespace/>refreshSelectChangeList');
+		btn.disabled = !event.target.checked;
 
-			Liferay.Util.submitForm(form);
-
-			<portlet:namespace/>closeModal(false);
+		if (event.target.checked) {
+			btn.classList.remove('disabled');
 		}
-	</script>
-</div>
+		else {
+			btn.classList.add('disabled');
+		}
+	}
+
+	function <portlet:namespace/>submitForm(event) {
+		var form = AUI().one('#<portlet:namespace/>fm');
+
+		Liferay.Util.getOpener().Liferay.fire('<portlet:namespace/>refreshChangeListHistory');
+
+		Liferay.Util.submitForm(form);
+
+		<portlet:namespace/>closeModal(false);
+	}
+</script>

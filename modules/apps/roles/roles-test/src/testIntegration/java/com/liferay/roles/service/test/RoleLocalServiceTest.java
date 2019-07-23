@@ -22,10 +22,10 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.model.OrganizationConstants;
 import com.liferay.portal.kernel.model.Role;
-import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.Team;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.UserGroup;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistry;
 import com.liferay.portal.kernel.service.GroupLocalService;
@@ -243,11 +243,11 @@ public class RoleLocalServiceTest {
 			companyId, null, excludedRoleNames, roleTypes, 0, groupId,
 			QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-		Stream<Role> expectedRolesStream = _roleLocalService.getRoles(
-			companyId
-		).stream();
+		List<Role> expectedRoles = _roleLocalService.getRoles(companyId);
 
-		List<Role> expectedRoles = expectedRolesStream.filter(
+		Stream<Role> expectedRolesStream = expectedRoles.stream();
+
+		expectedRoles = expectedRolesStream.filter(
 			role -> !excludedRoleNames.contains(role.getName())
 		).filter(
 			role -> role.getType() != RoleConstants.TYPE_SITE

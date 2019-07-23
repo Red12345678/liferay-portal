@@ -28,12 +28,12 @@ import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
 import com.liferay.journal.constants.JournalPortletKeys;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.service.JournalArticleLocalServiceUtil;
-import com.liferay.journal.web.asset.model.JournalArticleAssetRenderer;
-import com.liferay.journal.web.configuration.JournalWebConfiguration;
+import com.liferay.journal.web.internal.asset.model.JournalArticleAssetRenderer;
+import com.liferay.journal.web.internal.configuration.JournalWebConfiguration;
 import com.liferay.journal.web.internal.portlet.JournalPortlet;
 import com.liferay.journal.web.internal.security.permission.resource.JournalArticlePermission;
 import com.liferay.journal.web.internal.security.permission.resource.JournalFolderPermission;
-import com.liferay.journal.web.util.JournalUtil;
+import com.liferay.journal.web.internal.util.JournalUtil;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
@@ -50,6 +50,7 @@ import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.service.permission.GroupPermissionUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -221,6 +222,10 @@ public class JournalArticleActionDropdownItemsProvider {
 					add(_getAutoCopyArticleActionUnsafeConsumer());
 				}
 
+				String articleId =
+					_article.getArticleId() + JournalPortlet.VERSION_SEPARATOR +
+						_article.getVersion();
+
 				if (JournalArticlePermission.contains(
 						_themeDisplay.getPermissionChecker(), _article,
 						ActionKeys.EXPIRE) &&
@@ -229,9 +234,7 @@ public class JournalArticleActionDropdownItemsProvider {
 
 					add(
 						_getExpireArticleActionConsumer(
-							_article.getArticleId() +
-								JournalPortlet.VERSION_SEPARATOR +
-									_article.getVersion()));
+							articleId, _themeDisplay.getURLCurrent()));
 				}
 
 				add(_getCompareArticleVersionsActionUnsafeConsumer());
@@ -242,9 +245,7 @@ public class JournalArticleActionDropdownItemsProvider {
 
 					add(
 						_getDeleteArticleAction(
-							_article.getArticleId() +
-								JournalPortlet.VERSION_SEPARATOR +
-									_article.getVersion()));
+							articleId, _themeDisplay.getURLCurrent()));
 				}
 			}
 		};
@@ -253,7 +254,7 @@ public class JournalArticleActionDropdownItemsProvider {
 	public List<DropdownItem> getArticleVersionActionDropdownItems()
 		throws Exception {
 
-		return new DropdownItemList() {
+		DropdownItemList dropdownItems = new DropdownItemList() {
 			{
 				if (JournalArticlePermission.contains(
 						_themeDisplay.getPermissionChecker(), _article,
@@ -261,49 +262,12 @@ public class JournalArticleActionDropdownItemsProvider {
 
 					add(_getEditArticleActionUnsafeConsumer());
 				}
-
-				if (JournalArticlePermission.contains(
-						_themeDisplay.getPermissionChecker(), _article,
-						ActionKeys.VIEW)) {
-
-					add(_getPreviewArticleActionUnsafeConsumer());
-				}
-
-				if (JournalFolderPermission.contains(
-						_themeDisplay.getPermissionChecker(),
-						_themeDisplay.getScopeGroupId(), _article.getFolderId(),
-						ActionKeys.ADD_ARTICLE)) {
-
-					add(_getAutoCopyArticleActionUnsafeConsumer());
-				}
-
-				if (JournalArticlePermission.contains(
-						_themeDisplay.getPermissionChecker(), _article,
-						ActionKeys.EXPIRE) &&
-					(_article.getStatus() ==
-						WorkflowConstants.STATUS_APPROVED)) {
-
-					add(
-						_getExpireArticleActionConsumer(
-							_article.getArticleId() +
-								JournalPortlet.VERSION_SEPARATOR +
-									_article.getVersion()));
-				}
-
-				add(_getCompareArticleVersionsActionUnsafeConsumer());
-
-				if (JournalArticlePermission.contains(
-						_themeDisplay.getPermissionChecker(), _article,
-						ActionKeys.DELETE)) {
-
-					add(
-						_getDeleteArticleAction(
-							_article.getArticleId() +
-								JournalPortlet.VERSION_SEPARATOR +
-									_article.getVersion()));
-				}
 			}
 		};
+
+		dropdownItems.addAll(getArticleHistoryActionDropdownItems());
+
+		return dropdownItems;
 	}
 
 	private UnsafeConsumer<DropdownItem, Exception>
@@ -337,7 +301,8 @@ public class JournalArticleActionDropdownItemsProvider {
 
 		PortletURL redirectURL = _liferayPortletResponse.createRenderURL();
 
-		redirectURL.setParameter("mvcPath", "/compare_versions.jsp");
+		redirectURL.setParameter(
+			"mvcRenderCommandName", "/journal/compare_versions");
 		redirectURL.setParameter("redirect", _getRedirect());
 		redirectURL.setParameter(
 			"groupId", String.valueOf(_article.getGroupId()));
@@ -388,11 +353,18 @@ public class JournalArticleActionDropdownItemsProvider {
 	private UnsafeConsumer<DropdownItem, Exception> _getDeleteArticleAction(
 		String articleId) {
 
+		return _getDeleteArticleAction(articleId, _getRedirect());
+	}
+
+	private UnsafeConsumer<DropdownItem, Exception> _getDeleteArticleAction(
+		String articleId, String redirect) {
+
 		PortletURL deleteURL = _liferayPortletResponse.createActionURL();
 
-		deleteURL.setParameter(ActionRequest.ACTION_NAME, "deleteArticle");
+		deleteURL.setParameter(
+			ActionRequest.ACTION_NAME, "/journal/delete_article");
 
-		deleteURL.setParameter("redirect", _getRedirect());
+		deleteURL.setParameter("redirect", redirect);
 		deleteURL.setParameter(
 			"groupId", String.valueOf(_article.getGroupId()));
 		deleteURL.setParameter("articleId", articleId);
@@ -425,10 +397,17 @@ public class JournalArticleActionDropdownItemsProvider {
 	private UnsafeConsumer<DropdownItem, Exception>
 		_getExpireArticleActionConsumer(String articleId) {
 
+		return _getExpireArticleActionConsumer(articleId, _getRedirect());
+	}
+
+	private UnsafeConsumer<DropdownItem, Exception>
+		_getExpireArticleActionConsumer(String articleId, String redirect) {
+
 		PortletURL expireURL = _liferayPortletResponse.createActionURL();
 
-		expireURL.setParameter(ActionRequest.ACTION_NAME, "expireArticles");
-		expireURL.setParameter("redirect", _getRedirect());
+		expireURL.setParameter(
+			ActionRequest.ACTION_NAME, "/journal/expire_articles");
+		expireURL.setParameter("redirect", redirect);
 		expireURL.setParameter(
 			"groupId", String.valueOf(_article.getGroupId()));
 		expireURL.setParameter("articleId", articleId);
@@ -461,7 +440,8 @@ public class JournalArticleActionDropdownItemsProvider {
 
 		PortletURL deleteURL = _liferayPortletResponse.createActionURL();
 
-		deleteURL.setParameter(ActionRequest.ACTION_NAME, "moveToTrash");
+		deleteURL.setParameter(
+			ActionRequest.ACTION_NAME, "/journal/move_to_trash");
 
 		deleteURL.setParameter("redirect", _getRedirect());
 		deleteURL.setParameter(
@@ -543,8 +523,7 @@ public class JournalArticleActionDropdownItemsProvider {
 			sb.append(_article.getId());
 
 			return HttpUtil.addParameter(
-				sb.toString(), "p_p_state",
-				LiferayWindowState.POP_UP.toString());
+				sb.toString(), "p_l_mode", Constants.PREVIEW);
 		}
 
 		if (Validator.isNull(_article.getDDMTemplateKey())) {
@@ -628,7 +607,7 @@ public class JournalArticleActionDropdownItemsProvider {
 				_liferayPortletResponse.createActionURL();
 
 			unsubscribeArticleURL.setParameter(
-				ActionRequest.ACTION_NAME, "unsubscribeArticle");
+				ActionRequest.ACTION_NAME, "/journal/unsubscribe_article");
 
 			unsubscribeArticleURL.setParameter("redirect", _getRedirect());
 			unsubscribeArticleURL.setParameter(
@@ -647,7 +626,7 @@ public class JournalArticleActionDropdownItemsProvider {
 			_liferayPortletResponse.createActionURL();
 
 		subscribeArticleURL.setParameter(
-			ActionRequest.ACTION_NAME, "subscribeArticle");
+			ActionRequest.ACTION_NAME, "/journal/subscribe_article");
 
 		subscribeArticleURL.setParameter("redirect", _getRedirect());
 		subscribeArticleURL.setParameter(

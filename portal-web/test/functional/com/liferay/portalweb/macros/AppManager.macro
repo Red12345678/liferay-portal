@@ -1,4 +1,5 @@
 definition {
+
 	macro deactivateAppCP {
 		LexiconEntry.openEntryMenu(rowEntry = "${appName}");
 
@@ -73,7 +74,7 @@ definition {
 		if (isSet(searchTerm)) {
 			Search.searchCP(searchTerm = "${searchTerm}");
 		}
-		else{
+		else {
 			Search.searchCP(searchTerm = "${appName}");
 		}
 
@@ -116,4 +117,5 @@ definition {
 			key_appName = "${appName}",
 			locator1 = "AppManager#APP_NAME");
 	}
+
 }

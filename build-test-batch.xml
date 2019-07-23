@@ -177,6 +177,7 @@ lportal_BS
 			</beanshell>
 
 			<copy
+				failonerror="false"
 				file="@{artifact.file}"
 				tofile="${local.cache.artifact}"
 			/>
@@ -315,15 +316,23 @@ mariadb.executable=${mariadb.executable}]]></echo>
 								</else>
 							</if>
 
-							<echo></echo>
-							<echo>##</echo>
-							<echo>## ${database.executable} ${database.version.cmd}</echo>
-							<echo>##</echo>
-							<echo></echo>
+							<if>
+								<isset property="env.KUBERNETES_SERVICE_HOST" />
+								<then>
+									<echo>Using Kubernetes for ${database.type}.</echo>
+								</then>
+								<else>
+									<echo></echo>
+									<echo>##</echo>
+									<echo>## ${database.executable} ${database.version.cmd}</echo>
+									<echo>##</echo>
+									<echo></echo>
 
-							<exec executable="${database.executable}">
-								<arg line="${database.version.cmd}" />
-							</exec>
+									<exec executable="${database.executable}">
+										<arg line="${database.version.cmd}" />
+									</exec>
+								</else>
+							</if>
 						</else>
 					</if>
 				</action>
@@ -331,9 +340,17 @@ mariadb.executable=${mariadb.executable}]]></echo>
 
 			<database-test-action database.type="@{database.type}">
 				<action>
-					<exec executable="${database.service.executable}">
-						<arg line="${database.service.cmd.stop}" />
-					</exec>
+					<if>
+						<isset property="env.KUBERNETES_SERVICE_HOST" />
+						<then>
+							<stop-k8s-database database.type="@{database.type}" database.version="@{database.version}" />
+						</then>
+						<else>
+							<exec executable="${database.service.executable}">
+								<arg line="${database.service.cmd.stop}" />
+							</exec>
+						</else>
+					</if>
 				</action>
 			</database-test-action>
 
@@ -343,11 +360,21 @@ mariadb.executable=${mariadb.executable}]]></echo>
 
 					<set-portal-impl-system-ext-properties />
 
-					<exec executable="${database.service.executable}" resultproperty="exec.result">
-						<arg line="${database.service.cmd.start}" />
-					</exec>
+					<if>
+						<isset property="env.KUBERNETES_SERVICE_HOST" />
+						<then>
+							<get-database-property property.name="database.port" />
 
-					<diagnose-database-start database.type="@{database.type}" exec.result="${exec.result}" />
+							<start-k8s-database database.port="${database.port}" database.type="@{database.type}" database.version="@{database.version}" />
+						</then>
+						<else>
+							<exec executable="${database.service.executable}" resultproperty="exec.result">
+								<arg line="${database.service.cmd.start}" />
+							</exec>
+
+							<diagnose-database-start database.type="@{database.type}" exec.result="${exec.result}" />
+						</else>
+					</if>
 
 					<antcall inheritall="false" target="copy-optional-jars">
 						<param name="database.type" value="@{database.type}" />
@@ -378,9 +405,17 @@ mariadb.executable=${mariadb.executable}]]></echo>
 						</then>
 					</if>
 
-					<exec executable="${database.service.executable}" failonerror="true">
-						<arg line="${database.service.cmd.stop}" />
-					</exec>
+					<if>
+						<isset property="env.KUBERNETES_SERVICE_HOST" />
+						<then>
+							<stop-k8s-database database.type="@{database.type}" database.version="@{database.version}" />
+						</then>
+						<else>
+							<exec executable="${database.service.executable}" failonerror="true">
+								<arg line="${database.service.cmd.stop}" />
+							</exec>
+						</else>
+					</if>
 				</action>
 			</database-test-action>
 		</sequential>
@@ -1584,8 +1619,9 @@ app.server.type=@{app.server.type}]]></echo>
 								<param name="database.type" value="@{database.type}" />
 							</antcall>
 
-							<echo file="${app.server.classes.portal.dir}/system-ext.properties">com.liferay.portal.kernel.util.ServiceProxyFactory.timeout=600000
-log.sanitizer.enabled=false</echo>
+							<echo file="${app.server.classes.portal.dir}/system-ext.properties">log.sanitizer.enabled=false
+
+com.liferay.portal.kernel.util.ServiceProxyFactory.timeout=600000</echo>
 
 							<gradle-execute dir="modules/apps/static/portal-lpkg-deployer/portal-lpkg-deployer-test" task="test">
 								<arg value="test" />
@@ -1896,7 +1932,16 @@ log.sanitizer.enabled=false</echo>
 				<test-action>
 					<database-test-run-test database.type="mysql" stop.app.server="true">
 						<test-action>
-							<setup-lpkg-test database.type="@{database.type}" />
+							<antcall inheritAll="false" target="prepare-log4j-ext-xml">
+								<param name="database.type" value="@{database.type}" />
+							</antcall>
+
+							<antcall inheritAll="false" target="prepare-portal-ext-properties">
+								<param name="database.type" value="@{database.type}" />
+							</antcall>
+
+							<echo file="${app.server.classes.portal.dir}/system-ext.properties">com.liferay.portal.kernel.util.ServiceProxyFactory.timeout=600000
+log.sanitizer.enabled=false</echo>
 
 							<gradle-execute dir="modules/apps/static/portal-lpkg-deployer/portal-lpkg-deployer-test" task="test">
 								<arg value="test" />
@@ -1935,6 +1980,40 @@ log.sanitizer.enabled=false</echo>
 										<arg value="testIntegration" />
 										<arg value="--tests" />
 										<arg value="*.LPKGPersistenceVerifyTest" />
+									</gradle-execute>
+
+									<gradle-execute dir="modules/apps/static/portal-lpkg-deployer/portal-lpkg-deployer-test" task="testIntegration">
+										<arg value="testIntegration" />
+										<arg value="--tests" />
+										<arg value="*.LPKGPersistenceStartBundleTest" />
+									</gradle-execute>
+								</try>
+								<finally>
+									<ant dir="portal-kernel" inheritAll="false" target="test-class">
+										<property name="test.class" value="PortalLogAssertorTest" />
+									</ant>
+								</finally>
+							</trycatch>
+
+							<antcall inheritall="false" target="stop-app-server" />
+
+							<delete dir="${liferay.home}/logs" />
+
+							<gradle-execute dir="modules/apps/static/portal-lpkg-deployer/portal-lpkg-deployer-test" task="test">
+								<arg value="test" />
+								<arg value="--tests" />
+								<arg value="*.LPKGPersistenceUpgradeTest" />
+								<arg value="-Dliferay.home=${liferay.home}" />
+							</gradle-execute>
+
+							<trycatch>
+								<try>
+									<antcall inheritall="false" target="start-app-server-preserve-liferay-home" />
+
+									<gradle-execute dir="modules/apps/static/portal-lpkg-deployer/portal-lpkg-deployer-test" task="testIntegration">
+										<arg value="testIntegration" />
+										<arg value="--tests" />
+										<arg value="*.LPKGPersistenceVerifyUpgradeTest" />
 									</gradle-execute>
 								</try>
 								<finally>
@@ -2304,6 +2383,8 @@ log.sanitizer.enabled=false</echo>
 								tofile="${liferay.home}/osgi/test/com.liferay.portal.test.integration.jar"
 							/>
 
+							<gradle-execute dir="modules/apps/static/required-dependencies/required-dependencies" task="deployReqTestLibs" />
+
 							<local name="artifact.version" />
 
 							<property name="artifact.version" value="1.0.0-TEST_ARTIFACT" />
@@ -2313,6 +2394,7 @@ log.sanitizer.enabled=false</echo>
 
 							<copy-artifact-to-local-cache artifact.file="${test.app.server.lib.portal.dir}/portal-impl.jar" artifact.name="com.liferay.portal.impl" artifact.version="${artifact.version}" />
 							<copy-artifact-to-local-cache artifact.file="${test.app.server.lib.global.dir}/portal-kernel.jar" artifact.name="com.liferay.portal.kernel" artifact.version="${artifact.version}" />
+							<copy-artifact-to-local-cache artifact.file="${liferay.home}/osgi/test/com.liferay.arquillian.extension.junit.bridge.connector.jar" artifact.name="com.liferay.arquillian.extension.junit.bridge.connector" artifact.version="${artifact.version}" />
 							<copy-artifact-to-local-cache artifact.file="${liferay.home}/osgi/test/com.liferay.portal.test.jar" artifact.name="com.liferay.portal.test" artifact.version="${artifact.version}" />
 							<copy-artifact-to-local-cache artifact.file="${liferay.home}/osgi/test/com.liferay.portal.test.integration.jar" artifact.name="com.liferay.portal.test.integration" artifact.version="${artifact.version}" />
 							<copy-artifact-to-local-cache artifact.file="${test.app.server.lib.portal.dir}/util-bridges.jar" artifact.name="com.liferay.util.bridges" artifact.version="${artifact.version}" />
@@ -2788,6 +2870,61 @@ log.sanitizer.enabled=false</echo>
 					</echo>
 				</then>
 			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="start-k8s-database">
+		<attribute name="database.port" />
+		<attribute name="database.type" />
+		<attribute name="database.version" />
+
+		<sequential>
+			<fail message="Please set the property ${env.KUBERNETES_SERVICE_HOST}. Note that this script should only be run from a Kubernetes pod." unless="env.KUBERNETES_SERVICE_HOST" />
+
+			<beanshell>
+				<![CDATA[
+					import com.liferay.jenkins.results.parser.JenkinsResultsParserUtil;
+					import com.liferay.jenkins.results.parser.k8s.LiferayK8sConnection;
+					import com.liferay.jenkins.results.parser.k8s.Pod;
+					import com.liferay.jenkins.results.parser.k8s.ResourceConfigurationFactory;
+
+					LiferayK8sConnection liferayK8sConnection = LiferayK8sConnection.getInstance();
+
+					Pod pod = liferayK8sConnection.createPod(ResourceConfigurationFactory.getConfigurationPod("@{database.type}", "@{database.version}"));
+
+					String databaseIP = pod.getIP();
+					String hostIP = JenkinsResultsParserUtil.getHostIPAddress();
+
+					String[] commands = {"iptables -A OUTPUT -t nat -o lo -p tcp -m tcp --dport @{database.port} -j DNAT --to-destination " + databaseIP + ":@{database.port} && iptables -A POSTROUTING -t nat -p tcp -d " + databaseIP + " --dport @{database.port} -j SNAT --to-source " + hostIP};
+
+					JenkinsResultsParserUtil.executeBashCommands(commands);
+				]]>
+			</beanshell>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="stop-k8s-database">
+		<attribute name="database.type" />
+		<attribute name="database.version" />
+
+		<sequential>
+			<fail message="Please set the property ${env.KUBERNETES_SERVICE_HOST}. Note that this script should only be run from a Kubernetes pod." unless="env.KUBERNETES_SERVICE_HOST" />
+
+			<beanshell>
+				<![CDATA[
+					import com.liferay.jenkins.results.parser.JenkinsResultsParserUtil;
+					import com.liferay.jenkins.results.parser.k8s.LiferayK8sConnection;
+					import com.liferay.jenkins.results.parser.k8s.ResourceConfigurationFactory;
+
+					LiferayK8sConnection liferayK8sConnection = LiferayK8sConnection.getInstance();
+
+					liferayK8sConnection.deletePod(ResourceConfigurationFactory.getConfigurationPod("@{database.type}", "@{database.version}"));
+
+					String[] commands = {"iptables -t nat -F"};
+
+					JenkinsResultsParserUtil.executeBashCommands(commands);
+				]]>
+			</beanshell>
 		</sequential>
 	</macrodef>
 
@@ -5112,16 +5249,6 @@ information. Make sure to commit in all build services results.
 
 	<target name="setup-testable-tomcat-gc">
 		<setup-testable-tomcat-gc test.portal.bundle.version="${test.portal.bundle.version}" />
-	</target>
-
-	<target name="slim-profile-jdk8">
-		<run-batch-test>
-			<test-action>
-				<ant dir="." target="all">
-					<property name="build.profile" value="slim" />
-				</ant>
-			</test-action>
-		</run-batch-test>
 	</target>
 
 	<target name="source-format-current-branch-jdk8">

@@ -15,6 +15,7 @@
 package com.liferay.headless.delivery.internal.resource.v1_0;
 
 import com.liferay.asset.kernel.model.AssetEntry;
+import com.liferay.asset.list.asset.entry.provider.AssetListAssetEntryProvider;
 import com.liferay.asset.list.model.AssetListEntry;
 import com.liferay.asset.list.service.AssetListEntryService;
 import com.liferay.headless.delivery.dto.v1_0.ContentSetElement;
@@ -22,12 +23,11 @@ import com.liferay.headless.delivery.dto.v1_0.converter.DTOConverter;
 import com.liferay.headless.delivery.dto.v1_0.converter.DefaultDTOConverterContext;
 import com.liferay.headless.delivery.internal.dto.v1_0.converter.DTOConverterRegistry;
 import com.liferay.headless.delivery.resource.v1_0.ContentSetElementResource;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.CamelCaseUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
-import com.liferay.segments.provider.SegmentsEntryProvider;
+import com.liferay.segments.provider.SegmentsEntryProviderRegistry;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -58,10 +58,8 @@ public class ContentSetElementResourceImpl
 			Long contentSetId, Pagination pagination)
 		throws Exception {
 
-		AssetListEntry assetListEntry =
-			_assetListEntryService.getAssetListEntry(contentSetId);
-
-		return _getContentSetContentSetElementsPage(assetListEntry, pagination);
+		return _getContentSetContentSetElementsPage(
+			_assetListEntryService.getAssetListEntry(contentSetId), pagination);
 	}
 
 	@Override
@@ -140,17 +138,20 @@ public class ContentSetElementResourceImpl
 			AssetListEntry assetListEntry, Pagination pagination)
 		throws Exception {
 
-		long[] segmentsEntryIds = _segmentsEntryProvider.getSegmentsEntryIds(
-			assetListEntry.getGroupId(), _user.getModelClassName(),
-			_user.getPrimaryKey(), _createSegmentsContext());
+		long[] segmentsEntryIds =
+			_segmentsEntryProviderRegistry.getSegmentsEntryIds(
+				assetListEntry.getGroupId(), contextUser.getModelClassName(),
+				contextUser.getPrimaryKey(), _createSegmentsContext());
 
 		return Page.of(
 			transform(
-				assetListEntry.getAssetEntries(
-					segmentsEntryIds, pagination.getStartPosition(),
-					pagination.getEndPosition()),
+				_assetListAssetEntryProvider.getAssetEntries(
+					assetListEntry, segmentsEntryIds,
+					pagination.getStartPosition(), pagination.getEndPosition()),
 				this::_toContentSetElement),
-			pagination, assetListEntry.getAssetEntriesCount(segmentsEntryIds));
+			pagination,
+			_assetListAssetEntryProvider.getAssetEntriesCount(
+				assetListEntry, segmentsEntryIds));
 	}
 
 	private ContentSetElement _toContentSetElement(AssetEntry assetEntry) {
@@ -187,15 +188,15 @@ public class ContentSetElementResourceImpl
 	}
 
 	@Reference
+	private AssetListAssetEntryProvider _assetListAssetEntryProvider;
+
+	@Reference
 	private AssetListEntryService _assetListEntryService;
 
 	@Context
 	private HttpHeaders _httpHeaders;
 
 	@Reference
-	private SegmentsEntryProvider _segmentsEntryProvider;
-
-	@Context
-	private User _user;
+	private SegmentsEntryProviderRegistry _segmentsEntryProviderRegistry;
 
 }

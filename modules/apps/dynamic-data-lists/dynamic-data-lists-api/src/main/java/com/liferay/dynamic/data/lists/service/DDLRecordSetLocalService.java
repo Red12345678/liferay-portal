@@ -179,6 +179,9 @@ public interface DDLRecordSetLocalService
 	public DDLRecordSet deleteDDLRecordSet(long recordSetId)
 		throws PortalException;
 
+	public void deleteDDMStructureRecordSets(long ddmStructureId)
+		throws PortalException;
+
 	/**
 	 * @throws PortalException
 	 */
@@ -404,6 +407,9 @@ public interface DDLRecordSetLocalService
 	 */
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getDDLRecordSetsCount();
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<DDLRecordSet> getDDMStructureRecordSets(long ddmStructureId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ExportActionableDynamicQuery getExportActionableDynamicQuery(

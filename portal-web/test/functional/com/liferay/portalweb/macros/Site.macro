@@ -1,4 +1,5 @@
 definition {
+
 	var siteMember = "User";
 	var siteType = "Open";
 
@@ -360,6 +361,8 @@ definition {
 
 		SelectFrame(locator1 = "IFrame#DIALOG");
 
+		Pause(locator1 = "3000");
+
 		if (isSet(userMiddleName)) {
 			LexiconCard.checkCardCheckbox(card = "${userFirstName} ${userMiddleName} ${userLastName}");
 		}
@@ -543,6 +546,16 @@ definition {
 		}
 	}
 
+	macro deleteAllCP {
+		PortletEntry.selectAll();
+
+		ClickNoError(locator1 = "Icon#DELETE");
+
+		AssertConfirm(value1 = "Are you sure you want to delete this? It will be deleted immediately.");
+
+		Alert.viewSuccessMessage();
+	}
+
 	macro deleteCP {
 		var key_siteName = "${siteName}";
 
@@ -607,7 +620,7 @@ definition {
 		Pause(locator1 = "5000");
 
 		Type(
-			locator1 = "TextInput#FRIENDLY_URL",
+			locator1 = "TextInput#FRIENDLY_URL_SITE_SETTINGS",
 			value1 = "${siteFriendlyURLEdit}");
 
 		Button.clickSave();
@@ -620,7 +633,7 @@ definition {
 				value1 = "The friendly URL has too many slashes.");
 
 			AssertTextEquals(
-				locator1 = "TextInput#FRIENDLY_URL",
+				locator1 = "TextInput#FRIENDLY_URL_SITE_SETTINGS",
 				value1 = "${siteFriendlyURLEdit}");
 		}
 		else {
@@ -1256,6 +1269,20 @@ definition {
 			locator1 = "LexiconTable#TABLE_ENTRY_ELLIPSIS");
 	}
 
+	macro viewSelectSiteViaPersonalMenuMySites {
+		AssertElementPresent(locator1 = "Sites#SELECT_SITE_MODAL");
+
+		AssertTextEquals(
+			locator1 = "Sites#SELECT_SITE_MODAL_HEADER",
+			value1 = "Select Site");
+
+		SelectFrame(locator1 = "IFrame#DIALOG");
+
+		AssertElementPresent(
+			key_siteName = "${siteName}",
+			locator1 = "Sites#SELECT_SITE_MODAL_CARD_BODY_SITE_NAME");
+	}
+
 	macro viewSiteAdminPermissionsCP {
 		var key_siteName = "${siteName}";
 
@@ -1368,4 +1395,5 @@ definition {
 
 		AssertLocation(value1 = "${sitePageURL}");
 	}
+
 }

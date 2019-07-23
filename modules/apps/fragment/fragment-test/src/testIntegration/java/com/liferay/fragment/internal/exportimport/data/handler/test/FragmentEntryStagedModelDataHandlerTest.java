@@ -22,6 +22,7 @@ import com.liferay.fragment.model.FragmentEntry;
 import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.fragment.service.FragmentEntryLinkLocalServiceUtil;
 import com.liferay.fragment.service.FragmentEntryLocalServiceUtil;
+import com.liferay.fragment.util.FragmentEntryTestUtil;
 import com.liferay.fragment.util.FragmentTestUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -89,11 +90,12 @@ public class FragmentEntryStagedModelDataHandlerTest
 				PortalUtil.getClassNameId(Layout.class),
 				stagingGroup.getDefaultPublicPlid(), fragmentEntry.getCss(),
 				fragmentEntry.getHtml(), fragmentEntry.getJs(),
-				StringPool.BLANK, 0, serviceContext);
+				fragmentEntry.getConfiguration(), StringPool.BLANK,
+				StringPool.BLANK, 0, StringPool.BLANK, serviceContext);
 
 		stagedModel = FragmentEntryLocalServiceUtil.updateFragmentEntry(
 			TestPropsValues.getUserId(), fragmentEntry.getFragmentEntryId(),
-			fragmentEntry.getName(), "css", "html", "js", 0);
+			fragmentEntry.getName(), "css", "html", "js", "{fieldSets: []}", 0);
 
 		try {
 			exportImportStagedModel(stagedModel);
@@ -128,7 +130,7 @@ public class FragmentEntryStagedModelDataHandlerTest
 		FragmentCollection fragmentCollection =
 			FragmentTestUtil.addFragmentCollection(group.getGroupId());
 
-		return FragmentTestUtil.addFragmentEntry(
+		return FragmentEntryTestUtil.addFragmentEntry(
 			fragmentCollection.getFragmentCollectionId());
 	}
 

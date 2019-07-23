@@ -1,4 +1,5 @@
 definition {
+
 	macro _addItemPage {
 		IFrame.selectConfigurationFrame();
 
@@ -188,12 +189,12 @@ definition {
 
 		if ("${toggleValue}" == "enable") {
 			Check(
-				checkboxName = "Offer New Pages",
+				checkboxName = "When creating a new page, the page will be automatically added to this menu unless the user deselects it.",
 				locator1 = "Checkbox#ANY_CHECKBOX");
 		}
 		else if ("${toggleValue}" == "disable") {
 			Uncheck(
-				checkboxName = "Offer New Pages",
+				checkboxName = "When creating a new page, the page will be automatically added to this menu unless the user deselects it.",
 				locator1 = "Checkbox#ANY_CHECKBOX");
 		}
 		else {
@@ -245,4 +246,5 @@ definition {
 			key_itemName = "${itemName}",
 			locator1 = "SiteNavigationMenu#ITEM_ENTRY");
 	}
+
 }

@@ -40,10 +40,6 @@
 		<priority value="ERROR" />
 	</category>
 
-	<category name="com.germinus.easyconf">
-		<priority value="ERROR" />
-	</category>
-
 	<category name="com.liferay">
 		<priority value="ERROR" />
 	</category>
@@ -1056,18 +1052,6 @@
 		<priority value="ERROR" />
 	</category>
 
-	<category name="org.apache.struts">
-		<priority value="ERROR" />
-	</category>
-
-	<category name="org.apache.struts.action.RequestProcessor">
-		<priority value="ERROR" />
-	</category>
-
-	<category name="org.apache.struts.tiles.TilesRequestProcessor">
-		<priority value="ERROR" />
-	</category>
-
 	<category name="org.apache.velocity">
 		<priority value="ERROR" />
 	</category>
@@ -1121,7 +1105,7 @@
 	</category>
 
 	<category name="osgi.logging">
-		<priority value="INFO" />
+		<priority value="WARN" />
 	</category>
 
 	<category name="osgi.logging.org_eclipse_osgi">

@@ -14,7 +14,6 @@
 
 package com.liferay.change.tracking.service.impl;
 
-import com.liferay.change.tracking.constants.CTConstants;
 import com.liferay.change.tracking.exception.CTCollectionDescriptionException;
 import com.liferay.change.tracking.exception.CTCollectionNameException;
 import com.liferay.change.tracking.model.CTCollection;
@@ -185,11 +184,6 @@ public class CTCollectionLocalServiceImpl
 
 		dynamicQuery.add(companyIdProperty.eq(companyId));
 
-		Property nameProperty = PropertyFactoryUtil.forName("name");
-
-		dynamicQuery.add(
-			nameProperty.ne(CTConstants.CT_COLLECTION_NAME_PRODUCTION));
-
 		boolean includeActive = GetterUtil.getBoolean(
 			queryDefinition.getAttribute("includeActive"));
 
@@ -205,13 +199,15 @@ public class CTCollectionLocalServiceImpl
 
 		int status = queryDefinition.getStatus();
 
-		Property statusProperty = PropertyFactoryUtil.forName("status");
+		if (status != WorkflowConstants.STATUS_ANY) {
+			Property statusProperty = PropertyFactoryUtil.forName("status");
 
-		if (queryDefinition.isExcludeStatus()) {
-			dynamicQuery.add(statusProperty.ne(status));
-		}
-		else {
-			dynamicQuery.add(statusProperty.eq(status));
+			if (queryDefinition.isExcludeStatus()) {
+				dynamicQuery.add(statusProperty.ne(status));
+			}
+			else {
+				dynamicQuery.add(statusProperty.eq(status));
+			}
 		}
 
 		return ctCollectionLocalService.dynamicQuery(

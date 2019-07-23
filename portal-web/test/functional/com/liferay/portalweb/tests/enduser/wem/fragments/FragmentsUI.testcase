@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Fragments";
@@ -64,13 +65,17 @@ definition {
 	@description = "Add a fragment in the UI and then assert that it displays properly when added to a content page."
 	@priority = "5"
 	test AddFragmentToContentPage {
-		property app.server.types = "jboss,resin,tcserver,tomcat,weblogic,websphere,wildfly";
+		property app.server.types = "jboss,tcserver,tomcat,weblogic,websphere,wildfly";
 		property database.types = "db2,hypersonic,mariadb,mysql,oracle,postgresql,sqlserver,sybase";
 		property environment.acceptance = "true";
 		property portal.acceptance = "true";
 
 		task ("Publish the section fragment") {
-			PortletEntry.publish();
+			Button.clickPublish();
+		}
+
+		task ("Assert the fragment appears in Fragments Admin") {
+			FragmentsAdmin.viewEntryPresent(entry = "Fragment Name");
 		}
 
 		task ("Navigate to pages admin") {
@@ -198,4 +203,5 @@ definition {
 			AssertLocation(value1 = "https://github.com/liferay/generator-liferay-fragments#liferay-fragments-cli");
 		}
 	}
+
 }

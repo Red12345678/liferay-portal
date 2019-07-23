@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Staging";
@@ -11,14 +12,9 @@ definition {
 
 		JSONGroup.addGroup(groupName = "Site Name");
 
-		ProductMenu.gotoSite(site = "Site Name");
-
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
-
-		SitePages.addPublicPage(pageName = "Staging Test Page");
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Staging Test Page");
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -105,7 +101,7 @@ definition {
 
 	@priority = "5"
 	test AddPageWithPageVersioningEnabled {
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		ProductMenu.gotoStagingSite();
 
@@ -124,7 +120,7 @@ definition {
 
 		Staging.markAsReadyForPublication();
 
-		ProductMenu.gotoSite(site = "Site Name");
+		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedView();
 
@@ -149,4 +145,5 @@ definition {
 
 		Staging.viewSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name");
 	}
+
 }

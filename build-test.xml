@@ -50,18 +50,6 @@
 				<then>
 					<property name="test.build.liferay.portal.zip.file.name" value="${app.server.portal.dir}" />
 				</then>
-				<elseif>
-					<equals arg1="${app.server.type}" arg2="glassfish" />
-					<then>
-						<property name="test.build.liferay.portal.zip.file.name" value="${app.server.glassfish.portal.war.name}" />
-					</then>
-				</elseif>
-				<elseif>
-					<equals arg1="${tcat.enabled}" arg2="true" />
-					<then>
-						<property name="test.build.liferay.portal.zip.file.name" value="${app.server.tcat.admin.dir}/tcat_init/webapps/${lp.version.dtd}/ROOT.war" />
-					</then>
-				</elseif>
 			</if>
 
 			<if>
@@ -129,11 +117,7 @@ module.framework.properties.osgi.console=11312</echo>
 			<if>
 				<not>
 					<or>
-						<equals arg1="${app.server.type}" arg2="glassfish" />
 						<equals arg1="${app.server.type}" arg2="jboss" />
-						<equals arg1="${app.server.type}" arg2="jetty" />
-						<equals arg1="${app.server.type}" arg2="jonas" />
-						<equals arg1="${app.server.type}" arg2="resin" />
 						<equals arg1="${app.server.type}" arg2="tcserver" />
 						<equals arg1="${app.server.type}" arg2="tomcat" />
 						<equals arg1="${app.server.type}" arg2="weblogic" />
@@ -142,7 +126,7 @@ module.framework.properties.osgi.console=11312</echo>
 					</or>
 				</not>
 				<then>
-					<fail>Please set "app.server.type" to one of the following:${line.separator}, glassfish, jboss, jetty, jonas, resin, tcserver, tomcat, weblogic, websphere, or wildfly.</fail>
+					<fail>Please set "app.server.type" to one of the following:${line.separator}, jboss, tcserver, tomcat, weblogic, websphere, or wildfly.</fail>
 				</then>
 			</if>
 
@@ -2144,6 +2128,27 @@ tell application "Safari" to quit
 		</sequential>
 	</macrodef>
 
+	<macrodef name="prepare-saml-algorithm-blacklists">
+		<sequential>
+			<echo file="${liferay.home}/osgi/configs/com.liferay.saml.opensaml.integration.internal.bootstrap.SecurityConfigurationBootstrap.config">blacklisted.algorithms = ["http://www.w3.org/2001/04/xmldsig-more#rsa-sha256", "http://www.w3.org/2001/04/xmldsig-more#rsa-sha384", "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512", "http://www.w3.org/2001/04/xmlenc#sha256", "http://www.w3.org/2001/04/xmldsig-more#sha384", "http://www.w3.org/2001/04/xmlenc#sha512"]</echo>
+
+			<get-testcase-property property.name="app.server.bundles.size" />
+
+			<if>
+				<equals arg1="${app.server.bundles.size}" arg2="1" />
+				<then>
+					<set-app-server-properties app.server.bundle.index="1" />
+
+					<echo file="${test.app.server.liferay.home}/osgi/configs/com.liferay.saml.opensaml.integration.internal.bootstrap.SecurityConfigurationBootstrap.config">blacklisted.algorithms = ["http://www.w3.org/2000/09/xmldsig#rsa-sha1", "http://www.w3.org/2000/09/xmldsig#sha1"]</echo>
+				</then>
+			</if>
+
+			<print-file file.name="${liferay.home}/osgi/configs/com.liferay.saml.opensaml.integration.internal.bootstrap.SecurityConfigurationBootstrap.config" />
+
+			<print-file file.name="${test.app.server.liferay.home}/osgi/configs/com.liferay.saml.opensaml.integration.internal.bootstrap.SecurityConfigurationBootstrap.config" />
+		</sequential>
+	</macrodef>
+
 	<macrodef name="prepare-test-app-server-custom">
 		<sequential>
 			<ant antfile="build-dist.xml" inheritAll="false" target="unzip-${app.server.type}-custom" />
@@ -2272,23 +2277,6 @@ tell application "Safari" to quit
 		<attribute name="unit" />
 		<sequential>
 			<if>
-				<matches pattern="https?://" string="${test.build.bundle.glassfish.zip.url}" />
-				<then>
-					<antcall inheritAll="false" target="prepare-test-bundle">
-						<param name="app.server.type" value="glassfish" />
-						<param name="test.app.server.bin.dir" value="${app.server.glassfish.bin.dir}" />
-						<param name="test.build.bundle.zip.url" value="${test.build.bundle.glassfish.zip.url}" />
-					</antcall>
-				</then>
-				<elseif>
-					<equals arg1="${test.build.bundle.glassfish}" arg2="true" />
-					<then>
-						<ant antfile="build-dist.xml" inheritAll="false" target="build-dist-glassfish" />
-					</then>
-				</elseif>
-			</if>
-
-			<if>
 				<equals arg1="${test.build.bundle.jbosseap6.0}" arg2="true" />
 				<then>
 					<ant antfile="build-dist.xml" inheritAll="false" target="build-dist-jboss">
@@ -2325,66 +2313,6 @@ tell application "Safari" to quit
 						<ant antfile="build-dist.xml" inheritAll="false" target="build-dist-jboss">
 							<property name="app.server.jboss.version" value="6.1.0" />
 						</ant>
-					</then>
-				</elseif>
-			</if>
-
-			<if>
-				<equals arg1="${test.build.bundle.jbosseap6.4}" arg2="true" />
-				<then>
-					<ant antfile="build-dist.xml" inheritAll="false" target="build-dist-jboss">
-						<property name="app.server.jboss.version" value="6.4.0" />
-					</ant>
-				</then>
-			</if>
-
-			<if>
-				<matches pattern="https?://" string="${test.build.bundle.jetty.zip.url}" />
-				<then>
-					<antcall inheritAll="false" target="prepare-test-bundle">
-						<param name="app.server.type" value="jetty" />
-						<param name="test.app.server.bin.dir" value="${app.server.jetty.bin.dir}" />
-						<param name="test.build.bundle.zip.url" value="${test.build.bundle.jetty.zip.url}" />
-					</antcall>
-				</then>
-				<elseif>
-					<equals arg1="${test.build.bundle.jetty}" arg2="true" />
-					<then>
-						<ant antfile="build-dist.xml" inheritAll="false" target="build-dist-jetty" />
-					</then>
-				</elseif>
-			</if>
-
-			<if>
-				<matches pattern="https?://" string="${test.build.bundle.jonas.zip.url}" />
-				<then>
-					<antcall inheritAll="false" target="prepare-test-bundle">
-						<param name="app.server.type" value="jonas" />
-						<param name="test.app.server.bin.dir" value="${app.server.jonas.bin.dir}" />
-						<param name="test.build.bundle.zip.url" value="${test.build.bundle.jonas.zip.url}" />
-					</antcall>
-				</then>
-				<elseif>
-					<equals arg1="${test.build.bundle.jonas}" arg2="true" />
-					<then>
-						<ant antfile="build-dist.xml" inheritAll="false" target="build-dist-jonas" />
-					</then>
-				</elseif>
-			</if>
-
-			<if>
-				<matches pattern="https?://" string="${test.build.bundle.resin.zip.url}" />
-				<then>
-					<antcall inheritAll="false" target="prepare-test-bundle">
-						<param name="app.server.type" value="resin" />
-						<param name="test.app.server.bin.dir" value="${app.server.resin.bin.dir}" />
-						<param name="test.build.bundle.zip.url" value="${test.build.bundle.resin.zip.url}" />
-					</antcall>
-				</then>
-				<elseif>
-					<equals arg1="${test.build.bundle.resin}" arg2="true" />
-					<then>
-						<ant antfile="build-dist.xml" inheritAll="false" target="build-dist-resin" />
 					</then>
 				</elseif>
 			</if>
@@ -2460,8 +2388,6 @@ tell application "Safari" to quit
 			</if>
 
 			<setup-testable-tomcat />
-
-			<antcall inheritAll="false" target="prepare-test-build-tomcat-dependents" />
 
 			<if>
 				<and>
@@ -3532,8 +3458,6 @@ go</echo>
 		<sequential>
 			<setup-testable-tomcat-logging />
 
-			<setup-testable-tomcat-manager />
-
 			<setup-testable-tomcat-osgi-modules />
 
 			<setup-testable-tomcat-setenv />
@@ -3601,48 +3525,6 @@ go</echo>
 		</sequential>
 	</macrodef>
 
-	<macrodef name="setup-testable-tomcat-jmx">
-		<sequential>
-			<var name="testable.tomcat.jmx.opts" value="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=${jmx.remote.authenticate} -Dcom.sun.management.jmxremote.port=${jmx.remote.port} -Dcom.sun.management.jmxremote.ssl=${jmx.remote.ssl}" />
-
-			<if>
-				<not>
-					<resourcecontains
-						resource="${app.server.tomcat.dir}/bin/setenv.bat"
-						substring="${testable.tomcat.jmx.opts}"
-					/>
-				</not>
-				<then>
-					<echo append="true" file="${app.server.tomcat.dir}/bin/setenv.bat">
-						<![CDATA[
-							set "JMX_OPTS=${testable.tomcat.jmx.opts}"
-
-							set "CATALINA_OPTS=%CATALINA_OPTS% %JMX_OPTS%"
-						]]>
-					</echo>
-				</then>
-			</if>
-
-			<if>
-				<not>
-					<resourcecontains
-						resource="${app.server.tomcat.dir}/bin/setenv.sh"
-						substring="${testable.tomcat.jmx.opts}"
-					/>
-				</not>
-				<then>
-					<echo append="true" file="${app.server.tomcat.dir}/bin/setenv.sh">
-						<![CDATA[
-							JMX_OPTS="${testable.tomcat.jmx.opts}"
-
-							CATALINA_OPTS="${CATALINA_OPTS} ${JMX_OPTS} -Dsun.zip.disableMemoryMapping=true"
-						]]>
-					</echo>
-				</then>
-			</if>
-		</sequential>
-	</macrodef>
-
 	<macrodef name="setup-testable-tomcat-jpda-address">
 		<sequential>
 			<if>
@@ -3689,146 +3571,6 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 		</sequential>
 	</macrodef>
 
-	<macrodef name="setup-testable-tomcat-manager">
-		<sequential>
-			<if>
-				<not>
-					<available file="${app.server.tomcat.dir}/webapps/manager" type="dir" />
-				</not>
-				<then>
-					<antelope:stringutil property="tomcat.version.beginindex" string="${app.server.tomcat.dir}">
-						<antelope:indexof fromindex="0" string="tomcat-" />
-					</antelope:stringutil>
-
-					<antelope:math
-						datatype="int"
-						operand1="${tomcat.version.beginindex}"
-						operand2="7"
-						operation="+"
-						result="tomcat.version.beginindex"
-					/>
-
-					<antelope:stringutil property="tomcat.version" string="${app.server.tomcat.dir}">
-						<antelope:substring beginindex="${tomcat.version.beginindex}" />
-					</antelope:stringutil>
-
-					<antelope:stringutil property="tomcat.major.version.endindex" string="${tomcat.version}">
-						<antelope:indexof fromindex="0" string="." />
-					</antelope:stringutil>
-
-					<antelope:stringutil property="tomcat.major.version" string="${tomcat.version}">
-						<antelope:substring beginindex="0" endindex="${tomcat.major.version.endindex}" />
-					</antelope:stringutil>
-
-					<mirrors-get
-						dest="tomcat.zip"
-						src="${app.server.tomcat.zip.url}"
-					/>
-
-					<unzip
-						dest="${app.server.tomcat.dir}/webapps"
-						src="tomcat.zip"
-					>
-						<patternset
-							includes="apache-tomcat-${tomcat.version}/webapps/manager/**/*"
-						/>
-						<mapper>
-							<globmapper
-								from="apache-tomcat-${tomcat.version}/webapps/*"
-								to="*"
-							/>
-						</mapper>
-					</unzip>
-
-					<delete file="tomcat.zip" />
-				</then>
-			</if>
-
-			<xmltask dest="${app.server.tomcat.dir}/conf/tomcat-users.xml" source="${app.server.tomcat.dir}/conf/tomcat-users.xml">
-				<copy
-					path="/tomcat-users/role[@rolename='manager-gui']/@rolename"
-					property="tomcat.role.manager-gui.exists"
-				/>
-				<copy
-					path="/tomcat-users/role[@rolename='manager-jmx']/@rolename"
-					property="tomcat.role.manager-jmx.exists"
-				/>
-				<copy
-					path="/tomcat-users/role[@rolename='manager-script']/@rolename"
-					property="tomcat.role.manager-script.exists"
-				/>
-				<copy
-					path="/tomcat-users/role[@rolename='manager-status']/@rolename"
-					property="tomcat.role.manager-status.exists"
-				/>
-				<copy
-					path="/tomcat-users/role[@rolename='tomcat']/@rolename"
-					property="tomcat.role.tomcat.exists"
-				/>
-				<copy
-					path="/tomcat-users/user[@username='${app.server.tomcat.manager.user}']/@username"
-					property="tomcat.user.exists"
-				/>
-
-				<call path="/">
-					<actions>
-						<if>
-							<not>
-								<and>
-									<isset property="tomcat.role.manager-gui.exists" />
-									<isset property="tomcat.role.manager-script.exists" />
-									<isset property="tomcat.role.manager-jmx.exists" />
-									<isset property="tomcat.role.manager-status.exists" />
-									<isset property="tomcat.role.tomcat.exists" />
-									<isset property="tomcat.user.exists" />
-								</and>
-							</not>
-							<then>
-								<tstamp>
-									<format pattern="yyyyMMddkkmmssSSS" property="tstamp.value" />
-								</tstamp>
-
-								<copy
-									file="${app.server.tomcat.dir}/conf/tomcat-users.xml"
-									overwrite="true"
-									tofile="${app.server.tomcat.dir}/conf/tomcat-users.xml.${tstamp.value}"
-								/>
-							</then>
-						</if>
-					</actions>
-				</call>
-
-				<insert path="/tomcat-users" unless="tomcat.role.tomcat.exists"><![CDATA[
-					<role rolename="tomcat" />
-				]]></insert>
-
-				<insert path="/tomcat-users" unless="tomcat.role.manager-gui.exists"><![CDATA[
-					<role rolename="manager-gui" />
-				]]></insert>
-
-				<insert path="/tomcat-users" unless="tomcat.role.manager-script.exists"><![CDATA[
-					<role rolename="manager-script" />
-				]]></insert>
-
-				<insert path="/tomcat-users" unless="tomcat.role.manager-jmx.exists"><![CDATA[
-					<role rolename="manager-jmx" />
-				]]></insert>
-
-				<insert path="/tomcat-users" unless="tomcat.role.manager-status.exists"><![CDATA[
-					<role rolename="manager-status" />
-				]]></insert>
-
-				<insert path="/tomcat-users" unless="tomcat.user.exists"><![CDATA[
-					<user
-						password="${app.server.tomcat.manager.password}"
-						roles="tomcat,manager-gui,manager-script,manager-jmx,manager-status"
-						username="${app.server.tomcat.manager.user}"
-					/>
-				]]></insert>
-			</xmltask>
-		</sequential>
-	</macrodef>
-
 	<macrodef name="setup-testable-tomcat-osgi-modules">
 		<sequential>
 			<condition else="${env.TEST_BATCH_NAME}" property="test.batch.name" value="${test.batch.name}">
@@ -3860,8 +3602,6 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 			<setup-testable-tomcat-jacoco-agent />
 
 			<setup-testable-tomcat-aspectj-agent />
-
-			<setup-testable-tomcat-jmx />
 
 			<setup-testable-tomcat-jpda-address />
 		</sequential>
@@ -3936,34 +3676,12 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 		<attribute default="" name="testable.portal.started.marker.file" />
 
 		<sequential>
-			<if>
-				<equals arg1="${tcat.enabled}" arg2="true" />
-				<then>
-					<start-app-server-cmd
-						app.server.bin.dir="${app.server.tcat.admin.bin.dir}"
-						app.server.bundle.index="@{app.server.bundle.index}"
-						delete.liferay.home="@{delete.liferay.home}"
-						test.docker.environment="${test.docker.environment}"
-						testable.portal.started.marker.file="@{testable.portal.started.marker.file}"
-					/>
-
-					<start-app-server-cmd
-						app.server.bin.dir="${app.server.tcat.agent.bin.dir}"
-						app.server.bundle.index="@{app.server.bundle.index}"
-						delete.liferay.home="@{delete.liferay.home}"
-						test.docker.environment="${test.docker.environment}"
-						testable.portal.started.marker.file="@{testable.portal.started.marker.file}"
-					/>
-				</then>
-				<else>
-					<start-app-server-cmd
-						app.server.bundle.index="@{app.server.bundle.index}"
-						delete.liferay.home="@{delete.liferay.home}"
-						test.docker.environment="${test.docker.environment}"
-						testable.portal.started.marker.file="@{testable.portal.started.marker.file}"
-					/>
-				</else>
-			</if>
+			<start-app-server-cmd
+				app.server.bundle.index="@{app.server.bundle.index}"
+				delete.liferay.home="@{delete.liferay.home}"
+				test.docker.environment="${test.docker.environment}"
+				testable.portal.started.marker.file="@{testable.portal.started.marker.file}"
+			/>
 		</sequential>
 	</macrodef>
 
@@ -3983,27 +3701,9 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 
 			<local name="portal.not.started" />
 
-			<if>
-				<equals arg1="@{app.server.bin.dir}" arg2="${app.server.tcat.admin.bin.dir}" />
-				<then>
-					<waitfor maxwait="1" maxwaitunit="second" timeoutproperty="portal.not.started">
-						<socket port="${test.app.server.leading.port.number}180" server="localhost" />
-					</waitfor>
-				</then>
-				<elseif>
-					<equals arg1="@{app.server.bin.dir}" arg2="${app.server.tcat.agent.bin.dir}" />
-					<then>
-						<waitfor maxwait="1" maxwaitunit="second" timeoutproperty="portal.not.started">
-							<socket port="${test.app.server.leading.port.number}080" server="localhost" />
-						</waitfor>
-					</then>
-				</elseif>
-				<else>
-					<waitfor maxwait="1" maxwaitunit="second" timeoutproperty="portal.not.started">
-						<socket port="${test.app.server.leading.port.number}080" server="localhost" />
-					</waitfor>
-				</else>
-			</if>
+			<waitfor maxwait="1" maxwaitunit="second" timeoutproperty="portal.not.started">
+				<socket port="${test.app.server.leading.port.number}080" server="localhost" />
+			</waitfor>
 
 			<if>
 				<isset property="portal.not.started" />
@@ -4245,29 +3945,13 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 
 		<sequential>
 			<if>
-				<equals arg1="${tcat.enabled}" arg2="true" />
+				<istrue value="${test.docker.environment}" />
 				<then>
-					<stop-app-server-cmd
-						app.server.bin.dir="${app.server.tcat.admin.bin.dir}"
-						app.server.bundle.index="@{app.server.bundle.index}"
-						app.server.explicit.stop.count="@{app.server.explicit.stop.count}"
-					/>
-
-					<stop-app-server-cmd
-						app.server.bin.dir="${app.server.tcat.agent.bin.dir}"
+					<stop-app-server-docker-cmd
 						app.server.bundle.index="@{app.server.bundle.index}"
 						app.server.explicit.stop.count="@{app.server.explicit.stop.count}"
 					/>
 				</then>
-				<elseif>
-					<istrue value="${test.docker.environment}" />
-					<then>
-						<stop-app-server-docker-cmd
-							app.server.bundle.index="@{app.server.bundle.index}"
-							app.server.explicit.stop.count="@{app.server.explicit.stop.count}"
-						/>
-					</then>
-				</elseif>
 				<else>
 					<stop-app-server-cmd
 						app.server.bundle.index="@{app.server.bundle.index}"
@@ -4315,92 +3999,60 @@ org.apache.catalina.startup.ClassLoaderFactory.level=INFO]]>
 				</daemons>
 				<sequential>
 					<if>
-						<equals arg1="@{app.server.bin.dir}" arg2="${app.server.tcat.admin.bin.dir}" />
+						<isset property="env.HOSTNAME" />
 						<then>
-							<waitfor maxwait="5" maxwaitunit="minute" timeoutproperty="app.server.stopping.timeout">
-								<and>
-									<not>
-										<http url="http://localhost:${test.app.server.leading.port.number}180/console" />
-									</not>
-									<not>
-										<http url="http://localhost:${test.app.server.leading.port.number}099" />
-									</not>
-								</and>
-							</waitfor>
+							<property name="server.host" value="${env.HOSTNAME}" />
 						</then>
-						<elseif>
-							<equals arg1="@{app.server.bin.dir}" arg2="${app.server.tcat.agent.bin.dir}" />
-							<then>
-								<waitfor maxwait="5" maxwaitunit="minute" timeoutproperty="app.server.stopping.timeout">
-									<and>
-										<not>
-											<http url="http://localhost:${test.app.server.leading.port.number}080" />
-										</not>
-										<not>
-											<http url="http://localhost:${test.app.server.leading.port.number}099" />
-										</not>
-									</and>
-								</waitfor>
-							</then>
-						</elseif>
 						<else>
-							<if>
-								<isset property="env.HOSTNAME" />
-								<then>
-									<property name="server.host" value="${env.HOSTNAME}" />
-								</then>
-								<else>
-									<property name="server.host" value="localhost" />
-								</else>
-							</if>
-
-							<waitfor maxwait="5" maxwaitunit="minute" timeoutproperty="app.server.stopping.timeout">
-								<and>
-									<not>
-										<socket port="${test.app.server.leading.port.number}080" server="localhost" />
-									</not>
-									<not>
-										<socket port="${test.app.server.leading.port.number}099" server="${server.host}" />
-									</not>
-								</and>
-							</waitfor>
-
-							<if>
-								<equals arg1="${app.server.type}" arg2="wildfly" />
-								<then>
-									<retry retrycount="10">
-										<sequential>
-											<execute>
-												<![CDATA[
-													jps > jps_output
-												]]>
-											</execute>
-
-											<trycatch property="shutdown.error">
-												<try>
-													<if>
-														<resourcecontains
-															resource="jps_output"
-															substring="jboss-modules.jar"
-														/>
-														<then>
-															<fail />
-														</then>
-													</if>
-												</try>
-												<catch>
-													<sleep seconds="5" />
-
-													<fail message="Server failed to fully shut down." />
-												</catch>
-											</trycatch>
-										</sequential>
-									</retry>
-
-									<delete file="jps_output" />
-								</then>
-							</if>
+							<property name="server.host" value="localhost" />
 						</else>
+					</if>
+
+					<waitfor maxwait="5" maxwaitunit="minute" timeoutproperty="app.server.stopping.timeout">
+						<and>
+							<not>
+								<socket port="${test.app.server.leading.port.number}080" server="localhost" />
+							</not>
+							<not>
+								<socket port="${test.app.server.leading.port.number}099" server="${server.host}" />
+							</not>
+						</and>
+					</waitfor>
+
+					<if>
+						<equals arg1="${app.server.type}" arg2="wildfly" />
+						<then>
+							<retry retrycount="10">
+								<sequential>
+									<execute>
+										<![CDATA[
+											jps > jps_output
+										]]>
+									</execute>
+
+									<trycatch property="shutdown.error">
+										<try>
+											<if>
+												<resourcecontains
+													resource="jps_output"
+													substring="jboss-modules.jar"
+												/>
+												<then>
+													<fail />
+												</then>
+											</if>
+										</try>
+										<catch>
+											<sleep seconds="5" />
+
+											<fail message="Server failed to fully shut down." />
+										</catch>
+									</trycatch>
+								</sequential>
+							</retry>
+
+							<delete file="jps_output" />
+						</then>
 					</if>
 
 					<if>
@@ -4790,29 +4442,15 @@ war.path=${app.server.portal.dir}/</echo>
 
 			<local name="app.server.waiting.url" />
 
-			<if>
-				<equals arg1="@{app.server.bin.dir}" arg2="${app.server.tcat.admin.bin.dir}" />
-				<then>
-					<property name="app.server.waiting.url" value="http://localhost:${test.app.server.leading.port.number}180/console" />
-				</then>
-				<elseif>
-					<equals arg1="@{app.server.bin.dir}" arg2="${app.server.tcat.agent.bin.dir}" />
-					<then>
-						<property name="app.server.waiting.url" value="http://localhost:${test.app.server.leading.port.number}080" />
-					</then>
-				</elseif>
-				<else>
-					<get-testcase-property property.name="portal.context" />
+			<get-testcase-property property.name="portal.context" />
 
-					<if>
-						<isset property="portal.context" />
-						<then>
-							<property name="app.server.waiting.url" value="http://localhost:${test.app.server.leading.port.number}080/${portal.context}/web/guest" />
-						</then>
-						<else>
-							<property name="app.server.waiting.url" value="http://localhost:${test.app.server.leading.port.number}080/web/guest" />
-						</else>
-					</if>
+			<if>
+				<isset property="portal.context" />
+				<then>
+					<property name="app.server.waiting.url" value="http://localhost:${test.app.server.leading.port.number}080/${portal.context}/web/guest" />
+				</then>
+				<else>
+					<property name="app.server.waiting.url" value="http://localhost:${test.app.server.leading.port.number}080/web/guest" />
 				</else>
 			</if>
 
@@ -5119,6 +4757,20 @@ create database lportal${databases.size} encoding = 'UNICODE';</echo>
 				<if>
 					<equals arg1="${database.type}" arg2="db2" />
 					<then>
+						<get-database-property property.name="database.password" />
+						<get-database-property property.name="database.username" />
+
+						<if>
+							<isset property="env.KUBERNETES_SERVICE_HOST" />
+							<then>
+								<replace
+									file="create.sql"
+									token="drop database lportal;"
+									value="attach to liferay user ${database.username} using ${database.password};${line.separator}drop database lportal;"
+								/>
+							</then>
+						</if>
+
 						<replace
 							file="create.sql"
 						>
@@ -5139,6 +4791,17 @@ connect to lportal;</replacevalue>
 							<replacetoken>create database lportal pagesize 8192;</replacetoken>
 							<replacevalue>create database lportal pagesize 32768 temporary tablespace managed by automatic storage;</replacevalue>
 						</replace>
+
+						<if>
+							<isset property="env.KUBERNETES_SERVICE_HOST" />
+							<then>
+								<replace
+									file="create.sql"
+									token="connect to lportal;"
+									value="connect to lportal user ${database.username} using ${database.password};"
+								/>
+							</then>
+						</if>
 
 						<if>
 							<isset property="databases.size" />
@@ -6400,14 +6063,34 @@ go</echo>
 				/>
 			</then>
 			<elseif>
-				<equals arg1="${project.templates}" arg2="simple" />
+				<equals arg1="${project.templates}" arg2="rest" />
 				<then>
-					<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-npm-portlet" task="generateSampleProject" />
+					<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}" task="generateSampleProject" />
 
-					<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-npm-portlet/build/npm-simple-portlet" task="assemble" />
+					<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}/build/samplerest" task="assemble" />
 
 					<copy
-						file="${project.dir}/modules/sdk/project-templates/project-templates-npm-portlet/build/npm-simple-portlet/build/libs/npm.simple.portlet-1.0.0.jar"
+						file="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}/build/samplerest/build/libs/samplerest-1.0.0.jar"
+						todir="${liferay.home}/deploy"
+					/>
+				</then>
+			</elseif>
+			<elseif>
+				<equals arg1="${project.templates}" arg2="service-builder" />
+				<then>
+					<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}" task="generateSampleProject" />
+
+					<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}/build/foo" task="buildService" />
+
+					<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}/build/foo" task="assemble" />
+
+					<copy
+						file="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}/build/foo/foo-api/build/libs/foo.api-1.0.0.jar"
+						todir="${liferay.home}/deploy"
+					/>
+
+					<copy
+						file="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}/build/foo/foo-service/build/libs/foo.service-1.0.0.jar"
 						todir="${liferay.home}/deploy"
 					/>
 				</then>
@@ -6425,16 +6108,19 @@ go</echo>
 					/>
 				</then>
 			</elseif>
-			<else>
-				<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-npm-${project.templates}-portlet" task="generateSampleProject" />
+			<elseif>
+				<equals arg1="${project.templates}" arg2="war-mvc-portlet" />
+				<then>
+					<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}" task="generateSampleProject" />
 
-				<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-npm-${project.templates}-portlet/build/npm-${project.templates}-portlet" task="assemble" />
+					<gradle-execute dir="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}/build/samplewarmvcportlet" task="assemble" />
 
-				<copy
-					file="${project.dir}/modules/sdk/project-templates/project-templates-npm-${project.templates}-portlet/build/npm-${project.templates}-portlet/build/libs/npm.${project.templates}.portlet-1.0.0.jar"
-					todir="${liferay.home}/deploy"
-				/>
-			</else>
+					<copy
+						file="${project.dir}/modules/sdk/project-templates/project-templates-${project.templates}/build/samplewarmvcportlet/build/libs/samplewarmvcportlet.war"
+						todir="${liferay.home}/deploy"
+					/>
+				</then>
+			</elseif>
 		</if>
 	</target>
 
@@ -6850,6 +6536,7 @@ go</echo>
 					dir="modules"
 					erroronmissingdir="false"
 				>
+					<exclude name="**/node_modules/**/TEST-*.xml" />
 					<include name="**/TEST-*.xml" />
 				</fileset>
 				<fileset
@@ -7129,7 +6816,7 @@ ${lcs.portal.bundle.properties}</echo>
 			file="${app.server.dir}/bin/setenv${file.suffix.bat}"
 		>
 			<replacetoken><![CDATA[-XX:MaxPermSize=256m]]></replacetoken>
-			<replacevalue><![CDATA[-XX:MaxPermSize=256m -javaagent:../../patching-tool/lib/patching-tool-agent.jar]]></replacevalue>
+			<replacevalue><![CDATA[-javaagent:../../patching-tool/lib/patching-tool-agent.jar]]></replacevalue>
 		</replace>
 
 		<echo file="${lp.plugins.dir}/portlets/lcs-portlet/docroot/WEB-INF/src/portlet-ext.properties">#QA AWS
@@ -8192,16 +7879,6 @@ auto.deploy.dest.dir=C:/WINDOWS/system32/config/systemprofile/liferay/websphere-
 		</if>
 
 		<if>
-			<equals arg1="${tcat.enabled}" arg2="true" />
-			<then>
-				<echo append="true" file="${test.ext.properties.file}">
-					tcat.admin.repository=${app.server.tcat.admin.dir}/tcat_init/webapps/${lp.version.dtd}
-					tcat.enabled=true
-				</echo>
-			</then>
-		</if>
-
-		<if>
 			<equals arg1="${tear.down.before.test}" arg2="true" />
 			<then>
 				<echo append="true" file="${test.ext.properties.file}">
@@ -8473,6 +8150,19 @@ auto.deploy.dest.dir=C:/WINDOWS/system32/config/systemprofile/liferay/websphere-
 
 						<echo append="true" file="${test.ext.properties.file}">
 							database.@{database.type}.password=${database.password}
+						</echo>
+					</then>
+				</if>
+
+				<if>
+					<isset property="database.@{database.type}.schema" />
+					<then>
+						<local name="database.schema" />
+
+						<propertycopy from="database.@{database.type}.schema" name="database.schema" />
+
+						<echo append="true" file="${test.ext.properties.file}">
+							database.@{database.type}.schema=${database.schema}
 						</echo>
 					</then>
 				</if>
@@ -9225,40 +8915,6 @@ ANT_OPTS=${env.ANT_OPTS}</echo>
 		<app-server-properties-reset />
 	</target>
 
-	<target name="prepare-test-build-tomcat-dependents">
-		<if>
-			<equals arg1="${test.build.bundle.tcat}" arg2="true" />
-			<then>
-				<echo file="${lp.plugins.dir}/build.${user.name}.properties">app.server.tomcat.dir=${app.server.parent.dir}/tomcat-7.0.39
-
-liferay.home=${liferay.home}
-
-plugins.includes=marketplace-portlet</echo>
-
-				<if>
-					<matches pattern="https?://" string="${test.build.portal.war.url}" />
-					<then>
-						<mkdir dir="dist" />
-
-						<mirrors-get
-							dest="dist/liferay-portal-${lp.version}.war"
-							src="${test.build.portal.war.url}"
-						/>
-					</then>
-					<else>
-						<ant antfile="build-dist.xml" inheritAll="false" target="zip-portal-war" />
-					</else>
-				</if>
-
-				<ant antfile="build-dist.xml" inheritAll="false" target="build-dist-tcat" />
-
-				<delete dir="dist" />
-
-				<delete file="${lp.plugins.dir}/build.${user.name}.properties" />
-			</then>
-		</if>
-	</target>
-
 	<target name="prepare-test-build-unit">
 		<record-git-commit-portal />
 
@@ -9619,7 +9275,12 @@ ANT_OPTS=${env.ANT_OPTS}</echo>
 							<equals arg1="${testray.main.component.name}" arg2="Rolling Restart" />
 							<then>
 								<if>
-									<matches pattern="https?://" string="${test.build.fix.pack.zip.url.previous}" />
+									<and>
+										<matches pattern="https?://" string="${test.build.fix.pack.zip.url.previous}" />
+										<not>
+											<matches pattern="dxp-0-" string="${test.build.fix.pack.zip.url.previous}" />
+										</not>
+									</and>
 									<then>
 										<antcall target="install-patches">
 											<param name="patch.file.zip.url" value="${test.build.fix.pack.zip.url.previous}" />
@@ -9815,6 +9476,20 @@ cluster.link.bind.addr["cluster-link-udp"]=127.0.0.1</echo>
 								</exec>
 							</then>
 							<else>
+								<if>
+									<isset property="env.KUBERNETES_SERVICE_HOST" />
+									<then>
+										<get-database-property property.name="database.password" />
+										<get-database-property property.name="database.username" />
+
+										<retry retrycount="10" retrydelay="60000">
+											<exec executable="${db2.executable}" failonerror="true">
+												<arg line="attach to liferay user ${database.username} using ${database.password}" />
+											</exec>
+										</retry>
+									</then>
+								</if>
+
 								<exec executable="${db2.executable}">
 									<arg line="disconnect lportal" />
 								</exec>
@@ -9885,9 +9560,11 @@ cluster.link.bind.addr["cluster-link-udp"]=127.0.0.1</echo>
 
 							<propertycopy from="${database.type}.executable" name="database.executable" override="true" />
 
-							<exec executable="${database.executable}" failonerror="true" input="create.sql">
-								<arg line="${arg.line}" />
-							</exec>
+							<retry retrycount="3" retrydelay="60000">
+								<exec executable="${database.executable}" failonerror="true" input="create.sql">
+									<arg line="${arg.line}" />
+								</exec>
+							</retry>
 						</then>
 					</elseif>
 					<elseif>
@@ -9907,11 +9584,14 @@ cluster.link.bind.addr["cluster-link-udp"]=127.0.0.1</echo>
 									</exec>
 								</then>
 								<else>
-									<exec executable="su" failonerror="true">
-										<arg value="-c" />
-										<arg value="${oracle.sqlplus.executable} ${oracle.admin.user}/${oracle.admin.password} as sysdba @create.sql ${database.username} ${database.password}" />
-										<arg value="oracle" />
-									</exec>
+									<retry retrycount="3" retrydelay="60000">
+										<exec executable="${oracle.sqlplus.executable}" failonerror="true">
+											<arg value="${oracle.admin.user}/${oracle.admin.password}" />
+											<arg value="@create.sql" />
+											<arg value="${database.username}" />
+											<arg value="${database.password}" />
+										</exec>
+									</retry>
 								</else>
 							</if>
 						</then>
@@ -9921,12 +9601,14 @@ cluster.link.bind.addr["cluster-link-udp"]=127.0.0.1</echo>
 						<then>
 							<get-database-property property.name="database.username" />
 
-							<exec executable="${postgresql.executable}" failonerror="true">
-								<arg value="-f" />
-								<arg value="create.sql" />
-								<arg value="-U" />
-								<arg value="${database.username}" />
-							</exec>
+							<retry retrycount="3" retrydelay="60000">
+								<exec executable="${postgresql.executable}" failonerror="true">
+									<arg value="-f" />
+									<arg value="create.sql" />
+									<arg value="-U" />
+									<arg value="${database.username}" />
+								</exec>
+							</retry>
 						</then>
 					</elseif>
 					<elseif>
@@ -9954,16 +9636,18 @@ cluster.link.bind.addr["cluster-link-udp"]=127.0.0.1</echo>
 
 							<echo>${sybase.executable} -i create.sql -P ${database.password} -S ${database.schema} -U ${database.username}</echo>
 
-							<exec executable="${sybase.executable}" failonerror="true">
-								<arg value="-i" />
-								<arg value="create.sql" />
-								<arg value="-P" />
-								<arg value="${database.password}" />
-								<arg value="-S" />
-								<arg value="${database.schema}" />
-								<arg value="-U" />
-								<arg value="${database.username}" />
-							</exec>
+							<retry retrycount="3" retrydelay="60000">
+								<exec executable="${sybase.executable}" failonerror="true">
+									<arg value="-i" />
+									<arg value="create.sql" />
+									<arg value="-P" />
+									<arg value="${database.password}" />
+									<arg value="-S" />
+									<arg value="${database.schema}" />
+									<arg value="-U" />
+									<arg value="${database.username}" />
+								</exec>
+							</retry>
 						</then>
 					</elseif>
 				</if>
@@ -10986,15 +10670,6 @@ module.framework.properties.blacklist.portal.profile.names=${blacklist.portal.pr
 			</then>
 		</if>
 
-		<if>
-			<equals arg1="${app.server.type}" arg2="glassfish" />
-			<then>
-				<start-app-server />
-
-				<stop-app-server />
-			</then>
-		</if>
-
 		<get-testcase-property property.name="apacheds.blank.user.password.enabled" />
 		<get-testcase-property property.name="apacheds.enabled" />
 
@@ -11174,6 +10849,15 @@ module.framework.properties.blacklist.portal.profile.names=${blacklist.portal.pr
 			</then>
 		</if>
 
+		<get-testcase-property property.name="blacklist.saml.algorithms" />
+
+		<if>
+			<equals arg1="${blacklist.saml.algorithms}" arg2="true" />
+			<then>
+				<prepare-saml-algorithm-blacklists />
+			</then>
+		</if>
+
 		<get-testcase-property property.name="hook.plugins.includes" />
 
 		<if>
@@ -11267,18 +10951,11 @@ module.framework.properties.blacklist.portal.profile.names=${blacklist.portal.pr
 					</then>
 				</if>
 
-				<if>
-					<not>
-						<equals arg1="${tcat.enabled}" arg2="true" />
-					</not>
-					<then>
-						<waitfor maxwait="150" maxwaitunit="second">
-							<available file="${liferay.home}/logs" type="dir" />
-						</waitfor>
+				<waitfor maxwait="150" maxwaitunit="second">
+					<available file="${liferay.home}/logs" type="dir" />
+				</waitfor>
 
-						<antcall target="wait-for-plugins-deployment" />
-					</then>
-				</if>
+				<antcall target="wait-for-plugins-deployment" />
 
 				<if>
 					<available file="${liferay.home}/tmp/${theme.file.name}" />

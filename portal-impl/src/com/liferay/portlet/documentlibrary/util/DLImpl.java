@@ -454,10 +454,7 @@ public class DLImpl implements DL {
 				document.get(Field.ENTRY_CLASS_PK));
 
 			try {
-				FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(
-					fileEntryId);
-
-				entries.add(fileEntry);
+				entries.add(DLAppLocalServiceUtil.getFileEntry(fileEntryId));
 			}
 			catch (Exception e) {
 				if (_log.isWarnEnabled()) {
@@ -899,10 +896,8 @@ public class DLImpl implements DL {
 
 	@Override
 	public String getTitleWithExtension(FileEntry fileEntry) {
-		String title = fileEntry.getTitle();
-		String extension = fileEntry.getExtension();
-
-		return getTitleWithExtension(title, extension);
+		return getTitleWithExtension(
+			fileEntry.getTitle(), fileEntry.getExtension());
 	}
 
 	@Override

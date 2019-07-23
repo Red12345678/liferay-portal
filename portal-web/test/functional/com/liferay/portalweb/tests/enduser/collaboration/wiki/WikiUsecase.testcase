@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property custom.properties = "default.layout.template.id=1_column";
@@ -12,24 +13,17 @@ definition {
 
 		User.firstLoginPG();
 
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Wiki Test Page");
 
-		SitePages.addPublicPage(
-			pageName = "Wiki Test Page",
-			sitePageType = "Widget Page");
-
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Wiki Test Page",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
+		JSONLayout.addWidgetToPublicLayout(
+			column = "1",
+			groupName = "Guest",
+			layoutName = "Wiki Test Page",
+			widgetName = "Wiki");
 
 		Navigator.gotoPage(pageName = "Wiki Test Page");
-
-		Portlet.addPG(portletName = "Wiki");
 	}
 
 	tearDown {
@@ -54,30 +48,19 @@ definition {
 			panel = "Control Panel",
 			portlet = "Sites");
 
-		Site.addCP(
-			siteName = "Site Name",
-			siteType = "Blank");
+		JSONGroup.addGroup(groupName = "Site Name");
 
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
+		ProductMenu.gotoSite(site = "Site Name");
 
-		SitePages.addPublicPage(
-			pageName = "Staging Test Page",
-			sitePageType = "Widget Page");
+		JSONLayout.addPublicLayout(
+			groupName = "Site Name",
+			layoutName = "Staging Test Page");
 
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Staging Test Page",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
-
-		Navigator.gotoSitePage(
-			pageName = "Staging Test Page",
-			siteName = "Site Name");
-
-		Portlet.addPG(portletName = "Wiki");
+		JSONLayout.addWidgetToPublicLayout(
+			column = "1",
+			groupName = "Site Name",
+			layoutName = "Staging Test Page",
+			widgetName = "Wiki");
 
 		Navigator.gotoSitePage(
 			pageName = "Staging Test Page",
@@ -126,6 +109,16 @@ definition {
 		WikiPage.viewAttachmentPGViaEdit(
 			attachmentFileName = "Document_1.jpg",
 			wikiPageTitle = "Wiki Page Title");
+
+		AlloyEditor.clickContentField();
+
+		Click(locator1 = "AlloyEditor#CONTENT_ADD_BUTTON");
+
+		Click.clickNoMouseOver(locator1 = "AlloyEditor#CONTENT_ADD_MENUBAR_IMAGE");
+
+		SelectFrame(locator1 = "ItemSelector#ITEM_SELECTOR_IFRAME");
+
+		AssertElementPresent(locator1 = "//img[contains(@src,'Document_1.jpg')]");
 	}
 
 	@priority = "4"
@@ -305,7 +298,7 @@ definition {
 
 		WikiPage.addComment(entryComment = "Wiki Page Comment");
 
-		WikiPage.rateCommentAsGood();
+		Ratings.rate(ratingResult = "Thumb Up");
 
 		WikiPage.editComment(
 			entryComment = "Wiki Page Comment",
@@ -321,7 +314,13 @@ definition {
 			entryComment = "Wiki Page Comment Edited",
 			wikiPageTitle = "Wiki Page 1");
 
-		WikiPage.viewCommentRatingGood();
+		Ratings.viewRating(
+			ratingResult = "Thumb Up",
+			voteCount = "1");
+
+		Ratings.viewRating(
+			ratingResult = "Thumb Down",
+			voteCount = "0");
 	}
 
 	@priority = "5"
@@ -402,6 +401,11 @@ definition {
 			category = "Recycle Bin",
 			panel = "Site Administration",
 			portlet = "Recycle Bin");
+
+		RecycleBin.viewCP(
+			assetName = "FrontPage",
+			assetType = "Wiki Page",
+			deleteUser = "Test Test");
 
 		RecycleBin.restoreOverwriteCP(assetName = "FrontPage");
 
@@ -547,4 +551,5 @@ definition {
 			locator1 = "build-test.xml",
 			value1 = "remove-plugin -Dplugin.name=wiki-navigation-portlet");
 	}
+
 }

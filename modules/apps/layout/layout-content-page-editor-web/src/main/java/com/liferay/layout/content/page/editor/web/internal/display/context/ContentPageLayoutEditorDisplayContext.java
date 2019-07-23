@@ -19,10 +19,15 @@ import com.liferay.layout.page.template.model.LayoutPageTemplateStructure;
 import com.liferay.layout.page.template.model.LayoutPageTemplateStructureRel;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureLocalServiceUtil;
 import com.liferay.layout.page.template.service.LayoutPageTemplateStructureRelLocalServiceUtil;
+import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.comment.CommentManager;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.portlet.PortletProvider;
+import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.service.GroupLocalServiceUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.template.soy.util.SoyContext;
 import com.liferay.portal.template.soy.util.SoyContextFactoryUtil;
 import com.liferay.segments.constants.SegmentsConstants;
@@ -35,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.portlet.PortletURL;
 import javax.portlet.RenderResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,11 +54,12 @@ public class ContentPageLayoutEditorDisplayContext
 	public ContentPageLayoutEditorDisplayContext(
 		HttpServletRequest httpServletRequest, RenderResponse renderResponse,
 		String className, long classPK,
-		FragmentRendererController fragmentRendererController) {
+		FragmentRendererController fragmentRendererController,
+		CommentManager commentManager) {
 
 		super(
 			httpServletRequest, renderResponse, className, classPK,
-			fragmentRendererController);
+			commentManager, fragmentRendererController);
 	}
 
 	@Override
@@ -134,7 +141,9 @@ public class ContentPageLayoutEditorDisplayContext
 		return availableSegmentsEntriesSoyContext;
 	}
 
-	private SoyContext _getAvailableSegmentsExperiencesSoyContext() {
+	private SoyContext _getAvailableSegmentsExperiencesSoyContext()
+		throws PortalException {
+
 		SoyContext availableSegmentsExperiencesSoyContext =
 			SoyContextFactoryUtil.createSoyContext();
 
@@ -187,6 +196,27 @@ public class ContentPageLayoutEditorDisplayContext
 		return availableSegmentsExperiencesSoyContext;
 	}
 
+	private String _getEditSegmentsEntryURL() throws PortalException {
+		if (_editSegmentsEntryURL != null) {
+			return _editSegmentsEntryURL;
+		}
+
+		PortletURL portletURL = PortletProviderUtil.getPortletURL(
+			request, SegmentsEntry.class.getName(),
+			PortletProvider.Action.EDIT);
+
+		if (portletURL == null) {
+			_editSegmentsEntryURL = StringPool.BLANK;
+		}
+		else {
+			portletURL.setParameter("redirect", themeDisplay.getURLCurrent());
+
+			_editSegmentsEntryURL = portletURL.toString();
+		}
+
+		return _editSegmentsEntryURL;
+	}
+
 	private List<SoyContext> _getLayoutDataListSoyContext()
 		throws PortalException {
 
@@ -227,6 +257,16 @@ public class ContentPageLayoutEditorDisplayContext
 		return soyContexts;
 	}
 
+	private boolean _hasEditSegmentsEntryPermission() throws PortalException {
+		String editSegmentsEntryURL = _getEditSegmentsEntryURL();
+
+		if (Validator.isNull(editSegmentsEntryURL)) {
+			return false;
+		}
+
+		return true;
+	}
+
 	private boolean _isShowSegmentsExperiences() throws PortalException {
 		if (_showSegmentsExperiences != null) {
 			return _showSegmentsExperiences;
@@ -263,11 +303,16 @@ public class ContentPageLayoutEditorDisplayContext
 			getFragmentEntryActionURL(
 				"/content_layout/delete_segments_experience")
 		).put(
+			"editSegmentsEntryURL", _getEditSegmentsEntryURL()
+		).put(
+			"hasEditSegmentsEntryPermission", _hasEditSegmentsEntryPermission()
+		).put(
 			"layoutDataList", _getLayoutDataListSoyContext()
 		);
 	}
 
 	private SoyContext _editorSoyContext;
+	private String _editSegmentsEntryURL;
 	private SoyContext _fragmentsEditorToolbarSoyContext;
 	private Boolean _showSegmentsExperiences;
 

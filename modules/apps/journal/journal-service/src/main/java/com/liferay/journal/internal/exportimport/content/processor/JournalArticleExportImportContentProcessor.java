@@ -23,8 +23,8 @@ import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.storage.Fields;
 import com.liferay.dynamic.data.mapping.util.DDMFormValuesTransformer;
 import com.liferay.exportimport.content.processor.ExportImportContentProcessor;
-import com.liferay.exportimport.kernel.exception.ExportImportContentProcessorException;
 import com.liferay.exportimport.kernel.exception.ExportImportContentValidationException;
+import com.liferay.exportimport.kernel.lar.ExportImportPathUtil;
 import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerUtil;
@@ -37,6 +37,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.NoSuchLayoutException;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -45,7 +46,6 @@ import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.StagedModel;
 import com.liferay.portal.kernel.service.GroupLocalService;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
@@ -58,7 +58,6 @@ import com.liferay.portal.kernel.xml.XPath;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -286,7 +285,18 @@ public class JournalArticleExportImportContentProcessor
 			for (Element dynamicContentElement : dynamicContentElements) {
 				String jsonData = dynamicContentElement.getStringValue();
 
-				JSONObject jsonObject = _jsonFactory.createJSONObject(jsonData);
+				JSONObject jsonObject = null;
+
+				try {
+					jsonObject = _jsonFactory.createJSONObject(jsonData);
+				}
+				catch (JSONException jsone) {
+					if (_log.isDebugEnabled()) {
+						_log.debug("Unable to parse JSON", jsone);
+					}
+
+					continue;
+				}
 
 				long classPK = GetterUtil.getLong(jsonObject.get("classPK"));
 
@@ -382,19 +392,20 @@ public class JournalArticleExportImportContentProcessor
 				stagedModel, JournalArticle.class);
 
 		for (Element referenceElement : referenceElements) {
+			JournalArticle journalArticle = null;
+
 			long classPK = GetterUtil.getLong(
 				referenceElement.attributeValue("class-pk"));
 
-			Map<Long, Long> articlePrimaryKeys =
-				(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
-					JournalArticle.class + ".primaryKey");
+			long articlePrimaryKey = GetterUtil.getLong(
+				portletDataContext.getNewPrimaryKey(
+					JournalArticle.class + ".primaryKey", classPK));
 
-			long articlePrimaryKey = MapUtil.getLong(
-				articlePrimaryKeys, classPK, classPK);
-
-			JournalArticle journalArticle =
-				_journalArticleLocalService.fetchJournalArticle(
-					articlePrimaryKey);
+			if (articlePrimaryKey != 0) {
+				journalArticle =
+					_journalArticleLocalService.fetchJournalArticle(
+						articlePrimaryKey);
+			}
 
 			if (journalArticle == null) {
 				if (_log.isWarnEnabled()) {
@@ -403,18 +414,10 @@ public class JournalArticleExportImportContentProcessor
 							articlePrimaryKey);
 				}
 
-				ExportImportContentProcessorException eicpe =
-					new ExportImportContentProcessorException(
-						new NoSuchArticleException());
+				portletDataContext.removePrimaryKey(
+					ExportImportPathUtil.getModelPath(stagedModel));
 
-				eicpe.setClassName(
-					JournalArticleExportImportContentProcessor.class.getName());
-				eicpe.setStagedModelClassName(JournalArticle.class.getName());
-				eicpe.setStagedModelClassPK(articlePrimaryKey);
-				eicpe.setType(
-					ExportImportContentProcessorException.ARTICLE_NOT_FOUND);
-
-				throw eicpe;
+				continue;
 			}
 
 			String journalArticleReference =

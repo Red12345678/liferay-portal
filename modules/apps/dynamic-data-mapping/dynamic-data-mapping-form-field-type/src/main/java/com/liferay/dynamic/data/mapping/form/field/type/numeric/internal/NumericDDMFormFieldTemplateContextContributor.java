@@ -73,7 +73,9 @@ public class NumericDDMFormFieldTemplateContextContributor
 			ddmFormFieldRenderingContext);
 
 		parameters.put(
-			"predefinedValue", getFormattedValue(predefinedValue, locale));
+			"predefinedValue",
+			getFormattedValue(
+				ddmFormFieldRenderingContext, locale, predefinedValue));
 
 		parameters.put("symbols", getSymbolsMap(locale));
 
@@ -91,7 +93,9 @@ public class NumericDDMFormFieldTemplateContextContributor
 			parameters.put("value", "");
 		}
 		else {
-			parameters.put("value", getFormattedValue(value, locale));
+			parameters.put(
+				"value",
+				getFormattedValue(ddmFormFieldRenderingContext, locale, value));
 		}
 
 		return parameters;
@@ -116,15 +120,24 @@ public class NumericDDMFormFieldTemplateContextContributor
 		return ddmFormField.getDataType();
 	}
 
-	protected String getFormattedValue(String value, Locale locale) {
+	protected String getFormattedValue(
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext,
+		Locale locale, String value) {
+
 		if (Validator.isNull(value)) {
 			return StringPool.BLANK;
 		}
 
-		DecimalFormat numberFormat = NumericDDMFormFieldUtil.getNumberFormat(
-			locale);
+		if (GetterUtil.getBoolean(
+				ddmFormFieldRenderingContext.getProperty("valueChanged"))) {
 
-		return numberFormat.format(GetterUtil.getNumber(value));
+			DecimalFormat numberFormat =
+				NumericDDMFormFieldUtil.getNumberFormat(locale);
+
+			return numberFormat.format(GetterUtil.getNumber(value));
+		}
+
+		return value;
 	}
 
 	protected Map<String, String> getSymbolsMap(Locale locale) {

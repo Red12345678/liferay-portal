@@ -17,24 +17,19 @@ package com.liferay.headless.delivery.resource.v1_0.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
 import com.liferay.headless.delivery.client.dto.v1_0.Document;
-import com.liferay.headless.delivery.client.serdes.v1_0.DocumentSerDes;
+import com.liferay.headless.delivery.client.http.HttpInvoker;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.odata.entity.EntityField;
-import com.liferay.portal.vulcan.multipart.BinaryFile;
-import com.liferay.portal.vulcan.multipart.MultipartBody;
+import com.liferay.portal.kernel.util.FileUtil;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import org.junit.Assert;
 import org.junit.runner.RunWith;
 
 /**
@@ -44,54 +39,71 @@ import org.junit.runner.RunWith;
 public class DocumentResourceTest extends BaseDocumentResourceTestCase {
 
 	@Override
+	protected void assertValid(
+			Document document, Map<String, File> multipartFiles)
+		throws Exception {
+
+		Assert.assertEquals(
+			new String(FileUtil.getBytes(multipartFiles.get("file"))),
+			_read("http://localhost:8080" + document.getContentUrl()));
+	}
+
+	@Override
 	protected String[] getAdditionalAssertFieldNames() {
 		return new String[] {"description", "title"};
 	}
 
 	@Override
-	protected List<EntityField> getEntityFields(EntityField.Type type)
-		throws Exception {
+	protected String[] getIgnoredEntityFieldNames() {
+		return new String[] {"creatorId", "fileExtension", "sizeInBytes"};
+	}
 
-		List<EntityField> entityFields = super.getEntityFields(type);
+	@Override
+	protected Map<String, File> getMultipartFiles() throws Exception {
+		Map<String, File> files = new HashMap<>();
 
-		Stream<EntityField> stream = entityFields.stream();
+		String randomString = RandomTestUtil.randomString();
 
-		return stream.filter(
-			entityField -> !StringUtil.equals(
-				"fileExtension", entityField.getName())
-		).collect(
-			Collectors.toList()
-		);
+		files.put("file", FileUtil.createTempFile(randomString.getBytes()));
+
+		return files;
+	}
+
+	@Override
+	protected Document randomDocument() throws Exception {
+		Document document = super.randomDocument();
+
+		document.setViewableBy(Document.ViewableBy.ANYONE);
+
+		return document;
 	}
 
 	@Override
 	protected Long testGetDocumentFolderDocumentsPage_getDocumentFolderId()
 		throws Exception {
 
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setAddGuestPermissions(true);
+
 		Folder folder = DLAppLocalServiceUtil.addFolder(
 			UserLocalServiceUtil.getDefaultUserId(testGroup.getCompanyId()),
 			testGroup.getGroupId(), 0, RandomTestUtil.randomString(),
-			RandomTestUtil.randomString(), new ServiceContext());
+			RandomTestUtil.randomString(), serviceContext);
 
 		return folder.getFolderId();
 	}
 
-	@Override
-	protected MultipartBody toMultipartBody(Document document) {
-		testContentType = "multipart/form-data;boundary=PART";
+	private String _read(String url) throws Exception {
+		HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
 
-		Map<String, BinaryFile> binaryFileMap = new HashMap<>();
+		httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
+		httpInvoker.path(url);
+		httpInvoker.userNameAndPassword("test@liferay.com:test");
 
-		String randomString = RandomTestUtil.randomString();
+		HttpInvoker.HttpResponse httpResponse = httpInvoker.invoke();
 
-		binaryFileMap.put(
-			"file",
-			new BinaryFile(
-				testContentType, RandomTestUtil.randomString(),
-				new ByteArrayInputStream(randomString.getBytes()), 0));
-
-		return MultipartBody.of(
-			binaryFileMap, __ -> null, DocumentSerDes.toMap(document));
+		return httpResponse.getContent();
 	}
 
 }

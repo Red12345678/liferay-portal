@@ -20,18 +20,23 @@ import com.liferay.headless.admin.workflow.resource.v1_0.WorkflowLogResource;
 import com.liferay.headless.admin.workflow.resource.v1_0.WorkflowTaskResource;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
-import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLField;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLName;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLTypeExtension;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 
-import graphql.annotations.annotationTypes.GraphQLField;
-import graphql.annotations.annotationTypes.GraphQLInvokeDetached;
-import graphql.annotations.annotationTypes.GraphQLName;
-
-import java.util.Collection;
+import java.util.function.BiFunction;
 
 import javax.annotation.Generated;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.service.component.ComponentServiceObjects;
 
@@ -59,8 +64,7 @@ public class Query {
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
-	public WorkflowLog getWorkflowLog(
+	public WorkflowLog workflowLog(
 			@GraphQLName("workflowLogId") Long workflowLogId)
 		throws Exception {
 
@@ -72,8 +76,7 @@ public class Query {
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection<WorkflowLog> getWorkflowTaskWorkflowLogsPage(
+	public WorkflowLogPage workflowTaskWorkflowLogs(
 			@GraphQLName("workflowTaskId") Long workflowTaskId,
 			@GraphQLName("pageSize") int pageSize,
 			@GraphQLName("page") int page)
@@ -82,18 +85,13 @@ public class Query {
 		return _applyComponentServiceObjects(
 			_workflowLogResourceComponentServiceObjects,
 			this::_populateResourceContext,
-			workflowLogResource -> {
-				Page paginationPage =
-					workflowLogResource.getWorkflowTaskWorkflowLogsPage(
-						workflowTaskId, Pagination.of(pageSize, page));
-
-				return paginationPage.getItems();
-			});
+			workflowLogResource -> new WorkflowLogPage(
+				workflowLogResource.getWorkflowTaskWorkflowLogsPage(
+					workflowTaskId, Pagination.of(page, pageSize))));
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection<WorkflowTask> getRoleWorkflowTasksPage(
+	public WorkflowTaskPage roleWorkflowTasks(
 			@GraphQLName("roleId") Long roleId,
 			@GraphQLName("pageSize") int pageSize,
 			@GraphQLName("page") int page)
@@ -102,18 +100,13 @@ public class Query {
 		return _applyComponentServiceObjects(
 			_workflowTaskResourceComponentServiceObjects,
 			this::_populateResourceContext,
-			workflowTaskResource -> {
-				Page paginationPage =
-					workflowTaskResource.getRoleWorkflowTasksPage(
-						roleId, Pagination.of(pageSize, page));
-
-				return paginationPage.getItems();
-			});
+			workflowTaskResource -> new WorkflowTaskPage(
+				workflowTaskResource.getRoleWorkflowTasksPage(
+					roleId, Pagination.of(page, pageSize))));
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection<WorkflowTask> getWorkflowTasksAssignedToMePage(
+	public WorkflowTaskPage workflowTasksAssignedToMe(
 			@GraphQLName("pageSize") int pageSize,
 			@GraphQLName("page") int page)
 		throws Exception {
@@ -121,18 +114,13 @@ public class Query {
 		return _applyComponentServiceObjects(
 			_workflowTaskResourceComponentServiceObjects,
 			this::_populateResourceContext,
-			workflowTaskResource -> {
-				Page paginationPage =
-					workflowTaskResource.getWorkflowTasksAssignedToMePage(
-						Pagination.of(pageSize, page));
-
-				return paginationPage.getItems();
-			});
+			workflowTaskResource -> new WorkflowTaskPage(
+				workflowTaskResource.getWorkflowTasksAssignedToMePage(
+					Pagination.of(page, pageSize))));
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
-	public Collection<WorkflowTask> getWorkflowTasksAssignedToMyRolesPage(
+	public WorkflowTaskPage workflowTasksAssignedToMyRoles(
 			@GraphQLName("pageSize") int pageSize,
 			@GraphQLName("page") int page)
 		throws Exception {
@@ -140,18 +128,13 @@ public class Query {
 		return _applyComponentServiceObjects(
 			_workflowTaskResourceComponentServiceObjects,
 			this::_populateResourceContext,
-			workflowTaskResource -> {
-				Page paginationPage =
-					workflowTaskResource.getWorkflowTasksAssignedToMyRolesPage(
-						Pagination.of(pageSize, page));
-
-				return paginationPage.getItems();
-			});
+			workflowTaskResource -> new WorkflowTaskPage(
+				workflowTaskResource.getWorkflowTasksAssignedToMyRolesPage(
+					Pagination.of(page, pageSize))));
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
-	public WorkflowTask getWorkflowTask(
+	public WorkflowTask workflowTask(
 			@GraphQLName("workflowTaskId") Long workflowTaskId)
 		throws Exception {
 
@@ -160,6 +143,81 @@ public class Query {
 			this::_populateResourceContext,
 			workflowTaskResource -> workflowTaskResource.getWorkflowTask(
 				workflowTaskId));
+	}
+
+	@GraphQLTypeExtension(WorkflowTask.class)
+	public class GetWorkflowTaskWorkflowLogsPageTypeExtension {
+
+		public GetWorkflowTaskWorkflowLogsPageTypeExtension(
+			WorkflowTask workflowTask) {
+
+			_workflowTask = workflowTask;
+		}
+
+		@GraphQLField
+		public WorkflowLogPage workflowLogs(
+				@GraphQLName("pageSize") int pageSize,
+				@GraphQLName("page") int page)
+			throws Exception {
+
+			return _applyComponentServiceObjects(
+				_workflowLogResourceComponentServiceObjects,
+				Query.this::_populateResourceContext,
+				workflowLogResource -> new WorkflowLogPage(
+					workflowLogResource.getWorkflowTaskWorkflowLogsPage(
+						_workflowTask.getId(), Pagination.of(page, pageSize))));
+		}
+
+		private WorkflowTask _workflowTask;
+
+	}
+
+	@GraphQLName("WorkflowLogPage")
+	public class WorkflowLogPage {
+
+		public WorkflowLogPage(Page workflowLogPage) {
+			items = workflowLogPage.getItems();
+			page = workflowLogPage.getPage();
+			pageSize = workflowLogPage.getPageSize();
+			totalCount = workflowLogPage.getTotalCount();
+		}
+
+		@GraphQLField
+		protected java.util.Collection<WorkflowLog> items;
+
+		@GraphQLField
+		protected long page;
+
+		@GraphQLField
+		protected long pageSize;
+
+		@GraphQLField
+		protected long totalCount;
+
+	}
+
+	@GraphQLName("WorkflowTaskPage")
+	public class WorkflowTaskPage {
+
+		public WorkflowTaskPage(Page workflowTaskPage) {
+			items = workflowTaskPage.getItems();
+			page = workflowTaskPage.getPage();
+			pageSize = workflowTaskPage.getPageSize();
+			totalCount = workflowTaskPage.getTotalCount();
+		}
+
+		@GraphQLField
+		protected java.util.Collection<WorkflowTask> items;
+
+		@GraphQLField
+		protected long page;
+
+		@GraphQLField
+		protected long pageSize;
+
+		@GraphQLField
+		protected long totalCount;
+
 	}
 
 	private <T, R, E1 extends Throwable, E2 extends Throwable> R
@@ -185,23 +243,36 @@ public class Query {
 			WorkflowLogResource workflowLogResource)
 		throws Exception {
 
-		workflowLogResource.setContextCompany(
-			CompanyLocalServiceUtil.getCompany(
-				CompanyThreadLocal.getCompanyId()));
+		workflowLogResource.setContextAcceptLanguage(_acceptLanguage);
+		workflowLogResource.setContextCompany(_company);
+		workflowLogResource.setContextHttpServletRequest(_httpServletRequest);
+		workflowLogResource.setContextHttpServletResponse(_httpServletResponse);
+		workflowLogResource.setContextUser(_user);
 	}
 
 	private void _populateResourceContext(
 			WorkflowTaskResource workflowTaskResource)
 		throws Exception {
 
-		workflowTaskResource.setContextCompany(
-			CompanyLocalServiceUtil.getCompany(
-				CompanyThreadLocal.getCompanyId()));
+		workflowTaskResource.setContextAcceptLanguage(_acceptLanguage);
+		workflowTaskResource.setContextCompany(_company);
+		workflowTaskResource.setContextHttpServletRequest(_httpServletRequest);
+		workflowTaskResource.setContextHttpServletResponse(
+			_httpServletResponse);
+		workflowTaskResource.setContextUser(_user);
 	}
 
 	private static ComponentServiceObjects<WorkflowLogResource>
 		_workflowLogResourceComponentServiceObjects;
 	private static ComponentServiceObjects<WorkflowTaskResource>
 		_workflowTaskResourceComponentServiceObjects;
+
+	private AcceptLanguage _acceptLanguage;
+	private BiFunction<Object, String, Filter> _filterBiFunction;
+	private BiFunction<Object, String, Sort[]> _sortsBiFunction;
+	private Company _company;
+	private HttpServletRequest _httpServletRequest;
+	private HttpServletResponse _httpServletResponse;
+	private User _user;
 
 }

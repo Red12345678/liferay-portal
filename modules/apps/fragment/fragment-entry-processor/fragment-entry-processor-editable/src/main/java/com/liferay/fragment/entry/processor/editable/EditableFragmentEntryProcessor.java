@@ -20,7 +20,6 @@ import com.liferay.fragment.entry.processor.editable.parser.EditableElementParse
 import com.liferay.fragment.entry.processor.util.FragmentEntryProcessorUtil;
 import com.liferay.fragment.exception.FragmentEntryContentException;
 import com.liferay.fragment.model.FragmentEntryLink;
-import com.liferay.fragment.processor.DefaultFragmentEntryProcessorContext;
 import com.liferay.fragment.processor.FragmentEntryProcessor;
 import com.liferay.fragment.processor.FragmentEntryProcessorContext;
 import com.liferay.petra.string.StringBundler;
@@ -44,7 +43,6 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -114,30 +112,14 @@ public class EditableFragmentEntryProcessor implements FragmentEntryProcessor {
 
 	@Override
 	public JSONObject getDefaultEditableValuesJSONObject(String html) {
-		JSONObject defaultEditableValuesJSONObject =
-			JSONFactoryUtil.createJSONObject();
+		return _getDefaultEditableValuesJSONObject(html);
+	}
 
-		Document document = _getDocument(html);
+	@Override
+	public JSONObject getDefaultEditableValuesJSONObject(
+		String html, String configuration) {
 
-		for (Element element : document.select("lfr-editable")) {
-			EditableElementParser editableElementParser =
-				_editableElementParsers.get(element.attr("type"));
-
-			if (editableElementParser == null) {
-				continue;
-			}
-
-			JSONObject defaultValueJSONObject = JSONUtil.put(
-				"config", editableElementParser.getAttributes(element)
-			).put(
-				"defaultValue", editableElementParser.getValue(element)
-			);
-
-			defaultEditableValuesJSONObject.put(
-				element.attr("id"), defaultValueJSONObject);
-		}
-
-		return defaultEditableValuesJSONObject;
+		return _getDefaultEditableValuesJSONObject(html);
 	}
 
 	@Override
@@ -148,6 +130,16 @@ public class EditableFragmentEntryProcessor implements FragmentEntryProcessor {
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 			fragmentEntryLink.getEditableValues());
+
+		if (jsonObject.length() == 0) {
+			Class<?> clazz = getClass();
+
+			jsonObject.put(
+				clazz.getName(),
+				getDefaultEditableValuesJSONObject(
+					fragmentEntryLink.getHtml(),
+					fragmentEntryLink.getConfiguration()));
+		}
 
 		Document document = _getDocument(html);
 
@@ -280,27 +272,6 @@ public class EditableFragmentEntryProcessor implements FragmentEntryProcessor {
 		return bodyElement.outerHtml();
 	}
 
-	@Override
-	public String processFragmentEntryLinkHTML(
-			FragmentEntryLink fragmentEntryLink, String html, String mode,
-			Locale locale, long[] segmentsExperienceIds, long previewClassPK,
-			int previewType)
-		throws PortalException {
-
-		DefaultFragmentEntryProcessorContext
-			defaultFragmentEntryProcessorContext =
-				new DefaultFragmentEntryProcessorContext(
-					null, null, mode, locale);
-
-		defaultFragmentEntryProcessorContext.setPreviewClassPK(previewClassPK);
-		defaultFragmentEntryProcessorContext.setPreviewType(previewType);
-		defaultFragmentEntryProcessorContext.setSegmentsExperienceIds(
-			segmentsExperienceIds);
-
-		return processFragmentEntryLinkHTML(
-			fragmentEntryLink, html, defaultFragmentEntryProcessorContext);
-	}
-
 	@Reference(
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.DYNAMIC
@@ -324,10 +295,39 @@ public class EditableFragmentEntryProcessor implements FragmentEntryProcessor {
 	}
 
 	@Override
-	public void validateFragmentEntryHTML(String html) throws PortalException {
+	public void validateFragmentEntryHTML(String html, String configuration)
+		throws PortalException {
+
 		_validateAttributes(html);
 		_validateDuplicatedIds(html);
 		_validateEditableElements(html);
+	}
+
+	private JSONObject _getDefaultEditableValuesJSONObject(String html) {
+		JSONObject defaultEditableValuesJSONObject =
+			JSONFactoryUtil.createJSONObject();
+
+		Document document = _getDocument(html);
+
+		for (Element element : document.select("lfr-editable")) {
+			EditableElementParser editableElementParser =
+				_editableElementParsers.get(element.attr("type"));
+
+			if (editableElementParser == null) {
+				continue;
+			}
+
+			JSONObject defaultValueJSONObject = JSONUtil.put(
+				"config", editableElementParser.getAttributes(element)
+			).put(
+				"defaultValue", editableElementParser.getValue(element)
+			);
+
+			defaultEditableValuesJSONObject.put(
+				element.attr("id"), defaultValueJSONObject);
+		}
+
+		return defaultEditableValuesJSONObject;
 	}
 
 	private Document _getDocument(String html) {
@@ -351,8 +351,7 @@ public class EditableFragmentEntryProcessor implements FragmentEntryProcessor {
 
 		Template template = TemplateManagerUtil.getTemplate(
 			TemplateConstants.LANG_TYPE_FTL,
-			new StringTemplateResource("template_id", "[#ftl]\n" + html),
-			false);
+			new StringTemplateResource("template_id", "[#ftl]\n" + html), true);
 
 		TemplateManager templateManager =
 			TemplateManagerUtil.getTemplateManager(
@@ -400,7 +399,7 @@ public class EditableFragmentEntryProcessor implements FragmentEntryProcessor {
 				resourceBundle,
 				"you-must-define-all-require-attributes-x-for-each-editable-" +
 					"element",
-				String.join(StringPool.COMMA, _REQUIRED_ATTRIBUTE_NAMES)));
+				StringUtil.merge(_REQUIRED_ATTRIBUTE_NAMES)));
 	}
 
 	private void _validateAttributes(String html)

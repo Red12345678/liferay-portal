@@ -1,10 +1,13 @@
 definition {
+
 	macro activateStagingCP {
 		ProductMenuHelper.openProductMenu();
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "ProductMenu#PRODUCT_MENU_PANEL_SITE_ADMINISTRATION_SITE_NAME",
 			value1 = "${siteName}");
+
+		Pause(locator1 = "3000");
 
 		if ("${remoteStaging}" == "true") {
 			Check.checkHiddenToggleSwitch(locator1 = "SiteSettingsStaging#STAGING_REMOTE_LIVE");
@@ -701,9 +704,16 @@ definition {
 
 		Pause(locator1 = "30000");
 
-		AssertTextEquals(
-			locator1 = "Staging#PROCESS_RESULT",
-			value1 = "SUCCESSFUL");
+		if (isSet(failureExpected)) {
+			AssertTextEquals(
+				locator1 = "Staging#PROCESS_RESULT",
+				value1 = "FAILED");
+		}
+		else {
+			AssertTextEquals(
+				locator1 = "Staging#PROCESS_RESULT",
+				value1 = "Successful");
+		}
 	}
 
 	macro publishToLive {
@@ -888,6 +898,16 @@ definition {
 	}
 
 	macro remoteStagingSetUp {
+		if (isSet(remotePort)) {
+			User.loginPG(
+				nodePort = "${remotePort}",
+				password = "test",
+				userEmailAddress = "test@liferay.com");
+		}
+		else {
+			Navigator.openURL();
+		}
+
 		var siteID = "${siteID}";
 
 		ProductMenu.gotoPortlet(
@@ -907,6 +927,16 @@ definition {
 		Copy(
 			locator1 = "SitesEditSite#SITE_ID",
 			value1 = "siteID");
+
+		if (isSet(remotePort)) {
+			User.loginPG(
+				nodePort = "8080",
+				password = "test",
+				userEmailAddress = "test@liferay.com");
+		}
+		else {
+			Navigator.openURL();
+		}
 
 		ProductMenu.gotoSite(site = "${siteName}");
 
@@ -1276,4 +1306,5 @@ definition {
 
 		SelectFrameTop(value1 = "relative=top");
 	}
+
 }

@@ -1,9 +1,23 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 AUI.add(
 	'liferay-navigation-interaction-touch',
 	function(A) {
 		var ANDROID = A.UA.android;
 
-		var ANDROID_LEGACY = (ANDROID && ANDROID < 4.4);
+		var ANDROID_LEGACY = ANDROID && ANDROID < 4.4;
 
 		var STR_OPEN = 'open';
 
@@ -32,23 +46,16 @@ AUI.add(
 							outsideEvents = outsideEvents[0];
 						}
 
-						handle = menuNew.on(
-							outsideEvents,
-							function() {
-								Liferay.fire(
-									'hideNavigationMenu',
-									{
-										menu: menuNew
-									}
-								);
+						handle = menuNew.on(outsideEvents, function() {
+							Liferay.fire('hideNavigationMenu', {
+								menu: menuNew
+							});
 
-								Liferay.Data[handleId] = null;
+							Liferay.Data[handleId] = null;
 
-								handle.detach();
-							}
-						);
-					}
-					else {
+							handle.detach();
+						});
+					} else {
 						Liferay.fire('hideNavigationMenu', mapHover);
 
 						if (handle) {
@@ -67,7 +74,12 @@ AUI.add(
 					if (navigation) {
 						A.Event.defineOutside('touchend');
 
-						navigation.delegate('tap', instance._onTouchClick, '.lfr-nav-child-toggle', instance);
+						navigation.delegate(
+							'tap',
+							instance._onTouchClick,
+							'.lfr-nav-child-toggle',
+							instance
+						);
 
 						if (ANDROID_LEGACY) {
 							navigation.delegate(
@@ -80,9 +92,19 @@ AUI.add(
 						}
 
 						if (!A.UA.mobile) {
-							navigation.delegate(['mouseenter', 'mouseleave'], instance._onMouseToggle, '> li', instance);
+							navigation.delegate(
+								['mouseenter', 'mouseleave'],
+								instance._onMouseToggle,
+								'> li',
+								instance
+							);
 
-							navigation.delegate('keydown', instance._handleKeyDown, 'a', instance);
+							navigation.delegate(
+								'keydown',
+								instance._handleKeyDown,
+								'a',
+								instance
+							);
 						}
 					}
 				},
@@ -92,12 +114,18 @@ AUI.add(
 				_onTouchClick: function(event) {
 					var instance = this;
 
-					var menuNew = event.currentTarget.ancestor(instance._directChildLi);
+					var menuNew = event.currentTarget.ancestor(
+						instance._directChildLi
+					);
 
 					if (menuNew.one('.child-menu')) {
 						event.preventDefault();
 
-						instance._handleShowNavigationMenu(menuNew, instance.MAP_HOVER.menu, event);
+						instance._handleShowNavigationMenu(
+							menuNew,
+							instance.MAP_HOVER.menu,
+							event
+						);
 					}
 				}
 			},
@@ -106,6 +134,11 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['event-outside', 'event-tap', 'event-touch', 'liferay-navigation-interaction']
+		requires: [
+			'event-outside',
+			'event-tap',
+			'event-touch',
+			'liferay-navigation-interaction'
+		]
 	}
 );

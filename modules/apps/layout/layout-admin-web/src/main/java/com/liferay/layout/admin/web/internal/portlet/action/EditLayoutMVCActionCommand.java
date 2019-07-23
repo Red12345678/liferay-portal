@@ -34,7 +34,6 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
-import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.PortletKeys;
@@ -46,13 +45,13 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PropsValues;
 
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -121,11 +120,13 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 		Layout layout = _layoutLocalService.getLayout(
 			groupId, privateLayout, layoutId);
 
-		if (MapUtil.isEmpty(
-				MapUtil.filter(
-					friendlyURLMap,
-					entry -> Validator.isNotNull(entry.getValue())))) {
+		String oldFriendlyURL = layout.getFriendlyURL();
 
+		Collection<String> values = friendlyURLMap.values();
+
+		values.removeIf(value -> Validator.isNull(value));
+
+		if (friendlyURLMap.isEmpty()) {
 			friendlyURLMap = layout.getFriendlyURLMap();
 		}
 
@@ -217,13 +218,11 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 				layoutTypeSettingsProperties.toString());
 		}
 
-		HttpServletResponse httpServletResponse =
-			_portal.getHttpServletResponse(actionResponse);
-
 		EventsProcessorUtil.process(
 			PropsKeys.LAYOUT_CONFIGURATION_ACTION_UPDATE,
 			layoutTypePortlet.getConfigurationActionUpdate(),
-			uploadPortletRequest, httpServletResponse);
+			uploadPortletRequest,
+			_portal.getHttpServletResponse(actionResponse));
 
 		_actionUtil.updateLookAndFeel(
 			actionRequest, themeDisplay.getCompanyId(), liveGroupId,
@@ -232,7 +231,10 @@ public class EditLayoutMVCActionCommand extends BaseMVCActionCommand {
 
 		String redirect = ParamUtil.getString(actionRequest, "redirect");
 
-		if (Validator.isNull(redirect)) {
+		if (Validator.isNull(redirect) ||
+			(redirect.contains(oldFriendlyURL) &&
+			 !Objects.equals(layout.getFriendlyURL(), oldFriendlyURL))) {
+
 			redirect = _portal.getLayoutFullURL(layout, themeDisplay);
 		}
 

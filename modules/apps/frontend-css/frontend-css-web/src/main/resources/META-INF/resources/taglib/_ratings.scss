@@ -1,4 +1,4 @@
-@import "mixins";
+@import 'mixins';
 
 .taglib-ratings {
 	&.stars {
@@ -6,12 +6,29 @@
 			padding-left: 15px;
 		}
 
-		.liferay-rating-vote, .liferay-rating-score {
+		.liferay-rating-vote,
+		.liferay-rating-score {
 			display: inline-block;
 		}
 	}
 
-	&.like, &.thumbs {
+	&.stacked-stars .liferay-rating-score {
+		> div {
+			display: flex;
+		}
+
+		.rating-element {
+			color: #ffb900;
+			padding-top: 3px;
+		}
+
+		.rating-label {
+			margin-left: 8px;
+		}
+	}
+
+	&.like,
+	&.thumbs {
 		.rating-element * {
 			pointer-events: none;
 		}

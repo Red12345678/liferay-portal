@@ -1,5 +1,6 @@
 @component-name = "portal-forms-and-workflow-ee"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property test.run.environment = "EE";
@@ -2140,6 +2141,7 @@ definition {
 	@priority = "5"
 	test CompleteProcessWithUploadedDefinition {
 		property portal.acceptance = "true";
+		property test.name.skip.portal.instance = "KaleoformsUsecase#CompleteProcessWithUploadedDefinition";
 		property testray.component.names = "Training";
 
 		ProductMenu.gotoPortlet(
@@ -3085,6 +3087,8 @@ definition {
 
 	@priority = "4"
 	test EditProcessWorkflowAfterFormSubmission {
+		property test.name.skip.portal.instance = "KaleoformsUsecase#EditProcessWorkflowAfterFormSubmission";
+
 		ProductMenu.gotoPortlet(
 			category = "Workflow",
 			panel = "Control Panel",
@@ -3241,6 +3245,8 @@ definition {
 
 	@priority = "4"
 	test EditProcessWorkflowBeforeFormSubmission {
+		property test.name.skip.portal.instance = "KaleoformsUsecase#EditProcessWorkflowBeforeFormSubmission";
+
 		ProductMenu.gotoPortlet(
 			category = "Workflow",
 			panel = "Control Panel",
@@ -5407,4 +5413,5 @@ definition {
 			workflowDefinition = "Single Approver",
 			workflowTask = "Review");
 	}
+
 }

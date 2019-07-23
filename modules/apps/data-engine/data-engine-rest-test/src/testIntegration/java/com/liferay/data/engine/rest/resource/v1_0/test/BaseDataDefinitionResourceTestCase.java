@@ -14,61 +14,58 @@
 
 package com.liferay.data.engine.rest.resource.v1_0.test;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 
 import com.liferay.data.engine.rest.client.dto.v1_0.DataDefinition;
-import com.liferay.data.engine.rest.client.dto.v1_0.DataDefinitionPermission;
+import com.liferay.data.engine.rest.client.http.HttpInvoker;
 import com.liferay.data.engine.rest.client.pagination.Page;
+import com.liferay.data.engine.rest.client.pagination.Pagination;
+import com.liferay.data.engine.rest.client.resource.v1_0.DataDefinitionResource;
 import com.liferay.data.engine.rest.client.serdes.v1_0.DataDefinitionSerDes;
-import com.liferay.data.engine.rest.resource.v1_0.DataDefinitionResource;
+import com.liferay.petra.function.UnsafeTriConsumer;
 import com.liferay.petra.string.StringBundler;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.Base64;
-import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.DateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.Http;
-import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.odata.entity.EntityField;
 import com.liferay.portal.odata.entity.EntityModel;
 import com.liferay.portal.test.rule.Inject;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
-import com.liferay.portal.vulcan.pagination.Pagination;
 import com.liferay.portal.vulcan.resource.EntityModelResource;
 
 import java.lang.reflect.InvocationTargetException;
-
-import java.net.URL;
+import java.lang.reflect.Method;
 
 import java.text.DateFormat;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Generated;
 
 import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.Response;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.lang.time.DateUtils;
 
@@ -102,9 +99,18 @@ public abstract class BaseDataDefinitionResourceTestCase {
 	public void setUp() throws Exception {
 		irrelevantGroup = GroupTestUtil.addGroup();
 		testGroup = GroupTestUtil.addGroup();
-		testLocale = LocaleUtil.getDefault();
 
-		_resourceURL = new URL("http://localhost:8080/o/data-engine/v1.0");
+		testCompany = CompanyLocalServiceUtil.getCompany(
+			testGroup.getCompanyId());
+
+		_dataDefinitionResource.setContextCompany(testCompany);
+
+		DataDefinitionResource.Builder builder =
+			DataDefinitionResource.builder();
+
+		dataDefinitionResource = builder.locale(
+			LocaleUtil.getDefault()
+		).build();
 	}
 
 	@After
@@ -118,10 +124,16 @@ public abstract class BaseDataDefinitionResourceTestCase {
 		ObjectMapper objectMapper = new ObjectMapper() {
 			{
 				configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+				configure(
+					SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
 				enable(SerializationFeature.INDENT_OUTPUT);
 				setDateFormat(new ISO8601DateFormat());
 				setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 				setSerializationInclusion(JsonInclude.Include.NON_NULL);
+				setVisibility(
+					PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+				setVisibility(
+					PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE);
 			}
 		};
 
@@ -139,9 +151,15 @@ public abstract class BaseDataDefinitionResourceTestCase {
 		ObjectMapper objectMapper = new ObjectMapper() {
 			{
 				configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+				configure(
+					SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
 				setDateFormat(new ISO8601DateFormat());
 				setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 				setSerializationInclusion(JsonInclude.Include.NON_NULL);
+				setVisibility(
+					PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+				setVisibility(
+					PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE);
 			}
 		};
 
@@ -155,65 +173,48 @@ public abstract class BaseDataDefinitionResourceTestCase {
 	}
 
 	@Test
+	public void testEscapeRegexInStringFields() throws Exception {
+		String regex = "^[0-9]+(\\.[0-9]{1,2})\"?";
+
+		DataDefinition dataDefinition = randomDataDefinition();
+
+		dataDefinition.setDataDefinitionKey(regex);
+		dataDefinition.setStorageType(regex);
+
+		String json = DataDefinitionSerDes.toJSON(dataDefinition);
+
+		Assert.assertFalse(json.contains(regex));
+
+		dataDefinition = DataDefinitionSerDes.toDTO(json);
+
+		Assert.assertEquals(regex, dataDefinition.getDataDefinitionKey());
+		Assert.assertEquals(regex, dataDefinition.getStorageType());
+	}
+
+	@Test
 	public void testDeleteDataDefinition() throws Exception {
 		DataDefinition dataDefinition =
 			testDeleteDataDefinition_addDataDefinition();
 
-		assertResponseCode(
-			204, invokeDeleteDataDefinitionResponse(dataDefinition.getId()));
+		assertHttpResponseStatusCode(
+			204,
+			dataDefinitionResource.deleteDataDefinitionHttpResponse(
+				dataDefinition.getId()));
 
-		assertResponseCode(
-			404, invokeGetDataDefinitionResponse(dataDefinition.getId()));
+		assertHttpResponseStatusCode(
+			404,
+			dataDefinitionResource.getDataDefinitionHttpResponse(
+				dataDefinition.getId()));
 
-		assertResponseCode(404, invokeGetDataDefinitionResponse(0L));
+		assertHttpResponseStatusCode(
+			404, dataDefinitionResource.getDataDefinitionHttpResponse(0L));
 	}
 
 	protected DataDefinition testDeleteDataDefinition_addDataDefinition()
 		throws Exception {
 
-		return invokePostSiteDataDefinition(
+		return dataDefinitionResource.postSiteDataDefinition(
 			testGroup.getGroupId(), randomDataDefinition());
-	}
-
-	protected void invokeDeleteDataDefinition(Long dataDefinitionId)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		options.setDelete(true);
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/data-definitions/{dataDefinitionId}", dataDefinitionId);
-
-		options.setLocation(location);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-	}
-
-	protected Http.Response invokeDeleteDataDefinitionResponse(
-			Long dataDefinitionId)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		options.setDelete(true);
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/data-definitions/{dataDefinitionId}", dataDefinitionId);
-
-		options.setLocation(location);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
 	}
 
 	@Test
@@ -221,8 +222,9 @@ public abstract class BaseDataDefinitionResourceTestCase {
 		DataDefinition postDataDefinition =
 			testGetDataDefinition_addDataDefinition();
 
-		DataDefinition getDataDefinition = invokeGetDataDefinition(
-			postDataDefinition.getId());
+		DataDefinition getDataDefinition =
+			dataDefinitionResource.getDataDefinition(
+				postDataDefinition.getId());
 
 		assertEquals(postDataDefinition, getDataDefinition);
 		assertValid(getDataDefinition);
@@ -231,56 +233,8 @@ public abstract class BaseDataDefinitionResourceTestCase {
 	protected DataDefinition testGetDataDefinition_addDataDefinition()
 		throws Exception {
 
-		return invokePostSiteDataDefinition(
+		return dataDefinitionResource.postSiteDataDefinition(
 			testGroup.getGroupId(), randomDataDefinition());
-	}
-
-	protected DataDefinition invokeGetDataDefinition(Long dataDefinitionId)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/data-definitions/{dataDefinitionId}", dataDefinitionId);
-
-		options.setLocation(location);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		try {
-			return DataDefinitionSerDes.toDTO(string);
-		}
-		catch (Exception e) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to process HTTP response: " + string, e);
-			}
-
-			throw e;
-		}
-	}
-
-	protected Http.Response invokeGetDataDefinitionResponse(
-			Long dataDefinitionId)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/data-definitions/{dataDefinitionId}", dataDefinitionId);
-
-		options.setLocation(location);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
 	}
 
 	@Test
@@ -290,14 +244,15 @@ public abstract class BaseDataDefinitionResourceTestCase {
 
 		DataDefinition randomDataDefinition = randomDataDefinition();
 
-		DataDefinition putDataDefinition = invokePutDataDefinition(
-			postDataDefinition.getId(), randomDataDefinition);
+		DataDefinition putDataDefinition =
+			dataDefinitionResource.putDataDefinition(
+				postDataDefinition.getId(), randomDataDefinition);
 
 		assertEquals(randomDataDefinition, putDataDefinition);
 		assertValid(putDataDefinition);
 
-		DataDefinition getDataDefinition = invokeGetDataDefinition(
-			putDataDefinition.getId());
+		DataDefinition getDataDefinition =
+			dataDefinitionResource.getDataDefinition(putDataDefinition.getId());
 
 		assertEquals(randomDataDefinition, getDataDefinition);
 		assertValid(getDataDefinition);
@@ -306,190 +261,31 @@ public abstract class BaseDataDefinitionResourceTestCase {
 	protected DataDefinition testPutDataDefinition_addDataDefinition()
 		throws Exception {
 
-		return invokePostSiteDataDefinition(
+		return dataDefinitionResource.postSiteDataDefinition(
 			testGroup.getGroupId(), randomDataDefinition());
-	}
-
-	protected DataDefinition invokePutDataDefinition(
-			Long dataDefinitionId, DataDefinition dataDefinition)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		options.setBody(
-			DataDefinitionSerDes.toJSON(dataDefinition),
-			ContentTypes.APPLICATION_JSON, StringPool.UTF8);
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/data-definitions/{dataDefinitionId}", dataDefinitionId);
-
-		options.setLocation(location);
-
-		options.setPut(true);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		try {
-			return DataDefinitionSerDes.toDTO(string);
-		}
-		catch (Exception e) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to process HTTP response: " + string, e);
-			}
-
-			throw e;
-		}
-	}
-
-	protected Http.Response invokePutDataDefinitionResponse(
-			Long dataDefinitionId, DataDefinition dataDefinition)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		options.setBody(
-			DataDefinitionSerDes.toJSON(dataDefinition),
-			ContentTypes.APPLICATION_JSON, StringPool.UTF8);
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/data-definitions/{dataDefinitionId}", dataDefinitionId);
-
-		options.setLocation(location);
-
-		options.setPut(true);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
 	}
 
 	@Test
 	public void testPostDataDefinitionDataDefinitionPermission()
 		throws Exception {
 
-		Assert.assertTrue(true);
-	}
-
-	protected void invokePostDataDefinitionDataDefinitionPermission(
-			Long dataDefinitionId, String operation,
-			DataDefinitionPermission dataDefinitionPermission)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/data-definitions/{dataDefinitionId}/data-definition-permissions",
-					dataDefinitionId);
-
-		if (operation != null) {
-			location = HttpUtil.addParameter(location, "operation", operation);
-		}
-
-		options.setLocation(location);
-
-		options.setPost(true);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-	}
-
-	protected Http.Response
-			invokePostDataDefinitionDataDefinitionPermissionResponse(
-				Long dataDefinitionId, String operation,
-				DataDefinitionPermission dataDefinitionPermission)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath(
-					"/data-definitions/{dataDefinitionId}/data-definition-permissions",
-					dataDefinitionId);
-
-		if (operation != null) {
-			location = HttpUtil.addParameter(location, "operation", operation);
-		}
-
-		options.setLocation(location);
-
-		options.setPost(true);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
+		Assert.assertTrue(false);
 	}
 
 	@Test
 	public void testPostSiteDataDefinitionPermission() throws Exception {
-		Assert.assertTrue(true);
-	}
-
-	protected void invokePostSiteDataDefinitionPermission(
-			Long siteId, String operation,
-			DataDefinitionPermission dataDefinitionPermission)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath("/sites/{siteId}/data-definition-permissions", siteId);
-
-		if (operation != null) {
-			location = HttpUtil.addParameter(location, "operation", operation);
-		}
-
-		options.setLocation(location);
-
-		options.setPost(true);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-	}
-
-	protected Http.Response invokePostSiteDataDefinitionPermissionResponse(
-			Long siteId, String operation,
-			DataDefinitionPermission dataDefinitionPermission)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL +
-				_toPath("/sites/{siteId}/data-definition-permissions", siteId);
-
-		if (operation != null) {
-			location = HttpUtil.addParameter(location, "operation", operation);
-		}
-
-		options.setLocation(location);
-
-		options.setPost(true);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
+		Assert.assertTrue(false);
 	}
 
 	@Test
 	public void testGetSiteDataDefinitionsPage() throws Exception {
+		Page<DataDefinition> page =
+			dataDefinitionResource.getSiteDataDefinitionsPage(
+				testGetSiteDataDefinitionsPage_getSiteId(),
+				RandomTestUtil.randomString(), Pagination.of(1, 2), null);
+
+		Assert.assertEquals(0, page.getTotalCount());
+
 		Long siteId = testGetSiteDataDefinitionsPage_getSiteId();
 		Long irrelevantSiteId =
 			testGetSiteDataDefinitionsPage_getIrrelevantSiteId();
@@ -499,8 +295,8 @@ public abstract class BaseDataDefinitionResourceTestCase {
 				testGetSiteDataDefinitionsPage_addDataDefinition(
 					irrelevantSiteId, randomIrrelevantDataDefinition());
 
-			Page<DataDefinition> page = invokeGetSiteDataDefinitionsPage(
-				irrelevantSiteId, null, Pagination.of(1, 2));
+			page = dataDefinitionResource.getSiteDataDefinitionsPage(
+				irrelevantSiteId, null, Pagination.of(1, 2), null);
 
 			Assert.assertEquals(1, page.getTotalCount());
 
@@ -518,8 +314,8 @@ public abstract class BaseDataDefinitionResourceTestCase {
 			testGetSiteDataDefinitionsPage_addDataDefinition(
 				siteId, randomDataDefinition());
 
-		Page<DataDefinition> page = invokeGetSiteDataDefinitionsPage(
-			siteId, null, Pagination.of(1, 2));
+		page = dataDefinitionResource.getSiteDataDefinitionsPage(
+			siteId, null, Pagination.of(1, 2), null);
 
 		Assert.assertEquals(2, page.getTotalCount());
 
@@ -527,6 +323,10 @@ public abstract class BaseDataDefinitionResourceTestCase {
 			Arrays.asList(dataDefinition1, dataDefinition2),
 			(List<DataDefinition>)page.getItems());
 		assertValid(page);
+
+		dataDefinitionResource.deleteDataDefinition(dataDefinition1.getId());
+
+		dataDefinitionResource.deleteDataDefinition(dataDefinition2.getId());
 	}
 
 	@Test
@@ -547,8 +347,9 @@ public abstract class BaseDataDefinitionResourceTestCase {
 			testGetSiteDataDefinitionsPage_addDataDefinition(
 				siteId, randomDataDefinition());
 
-		Page<DataDefinition> page1 = invokeGetSiteDataDefinitionsPage(
-			siteId, null, Pagination.of(1, 2));
+		Page<DataDefinition> page1 =
+			dataDefinitionResource.getSiteDataDefinitionsPage(
+				siteId, null, Pagination.of(1, 2), null);
 
 		List<DataDefinition> dataDefinitions1 =
 			(List<DataDefinition>)page1.getItems();
@@ -556,8 +357,9 @@ public abstract class BaseDataDefinitionResourceTestCase {
 		Assert.assertEquals(
 			dataDefinitions1.toString(), 2, dataDefinitions1.size());
 
-		Page<DataDefinition> page2 = invokeGetSiteDataDefinitionsPage(
-			siteId, null, Pagination.of(2, 2));
+		Page<DataDefinition> page2 =
+			dataDefinitionResource.getSiteDataDefinitionsPage(
+				siteId, null, Pagination.of(2, 2), null);
 
 		Assert.assertEquals(3, page2.getTotalCount());
 
@@ -567,21 +369,130 @@ public abstract class BaseDataDefinitionResourceTestCase {
 		Assert.assertEquals(
 			dataDefinitions2.toString(), 1, dataDefinitions2.size());
 
+		Page<DataDefinition> page3 =
+			dataDefinitionResource.getSiteDataDefinitionsPage(
+				siteId, null, Pagination.of(1, 3), null);
+
 		assertEqualsIgnoringOrder(
 			Arrays.asList(dataDefinition1, dataDefinition2, dataDefinition3),
-			new ArrayList<DataDefinition>() {
-				{
-					addAll(dataDefinitions1);
-					addAll(dataDefinitions2);
+			(List<DataDefinition>)page3.getItems());
+	}
+
+	@Test
+	public void testGetSiteDataDefinitionsPageWithSortDateTime()
+		throws Exception {
+
+		testGetSiteDataDefinitionsPageWithSort(
+			EntityField.Type.DATE_TIME,
+			(entityField, dataDefinition1, dataDefinition2) -> {
+				BeanUtils.setProperty(
+					dataDefinition1, entityField.getName(),
+					DateUtils.addMinutes(new Date(), -2));
+			});
+	}
+
+	@Test
+	public void testGetSiteDataDefinitionsPageWithSortInteger()
+		throws Exception {
+
+		testGetSiteDataDefinitionsPageWithSort(
+			EntityField.Type.INTEGER,
+			(entityField, dataDefinition1, dataDefinition2) -> {
+				BeanUtils.setProperty(
+					dataDefinition1, entityField.getName(), 0);
+				BeanUtils.setProperty(
+					dataDefinition2, entityField.getName(), 1);
+			});
+	}
+
+	@Test
+	public void testGetSiteDataDefinitionsPageWithSortString()
+		throws Exception {
+
+		testGetSiteDataDefinitionsPageWithSort(
+			EntityField.Type.STRING,
+			(entityField, dataDefinition1, dataDefinition2) -> {
+				Class clazz = dataDefinition1.getClass();
+
+				Method method = clazz.getMethod(
+					"get" +
+						StringUtil.upperCaseFirstLetter(entityField.getName()));
+
+				Class<?> returnType = method.getReturnType();
+
+				if (returnType.isAssignableFrom(Map.class)) {
+					BeanUtils.setProperty(
+						dataDefinition1, entityField.getName(),
+						Collections.singletonMap("Aaa", "Aaa"));
+					BeanUtils.setProperty(
+						dataDefinition2, entityField.getName(),
+						Collections.singletonMap("Bbb", "Bbb"));
+				}
+				else {
+					BeanUtils.setProperty(
+						dataDefinition1, entityField.getName(), "Aaa");
+					BeanUtils.setProperty(
+						dataDefinition2, entityField.getName(), "Bbb");
 				}
 			});
+	}
+
+	protected void testGetSiteDataDefinitionsPageWithSort(
+			EntityField.Type type,
+			UnsafeTriConsumer
+				<EntityField, DataDefinition, DataDefinition, Exception>
+					unsafeTriConsumer)
+		throws Exception {
+
+		List<EntityField> entityFields = getEntityFields(type);
+
+		if (entityFields.isEmpty()) {
+			return;
+		}
+
+		Long siteId = testGetSiteDataDefinitionsPage_getSiteId();
+
+		DataDefinition dataDefinition1 = randomDataDefinition();
+		DataDefinition dataDefinition2 = randomDataDefinition();
+
+		for (EntityField entityField : entityFields) {
+			unsafeTriConsumer.accept(
+				entityField, dataDefinition1, dataDefinition2);
+		}
+
+		dataDefinition1 = testGetSiteDataDefinitionsPage_addDataDefinition(
+			siteId, dataDefinition1);
+
+		dataDefinition2 = testGetSiteDataDefinitionsPage_addDataDefinition(
+			siteId, dataDefinition2);
+
+		for (EntityField entityField : entityFields) {
+			Page<DataDefinition> ascPage =
+				dataDefinitionResource.getSiteDataDefinitionsPage(
+					siteId, null, Pagination.of(1, 2),
+					entityField.getName() + ":asc");
+
+			assertEquals(
+				Arrays.asList(dataDefinition1, dataDefinition2),
+				(List<DataDefinition>)ascPage.getItems());
+
+			Page<DataDefinition> descPage =
+				dataDefinitionResource.getSiteDataDefinitionsPage(
+					siteId, null, Pagination.of(1, 2),
+					entityField.getName() + ":desc");
+
+			assertEquals(
+				Arrays.asList(dataDefinition2, dataDefinition1),
+				(List<DataDefinition>)descPage.getItems());
+		}
 	}
 
 	protected DataDefinition testGetSiteDataDefinitionsPage_addDataDefinition(
 			Long siteId, DataDefinition dataDefinition)
 		throws Exception {
 
-		return invokePostSiteDataDefinition(siteId, dataDefinition);
+		return dataDefinitionResource.postSiteDataDefinition(
+			siteId, dataDefinition);
 	}
 
 	protected Long testGetSiteDataDefinitionsPage_getSiteId() throws Exception {
@@ -592,64 +503,6 @@ public abstract class BaseDataDefinitionResourceTestCase {
 		throws Exception {
 
 		return irrelevantGroup.getGroupId();
-	}
-
-	protected Page<DataDefinition> invokeGetSiteDataDefinitionsPage(
-			Long siteId, String keywords, Pagination pagination)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL + _toPath("/sites/{siteId}/data-definitions", siteId);
-
-		if (keywords != null) {
-			location = HttpUtil.addParameter(location, "keywords", keywords);
-		}
-
-		if (pagination != null) {
-			location = HttpUtil.addParameter(
-				location, "page", pagination.getPage());
-			location = HttpUtil.addParameter(
-				location, "pageSize", pagination.getPageSize());
-		}
-
-		options.setLocation(location);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		return Page.of(string, DataDefinitionSerDes::toDTO);
-	}
-
-	protected Http.Response invokeGetSiteDataDefinitionsPageResponse(
-			Long siteId, String keywords, Pagination pagination)
-		throws Exception {
-
-		Http.Options options = _createHttpOptions();
-
-		String location =
-			_resourceURL + _toPath("/sites/{siteId}/data-definitions", siteId);
-
-		if (keywords != null) {
-			location = HttpUtil.addParameter(location, "keywords", keywords);
-		}
-
-		if (pagination != null) {
-			location = HttpUtil.addParameter(
-				location, "page", pagination.getPage());
-			location = HttpUtil.addParameter(
-				location, "pageSize", pagination.getPageSize());
-		}
-
-		options.setLocation(location);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
 	}
 
 	@Test
@@ -667,72 +520,37 @@ public abstract class BaseDataDefinitionResourceTestCase {
 			DataDefinition dataDefinition)
 		throws Exception {
 
-		return invokePostSiteDataDefinition(
+		return dataDefinitionResource.postSiteDataDefinition(
 			testGetSiteDataDefinitionsPage_getSiteId(), dataDefinition);
 	}
 
-	protected DataDefinition invokePostSiteDataDefinition(
-			Long siteId, DataDefinition dataDefinition)
-		throws Exception {
+	@Test
+	public void testGetSiteDataDefinition() throws Exception {
+		DataDefinition postDataDefinition =
+			testGetSiteDataDefinition_addDataDefinition();
 
-		Http.Options options = _createHttpOptions();
+		DataDefinition getDataDefinition =
+			dataDefinitionResource.getSiteDataDefinition(
+				postDataDefinition.getSiteId(),
+				postDataDefinition.getDataDefinitionKey());
 
-		options.setBody(
-			DataDefinitionSerDes.toJSON(dataDefinition),
-			ContentTypes.APPLICATION_JSON, StringPool.UTF8);
-
-		String location =
-			_resourceURL + _toPath("/sites/{siteId}/data-definitions", siteId);
-
-		options.setLocation(location);
-
-		options.setPost(true);
-
-		String string = HttpUtil.URLtoString(options);
-
-		if (_log.isDebugEnabled()) {
-			_log.debug("HTTP response: " + string);
-		}
-
-		try {
-			return DataDefinitionSerDes.toDTO(string);
-		}
-		catch (Exception e) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to process HTTP response: " + string, e);
-			}
-
-			throw e;
-		}
+		assertEquals(postDataDefinition, getDataDefinition);
+		assertValid(getDataDefinition);
 	}
 
-	protected Http.Response invokePostSiteDataDefinitionResponse(
-			Long siteId, DataDefinition dataDefinition)
+	protected DataDefinition testGetSiteDataDefinition_addDataDefinition()
 		throws Exception {
 
-		Http.Options options = _createHttpOptions();
-
-		options.setBody(
-			DataDefinitionSerDes.toJSON(dataDefinition),
-			ContentTypes.APPLICATION_JSON, StringPool.UTF8);
-
-		String location =
-			_resourceURL + _toPath("/sites/{siteId}/data-definitions", siteId);
-
-		options.setLocation(location);
-
-		options.setPost(true);
-
-		HttpUtil.URLtoByteArray(options);
-
-		return options.getResponse();
+		return dataDefinitionResource.postSiteDataDefinition(
+			testGroup.getGroupId(), randomDataDefinition());
 	}
 
-	protected void assertResponseCode(
-		int expectedResponseCode, Http.Response actualResponse) {
+	protected void assertHttpResponseStatusCode(
+		int expectedHttpResponseStatusCode,
+		HttpInvoker.HttpResponse actualHttpResponse) {
 
 		Assert.assertEquals(
-			expectedResponseCode, actualResponse.getResponseCode());
+			expectedHttpResponseStatusCode, actualHttpResponse.getStatusCode());
 	}
 
 	protected void assertEquals(
@@ -815,6 +633,16 @@ public abstract class BaseDataDefinitionResourceTestCase {
 			}
 
 			if (Objects.equals(
+					"dataDefinitionKey", additionalAssertFieldName)) {
+
+				if (dataDefinition.getDataDefinitionKey() == null) {
+					valid = false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
 					"dataDefinitionRules", additionalAssertFieldName)) {
 
 				if (dataDefinition.getDataDefinitionRules() == null) {
@@ -867,7 +695,7 @@ public abstract class BaseDataDefinitionResourceTestCase {
 	protected void assertValid(Page<DataDefinition> page) {
 		boolean valid = false;
 
-		Collection<DataDefinition> dataDefinitions = page.getItems();
+		java.util.Collection<DataDefinition> dataDefinitions = page.getItems();
 
 		int size = dataDefinitions.size();
 
@@ -882,6 +710,10 @@ public abstract class BaseDataDefinitionResourceTestCase {
 	}
 
 	protected String[] getAdditionalAssertFieldNames() {
+		return new String[0];
+	}
+
+	protected String[] getIgnoredEntityFieldNames() {
 		return new String[0];
 	}
 
@@ -907,6 +739,19 @@ public abstract class BaseDataDefinitionResourceTestCase {
 				if (!Objects.deepEquals(
 						dataDefinition1.getDataDefinitionFields(),
 						dataDefinition2.getDataDefinitionFields())) {
+
+					return false;
+				}
+
+				continue;
+			}
+
+			if (Objects.equals(
+					"dataDefinitionKey", additionalAssertFieldName)) {
+
+				if (!Objects.deepEquals(
+						dataDefinition1.getDataDefinitionKey(),
+						dataDefinition2.getDataDefinitionKey())) {
 
 					return false;
 				}
@@ -1010,7 +855,9 @@ public abstract class BaseDataDefinitionResourceTestCase {
 		return true;
 	}
 
-	protected Collection<EntityField> getEntityFields() throws Exception {
+	protected java.util.Collection<EntityField> getEntityFields()
+		throws Exception {
+
 		if (!(_dataDefinitionResource instanceof EntityModelResource)) {
 			throw new UnsupportedOperationException(
 				"Resource is not an instance of EntityModelResource");
@@ -1031,12 +878,15 @@ public abstract class BaseDataDefinitionResourceTestCase {
 	protected List<EntityField> getEntityFields(EntityField.Type type)
 		throws Exception {
 
-		Collection<EntityField> entityFields = getEntityFields();
+		java.util.Collection<EntityField> entityFields = getEntityFields();
 
 		Stream<EntityField> stream = entityFields.stream();
 
 		return stream.filter(
-			entityField -> Objects.equals(entityField.getType(), type)
+			entityField ->
+				Objects.equals(entityField.getType(), type) &&
+				!ArrayUtil.contains(
+					getIgnoredEntityFieldNames(), entityField.getName())
 		).collect(
 			Collectors.toList()
 		);
@@ -1059,6 +909,14 @@ public abstract class BaseDataDefinitionResourceTestCase {
 		if (entityFieldName.equals("dataDefinitionFields")) {
 			throw new IllegalArgumentException(
 				"Invalid entity field " + entityFieldName);
+		}
+
+		if (entityFieldName.equals("dataDefinitionKey")) {
+			sb.append("'");
+			sb.append(String.valueOf(dataDefinition.getDataDefinitionKey()));
+			sb.append("'");
+
+			return sb.toString();
 		}
 
 		if (entityFieldName.equals("dataDefinitionRules")) {
@@ -1172,6 +1030,7 @@ public abstract class BaseDataDefinitionResourceTestCase {
 	protected DataDefinition randomDataDefinition() throws Exception {
 		return new DataDefinition() {
 			{
+				dataDefinitionKey = RandomTestUtil.randomString();
 				dateCreated = RandomTestUtil.nextDate();
 				dateModified = RandomTestUtil.nextDate();
 				id = RandomTestUtil.randomLong();
@@ -1194,77 +1053,10 @@ public abstract class BaseDataDefinitionResourceTestCase {
 		return randomDataDefinition();
 	}
 
+	protected DataDefinitionResource dataDefinitionResource;
 	protected Group irrelevantGroup;
-	protected String testContentType = "application/json";
+	protected Company testCompany;
 	protected Group testGroup;
-	protected Locale testLocale;
-	protected String testUserNameAndPassword = "test@liferay.com:test";
-
-	private Http.Options _createHttpOptions() {
-		Http.Options options = new Http.Options();
-
-		options.addHeader("Accept", "application/json");
-		options.addHeader(
-			"Accept-Language", LocaleUtil.toW3cLanguageId(testLocale));
-
-		String encodedTestUserNameAndPassword = Base64.encode(
-			testUserNameAndPassword.getBytes());
-
-		options.addHeader(
-			"Authorization", "Basic " + encodedTestUserNameAndPassword);
-
-		options.addHeader("Content-Type", testContentType);
-
-		return options;
-	}
-
-	private String _toJSON(Map<String, String> map) {
-		if (map == null) {
-			return "null";
-		}
-
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("{");
-
-		Set<Map.Entry<String, String>> set = map.entrySet();
-
-		Iterator<Map.Entry<String, String>> iterator = set.iterator();
-
-		while (iterator.hasNext()) {
-			Map.Entry<String, String> entry = iterator.next();
-
-			sb.append("\"" + entry.getKey() + "\": ");
-
-			if (entry.getValue() == null) {
-				sb.append("null");
-			}
-			else {
-				sb.append("\"" + entry.getValue() + "\"");
-			}
-
-			if (iterator.hasNext()) {
-				sb.append(", ");
-			}
-		}
-
-		sb.append("}");
-
-		return sb.toString();
-	}
-
-	private String _toPath(String template, Object... values) {
-		if (ArrayUtil.isEmpty(values)) {
-			return template;
-		}
-
-		for (int i = 0; i < values.length; i++) {
-			template = template.replaceFirst(
-				"\\{.*?\\}", String.valueOf(values[i]));
-		}
-
-		return template;
-	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		BaseDataDefinitionResourceTestCase.class);
@@ -1284,8 +1076,7 @@ public abstract class BaseDataDefinitionResourceTestCase {
 	private static DateFormat _dateFormat;
 
 	@Inject
-	private DataDefinitionResource _dataDefinitionResource;
-
-	private URL _resourceURL;
+	private com.liferay.data.engine.rest.resource.v1_0.DataDefinitionResource
+		_dataDefinitionResource;
 
 }

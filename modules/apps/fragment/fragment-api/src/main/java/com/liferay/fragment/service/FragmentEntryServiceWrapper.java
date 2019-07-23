@@ -130,6 +130,20 @@ public class FragmentEntryServiceWrapper
 	}
 
 	@Override
+	public com.liferay.fragment.model.FragmentEntry addFragmentEntry(
+			long groupId, long fragmentCollectionId, String fragmentEntryKey,
+			String name, String css, String html, String js,
+			String configuration, long previewFileEntryId, int type, int status,
+			com.liferay.portal.kernel.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _fragmentEntryService.addFragmentEntry(
+			groupId, fragmentCollectionId, fragmentEntryKey, name, css, html,
+			js, configuration, previewFileEntryId, type, status,
+			serviceContext);
+	}
+
+	@Override
 	public com.liferay.fragment.model.FragmentEntry copyFragmentEntry(
 			long groupId, long fragmentEntryId, long fragmentCollectionId,
 			com.liferay.portal.kernel.service.ServiceContext serviceContext)
@@ -340,6 +354,12 @@ public class FragmentEntryServiceWrapper
 		return _fragmentEntryService.updateFragmentEntry(fragmentEntryId, name);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #updateFragmentEntry(long, String, String, String,
+	 String, String, int)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry updateFragmentEntry(
 			long fragmentEntryId, String name, String css, String html,
@@ -350,6 +370,12 @@ public class FragmentEntryServiceWrapper
 			fragmentEntryId, name, css, html, js, status);
 	}
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #updateFragmentEntry(long, String, String, String,
+	 String, String, long, int)}
+	 */
+	@Deprecated
 	@Override
 	public com.liferay.fragment.model.FragmentEntry updateFragmentEntry(
 			long fragmentEntryId, String name, String css, String html,
@@ -358,6 +384,28 @@ public class FragmentEntryServiceWrapper
 
 		return _fragmentEntryService.updateFragmentEntry(
 			fragmentEntryId, name, css, html, js, previewFileEntryId, status);
+	}
+
+	@Override
+	public com.liferay.fragment.model.FragmentEntry updateFragmentEntry(
+			long fragmentEntryId, String name, String css, String html,
+			String js, String configuration, int status)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _fragmentEntryService.updateFragmentEntry(
+			fragmentEntryId, name, css, html, js, configuration, status);
+	}
+
+	@Override
+	public com.liferay.fragment.model.FragmentEntry updateFragmentEntry(
+			long fragmentEntryId, String name, String css, String html,
+			String js, String configuration, long previewFileEntryId,
+			int status)
+		throws com.liferay.portal.kernel.exception.PortalException {
+
+		return _fragmentEntryService.updateFragmentEntry(
+			fragmentEntryId, name, css, html, js, configuration,
+			previewFileEntryId, status);
 	}
 
 	@Override

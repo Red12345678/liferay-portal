@@ -89,6 +89,7 @@ public class DefaultAssetDisplayPageFriendlyURLResolver
 			_getInfoDisplayObjectProvider(journalArticle);
 
 		if (Validator.isNull(journalArticle.getLayoutUuid()) &&
+			(infoDisplayObjectProvider != null) &&
 			AssetDisplayPageHelper.hasAssetDisplayPage(
 				groupId, infoDisplayObjectProvider.getClassNameId(),
 				infoDisplayObjectProvider.getClassPK(),
@@ -102,11 +103,11 @@ public class DefaultAssetDisplayPageFriendlyURLResolver
 		HttpServletRequest httpServletRequest =
 			(HttpServletRequest)requestContext.get("request");
 
-		Locale locale = _portal.getLocale(httpServletRequest);
-
 		return _getBasicLayoutURL(
 			groupId, privateLayout, mainPath, friendlyURL, params,
-			requestContext, journalArticle.getUrlTitle(locale), journalArticle);
+			requestContext,
+			journalArticle.getUrlTitle(_portal.getLocale(httpServletRequest)),
+			journalArticle);
 	}
 
 	@Override
@@ -123,6 +124,7 @@ public class DefaultAssetDisplayPageFriendlyURLResolver
 			_getInfoDisplayObjectProvider(journalArticle);
 
 		if (Validator.isNull(journalArticle.getLayoutUuid()) &&
+			(infoDisplayObjectProvider != null) &&
 			AssetDisplayPageHelper.hasAssetDisplayPage(
 				groupId, infoDisplayObjectProvider.getClassNameId(),
 				infoDisplayObjectProvider.getClassPK(),
@@ -269,6 +271,10 @@ public class DefaultAssetDisplayPageFriendlyURLResolver
 
 		InfoDisplayObjectProvider infoDisplayObjectProvider =
 			_getInfoDisplayObjectProvider(journalArticle);
+
+		if (infoDisplayObjectProvider == null) {
+			return layoutActualURL;
+		}
 
 		String keywords = infoDisplayObjectProvider.getKeywords(locale);
 

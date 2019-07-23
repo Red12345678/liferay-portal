@@ -135,7 +135,7 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 	</aui:form>
 
 	<div class="container-fluid-1280 ddm-form-instance-settings hide" id="<portlet:namespace />settings">
-		<%= request.getAttribute(DDMWebKeys.DYNAMIC_DATA_MAPPING_FORM_HTML) %>
+		<%= ddmFormAdminDisplayContext.serializeSettingsForm() %>
 	</div>
 </div>
 
@@ -206,12 +206,14 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 							saved: <%= formInstance != null %>,
 							showPublishAlert: <%= ddmFormAdminDisplayContext.isShowPublishAlert() %>,
 							spritemap: Liferay.DDM.FormSettings.spritemap,
-							strings: Liferay.DDM.FormSettings.strings
+							strings: Liferay.DDM.FormSettings.strings,
+							view: 'formBuilder'
 						},
 						'#<portlet:namespace />-container'
 					);
 				},
 				function(error) {
+					throw error;
 				}
 			);
 		}
@@ -285,15 +287,7 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 							label: '<liferay-ui:message key="done" />',
 							on: {
 								click: function() {
-									var ddmForm = Liferay.component('settingsDDMForm');
-
-									ddmForm.validate(
-										function(hasErrors) {
-											if (!hasErrors) {
-												Liferay.Util.getWindow('<portlet:namespace />settingsModal').hide();
-											}
-										}
-									);
+									Liferay.Util.getWindow('<portlet:namespace />settingsModal').hide();
 								}
 							}
 						}
@@ -301,6 +295,7 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 					width: 720
 				},
 				id: '<portlet:namespace />settingsModal',
+				stack: false,
 				title: '<liferay-ui:message key="form-settings" />'
 			},
 			function(dialogWindow) {

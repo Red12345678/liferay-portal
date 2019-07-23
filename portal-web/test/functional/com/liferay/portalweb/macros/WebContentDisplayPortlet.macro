@@ -1,4 +1,5 @@
 definition {
+
 	macro configureScopePG {
 		Portlet.gotoPortletOptions(
 			portletName = "${portletName}",
@@ -16,6 +17,8 @@ definition {
 	}
 
 	macro configureSetupPG {
+		Pause(locator1 = "3000");
+
 		if (isSet(userToolNameList)) {
 			SelectFrame(locator1 = "IFrame#DIALOG");
 
@@ -167,7 +170,7 @@ definition {
 
 		SelectFrame(value1 = "relative=top");
 
-		SelectFrame(locator1 = "IFrame#DIALOG");
+		SelectFrame.selectSecondFrame(locator1 = "IFrame#DIALOG");
 
 		var searchTerm = "${webContentTitle}";
 
@@ -226,7 +229,7 @@ definition {
 		SelectFrame(value1 = "relative=top");
 	}
 
-	macro selectParentSiteWebContent {
+	macro selectOtherSiteWebContent {
 		Portlet.gotoPortletOptions(
 			portletName = "Web Content Display",
 			portletOption = "Configuration");
@@ -243,7 +246,7 @@ definition {
 
 		Click(locator1 = "Dropdown#FILTER_AND_ORDER");
 
-		MenuItem.click(menuItem = "${parentSiteName}");
+		MenuItem.click(menuItem = "${otherSiteName}");
 
 		var key_webContentTitle = "${webContentTitle}";
 
@@ -263,9 +266,16 @@ definition {
 	}
 
 	macro selectWebContent {
-		Portlet.gotoPortletOptions(
-			portletName = "Web Content Display",
-			portletOption = "Configuration");
+		if ("${contentPage}" == "true") {
+			Click.clickNoWaitForVisible(
+				key_portletName = "Web Content Display",
+				locator1 = "PageEditor#WIDGETS_OPTIONS_ICON");
+		}
+		else {
+			Portlet.gotoPortletOptions(
+				portletName = "Web Content Display",
+				portletOption = "Configuration");
+		}
 
 		SelectFrame(locator1 = "IFrame#DIALOG");
 
@@ -297,6 +307,10 @@ definition {
 		PortletEntry.save();
 
 		SelectFrame(value1 = "relative=top");
+
+		if ("${contentPage}" == "true") {
+			Click(locator1 = "Icon#CLOSE");
+		}
 	}
 
 	macro undoMoveToRecycleBin {
@@ -406,8 +420,6 @@ definition {
 			AssertTextEquals.assertPartialText(
 				locator1 = "WCD#DOCUMENT_CONVERSION_TYPE",
 				value1 = "${fileType}");
-
-			AssertElementPresent(locator1 = "WCD#DOCUMENT_CONVERSION_TYPE_ICON");
 		}
 	}
 
@@ -422,4 +434,5 @@ definition {
 			locator1 = "Message#ERROR_3",
 			value1 = "The web content article ${webContentTitle} was moved to the Recycle Bin");
 	}
+
 }

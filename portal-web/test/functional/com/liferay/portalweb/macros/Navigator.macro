@@ -1,4 +1,5 @@
 definition {
+
 	macro _gotoPage {
 		var key_pageName = "${pageName}";
 		var count = "0";
@@ -139,11 +140,7 @@ definition {
 	}
 
 	macro gotoPersonalSite {
-		Click(locator1 = "UserBar#USER_AVATAR_IMAGE");
-
-		var key_dropdownItem = "My Sites";
-
-		Click(locator1 = "UserBar#USER_AVATAR_DROPDOWN_ITEM");
+		UserBar.gotoDropdownItem(dropdownItem = "My Profile");
 	}
 
 	macro gotoPrivateSitePage {
@@ -303,4 +300,5 @@ definition {
 	macro selectSpecificWindow {
 		SelectWindow(locator1 = "title=${windowTitle}");
 	}
+
 }

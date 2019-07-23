@@ -17,22 +17,16 @@ package com.liferay.headless.delivery.resource.v1_0.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.headless.delivery.client.dto.v1_0.BlogPostingImage;
-import com.liferay.headless.delivery.client.serdes.v1_0.BlogPostingImageSerDes;
+import com.liferay.headless.delivery.client.http.HttpInvoker;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.odata.entity.EntityField;
-import com.liferay.portal.vulcan.multipart.BinaryFile;
-import com.liferay.portal.vulcan.multipart.MultipartBody;
+import com.liferay.portal.kernel.util.FileUtil;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -58,7 +52,8 @@ public class BlogPostingImageResourceTest
 		blogPostingImage.setTitle("*,?");
 
 		try {
-			testPostSiteBlogPostingImage_addBlogPostingImage(blogPostingImage);
+			testPostSiteBlogPostingImage_addBlogPostingImage(
+				blogPostingImage, getMultipartFiles());
 
 			Assert.fail();
 		}
@@ -74,38 +69,41 @@ public class BlogPostingImageResourceTest
 	}
 
 	@Override
-	protected List<EntityField> getEntityFields(EntityField.Type type)
+	protected void assertValid(
+			BlogPostingImage blogPostingImage, Map<String, File> multipartFiles)
 		throws Exception {
 
-		List<EntityField> entityFields = super.getEntityFields(type);
-
-		Stream<EntityField> stream = entityFields.stream();
-
-		return stream.filter(
-			entityField -> !StringUtil.equals(
-				"fileExtension", entityField.getName())
-		).collect(
-			Collectors.toList()
-		);
+		Assert.assertEquals(
+			new String(FileUtil.getBytes(multipartFiles.get("file"))),
+			_read("http://localhost:8080" + blogPostingImage.getContentUrl()));
 	}
 
 	@Override
-	protected MultipartBody toMultipartBody(BlogPostingImage blogPostingImage) {
-		testContentType = "multipart/form-data;boundary=PART";
+	protected String[] getIgnoredEntityFieldNames() {
+		return new String[] {"fileExtension"};
+	}
 
-		Map<String, BinaryFile> binaryFileMap = new HashMap<>();
+	@Override
+	protected Map<String, File> getMultipartFiles() throws Exception {
+		Map<String, File> files = new HashMap<>();
 
 		String randomString = RandomTestUtil.randomString();
 
-		binaryFileMap.put(
-			"file",
-			new BinaryFile(
-				testContentType, RandomTestUtil.randomString(),
-				new ByteArrayInputStream(randomString.getBytes()), 0));
+		files.put("file", FileUtil.createTempFile(randomString.getBytes()));
 
-		return MultipartBody.of(
-			binaryFileMap, __ -> null,
-			BlogPostingImageSerDes.toMap(blogPostingImage));
+		return files;
+	}
+
+	private String _read(String url) throws Exception {
+		HttpInvoker httpInvoker = HttpInvoker.newHttpInvoker();
+
+		httpInvoker.httpMethod(HttpInvoker.HttpMethod.GET);
+		httpInvoker.path(url);
+		httpInvoker.userNameAndPassword("test@liferay.com:test");
+
+		HttpInvoker.HttpResponse httpResponse = httpInvoker.invoke();
+
+		return httpResponse.getContent();
 	}
 
 }

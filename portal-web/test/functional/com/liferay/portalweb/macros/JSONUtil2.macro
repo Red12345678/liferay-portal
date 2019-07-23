@@ -12,10 +12,12 @@ definition {
 
 		if ("${bool}" == "TRUE") {
 			echo("JSON array  ${key}' already added, returning original JSON");
-		} else {
+		}
+		else {
 			if ("${JSON}" == "{}") {
 				var JSON = '''{"${key}" : []}''';
-			} else {
+			}
+			else {
 				var JSON = StringUtil.regexReplaceFirst("${JSON}","(.*)\}","$1, "${key}": []}");
 			}
 		}
@@ -47,7 +49,8 @@ definition {
 			if ("${temp}" == "[]") {
 				//if empty no need to add comma
 				var JSON = StringUtil.regexReplaceFirst("${JSON}","(\"${key}\"\s*:\s*)\[\]", "$1["${value}"]");
-			} else {
+			}
+			else {
 				var JSON = StringUtil.regexReplaceFirst("${JSON}","(\"${key}\"\s*:\s*)(\[.*?)\]", "$1$2, "${value}"]");
 			}
 		}
@@ -71,11 +74,40 @@ definition {
 
 		if ("${JSON}" == "{}") {
 			var JSON = '''{"${key}" : ${value}}''';
-		} else {
+		}
+		else {
 			var JSON = StringUtil.regexReplaceFirst("${JSON}","(.*)\}","$1, "${key}": ${value}}");
 		}
 
 		return "${JSON}";
+	}
+
+	@summary = "Helper function to convert a localized list into JSON"
+	macro _convertLocalizedListToMap {
+		// Create list using '${listMap'
+
+		var localizedMap = "{";
+
+		for (var i : list "${listMap}") {
+			var locale = StringUtil.extractFirst("${i}", ":");
+			var translated = StringUtil.extractLast("${i}", ":");
+
+			var localizedMap = '''${localizedMap}"${locale}":"${translated}",''';
+		}
+
+		// Replace last comma with }
+
+		var localizedMap = RegexUtil.replace("${localizedMap}", "(.*)(?=,)", "1");
+		var localizedMap = "${localizedMap}}";
+
+		return "${localizedMap}";
+	}
+
+	@summary = "checks if either A or B is set, but not both"
+	macro _exclusiveOrCheck {
+		if (((isSet(A)) && (isSet(B))) || ((!(isSet(B))) && (!(isSet(A))))) {
+			fail("${failMessage}");
+		}
 	}
 
 	macro _getScopeGroupId {
@@ -98,7 +130,8 @@ definition {
 
 		if ("${temp}" == "${key}") {
 			return "TRUE";
-		} else {
+		}
+		else {
 			return "FALSE";
 		}
 	}
@@ -109,8 +142,10 @@ definition {
 
 		if ("${temp}" == "${key}") {
 			return "TRUE";
-		} else {
+		}
+		else {
 			return "FALSE";
 		}
 	}
+
 }

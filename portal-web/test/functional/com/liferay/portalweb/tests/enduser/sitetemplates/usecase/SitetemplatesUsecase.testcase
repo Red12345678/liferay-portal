@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.component.names = "Site Templates";
@@ -294,6 +295,63 @@ definition {
 			permissionDefinitionKey = "CONTENT_PERMISSIONS_VIEW_CHECKBOX",
 			permissionFlagged = "false",
 			roleTitle = "Guest");
+	}
+
+	@description = "This is a use case for LPS-75802"
+	@priority = "5"
+	test PublishSiteCreatedBasedOnASiteTemplate {
+		property osgi.app.includes = "frontend-theme-porygon";
+
+		ProductMenu.gotoPortlet(
+			category = "Sites",
+			panel = "Control Panel",
+			portlet = "Site Templates");
+
+		SiteTemplates.addCP(
+			siteTemplateActive = "Yes",
+			siteTemplateName = "Site Template Name");
+
+		LexiconEntry.gotoEntryMenuItem(
+			menuItem = "Manage",
+			rowEntry = "Site Template Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Site Builder",
+			panel = "Site Administration",
+			portlet = "Pages");
+
+		Page.changeCurrentTheme(
+			pageName = "Home",
+			themeName = "Porygon");
+
+		ProductMenu.gotoPortlet(
+			category = "Sites",
+			panel = "Control Panel",
+			portlet = "Sites");
+
+		Site.addCP(
+			siteName = "Site Name",
+			siteTemplateActive = "Yes",
+			siteTemplateName = "Site Template Name",
+			siteType = "Site Template",
+			uncheckPropagation = "true");
+
+		Navigator.openSiteURL(siteName = "Site Name");
+
+		ProductMenu.gotoPortlet(
+			category = "Publishing",
+			panel = "Site Administration",
+			portlet = "Staging");
+
+		Staging.activateStagingCP(siteName = "Site Name");
+
+		Navigator.gotoStagedSitePage(
+			pageName = "Home",
+			siteName = "Site Name");
+
+		Staging.gotoPublishToLive();
+
+		Staging.publishToLive();
 	}
 
 	@priority = "3"
@@ -749,4 +807,5 @@ definition {
 			permissionFlagged = "true",
 			roleTitle = "Guest");
 	}
+
 }

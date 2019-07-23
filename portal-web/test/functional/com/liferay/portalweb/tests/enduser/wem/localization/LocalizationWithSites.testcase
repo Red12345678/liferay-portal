@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Localization";
@@ -486,7 +487,7 @@ definition {
 		Alert.closePortalLocalizationWarning();
 
 		ProductMenu.gotoPortlet(
-			category = "Generador de sitios",
+			category = "Constructor del sitio",
 			panel = "Site Administration",
 			portlet = "Páginas del sitio web");
 
@@ -507,7 +508,7 @@ definition {
 		Alert.closePortalLocalizationWarning();
 
 		ProductMenu.gotoPortlet(
-			category = "Generador de sitios",
+			category = "Constructor del sitio",
 			panel = "Site Administration",
 			portlet = "Páginas del sitio web");
 
@@ -915,7 +916,7 @@ definition {
 			siteName = "Site Name");
 
 		ProductMenu.gotoPortlet(
-			category = "Generador de sitios",
+			category = "Constructor del sitio",
 			panel = "Site Administration",
 			portlet = "Páginas del sitio web");
 
@@ -929,4 +930,5 @@ definition {
 			fieldName = "Nombre",
 			unavailableLanguageList = "en_US");
 	}
+
 }

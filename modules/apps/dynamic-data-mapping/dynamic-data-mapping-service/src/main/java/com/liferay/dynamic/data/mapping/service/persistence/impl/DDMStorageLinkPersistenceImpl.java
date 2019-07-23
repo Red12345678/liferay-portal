@@ -29,8 +29,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -45,7 +44,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -2469,9 +2467,7 @@ public class DDMStorageLinkPersistenceImpl
 			structureVersionIds = new long[0];
 		}
 		else if (structureVersionIds.length > 1) {
-			structureVersionIds = ArrayUtil.unique(structureVersionIds);
-
-			Arrays.sort(structureVersionIds);
+			structureVersionIds = ArrayUtil.sortedUnique(structureVersionIds);
 		}
 
 		if (structureVersionIds.length == 1) {
@@ -2669,9 +2665,7 @@ public class DDMStorageLinkPersistenceImpl
 			structureVersionIds = new long[0];
 		}
 		else if (structureVersionIds.length > 1) {
-			structureVersionIds = ArrayUtil.unique(structureVersionIds);
-
-			Arrays.sort(structureVersionIds);
+			structureVersionIds = ArrayUtil.sortedUnique(structureVersionIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -2896,7 +2890,7 @@ public class DDMStorageLinkPersistenceImpl
 
 		ddmStorageLink.setUuid(uuid);
 
-		ddmStorageLink.setCompanyId(companyProvider.getCompanyId());
+		ddmStorageLink.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return ddmStorageLink;
 	}
@@ -3590,9 +3584,6 @@ public class DDMStorageLinkPersistenceImpl
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
-	@ServiceReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@ServiceReference(type = EntityCache.class)
 	protected EntityCache entityCache;

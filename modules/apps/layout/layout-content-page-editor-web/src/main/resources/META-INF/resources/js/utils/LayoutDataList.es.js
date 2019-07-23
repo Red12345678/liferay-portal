@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {getFragmentRowIndex} from './FragmentsEditorGetUtils.es';
 
 /**
@@ -13,20 +27,17 @@ function containsFragmentEntryLinkId(
 	fragmentEntryLinkId,
 	skipSegmentsExperienceId
 ) {
-	return LayoutDataList
-		.filter(
-			function _avoidCurrentExperienceLayoutDataItem(LayoutDataItem) {
-				return LayoutDataItem.segmentsExperienceId !== skipSegmentsExperienceId;
-			}
-		).some(
-			function _getFragmentRowIndexWrapper(LayoutDataItem) {
-				const index = getFragmentRowIndex(
-					LayoutDataItem.layoutData.structure,
-					fragmentEntryLinkId
-				);
-				return index !== -1;
-			}
+	return LayoutDataList.filter(function _avoidCurrentExperienceLayoutDataItem(
+		LayoutDataItem
+	) {
+		return LayoutDataItem.segmentsExperienceId !== skipSegmentsExperienceId;
+	}).some(function _getFragmentRowIndexWrapper(LayoutDataItem) {
+		const index = getFragmentRowIndex(
+			LayoutDataItem.layoutData.structure,
+			fragmentEntryLinkId
 		);
+		return index !== -1;
+	});
 }
 
 /**
@@ -42,7 +53,4 @@ function getEmptyLayoutData() {
 	};
 }
 
-export {
-	containsFragmentEntryLinkId,
-	getEmptyLayoutData
-};
+export {containsFragmentEntryLinkId, getEmptyLayoutData};

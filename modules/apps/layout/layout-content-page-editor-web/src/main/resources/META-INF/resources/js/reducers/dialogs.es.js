@@ -1,4 +1,24 @@
-import {HIDE_MAPPING_DIALOG, HIDE_MAPPING_TYPE_DIALOG, OPEN_ASSET_TYPE_DIALOG, OPEN_MAPPING_FIELDS_DIALOG, SELECT_MAPPEABLE_TYPE} from '../actions/actions.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import {
+	HIDE_MAPPING_DIALOG,
+	HIDE_MAPPING_TYPE_DIALOG,
+	OPEN_ASSET_TYPE_DIALOG,
+	OPEN_MAPPING_FIELDS_DIALOG,
+	SELECT_MAPPEABLE_TYPE
+} from '../actions/actions.es';
 import {setIn} from '../utils/FragmentsEditorUpdateUtils.es';
 
 /**
@@ -57,12 +77,12 @@ function openMappingFieldsDialogReducer(state, action) {
 			action.fragmentEntryLinkId
 		);
 
-		if (nextState.selectedMappingTypes &&
-			nextState.selectedMappingTypes.type) {
-
+		if (
+			nextState.selectedMappingTypes &&
+			nextState.selectedMappingTypes.type
+		) {
 			nextState = setIn(nextState, ['selectMappingDialogVisible'], true);
-		}
-		else {
+		} else {
 			nextState = setIn(
 				nextState,
 				['selectMappingTypeDialogVisible'],
@@ -85,47 +105,44 @@ function openMappingFieldsDialogReducer(state, action) {
  * @review
  */
 function selectMappeableTypeReducer(state, action) {
-	return new Promise(
-		resolve => {
-			let nextState = state;
+	return new Promise(resolve => {
+		let nextState = state;
 
-			if (action.type === SELECT_MAPPEABLE_TYPE) {
-				_selectMappingType(
-					nextState.classPK,
-					nextState.portletNamespace,
-					action.selectedMappingSubtypeId,
-					action.selectedMappingTypeId,
-					nextState.updateLayoutPageTemplateEntryAssetTypeURL
-				)
-					.then(
-						() => {
-							nextState = setIn(
-								nextState,
-								['selectedMappingTypes'],
-								action.mappingTypes
-							);
-
-							if (
-								nextState.selectMappingDialogFragmentEntryLinkId &&
-								nextState.selectMappingDialogEditableId
-							) {
-								nextState = setIn(nextState, ['selectMappingDialogVisible'], true);
-							}
-
-							resolve(nextState);
-						}
-					)
-					.catch(
-						() => {
-							resolve(nextState);
-						}
+		if (action.type === SELECT_MAPPEABLE_TYPE) {
+			_selectMappingType(
+				nextState.classPK,
+				nextState.portletNamespace,
+				action.selectedMappingSubtypeId,
+				action.selectedMappingTypeId,
+				nextState.updateLayoutPageTemplateEntryAssetTypeURL
+			)
+				.then(() => {
+					nextState = setIn(
+						nextState,
+						['selectedMappingTypes'],
+						action.mappingTypes
 					);
-			}
-			else {
-				resolve(nextState);
-			}
+
+					if (
+						nextState.selectMappingDialogFragmentEntryLinkId &&
+						nextState.selectMappingDialogEditableId
+					) {
+						nextState = setIn(
+							nextState,
+							['selectMappingDialogVisible'],
+							true
+						);
+					}
+
+					resolve(nextState);
+				})
+				.catch(() => {
+					resolve(nextState);
+				});
+		} else {
+			resolve(nextState);
 		}
-	);
+	});
 }
 
 /**
@@ -184,16 +201,11 @@ function _selectMappingType(
 	formData.append(`${portletNamespace}classNameId`, selectedMappingTypeId);
 	formData.append(`${portletNamespace}classPK`, classPK);
 
-	return fetch(
-		updateLayoutPageTemplateEntryAssetTypeURL,
-		{
-			body: formData,
-			credentials: 'include',
-			method: 'POST'
-		}
-	).then(
-		response => response.json()
-	);
+	return fetch(updateLayoutPageTemplateEntryAssetTypeURL, {
+		body: formData,
+		credentials: 'include',
+		method: 'POST'
+	}).then(response => response.json());
 }
 
 export {

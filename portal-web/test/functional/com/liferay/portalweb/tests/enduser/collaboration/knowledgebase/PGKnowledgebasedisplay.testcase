@@ -1,35 +1,25 @@
 @component-name = "portal-knowledge-base"
 definition {
+
 	property custom.properties = "default.layout.template.id=1_column";
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Knowledge Base";
-	var pageName = "Knowledge Base Display Page";
-	var portletName = "Knowledge Base Display";
 
 	setUp {
 		TestCase.setUpPortalInstance();
 
 		User.firstLoginPG();
 
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Knowledge Base Display Page");
 
-		SitePages.addPublicPage(
-			pageName = "Knowledge Base Display Page",
-			sitePageType = "Widget Page");
-
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Knowledge Base Display Page",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
-
-		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
-
-		Portlet.addPG(portletName = "Knowledge Base Display");
+		JSONLayout.addWidgetToPublicLayout(
+			column = "1",
+			groupName = "Guest",
+			layoutName = "Knowledge Base Display Page",
+			widgetName = "Knowledge Base Display");
 	}
 
 	tearDown {
@@ -51,12 +41,7 @@ definition {
 
 	@priority = "4"
 	test AddChildArticle {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -80,12 +65,7 @@ definition {
 
 	@priority = "3"
 	test AddKBArticleContentNull {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "",
@@ -99,12 +79,7 @@ definition {
 
 	@priority = "4"
 	test AddKBArticleSuggestion {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -130,12 +105,7 @@ definition {
 
 	@priority = "3"
 	test AddKBArticleTitleNull {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCPWithInvalidTitle(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -148,12 +118,7 @@ definition {
 
 	@priority = "4"
 	test AddMultipleKBArticleSuggestions {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		for (var articleCount : list "1,2") {
 			KBArticle.addCP(
@@ -187,12 +152,7 @@ definition {
 
 	@priority = "4"
 	test CancelAddChildArticle {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -216,23 +176,13 @@ definition {
 
 	@priority = "3"
 	test CannotViewDuplicateBreadcrumbsWhenAddingParentArticle {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content Parent",
 			kbArticleTitle = "Knowledge Base Article Title Parent");
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content Child",
@@ -253,12 +203,7 @@ definition {
 
 	@priority = "4"
 	test DeleteChildArticle {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -284,12 +229,7 @@ definition {
 
 	@priority = "4"
 	test DeleteKBArticleViaKBDisplay {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -304,13 +244,7 @@ definition {
 
 	@priority = "4"
 	test EditChildArticle {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
-
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Parent Content 1",
 			kbArticleTitle = "Knowledge Base Article Parent Title 1");
@@ -355,12 +289,7 @@ definition {
 
 	@priority = "4"
 	test EditKBArticle {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -390,12 +319,7 @@ definition {
 
 	@priority = "4"
 	test EditKBArticleDisplaySettingsViaKBDisplayConfiguration {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -420,12 +344,7 @@ definition {
 
 	@priority = "4"
 	test RateKBArticleWithoutSuggestions {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -433,31 +352,22 @@ definition {
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
-		KBArticle.rateArticlePG(
-			articleVoteCount = "1",
-			kbArticleTitle = "Knowledge Base Article Title",
-			rateUp = "true");
+		Ratings.rate(ratingResult = "Thumb Up");
+
+		Ratings.viewRating(
+			ratingResult = "Thumb Up",
+			voteCount = "1");
 	}
 
 	@priority = "4"
 	test SelectParentArticleViaKBDisplay {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Parent Content 1",
 			kbArticleTitle = "Knowledge Base Article Parent Title 1");
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Parent Content 1 Child 1",
@@ -478,23 +388,13 @@ definition {
 
 	@priority = "4"
 	test ViewEditedKBArticleTitleHistory {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "KB Article Content",
 			kbArticleTitle = "KB Article Title");
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.editCP(
 			kbArticleContentEdit = "KB Article Content Edit",
@@ -513,12 +413,7 @@ definition {
 
 	@priority = "4"
 	test ViewKBArticleSuggestionsWorkflow {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article1 Content",
@@ -562,12 +457,7 @@ definition {
 
 	@priority = "4"
 	test ViewKBArticleViaDefaultFriendlyURL {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -592,12 +482,7 @@ definition {
 
 	@priority = "3"
 	test ViewKBArticleViaNavigationLinks {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		for (var kbCount : list "1,2,3") {
 			KBArticle.addCP(
@@ -658,12 +543,7 @@ definition {
 
 	@priority = "4"
 	test ViewKBArticleViaUserDefinedFriendlyURL {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -689,23 +569,13 @@ definition {
 
 	@priority = "3"
 	test ViewKBArticleWithBlogsEntryRelatedAsset {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Blogs");
+		BlogsNavigator.openBlogsAdmin(siteURLKey = "guest");
 
 		Blogs.addEntry(
 			entryContent = "Blogs Entry Content",
 			entryTitle = "Blogs Entry Title");
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			assetTitle = "Blogs Entry Title",
@@ -734,12 +604,7 @@ definition {
 	test ViewKBArticleWithEditedStarRatings {
 		property test.name.skip.portal.instance = "PGKnowledgebasedisplay#ViewKBArticleWithEditedStarRatings";
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -779,12 +644,7 @@ definition {
 
 	@priority = "4"
 	test ViewKBArticleWithKBChildArticleHierarchyNavigation {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		for (var articleCount : list "1,2,3") {
 			KBArticle.addCP(
@@ -845,12 +705,7 @@ definition {
 
 		KBArticle.viewDefaultViaKBDisplayPG();
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -867,12 +722,7 @@ definition {
 	test ViewKBArticleWithStarRatings {
 		property test.name.skip.portal.instance = "PGKnowledgebasedisplay#ViewKBArticleWithStarRatings";
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -884,10 +734,11 @@ definition {
 			kbArticleContent = "Knowledge Base Article Content",
 			kbArticleTitle = "Knowledge Base Article Title");
 
-		KBArticle.rateArticlePG(
-			articleVoteCount = "1",
-			kbArticleTitle = "Knowledge Base Article Title",
-			rateUp = "true");
+		Ratings.rate(ratingResult = "Thumb Up");
+
+		Ratings.viewRating(
+			ratingResult = "Thumb Up",
+			voteCount = "1");
 
 		PortalSettings.gotoConfiguration(
 			configurationCategory = "Community Tools",
@@ -925,19 +776,12 @@ definition {
 
 		Navigator.gotoPage(pageName = "Knowledge Base Display Page");
 
-		KBArticle.rateArticlePG(
-			articleVoteCount = "1",
-			kbArticleTitle = "Knowledge Base Article Title");
+		Ratings.viewRating(voteCount = "1");
 	}
 
 	@priority = "3"
 	test ViewKBArticleWithXSSCodeInjectedTitle {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -945,12 +789,7 @@ definition {
 			kbArticleTitle = '''><img onerror="alert('xss')" src="xx" /><''',
 			specialCharacters = "true");
 
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -967,12 +806,7 @@ definition {
 
 	@priority = "4"
 	test ViewKBChildArticleViaNextLink {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Parent Content 1",
@@ -994,12 +828,7 @@ definition {
 
 	@priority = "3"
 	test ViewNoDuplicateKBSuggestionAfterRefresh {
-		Navigator.openURL();
-
-		ProductMenu.gotoPortlet(
-			category = "Content &amp; Data",
-			panel = "Site Administration",
-			portlet = "Knowledge Base");
+		KBAdmin.openKBAdmin(siteURLKey = "guest");
 
 		KBArticle.addCP(
 			kbArticleContent = "Knowledge Base Article Content",
@@ -1024,4 +853,5 @@ definition {
 			kbThereAreSuggestionsLink = "There is one suggestion. (1 Pending)",
 			status = "New");
 	}
+
 }

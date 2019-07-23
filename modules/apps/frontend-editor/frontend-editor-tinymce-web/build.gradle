@@ -55,7 +55,7 @@ clean {
 }
 
 dependencies {
-	compileOnly group: "com.liferay", name: "com.liferay.frontend.editor.api", version: "2.0.0"
+	compileOnly group: "com.liferay", name: "com.liferay.frontend.editor.api", version: "4.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.editor.taglib", version: "2.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.frontend.taglib", version: "4.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.item.selector.api", version: "4.0.0"

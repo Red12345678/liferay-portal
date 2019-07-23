@@ -15,8 +15,10 @@
 package com.liferay.fragment.contributor;
 
 import com.liferay.fragment.model.FragmentEntry;
+import com.liferay.portal.kernel.util.ResourceBundleLoader;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.osgi.annotation.versioning.ProviderType;
@@ -37,5 +39,13 @@ public interface FragmentCollectionContributorTracker {
 		getFragmentCollectionContributors();
 
 	public Map<String, FragmentEntry> getFragmentEntries();
+
+	public default Map<String, FragmentEntry> getFragmentEntries(
+		Locale locale) {
+
+		return getFragmentEntries();
+	}
+
+	public ResourceBundleLoader getResourceBundleLoader();
 
 }

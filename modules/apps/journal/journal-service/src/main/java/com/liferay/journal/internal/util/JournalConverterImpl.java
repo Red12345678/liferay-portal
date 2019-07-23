@@ -138,14 +138,12 @@ public class JournalConverterImpl implements JournalConverter {
 
 		Element rootElement = document.addElement("root");
 
-		String availableLocales = getAvailableLocales(ddmFields);
-
-		rootElement.addAttribute("available-locales", availableLocales);
-
-		Locale defaultLocale = ddmFields.getDefaultLocale();
+		rootElement.addAttribute(
+			"available-locales", getAvailableLocales(ddmFields));
 
 		rootElement.addAttribute(
-			"default-locale", LocaleUtil.toLanguageId(defaultLocale));
+			"default-locale",
+			LocaleUtil.toLanguageId(ddmFields.getDefaultLocale()));
 
 		DDMFieldsCounter ddmFieldsCounter = new DDMFieldsCounter();
 
@@ -560,7 +558,7 @@ public class JournalConverterImpl implements JournalConverter {
 						uuid, groupId);
 				}
 
-				serializable = jsonObject.toString();
+				serializable = dynamicContentElement.getText();
 			}
 			catch (Exception e) {
 				return StringPool.BLANK;

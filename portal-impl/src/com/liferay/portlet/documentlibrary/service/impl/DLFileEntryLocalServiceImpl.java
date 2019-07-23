@@ -34,7 +34,6 @@ import com.liferay.document.library.kernel.model.DLFolderConstants;
 import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
 import com.liferay.document.library.kernel.store.DLStoreUtil;
 import com.liferay.document.library.kernel.util.DL;
-import com.liferay.document.library.kernel.util.DLFileVersionPolicy;
 import com.liferay.document.library.kernel.util.DLUtil;
 import com.liferay.document.library.kernel.util.DLValidatorUtil;
 import com.liferay.document.library.kernel.util.comparator.RepositoryModelModifiedDateComparator;
@@ -51,7 +50,6 @@ import com.liferay.expando.kernel.util.ExpandoBridgeUtil;
 import com.liferay.exportimport.kernel.lar.ExportImportThreadLocal;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.comment.CommentManagerUtil;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
@@ -68,11 +66,9 @@ import com.liferay.portal.kernel.increment.BufferedIncrement;
 import com.liferay.portal.kernel.increment.NumberIncrement;
 import com.liferay.portal.kernel.interval.IntervalActionProcessor;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.lock.ExpiredLockException;
 import com.liferay.portal.kernel.lock.InvalidLockException;
 import com.liferay.portal.kernel.lock.Lock;
 import com.liferay.portal.kernel.lock.LockManagerUtil;
-import com.liferay.portal.kernel.lock.NoSuchLockException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
@@ -85,7 +81,6 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.repository.event.RepositoryEventTrigger;
 import com.liferay.portal.kernel.repository.event.RepositoryEventType;
 import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexable;
@@ -121,6 +116,7 @@ import com.liferay.portal.util.RepositoryUtil;
 import com.liferay.portlet.documentlibrary.model.impl.DLFileEntryImpl;
 import com.liferay.portlet.documentlibrary.service.base.DLFileEntryLocalServiceBaseImpl;
 import com.liferay.portlet.documentlibrary.util.DLAppUtil;
+import com.liferay.portlet.documentlibrary.util.DLFileVersionPolicyImpl;
 
 import java.awt.image.RenderedImage;
 
@@ -180,8 +176,8 @@ public class DLFileEntryLocalServiceImpl
 
 		User user = userPersistence.findByPrimaryKey(userId);
 
-		folderId = dlFolderLocalService.getFolderId(
-			user.getCompanyId(), folderId);
+		folderId = DLFolderLocalServiceImpl.getFolderId(
+			dlFolderPersistence, user.getCompanyId(), folderId);
 
 		String name = String.valueOf(
 			counterLocalService.increment(DLFileEntry.class.getName()));
@@ -192,7 +188,8 @@ public class DLFileEntryLocalServiceImpl
 
 		if (fileEntryTypeId == -1) {
 			fileEntryTypeId =
-				dlFileEntryTypeLocalService.getDefaultFileEntryTypeId(folderId);
+				DLFileEntryTypeLocalServiceImpl.getDefaultFileEntryTypeId(
+					dlFolderPersistence, folderId);
 		}
 
 		validateFileEntryTypeId(
@@ -215,7 +212,7 @@ public class DLFileEntryLocalServiceImpl
 		DLFolder repositoryDLFolder = null;
 
 		if (repositoryId != groupId) {
-			Repository repository = repositoryLocalService.getRepository(
+			Repository repository = repositoryPersistence.findByPrimaryKey(
 				repositoryId);
 
 			repositoryDLFolder = dlFolderPersistence.findByPrimaryKey(
@@ -407,18 +404,11 @@ public class DLFileEntryLocalServiceImpl
 		throws PortalException {
 
 		if (Validator.isNotNull(lockUuid)) {
-			try {
-				Lock lock = LockManagerUtil.getLock(
-					DLFileEntry.class.getName(), fileEntryId);
+			Lock lock = LockManagerUtil.fetchLock(
+				DLFileEntry.class.getName(), fileEntryId);
 
-				if (!Objects.equals(lock.getUuid(), lockUuid)) {
-					throw new InvalidLockException("UUIDs do not match");
-				}
-			}
-			catch (ExpiredLockException | NoSuchLockException e) {
-				if (_log.isDebugEnabled()) {
-					_log.debug(e, e);
-				}
+			if ((lock != null) && !Objects.equals(lock.getUuid(), lockUuid)) {
+				throw new InvalidLockException("UUIDs do not match");
 			}
 		}
 
@@ -1285,7 +1275,10 @@ public class DLFileEntryLocalServiceImpl
 		long userId = PrincipalThreadLocal.getUserId();
 
 		for (DLFileVersion dlFileVersion : dlFileVersions) {
-			if (hasFileEntryLock(userId, dlFileVersion.getFileEntryId())) {
+			if (hasFileEntryLock(
+					userId, dlFileVersion.getFileEntryId(),
+					dlFileVersion.getFolderId())) {
+
 				return dlFileVersion.getFileEntry();
 			}
 		}
@@ -1502,7 +1495,12 @@ public class DLFileEntryLocalServiceImpl
 
 		DLFileEntry dlFileEntry = getFileEntry(fileEntryId);
 
-		long folderId = dlFileEntry.getFolderId();
+		return hasFileEntryLock(userId, fileEntryId, dlFileEntry.getFolderId());
+	}
+
+	@Override
+	public boolean hasFileEntryLock(
+		long userId, long fileEntryId, long folderId) {
 
 		boolean hasLock = LockManagerUtil.hasLock(
 			userId, DLFileEntry.class.getName(), fileEntryId);
@@ -1540,14 +1538,14 @@ public class DLFileEntryLocalServiceImpl
 
 	@Override
 	public boolean isFileEntryCheckedOut(long fileEntryId) {
-		DLFileVersion dlFileVersion = dlFileVersionPersistence.fetchByF_V(
+		int count = dlFileVersionPersistence.countByF_V(
 			fileEntryId, DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION);
 
-		if (dlFileVersion == null) {
-			return false;
+		if (count > 0) {
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	/**
@@ -1570,9 +1568,17 @@ public class DLFileEntryLocalServiceImpl
 		DLFileVersion latestDLFileVersion =
 			dlFileVersionLocalService.getLatestFileVersion(fileEntryId, false);
 
-		return dlFileVersionPolicy.isKeepFileVersionLabel(
-			lastDLFileVersion, latestDLFileVersion, majorVersion,
-			serviceContext);
+		DLFileVersionPolicyImpl dlFileVersionPolicyImpl =
+			new DLFileVersionPolicyImpl();
+
+		try {
+			return dlFileVersionPolicyImpl.isKeepFileVersionLabel(
+				lastDLFileVersion, latestDLFileVersion, majorVersion,
+				serviceContext);
+		}
+		finally {
+			dlFileVersionPolicyImpl.destroy();
+		}
 	}
 
 	/**
@@ -1591,11 +1597,6 @@ public class DLFileEntryLocalServiceImpl
 	@Override
 	public Lock lockFileEntry(long userId, long fileEntryId)
 		throws PortalException {
-
-		if (hasFileEntryLock(userId, fileEntryId)) {
-			return LockManagerUtil.getLock(
-				DLFileEntry.class.getName(), fileEntryId);
-		}
 
 		return LockManagerUtil.lock(
 			userId, DLFileEntry.class.getName(), fileEntryId, null, false,
@@ -1793,9 +1794,8 @@ public class DLFileEntryLocalServiceImpl
 					return;
 				}
 
-				Document document = indexer.getDocument(dlFileEntry);
-
-				indexableActionableDynamicQuery.addDocuments(document);
+				indexableActionableDynamicQuery.addDocuments(
+					indexer.getDocument(dlFileEntry));
 			});
 
 		indexableActionableDynamicQuery.performActions();
@@ -1964,10 +1964,10 @@ public class DLFileEntryLocalServiceImpl
 			dlFileVersion.getFileEntryId());
 
 		if (status == WorkflowConstants.STATUS_APPROVED) {
-			if (DLUtil.compareVersions(
-					dlFileEntry.getVersion(), dlFileVersion.getVersion()) <=
-						0) {
+			int compare = DLUtil.compareVersions(
+				dlFileEntry.getVersion(), dlFileVersion.getVersion());
 
+			if (compare <= 0) {
 				dlFileEntry.setModifiedDate(dlFileVersion.getModifiedDate());
 				dlFileEntry.setFileName(dlFileVersion.getFileName());
 				dlFileEntry.setExtension(dlFileVersion.getExtension());
@@ -2115,23 +2115,22 @@ public class DLFileEntryLocalServiceImpl
 	public boolean verifyFileEntryLock(long fileEntryId, String lockUuid)
 		throws PortalException {
 
-		try {
-			Lock lock = LockManagerUtil.getLock(
-				DLFileEntry.class.getName(), fileEntryId);
+		Lock lock = LockManagerUtil.fetchLock(
+			DLFileEntry.class.getName(), fileEntryId);
 
+		if (lock != null) {
 			if (Objects.equals(lock.getUuid(), lockUuid)) {
 				return true;
 			}
 
 			return false;
 		}
-		catch (ExpiredLockException | NoSuchLockException e) {
-			DLFileEntry dlFileEntry = dlFileEntryLocalService.getFileEntry(
-				fileEntryId);
 
-			return dlFolderLocalService.verifyInheritableLock(
-				dlFileEntry.getFolderId(), lockUuid);
-		}
+		DLFileEntry dlFileEntry = dlFileEntryLocalService.getFileEntry(
+			fileEntryId);
+
+		return dlFolderLocalService.verifyInheritableLock(
+			dlFileEntry.getFolderId(), lockUuid);
 	}
 
 	protected void addFileEntryResources(
@@ -2235,9 +2234,8 @@ public class DLFileEntryLocalServiceImpl
 		UnicodeProperties extraSettingsProperties =
 			dlFileVersion.getExtraSettingsProperties();
 
-		ExpandoBridge expandoBridge = dlFileVersion.getExpandoBridge();
-
-		convertExtraSettings(extraSettingsProperties, expandoBridge, keys);
+		convertExtraSettings(
+			extraSettingsProperties, dlFileVersion.getExpandoBridge(), keys);
 
 		dlFileVersion.setExtraSettingsProperties(extraSettingsProperties);
 
@@ -2245,11 +2243,13 @@ public class DLFileEntryLocalServiceImpl
 
 		int status = dlFileVersion.getStatus();
 
-		if ((status == WorkflowConstants.STATUS_APPROVED) &&
-			(DLUtil.compareVersions(
-				dlFileEntry.getVersion(), dlFileVersion.getVersion()) <= 0)) {
+		if (status == WorkflowConstants.STATUS_APPROVED) {
+			int compare = DLUtil.compareVersions(
+				dlFileEntry.getVersion(), dlFileVersion.getVersion());
 
-			reindex(dlFileEntry);
+			if (compare <= 0) {
+				reindex(dlFileEntry);
+			}
 		}
 	}
 
@@ -2259,9 +2259,8 @@ public class DLFileEntryLocalServiceImpl
 		UnicodeProperties extraSettingsProperties =
 			dlFileEntry.getExtraSettingsProperties();
 
-		ExpandoBridge expandoBridge = dlFileEntry.getExpandoBridge();
-
-		convertExtraSettings(extraSettingsProperties, expandoBridge, keys);
+		convertExtraSettings(
+			extraSettingsProperties, dlFileEntry.getExpandoBridge(), keys);
 
 		dlFileEntry.setExtraSettingsProperties(extraSettingsProperties);
 
@@ -2425,8 +2424,8 @@ public class DLFileEntryLocalServiceImpl
 				_log.debug(ifete, ifete);
 			}
 
-			return dlFileEntryTypeLocalService.getDefaultFileEntryTypeId(
-				dlFileEntry.getFolderId());
+			return DLFileEntryTypeLocalServiceImpl.getDefaultFileEntryTypeId(
+				dlFolderPersistence, dlFileEntry.getFolderId());
 		}
 	}
 
@@ -2550,11 +2549,8 @@ public class DLFileEntryLocalServiceImpl
 					userId, fileEntryId, fileEntryTypeId, serviceContext);
 			}
 		}
-		else if (!checkedOut) {
-			lockFileEntry(userId, fileEntryId);
-		}
 
-		if (!hasFileEntryLock(userId, fileEntryId)) {
+		if (!hasFileEntryLock(userId, fileEntryId, dlFileEntry.getFolderId())) {
 			lockFileEntry(userId, fileEntryId);
 		}
 
@@ -2782,9 +2778,6 @@ public class DLFileEntryLocalServiceImpl
 		}
 	}
 
-	@BeanReference(type = DLFileVersionPolicy.class)
-	protected DLFileVersionPolicy dlFileVersionPolicy;
-
 	private DLFileEntry _checkOutDLFileEntryModel(
 			long userId, long fileEntryId, long fileEntryTypeId,
 			ServiceContext serviceContext)
@@ -2803,7 +2796,8 @@ public class DLFileEntryLocalServiceImpl
 		DLFileEntry dlFileEntry = dlFileEntryPersistence.findByPrimaryKey(
 			fileEntryId);
 
-		boolean hasLock = hasFileEntryLock(userId, fileEntryId);
+		boolean hasLock = hasFileEntryLock(
+			userId, fileEntryId, dlFileEntry.getFolderId());
 
 		if (!hasLock) {
 			if ((expirationTime <= 0) ||

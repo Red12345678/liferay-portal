@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 (function() {
 	var CKTools = CKEDITOR.tools;
 
@@ -11,9 +25,13 @@
 
 	var REGEX_NEWLINE = /\r?\n/g;
 
+	var REGEX_NON_BREAKING_SPACE = /\u00a0/g;
+
 	var REGEX_NOT_WHITESPACE = /[^\t\n\r ]/;
 
 	var REGEX_URL_PREFIX = /^(?:\/|https?|ftp):\/\//i;
+
+	var REGEX_ZERO_WIDTH_SPACE = /\u200B/g;
 
 	var STR_BLANK = '';
 
@@ -85,16 +103,13 @@
 				fragment.writeHtml(writer);
 
 				data = writer.getHtml();
-			}
-			else {
+			} else {
 				var div = document.createElement('div');
 
 				if (!instance._creoleParser) {
-					instance._creoleParser = new CKEDITOR.CreoleParser(
-						{
-							imagePrefix: attachmentURLPrefix
-						}
-					);
+					instance._creoleParser = new CKEDITOR.CreoleParser({
+						imagePrefix: attachmentURLPrefix
+					});
 				}
 
 				instance._creoleParser.parse(div, data);
@@ -102,7 +117,7 @@
 				data = div.innerHTML;
 			}
 
-			return (data || enterModeEmptyValue[instance._editor.enterMode]);
+			return data || enterModeEmptyValue[instance._editor.enterMode];
 		},
 
 		_appendNewLines: function(total) {
@@ -112,7 +127,9 @@
 
 			var endResult = instance._endResult;
 
-			var newLinesAtEnd = REGEX_LASTCHAR_NEWLINE.exec(endResult.slice(-2).join(STR_BLANK));
+			var newLinesAtEnd = REGEX_LASTCHAR_NEWLINE.exec(
+				endResult.slice(-2).join(STR_BLANK)
+			);
 
 			if (newLinesAtEnd) {
 				count = newLinesAtEnd[1].length;
@@ -164,8 +181,7 @@
 					instance._handleData(child.data || child.outerHTML, node);
 
 					continue;
-				}
-				else if (instance._isIgnorable(child)) {
+				} else if (instance._isIgnorable(child)) {
 					continue;
 				}
 
@@ -197,8 +213,11 @@
 				newLineCharacter = NEW_LINE;
 
 				listTagsIn.push(newLineCharacter);
-			}
-			else if (element.previousSibling && nextSibling && nextSibling !== NEW_LINE) {
+			} else if (
+				element.previousSibling &&
+				nextSibling &&
+				nextSibling !== NEW_LINE
+			) {
 				listTagsIn.push(newLineCharacter);
 			}
 		},
@@ -209,6 +228,8 @@
 			if (data) {
 				if (!instance._skipParse) {
 					data = data.replace(REGEX_NEWLINE, STR_BLANK);
+					data = data.replace(REGEX_ZERO_WIDTH_SPACE, STR_BLANK);
+					data = data.replace(REGEX_NON_BREAKING_SPACE, STR_SPACE);
 
 					if (!instance._verbatim) {
 						data = data.replace(
@@ -218,18 +239,25 @@
 
 								if (!instance._endResult.length) {
 									res += '~' + p1;
-								}
-								else {
-									var lastResultString = instance._endResult[instance._endResult.length - 1];
+								} else {
+									var lastResultString =
+										instance._endResult[
+											instance._endResult.length - 1
+										];
 
-									var lastResultCharacter = lastResultString[lastResultString.length - 1];
+									var lastResultCharacter =
+										lastResultString[
+											lastResultString.length - 1
+										];
 
-									if (lastResultCharacter !== '~' && lastResultCharacter !== p1[0]) {
+									if (
+										lastResultCharacter !== '~' &&
+										lastResultCharacter !== p1[0]
+									) {
 										res += '~';
 									}
 
 									res += p1;
-
 								}
 
 								return res;
@@ -255,8 +283,10 @@
 				if (!instance._isLastItemNewLine()) {
 					instance._endResult.push(NEW_LINE);
 				}
-			}
-			else if (tagName == TAG_UNORDERED_LIST || tagName == TAG_ORDERED_LIST) {
+			} else if (
+				tagName == TAG_UNORDERED_LIST ||
+				tagName == TAG_ORDERED_LIST
+			) {
 				instance._listsStack.pop();
 
 				var newLinesCount = 1;
@@ -266,13 +296,11 @@
 				}
 
 				instance._appendNewLines(newLinesCount);
-			}
-			else if (tagName == TAG_PRE) {
+			} else if (tagName == TAG_PRE) {
 				if (!instance._isLastItemNewLine()) {
 					instance._endResult.push(NEW_LINE);
 				}
-			}
-			else if (tagName == 'table') {
+			} else if (tagName == 'table') {
 				listTagsOut.push(NEW_LINE);
 			}
 
@@ -289,53 +317,64 @@
 				tagName = tagName.toLowerCase();
 
 				var regexHeader = REGEX_HEADER.exec(tagName);
+				var elementContent = element.textContent
+					.toString()
+					.replace(REGEX_ZERO_WIDTH_SPACE, STR_BLANK);
 
 				if (tagName == TAG_PARAGRAPH) {
 					instance._handleParagraph(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'br') {
+				} else if (tagName == 'br') {
 					instance._handleBreak(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'a') {
+				} else if (tagName == 'a') {
 					instance._handleLink(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'strong' || tagName == 'b') {
+				} else if (
+					(tagName == 'strong' || tagName == 'b') &&
+					elementContent.length > 0
+				) {
 					instance._handleStrong(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'em' || tagName == 'i') {
+				} else if (
+					(tagName == 'em' || tagName == 'i') &&
+					elementContent.length > 0
+				) {
 					instance._handleEm(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'img') {
+				} else if (tagName == 'img') {
 					instance._handleImage(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_UNORDERED_LIST) {
-					instance._handleUnorderedList(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_LIST_ITEM) {
+				} else if (tagName == TAG_UNORDERED_LIST) {
+					instance._handleUnorderedList(
+						element,
+						listTagsIn,
+						listTagsOut
+					);
+				} else if (tagName == TAG_LIST_ITEM) {
 					instance._handleListItem(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_ORDERED_LIST) {
-					instance._handleOrderedList(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'hr') {
+				} else if (tagName == TAG_ORDERED_LIST) {
+					instance._handleOrderedList(
+						element,
+						listTagsIn,
+						listTagsOut
+					);
+				} else if (tagName == 'hr') {
 					instance._handleHr(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_PRE) {
+				} else if (tagName == TAG_PRE) {
 					instance._handlePre(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == TAG_TELETYPETEXT) {
+				} else if (tagName == TAG_TELETYPETEXT) {
 					instance._handleTT(element, listTagsIn, listTagsOut);
-				}
-				else if (regexHeader) {
-					instance._handleHeader(element, listTagsIn, listTagsOut, regexHeader);
-				}
-				else if (tagName == 'th') {
-					instance._handleTableHeader(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'tr') {
+				} else if (regexHeader) {
+					instance._handleHeader(
+						element,
+						listTagsIn,
+						listTagsOut,
+						regexHeader
+					);
+				} else if (tagName == 'th') {
+					instance._handleTableHeader(
+						element,
+						listTagsIn,
+						listTagsOut
+					);
+				} else if (tagName == 'tr') {
 					instance._handleTableRow(element, listTagsIn, listTagsOut);
-				}
-				else if (tagName == 'td') {
+				} else if (tagName == 'td') {
 					instance._handleTableCell(element, listTagsIn, listTagsOut);
 				}
 			}
@@ -404,8 +443,7 @@
 
 				if (linkText === hrefAttribute) {
 					instance._verbatim = true;
-				}
-				else {
+				} else {
 					listTagsIn.push(hrefAttribute, STR_PIPE);
 				}
 
@@ -424,7 +462,11 @@
 
 			var listsStackLength = listsStack.length;
 
-			listTagsIn.push(new Array(listsStackLength + 1).join(listsStack[listsStackLength - 1]));
+			listTagsIn.push(
+				new Array(listsStackLength + 1).join(
+					listsStack[listsStackLength - 1]
+				)
+			);
 		},
 
 		_handleOrderedList: function(element, listTagsIn, listTagsOut) {
@@ -461,7 +503,10 @@
 
 			var previousSibling = element.previousSibling;
 
-			if (instance._isParentNode(element, TAG_LIST_ITEM) && (!previousSibling || instance._isIgnorable(previousSibling))) {
+			if (
+				instance._isParentNode(element, TAG_LIST_ITEM) &&
+				(!previousSibling || instance._isIgnorable(previousSibling))
+			) {
 				listTagsIn.push(STR_SPACE);
 			}
 
@@ -519,7 +564,11 @@
 		},
 
 		_hasClass: function(element, className) {
-			return (STR_SPACE + element.className + STR_SPACE).indexOf(STR_SPACE + className + STR_SPACE) > -1;
+			return (
+				(STR_SPACE + element.className + STR_SPACE).indexOf(
+					STR_SPACE + className + STR_SPACE
+				) > -1
+			);
 		},
 
 		_hasParentNode: function(element, tags, level) {
@@ -533,7 +582,10 @@
 
 			var parentNode = element.parentNode;
 
-			var tagName = parentNode && parentNode.tagName && parentNode.tagName.toLowerCase();
+			var tagName =
+				parentNode &&
+				parentNode.tagName &&
+				parentNode.tagName.toLowerCase();
 
 			if (tagName) {
 				var length = tags.length;
@@ -567,7 +619,11 @@
 
 			var nodeType = node.nodeType;
 
-			return node.isElementContentWhitespace || nodeType == 8 || nodeType == 3 && instance._isWhitespace(node);
+			return (
+				node.isElementContentWhitespace ||
+				nodeType == 8 ||
+				(nodeType == 3 && instance._isWhitespace(node))
+			);
 		},
 
 		_isLastItemNewLine: function(node) {
@@ -575,7 +631,9 @@
 
 			var endResult = instance._endResult;
 
-			return endResult && REGEX_LASTCHAR_NEWLINE.test(endResult.slice(-1));
+			return (
+				endResult && REGEX_LASTCHAR_NEWLINE.test(endResult.slice(-1))
+			);
 		},
 
 		_isParentNode: function(element, tagName) {
@@ -585,7 +643,10 @@
 		},
 
 		_isWhitespace: function(node) {
-			return node.isElementContentWhitespace || !REGEX_NOT_WHITESPACE.test(node.data);
+			return (
+				node.isElementContentWhitespace ||
+				!REGEX_NOT_WHITESPACE.test(node.data)
+			);
 		},
 
 		_pushTagList: function(tagsList) {
@@ -607,7 +668,10 @@
 		},
 
 		_tagNameMatch: function(tagSrc, tagDest) {
-			return tagDest instanceof RegExp && tagDest.test(tagSrc) || tagSrc === tagDest;
+			return (
+				(tagDest instanceof RegExp && tagDest.test(tagSrc)) ||
+				tagSrc === tagDest
+			);
 		},
 
 		_endResult: null,
@@ -619,18 +683,15 @@
 		_verbatim: true
 	};
 
-	CKEDITOR.plugins.add(
-		'creole_data_processor',
-		{
-			requires: ['htmlwriter'],
+	CKEDITOR.plugins.add('creole_data_processor', {
+		requires: ['htmlwriter'],
 
-			init: function(editor) {
-				attachmentURLPrefix = editor.config.attachmentURLPrefix;
+		init: function(editor) {
+			attachmentURLPrefix = editor.config.attachmentURLPrefix;
 
-				editor.dataProcessor = new CreoleDataProcessor(editor);
+			editor.dataProcessor = new CreoleDataProcessor(editor);
 
-				editor.fire('customDataProcessorLoaded');
-			}
+			editor.fire('customDataProcessorLoaded');
 		}
-	);
+	});
 })();

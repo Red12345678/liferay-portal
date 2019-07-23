@@ -200,7 +200,7 @@
 </tr>
 <tr>
 	<td>DELETE</td>
-	<td>//*[@data-qa-id='deleteButton'] | //button[contains(.,'Delete')] | //button[contains(.,'delete')]</td>
+	<td>//*[@data-qa-id='deleteButton'] | //div[contains(@class,'show')]//button[contains(.,'Delete')] | //button[contains(.,'delete')] | //button[contains(@class,'delete-logo')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -214,13 +214,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>DELETE_ROW_N</td>
-	<td>xpath=(//button[contains(@class,'delete-row')])[${key_rowIndexNumber}]</td>
+	<td>DELETE_LAYOUT_LOGO</td>
+	<td>//button[contains(@class,'delete-logo')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>DOCUMENTS_AND_MEDIA</td>
-	<td>//div[@data-fieldname='${key_fieldName}']/div/button[contains(.,'Select')]</td>
+	<td>DELETE_ROW_N</td>
+	<td>xpath=(//button[contains(@class,'delete-row')])[${key_rowIndexNumber}]</td>
 	<td></td>
 </tr>
 <tr>
@@ -331,11 +331,6 @@
 <tr>
 	<td>LEAVE</td>
 	<td>//button[contains(.,'Leave')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>LINK_TO_PAGE_SELECT_PAGE</td>
-	<td>//div[@data-fieldname='${key_fieldName}']//button[contains(.,'Select')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -544,6 +539,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>SELECT_CONTENT</td>
+	<td>//div[@data-fieldname='${key_fieldName}']//button[contains(.,'Select')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td>SELECT_FILE</td>
 	<td>//button[contains(.,'Select File')] | //label[contains(.,'Select File')]</td>
 	<td></td>
@@ -571,6 +571,16 @@
 <tr>
 	<td>SEND_PASSWORD_RESET_LINK</td>
 	<td>//button[contains(.,'Send Password Reset Link')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SHARE_SIDEBAR</td>
+	<td>//div[contains(@class,'btn-group-item')]/button[contains(@class,'btn') and contains(.,'Share')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SHARE_SIDENAV</td>
+	<td>//a[contains(@class,'btn')][contains(.,'Share')]</td>
 	<td></td>
 </tr>
 <tr>

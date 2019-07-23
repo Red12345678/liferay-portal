@@ -32,12 +32,14 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Portal;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.search.document.Document;
 import com.liferay.portal.search.query.BooleanQuery;
 import com.liferay.portal.search.query.Queries;
 import com.liferay.portal.search.query.Query;
 import com.liferay.portal.search.query.TermsQuery;
+import com.liferay.portal.search.query.field.FieldQueryFactory;
 import com.liferay.portal.search.searcher.SearchRequest;
 import com.liferay.portal.search.searcher.SearchRequestBuilder;
 import com.liferay.portal.search.searcher.SearchRequestBuilderFactory;
@@ -147,7 +149,7 @@ public class CTEntryLocalServiceImpl extends CTEntryLocalServiceBaseImpl {
 	@Override
 	public List<CTEntry> getCTCollectionCTEntries(long ctCollectionId) {
 		return getCTCollectionCTEntries(
-			ctCollectionId, WorkflowConstants.STATUS_DRAFT, QueryUtil.ALL_POS,
+			ctCollectionId, WorkflowConstants.STATUS_ANY, QueryUtil.ALL_POS,
 			QueryUtil.ALL_POS, null);
 	}
 
@@ -188,33 +190,46 @@ public class CTEntryLocalServiceImpl extends CTEntryLocalServiceBaseImpl {
 			ctCollectionId, queryDefinition);
 	}
 
-	@Indexable(type = IndexableType.REINDEX)
 	@Override
-	public List<CTEntry> getRelatedOwnerCTEntries(long ctEntryId) {
-		return getRelatedOwnerCTEntries(
-			ctEntryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	public List<CTEntry> getRelatedOwnerCTEntries(
+		long companyId, long ctCollectionId, long ctEntryId, String keywords,
+		QueryDefinition<CTEntry> queryDefinition) {
+
+		Query query = _buildQuery(
+			companyId, ctCollectionId, ctEntryId, keywords,
+			queryDefinition.getStatus(), queryDefinition.isExcludeStatus());
+
+		SearchResponse searchResponse = _search(
+			companyId, query, queryDefinition);
+
+		return _getCTEntries(searchResponse);
 	}
 
 	@Override
 	public List<CTEntry> getRelatedOwnerCTEntries(
-		long ctEntryId, int start, int end,
-		OrderByComparator<CTEntry> orderByComparator) {
-
-		QueryDefinition<CTEntry> queryDefinition = new QueryDefinition<>();
-
-		queryDefinition.setEnd(end);
-		queryDefinition.setOrderByComparator(orderByComparator);
-		queryDefinition.setStart(start);
-		queryDefinition.setStatus(WorkflowConstants.STATUS_DRAFT);
+		long ctEntryId, QueryDefinition<CTEntry> queryDefinition) {
 
 		return ctEntryFinder.findByRelatedCTEntries(ctEntryId, queryDefinition);
 	}
 
 	@Override
-	public int getRelatedOwnerCTEntriesCount(long ctEntryId) {
-		QueryDefinition<CTEntry> queryDefinition = new QueryDefinition<>();
+	public long getRelatedOwnerCTEntriesCount(
+		long companyId, long ctCollectionId, long ctEntryId, String keywords,
+		QueryDefinition<CTEntry> queryDefinition) {
 
-		queryDefinition.setStatus(WorkflowConstants.STATUS_DRAFT);
+		Query query = _buildQuery(
+			companyId, ctCollectionId, ctEntryId, keywords,
+			queryDefinition.getStatus(), queryDefinition.isExcludeStatus());
+
+		SearchResponse searchResponse = _search(
+			companyId, query, queryDefinition);
+
+		return searchResponse.getTotalHits();
+	}
+
+	@Override
+	public int getRelatedOwnerCTEntriesCount(
+		long ctEntryId, QueryDefinition<CTEntry> queryDefinition) {
 
 		return ctEntryFinder.countByRelatedCTEntries(
 			ctEntryId, queryDefinition);
@@ -238,6 +253,19 @@ public class CTEntryLocalServiceImpl extends CTEntryLocalServiceBaseImpl {
 	}
 
 	@Override
+	public List<CTEntry> search(
+		CTCollection ctCollection, String keywords,
+		QueryDefinition<CTEntry> queryDefinition) {
+
+		Query query = _buildQuery(ctCollection, keywords);
+
+		SearchResponse searchResponse = _search(
+			ctCollection.getCompanyId(), query, queryDefinition);
+
+		return _getCTEntries(searchResponse);
+	}
+
+	@Override
 	public long searchCount(
 		CTCollection ctCollection, long[] groupIds, long[] userIds,
 		long[] classNameIds, int[] changeTypes, Boolean collision,
@@ -247,6 +275,19 @@ public class CTEntryLocalServiceImpl extends CTEntryLocalServiceBaseImpl {
 			ctCollection, groupIds, userIds, classNameIds, changeTypes,
 			collision, queryDefinition.getStatus(),
 			queryDefinition.isExcludeStatus());
+
+		SearchResponse searchResponse = _search(
+			ctCollection.getCompanyId(), query, queryDefinition);
+
+		return searchResponse.getTotalHits();
+	}
+
+	@Override
+	public int searchCount(
+		CTCollection ctCollection, String keywords,
+		QueryDefinition<CTEntry> queryDefinition) {
+
+		Query query = _buildQuery(ctCollection, keywords);
 
 		SearchResponse searchResponse = _search(
 			ctCollection.getCompanyId(), query, queryDefinition);
@@ -328,8 +369,6 @@ public class CTEntryLocalServiceImpl extends CTEntryLocalServiceBaseImpl {
 		BooleanQuery booleanQuery = _queries.booleanQuery();
 
 		booleanQuery.addFilterQueryClauses(
-			_queries.term("ctCollectionId", ctCollection.getCtCollectionId()));
-		booleanQuery.addFilterQueryClauses(
 			_queries.term(Field.COMPANY_ID, ctCollection.getCompanyId()));
 
 		if (!ArrayUtil.isEmpty(groupIds)) {
@@ -345,11 +384,15 @@ public class CTEntryLocalServiceImpl extends CTEntryLocalServiceBaseImpl {
 					Field.USER_ID, _getTermValues(ArrayUtil.toArray(userIds))));
 		}
 
-		if (!ArrayUtil.isEmpty(classNameIds)) {
-			booleanQuery.addMustQueryClauses(
-				_getTermsQuery(
-					"modelClassNameId",
-					_getTermValues(ArrayUtil.toArray(classNameIds))));
+		if (WorkflowConstants.STATUS_ANY != status) {
+			if (excludeStatus) {
+				booleanQuery.addMustNotQueryClauses(
+					_queries.term(Field.STATUS, status));
+			}
+			else {
+				booleanQuery.addMustQueryClauses(
+					_queries.term(Field.STATUS, status));
+			}
 		}
 
 		if (!ArrayUtil.isEmpty(changeTypes)) {
@@ -364,6 +407,51 @@ public class CTEntryLocalServiceImpl extends CTEntryLocalServiceBaseImpl {
 				_queries.term("collision", collision));
 		}
 
+		booleanQuery.addFilterQueryClauses(
+			_queries.term("ctCollectionId", ctCollection.getCtCollectionId()));
+
+		if (!ArrayUtil.isEmpty(classNameIds)) {
+			booleanQuery.addMustQueryClauses(
+				_getTermsQuery(
+					"modelClassNameId",
+					_getTermValues(ArrayUtil.toArray(classNameIds))));
+		}
+
+		return booleanQuery;
+	}
+
+	private Query _buildQuery(CTCollection ctCollection, String keywords) {
+		BooleanQuery booleanQuery = _queries.booleanQuery();
+
+		booleanQuery.addFilterQueryClauses(
+			_queries.term(Field.COMPANY_ID, ctCollection.getCompanyId()));
+		booleanQuery.addFilterQueryClauses(
+			_queries.term(Field.STATUS, WorkflowConstants.STATUS_APPROVED));
+
+		if (Validator.isNotNull(keywords)) {
+			booleanQuery.addMustQueryClauses(
+				_fieldQueryFactory.createQuery(
+					Field.TITLE, keywords, true, false));
+		}
+
+		booleanQuery.addFilterQueryClauses(
+			_queries.term("ctCollectionId", ctCollection.getCtCollectionId()));
+		booleanQuery.addFilterQueryClauses(
+			_queries.term(
+				"originalCTCollectionId", ctCollection.getCtCollectionId()));
+
+		return booleanQuery;
+	}
+
+	private Query _buildQuery(
+		long companyId, long ctCollectionId, long ctEntryId, String keywords,
+		int status, boolean excludeStatus) {
+
+		BooleanQuery booleanQuery = _queries.booleanQuery();
+
+		booleanQuery.addFilterQueryClauses(
+			_queries.term(Field.COMPANY_ID, companyId));
+
 		if (WorkflowConstants.STATUS_ANY != status) {
 			if (excludeStatus) {
 				booleanQuery.addMustNotQueryClauses(
@@ -374,6 +462,17 @@ public class CTEntryLocalServiceImpl extends CTEntryLocalServiceBaseImpl {
 					_queries.term(Field.STATUS, status));
 			}
 		}
+
+		if (Validator.isNotNull(keywords)) {
+			booleanQuery.addMustQueryClauses(
+				_fieldQueryFactory.createQuery(
+					Field.TITLE, keywords, true, false));
+		}
+
+		booleanQuery.addFilterQueryClauses(
+			_queries.term("affectedByCTEntryIds", ctEntryId));
+		booleanQuery.addFilterQueryClauses(
+			_queries.term("ctCollectionId", ctCollectionId));
 
 		return booleanQuery;
 	}
@@ -513,6 +612,9 @@ public class CTEntryLocalServiceImpl extends CTEntryLocalServiceBaseImpl {
 			throw new IllegalArgumentException("Change type value is invalid");
 		}
 	}
+
+	@Reference
+	private FieldQueryFactory _fieldQueryFactory;
 
 	@Reference
 	private Portal _portal;

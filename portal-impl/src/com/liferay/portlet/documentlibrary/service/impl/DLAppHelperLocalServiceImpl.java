@@ -56,7 +56,6 @@ import com.liferay.portal.kernel.repository.model.FileShortcut;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.repository.model.RepositoryModel;
-import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
@@ -341,9 +340,7 @@ public class DLAppHelperLocalServiceImpl
 			folderId = dlFolder.getFolderId();
 		}
 
-		DLFolder dlFolder = dlFolderLocalService.getDLFolder(folderId);
-
-		moveDependentsToTrash(dlFolder);
+		moveDependentsToTrash(dlFolderLocalService.getDLFolder(folderId));
 	}
 
 	@Override
@@ -353,7 +350,7 @@ public class DLAppHelperLocalServiceImpl
 		throws PortalException {
 
 		boolean hasLock = dlFileEntryLocalService.hasFileEntryLock(
-			userId, fileEntry.getFileEntryId());
+			userId, fileEntry.getFileEntryId(), fileEntry.getFolderId());
 
 		if (!hasLock) {
 			dlFileEntryLocalService.lockFileEntry(
@@ -384,7 +381,7 @@ public class DLAppHelperLocalServiceImpl
 		throws PortalException {
 
 		boolean hasLock = dlFileEntryLocalService.hasFileEntryLock(
-			userId, fileEntry.getFileEntryId());
+			userId, fileEntry.getFileEntryId(), fileEntry.getFolderId());
 
 		if (!hasLock) {
 			dlFileEntryLocalService.lockFileEntry(
@@ -598,11 +595,9 @@ public class DLAppHelperLocalServiceImpl
 					});
 				indexableActionableDynamicQuery.setCompanyId(companyId);
 				indexableActionableDynamicQuery.setPerformActionMethod(
-					(DLFileEntry dlFileEntry) -> {
-						Document document = indexer.getDocument(dlFileEntry);
-
-						indexableActionableDynamicQuery.addDocuments(document);
-					});
+					(DLFileEntry dlFileEntry) ->
+						indexableActionableDynamicQuery.addDocuments(
+							indexer.getDocument(dlFileEntry)));
 				indexableActionableDynamicQuery.setSearchEngineId(
 					indexer.getSearchEngineId());
 
@@ -657,9 +652,7 @@ public class DLAppHelperLocalServiceImpl
 			folderId = dlFolder.getFolderId();
 		}
 
-		DLFolder dlFolder = dlFolderLocalService.getDLFolder(folderId);
-
-		restoreDependentsFromTrash(dlFolder);
+		restoreDependentsFromTrash(dlFolderLocalService.getDLFolder(folderId));
 	}
 
 	/**
@@ -677,6 +670,14 @@ public class DLAppHelperLocalServiceImpl
 
 	@Override
 	public void restoreFileEntryFromTrash(long userId, FileEntry fileEntry)
+		throws PortalException {
+
+		restoreFileEntryFromTrash(userId, fileEntry.getFolderId(), fileEntry);
+	}
+
+	@Override
+	public void restoreFileEntryFromTrash(
+			long userId, long newFolderId, FileEntry fileEntry)
 		throws PortalException {
 
 		// File entry
@@ -703,9 +704,8 @@ public class DLAppHelperLocalServiceImpl
 			dlFileEntry.getTitle());
 
 		String title = dlFileEntryLocalService.getUniqueTitle(
-			dlFileEntry.getGroupId(), dlFileEntry.getFolderId(),
-			dlFileEntry.getFileEntryId(), originalTitle,
-			dlFileEntry.getExtension());
+			dlFileEntry.getGroupId(), newFolderId, dlFileEntry.getFileEntryId(),
+			originalTitle, dlFileEntry.getExtension());
 
 		String originalFileName = TrashUtil.getOriginalTitle(
 			dlFileEntry.getTitle(), "fileName");
@@ -1265,7 +1265,7 @@ public class DLAppHelperLocalServiceImpl
 		}
 
 		if (dlFileEntry.isInTrashExplicitly()) {
-			restoreFileEntryFromTrash(userId, fileEntry);
+			restoreFileEntryFromTrash(userId, newFolderId, fileEntry);
 
 			fileEntry = dlAppLocalService.moveFileEntry(
 				userId, fileEntry.getFileEntryId(), newFolderId,

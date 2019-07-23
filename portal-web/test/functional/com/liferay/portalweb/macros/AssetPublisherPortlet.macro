@@ -1,4 +1,5 @@
 definition {
+
 	macro addAsset {
 		Portlet.clickPortletPlusIconPG(portletName = "Asset Publisher");
 
@@ -251,7 +252,7 @@ definition {
 		if ("${displayPage}" == "true") {
 			var key_portletName = "${portletName}";
 
-			Click(locator1 = "PageEditor#WIDGETS_OPTIONS_ICON");
+			Click.clickNoWaitForVisible(locator1 = "PageEditor#WIDGETS_OPTIONS_ICON");
 
 			SelectFrame(locator1 = "IFrame#DIALOG");
 		}
@@ -268,7 +269,7 @@ definition {
 				locator1 = "Checkbox#ANY_CHECKBOX");
 		}
 
-		if (isSet(enableSocialBookmarkSites)){
+		if (isSet(enableSocialBookmarkSites)) {
 			for (var socialBookmarkSite : list "${enableSocialBookmarkSites}") {
 				AddSelection(
 					locator1 = "SocialBookmarks#ENABLE_SOCIAL_BOOKMARK_AVAILABLE_SELECT",
@@ -957,6 +958,19 @@ definition {
 		}
 	}
 
+	macro viewAssetRelatedAssets {
+		AssertTextEquals(
+			locator1 = "AssetRelatedAssets#HEADER",
+			value1 = "Related Assets");
+
+		for (var relatedAssetTitle : list "${relatedAssetTitles}") {
+			AssertTextEquals(
+				key_relatedAssetTitle = "${relatedAssetTitle}",
+				locator1 = "AssetRelatedAssets#ASSET_TITLE",
+				value1 = "${relatedAssetTitle}");
+		}
+	}
+
 	macro viewAssetTypeNotAvailable {
 		SelectFrame(locator1 = "IFrame#CONFIGURATION");
 
@@ -1493,15 +1507,8 @@ definition {
 			locator1 = "APAsset#ASSET_TITLE",
 			value1 = "${assetTitle}");
 
-		if (isSet(relatedAssetTitle)) {
-			AssertTextEquals(
-				locator1 = "AssetRelatedAssets#HEADER",
-				value1 = "Related Assets");
-
-			AssertTextEquals(
-				key_relatedAssetTitle = "${relatedAssetTitle}",
-				locator1 = "AssetRelatedAssets#ASSET_TITLE",
-				value1 = "${relatedAssetTitle}");
+		if (isSet(relatedAssetTitles)) {
+			AssetPublisherPortlet.viewAssetRelatedAssets(relatedAssetTitles = "${relatedAssetTitles}");
 		}
 
 		if (isSet(relatedAssetTitleHidden)) {
@@ -1589,4 +1596,5 @@ definition {
 				value1 = "${nonTaggedAsset}");
 		}
 	}
+
 }

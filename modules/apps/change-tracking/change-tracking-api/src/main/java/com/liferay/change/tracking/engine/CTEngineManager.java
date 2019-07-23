@@ -18,6 +18,7 @@ import com.liferay.change.tracking.engine.exception.CTEngineException;
 import com.liferay.change.tracking.model.CTCollection;
 import com.liferay.change.tracking.model.CTEntry;
 import com.liferay.change.tracking.model.CTEntryAggregate;
+import com.liferay.change.tracking.model.CTProcess;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.model.BaseModel;
 
@@ -104,10 +105,12 @@ public interface CTEngineManager {
 	/**
 	 * Returns the change tracking collection with the primary key.
 	 *
+	 * @param  companyId the primary key of the company
 	 * @param  ctCollectionId the primary key of the change collection
 	 * @return the change tracking collection
 	 */
-	public Optional<CTCollection> getCTCollectionOptional(long ctCollectionId);
+	public Optional<CTCollection> getCTCollectionOptional(
+		long companyId, long ctCollectionId);
 
 	/**
 	 * Returns all the change tracking collections associated with the given
@@ -121,7 +124,7 @@ public interface CTEngineManager {
 	/**
 	 * Returns the change entries associated with the given change collection.
 	 *
-	 * @param  ctCollection the primary key of the change collection
+	 * @param  ctCollection the change collection
 	 * @param  groupIds the group primary keys
 	 * @param  userIds the user primary keys
 	 * @param  classNameIds the class name primary keys
@@ -135,6 +138,19 @@ public interface CTEngineManager {
 	public List<CTEntry> getCTEntries(
 		CTCollection ctCollection, long[] groupIds, long[] userIds,
 		long[] classNameIds, int[] changeTypes, Boolean collision,
+		QueryDefinition<CTEntry> queryDefinition);
+
+	/**
+	 * Returns all the change tracking entries associated with the given change
+	 * collection, keywords, and query definition.
+	 *
+	 * @param  ctCollection the change collection
+	 * @param  keywords the keywords
+	 * @param  queryDefinition the settings regarding pagination and order
+	 * @return the change tracking entries
+	 */
+	public List<CTEntry> getCTEntries(
+		CTCollection ctCollection, String keywords,
 		QueryDefinition<CTEntry> queryDefinition);
 
 	/**
@@ -162,7 +178,7 @@ public interface CTEngineManager {
 	 * Returns the number of change entries associated with the given change
 	 * collection and filters.
 	 *
-	 * @param  ctCollection the primary key of the change collection
+	 * @param  ctCollection the change collection
 	 * @param  groupIds the group primary keys
 	 * @param  userIds the user primary keys
 	 * @param  classNameIds the class name primary keys
@@ -176,6 +192,19 @@ public interface CTEngineManager {
 	public int getCTEntriesCount(
 		CTCollection ctCollection, long[] groupIds, long[] userIds,
 		long[] classNameIds, int[] changeTypes, Boolean collision,
+		QueryDefinition<CTEntry> queryDefinition);
+
+	/**
+	 * Returns the number of change tracking entries associated with the given
+	 * change collection, keywords, and query definition.
+	 *
+	 * @param  ctCollection the change collection
+	 * @param  keywords the keywords
+	 * @param  queryDefinition the settings
+	 * @return the number of change tracking entries
+	 */
+	public int getCTEntriesCount(
+		CTCollection ctCollection, String keywords,
 		QueryDefinition<CTEntry> queryDefinition);
 
 	/**
@@ -198,6 +227,31 @@ public interface CTEngineManager {
 	 * @return the change entry aggregates
 	 */
 	public List<CTEntryAggregate> getCTEntryAggregates(long ctCollectionId);
+
+	/**
+	 * Returns the change tracking processes.
+	 *
+	 * @param  companyId the company ID of the desired processes
+	 * @param  userId the user ID of the user to filter the processes. If it's
+	 *         not a valid user, it's omitted from the filter.
+	 * @param  keywords the keywords to filter processes. If empty or
+	 *         <code>null</code>, it's omitted from the filter.
+	 * @param  queryDefinition the settings regarding pagination, order, and
+	 *         status filtering
+	 * @return the change tracking processes filtered based on the parameters
+	 */
+	public List<CTProcess> getCTProcesses(
+		long companyId, long userId, String keywords,
+		QueryDefinition<?> queryDefinition);
+
+	/**
+	 * Returns the latest change tracking process executed for a given company.
+	 *
+	 * @param  companyId the company ID of the company for which to return the
+	 *         latest change tracking process
+	 * @return the latest change tracking process for the given company
+	 */
+	public Optional<CTProcess> getLatestCTProcessOptional(long companyId);
 
 	/**
 	 * Returns the production change tracking collection that contains all the

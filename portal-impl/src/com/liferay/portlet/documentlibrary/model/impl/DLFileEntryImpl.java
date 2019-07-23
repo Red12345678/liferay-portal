@@ -239,17 +239,8 @@ public class DLFileEntryImpl extends DLFileEntryBaseImpl {
 
 	@Override
 	public Lock getLock() {
-		try {
-			return LockManagerUtil.getLock(
-				DLFileEntry.class.getName(), getFileEntryId());
-		}
-		catch (PortalException pe) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(pe, pe);
-			}
-		}
-
-		return null;
+		return LockManagerUtil.fetchLock(
+			DLFileEntry.class.getName(), getFileEntryId());
 	}
 
 	@Override
@@ -293,19 +284,8 @@ public class DLFileEntryImpl extends DLFileEntryBaseImpl {
 
 	@Override
 	public boolean hasLock() {
-		long folderId = getFolderId();
-
-		boolean hasLock = LockManagerUtil.hasLock(
-			PrincipalThreadLocal.getUserId(), DLFileEntry.class.getName(),
-			getFileEntryId());
-
-		if (!hasLock &&
-			(folderId != DLFolderConstants.DEFAULT_PARENT_FOLDER_ID)) {
-
-			hasLock = DLFolderLocalServiceUtil.hasInheritableLock(folderId);
-		}
-
-		return hasLock;
+		return DLFileEntryLocalServiceUtil.hasFileEntryLock(
+			PrincipalThreadLocal.getUserId(), getFileEntryId(), getFolderId());
 	}
 
 	@Override
@@ -335,9 +315,8 @@ public class DLFileEntryImpl extends DLFileEntryBaseImpl {
 			Repository repository = RepositoryLocalServiceUtil.getRepository(
 				repositoryId);
 
-			long dlFolderId = repository.getDlFolderId();
-
-			DLFolder dlFolder = DLFolderLocalServiceUtil.getFolder(dlFolderId);
+			DLFolder dlFolder = DLFolderLocalServiceUtil.getFolder(
+				repository.getDlFolderId());
 
 			return dlFolder.isHidden();
 		}

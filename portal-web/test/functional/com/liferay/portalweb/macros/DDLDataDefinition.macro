@@ -1,4 +1,5 @@
 definition {
+
 	var ddlDataDefinitionDescription = "Data Definition Description";
 	var ddlDataDefinitionName = "Data Definition Name";
 	var ddlListName = "List Name";
@@ -177,7 +178,7 @@ definition {
 	}
 
 	macro save {
-		if("${changeListEnabled}" == "true") {
+		if ("${changeListEnabled}" == "true") {
 			Button.clickPublishToChangeList();
 		}
 		else {
@@ -210,7 +211,7 @@ definition {
 
 		SelectFrameTop();
 
-		while(IsElementNotPresent(locator1 = "IFrame#DIALOG")){
+		while (IsElementNotPresent(locator1 = "IFrame#DIALOG")) {
 			Pause(locator1 = "1000");
 		}
 
@@ -324,4 +325,5 @@ definition {
 			locator1 = "NavBar#ASSET_TITLE",
 			value1 = "${assetTitle}");
 	}
+
 }

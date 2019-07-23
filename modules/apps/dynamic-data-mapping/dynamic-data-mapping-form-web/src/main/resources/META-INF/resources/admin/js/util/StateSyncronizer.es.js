@@ -1,46 +1,45 @@
-import * as FormSupport from 'dynamic-data-mapping-form-builder/js/components/Form/FormSupport.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import * as FormSupport from 'dynamic-data-mapping-form-renderer/js/components/FormRenderer/FormSupport.es';
 import Component from 'metal-jsx';
 import {Config} from 'metal-state';
 import {EventHandler} from 'metal-events';
-import {PagesVisitor} from 'dynamic-data-mapping-form-builder/js/util/visitors.es';
+import {PagesVisitor} from 'dynamic-data-mapping-form-renderer/js/util/visitors.es';
 
 class StateSyncronizer extends Component {
-	static PROPS = {
-		descriptionEditor: Config.any(),
-		layoutProvider: Config.any(),
-		localizedDescription: Config.object().value({}),
-		localizedName: Config.object().value({}),
-		nameEditor: Config.any(),
-		namespace: Config.string().required(),
-		published: Config.bool(),
-		settingsDDMForm: Config.any(),
-		translationManager: Config.any()
-	};
-
 	created() {
 		const {descriptionEditor, nameEditor, translationManager} = this.props;
 
 		this._eventHandler = new EventHandler();
 
 		this._eventHandler.add(
-			descriptionEditor.on('change', this._handleDescriptionEditorChanged.bind(this)),
+			descriptionEditor.on(
+				'change',
+				this._handleDescriptionEditorChanged.bind(this)
+			),
 			nameEditor.on('change', this._handleNameEditorChanged.bind(this))
 		);
 
 		if (translationManager) {
 			this._eventHandler.add(
-				translationManager.on(
-					'deleteAvailableLocale',
-					({locale}) => {
-						this.deleteLanguageId(locale);
-					}
-				),
-				translationManager.on(
-					'editingLocaleChange',
-					event => {
-						this.syncEditors(event.newVal);
-					}
-				),
+				translationManager.on('deleteAvailableLocale', ({locale}) => {
+					this.deleteLanguageId(locale);
+				}),
+				translationManager.on('editingLocaleChange', event => {
+					this.syncEditors(event.newVal);
+				})
 			);
 		}
 	}
@@ -94,7 +93,11 @@ class StateSyncronizer extends Component {
 	}
 
 	getState() {
-		const {layoutProvider, localizedDescription, localizedName} = this.props;
+		const {
+			layoutProvider,
+			localizedDescription,
+			localizedName
+		} = this.props;
 
 		const state = {
 			availableLanguageIds: this.getAvailableLanguageIds(),
@@ -144,32 +147,35 @@ class StateSyncronizer extends Component {
 	syncInputs() {
 		const {namespace, settingsDDMForm} = this.props;
 		const state = this.getState();
-		const {
-			description,
-			name
-		} = state;
+		const {description, name} = state;
 
-		Object.keys(state.name).forEach(
-			key => {
-				state.name[key] = Liferay.Util.unescape(state.name[key]);
-			}
-		);
+		Object.keys(state.name).forEach(key => {
+			state.name[key] = Liferay.Util.unescape(state.name[key]);
+		});
 
-		Object.keys(state.description).forEach(
-			key => {
-				state.description[key] = Liferay.Util.unescape(state.description[key]);
-			}
-		);
+		Object.keys(state.description).forEach(key => {
+			state.description[key] = Liferay.Util.unescape(
+				state.description[key]
+			);
+		});
 
 		if (settingsDDMForm) {
-			const settings = settingsDDMForm.get('context');
-
-			document.querySelector(`#${namespace}serializedSettingsContext`).value = JSON.stringify(settings);
+			document.querySelector(
+				`#${namespace}serializedSettingsContext`
+			).value = JSON.stringify({
+				pages: settingsDDMForm.pages
+			});
 		}
 
-		document.querySelector(`#${namespace}name`).value = JSON.stringify(name);
-		document.querySelector(`#${namespace}description`).value = JSON.stringify(description);
-		document.querySelector(`#${namespace}serializedFormBuilderContext`).value = this._getSerializedFormBuilderContext();
+		document.querySelector(`#${namespace}name`).value = JSON.stringify(
+			name
+		);
+		document.querySelector(
+			`#${namespace}description`
+		).value = JSON.stringify(description);
+		document.querySelector(
+			`#${namespace}serializedFormBuilderContext`
+		).value = this._getSerializedFormBuilderContext();
 	}
 
 	_getSerializedFormBuilderContext() {
@@ -177,63 +183,61 @@ class StateSyncronizer extends Component {
 
 		const visitor = new PagesVisitor(state.pages);
 
-		const pages = visitor.mapPages(
-			page => {
-				return {
-					...page,
-					description: page.localizedDescription,
-					title: page.localizedTitle
-				};
-			}
-		);
+		const pages = visitor.mapPages(page => {
+			return {
+				...page,
+				description: page.localizedDescription,
+				title: page.localizedTitle
+			};
+		});
 
 		visitor.setPages(pages);
 
-		return JSON.stringify(
-			{
-				...state,
-				pages: visitor.mapFields(
-					field => {
-						return {
-							...field,
-							settingsContext: {
-								...field.settingsContext,
-								pages: this._getSerializedSettingsContextPages(field.settingsContext.pages)
-							}
-						};
+		return JSON.stringify({
+			...state,
+			pages: visitor.mapFields(field => {
+				return {
+					...field,
+					settingsContext: {
+						...field.settingsContext,
+						availableLanguageIds: this.getAvailableLanguageIds(),
+						defaultLanguageId: this.getDefaultLanguageId(),
+						pages: this._getSerializedSettingsContextPages(
+							field.settingsContext.pages
+						)
 					}
-				)
-			}
-		);
+				};
+			})
+		});
 	}
 
 	_getSerializedSettingsContextPages(pages) {
 		const defaultLanguageId = this.getDefaultLanguageId();
 		const visitor = new PagesVisitor(pages);
 
-		return visitor.mapFields(
-			field => {
-				if (field.type === 'options') {
-					const {value} = field;
-					const newValue = {};
+		return visitor.mapFields(field => {
+			if (field.type === 'options') {
+				const {value} = field;
+				const newValue = {};
 
-					for (const locale in value) {
-						newValue[locale] = value[locale].filter(({value}) => value !== '');
-					}
-
-					if (!newValue[defaultLanguageId]) {
-						newValue[defaultLanguageId] = [];
-					}
-
-					field = {
-						...field,
-						value: newValue
-					};
+				for (const locale in value) {
+					newValue[locale] = value[locale].filter(
+						({value}) => value !== ''
+					);
 				}
 
-				return field;
+				if (!newValue[defaultLanguageId]) {
+					newValue[defaultLanguageId] = [];
+				}
+
+				field = {
+					...field,
+					value: newValue
+				};
 			}
-		);
+
+			return field;
+		});
 	}
 
 	_handleDescriptionEditorChanged() {
@@ -250,5 +254,17 @@ class StateSyncronizer extends Component {
 		localizedName[this.getEditingLanguageId()] = editor.getHTML();
 	}
 }
+
+StateSyncronizer.PROPS = {
+	descriptionEditor: Config.any(),
+	layoutProvider: Config.any(),
+	localizedDescription: Config.object().value({}),
+	localizedName: Config.object().value({}),
+	nameEditor: Config.any(),
+	namespace: Config.string().required(),
+	published: Config.bool(),
+	settingsDDMForm: Config.any(),
+	translationManager: Config.any()
+};
 
 export default StateSyncronizer;

@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.aggregation.AggregationResult;
 import com.liferay.portal.search.document.Document;
+import com.liferay.portal.search.groupby.GroupByResponse;
 import com.liferay.portal.search.hits.SearchHit;
 import com.liferay.portal.search.hits.SearchHits;
 import com.liferay.portal.search.internal.legacy.searcher.FacetContextImpl;
@@ -31,7 +32,9 @@ import com.liferay.portal.search.stats.StatsResponse;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -101,8 +104,15 @@ public class SearchResponseImpl implements SearchResponse, Serializable {
 
 	@Override
 	public Stream<SearchResponse> getFederatedSearchResponsesStream() {
-		return _federatedSearchResponsesMap.values(
-		).stream();
+		Collection<SearchResponse> searchResponses =
+			_federatedSearchResponsesMap.values();
+
+		return searchResponses.stream();
+	}
+
+	@Override
+	public List<GroupByResponse> getGroupByResponses() {
+		return Collections.unmodifiableList(_groupByResponses);
 	}
 
 	@Override
@@ -149,6 +159,12 @@ public class SearchResponseImpl implements SearchResponse, Serializable {
 
 	public void setFederatedSearchKey(String federatedSearchKey) {
 		_federatedSearchKey = federatedSearchKey;
+	}
+
+	public void setGroupByResponses(List<GroupByResponse> groupByResponses) {
+		_groupByResponses.clear();
+
+		_groupByResponses.addAll(groupByResponses);
 	}
 
 	public void setHits(Hits hits) {
@@ -218,6 +234,7 @@ public class SearchResponseImpl implements SearchResponse, Serializable {
 	private String _federatedSearchKey;
 	private final Map<String, SearchResponse> _federatedSearchResponsesMap =
 		new LinkedHashMap<>();
+	private final List<GroupByResponse> _groupByResponses = new ArrayList<>();
 	private Hits _hits;
 	private String _requestString = StringPool.BLANK;
 	private String _responseString = StringPool.BLANK;

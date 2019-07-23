@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property custom.properties = "default.layout.template.id=1_column";
@@ -11,24 +12,15 @@ definition {
 
 		User.firstLoginPG();
 
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Blogs Page");
 
-		SitePages.addPublicPage(
-			pageName = "Blogs Page",
-			sitePageType = "Widget Page");
-
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Blogs Page",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
-
-		Navigator.gotoPage(pageName = "Blogs Page");
-
-		Portlet.addPG(portletName = "Blogs");
+		JSONLayout.addWidgetToPublicLayout(
+			column = "1",
+			groupName = "Guest",
+			layoutName = "Blogs Page",
+			widgetName = "Blogs");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 	}
@@ -240,26 +232,17 @@ definition {
 	test AddBlogsEntryWithSamePageScope {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		Navigator.gotoPage(pageName = "Blogs Page");
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Blogs Page2");
 
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
-
-		SitePages.addPublicPage(
-			pageName = "Blogs Page2",
-			sitePageType = "Widget Page");
-
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Blogs Page2",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
+		JSONLayout.addWidgetToPublicLayout(
+			column = "1",
+			groupName = "Guest",
+			layoutName = "Blogs Page2",
+			widgetName = "Blogs");
 
 		Navigator.gotoPage(pageName = "Blogs Page2");
-
-		Portlet.addPG(portletName = "Blogs");
 
 		Portlet.gotoPortletOptions(
 			portletName = "Blogs",
@@ -906,24 +889,24 @@ definition {
 			entryContent = "Blogs Entry Content",
 			entryTitle = "Blogs Entry Title");
 
-		BlogsEntry.rateThumbsUp(entryTitle = "Blogs Entry Title");
+		Ratings.rate(ratingResult = "Thumb Up");
 
-		BlogsEntry.viewThumbsUp(
-			entryTitle = "Blogs Entry Title",
+		Ratings.viewRating(
+			ratingResult = "Thumb Up",
 			voteCount = "1");
 
-		BlogsEntry.viewThumbsDown(
-			entryTitle = "Blogs Entry Title",
+		Ratings.viewRating(
+			ratingResult = "Thumb Down",
 			voteCount = "0");
 
-		BlogsEntry.rateThumbsDown(entryTitle = "Blogs Entry Title");
+		Ratings.rate(ratingResult = "Thumb Down");
 
-		BlogsEntry.viewThumbsUp(
-			entryTitle = "Blogs Entry Title",
+		Ratings.viewRating(
+			ratingResult = "Thumb Up",
 			voteCount = "0");
 
-		BlogsEntry.viewThumbsDown(
-			entryTitle = "Blogs Entry Title",
+		Ratings.viewRating(
+			ratingResult = "Thumb Down",
 			voteCount = "1");
 	}
 
@@ -1031,20 +1014,9 @@ definition {
 
 	@priority = "4"
 	test SearchBlogsEntryContent {
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
-
-		SitePages.addPublicPage(
-			pageName = "Search Page",
-			sitePageType = "Widget Page");
-
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Search Page",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Search Page");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1066,20 +1038,9 @@ definition {
 
 	@priority = "4"
 	test SearchBlogsEntryContentQuotes {
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
-
-		SitePages.addPublicPage(
-			pageName = "Search Page",
-			sitePageType = "Widget Page");
-
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Search Page",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Search Page");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1109,20 +1070,9 @@ definition {
 
 	@priority = "4"
 	test SearchBlogsEntryTitle {
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
-
-		SitePages.addPublicPage(
-			pageName = "Search Page",
-			sitePageType = "Widget Page");
-
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Search Page",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Search Page");
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1144,20 +1094,9 @@ definition {
 
 	@priority = "4"
 	test SearchBlogsEntryTitleQuotes {
-		ProductMenu.gotoPortlet(
-			category = "Site Builder",
-			panel = "Site Administration",
-			portlet = "Pages");
-
-		SitePages.addPublicPage(
-			pageName = "Search Page",
-			sitePageType = "Widget Page");
-
-		SitePages.configurePage(
-			columnName = "1 Column",
-			pageName = "Search Page",
-			privacy = "Public Pages",
-			sitePageType = "Widget Page");
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Search Page");
 
 		Navigator.gotoPage(pageName = "Search Page");
 
@@ -1372,7 +1311,7 @@ definition {
 	@priority = "4"
 	test ViewBlogsEntryCommentAsGuest {
 		property osgi.module.configuration.file.names = "com.liferay.portal.bundle.blacklist.internal.BundleBlacklistConfiguration.config";
-		property osgi.module.configurations = "blacklistBundleSymbolicNames=&quot;com.liferay.saml.addon.keep.alive.web,com.liferay.saml.api,com.liferay.saml.impl,com.liferay.saml.opensaml.integration,com.liferay.saml.persistence.api,com.liferay.saml.persistence.service,com.liferay.saml.web&quot;";
+		property osgi.module.configurations = "blacklistBundleSymbolicNames=&quot;com.liferay.saml.addon.keep.alive.web,com.liferay.saml.api,com.liferay.saml.impl,com.liferay.saml.opensaml.integration,com.liferay.saml.persistence.api,com.liferay.saml.persistence.service,com.liferay.saml.web,saml-hook&quot;";
 
 		Navigator.gotoPage(pageName = "Blogs Page");
 
@@ -1911,4 +1850,5 @@ definition {
 			entryContent = "Blogs Entry Content",
 			entryTitle = "Blogs Entry Title");
 	}
+
 }

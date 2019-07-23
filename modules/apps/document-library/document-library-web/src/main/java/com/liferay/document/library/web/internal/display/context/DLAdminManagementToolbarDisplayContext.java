@@ -84,21 +84,20 @@ import javax.servlet.http.HttpServletRequest;
 public class DLAdminManagementToolbarDisplayContext {
 
 	public DLAdminManagementToolbarDisplayContext(
-			LiferayPortletRequest liferayPortletRequest,
-			LiferayPortletResponse liferayPortletResponse,
-			DLRequestHelper dlRequestHelper,
-			DLAdminDisplayContext dlAdminDisplayContext)
-		throws PortalException {
+		LiferayPortletRequest liferayPortletRequest,
+		LiferayPortletResponse liferayPortletResponse,
+		HttpServletRequest httpServletRequest,
+		DLAdminDisplayContext dlAdminDisplayContext) {
 
 		_liferayPortletRequest = liferayPortletRequest;
 		_liferayPortletResponse = liferayPortletResponse;
-		_dlRequestHelper = dlRequestHelper;
+		_httpServletRequest = httpServletRequest;
 		_dlAdminDisplayContext = dlAdminDisplayContext;
-
-		_httpServletRequest = dlRequestHelper.getRequest();
 
 		_currentURLObj = PortletURLUtil.getCurrent(
 			liferayPortletRequest, liferayPortletResponse);
+
+		_dlRequestHelper = new DLRequestHelper(_httpServletRequest);
 
 		_dlPortletInstanceSettingsHelper = new DLPortletInstanceSettingsHelper(
 			_dlRequestHelper);
@@ -108,9 +107,6 @@ public class DLAdminManagementToolbarDisplayContext {
 
 		_themeDisplay = (ThemeDisplay)_httpServletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
-
-		_hasValidAssetVocabularies = _hasValidAssetVocabularies(
-			_themeDisplay.getScopeGroupId());
 	}
 
 	public List<DropdownItem> getActionDropdownItems() throws PortalException {
@@ -175,7 +171,9 @@ public class DLAdminManagementToolbarDisplayContext {
 							dropdownItem.setQuickAction(true);
 						});
 
-					if (_hasValidAssetVocabularies) {
+					if (_hasValidAssetVocabularies(
+							_themeDisplay.getScopeGroupId())) {
+
 						add(
 							dropdownItem -> {
 								dropdownItem.putData(
@@ -248,10 +246,10 @@ public class DLAdminManagementToolbarDisplayContext {
 		};
 	}
 
-	public List<String> getAvailableActionDropdownItems(FileEntry fileEntry)
+	public List<String> getAvailableActions(FileEntry fileEntry)
 		throws PortalException {
 
-		List<String> availableActionDropdownItems = new ArrayList<>();
+		List<String> availableActions = new ArrayList<>();
 
 		PermissionChecker permissionChecker =
 			_themeDisplay.getPermissionChecker();
@@ -259,46 +257,48 @@ public class DLAdminManagementToolbarDisplayContext {
 		if (DLFileEntryPermission.contains(
 				permissionChecker, fileEntry, ActionKeys.DELETE)) {
 
-			availableActionDropdownItems.add("deleteEntries");
+			availableActions.add("deleteEntries");
 		}
 
 		if (DLFileEntryPermission.contains(
 				permissionChecker, fileEntry, ActionKeys.UPDATE)) {
 
-			availableActionDropdownItems.add("move");
+			availableActions.add("move");
 
 			if (fileEntry.isCheckedOut()) {
-				availableActionDropdownItems.add("checkin");
+				availableActions.add("checkin");
 			}
 			else {
-				availableActionDropdownItems.add("checkout");
+				availableActions.add("checkout");
 			}
 
 			if (!RepositoryUtil.isExternalRepository(
 					fileEntry.getRepositoryId()) &&
 				!_hasWorkflowDefinitionLink(fileEntry)) {
 
-				if (_hasValidAssetVocabularies) {
-					availableActionDropdownItems.add("editCategories");
+				if (_hasValidAssetVocabularies(
+						_themeDisplay.getScopeGroupId())) {
+
+					availableActions.add("editCategories");
 				}
 
-				availableActionDropdownItems.add("editTags");
+				availableActions.add("editTags");
 			}
 		}
 
 		if (DLFileEntryPermission.contains(
 				permissionChecker, fileEntry, ActionKeys.VIEW)) {
 
-			availableActionDropdownItems.add("download");
+			availableActions.add("download");
 		}
 
-		return availableActionDropdownItems;
+		return availableActions;
 	}
 
-	public List<String> getAvailableActionDropdownItems(Folder folder)
+	public List<String> getAvailableActions(Folder folder)
 		throws PortalException {
 
-		List<String> availableActionDropdownItems = new ArrayList<>();
+		List<String> availableActions = new ArrayList<>();
 
 		PermissionChecker permissionChecker =
 			_themeDisplay.getPermissionChecker();
@@ -306,24 +306,24 @@ public class DLAdminManagementToolbarDisplayContext {
 		if (DLFolderPermission.contains(
 				permissionChecker, folder, ActionKeys.DELETE)) {
 
-			availableActionDropdownItems.add("deleteEntries");
+			availableActions.add("deleteEntries");
 		}
 
 		if (DLFolderPermission.contains(
 				permissionChecker, folder, ActionKeys.UPDATE) &&
 			!folder.isMountPoint()) {
 
-			availableActionDropdownItems.add("move");
+			availableActions.add("move");
 		}
 
 		if (DLFolderPermission.contains(
 				permissionChecker, folder, ActionKeys.VIEW) &&
 			!RepositoryUtil.isExternalRepository(folder.getRepositoryId())) {
 
-			availableActionDropdownItems.add("download");
+			availableActions.add("download");
 		}
 
-		return availableActionDropdownItems;
+		return availableActions;
 	}
 
 	public String getClearResultsURL() {
@@ -840,13 +840,17 @@ public class DLAdminManagementToolbarDisplayContext {
 	private boolean _hasValidAssetVocabularies(long scopeGroupId)
 		throws PortalException {
 
+		if (_hasValidAssetVocabularies != null) {
+			return _hasValidAssetVocabularies;
+		}
+
 		List<AssetVocabulary> assetVocabularies =
 			AssetVocabularyServiceUtil.getGroupVocabularies(
 				PortalUtil.getCurrentAndAncestorSiteGroupIds(scopeGroupId));
 
 		Stream<AssetVocabulary> stream = assetVocabularies.stream();
 
-		return stream.anyMatch(
+		_hasValidAssetVocabularies = stream.anyMatch(
 			assetVocabulary -> {
 				if (!assetVocabulary.isAssociatedToClassNameId(
 						ClassNameLocalServiceUtil.getClassNameId(
@@ -866,6 +870,8 @@ public class DLAdminManagementToolbarDisplayContext {
 
 				return false;
 			});
+
+		return _hasValidAssetVocabularies;
 	}
 
 	private boolean _hasWorkflowDefinitionLink(FileEntry fileEntry)
@@ -925,7 +931,7 @@ public class DLAdminManagementToolbarDisplayContext {
 		_dlPortletInstanceSettingsHelper;
 	private final DLRequestHelper _dlRequestHelper;
 	private final DLTrashUtil _dlTrashUtil;
-	private final boolean _hasValidAssetVocabularies;
+	private Boolean _hasValidAssetVocabularies;
 	private final HttpServletRequest _httpServletRequest;
 	private final LiferayPortletRequest _liferayPortletRequest;
 	private final LiferayPortletResponse _liferayPortletResponse;

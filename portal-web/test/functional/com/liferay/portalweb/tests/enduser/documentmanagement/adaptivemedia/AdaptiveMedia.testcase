@@ -1,5 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property custom.properties = "default.layout.template.id=1_column";
@@ -683,12 +684,7 @@ definition {
 
 	@priority = "5"
 	test ViewNumberOfAdaptedImagesAfterAdaptingImages {
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites");
-
-		Site.addBlankCP(siteName = "Site Name");
+		JSONGroup.addGroup(groupName = "Site Name");
 
 		ProductMenu.gotoSite(site = "Site Name");
 
@@ -729,15 +725,11 @@ definition {
 
 		AdaptiveMedia.disableImageResolution(
 			imageName = "Low Resolution",
-			imageState = "Disabled",
-			percentAdapted = "100");
+			imageState = "Disabled");
 
-		ProductMenu.gotoPortlet(
-			category = "Sites",
-			panel = "Control Panel",
-			portlet = "Sites");
+		JSONGroup.addGroup(groupName = "Another Site Name");
 
-		Site.addBlankCP(siteName = "Another Site Name");
+		ProductMenu.gotoSite(site = "Another Site Name");
 
 		for (var entryCount : list "1,2") {
 			ProductMenu.gotoPortlet(
@@ -772,4 +764,5 @@ definition {
 
 		AdaptiveMedia.viewNumberOfAdaptedImages(numberOfAdaptedImages = "4/4");
 	}
+
 }

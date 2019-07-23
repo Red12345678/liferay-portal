@@ -24,6 +24,8 @@ if (assetPublisherDisplayContext.isEnableTagBasedNavigation() && !assetPublisher
 }
 %>
 
+<liferay-ui:success key='<%= AssetPublisherPortletKeys.ASSET_PUBLISHER + "requestProcessed" %>' message="your-request-completed-successfully" />
+
 <c:if test="<%= assetPublisherDisplayContext.isEnableSubscriptions() %>">
 	<div class="subscribe-action">
 		<c:if test="<%= assetPublisherDisplayContext.isSubscriptionEnabled() %>">
@@ -139,12 +141,8 @@ SearchContainer searchContainer = assetPublisherDisplayContext.getSearchContaine
 	/>
 </c:if>
 
-<aui:script use="querystring-parse">
-	var queryString = window.location.search.substring(1);
-
-	var queryParamObj = new A.QueryString.parse(queryString);
-
-	var assetEntryId = queryParamObj['<portlet:namespace />assetEntryId'];
+<aui:script sandbox="<%= true %>">
+	const assetEntryId = '<%= assetPublisherDisplayContext.getAssetEntryId() %>';
 
 	if (assetEntryId) {
 		window.location.hash = assetEntryId;

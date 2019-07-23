@@ -1,6 +1,7 @@
 definition {
+
 	macro addReportDefinition {
-		LexiconEntry.gotoAdd();
+		LexiconEntry.gotoAddReport();
 
 		PortletEntry.inputName(name = "${reportsDefinitionName}");
 
@@ -524,4 +525,5 @@ Sincerely,<br />
 				value1 = "${reportsFileName}");
 		}
 	}
+
 }

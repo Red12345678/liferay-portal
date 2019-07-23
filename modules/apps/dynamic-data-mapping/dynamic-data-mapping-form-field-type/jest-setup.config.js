@@ -18,39 +18,38 @@ window.AlloyEditor = {
 			name: 'link'
 		},
 		{
-			buttons: ['styles', 'bold', 'italic', 'underline', 'link', 'twitter'],
+			buttons: [
+				'styles',
+				'bold',
+				'italic',
+				'underline',
+				'link',
+				'twitter'
+			],
 			name: 'text'
 		}
 	]
 };
 
-window.AUI = () => (
-	{
-		use: (_, callback) => callback(
-			{
-				LiferayAlloyEditor: () => (
-					{
-						render: () => (
-							{
-								getHTML: () => 'test',
-								getNativeEditor: () => (
-									{
-										on: () => true,
-										setData: () => false
-									}
-								)
-							}
-						)
-					}
-				),
-				one: () => (
-					{
-						innerHTML: () => {}
-					}
-				)
-			}
-		)
+window.AUI = () => ({
+	use: (...modules) => {
+		const callback = modules[modules.length - 1];
+
+		callback({
+			LiferayAlloyEditor: () => ({
+				render: () => ({
+					getHTML: () => 'test',
+					getNativeEditor: () => ({
+						on: () => true,
+						setData: () => false
+					})
+				})
+			}),
+			one: () => ({
+				innerHTML: () => {}
+			})
+		});
 	}
-);
+});
 
 window.themeDisplay = window.Liferay.ThemeDisplay;

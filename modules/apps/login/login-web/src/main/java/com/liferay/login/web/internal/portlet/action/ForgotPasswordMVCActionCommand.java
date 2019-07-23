@@ -20,7 +20,6 @@ import com.liferay.login.web.internal.constants.LoginPortletKeys;
 import com.liferay.login.web.internal.portlet.util.LoginUtil;
 import com.liferay.portal.kernel.captcha.CaptchaConfigurationException;
 import com.liferay.portal.kernel.captcha.CaptchaException;
-import com.liferay.portal.kernel.captcha.CaptchaTextException;
 import com.liferay.portal.kernel.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.RequiredReminderQueryException;
 import com.liferay.portal.kernel.exception.SendPasswordException;
@@ -50,8 +49,6 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletSession;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -154,8 +151,7 @@ public class ForgotPasswordMVCActionCommand extends BaseMVCActionCommand {
 			}
 		}
 		catch (Exception e) {
-			if (e instanceof CaptchaConfigurationException ||
-				e instanceof CaptchaTextException ||
+			if (e instanceof CaptchaException ||
 				e instanceof UserEmailAddressException) {
 
 				SessionErrors.add(actionRequest, e.getClass());
@@ -168,11 +164,9 @@ public class ForgotPasswordMVCActionCommand extends BaseMVCActionCommand {
 					 e instanceof UserReminderQueryException) {
 
 				if (PropsValues.LOGIN_SECURE_FORGOT_PASSWORD) {
-					HttpServletRequest httpServletRequest =
-						_portal.getHttpServletRequest(actionRequest);
-
 					SessionMessages.add(
-						httpServletRequest, "forgotPasswordSent");
+						_portal.getHttpServletRequest(actionRequest),
+						"forgotPasswordSent");
 
 					sendRedirect(actionRequest, actionResponse, null);
 				}
@@ -300,10 +294,8 @@ public class ForgotPasswordMVCActionCommand extends BaseMVCActionCommand {
 			actionRequest, emailFromName, emailFromAddress, emailToAddress,
 			subject, body);
 
-		HttpServletRequest httpServletRequest = _portal.getHttpServletRequest(
-			actionRequest);
-
-		SessionMessages.add(httpServletRequest, "forgotPasswordSent");
+		SessionMessages.add(
+			_portal.getHttpServletRequest(actionRequest), "forgotPasswordSent");
 
 		sendRedirect(actionRequest, actionResponse, null);
 	}

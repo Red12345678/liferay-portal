@@ -1,4 +1,5 @@
 definition {
+
 	var entryAuthorFullName = "Test Test";
 
 	macro addContent {
@@ -356,8 +357,6 @@ definition {
 			key_menuItem = "Move to Recycle Bin",
 			locator1 = "MenuItem#DROPDOWN_MENU_ITEM");
 
-		AssertConfirm(value1 = "Are you sure you want to move this to the Recycle Bin?");
-
 		Alert.viewSuccessMessage();
 	}
 
@@ -377,8 +376,6 @@ definition {
 		ClickNoError(
 			key_menuItem = "Move to Recycle Bin",
 			locator1 = "MenuItem#DROPDOWN_MENU_ITEM");
-
-		AssertConfirm(value1 = "Are you sure you want to move this to the Recycle Bin?");
 
 		Alert.viewSuccessMessage();
 	}
@@ -429,7 +426,7 @@ definition {
 
 		AssertTextEquals.assertPartialText(
 			locator1 = "BlogsEntry#TITLE_FIELD_HELPER",
-			value1 = "This field is required to publish the entry.");
+			value1 = "This field is required.");
 
 		AssertElementNotPresent(locator1 = "Message#SUCCESS");
 	}
@@ -454,26 +451,6 @@ definition {
 			value1 = "Submit for Publication");
 
 		Alert.viewSuccessMessage();
-	}
-
-	macro rateThumbsDown {
-		var key_entryTitle = "${entryTitle}";
-
-		AssertTextEquals(
-			locator1 = "BlogsEntry#TITLE",
-			value1 = "${entryTitle}");
-
-		Click(locator1 = "Ratings#THUMB_DOWN");
-	}
-
-	macro rateThumbsUp {
-		var key_entryTitle = "${entryTitle}";
-
-		AssertTextEquals(
-			locator1 = "BlogsEntry#TITLE",
-			value1 = "${entryTitle}");
-
-		Click(locator1 = "Ratings#THUMB_UP");
 	}
 
 	macro removeSmallImage {
@@ -654,6 +631,17 @@ definition {
 			key_relatedAssetTitle = "${relatedAssetTitle}",
 			locator1 = "AssetRelatedAssets#ASSET_TITLE",
 			value1 = "${relatedAssetTitle}");
+	}
+
+	macro viewAutoTag {
+		var key_entryTitle = "${entryTitle}";
+		var tagName = StringUtil.lowerCase("${tagName}");
+
+		var key_tagName = "${tagName}";
+
+		AssertTextEquals(
+			locator1 = "BlogsEntry#TAG",
+			value1 = "${tagName}");
 	}
 
 	macro viewContent {
@@ -992,6 +980,34 @@ definition {
 			value1 = "${entryContent}");
 	}
 
+	macro viewSharedAsset {
+		AssertTextEquals(
+			locator1 = "Portlet#HEADER",
+			value1 = "Shared Content");
+
+		if ("${contentSharingPermission}" == "View") {
+			AssertElementNotPresent(locator1 = "Button#EDIT");
+		}
+
+		else if ("${contentSharingPermission}" == "Comment") {
+			AssertElementNotPresent(locator1 = "Button#EDIT");
+		}
+
+		else {
+			AssertElementPresent(locator1 = "Comments#COMMENT_FIELD");
+		}
+
+		var key_entryTitle = "${entryTitle}";
+
+		AssertTextEquals(
+			locator1 = "Sharing#BLOGS_CONTENT",
+			value1 = "${entryContent}");
+
+		AssertTextEquals(
+			locator1 = "Sharing#BLOGS_TITLE",
+			value1 = "${entryTitle}");
+	}
+
 	macro viewStatus {
 		AssertTextEquals(
 			locator1 = "AssetWorkflow#WORKFLOW_STATUS",
@@ -1082,30 +1098,6 @@ definition {
 				locator1 = "BlogsEntry#TITLE",
 				value1 = "${entryTitle}");
 		}
-	}
-
-	macro viewThumbsDown {
-		var key_entryTitle = "${entryTitle}";
-
-		AssertTextEquals(
-			locator1 = "BlogsEntry#TITLE",
-			value1 = "${entryTitle}");
-
-		AssertTextEquals(
-			locator1 = "Ratings#THUMB_DOWN",
-			value1 = "${voteCount}");
-	}
-
-	macro viewThumbsUp {
-		var key_entryTitle = "${entryTitle}";
-
-		AssertTextEquals(
-			locator1 = "BlogsEntry#TITLE",
-			value1 = "${entryTitle}");
-
-		AssertTextEquals(
-			locator1 = "Ratings#THUMB_UP",
-			value1 = "${voteCount}");
 	}
 
 	macro viewTitle {
@@ -1258,4 +1250,5 @@ definition {
 
 		AssertElementNotPresent(locator1 = "AP#ASSET_ABSTRACT_TITLE");
 	}
+
 }

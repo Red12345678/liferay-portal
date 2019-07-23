@@ -1,5 +1,6 @@
 @component-name = "portal-forms-and-workflow-ee"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property test.run.environment = "EE";
@@ -1765,6 +1766,8 @@ definition {
 
 	@priority = "4"
 	test EditUploadedWorkflowViaViewTabViaAddProcess {
+		property test.name.skip.portal.instance = "CPKaleoformsadmin#EditUploadedWorkflowViaViewTabViaAddProcess";
+
 		ProductMenu.gotoPortlet(
 			category = "Workflow",
 			panel = "Control Panel",
@@ -2811,6 +2814,13 @@ definition {
 			kfProcessFieldData = "One",
 			kfStatus = "Approved");
 
+		ProductMenu.gotoPortlet(
+			category = "Content &amp; Data",
+			panel = "Site Administration",
+			portlet = "Kaleo Forms Admin");
+
+		KaleoFormsAdmin.viewProcessRecord(kfProcessName = "Kaleo Forms Process");
+
 		KaleoFormsAdmin.viewProcessRecordTable(
 			kfAuthor = "Test Test",
 			kfProcessFieldData = "Two",
@@ -2948,4 +2958,5 @@ definition {
 
 		KaleoFormsAdmin.viewNoUnpublishedWorkflowDefinitions();
 	}
+
 }

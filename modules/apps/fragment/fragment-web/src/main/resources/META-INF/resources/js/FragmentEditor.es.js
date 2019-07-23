@@ -1,7 +1,20 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import Soy from 'metal-soy';
 import {Config} from 'metal-state';
-import {openToast} from 'frontend-js-web/liferay/toast/commands/OpenToast.es';
-import PortletBase from 'frontend-js-web/liferay/PortletBase.es';
+import {PortletBase, openToast} from 'frontend-js-web';
 
 import templates from './FragmentEditor.soy';
 import './FragmentPreview.es';
@@ -14,15 +27,17 @@ import './SourceEditor.es';
  * a <code>&lt;FragmentPreview /></code> component for the preview.
  */
 class FragmentEditor extends PortletBase {
-
 	/**
 	 * @inheritDoc
 	 */
 	shouldUpdate(changes) {
-		return changes._html ||
+		return (
+			changes._html ||
 			changes._js ||
+			changes._configuration ||
 			changes._css ||
-			changes._saving;
+			changes._saving
+		);
 	}
 
 	/**
@@ -30,17 +45,19 @@ class FragmentEditor extends PortletBase {
 	 *
 	 * @public
 	 * @return {{
+	 *   configuration: string,
 	 *   css: string,
 	 *   html: string,
 	 *   js: string
 	 * }}
 	 */
 	getContent() {
-		return ({
+		return {
+			configuration: this._configuration,
 			css: this._css,
 			html: this._html,
 			js: this._js
-		});
+		};
 	}
 
 	/**
@@ -61,10 +78,18 @@ class FragmentEditor extends PortletBase {
 	 * @private
 	 */
 	_handleContentChanged() {
-		this.emit(
-			'contentChanged',
-			this.getContent()
-		);
+		this.emit('contentChanged', this.getContent());
+	}
+
+	/**
+	 * Callback executed when the Configuration editor changes.
+	 *
+	 * @param {!Event} event
+	 * @private
+	 */
+	_handleConfigurationChanged(event) {
+		this._configuration = event.content;
+		this._handleContentChanged();
 	}
 
 	/**
@@ -115,63 +140,47 @@ class FragmentEditor extends PortletBase {
 		if (this.isHtmlValid()) {
 			this._saving = true;
 
-			this.fetch(
-				this.urls.edit,
-				{
-					cssContent: content.css,
-					fragmentCollectionId: this.fragmentCollectionId,
-					fragmentEntryId: this.fragmentEntryId,
-					htmlContent: content.html,
-					jsContent: content.js,
-					name: this.name,
-					status
-				}
-			)
-				.then(
-					response => response.json()
-				)
-				.then(
-					response => {
-						if (response.error) {
-							throw response.error;
-						}
-
-						return response;
+			this.fetch(this.urls.edit, {
+				configurationContent: content.configuration,
+				cssContent: content.css,
+				fragmentCollectionId: this.fragmentCollectionId,
+				fragmentEntryId: this.fragmentEntryId,
+				htmlContent: content.html,
+				jsContent: content.js,
+				name: this.name,
+				status
+			})
+				.then(response => response.json())
+				.then(response => {
+					if (response.error) {
+						throw response.error;
 					}
-				)
-				.then(
-					response => {
-						const redirectURL = (
-							response.redirect ||
-							this.urls.redirect
-						);
 
-						Liferay.Util.navigate(redirectURL);
-					}
-				)
-				.catch(
-					error => {
-						this._saving = false;
+					return response;
+				})
+				.then(response => {
+					const redirectURL = response.redirect || this.urls.redirect;
 
-						const message = typeof error === 'string' ?
-							error :
-							Liferay.Language.get('error');
+					Liferay.Util.navigate(redirectURL);
+				})
+				.catch(error => {
+					this._saving = false;
 
-						openToast(
-							{
-								message,
-								title: Liferay.Language.get('error'),
-								type: 'danger'
-							}
-						);
-					}
-				);
-		}
-		else {
+					const message =
+						typeof error === 'string'
+							? error
+							: Liferay.Language.get('error');
+
+					openToast({
+						message,
+						title: Liferay.Language.get('error'),
+						type: 'danger'
+					});
+				});
+		} else {
 			alert(Liferay.Language.get('fragment-html-is-invalid'));
 		}
 	}
-
 }
 
 /**
@@ -181,7 +190,6 @@ class FragmentEditor extends PortletBase {
  * @type {!Object}
  */
 FragmentEditor.STATE = {
-
 	/**
 	 * List of tags for custom autocompletion in the HTML editor.
 	 *
@@ -191,12 +199,10 @@ FragmentEditor.STATE = {
 	 * @type Array
 	 */
 	autocompleteTags: Config.arrayOf(
-		Config.shapeOf(
-			{
-				content: Config.string(),
-				name: Config.string()
-			}
-		)
+		Config.shapeOf({
+			content: Config.string(),
+			name: Config.string()
+		})
 	),
 
 	/**
@@ -239,12 +245,24 @@ FragmentEditor.STATE = {
 	 *	redirect: !string
 	 * }}
 	 */
-	urls: Config.shapeOf(
-		{
-			edit: Config.string().required(),
-			redirect: Config.string().required()
-		}
-	).required(),
+	urls: Config.shapeOf({
+		edit: Config.string().required(),
+		redirect: Config.string().required()
+	}).required(),
+
+	/**
+	 * Updated Configuration content of the editor. This value is propagated to the
+	 * preview pane.
+	 *
+	 * @default ''
+	 * @instance
+	 * @memberOf FragmentEditor
+	 * @private
+	 * @type {string}
+	 */
+	_configuration: Config.string()
+		.internal()
+		.value(''),
 
 	/**
 	 * Updated CSS content of the editor. This value is propagated to the

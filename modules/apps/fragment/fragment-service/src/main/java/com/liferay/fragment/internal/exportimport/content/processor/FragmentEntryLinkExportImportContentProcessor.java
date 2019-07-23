@@ -25,7 +25,6 @@ import com.liferay.dynamic.data.mapping.service.DDMTemplateLocalService;
 import com.liferay.exportimport.content.processor.ExportImportContentProcessor;
 import com.liferay.exportimport.kernel.lar.PortletDataContext;
 import com.liferay.exportimport.kernel.lar.StagedModelDataHandlerUtil;
-import com.liferay.fragment.model.FragmentEntryLink;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -73,6 +72,11 @@ public class FragmentEntryLinkExportImportContentProcessor
 			boolean escapeContent)
 		throws Exception {
 
+		content =
+			_dlReferencesExportImportContentProcessor.
+				replaceExportContentReferences(
+					portletDataContext, stagedModel, content, true, false);
+
 		JSONObject editableValuesJSONObject = JSONFactoryUtil.createJSONObject(
 			content);
 
@@ -114,6 +118,11 @@ public class FragmentEntryLinkExportImportContentProcessor
 			PortletDataContext portletDataContext, StagedModel stagedModel,
 			String content)
 		throws Exception {
+
+		content =
+			_dlReferencesExportImportContentProcessor.
+				replaceImportContentReferences(
+					portletDataContext, stagedModel, content);
 
 		JSONObject editableValuesJSONObject = JSONFactoryUtil.createJSONObject(
 			content);
@@ -329,12 +338,15 @@ public class FragmentEntryLinkExportImportContentProcessor
 		while (editableKeysIterator.hasNext()) {
 			String editableKey = editableKeysIterator.next();
 
-			if (!editableKey.startsWith(_SEGMENTS_EXPERIENCE_ID)) {
+			if (!editableKey.startsWith(
+					SegmentsConstants.SEGMENTS_EXPERIENCE_ID_PREFIX)) {
+
 				continue;
 			}
 
 			long segmentsExperienceId = GetterUtil.getLong(
-				editableKey.substring(_SEGMENTS_EXPERIENCE_ID.length()));
+				editableKey.substring(
+					SegmentsConstants.SEGMENTS_EXPERIENCE_ID_PREFIX.length()));
 
 			if (segmentsExperienceId ==
 					SegmentsConstants.SEGMENTS_EXPERIENCE_ID_DEFAULT) {
@@ -342,18 +354,9 @@ public class FragmentEntryLinkExportImportContentProcessor
 				continue;
 			}
 
-			FragmentEntryLink fragmentEntryLink =
-				(FragmentEntryLink)stagedModel;
-
 			SegmentsExperience segmentsExperience =
 				_segmentsExperienceLocalService.fetchSegmentsExperience(
 					segmentsExperienceId);
-
-			if (fragmentEntryLink.getClassPK() !=
-					segmentsExperience.getClassPK()) {
-
-				continue;
-			}
 
 			StagedModelDataHandlerUtil.exportReferenceStagedModel(
 				portletDataContext, stagedModel, segmentsExperience,
@@ -371,12 +374,15 @@ public class FragmentEntryLinkExportImportContentProcessor
 		editableKeysIterator.forEachRemaining(editableKeys::add);
 
 		for (String editableKey : editableKeys) {
-			if (!editableKey.startsWith(_SEGMENTS_EXPERIENCE_ID)) {
+			if (!editableKey.startsWith(
+					SegmentsConstants.SEGMENTS_EXPERIENCE_ID_PREFIX)) {
+
 				continue;
 			}
 
 			long segmentsExperienceId = GetterUtil.getLong(
-				editableKey.substring(_SEGMENTS_EXPERIENCE_ID.length()));
+				editableKey.substring(
+					SegmentsConstants.SEGMENTS_EXPERIENCE_ID_PREFIX.length()));
 
 			Map<Long, Long> segmentsExperienceIds =
 				(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
@@ -392,15 +398,13 @@ public class FragmentEntryLinkExportImportContentProcessor
 			editableJSONObject.remove(editableKey);
 
 			editableJSONObject.put(
-				_SEGMENTS_EXPERIENCE_ID + importedSegmentsExperienceId,
+				SegmentsConstants.SEGMENTS_EXPERIENCE_ID_PREFIX +
+					importedSegmentsExperienceId,
 				segmentsExperienceJSONObject);
 		}
 	}
 
 	private static final String _DDM_TEMPLATE = "ddmTemplate_";
-
-	private static final String _SEGMENTS_EXPERIENCE_ID =
-		"segments-experience-id-";
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		FragmentEntryLinkExportImportContentProcessor.class);
@@ -410,6 +414,10 @@ public class FragmentEntryLinkExportImportContentProcessor
 
 	@Reference
 	private DDMTemplateLocalService _ddmTemplateLocalService;
+
+	@Reference(target = "(content.processor.type=DLReferences)")
+	private ExportImportContentProcessor<String>
+		_dlReferencesExportImportContentProcessor;
 
 	@Reference
 	private Portal _portal;

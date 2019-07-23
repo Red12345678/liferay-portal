@@ -16,7 +16,6 @@ package com.liferay.fragment.entry.processor.portlet;
 
 import com.liferay.fragment.exception.FragmentEntryContentException;
 import com.liferay.fragment.model.FragmentEntryLink;
-import com.liferay.fragment.processor.DefaultFragmentEntryProcessorContext;
 import com.liferay.fragment.processor.FragmentEntryProcessor;
 import com.liferay.fragment.processor.FragmentEntryProcessorContext;
 import com.liferay.fragment.processor.PortletRegistry;
@@ -51,9 +50,9 @@ import com.liferay.portal.kernel.util.PortletKeys;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portlet.PortletPreferencesImpl;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -217,28 +216,9 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 	}
 
 	@Override
-	public String processFragmentEntryLinkHTML(
-			FragmentEntryLink fragmentEntryLink, String html, String mode,
-			Locale locale, long[] segmentsExperienceIds, long previewClassPK,
-			int previewType)
+	public void validateFragmentEntryHTML(String html, String configuration)
 		throws PortalException {
 
-		DefaultFragmentEntryProcessorContext
-			defaultFragmentEntryProcessorContext =
-				new DefaultFragmentEntryProcessorContext(
-					null, null, mode, locale);
-
-		defaultFragmentEntryProcessorContext.setPreviewClassPK(previewClassPK);
-		defaultFragmentEntryProcessorContext.setPreviewType(previewType);
-		defaultFragmentEntryProcessorContext.setSegmentsExperienceIds(
-			segmentsExperienceIds);
-
-		return processFragmentEntryLinkHTML(
-			fragmentEntryLink, html, defaultFragmentEntryProcessorContext);
-	}
-
-	@Override
-	public void validateFragmentEntryHTML(String html) throws PortalException {
 		Document document = _getDocument(html);
 
 		for (Element element : document.select("*")) {
@@ -446,13 +426,9 @@ public class PortletFragmentEntryProcessor implements FragmentEntryProcessor {
 
 		long plid = 0L;
 
-		if (jxPortletPreferences instanceof
-				com.liferay.portal.kernel.model.PortletPreferences) {
-
-			com.liferay.portal.kernel.model.PortletPreferences
-				portletPreferences =
-					(com.liferay.portal.kernel.model.PortletPreferences)
-						jxPortletPreferences;
+		if (jxPortletPreferences instanceof PortletPreferencesImpl) {
+			PortletPreferencesImpl portletPreferences =
+				(PortletPreferencesImpl)jxPortletPreferences;
 
 			plid = portletPreferences.getPlid();
 		}

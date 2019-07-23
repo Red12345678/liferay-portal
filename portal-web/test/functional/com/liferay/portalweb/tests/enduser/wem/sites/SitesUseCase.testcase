@@ -1,5 +1,6 @@
 @component-name = "portal-wcm"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Site Administration";
@@ -142,7 +143,7 @@ definition {
 			configurationName = "Inactive Request Handler",
 			configurationScope = "System Scope");
 
-		FormFields.enableCheckbox(fieldName = "show.inactive.request.message");
+		FormFields.enableCheckbox(fieldName = "Show Inactive Request Message");
 
 		SystemSettings.saveConfiguration();
 
@@ -622,18 +623,11 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 
+		Pause(locator1 = "30000");
+
 		Gmail.login(
 			userEmailAddress = PropsUtil.get("email.address.2"),
 			userPassword = PropsUtil.get("email.password.2"));
-
-		Gmail.gotoHtmlMode();
-
-		Gmail.gotoMail(
-			emailFromUserName = "Joe Bloggs",
-			gmailAssetType = "New Account",
-			gmailMessageTitle = "Your New Account");
-
-		var emailPassword = selenium.getText("Gmail#EMAIL_PASSWORD");
 
 		Gmail.gotoHtmlMode();
 
@@ -651,7 +645,7 @@ definition {
 		Navigator.openSpecificURL(url = "http://www.baker.com:8080/");
 
 		User.signInPG(
-			emailPassword = "${emailPassword}",
+			emailPassword = "password",
 			emailVerification = "${emailVerification}",
 			userEmailAddress = PropsUtil.get("email.address.2"));
 
@@ -804,7 +798,7 @@ definition {
 			configurationName = "Inactive Request Handler",
 			configurationScope = "System Scope");
 
-		FormFields.enableCheckbox(fieldName = "show.inactive.request.message");
+		FormFields.enableCheckbox(fieldName = "Show Inactive Request Message");
 
 		SystemSettings.saveConfiguration();
 
@@ -1066,7 +1060,7 @@ definition {
 
 		LexiconEntry.gotoAdd();
 
-		LAR.exportSuccess();
+		LAR.exportWithAssertionOnSuccess();
 
 		var larFileName = LAR.getLarFileName();
 
@@ -1295,4 +1289,5 @@ definition {
 
 		AssertHTMLSourceTextPresent(value1 = "${escapedScript}");
 	}
+
 }

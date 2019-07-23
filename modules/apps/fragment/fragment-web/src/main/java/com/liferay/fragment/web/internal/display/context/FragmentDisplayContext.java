@@ -14,6 +14,7 @@
 
 package com.liferay.fragment.web.internal.display.context;
 
+import com.liferay.fragment.configuration.FragmentServiceConfiguration;
 import com.liferay.fragment.constants.FragmentActionKeys;
 import com.liferay.fragment.constants.FragmentConstants;
 import com.liferay.fragment.constants.FragmentPortletKeys;
@@ -25,7 +26,7 @@ import com.liferay.fragment.service.FragmentEntryLocalServiceUtil;
 import com.liferay.fragment.service.FragmentEntryServiceUtil;
 import com.liferay.fragment.web.internal.constants.FragmentWebKeys;
 import com.liferay.fragment.web.internal.security.permission.resource.FragmentPermission;
-import com.liferay.fragment.web.util.FragmentPortletUtil;
+import com.liferay.fragment.web.internal.util.FragmentPortletUtil;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.NavigationItem;
@@ -34,6 +35,7 @@ import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.module.configuration.ConfigurationProviderUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletURLFactoryUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -138,6 +140,29 @@ public class FragmentDisplayContext {
 		};
 	}
 
+	public String getConfigurationContent() {
+		if (Validator.isNotNull(_configurationContent)) {
+			return _configurationContent;
+		}
+
+		_configurationContent = ParamUtil.getString(
+			_httpServletRequest, "configurationContent");
+
+		FragmentEntry fragmentEntry = getFragmentEntry();
+
+		if ((fragmentEntry != null) &&
+			Validator.isNull(_configurationContent)) {
+
+			_configurationContent = fragmentEntry.getConfiguration();
+
+			if (Validator.isNull(_configurationContent)) {
+				_configurationContent = "{\n\t\"fieldSets\": [\n\t]\n}";
+			}
+		}
+
+		return _configurationContent;
+	}
+
 	public String getCssContent() {
 		if (Validator.isNotNull(_cssContent)) {
 			return _cssContent;
@@ -213,6 +238,11 @@ public class FragmentDisplayContext {
 			"draft", String.valueOf(WorkflowConstants.STATUS_DRAFT)
 		);
 
+		FragmentServiceConfiguration fragmentServiceConfiguration =
+			ConfigurationProviderUtil.getCompanyConfiguration(
+				FragmentServiceConfiguration.class,
+				_themeDisplay.getCompanyId());
+
 		soyContext.put(
 			"allowedStatus", allowedStatusSoyContext
 		).put(
@@ -223,6 +253,8 @@ public class FragmentDisplayContext {
 		).put(
 			"fragmentEntryId", getFragmentEntryId()
 		).put(
+			"initialConfiguration", getConfigurationContent()
+		).put(
 			"initialCSS", getCssContent()
 		).put(
 			"initialHTML", getHtmlContent()
@@ -232,6 +264,9 @@ public class FragmentDisplayContext {
 			"name", getName()
 		).put(
 			"portletNamespace", _renderResponse.getNamespace()
+		).put(
+			"propagationEnabled",
+			fragmentServiceConfiguration.propagateChanges()
 		).put(
 			"spritemap",
 			_themeDisplay.getPathThemeImages() + "/lexicon/icons.svg"
@@ -610,6 +645,7 @@ public class FragmentDisplayContext {
 		return _tabs1;
 	}
 
+	private String _configurationContent;
 	private String _cssContent;
 	private FragmentCollection _fragmentCollection;
 	private Long _fragmentCollectionId;

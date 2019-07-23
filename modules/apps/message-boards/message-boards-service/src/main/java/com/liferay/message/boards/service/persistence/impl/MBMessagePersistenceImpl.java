@@ -34,12 +34,11 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.sanitizer.Sanitizer;
 import com.liferay.portal.kernel.sanitizer.SanitizerException;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.kernel.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
-import com.liferay.portal.kernel.service.persistence.CompanyProvider;
-import com.liferay.portal.kernel.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.kernel.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -56,7 +55,6 @@ import java.io.Serializable;
 
 import java.lang.reflect.InvocationHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -8296,9 +8294,7 @@ public class MBMessagePersistenceImpl
 			classNameIds = new long[0];
 		}
 		else if (classNameIds.length > 1) {
-			classNameIds = ArrayUtil.unique(classNameIds);
-
-			Arrays.sort(classNameIds);
+			classNameIds = ArrayUtil.sortedUnique(classNameIds);
 		}
 
 		if (classNameIds.length == 1) {
@@ -8504,9 +8500,7 @@ public class MBMessagePersistenceImpl
 			classNameIds = new long[0];
 		}
 		else if (classNameIds.length > 1) {
-			classNameIds = ArrayUtil.unique(classNameIds);
-
-			Arrays.sort(classNameIds);
+			classNameIds = ArrayUtil.sortedUnique(classNameIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -16602,9 +16596,7 @@ public class MBMessagePersistenceImpl
 			classNameIds = new long[0];
 		}
 		else if (classNameIds.length > 1) {
-			classNameIds = ArrayUtil.unique(classNameIds);
-
-			Arrays.sort(classNameIds);
+			classNameIds = ArrayUtil.sortedUnique(classNameIds);
 		}
 
 		if (classNameIds.length == 1) {
@@ -16826,9 +16818,7 @@ public class MBMessagePersistenceImpl
 			classNameIds = new long[0];
 		}
 		else if (classNameIds.length > 1) {
-			classNameIds = ArrayUtil.unique(classNameIds);
-
-			Arrays.sort(classNameIds);
+			classNameIds = ArrayUtil.sortedUnique(classNameIds);
 		}
 
 		Object[] finderArgs = new Object[] {
@@ -20426,7 +20416,7 @@ public class MBMessagePersistenceImpl
 
 		mbMessage.setUuid(uuid);
 
-		mbMessage.setCompanyId(companyProvider.getCompanyId());
+		mbMessage.setCompanyId(CompanyThreadLocal.getCompanyId());
 
 		return mbMessage;
 	}
@@ -22552,9 +22542,6 @@ public class MBMessagePersistenceImpl
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		finderCache.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
-
-	@ServiceReference(type = CompanyProviderWrapper.class)
-	protected CompanyProvider companyProvider;
 
 	@ServiceReference(type = EntityCache.class)
 	protected EntityCache entityCache;

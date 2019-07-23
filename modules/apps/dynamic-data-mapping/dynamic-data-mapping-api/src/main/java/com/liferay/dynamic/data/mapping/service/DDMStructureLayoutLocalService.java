@@ -84,9 +84,23 @@ public interface DDMStructureLayoutLocalService
 			DDMFormLayout ddmFormLayout, ServiceContext serviceContext)
 		throws PortalException;
 
+	/**
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link
+	 #addStructureLayout(long, long, long, long, Map, Map, String,
+	 String, ServiceContext)}
+	 */
+	@Deprecated
 	@Indexable(type = IndexableType.REINDEX)
 	public DDMStructureLayout addStructureLayout(
 			long userId, long groupId, long structureVersionId,
+			Map<Locale, String> name, Map<Locale, String> description,
+			String definition, ServiceContext serviceContext)
+		throws PortalException;
+
+	@Indexable(type = IndexableType.REINDEX)
+	public DDMStructureLayout addStructureLayout(
+			long userId, long groupId, long classNameId,
+			String structureLayoutKey, long structureVersionId,
 			Map<Locale, String> name, Map<Locale, String> description,
 			String definition, ServiceContext serviceContext)
 		throws PortalException;
@@ -215,6 +229,10 @@ public interface DDMStructureLayoutLocalService
 		String uuid, long groupId);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public DDMStructureLayout fetchStructureLayout(
+		long groupId, long classNameId, String structureLayoutKey);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public ActionableDynamicQuery getActionableDynamicQuery();
 
 	/**
@@ -313,6 +331,11 @@ public interface DDMStructureLayoutLocalService
 		throws PortalException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public DDMStructureLayout getStructureLayout(
+			long groupId, long classNameId, String structureLayoutKey)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public DDMStructureLayout getStructureLayoutByStructureVersionId(
 			long structureVersionId)
 		throws PortalException;
@@ -334,6 +357,11 @@ public interface DDMStructureLayoutLocalService
 			long companyId, long[] groupIds, long classNameId, String keywords,
 			int start, int end,
 			OrderByComparator<DDMStructureLayout> orderByComparator)
+		throws PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int searchCount(
+			long companyId, long[] groupIds, long classNameId, String keywords)
 		throws PortalException;
 
 	/**

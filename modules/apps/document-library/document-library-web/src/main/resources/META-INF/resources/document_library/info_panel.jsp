@@ -67,11 +67,13 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(fileEntries) && ListUtil.isEmp
 				</li>
 			</ul>
 
-			<h4 class="sidebar-title"><%= (folder != null) ? HtmlUtil.escape(folder.getName()) : LanguageUtil.get(request, "home") %></h4>
+			<h1 class="sidebar-title">
+				<%= (folder != null) ? HtmlUtil.escape(folder.getName()) : LanguageUtil.get(request, "home") %>
+			</h1>
 
-			<h5 class="sidebar-subtitle">
+			<h2 class="sidebar-subtitle">
 				<liferay-ui:message key="folder" />
-			</h5>
+			</h2>
 		</div>
 
 		<div class="sidebar-body">
@@ -146,11 +148,13 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(fileEntries) && ListUtil.isEmp
 				</li>
 			</ul>
 
-			<h4 class="sidebar-title"><%= HtmlUtil.escape(fileShortcut.getToTitle()) %></h4>
+			<h1 class="sidebar-title">
+				<%= HtmlUtil.escape(fileShortcut.getToTitle()) %>
+			</h1>
 
-			<h5>
+			<h2 class="sidebar-subtitle">
 				<liferay-ui:message key="shortcut" />
-			</h5>
+			</h2>
 		</div>
 
 		<div class="sidebar-body">
@@ -253,7 +257,9 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(fileEntries) && ListUtil.isEmp
 	</c:when>
 	<c:otherwise>
 		<div class="sidebar-header">
-			<h4 class="sidebar-title"><liferay-ui:message arguments="<%= folders.size() + fileEntries.size() + fileShortcuts.size() %>" key="x-items-are-selected" /></h4>
+			<h1 class="sidebar-title">
+				<liferay-ui:message arguments="<%= folders.size() + fileEntries.size() + fileShortcuts.size() %>" key="x-items-are-selected" />
+			</h1>
 		</div>
 
 		<div class="sidebar-body">
@@ -263,9 +269,9 @@ if (ListUtil.isEmpty(folders) && ListUtil.isEmpty(fileEntries) && ListUtil.isEmp
 				refresh="<%= false %>"
 			>
 				<liferay-ui:section>
-					<h5>
+					<strong>
 						<liferay-ui:message arguments="<%= folders.size() + fileEntries.size() + fileShortcuts.size() %>" key="x-items-are-selected" />
-					</h5>
+					</strong>
 				</liferay-ui:section>
 			</liferay-ui:tabs>
 		</div>

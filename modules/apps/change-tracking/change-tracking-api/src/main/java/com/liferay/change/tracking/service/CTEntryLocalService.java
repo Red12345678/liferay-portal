@@ -365,17 +365,23 @@ public interface CTEntryLocalService
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
 		throws PortalException;
 
-	@Indexable(type = IndexableType.REINDEX)
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public List<CTEntry> getRelatedOwnerCTEntries(long ctEntryId);
+	public List<CTEntry> getRelatedOwnerCTEntries(
+		long companyId, long ctCollectionId, long ctEntryId, String keywords,
+		QueryDefinition<CTEntry> queryDefinition);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public List<CTEntry> getRelatedOwnerCTEntries(
-		long ctEntryId, int start, int end,
-		OrderByComparator<CTEntry> orderByComparator);
+		long ctEntryId, QueryDefinition<CTEntry> queryDefinition);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getRelatedOwnerCTEntriesCount(long ctEntryId);
+	public long getRelatedOwnerCTEntriesCount(
+		long companyId, long ctCollectionId, long ctEntryId, String keywords,
+		QueryDefinition<CTEntry> queryDefinition);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getRelatedOwnerCTEntriesCount(
+		long ctEntryId, QueryDefinition<CTEntry> queryDefinition);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public boolean hasCTCollectionCTEntries(long ctCollectionId);
@@ -397,9 +403,19 @@ public interface CTEntryLocalService
 		QueryDefinition<CTEntry> queryDefinition);
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public List<CTEntry> search(
+		CTCollection ctCollection, String keywords,
+		QueryDefinition<CTEntry> queryDefinition);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public long searchCount(
 		CTCollection ctCollection, long[] groupIds, long[] userIds,
 		long[] classNameIds, int[] changeTypes, Boolean collision,
+		QueryDefinition<CTEntry> queryDefinition);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int searchCount(
+		CTCollection ctCollection, String keywords,
 		QueryDefinition<CTEntry> queryDefinition);
 
 	public void setCTCollectionCTEntries(

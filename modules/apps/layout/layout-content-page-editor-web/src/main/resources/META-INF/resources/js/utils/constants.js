@@ -1,25 +1,22 @@
 /**
- * @type {string}
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
-export const BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR = 'com.liferay.fragment.entry.processor.background.image.BackgroundImageFragmentEntryProcessor';
 
 /**
- * Available values for buttonType config key
+ * @type {string}
  */
-export const BUTTON_TYPES = [
-	{
-		buttonTypeId: 'link',
-		label: Liferay.Language.get('link')
-	},
-	{
-		buttonTypeId: 'primary',
-		label: Liferay.Language.get('primary-button')
-	},
-	{
-		buttonTypeId: 'secondary',
-		label: Liferay.Language.get('secondary-button')
-	}
-];
+export const BACKGROUND_IMAGE_FRAGMENT_ENTRY_PROCESSOR =
+	'com.liferay.fragment.entry.processor.background.image.BackgroundImageFragmentEntryProcessor';
 
 /**
  * List of editable types and their compatibilities
@@ -30,7 +27,7 @@ export const BUTTON_TYPES = [
  */
 
 export const COMPATIBLE_TYPES = {
-	'html': [
+	html: [
 		'ddm-date',
 		'ddm-decimal',
 		'ddm-integer',
@@ -41,10 +38,7 @@ export const COMPATIBLE_TYPES = {
 		'url'
 	],
 
-	'image': [
-		'ddm-image',
-		'image'
-	],
+	image: ['ddm-image', 'image'],
 
 	'rich-text': [
 		'ddm-date',
@@ -57,7 +51,7 @@ export const COMPATIBLE_TYPES = {
 		'url'
 	],
 
-	'text': [
+	text: [
 		'ddm-date',
 		'ddm-decimal',
 		'ddm-integer',
@@ -112,6 +106,14 @@ export const FLOATING_TOOLBAR_BUTTONS = {
 		type: 'editor'
 	},
 
+	fragmentConfiguration: {
+		icon: '',
+		id: 'fragment_configuration',
+		panelId: 'fragment_configuration',
+		title: '',
+		type: 'panel'
+	},
+
 	imageLink: {
 		icon: 'link',
 		id: 'image_properties',
@@ -164,7 +166,8 @@ export const FLOATING_TOOLBAR_BUTTONS = {
 /**
  * @type {string}
  */
-export const EDITABLE_FRAGMENT_ENTRY_PROCESSOR = 'com.liferay.fragment.entry.processor.editable.EditableFragmentEntryProcessor';
+export const EDITABLE_FRAGMENT_ENTRY_PROCESSOR =
+	'com.liferay.fragment.entry.processor.editable.EditableFragmentEntryProcessor';
 
 /**
  * Fragments Editor dragging class
@@ -205,6 +208,12 @@ export const FRAGMENTS_EDITOR_ROW_TYPES = {
 	componentRow: '1',
 	sectionRow: '0'
 };
+
+/**
+ * @type {string}
+ */
+export const FREEMARKER_FRAGMENT_ENTRY_PROCESSOR =
+	'com.liferay.fragment.entry.processor.freemarker.FreeMarkerFragmentEntryProcessor';
 
 /**
  * Available attributes for target config key
@@ -267,31 +276,19 @@ export const TEXT_STYLES = [
 		textStyleId: 'lead'
 	},
 	{
-		label: Liferay.Util.sub(
-			Liferay.Language.get('heading-x'),
-			'1'
-		),
+		label: Liferay.Util.sub(Liferay.Language.get('heading-x'), '1'),
 		textStyleId: 'h1'
 	},
 	{
-		label: Liferay.Util.sub(
-			Liferay.Language.get('heading-x'),
-			'2'
-		),
+		label: Liferay.Util.sub(Liferay.Language.get('heading-x'), '2'),
 		textStyleId: 'h2'
 	},
 	{
-		label: Liferay.Util.sub(
-			Liferay.Language.get('heading-x'),
-			'3'
-		),
+		label: Liferay.Util.sub(Liferay.Language.get('heading-x'), '3'),
 		textStyleId: 'h3'
 	},
 	{
-		label: Liferay.Util.sub(
-			Liferay.Language.get('heading-x'),
-			'4'
-		),
+		label: Liferay.Util.sub(Liferay.Language.get('heading-x'), '4'),
 		textStyleId: 'h4'
 	}
 ];

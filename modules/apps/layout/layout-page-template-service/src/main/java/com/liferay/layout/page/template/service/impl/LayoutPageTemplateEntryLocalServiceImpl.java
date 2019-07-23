@@ -18,11 +18,9 @@ import com.liferay.dynamic.data.mapping.model.DDMStructureLink;
 import com.liferay.dynamic.data.mapping.service.DDMStructureLinkLocalService;
 import com.liferay.fragment.service.FragmentEntryLinkLocalService;
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
-import com.liferay.layout.page.template.exception.DuplicateLayoutPageTemplateEntryException;
 import com.liferay.layout.page.template.exception.LayoutPageTemplateEntryNameException;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.service.base.LayoutPageTemplateEntryLocalServiceBaseImpl;
-import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.Company;
@@ -44,6 +42,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.spring.extender.service.ServiceReference;
+import com.liferay.staging.StagingGroupHelper;
 
 import java.util.Collections;
 import java.util.Date;
@@ -270,16 +269,21 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 
 		// Layout prototype
 
-		long layoutPrototypeId = layoutPageTemplateEntry.getLayoutPrototypeId();
+		if (!_stagingGroupHelper.isLocalStagingGroup(
+				layoutPageTemplateEntry.getGroupId())) {
 
-		if (layoutPrototypeId > 0) {
-			LayoutPrototype layoutPrototype =
-				_layoutPrototypeLocalService.fetchLayoutPrototype(
-					layoutPrototypeId);
+			long layoutPrototypeId =
+				layoutPageTemplateEntry.getLayoutPrototypeId();
 
-			if (layoutPrototype != null) {
-				_layoutPrototypeLocalService.deleteLayoutPrototype(
-					layoutPrototypeId);
+			if (layoutPrototypeId > 0) {
+				LayoutPrototype layoutPrototype =
+					_layoutPrototypeLocalService.fetchLayoutPrototype(
+						layoutPrototypeId);
+
+				if (layoutPrototype != null) {
+					_layoutPrototypeLocalService.deleteLayoutPrototype(
+						layoutPrototypeId);
+				}
 			}
 		}
 
@@ -317,10 +321,8 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 			long layoutPageTemplateEntryId)
 		throws PortalException {
 
-		LayoutPageTemplateEntry layoutPageTemplateEntry =
-			getLayoutPageTemplateEntry(layoutPageTemplateEntryId);
-
-		return deleteLayoutPageTemplateEntry(layoutPageTemplateEntry);
+		return deleteLayoutPageTemplateEntry(
+			getLayoutPageTemplateEntry(layoutPageTemplateEntryId));
 	}
 
 	@Override
@@ -744,14 +746,14 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 
 	protected void validate(long groupId, String name) throws PortalException {
 		if (Validator.isNull(name)) {
-			throw new LayoutPageTemplateEntryNameException(
-				"Name must not be null for group " + groupId);
+			throw new LayoutPageTemplateEntryNameException.MustNotBeNull(
+				groupId);
 		}
 
 		for (char c : _BLACKLIST_CHAR) {
 			if (name.indexOf(c) >= 0) {
-				throw new LayoutPageTemplateEntryNameException(
-					"Invalid character in name");
+				throw new LayoutPageTemplateEntryNameException.
+					MustNotContainInvalidCharacters(c);
 			}
 		}
 
@@ -759,18 +761,16 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 			LayoutPageTemplateEntry.class.getName(), "name");
 
 		if (name.length() > nameMaxLength) {
-			throw new LayoutPageTemplateEntryNameException(
-				"Maximum length of name exceeded");
+			throw new LayoutPageTemplateEntryNameException.
+				MustNotExceedMaximumSize(nameMaxLength);
 		}
 
 		LayoutPageTemplateEntry layoutPageTemplateEntry =
 			layoutPageTemplateEntryPersistence.fetchByG_N(groupId, name);
 
 		if (layoutPageTemplateEntry != null) {
-			throw new DuplicateLayoutPageTemplateEntryException(
-				StringBundler.concat(
-					"Duplicate layout page template for group ", groupId,
-					" with name ", name));
+			throw new LayoutPageTemplateEntryNameException.MustNotBeDuplicate(
+				groupId, name);
 		}
 	}
 
@@ -779,27 +779,29 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 			ServiceContext serviceContext)
 		throws PortalException {
 
-		Map<Locale, String> titleMap = Collections.singletonMap(
-			LocaleUtil.getSiteDefault(), name);
-
+		boolean privateLayout = false;
 		String layoutType = LayoutConstants.TYPE_ASSET_DISPLAY;
 
 		if (type == LayoutPageTemplateEntryTypeConstants.TYPE_BASIC) {
+			privateLayout = true;
 			layoutType = LayoutConstants.TYPE_CONTENT;
 		}
+
+		Map<Locale, String> titleMap = Collections.singletonMap(
+			LocaleUtil.getSiteDefault(), name);
 
 		serviceContext.setAttribute(
 			"layout.instanceable.allowed", Boolean.TRUE);
 
 		Layout layout = layoutLocalService.addLayout(
-			userId, groupId, false, 0, titleMap, titleMap, null, null, null,
-			layoutType, StringPool.BLANK, true, true, new HashMap<>(),
+			userId, groupId, privateLayout, 0, titleMap, titleMap, null, null,
+			null, layoutType, StringPool.BLANK, true, true, new HashMap<>(),
 			serviceContext);
 
 		serviceContext.setModifiedDate(layout.getModifiedDate());
 
 		layoutLocalService.addLayout(
-			userId, groupId, false, layout.getParentLayoutId(),
+			userId, groupId, privateLayout, layout.getParentLayoutId(),
 			classNameLocalService.getClassNameId(Layout.class),
 			layout.getPlid(), layout.getNameMap(), titleMap,
 			layout.getDescriptionMap(), layout.getKeywordsMap(),
@@ -825,5 +827,8 @@ public class LayoutPageTemplateEntryLocalServiceImpl
 
 	@ServiceReference(type = LayoutPrototypeLocalService.class)
 	private LayoutPrototypeLocalService _layoutPrototypeLocalService;
+
+	@ServiceReference(type = StagingGroupHelper.class)
+	private StagingGroupHelper _stagingGroupHelper;
 
 }

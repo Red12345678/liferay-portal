@@ -32,6 +32,7 @@ import com.liferay.exportimport.kernel.lar.StagedModelModifiedDateComparator;
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleConstants;
 import com.liferay.exportimport.kernel.lifecycle.ExportImportLifecycleManager;
 import com.liferay.exportimport.kernel.staging.LayoutStagingUtil;
+import com.liferay.exportimport.kernel.staging.MergeLayoutPrototypesThreadLocal;
 import com.liferay.exportimport.kernel.staging.Staging;
 import com.liferay.exportimport.lar.PermissionImporter;
 import com.liferay.fragment.model.FragmentEntryLink;
@@ -148,6 +149,13 @@ public class LayoutStagedModelDataHandler
 
 		Layout layout = _layoutLocalService.fetchLayoutByUuidAndGroupId(
 			uuid, groupId, privateLayout);
+
+		if ((layout == null) &&
+			MergeLayoutPrototypesThreadLocal.isInProgress()) {
+
+			layout = _layoutLocalService.fetchLayoutByUuidAndGroupId(
+				uuid, groupId, !privateLayout);
+		}
 
 		if (layout != null) {
 			deleteStagedModel(layout);
@@ -279,7 +287,10 @@ public class LayoutStagedModelDataHandler
 			Layout parentLayout = _layoutLocalService.fetchLayout(
 				layout.getGroupId(), layout.isPrivateLayout(), parentLayoutId);
 
-			if (parentLayout != null) {
+			String parentLayoutUuid = layoutElement.attributeValue(
+				"parent-layout-uuid");
+
+			if ((parentLayout != null) && Validator.isNull(parentLayoutUuid)) {
 				StagedModelDataHandlerUtil.exportReferenceStagedModel(
 					portletDataContext, layout, parentLayout,
 					PortletDataContext.REFERENCE_TYPE_PARENT);

@@ -8,6 +8,7 @@
 	{@param urlProductionView: string}
 	{@param urlSelectChangeList: string}
 	{@param? changeEntries: list<[
+		ctEntryId: number,
 		title: string,
 		conflict: bool,
 		userName: string,
@@ -15,6 +16,7 @@
 		contentType: string,
 		lastEdited: string,
 		changeType: string,
+		affectedByCTEntriesCount: number,
 		version: string
 	]>}
 	{@param? changes: [
@@ -43,8 +45,10 @@
 		userPortraitURL: string,
 		userName: string
 	]}
+	{@param? _handleClickAffected: any}
 	{@param? _handleClickPublish: any}
 	{@param? _handleClickRecentCollections: any}
+	{@param? _handleClickTrash: any}
 
 	{let $headerButtonLabel kind="text"}
 		{msg desc=""}publish{/msg}
@@ -110,6 +114,7 @@
 						{param spritemap: $spritemap /}
 						{param _handleClickPublish: $_handleClickPublish /}
 						{param _handleClickRecentCollections: $_handleClickRecentCollections /}
+						{param _handleClickTrash: $_handleClickTrash /}
 					{/call}
 				</div>
 
@@ -147,6 +152,7 @@
 							{msg desc=""}latest-changes-in{/msg} {$headerTitleActiveChangeList}
 						{/param}
 						{param spritemap: $spritemap /}
+						{param _handleClickAffected: $_handleClickAffected /}
 					{/call}
 				</div>
 			</div>
@@ -164,6 +170,7 @@
 	{@param? cardEmpty: bool}
 	{@param? cardStateColor: string}
 	{@param? changeEntries: list<[
+		ctEntryId: number,
 		title: string,
 		conflict: bool,
 		userName: string,
@@ -171,6 +178,7 @@
 		contentType: string,
 		lastEdited: string,
 		changeType: string,
+		affectedByCTEntriesCount: number,
 		version: string
 	]>}
 	{@param? changeListsDropdownMenu: list<[
@@ -212,8 +220,10 @@
 	]}
 	{@param? publishedByTitle: string}
 	{@param? urlSelectChangeList: string}
+	{@param? _handleClickAffected: any}
 	{@param? _handleClickPublish: any}
 	{@param? _handleClickRecentCollections: any}
+	{@param? _handleClickTrash: any}
 
 	<div class="overview-card-sheet {$cardStateColor}">
 		{call .overviewCardHeader}
@@ -234,11 +244,11 @@
 			{param spritemap: $spritemap /}
 			{param _handleClickPublish: $_handleClickPublish /}
 			{param _handleClickRecentCollections: $_handleClickRecentCollections /}
+			{param _handleClickTrash: $_handleClickTrash /}
 		{/call}
 
 		{if not $cardEmpty}
 			<div class="overview-card-sheet-divider"></div>
-
 			{call .overviewCardBody}
 				{param changes: $changes /}
 				{param changeEntries: $changeEntries /}
@@ -248,6 +258,7 @@
 				{param publishedBy: $publishedBy /}
 				{param publishedByTitle: $publishedByTitle /}
 				{param spritemap: $spritemap /}
+				{param _handleClickAffected: $_handleClickAffected /}
 			{/call}
 		{else}
 			<div class="empty-production-view sheet-text text-center text-strong">
@@ -284,6 +295,7 @@
 	{@param? urlSelectChangeList: string}
 	{@param? _handleClickPublish: any}
 	{@param? _handleClickRecentCollections: any}
+	{@param? _handleClickTrash: any}
 
 	{let $twoColumns: $headerButton /}
 
@@ -348,7 +360,7 @@
 								</div>
 							{/if}
 							<div class="btn-group-item">
-								<button class="btn btn-monospaced btn-outline-borderless btn-outline-secondary btn-xs" data-qa-id="headerTrash" type="button">
+								<button class="btn btn-monospaced btn-outline-borderless btn-outline-secondary btn-xs" data-qa-id="headerTrash" onclick="{$_handleClickTrash}" type="button">
 									<svg class="icon-monospaced lexicon-icon lexicon-icon-trash" focusable="false" role="presentation">
 										<use xlink:href="{$spritemap}#trash" />
 									</svg>
@@ -365,6 +377,7 @@
 
 {template .overviewCardBody}
 	{@param? changeEntries: list<[
+		ctEntryId: number,
 		title: string,
 		conflict: bool,
 		userName: string,
@@ -372,6 +385,7 @@
 		contentType: string,
 		lastEdited: string,
 		changeType: string,
+		affectedByCTEntriesCount: number,
 		version: string
 	]>}
 	{@param? changesLabel: string}
@@ -393,6 +407,7 @@
 	]}
 	{@param? publishedByTitle: string}
 	{@param spritemap: string}
+	{@param? _handleClickAffected: any}
 
 	<div class="overview-card-body overview-card-container">
 
@@ -401,9 +416,18 @@
 				{if $descriptionTitle}
 					<h3>{$descriptionTitle}</h3>
 				{/if}
-				<div class="sheet-text" data-qa-id="description">
-					{$description}
-				</div>
+				{if strLen($description) > 134}
+					<div class="sheet-text" data-qa-id="description">
+						<span class="lfr-portal-tooltip line-clamp"
+							title="{$description}">
+							{$description}
+						</span>
+					</div>
+				{else}
+					<div class="sheet-text" data-qa-id="description">
+						{$description}
+					</div>
+				{/if}
 			</div>
 		{/if}
 
@@ -438,7 +462,7 @@
 			<div class="overview-card-sheet-block">
 				<h3>{$changesLabel}</h3>
 
-				<div class="changes-row">
+				<div class="changes-row clearfix">
 					<div class="changes">
 						<div class="big-number" data-qa-id="changesAdded">{$changes.added}</div>
 						<div class="">{$changes.addedLabel}</div>
@@ -487,6 +511,8 @@
 									<th class="table-cell-expand">{msg desc=""}
 										change-type{/msg}</th>
 									<th class="table-cell-expand">{msg desc=""}
+										affects{/msg}</th>
+									<th class="table-cell-expand">{msg desc=""}
 										version{/msg}</th>
 								</tr>
 								</thead>
@@ -494,6 +520,8 @@
 								<tbody>
 									{foreach $changeEntry in $changeEntries}
 										{call .changeEntry}
+											{param ctEntryId: $changeEntry.ctEntryId /}
+											{param affects: $changeEntry.affectedByCTEntriesCount /}
 											{param changeType: $changeEntry.changeType /}
 											{param conflict: $changeEntry.conflict /}
 											{param contentType: $changeEntry.contentType /}
@@ -504,6 +532,7 @@
 											{param title: $changeEntry.title /}
 											{param userName: $changeEntry.userName /}
 											{param version: $changeEntry.version /}
+											{param _handleClickAffected: $_handleClickAffected /}
 										{/call}
 									{/foreach}
 								</tbody>
@@ -517,6 +546,8 @@
 {/template}
 
 {template .changeEntry}
+	{@param ctEntryId: number}
+	{@param affects: number}
 	{@param changeType: string}
 	{@param conflict: bool}
 	{@param contentType: string}
@@ -527,6 +558,7 @@
 	{@param title: string}
 	{@param userName: string}
 	{@param version: string}
+	{@param _handleClickAffected: any}
 
 	<tr>
 		<td class="table-cell-expand">
@@ -558,6 +590,13 @@
 		</td>
 		<td class="table-cell-expand">
 			<div id="change-entry-change-type-{$index}">{$changeType}</div>
+		</td>
+		<td class="table-cell-expand">
+			<div id="change-entry-affects-{$index}">
+				{if $affects > 0}
+					<a data-entry-id="{$ctEntryId}" href="#" onclick="{$_handleClickAffected}" >{$affects}</a>
+				{/if}
+			</div>
 		</td>
 		<td class="table-cell-expand">
 			<div id="change-entry-version-{$index}">{$version}</div>

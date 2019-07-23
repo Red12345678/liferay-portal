@@ -62,7 +62,7 @@ public class SharingModelResourcePermissionConfiguratorImpl
 
 		if (_sharingSystemConfiguration.enabled()) {
 			consumer.accept(
-				new SharingModelResourcePermissionLogicImpl<>(
+				new SharingModelResourcePermissionLogic<>(
 					_classNameLocalService.getClassNameId(
 						modelResourcePermission.getModelName())));
 		}
@@ -98,9 +98,8 @@ public class SharingModelResourcePermissionConfiguratorImpl
 
 	private SharingSystemConfiguration _sharingSystemConfiguration;
 
-	private class SharingModelResourcePermissionLogicImpl
-		<T extends GroupedModel>
-			implements ModelResourcePermissionLogic<T> {
+	private class SharingModelResourcePermissionLogic<T extends GroupedModel>
+		implements ModelResourcePermissionLogic<T> {
 
 		@Override
 		public Boolean contains(
@@ -115,9 +114,20 @@ public class SharingModelResourcePermissionConfiguratorImpl
 				return null;
 			}
 
+			long primaryKey = (Long)model.getPrimaryKeyObj();
+
+			if (permissionChecker.hasOwnerPermission(
+					model.getCompanyId(), name, primaryKey, model.getUserId(),
+					actionId) ||
+				permissionChecker.hasPermission(
+					model.getGroupId(), name, primaryKey, actionId)) {
+
+				return null;
+			}
+
 			if (!_sharingEntryLocalService.hasSharingPermission(
-					permissionChecker.getUserId(), _classNameId,
-					(Long)model.getPrimaryKeyObj(), sharingEntryAction)) {
+					permissionChecker.getUserId(), _classNameId, primaryKey,
+					sharingEntryAction)) {
 
 				return null;
 			}
@@ -133,7 +143,7 @@ public class SharingModelResourcePermissionConfiguratorImpl
 			return null;
 		}
 
-		private SharingModelResourcePermissionLogicImpl(long classNameId) {
+		private SharingModelResourcePermissionLogic(long classNameId) {
 			_classNameId = classNameId;
 		}
 

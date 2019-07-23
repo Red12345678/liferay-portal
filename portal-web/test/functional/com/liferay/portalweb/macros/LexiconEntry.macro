@@ -1,4 +1,5 @@
 definition {
+
 	macro changeDisplayStyle {
 		var browserType = PropsUtil.get("browser.type");
 
@@ -70,6 +71,16 @@ definition {
 		LexiconEntry.gotoAdd();
 
 		MenuItem.click(menuItem = "${menuItem}");
+	}
+
+	macro gotoAddReport {
+		var browserType = PropsUtil.get("browser.type");
+
+		if ("${browserType}" == "chrome") {
+			MetalComponent.waitForReportsManagementBar();
+		}
+
+		Click(locator1 = "Button#PLUS");
 	}
 
 	macro gotoEllipsisMenuItem {
@@ -183,4 +194,5 @@ definition {
 			key_menuItem = "${menuItem}",
 			locator1 = "MenuItem#ANY_MENU_ITEM");
 	}
+
 }

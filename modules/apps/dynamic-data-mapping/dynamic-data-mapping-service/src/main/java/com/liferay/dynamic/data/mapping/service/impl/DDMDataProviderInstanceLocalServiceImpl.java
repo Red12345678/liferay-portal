@@ -102,10 +102,12 @@ public class DDMDataProviderInstanceLocalServiceImpl
 		throws PortalException {
 
 		if (!GroupThreadLocal.isDeleteInProcess()) {
-			if (ddmDataProviderInstanceLinkPersistence.
+			int count =
+				ddmDataProviderInstanceLinkPersistence.
 					countByDataProviderInstanceId(
-						dataProviderInstance.getDataProviderInstanceId()) > 0) {
+						dataProviderInstance.getDataProviderInstanceId());
 
+			if (count > 0) {
 				throw new RequiredDataProviderInstanceException.
 					MustNotDeleteDataProviderInstanceReferencedByDataProviderInstanceLinks(
 						dataProviderInstance.getDataProviderInstanceId());
@@ -152,9 +154,8 @@ public class DDMDataProviderInstanceLocalServiceImpl
 				dynamicQuery.add(groupIdProperty.eq(groupId));
 			});
 		actionableDynamicQuery.setPerformActionMethod(
-			(DDMDataProviderInstance ddmDataProviderInstance) -> {
-				deleteDataProviderInstance(ddmDataProviderInstance);
-			});
+			(DDMDataProviderInstance ddmDataProviderInstance) ->
+				deleteDataProviderInstance(ddmDataProviderInstance));
 
 		actionableDynamicQuery.setCompanyId(companyId);
 

@@ -38,9 +38,9 @@ import com.liferay.journal.model.JournalFolderConstants;
 import com.liferay.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.Organization;
-import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.model.WorkflowInstanceLink;
+import com.liferay.portal.kernel.model.role.RoleConstants;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
@@ -573,6 +573,41 @@ public class WorkflowTaskManagerImplTest
 
 		serviceContext = ServiceContextTestUtil.getServiceContext(
 			group.getGroupId());
+	}
+
+	@Test
+	public void testApproveSiteMember() throws Exception {
+		activateWorkflow(
+			JournalFolder.class.getName(),
+			JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+			JournalArticleConstants.DDM_STRUCTURE_ID_ALL,
+			SITE_MEMBER_SINGLE_APPROVER, 1);
+
+		JournalArticle article = addJournalArticle(
+			JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+
+		Assert.assertEquals(
+			WorkflowConstants.STATUS_PENDING, article.getStatus());
+
+		checkUserNotificationEventsByUsers(siteMemberUser);
+
+		Assert.assertTrue(hasOtherAssignees(adminUser));
+
+		assignWorkflowTaskToUser(adminUser, siteMemberUser);
+
+		completeWorkflowTask(siteMemberUser, Constants.APPROVE);
+
+		getWorkflowInstance(JournalArticle.class.getName(), article.getId());
+
+		article = JournalArticleLocalServiceUtil.getArticle(article.getId());
+
+		Assert.assertEquals(
+			WorkflowConstants.STATUS_APPROVED, article.getStatus());
+
+		deactivateWorkflow(
+			JournalFolder.class.getName(),
+			JournalFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+			JournalArticleConstants.DDM_STRUCTURE_ID_ALL);
 	}
 
 	@Test

@@ -1,6 +1,6 @@
 dependencies {
 	compileOnly group: "com.liferay", name: "com.liferay.item.selector.api", version: "4.0.0"
-	compileOnly group: "com.liferay", name: "com.liferay.item.selector.criteria.api", version: "4.0.0"
+	compileOnly group: "com.liferay", name: "com.liferay.item.selector.criteria.api", version: "4.1.0"
 	compileOnly group: "com.liferay", name: "com.liferay.item.selector.taglib", version: "3.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.lang", version: "3.0.0"
 	compileOnly group: "com.liferay", name: "com.liferay.petra.string", version: "3.0.0"

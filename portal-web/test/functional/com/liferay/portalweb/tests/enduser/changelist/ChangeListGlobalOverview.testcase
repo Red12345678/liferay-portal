@@ -1,5 +1,6 @@
 @component-name = "portal-staging"
 definition {
+
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Change Lists";
@@ -14,7 +15,14 @@ definition {
 			panel = "Control Panel",
 			portlet = "Settings");
 
-		ChangeList.enableChangeList(gotoOverview = "true");
+		ChangeList.enableChangeList();
+
+		ChangeList.changeUserSettingsPopuConfirmation(changeUserPopupConfirmation = "disable");
+
+		ProductMenu.gotoPortlet(
+			category = "Change Lists",
+			panel = "Control Panel",
+			portlet = "Overview");
 	}
 
 	tearDown {
@@ -28,6 +36,8 @@ definition {
 				category = "Change Lists",
 				panel = "Control Panel",
 				portlet = "Settings");
+
+			ChangeList.changeUserSettingsPopuConfirmation(changeUserPopupConfirmation = "enable");
 
 			ChangeList.disableChangeList();
 		}
@@ -52,10 +62,7 @@ definition {
 
 		Button.clickPublishToChangeList();
 
-		ProductMenu.gotoPortlet(
-			category = "Change Lists",
-			panel = "Control Panel",
-			portlet = "Overview");
+		Click(locator1 = "ChangeList#INDICATOR");
 
 		ChangeList.viewChangeOnOverview(
 			contentChangeType = "Added",
@@ -85,10 +92,7 @@ definition {
 
 		Button.clickPublishToChangeList();
 
-		ProductMenu.gotoPortlet(
-			category = "Change Lists",
-			panel = "Control Panel",
-			portlet = "Overview");
+		Click(locator1 = "ChangeList#INDICATOR");
 
 		ChangeList.viewChangeOnOverview(
 			contentChangeType = "Added",
@@ -204,10 +208,7 @@ definition {
 			changeListEnabled = "true",
 			structureName = "My Structure");
 
-		ProductMenu.gotoPortlet(
-			category = "Change Lists",
-			panel = "Control Panel",
-			portlet = "Overview");
+		Click(locator1 = "ChangeList#INDICATOR");
 
 		ChangeList.viewContentTypeOnOverview(
 			contentTitle = "My Structure",
@@ -233,10 +234,7 @@ definition {
 			templateDescription = "WC Template Description",
 			templateName = "WC Template Name");
 
-		ProductMenu.gotoPortlet(
-			category = "Change Lists",
-			panel = "Control Panel",
-			portlet = "Overview");
+		Click(locator1 = "ChangeList#INDICATOR");
 
 		ChangeList.viewContentTypeOnOverview(
 			contentTitle = "WC Template Name",
@@ -345,4 +343,14 @@ definition {
 			locator1 = "ChangeList#ACTIVE_CHANGE_LIST_TITLE",
 			value1 = "Change List Name");
 	}
+
+	@priority = "5"
+	test DeleteChangeListFromOverviewScreen {
+		ChangeList.addNewChangeList(
+			changeListDescription = "Change List Description",
+			changeListName = "Change List Name");
+
+		ChangeList.deleteChangeListFromOverviewScreen(changeListName = "Change List Name");
+	}
+
 }

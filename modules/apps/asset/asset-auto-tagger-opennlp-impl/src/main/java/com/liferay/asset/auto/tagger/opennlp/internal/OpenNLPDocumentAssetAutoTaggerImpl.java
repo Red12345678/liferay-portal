@@ -14,7 +14,7 @@
 
 package com.liferay.asset.auto.tagger.opennlp.internal;
 
-import com.liferay.asset.auto.tagger.opennlp.api.OpenNLPDocumentAssetAutoTagger;
+import com.liferay.asset.auto.tagger.opennlp.OpenNLPDocumentAssetAutoTagger;
 import com.liferay.asset.auto.tagger.opennlp.internal.configuration.OpenNLPDocumentAssetAutoTaggerCompanyConfiguration;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -66,16 +66,6 @@ public class OpenNLPDocumentAssetAutoTaggerImpl
 			return Collections.emptyList();
 		}
 
-		OpenNLPDocumentAssetAutoTaggerCompanyConfiguration
-			openNLPDocumentAssetAutoTaggerCompanyConfiguration =
-				_configurationProvider.getCompanyConfiguration(
-					OpenNLPDocumentAssetAutoTaggerCompanyConfiguration.class,
-					companyId);
-
-		if (!openNLPDocumentAssetAutoTaggerCompanyConfiguration.enabled()) {
-			return Collections.emptyList();
-		}
-
 		if (!_supportedContentTypes.contains(mimeType)) {
 			return Collections.emptyList();
 		}
@@ -88,6 +78,12 @@ public class OpenNLPDocumentAssetAutoTaggerImpl
 
 		List<TokenNameFinderModel> tokenNameFinderModels =
 			_tokenNameFinderModelsHolder.getModels();
+
+		OpenNLPDocumentAssetAutoTaggerCompanyConfiguration
+			openNLPDocumentAssetAutoTaggerCompanyConfiguration =
+				_configurationProvider.getCompanyConfiguration(
+					OpenNLPDocumentAssetAutoTaggerCompanyConfiguration.class,
+					companyId);
 
 		return Stream.of(
 			sentenceDetectorME.sentDetect(content)

@@ -1,12 +1,25 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import 'clay-icon';
-
+import {PortletBase, openToast} from 'frontend-js-web';
 import Soy from 'metal-soy';
-import PortletBase from 'frontend-js-web/liferay/PortletBase.es';
 import {Config} from 'metal-state';
-import {openToast} from 'frontend-js-web/liferay/toast/commands/OpenToast.es';
-import {PublishChangeList} from './PublishChangeList.es';
 
+import {ContentsAffected} from './ContentsAffected.es';
 import templates from './Overview.soy';
+import {PublishChangeList} from './PublishChangeList.es';
 
 const SPLIT_REGEX = /({\d+})/g;
 
@@ -14,66 +27,134 @@ const SPLIT_REGEX = /({\d+})/g;
  * Provides the component for the Overview configuration screen.
  */
 class Overview extends PortletBase {
-
 	created() {
 		this._render();
 
 		this._fetchProductionCollection();
 	}
 
-	_fetchProductionCollection() {
-		let headers = new Headers();
+	_checkoutCollection(ctCollectionId, production) {
+		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		headers.append('X-CSRF-Token', Liferay.authToken);
 
-		let init = {
+		const body = {
+			credentials: 'include',
+			headers,
+			method: 'POST'
+		};
+
+		const url =
+			this.urlCollectionsBase +
+			'/' +
+			ctCollectionId +
+			'/checkout?companyId=' +
+			Liferay.ThemeDisplay.getCompanyId() +
+			'&userId=' +
+			Liferay.ThemeDisplay.getUserId();
+
+		fetch(url, body)
+			.then(response => {
+				if (response.status === 202) {
+					Liferay.fire('refreshChangeTrackingIndicator');
+
+					if (production) {
+						Liferay.Util.navigate(this.urlSelectProduction);
+					} else {
+						this._render();
+					}
+				} else if (response.status === 400) {
+					response.json().then(data => {
+						openToast({
+							message: Liferay.Util.sub(
+								Liferay.Language.get(
+									'an-error-occured-when-trying-to-check-x-out-x'
+								),
+								this.changeListName,
+								data.message
+							),
+							title: Liferay.Language.get('error'),
+							type: 'danger'
+						});
+					});
+				}
+			})
+			.catch(error => {
+				const message =
+					typeof error === 'string'
+						? error
+						: Liferay.Util.sub(
+								Liferay.Language.get(
+									'an-error-occured-when-trying-to-check-x-out'
+								),
+								this.changeListName
+						  );
+
+				openToast({
+					message,
+					title: Liferay.Language.get('error'),
+					type: 'danger'
+				});
+			});
+	}
+
+	_fetchProductionCollection() {
+		const headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+		headers.append('X-CSRF-Token', Liferay.authToken);
+
+		const init = {
 			credentials: 'include',
 			headers,
 			method: 'GET'
 		};
 
-		let url = this.urlCollectionsBase + '?companyId=' + Liferay.ThemeDisplay.getCompanyId() + '&type=production';
+		const url =
+			this.urlCollectionsBase +
+			'?companyId=' +
+			Liferay.ThemeDisplay.getCompanyId() +
+			'&type=production';
 
 		fetch(url, init)
 			.then(r => r.json())
-			.then(
-				response => {
-					this.productionCTCollectionId = response[0].ctCollectionId;
-				}
-			);
+			.then(response => {
+				this.productionCTCollectionId = response[0].ctCollectionId;
+			});
 	}
 
 	_fetchAll(urls, init) {
 		return Promise.all(
-			urls.map(
-				url => fetch(url, init)
+			urls.map(url =>
+				fetch(url, init)
 					.then(r => r.json())
 					.then(data => data)
-					.catch(
-						error => {
-							const message = typeof error === 'string' ?
-								error :
-								Liferay.Util.sub(Liferay.Language.get('an-error-occured-while-getting-data-from-x'), url);
+					.catch(error => {
+						const message =
+							typeof error === 'string'
+								? error
+								: Liferay.Util.sub(
+										Liferay.Language.get(
+											'an-error-occured-while-getting-data-from-x'
+										),
+										url
+								  );
 
-							openToast(
-								{
-									message,
-									title: Liferay.Language.get('error'),
-									type: 'danger'
-								}
-							);
-						}
-					)
+						openToast({
+							message,
+							title: Liferay.Language.get('error'),
+							type: 'danger'
+						});
+					})
 			)
 		);
 	}
 
 	_fetchChangeEntries(url, type) {
-		let headers = new Headers();
+		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		headers.append('X-CSRF-Token', Liferay.authToken);
 
-		let init = {
+		const init = {
 			credentials: 'include',
 			headers,
 			method: type
@@ -82,31 +163,33 @@ class Overview extends PortletBase {
 		fetch(url, init)
 			.then(r => r.json())
 			.then(response => this._populateChangeEntries(response))
-			.catch(
-				error => {
-					const message = typeof error === 'string' ?
-						error :
-						Liferay.Util.sub(Liferay.Language.get('an-error-occured-while-getting-data-from-x'), url);
+			.catch(error => {
+				const message =
+					typeof error === 'string'
+						? error
+						: Liferay.Util.sub(
+								Liferay.Language.get(
+									'an-error-occured-while-getting-data-from-x'
+								),
+								url
+						  );
 
-					openToast(
-						{
-							message,
-							title: Liferay.Language.get('error'),
-							type: 'danger'
-						}
-					);
-				}
-			);
+				openToast({
+					message,
+					title: Liferay.Language.get('error'),
+					type: 'danger'
+				});
+			});
 	}
 
 	_fetchCollisions(url, type) {
 		this.collisionsLoading = true;
 
-		let headers = new Headers();
+		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		headers.append('X-CSRF-Token', Liferay.authToken);
 
-		let init = {
+		const init = {
 			credentials: 'include',
 			headers,
 			method: type
@@ -115,29 +198,31 @@ class Overview extends PortletBase {
 		fetch(url, init)
 			.then(r => r.json())
 			.then(response => this._populateCollidingChangeEntries(response))
-			.catch(
-				error => {
-					const message = typeof error === 'string' ?
-						error :
-						Liferay.Util.sub(Liferay.Language.get('an-error-occured-while-getting-data-from-x'), url);
+			.catch(error => {
+				const message =
+					typeof error === 'string'
+						? error
+						: Liferay.Util.sub(
+								Liferay.Language.get(
+									'an-error-occured-while-getting-data-from-x'
+								),
+								url
+						  );
 
-					openToast(
-						{
-							message,
-							title: Liferay.Language.get('error'),
-							type: 'danger'
-						}
-					);
-				}
-			);
+				openToast({
+					message,
+					title: Liferay.Language.get('error'),
+					type: 'danger'
+				});
+			});
 	}
 
 	_fetchRecentCollections(url, type) {
-		let headers = new Headers();
+		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		headers.append('X-CSRF-Token', Liferay.authToken);
 
-		let init = {
+		const init = {
 			credentials: 'include',
 			headers,
 			method: type
@@ -146,34 +231,59 @@ class Overview extends PortletBase {
 		fetch(url, init)
 			.then(r => r.json())
 			.then(response => this._populateChangeListsDropdown(response))
-			.catch(
-				error => {
-					const message = typeof error === 'string' ?
-						error :
-						Liferay.Util.sub(Liferay.Language.get('an-error-occured-while-getting-data-from-x'), url);
+			.catch(error => {
+				const message =
+					typeof error === 'string'
+						? error
+						: Liferay.Util.sub(
+								Liferay.Language.get(
+									'an-error-occured-while-getting-data-from-x'
+								),
+								url
+						  );
 
-					openToast(
-						{
-							message,
-							title: Liferay.Language.get('error'),
-							type: 'danger'
-						}
-					);
-				}
-			);
+				openToast({
+					message,
+					title: Liferay.Language.get('error'),
+					type: 'danger'
+				});
+			});
 	}
 
-	_handleClickPublish(event) {
-		new PublishChangeList(
-			{
-				changeListDescription: this.descriptionActiveChangeList,
-				changeListName: this.headerTitleActiveChangeList,
-				spritemap: themeDisplay.getPathThemeImages() + '/lexicon/icons.svg',
-				urlChangeListsHistory: this.urlChangeListsHistory,
-				urlCheckoutProduction: this.urlCollectionsBase + '/' + this.productionCTCollectionId + '/checkout?companyId=' + Liferay.ThemeDisplay.getCompanyId() + '&userId=' + Liferay.ThemeDisplay.getUserId(),
-				urlPublishChangeList: this.urlActiveCollectionPublish
-			}
-		);
+	_handleClickAffected(event) {
+		event.preventDefault();
+		const entryId = event.target.getAttribute('data-entry-id');
+
+		new ContentsAffected({
+			entityNameTranslations: this.entityNameTranslations,
+			spritemap: themeDisplay.getPathThemeImages() + '/lexicon/icons.svg',
+			urlAffectedContents:
+				this.urlCollectionsBase +
+				'/' +
+				this.activeCTCollectionId +
+				'/entries/' +
+				entryId +
+				'/affecteds'
+		});
+	}
+
+	_handleClickPublish() {
+		new PublishChangeList({
+			changeListDescription: this.descriptionActiveChangeList,
+			changeListHasCollision: this.hasCollision,
+			changeListName: this.headerTitleActiveChangeList,
+			spritemap: themeDisplay.getPathThemeImages() + '/lexicon/icons.svg',
+			urlChangeListsHistory: this.urlChangeListsHistory,
+			urlCheckoutProduction:
+				this.urlCollectionsBase +
+				'/' +
+				this.productionCTCollectionId +
+				'/checkout?companyId=' +
+				Liferay.ThemeDisplay.getCompanyId() +
+				'&userId=' +
+				Liferay.ThemeDisplay.getUserId(),
+			urlPublishChangeList: this.urlActiveCollectionPublish
+		});
 	}
 
 	_handleClickRecentCollections(event) {
@@ -182,71 +292,84 @@ class Overview extends PortletBase {
 		let ok = true;
 
 		if (this.checkoutConfirmationEnabled) {
-			const label = this._sub(Liferay.Language.get('do-you-want-to-switch-to-x-change-list'), [event.target.text]) + '\n' + Liferay.Language.get('you-can-disable-this-message-from-the-change-list-user-settings-tab');
+			const label = this._sub(
+				Liferay.Language.get('do-you-want-to-switch-to-x-change-list'),
+				[event.target.text]
+			);
 			ok = confirm(label);
 		}
 
 		if (ok) {
-			let headers = new Headers();
+			const collectionId = event.target.getAttribute(
+				'data-collection-id'
+			);
+
+			const production = event.target.getAttribute('data-production');
+
+			this._checkoutCollection(collectionId, production);
+		}
+	}
+
+	_handleClickTrash() {
+		let ok = false;
+
+		const label = this._sub(
+			Liferay.Language.get(
+				'are-you-sure-you-want-to-delete-x-change-list'
+			),
+			[this.headerTitleActiveChangeList]
+		);
+
+		ok = confirm(label);
+
+		if (ok) {
+			const headers = new Headers();
 			headers.append('Content-Type', 'application/json');
 			headers.append('X-CSRF-Token', Liferay.authToken);
 
-			let body = {
+			const body = {
 				credentials: 'include',
 				headers,
-				method: 'POST'
+				method: 'DELETE'
 			};
 
-			let collectionId = event.target.getAttribute('data-collection-id');
-
-			let production = event.target.getAttribute('data-production');
-
-			let url = this.urlCollectionsBase + '/' + collectionId + '/checkout?companyId=' + Liferay.ThemeDisplay.getCompanyId() + '&userId=' + Liferay.ThemeDisplay.getUserId();
+			const url =
+				this.urlCollectionsBase + '/' + this.activeCTCollectionId;
 
 			fetch(url, body)
-				.then(
-					response => {
-						if (response.status === 202) {
-							Liferay.fire('refreshChangeTrackingIndicator');
-
-							if (production) {
-								Liferay.Util.navigate(this.urlSelectProduction);
-							}
-							else {
-								this._render();
-							}
-						}
-						else if (response.status === 400) {
-							response.json()
-								.then(
-									data => {
-										openToast(
-											{
-												message: Liferay.Util.sub(Liferay.Language.get('an-error-occured-when-trying-to-check-x-out-x'), this.changeListName, data.message),
-												title: Liferay.Language.get('error'),
-												type: 'danger'
-											}
-										);
-									}
-								);
-						}
+				.then(response => {
+					if (response.status === 204) {
+						Liferay.Util.navigate(this.urlSelectProduction);
+					} else if (response.status === 404) {
+						openToast({
+							message: this._sub(
+								Liferay.Language.get(
+									'unable-to-delete-change-list-x-because-it-could-not-be-found'
+								),
+								[this.headerTitleActiveChangeList]
+							),
+							title: Liferay.Language.get('error'),
+							type: 'danger'
+						});
 					}
-				)
-				.catch(
-					error => {
-						const message = typeof error === 'string' ?
-							error :
-							Liferay.Util.sub(Liferay.Language.get('an-error-occured-when-trying-to-check-x-out'), this.changeListName);
+				})
+				.catch(error => {
+					const message =
+						typeof error === 'string'
+							? error
+							: this._sub(
+									Liferay.Language.get(
+										'an-error-occured-when-trying-to-delete-x'
+									),
+									[this.headerTitleActiveChangeList]
+							  );
 
-						openToast(
-							{
-								message,
-								title: Liferay.Language.get('error'),
-								type: 'danger'
-							}
-						);
-					}
-				);
+					openToast({
+						message,
+						title: Liferay.Language.get('error'),
+						type: 'danger'
+					});
+				});
 		}
 	}
 
@@ -261,44 +384,42 @@ class Overview extends PortletBase {
 			return;
 		}
 
-		changeEntriesResult.items.forEach(
-			changeEntry => {
-				let changeTypeStr = Liferay.Language.get('added');
+		changeEntriesResult.items.forEach(changeEntry => {
+			let changeTypeStr = Liferay.Language.get('added');
 
-				if (changeEntry.changeType === 1) {
-					changeTypeStr = Liferay.Language.get('deleted');
-				}
-				else if (changeEntry.changeType === 2) {
-					changeTypeStr = Liferay.Language.get('modified');
-				}
-
-				let entityNameTranslation = this.entityNameTranslations.find(
-					entityNameTranslation =>
-						entityNameTranslation.key == changeEntry.contentType
-				);
-
-				this.changeEntries.push(
-					{
-						changeType: changeTypeStr,
-						conflict: changeEntry.collision,
-						contentType: entityNameTranslation.translation,
-						lastEdited: new Intl.DateTimeFormat(
-							Liferay.ThemeDisplay.getBCP47LanguageId(),
-							{
-								day: 'numeric',
-								hour: 'numeric',
-								minute: 'numeric',
-								month: 'numeric',
-								year: 'numeric'
-							}).format(new Date(changeEntry.modifiedDate)),
-						site: changeEntry.siteName,
-						title: changeEntry.title,
-						userName: changeEntry.userName,
-						version: String(changeEntry.version)
-					}
-				);
+			if (changeEntry.changeType === 1) {
+				changeTypeStr = Liferay.Language.get('deleted');
+			} else if (changeEntry.changeType === 2) {
+				changeTypeStr = Liferay.Language.get('modified');
 			}
-		);
+
+			const entityNameTranslation = this.entityNameTranslations.find(
+				entityNameTranslation =>
+					entityNameTranslation.key == changeEntry.contentType
+			);
+
+			this.changeEntries.push({
+				affectedByCTEntriesCount: changeEntry.affectedByCTEntriesCount,
+				changeType: changeTypeStr,
+				conflict: changeEntry.collision,
+				contentType: entityNameTranslation.translation,
+				ctEntryId: changeEntry.ctEntryId,
+				lastEdited: new Intl.DateTimeFormat(
+					Liferay.ThemeDisplay.getBCP47LanguageId(),
+					{
+						day: 'numeric',
+						hour: 'numeric',
+						minute: 'numeric',
+						month: 'numeric',
+						year: 'numeric'
+					}
+				).format(new Date(changeEntry.modifiedDate)),
+				site: changeEntry.siteName,
+				title: changeEntry.title,
+				userName: changeEntry.userName,
+				version: String(changeEntry.version)
+			});
+		});
 
 		if (this.changeEntries.length === 0) {
 			this.headerButtonDisabled = true;
@@ -308,24 +429,27 @@ class Overview extends PortletBase {
 	_populateChangeListsDropdown(collectionResults) {
 		this.changeListsDropdownMenu = [];
 
-		collectionResults.forEach(
-			ctCollection => {
-				this.changeListsDropdownMenu.push(
-					{
-						ctCollectionId: ctCollection.ctCollectionId,
-						label: ctCollection.name
-					}
-				);
-			}
-		);
+		collectionResults.forEach(ctCollection => {
+			this.changeListsDropdownMenu.push({
+				ctCollectionId: ctCollection.ctCollectionId,
+				label: ctCollection.name
+			});
+		});
 	}
 
 	_populateCollidingChangeEntries(collisionsResult) {
 		if (collisionsResult.items) {
 			this.collisionsCount = collisionsResult.items.length;
+
+			if (this.collisionsCount > 0) {
+				this.hasCollision = true;
+			}
 		}
 
-		this.collisionsTooltip = Liferay.Util.sub(Liferay.Language.get('collision-detected-for-x-change-lists'), this.collisionsCount);
+		this.collisionsTooltip = Liferay.Util.sub(
+			Liferay.Language.get('collision-detected-for-x-change-lists'),
+			this.collisionsCount
+		);
 
 		this.collisionsLoading = false;
 	}
@@ -333,22 +457,32 @@ class Overview extends PortletBase {
 	_populateFields(requestResult) {
 		let activeCollection = requestResult[0];
 		let productionInformation = requestResult[1];
-		let userSettings = requestResult[2];
+		const userSettings = requestResult[2];
+
+		this.activeCTCollectionId = activeCollection[0].ctCollectionId;
 
 		if (activeCollection !== undefined && activeCollection.length == 1) {
 			activeCollection = activeCollection[0];
 		}
 
 		if (activeCollection !== undefined) {
-			let foundEntriesLink = activeCollection.links.find(
-				function(link) {
-					return link.rel === 'entries';
-				}
-			);
+			const foundEntriesLink = activeCollection.links.find(function(
+				link
+			) {
+				return link.rel === 'entries';
+			});
 
 			if (foundEntriesLink) {
-				this._fetchCollisions(foundEntriesLink.href + '?collision=true', foundEntriesLink.type);
-				this._fetchChangeEntries(foundEntriesLink.href, foundEntriesLink.type);
+				this._fetchCollisions(
+					foundEntriesLink.href + '?collision=true',
+					foundEntriesLink.type
+				);
+				this._fetchChangeEntries(
+					foundEntriesLink.href +
+						'?companyId=' +
+						Liferay.ThemeDisplay.getCompanyId(),
+					foundEntriesLink.type
+				);
 			}
 
 			this.urlActiveCollectionPublish = activeCollection.links.find(
@@ -371,7 +505,13 @@ class Overview extends PortletBase {
 
 			// Change Lists dropdown Menu
 
-			let urlRecentCollections = this.urlCollectionsBase + '?companyId=' + Liferay.ThemeDisplay.getCompanyId() + '&userId=' + Liferay.ThemeDisplay.getUserId() + '&type=recent&limit=5&sort=modifiedDate:desc';
+			const urlRecentCollections =
+				this.urlCollectionsBase +
+				'?companyId=' +
+				Liferay.ThemeDisplay.getCompanyId() +
+				'&userId=' +
+				Liferay.ThemeDisplay.getUserId() +
+				'&type=recent&limit=5&sort=modifiedDate:desc';
 
 			this._fetchRecentCollections(urlRecentCollections, 'GET');
 
@@ -384,15 +524,24 @@ class Overview extends PortletBase {
 			this.initialFetch = true;
 		}
 
-		if (productionInformation !== undefined && productionInformation.length == 1) {
+		if (
+			productionInformation !== undefined &&
+			productionInformation.length == 1
+		) {
 			productionInformation = productionInformation[0];
 		}
 
-		if ((productionInformation !== undefined) && (productionInformation.ctcollection !== undefined) && (productionInformation.ctcollection.name !== undefined)) {
-			this.descriptionProductionInformation = productionInformation.ctcollection.description;
-			this.headerTitleProductionInformation = productionInformation.ctcollection.name;
+		if (
+			productionInformation !== undefined &&
+			productionInformation.ctcollection !== undefined &&
+			productionInformation.ctcollection.name !== undefined
+		) {
+			this.descriptionProductionInformation =
+				productionInformation.ctcollection.description;
+			this.headerTitleProductionInformation =
+				productionInformation.ctcollection.name;
 
-			let publishDate = new Date(productionInformation.date);
+			const publishDate = new Date(productionInformation.date);
 
 			this.publishedBy = {
 				dateTime: new Intl.DateTimeFormat(
@@ -403,35 +552,46 @@ class Overview extends PortletBase {
 						minute: 'numeric',
 						month: 'numeric',
 						year: 'numeric'
-					}).format(publishDate),
+					}
+				).format(publishDate),
 				userInitials: productionInformation.userInitials,
 				userName: productionInformation.userName,
 				userPortraitURL: productionInformation.userPortraitURL
 			};
 
 			this.productionFound = true;
-		}
-		else {
+		} else {
 			this.productionFound = false;
 		}
 
 		if (userSettings) {
-			this.checkoutConfirmationEnabled = userSettings.checkoutCTCollectionConfirmationEnabled;
+			this.checkoutConfirmationEnabled =
+				userSettings.checkoutCTCollectionConfirmationEnabled;
 		}
 	}
 
 	_render() {
-		let urlActiveCollection = this.urlCollectionsBase + '?companyId=' + Liferay.ThemeDisplay.getCompanyId() + '&userId=' + Liferay.ThemeDisplay.getUserId() + "&type=active";
+		const urlActiveCollection =
+			this.urlCollectionsBase +
+			'?companyId=' +
+			Liferay.ThemeDisplay.getCompanyId() +
+			'&userId=' +
+			Liferay.ThemeDisplay.getUserId() +
+			'&type=active';
 
-		let urls = [urlActiveCollection, this.urlProductionInformation, this.urlUserSettings];
+		const urls = [
+			urlActiveCollection,
+			this.urlProductionInformation,
+			this.urlUserSettings
+		];
 
 		this.initialFetch = false;
 
-		let headers = new Headers();
+		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		headers.append('X-CSRF-Token', Liferay.authToken);
 
-		let init = {
+		const init = {
 			credentials: 'include',
 			headers,
 			method: 'GET'
@@ -439,25 +599,26 @@ class Overview extends PortletBase {
 
 		this._fetchAll(urls, init)
 			.then(result => this._populateFields(result))
-			.catch(
-				error => {
-					const message = typeof error === 'string' ?
-						error :
-						Liferay.Language.get('an-error-occured-while-parsing-data');
+			.catch(error => {
+				const message =
+					typeof error === 'string'
+						? error
+						: Liferay.Language.get(
+								'an-error-occured-while-parsing-data'
+						  );
 
-					openToast(
-						{
-							message,
-							title: Liferay.Language.get('error'),
-							type: 'danger'
-						}
-					);
-				}
-			);
+				openToast({
+					message,
+					title: Liferay.Language.get('error'),
+					type: 'danger'
+				});
+			});
 	}
 
 	_sub(langKey, args) {
-		const keyArray = langKey.split(SPLIT_REGEX).filter(val => val.length !== 0);
+		const keyArray = langKey
+			.split(SPLIT_REGEX)
+			.filter(val => val.length !== 0);
 
 		for (let i = 0; i < args.length; i++) {
 			const arg = args[i];
@@ -484,7 +645,6 @@ class Overview extends PortletBase {
  * @type {!Object}
  */
 Overview.STATE = {
-
 	/**
 	 * Active change tracking collection ID retrieved from the REST service.
 	 *
@@ -503,13 +663,11 @@ Overview.STATE = {
 	 * @memberOf Overview
 	 * @type {object}
 	 */
-	changes: Config.shapeOf(
-		{
-			added: Config.number().value(0),
-			deleted: Config.number().value(0),
-			modified: Config.number().value(0)
-		}
-	),
+	changes: Config.shapeOf({
+		added: Config.number().value(0),
+		deleted: Config.number().value(0),
+		modified: Config.number().value(0)
+	}),
 
 	/**
 	 * Active change list card description.
@@ -540,12 +698,10 @@ Overview.STATE = {
 	 * @type {object}
 	 */
 	entityNameTranslations: Config.arrayOf(
-		Config.shapeOf(
-			{
-				key: Config.string(),
-				translation: Config.string()
-			}
-		)
+		Config.shapeOf({
+			key: Config.string(),
+			translation: Config.string()
+		})
 	),
 
 	/**
@@ -557,18 +713,17 @@ Overview.STATE = {
 	 * @type {object}
 	 */
 	changeEntries: Config.arrayOf(
-		Config.shapeOf(
-			{
-				changeType: Config.string(),
-				conflict: Config.bool(),
-				contentType: Config.string(),
-				lastEdited: Config.string(),
-				site: Config.string(),
-				title: Config.string(),
-				userName: Config.string(),
-				version: Config.string()
-			}
-		)
+		Config.shapeOf({
+			affectedByCTEntriesCount: Config.number(),
+			changeType: Config.string(),
+			conflict: Config.bool(),
+			contentType: Config.string(),
+			lastEdited: Config.string(),
+			site: Config.string(),
+			title: Config.string(),
+			userName: Config.string(),
+			version: Config.string()
+		})
 	),
 
 	/**
@@ -580,12 +735,10 @@ Overview.STATE = {
 	 * @type {array}
 	 */
 	changeListsDropdownMenu: Config.arrayOf(
-		Config.shapeOf(
-			{
-				ctCollectionId: Config.string(),
-				label: Config.string()
-			}
-		)
+		Config.shapeOf({
+			ctCollectionId: Config.string(),
+			label: Config.string()
+		})
 	),
 
 	/**
@@ -619,6 +772,8 @@ Overview.STATE = {
 	collisionsCount: Config.number().value(0),
 
 	collisionsTooltip: Config.string(),
+
+	hasCollision: Config.bool().value(false),
 
 	/**
 	 * If <code>true</code>, head button is disabled.
@@ -671,14 +826,12 @@ Overview.STATE = {
 	 * @memberOf Overview
 	 * @type {object}
 	 */
-	publisedBy: Config.shapeOf(
-		{
-			dateTime: Config.string(),
-			userInitials: Config.string(),
-			userName: Config.string(),
-			userPortraitURL: Config.string()
-		}
-	),
+	publisedBy: Config.shapeOf({
+		dateTime: Config.string(),
+		userInitials: Config.string(),
+		userName: Config.string(),
+		userPortraitURL: Config.string()
+	}),
 
 	/**
 	 * BBase REST API URL to the collection resource.
@@ -752,7 +905,6 @@ Overview.STATE = {
 	 * @type {!string}
 	 */
 	spritemap: Config.string().required()
-
 };
 
 Soy.register(Overview, templates);

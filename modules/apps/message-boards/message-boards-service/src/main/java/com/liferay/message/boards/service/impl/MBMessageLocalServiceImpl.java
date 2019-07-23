@@ -278,13 +278,12 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		MBGroupServiceSettings mbGroupServiceSettings =
 			MBGroupServiceSettings.getInstance(groupId);
 
-		if (mbGroupServiceSettings != null) {
-			if (!mbGroupServiceSettings.isAllowAnonymousPosting()) {
-				if (anonymous || user.isDefaultUser()) {
-					throw new PrincipalException.MustHavePermission(
-						userId, ActionKeys.ADD_MESSAGE);
-				}
-			}
+		if ((mbGroupServiceSettings != null) &&
+			!mbGroupServiceSettings.isAllowAnonymousPosting() &&
+			(anonymous || user.isDefaultUser())) {
+
+			throw new PrincipalException.MustHavePermission(
+				userId, ActionKeys.ADD_MESSAGE);
 		}
 
 		if (user.isDefaultUser()) {
@@ -292,6 +291,8 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		}
 
 		Date now = new Date();
+
+		Date modifiedDate = serviceContext.getModifiedDate(now);
 
 		long messageId = counterLocalService.increment();
 
@@ -323,7 +324,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		message.setUserId(user.getUserId());
 		message.setUserName(userName);
 		message.setCreateDate(serviceContext.getCreateDate(now));
-		message.setModifiedDate(serviceContext.getModifiedDate(now));
+		message.setModifiedDate(modifiedDate);
 
 		if (threadId > 0) {
 			message.setThreadId(threadId);
@@ -338,7 +339,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		message.setStatus(WorkflowConstants.STATUS_DRAFT);
 		message.setStatusByUserId(user.getUserId());
 		message.setStatusByUserName(userName);
-		message.setStatusDate(serviceContext.getModifiedDate(now));
+		message.setStatusDate(modifiedDate);
 
 		// Thread
 
@@ -599,10 +600,8 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 	public void deleteDiscussionMessages(String className, long classPK)
 		throws PortalException {
 
-		long classNameId = classNameLocalService.getClassNameId(className);
-
 		MBDiscussion discussion = mbDiscussionLocalService.fetchDiscussion(
-			classNameId, classPK);
+			classNameLocalService.getClassNameId(className), classPK);
 
 		if (discussion == null) {
 			if (_log.isInfoEnabled()) {
@@ -1046,9 +1045,11 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			classNameId, classPK);
 
 		if (discussion != null) {
-			message = mbMessagePersistence.findByT_P_First(
-				discussion.getThreadId(),
-				MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID, null);
+			MBThread mbThread = mbThreadPersistence.findByPrimaryKey(
+				discussion.getThreadId());
+
+			message = mbMessagePersistence.findByPrimaryKey(
+				mbThread.getRootMessageId());
 		}
 		else {
 			boolean workflowEnabled = WorkflowThreadLocal.isEnabled();
@@ -1120,9 +1121,8 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 	public int getDiscussionMessagesCount(
 		String className, long classPK, int status) {
 
-		long classNameId = classNameLocalService.getClassNameId(className);
-
-		return getDiscussionMessagesCount(classNameId, classPK, status);
+		return getDiscussionMessagesCount(
+			classNameLocalService.getClassNameId(className), classPK, status);
 	}
 
 	@Override
@@ -1230,9 +1230,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			long userId, long messageId, int status)
 		throws PortalException {
 
-		MBMessage message = getMessage(messageId);
-
-		return getMessageDisplay(userId, message, status);
+		return getMessageDisplay(userId, getMessage(messageId), status);
 	}
 
 	@Override
@@ -1551,10 +1549,9 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		long userId, String className, long classPK, int status, int start,
 		int end, OrderByComparator<MBMessage> obc) {
 
-		long classNameId = classNameLocalService.getClassNameId(className);
-
 		return getUserDiscussionMessages(
-			userId, classNameId, classPK, status, start, end, obc);
+			userId, classNameLocalService.getClassNameId(className), classPK,
+			status, start, end, obc);
 	}
 
 	@Override
@@ -1585,10 +1582,9 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 	public int getUserDiscussionMessagesCount(
 		long userId, String className, long classPK, int status) {
 
-		long classNameId = classNameLocalService.getClassNameId(className);
-
 		return getUserDiscussionMessagesCount(
-			userId, classNameId, classPK, status);
+			userId, classNameLocalService.getClassNameId(className), classPK,
+			status);
 	}
 
 	@Override
@@ -1871,7 +1867,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 						publishDate = assetEntry.getPublishDate();
 					}
 					else {
-						publishDate = now;
+						publishDate = modifiedDate;
 
 						serviceContext.setCommand(Constants.ADD);
 					}
@@ -1917,8 +1913,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 
 		if (!message.isDiscussion()) {
 			mbStatsUserLocalService.updateStatsUser(
-				message.getGroupId(), userId,
-				serviceContext.getModifiedDate(now));
+				message.getGroupId(), userId, modifiedDate);
 		}
 
 		return message;
@@ -2681,10 +2676,9 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 	private long _getRootDiscussionMessageId(String className, long classPK)
 		throws PortalException {
 
-		long classNameId = classNameLocalService.getClassNameId(className);
-
 		MBMessage message = mbMessagePersistence.findByC_C_First(
-			classNameId, classPK, new MessageCreateDateComparator(true));
+			classNameLocalService.getClassNameId(className), classPK,
+			new MessageCreateDateComparator(true));
 
 		return message.getMessageId();
 	}
@@ -2730,34 +2724,31 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 
 		MBThread thread = mbThreadLocalService.getThread(message.getThreadId());
 
-		if (serviceContext.getWorkflowAction() ==
-				WorkflowConstants.ACTION_SAVE_DRAFT) {
+		if ((serviceContext.getWorkflowAction() ==
+				WorkflowConstants.ACTION_SAVE_DRAFT) &&
+			!message.isDraft() && !message.isPending()) {
 
-			if (!message.isDraft() && !message.isPending()) {
-				message.setStatus(WorkflowConstants.STATUS_DRAFT);
+			message.setStatus(WorkflowConstants.STATUS_DRAFT);
 
-				// Thread
+			// Thread
 
-				User user = userLocalService.getUser(userId);
+			updateThreadStatus(
+				thread, message, userLocalService.getUser(userId), oldStatus,
+				modifiedDate);
 
-				updateThreadStatus(
-					thread, message, user, oldStatus, modifiedDate);
+			// Asset
 
-				// Asset
+			assetEntryLocalService.updateVisible(
+				message.getWorkflowClassName(), message.getMessageId(), false);
 
-				assetEntryLocalService.updateVisible(
-					message.getWorkflowClassName(), message.getMessageId(),
-					false);
+			if (!message.isDiscussion()) {
 
-				if (!message.isDiscussion()) {
+				// Indexer
 
-					// Indexer
+				Indexer<MBMessage> indexer =
+					IndexerRegistryUtil.nullSafeGetIndexer(MBMessage.class);
 
-					Indexer<MBMessage> indexer =
-						IndexerRegistryUtil.nullSafeGetIndexer(MBMessage.class);
-
-					indexer.delete(message);
-				}
+				indexer.delete(message);
 			}
 		}
 

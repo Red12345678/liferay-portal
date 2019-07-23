@@ -1,4 +1,5 @@
 definition {
+
 	macro _addPageTypeEmbedded {
 		Type(
 			locator1 = "SitePagesEditPage#PAGE_TYPE_EMBEDDED_URL_FIELD",
@@ -168,7 +169,7 @@ definition {
 		}
 
 		AssertClick(
-			locator1 = "Button#DELETE",
+			locator1 = "Button#DELETE_LAYOUT_LOGO",
 			value1 = "Delete");
 
 		PortletEntry.save();
@@ -440,7 +441,7 @@ definition {
 	}
 
 	macro viewChildPageDropdown {
-		ClickNoError.clickNoMouseOver(locator1 = "Home#${viewChildPageDropdown}");
+		ClickNoError(locator1 = "Home#${viewChildPageDropdown}");
 
 		if (isSet(javaScriptPage)) {
 			AssertConfirm.waitForConfirmation(value1 = "${javaScriptPage}");
@@ -717,6 +718,23 @@ definition {
 		}
 	}
 
+	macro viewPagesOrderOnPage {
+		AssertTextEquals.assertPartialText(
+			key_index = "1",
+			locator1 = "SitePages#LIST_GROUP_ITEM_ROW_ENTRY_ON_PAGE",
+			value1 = "${pageName1}");
+
+		AssertTextEquals.assertPartialText(
+			key_index = "2",
+			locator1 = "SitePages#LIST_GROUP_ITEM_ROW_ENTRY_ON_PAGE",
+			value1 = "${pageName2}");
+
+		AssertTextEquals.assertPartialText(
+			key_index = "3",
+			locator1 = "SitePages#LIST_GROUP_ITEM_ROW_ENTRY_ON_PAGE",
+			value1 = "${pageName3}");
+	}
+
 	macro viewPageTemplate {
 		Navigator.openSiteURL(siteName = "Site Name");
 
@@ -905,4 +923,5 @@ definition {
 
 		AssertElementNotPresent(locator1 = "Home#PAGE");
 	}
+
 }

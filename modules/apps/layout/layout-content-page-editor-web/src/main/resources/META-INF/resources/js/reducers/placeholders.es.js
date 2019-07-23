@@ -1,4 +1,25 @@
-import {CLEAR_ACTIVE_ITEM, CLEAR_DROP_TARGET, CLEAR_HOVERED_ITEM, UPDATE_ACTIVE_ITEM, UPDATE_DROP_TARGET, UPDATE_HOVERED_ITEM} from '../actions/actions.es';
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+import {
+	CLEAR_ACTIVE_ITEM,
+	CLEAR_DROP_TARGET,
+	CLEAR_HOVERED_ITEM,
+	UPDATE_ACTIVE_ITEM,
+	UPDATE_DROP_TARGET,
+	UPDATE_HOVERED_ITEM
+} from '../actions/actions.es';
 import {setIn} from '../utils/FragmentsEditorUpdateUtils.es';
 
 /**
@@ -17,8 +38,7 @@ function updateActiveItemReducer(state, action) {
 	if (action.type === CLEAR_ACTIVE_ITEM) {
 		nextState = setIn(nextState, ['activeItemId'], null);
 		nextState = setIn(nextState, ['activeItemType'], null);
-	}
-	else if (action.type === UPDATE_ACTIVE_ITEM) {
+	} else if (action.type === UPDATE_ACTIVE_ITEM) {
 		nextState = setIn(nextState, ['activeItemId'], action.activeItemId);
 		nextState = setIn(nextState, ['activeItemType'], action.activeItemType);
 	}
@@ -44,8 +64,7 @@ function updateDropTargetReducer(state, action) {
 		nextState = setIn(nextState, ['dropTargetBorder'], null);
 		nextState = setIn(nextState, ['dropTargetItemId'], null);
 		nextState = setIn(nextState, ['dropTargetItemType'], null);
-	}
-	else if (action.type === UPDATE_DROP_TARGET) {
+	} else if (action.type === UPDATE_DROP_TARGET) {
 		nextState = setIn(
 			nextState,
 			['dropTargetBorder'],
@@ -84,8 +103,7 @@ function updateHoveredItemReducer(state, action) {
 	if (action.type === CLEAR_HOVERED_ITEM) {
 		nextState = setIn(nextState, ['hoveredItemId'], null);
 		nextState = setIn(nextState, ['hoveredItemType'], null);
-	}
-	else if (action.type === UPDATE_HOVERED_ITEM) {
+	} else if (action.type === UPDATE_HOVERED_ITEM) {
 		nextState = setIn(nextState, ['hoveredItemId'], action.hoveredItemId);
 
 		nextState = setIn(

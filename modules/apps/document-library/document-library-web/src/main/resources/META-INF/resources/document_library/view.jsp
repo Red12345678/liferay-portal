@@ -30,8 +30,6 @@ String navigation = ParamUtil.getString(request, "navigation");
 		<%
 		DLPortletInstanceSettingsHelper dlPortletInstanceSettingsHelper = new DLPortletInstanceSettingsHelper(dlRequestHelper);
 
-		String[] entryColumns = dlPortletInstanceSettingsHelper.getEntryColumns();
-
 		String mvcRenderCommandName = ParamUtil.getString(request, "mvcRenderCommandName");
 
 		boolean defaultFolderView = dlAdminDisplayContext.isDefaultFolderView();
@@ -63,9 +61,9 @@ String navigation = ParamUtil.getString(request, "navigation");
 			portletURL="<%= restoreTrashEntriesURL %>"
 		/>
 
-		<%@ include file="/document_library/navigation.jspf" %>
+		<liferay-util:include page="/document_library/navigation.jsp" servletContext="<%= application %>" />
 
-		<%@ include file="/document_library/toolbar.jspf" %>
+		<liferay-util:include page="/document_library/toolbar.jsp" servletContext="<%= application %>" />
 
 		<%
 		BulkSelectionRunner bulkSelectionRunner = BulkSelectionRunnerUtil.getBulkSelectionRunner();
@@ -79,7 +77,7 @@ String navigation = ParamUtil.getString(request, "navigation");
 
 		<soy:component-renderer
 			context="<%= context %>"
-			module="document_library/bulk/BulkStatus.es"
+			module="document_library/js/bulk/BulkStatus.es"
 			templateNamespace="com.liferay.document.library.web.BulkStatus.render"
 		/>
 
@@ -105,7 +103,7 @@ String navigation = ParamUtil.getString(request, "navigation");
 				<div class="sidenav-content">
 					<div class="document-library-breadcrumb" id="<portlet:namespace />breadcrumbContainer">
 						<c:if test='<%= !mvcRenderCommandName.equals("/document_library/search") %>'>
-							<%@ include file="/document_library/breadcrumb.jspf" %>
+							<liferay-util:include page="/document_library/breadcrumb.jsp" servletContext="<%= application %>" />
 						</c:if>
 					</div>
 
@@ -122,10 +120,10 @@ String navigation = ParamUtil.getString(request, "navigation");
 						<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 						<aui:input name="repositoryId" type="hidden" value="<%= repositoryId %>" />
 						<aui:input name="newFolderId" type="hidden" />
-						<aui:input name="selectAll" type="hidden" value="<%= false %>" />
 						<aui:input name="folderId" type="hidden" value="<%= folderId %>" />
 						<aui:input name="changeLog" type="hidden" />
 						<aui:input name="versionIncrease" type="hidden" />
+						<aui:input name="selectAll" type="hidden" value="<%= false %>" />
 
 						<liferay-ui:error exception="<%= AuthenticationRepositoryException.class %>" message="you-cannot-access-the-repository-because-you-are-not-allowed-to-or-it-is-unavailable" />
 						<liferay-ui:error exception="<%= DuplicateFileEntryException.class %>" message="the-folder-you-selected-already-has-an-entry-with-this-name.-please-select-a-different-folder" />
@@ -134,10 +132,10 @@ String navigation = ParamUtil.getString(request, "navigation");
 						<div class="document-container">
 							<c:choose>
 								<c:when test='<%= mvcRenderCommandName.equals("/document_library/search") %>'>
-									<%@ include file="/document_library/search_resources.jspf" %>
+									<liferay-util:include page="/document_library/search_resources.jsp" servletContext="<%= application %>" />
 								</c:when>
 								<c:otherwise>
-									<%@ include file="/document_library/view_entries.jspf" %>
+									<liferay-util:include page="/document_library/view_entries.jsp" servletContext="<%= application %>" />
 								</c:otherwise>
 							</c:choose>
 
@@ -199,6 +197,7 @@ String navigation = ParamUtil.getString(request, "navigation");
 		<aui:script use="liferay-document-library">
 
 			<%
+			String[] entryColumns = dlPortletInstanceSettingsHelper.getEntryColumns();
 			String[] escapedEntryColumns = new String[entryColumns.length];
 
 			for (int i = 0; i < entryColumns.length; i++) {
@@ -243,28 +242,6 @@ String navigation = ParamUtil.getString(request, "navigation");
 						openViewMoreFileEntryTypesURL: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/document_library/view_more_menu_items.jsp" /><portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" /><portlet:param name="eventName" value='<%= liferayPortletResponse.getNamespace() + "selectAddMenuItem" %>' /></portlet:renderURL>',
 						portletId: '<%= HtmlUtil.escapeJS(portletId) %>',
 						redirect: encodeURIComponent('<%= currentURL %>'),
-						repositories: [
-							{
-								id: '<%= scopeGroupId %>',
-								name: '<liferay-ui:message key="local" />'
-							}
-
-							<%
-							List<Folder> mountFolders = DLAppServiceUtil.getMountFolders(repositoryId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
-							for (Folder mountFolder : mountFolders) {
-							%>
-
-								, {
-									id: '<%= mountFolder.getRepositoryId() %>',
-									name: '<%= HtmlUtil.escapeJS(mountFolder.getName()) %>'
-								}
-
-							<%
-							}
-							%>
-
-						],
 						selectFileEntryTypeURL: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/document_library/select_file_entry_type.jsp" /><portlet:param name="fileEntryTypeId" value="<%= String.valueOf(fileEntryTypeId) %>" /></portlet:renderURL>',
 						selectFolderURL: '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcRenderCommandName" value="/document_library/select_folder" /><portlet:param name="folderId" value="<%= String.valueOf(folderId) %>" /></portlet:renderURL>',
 						scopeGroupId: <%= scopeGroupId %>,
@@ -331,14 +308,14 @@ String navigation = ParamUtil.getString(request, "navigation");
 			componentId='<%= liferayPortletResponse.getNamespace() + "EditTagsComponent" %>'
 			containerId='<%= "#" + liferayPortletResponse.getNamespace() + "documentLibraryModal" %>'
 			context="<%= tagsContext %>"
-			module="document_library/categorization/EditTags.es"
+			module="document_library/js/categorization/EditTags.es"
 		/>
 
 		<liferay-frontend:component
 			componentId='<%= liferayPortletResponse.getNamespace() + "EditCategoriesComponent" %>'
 			containerId='<%= "#" + liferayPortletResponse.getNamespace() + "documentLibraryModal" %>'
 			context="<%= categoriesContext %>"
-			module="document_library/categorization/EditCategories.es"
+			module="document_library/js/categorization/EditCategories.es"
 		/>
 
 		<liferay-util:dynamic-include key="com.liferay.document.library.web#/document_library/view.jsp#post" />

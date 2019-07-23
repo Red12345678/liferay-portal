@@ -14,9 +14,9 @@
 
 package com.liferay.change.tracking.change.lists.web.internal.display.context;
 
-import com.liferay.change.tracking.configuration.CTConfigurationRegistryUtil;
 import com.liferay.change.tracking.constants.CTPortletKeys;
 import com.liferay.change.tracking.constants.CTSettingsKeys;
+import com.liferay.change.tracking.definition.CTDefinitionRegistryUtil;
 import com.liferay.change.tracking.engine.CTEngineManager;
 import com.liferay.change.tracking.model.CTCollection;
 import com.liferay.change.tracking.model.CTEntry;
@@ -88,7 +88,7 @@ public class ChangeListsDisplayContext {
 		soyContext.put(
 			"entityNameTranslations",
 			JSONUtil.toJSONArray(
-				CTConfigurationRegistryUtil.getContentTypeLanguageKeys(),
+				CTDefinitionRegistryUtil.getContentTypeLanguageKeys(),
 				contentTypeLanguageKey -> JSONUtil.put(
 					"key", contentTypeLanguageKey
 				).put(
@@ -96,6 +96,8 @@ public class ChangeListsDisplayContext {
 					LanguageUtil.get(
 						_httpServletRequest, contentTypeLanguageKey)
 				))
+		).put(
+			"namespace", _renderResponse.getNamespace()
 		).put(
 			"spritemap",
 			_themeDisplay.getPathThemeImages() + "/lexicon/icons.svg"
@@ -133,7 +135,7 @@ public class ChangeListsDisplayContext {
 
 		soyContext.put("urlSelectChangeList", portletURL.toString());
 
-		portletURL.setParameter("production", "true");
+		portletURL.setParameter("refresh", "true");
 
 		soyContext.put("urlSelectProduction", portletURL.toString());
 
@@ -141,15 +143,9 @@ public class ChangeListsDisplayContext {
 	}
 
 	public String getConfirmationMessage(String ctCollectionName) {
-		return StringBundler.concat(
-			LanguageUtil.format(
-				_httpServletRequest, "do-you-want-to-switch-to-x-change-list",
-				ctCollectionName, true),
-			"\\n",
-			LanguageUtil.get(
-				_httpServletRequest,
-				"you-can-disable-this-message-from-the-change-list-user-" +
-					"settings-tab"));
+		return LanguageUtil.format(
+			_httpServletRequest, "do-you-want-to-switch-to-x-change-list",
+			ctCollectionName, true);
 	}
 
 	public CreationMenu getCreationMenu() {
@@ -341,6 +337,30 @@ public class ChangeListsDisplayContext {
 				addTableViewTypeItem();
 			}
 		};
+	}
+
+	public boolean hasCollision(long ctCollectionId) {
+		Optional<CTCollection> ctCollectionOptional =
+			_ctEngineManager.getCTCollectionOptional(
+				_themeDisplay.getCompanyId(), ctCollectionId);
+
+		if (!ctCollectionOptional.isPresent()) {
+			return false;
+		}
+
+		QueryDefinition<CTEntry> queryDefinition = new QueryDefinition<>();
+
+		queryDefinition.setStatus(WorkflowConstants.STATUS_DRAFT);
+
+		int ctEntriesCount = _ctEngineManager.getCTEntriesCount(
+			ctCollectionOptional.get(), null, null, null, null, true,
+			queryDefinition);
+
+		if (ctEntriesCount > 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public boolean hasCTEntries(long ctCollectionId) {

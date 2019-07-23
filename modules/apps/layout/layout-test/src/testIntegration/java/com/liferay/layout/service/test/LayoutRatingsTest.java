@@ -23,7 +23,7 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.util.test.LayoutTestUtil;
-import com.liferay.portlet.ratings.test.BaseRatingsTestCase;
+import com.liferay.ratings.test.util.BaseRatingsTestCase;
 
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -55,8 +55,9 @@ public class LayoutRatingsTest extends BaseRatingsTestCase {
 			BaseModel<?> baseModel, ServiceContext serviceContext)
 		throws Exception {
 
-		LayoutLocalServiceUtil.deleteLayout(
-			((Layout)baseModel).getPlid(), serviceContext);
+		Layout layout = (Layout)baseModel;
+
+		LayoutLocalServiceUtil.deleteLayout(layout.getPlid(), serviceContext);
 
 		return null;
 	}

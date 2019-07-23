@@ -1,4 +1,5 @@
 definition {
+
 	macro discardChanges {
 		var key_text = "Discard Changes";
 
@@ -28,20 +29,25 @@ definition {
 
 		MenuItem.click(menuItem = "Edit in ${dmGoogleApp}");
 
+		var siteName = TestCase.getSiteName(siteName = "${siteName}");
+
 		AssertElementPresent(
-			key_text = "Save and Return to Liferay",
+			key_text = "Save and Return to ${siteName}",
 			locator1 = "Button#ANY");
 	}
 
 	macro saveAndExit {
-		var key_text = "Save and Return to Liferay";
+		var siteName = TestCase.getSiteName(siteName = "${siteName}");
+
+		var key_text = "Save and Return to ${siteName}";
 
 		AssertElementPresent(locator1 = "Button#ANY");
 
 		AssertClick(
 			locator1 = "Button#ANY",
-			value1 = "Save and Return to Liferay");
+			value1 = "Save and Return to ${siteName}");
 
 		Navigator.openURL();
 	}
+
 }

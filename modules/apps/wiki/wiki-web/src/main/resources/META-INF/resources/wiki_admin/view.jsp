@@ -144,7 +144,7 @@ WikiNodesManagementToolbarDisplayContext wikiNodesManagementToolbarDisplayContex
 					<%
 					Map<String, Object> rowData = new HashMap<>();
 
-					rowData.put("actions", String.join(StringPool.COMMA, wikiNodesManagementToolbarDisplayContext.getAvailableActionDropdownItems(node)));
+					rowData.put("actions", StringUtil.merge(wikiNodesManagementToolbarDisplayContext.getAvailableActions(node)));
 
 					row.setData(rowData);
 
@@ -166,11 +166,11 @@ WikiNodesManagementToolbarDisplayContext wikiNodesManagementToolbarDisplayContex
 							<liferay-ui:search-container-column-text
 								colspan="<%= 2 %>"
 							>
-								<h2 class="h5">
+								<p class="h5">
 									<aui:a href="<%= rowURL.toString() %>">
 										<%= HtmlUtil.escape(node.getName()) %>
 									</aui:a>
-								</h2>
+								</p>
 
 								<%
 								Date lastPostDate = node.getLastPostDate();

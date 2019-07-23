@@ -1,4 +1,5 @@
 definition {
+
 	macro addFragment {
 		PageEditor.expandFragmentCollection(collectionName = "${collectionName}");
 
@@ -72,6 +73,14 @@ definition {
 
 	macro clickPublish {
 		Button.click(button = "Publish");
+	}
+
+	macro closeSidebar {
+		Click(
+			key_tabName = "${tabName}",
+			locator1 = "PageEditor#FRAGMENT_SIDEBAR_TAB_BUTTON");
+
+		AssertElementPresent(locator1 = "PageEditor#FRAGMENT_SIDEBAR_COLLAPSED");
 	}
 
 	macro editFragmentImage {
@@ -243,6 +252,20 @@ definition {
 			locator1 = "PageEditor#FRAGMENT_SIDEBAR_COLLECTION_PANEL");
 	}
 
+	macro viewComment {
+		AssertTextEquals(
+			locator1 = "PageEditor#FRAGMENT_SIDEBAR_SECTION_TITLE",
+			value1 = "Comments");
+
+		AssertTextEquals(
+			locator1 = "PageEditor#FRAGMENT_SIDEBAR_CENTER_TEXT",
+			value1 = "No comments yet");
+
+		AssertTextEquals(
+			locator1 = "PageEditor#FRAGMENT_SIDEBAR_SECONDARY_TEXT",
+			value1 = "Select a fragment to add a comment");
+	}
+
 	macro viewEditorEmpty {
 		AssertElementPresent(locator1 = "PageEditor#EMPTY_MESSAGE");
 	}
@@ -275,4 +298,5 @@ definition {
 			locator1 = "PageEditor#AUTOSAVE_MESSAGE",
 			value1 = "Draft saved at");
 	}
+
 }

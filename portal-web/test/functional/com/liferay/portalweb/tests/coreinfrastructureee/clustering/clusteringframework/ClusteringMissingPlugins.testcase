@@ -1,5 +1,6 @@
 @component-name = "portal-clustering"
 definition {
+
 	property app.server.bundles.size = "1";
 	property cluster.enabled = "true";
 	property portal.release = "true";
@@ -83,7 +84,6 @@ definition {
 			value1 = "test.key=test.value");
 	}
 
-	@ignore = "true"
 	@priority = "4"
 	test CacheReplicationbyCopy {
 		property custom.properties = "ehcache.bootstrap.cache.loader.enabled=false${line.separator}ehcache.replicator.properties.test.cache=replicatePutsViaCopy=true";
@@ -161,7 +161,11 @@ definition {
 
 		AssertTextEquals(
 			locator1 = "ServerAdministrationScript#OUTPUT_FIELD",
-			value1 = "test.key=null");
+			value1 = "test.cache is empty");
+
+		Clustering.runGroovyScript(
+			nodePort = "8080",
+			scriptFile = "groovy-script-portal-cache-remove.groovy");
 
 		Clustering.runGroovyScript(
 			nodePort = "8080",
@@ -303,4 +307,5 @@ definition {
 			expectedText = "Memory clustered job from modules is triggered",
 			nodePort = "9080");
 	}
+
 }

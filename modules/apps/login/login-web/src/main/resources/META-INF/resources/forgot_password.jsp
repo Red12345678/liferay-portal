@@ -41,6 +41,7 @@ renderResponse.setTitle(LanguageUtil.get(request, "forgot-password"));
 		<aui:input name="saveLastPath" type="hidden" value="<%= false %>" />
 
 		<liferay-ui:error exception="<%= CaptchaConfigurationException.class %>" message="a-captcha-error-occurred-please-contact-an-administrator" />
+		<liferay-ui:error exception="<%= CaptchaException.class %>" message="captcha-verification-failed" />
 		<liferay-ui:error exception="<%= CaptchaTextException.class %>" message="text-verification-failed" />
 		<liferay-ui:error exception="<%= NoSuchUserException.class %>" message='<%= "the-" + TextFormatter.format(HtmlUtil.escape(authType), TextFormatter.K) + "-you-requested-is-not-registered-in-our-database" %>' />
 		<liferay-ui:error exception="<%= RequiredReminderQueryException.class %>" message="you-have-not-configured-a-reminder-query" />
@@ -107,7 +108,7 @@ renderResponse.setTitle(LanguageUtil.get(request, "forgot-password"));
 					</aui:input>
 
 					<c:if test="<%= captchaConfiguration.sendPasswordCaptchaEnabled() %>">
-						<portlet:resourceURL id="/login/captcha" var="captchaURL" />
+						<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="/login/captcha" var="captchaURL" />
 
 						<liferay-captcha:captcha
 							url="<%= captchaURL %>"
@@ -159,7 +160,7 @@ renderResponse.setTitle(LanguageUtil.get(request, "forgot-password"));
 						</c:when>
 						<c:otherwise>
 							<c:if test="<%= reminderAttempts >= 3 %>">
-								<portlet:resourceURL id="/login/captcha" var="captchaURL" />
+								<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="/login/captcha" var="captchaURL" />
 
 								<liferay-captcha:captcha
 									url="<%= captchaURL %>"

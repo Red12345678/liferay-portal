@@ -18,13 +18,21 @@ import com.liferay.bulk.rest.dto.v1_0.Status;
 import com.liferay.bulk.rest.resource.v1_0.StatusResource;
 import com.liferay.petra.function.UnsafeConsumer;
 import com.liferay.petra.function.UnsafeFunction;
-import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
-import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
+import com.liferay.portal.kernel.model.Company;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.search.filter.Filter;
+import com.liferay.portal.vulcan.accept.language.AcceptLanguage;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLField;
+import com.liferay.portal.vulcan.graphql.annotation.GraphQLName;
+import com.liferay.portal.vulcan.pagination.Page;
 
-import graphql.annotations.annotationTypes.GraphQLField;
-import graphql.annotations.annotationTypes.GraphQLInvokeDetached;
+import java.util.function.BiFunction;
 
 import javax.annotation.Generated;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.service.component.ComponentServiceObjects;
 
@@ -44,12 +52,35 @@ public class Query {
 	}
 
 	@GraphQLField
-	@GraphQLInvokeDetached
-	public Status getStatus() throws Exception {
+	public Status status() throws Exception {
 		return _applyComponentServiceObjects(
 			_statusResourceComponentServiceObjects,
 			this::_populateResourceContext,
 			statusResource -> statusResource.getStatus());
+	}
+
+	@GraphQLName("StatusPage")
+	public class StatusPage {
+
+		public StatusPage(Page statusPage) {
+			items = statusPage.getItems();
+			page = statusPage.getPage();
+			pageSize = statusPage.getPageSize();
+			totalCount = statusPage.getTotalCount();
+		}
+
+		@GraphQLField
+		protected java.util.Collection<Status> items;
+
+		@GraphQLField
+		protected long page;
+
+		@GraphQLField
+		protected long pageSize;
+
+		@GraphQLField
+		protected long totalCount;
+
 	}
 
 	private <T, R, E1 extends Throwable, E2 extends Throwable> R
@@ -74,12 +105,22 @@ public class Query {
 	private void _populateResourceContext(StatusResource statusResource)
 		throws Exception {
 
-		statusResource.setContextCompany(
-			CompanyLocalServiceUtil.getCompany(
-				CompanyThreadLocal.getCompanyId()));
+		statusResource.setContextAcceptLanguage(_acceptLanguage);
+		statusResource.setContextCompany(_company);
+		statusResource.setContextHttpServletRequest(_httpServletRequest);
+		statusResource.setContextHttpServletResponse(_httpServletResponse);
+		statusResource.setContextUser(_user);
 	}
 
 	private static ComponentServiceObjects<StatusResource>
 		_statusResourceComponentServiceObjects;
+
+	private AcceptLanguage _acceptLanguage;
+	private BiFunction<Object, String, Filter> _filterBiFunction;
+	private BiFunction<Object, String, Sort[]> _sortsBiFunction;
+	private Company _company;
+	private HttpServletRequest _httpServletRequest;
+	private HttpServletResponse _httpServletResponse;
+	private User _user;
 
 }

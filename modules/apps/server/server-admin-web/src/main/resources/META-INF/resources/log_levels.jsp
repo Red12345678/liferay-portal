@@ -23,6 +23,7 @@ if (!ArrayUtil.contains(tab2Names, tabs2)) {
 	tabs2 = tab2Names[0];
 }
 
+int delta = ParamUtil.getInteger(request, SearchContainer.DEFAULT_DELTA_PARAM, SearchContainer.DEFAULT_DELTA);
 String keywords = ParamUtil.getString(request, "keywords");
 
 PortletURL serverURL = renderResponse.createRenderURL();
@@ -30,6 +31,46 @@ PortletURL serverURL = renderResponse.createRenderURL();
 serverURL.setParameter("mvcRenderCommandName", "/server_admin/view");
 serverURL.setParameter("tabs1", tabs1);
 serverURL.setParameter("tabs2", tabs2);
+serverURL.setParameter("delta", String.valueOf(delta));
+
+PortletURL clearResultsURL = PortletURLUtil.clone(serverURL, liferayPortletResponse);
+
+clearResultsURL.setParameter("navigation", (String)null);
+clearResultsURL.setParameter("keywords", StringPool.BLANK);
+
+SearchContainer loggerSearchContainer = new SearchContainer(liferayPortletRequest, serverURL, null, null);
+
+Map currentLoggerNames = new TreeMap();
+
+Enumeration enu = LogManager.getCurrentLoggers();
+
+while (enu.hasMoreElements()) {
+	Logger logger = (Logger)enu.nextElement();
+
+	if (Validator.isNull(keywords) || logger.getName().contains(keywords)) {
+		currentLoggerNames.put(logger.getName(), logger);
+	}
+}
+
+List currentLoggerNamesList = ListUtil.fromCollection(currentLoggerNames.entrySet());
+
+Iterator itr = currentLoggerNamesList.iterator();
+
+while (itr.hasNext()) {
+	Map.Entry entry = (Map.Entry)itr.next();
+
+	String name = (String)entry.getKey();
+	Logger logger = (Logger)entry.getValue();
+
+	Level level = logger.getLevel();
+
+	if (level == null) {
+		itr.remove();
+	}
+}
+
+loggerSearchContainer.setResults(ListUtil.subList(currentLoggerNamesList, loggerSearchContainer.getStart(), loggerSearchContainer.getEnd()));
+loggerSearchContainer.setTotal(currentLoggerNamesList.size());
 %>
 
 <div class="server-admin-tabs">
@@ -52,14 +93,14 @@ serverURL.setParameter("tabs2", tabs2);
 		</aui:nav>
 
 		<c:if test='<%= tabs2.equals("update-categories") %>'>
-			<aui:nav-bar-search>
-				<liferay-ui:input-search
-					autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>"
-					markupView="lexicon"
-					placeholder='<%= LanguageUtil.get(request, "keywords") %>'
-					title='<%= LanguageUtil.get(request, "search-categories") %>'
-				/>
-			</aui:nav-bar-search>
+			<clay:management-toolbar
+				clearResultsURL="<%= String.valueOf(clearResultsURL) %>"
+				itemsTotal="<%= loggerSearchContainer.getTotal() %>"
+				searchActionURL="<%= String.valueOf(serverURL) %>"
+				searchFormName="searchFm"
+				selectable="<%= false %>"
+				showSearch="<%= true %>"
+			/>
 		</c:if>
 	</aui:nav-bar>
 
@@ -90,46 +131,9 @@ serverURL.setParameter("tabs2", tabs2);
 			</aui:button-row>
 		</c:when>
 		<c:otherwise>
-
-			<%
-			Map currentLoggerNames = new TreeMap();
-
-			Enumeration enu = LogManager.getCurrentLoggers();
-
-			while (enu.hasMoreElements()) {
-				Logger logger = (Logger)enu.nextElement();
-
-				if (Validator.isNull(keywords) || logger.getName().contains(keywords)) {
-					currentLoggerNames.put(logger.getName(), logger);
-				}
-			}
-
-			List currentLoggerNamesList = ListUtil.fromCollection(currentLoggerNames.entrySet());
-
-			Iterator itr = currentLoggerNamesList.iterator();
-
-			while (itr.hasNext()) {
-				Map.Entry entry = (Map.Entry)itr.next();
-
-				String name = (String)entry.getKey();
-				Logger logger = (Logger)entry.getValue();
-
-				Level level = logger.getLevel();
-
-				if (level == null) {
-					itr.remove();
-				}
-			}
-			%>
-
 			<liferay-ui:search-container
-				iteratorURL="<%= serverURL %>"
-				total="<%= currentLoggerNamesList.size() %>"
+				searchContainer="<%= loggerSearchContainer %>"
 			>
-				<liferay-ui:search-container-results
-					results="<%= ListUtil.subList(currentLoggerNamesList, searchContainer.getStart(), searchContainer.getEnd()) %>"
-				/>
-
 				<liferay-ui:search-container-row
 					className="java.util.Map.Entry"
 					modelVar="entry"

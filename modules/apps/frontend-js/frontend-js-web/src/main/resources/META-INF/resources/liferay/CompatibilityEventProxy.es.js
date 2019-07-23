@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import State from 'metal-state';
 import {core} from 'metal';
 
@@ -11,7 +25,6 @@ import {core} from 'metal';
  */
 
 class CompatibilityEventProxy extends State {
-
 	/**
 	 * @inheritDoc
 	 * @review
@@ -63,37 +76,35 @@ class CompatibilityEventProxy extends State {
 	 */
 
 	emitCompatibleEvents_(eventName, event) {
-		this.eventTargets_.forEach(
-			target => {
-				if (target.fire) {
-					let prefixedEventName = this.namespace ?
-						this.namespace + ':' + eventName :
-						eventName;
-					let yuiEvent = target._yuievt.events[prefixedEventName];
+		this.eventTargets_.forEach(target => {
+			if (target.fire) {
+				const prefixedEventName = this.namespace
+					? this.namespace + ':' + eventName
+					: eventName;
+				const yuiEvent = target._yuievt.events[prefixedEventName];
 
-					if (core.isObject(event)) {
-						try {
-							event.target = this.host;
-						}
-						catch (e) {
-						}
-					}
-
-					let emitFacadeReference;
-
-					if (!this.emitFacade && yuiEvent) {
-						emitFacadeReference = yuiEvent.emitFacade;
-						yuiEvent.emitFacade = false;
-					}
-
-					target.fire(prefixedEventName, event);
-
-					if (!this.emitFacade && yuiEvent) {
-						yuiEvent.emitFacade = emitFacadeReference;
+				if (core.isObject(event)) {
+					try {
+						event.target = this.host;
+					} catch (e) {
+						// Do nothing
 					}
 				}
+
+				let emitFacadeReference;
+
+				if (!this.emitFacade && yuiEvent) {
+					emitFacadeReference = yuiEvent.emitFacade;
+					yuiEvent.emitFacade = false;
+				}
+
+				target.fire(prefixedEventName, event);
+
+				if (!this.emitFacade && yuiEvent) {
+					yuiEvent.emitFacade = emitFacadeReference;
+				}
 			}
-		);
+		});
 	}
 
 	/**
@@ -104,24 +115,20 @@ class CompatibilityEventProxy extends State {
 	 */
 
 	startCompatibility_() {
-		this.host.on(
-			'*',
-			(event, eventFacade) => {
-				if (!eventFacade) {
-					eventFacade = event;
-				}
-
-				let compatibleEvent = this.checkAttributeEvent_(eventFacade.type);
-
-				if (compatibleEvent !== eventFacade.type) {
-					eventFacade.type = compatibleEvent;
-					this.host.emit(compatibleEvent, event, eventFacade);
-				}
-				else if (this.eventTargets_.length > 0) {
-					this.emitCompatibleEvents_(compatibleEvent, event);
-				}
+		this.host.on('*', (event, eventFacade) => {
+			if (!eventFacade) {
+				eventFacade = event;
 			}
-		);
+
+			const compatibleEvent = this.checkAttributeEvent_(eventFacade.type);
+
+			if (compatibleEvent !== eventFacade.type) {
+				eventFacade.type = compatibleEvent;
+				this.host.emit(compatibleEvent, event, eventFacade);
+			} else if (this.eventTargets_.length > 0) {
+				this.emitCompatibleEvents_(compatibleEvent, event);
+			}
+		});
 	}
 }
 
@@ -134,7 +141,6 @@ class CompatibilityEventProxy extends State {
  */
 
 CompatibilityEventProxy.STATE = {
-
 	/**
 	 * Regex for replace event names to YUI adapted names.
 	 * @review

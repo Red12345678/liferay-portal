@@ -163,10 +163,8 @@ public class DDLRecordSetLocalServiceImpl
 
 		// Record set version
 
-		long ddmStructureVersionId = getDDMStructureVersionId(ddmStructureId);
-
 		addRecordSetVersion(
-			ddmStructureVersionId, user, recordSet,
+			getDDMStructureVersionId(ddmStructureId), user, recordSet,
 			DDLRecordSetConstants.VERSION_DEFAULT, serviceContext);
 
 		// Dynamic data mapping structure link
@@ -240,6 +238,18 @@ public class DDLRecordSetLocalServiceImpl
 			recordSet.getCompanyId(), recordSet.getGroupId(),
 			recordSet.getUserId(), DDLRecordSet.class.getName(),
 			recordSet.getRecordSetId(), groupPermissions, guestPermissions);
+	}
+
+	@Override
+	public void deleteDDMStructureRecordSets(long ddmStructureId)
+		throws PortalException {
+
+		List<DDLRecordSet> ddlRecordSets = getDDMStructureRecordSets(
+			ddmStructureId);
+
+		for (DDLRecordSet ddlRecordSet : ddlRecordSets) {
+			deleteRecordSet(ddlRecordSet);
+		}
 	}
 
 	/**
@@ -362,6 +372,11 @@ public class DDLRecordSetLocalServiceImpl
 	@Override
 	public DDLRecordSet fetchRecordSet(long groupId, String recordSetKey) {
 		return ddlRecordSetPersistence.fetchByG_R(groupId, recordSetKey);
+	}
+
+	@Override
+	public List<DDLRecordSet> getDDMStructureRecordSets(long ddmStructureId) {
+		return ddlRecordSetPersistence.findByDDMStructureId(ddmStructureId);
 	}
 
 	/**

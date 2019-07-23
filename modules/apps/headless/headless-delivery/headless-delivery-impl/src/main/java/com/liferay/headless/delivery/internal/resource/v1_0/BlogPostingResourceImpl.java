@@ -17,6 +17,8 @@ package com.liferay.headless.delivery.internal.resource.v1_0;
 import com.liferay.blogs.model.BlogsEntry;
 import com.liferay.blogs.service.BlogsEntryService;
 import com.liferay.document.library.kernel.service.DLAppService;
+import com.liferay.expando.kernel.service.ExpandoColumnLocalService;
+import com.liferay.expando.kernel.service.ExpandoTableLocalService;
 import com.liferay.headless.common.spi.resource.SPIRatingResource;
 import com.liferay.headless.common.spi.service.context.ServiceContextUtil;
 import com.liferay.headless.delivery.dto.v1_0.BlogPosting;
@@ -25,10 +27,11 @@ import com.liferay.headless.delivery.dto.v1_0.Rating;
 import com.liferay.headless.delivery.dto.v1_0.TaxonomyCategory;
 import com.liferay.headless.delivery.dto.v1_0.converter.DefaultDTOConverterContext;
 import com.liferay.headless.delivery.internal.dto.v1_0.converter.BlogPostingDTOConverter;
+import com.liferay.headless.delivery.internal.dto.v1_0.util.CustomFieldsUtil;
+import com.liferay.headless.delivery.internal.dto.v1_0.util.EntityFieldsUtil;
 import com.liferay.headless.delivery.internal.dto.v1_0.util.RatingUtil;
 import com.liferay.headless.delivery.internal.odata.entity.v1_0.BlogPostingEntityModel;
 import com.liferay.headless.delivery.resource.v1_0.BlogPostingResource;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Sort;
@@ -47,12 +50,14 @@ import com.liferay.portal.vulcan.util.LocalDateTimeUtil;
 import com.liferay.portal.vulcan.util.SearchUtil;
 import com.liferay.ratings.kernel.service.RatingsEntryLocalService;
 
+import java.io.Serializable;
+
 import java.time.LocalDateTime;
 
+import java.util.Map;
 import java.util.Optional;
 
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.osgi.service.component.annotations.Component;
@@ -97,7 +102,11 @@ public class BlogPostingResourceImpl
 
 	@Override
 	public EntityModel getEntityModel(MultivaluedMap multivaluedMap) {
-		return _entityModel;
+		return new BlogPostingEntityModel(
+			EntityFieldsUtil.getEntityFields(
+				_portal.getClassNameId(BlogsEntry.class.getName()),
+				contextCompany.getCompanyId(), _expandoColumnLocalService,
+				_expandoTableLocalService));
 	}
 
 	@Override
@@ -164,8 +173,9 @@ public class BlogPostingResourceImpl
 					)),
 				null,
 				ServiceContextUtil.createServiceContext(
+					blogPosting.getTaxonomyCategoryIds(),
 					blogPosting.getKeywords(),
-					blogPosting.getTaxonomyCategoryIds(), siteId,
+					_getExpandoBridgeAttributes(blogPosting), siteId,
 					blogPosting.getViewableByAsString())));
 	}
 
@@ -202,8 +212,9 @@ public class BlogPostingResourceImpl
 					)),
 				null,
 				ServiceContextUtil.createServiceContext(
-					blogPosting.getKeywords(),
 					blogPosting.getTaxonomyCategoryIds(),
+					blogPosting.getKeywords(),
+					_getExpandoBridgeAttributes(blogPosting),
 					blogsEntry.getGroupId(),
 					blogPosting.getViewableByAsString())));
 	}
@@ -245,6 +256,15 @@ public class BlogPostingResourceImpl
 		}
 	}
 
+	private Map<String, Serializable> _getExpandoBridgeAttributes(
+		BlogPosting blogPosting) {
+
+		return CustomFieldsUtil.toMap(
+			BlogsEntry.class.getName(), contextCompany.getCompanyId(),
+			blogPosting.getCustomFields(),
+			contextAcceptLanguage.getPreferredLocale());
+	}
+
 	private ImageSelector _getImageSelector(Long imageId) {
 		if ((imageId == null) || (imageId == 0)) {
 			return new ImageSelector();
@@ -269,7 +289,7 @@ public class BlogPostingResourceImpl
 			BlogsEntry.class.getName(), _ratingsEntryLocalService,
 			ratingsEntry -> RatingUtil.toRating(
 				_portal, ratingsEntry, _userLocalService),
-			_user);
+			contextUser);
 	}
 
 	private BlogPosting _toBlogPosting(BlogsEntry blogsEntry) throws Exception {
@@ -278,9 +298,6 @@ public class BlogPostingResourceImpl
 				contextAcceptLanguage.getPreferredLocale(),
 				blogsEntry.getEntryId()));
 	}
-
-	private static final EntityModel _entityModel =
-		new BlogPostingEntityModel();
 
 	@Reference
 	private BlogPostingDTOConverter _blogPostingDTOConverter;
@@ -292,13 +309,16 @@ public class BlogPostingResourceImpl
 	private DLAppService _dlAppService;
 
 	@Reference
+	private ExpandoColumnLocalService _expandoColumnLocalService;
+
+	@Reference
+	private ExpandoTableLocalService _expandoTableLocalService;
+
+	@Reference
 	private Portal _portal;
 
 	@Reference
 	private RatingsEntryLocalService _ratingsEntryLocalService;
-
-	@Context
-	private User _user;
 
 	@Reference
 	private UserLocalService _userLocalService;

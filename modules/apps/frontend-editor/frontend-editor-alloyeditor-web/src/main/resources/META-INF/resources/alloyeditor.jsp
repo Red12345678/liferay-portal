@@ -95,15 +95,15 @@ if (editorOptions != null) {
 
 			<div class="alloy-editor-switch hide">
 				<button class="btn btn-default btn-xs hide lfr-portal-tooltip" data-title="<%= LanguageUtil.get(resourceBundle, "fullscreen") %>" id="<%= HtmlUtil.escapeAttribute(name) %>Fullscreen" type="button">
-					<aui:icon cssClass="icon-monospaced" image="expand" markupView="lexicon" />
+					<aui:icon image="expand" markupView="lexicon" />
 				</button>
 
 				<button class="btn btn-default btn-xs hide lfr-portal-tooltip" data-title="<%= LanguageUtil.get(resourceBundle, "dark-theme") %>" id="<%= HtmlUtil.escapeAttribute(name) %>SwitchTheme" type="button">
-					<aui:icon cssClass="icon-monospaced" image="moon" markupView="lexicon" />
+					<aui:icon image="moon" markupView="lexicon" />
 				</button>
 
 				<button class="btn btn-default btn-xs editor-view lfr-portal-tooltip" data-title="<%= LanguageUtil.get(resourceBundle, "code-view") %>" id="<%= HtmlUtil.escapeAttribute(name) %>Switch" type="button">
-					<aui:icon cssClass="icon-monospaced" image="code" markupView="lexicon" />
+					<aui:icon image="code" markupView="lexicon" />
 				</button>
 			</div>
 		</c:when>
@@ -151,26 +151,27 @@ name = HtmlUtil.escapeJS(name);
 	var alloyEditor;
 
 	var documentBrowseLinkCallback = function(editor, linkHref, callback) {
-		AUI().use(
-			'liferay-item-selector-dialog',
-			function(A) {
-				var itemSelectorDialog = new A.LiferayItemSelectorDialog(
-					{
-						eventName: editor.name + 'selectDocument',
-						on: {
-							selectedItemChange: function(event) {
-								var selectedItem = event.newVal;
-
-								if (selectedItem) {
-									callback(selectedItem);
-								}
-							}
-						},
-						title: '<liferay-ui:message key="select-item" />',
-						url: linkHref
-					});
+		Liferay.Loader.require(
+			'frontend-js-web/liferay/ItemSelectorDialog.es',
+			function(ItemSelectorDialog) {
+				var itemSelectorDialog = new ItemSelectorDialog.default({
+					eventName: editor.name + 'selectDocument',
+					title: '<liferay-ui:message key="select-item" />',
+					url: linkHref
+				});
 
 				itemSelectorDialog.open();
+
+				itemSelectorDialog.on(
+					'selectedItemChange',
+					function(event) {
+						var selectedItem = event.selectedItem;
+
+						if (selectedItem) {
+							callback(selectedItem);
+						}
+					}
+				);
 			}
 		);
 	};

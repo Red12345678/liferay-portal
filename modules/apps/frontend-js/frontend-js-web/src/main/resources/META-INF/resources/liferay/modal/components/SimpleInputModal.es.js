@@ -1,4 +1,19 @@
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 import {Config} from 'metal-state';
+import fetch from './../../util/fetch.es';
 import {isString} from 'metal';
 import Soy from 'metal-soy';
 
@@ -12,14 +27,17 @@ import templates from './SimpleInputModal.soy';
  */
 
 class SimpleInputModal extends PortletBase {
-
 	/**
 	 * @inheritDoc
 	 * @review
 	 */
 
 	attached() {
-		this.addListener('formSubmit', this._defaultFormSubmit.bind(this), true);
+		this.addListener(
+			'formSubmit',
+			this._defaultFormSubmit.bind(this),
+			true
+		);
 	}
 
 	/**
@@ -28,11 +46,9 @@ class SimpleInputModal extends PortletBase {
 	 */
 
 	rendered() {
-		requestAnimationFrame(
-			() => {
-				this.refs.modal.refs.mainField.focus();
-			}
-		);
+		requestAnimationFrame(() => {
+			this.refs.modal.refs.mainField.focus();
+		});
 	}
 
 	/**
@@ -43,24 +59,22 @@ class SimpleInputModal extends PortletBase {
 	 */
 
 	_defaultFormSubmit(event) {
-		this.fetch(this.formSubmitURL, event.form)
+		fetch(this.formSubmitURL, {
+			body: new FormData(event.form),
+			method: 'POST'
+		})
 			.then(response => response.json())
-			.then(
-				responseContent => {
-					if (responseContent.error) {
-						this._loadingResponse = false;
-						this._handleFormError(responseContent);
-					}
-					else {
-						this._handleFormSuccess(responseContent);
-					}
+			.then(responseContent => {
+				if (responseContent.error) {
+					this._loadingResponse = false;
+					this._handleFormError(responseContent);
+				} else {
+					this._handleFormSuccess(responseContent);
 				}
-			)
-			.catch(
-				response => {
-					this._handleFormError(response);
-				}
-			);
+			})
+			.catch(response => {
+				this._handleFormError(response);
+			});
 
 		this._loadingResponse = true;
 	}
@@ -88,12 +102,9 @@ class SimpleInputModal extends PortletBase {
 	_handleFormError(responseContent) {
 		this._errorMessage = responseContent.error || '';
 
-		this.emit(
-			'formError',
-			{
-				errorMessage: this._errorMessage
-			}
-		);
+		this.emit('formError', {
+			errorMessage: this._errorMessage
+		});
 	}
 
 	/**
@@ -108,12 +119,9 @@ class SimpleInputModal extends PortletBase {
 	_handleFormSubmit(event) {
 		event.preventDefault();
 
-		this.emit(
-			'formSubmit',
-			{
-				form: this.refs.modal.refs.form
-			}
-		);
+		this.emit('formSubmit', {
+			form: this.refs.modal.refs.form
+		});
 	}
 
 	/**
@@ -126,12 +134,9 @@ class SimpleInputModal extends PortletBase {
 	 */
 
 	_handleFormSuccess(responseContent) {
-		this.emit(
-			'formSuccess',
-			{
-				redirectURL: responseContent.redirectURL || ''
-			}
-		);
+		this.emit('formSuccess', {
+			redirectURL: responseContent.redirectURL || ''
+		});
 	}
 
 	/**
@@ -153,7 +158,6 @@ class SimpleInputModal extends PortletBase {
  */
 
 SimpleInputModal.STATE = {
-
 	/**
 	 * Label for the optional checkbox
 	 * @default ''
@@ -163,13 +167,11 @@ SimpleInputModal.STATE = {
 	 * @type {string}
 	 */
 
-	checkboxFieldLabel: Config
-		.setter(
-			(checkboxFieldLabel) => {
-				return (isString(checkboxFieldLabel) && checkboxFieldLabel) ?
-					Soy.toIncDom(checkboxFieldLabel) : '';
-			}
-		)
+	checkboxFieldLabel: Config.setter(checkboxFieldLabel => {
+		return isString(checkboxFieldLabel) && checkboxFieldLabel
+			? Soy.toIncDom(checkboxFieldLabel)
+			: '';
+	})
 		.string()
 		.value(''),
 
@@ -271,8 +273,9 @@ SimpleInputModal.STATE = {
 	 * @type {!string}
 	 */
 
-	mainFieldLabel: Config
-		.setter((mainFieldLabel) => Soy.toIncDom(mainFieldLabel))
+	mainFieldLabel: Config.setter(mainFieldLabel =>
+		Soy.toIncDom(mainFieldLabel)
+	)
 		.string()
 		.required(),
 

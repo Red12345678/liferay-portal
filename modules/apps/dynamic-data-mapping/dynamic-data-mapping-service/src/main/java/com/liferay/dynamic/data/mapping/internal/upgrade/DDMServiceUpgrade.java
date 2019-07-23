@@ -220,11 +220,30 @@ public class DDMServiceUpgrade implements UpgradeStepRegistrator {
 				}));
 
 		registry.register(
+			"2.0.4", "3.0.0",
+			new BaseUpgradeSQLServerDatetime(
+				new Class<?>[] {
+					DDMContentTable.class, DDMDataProviderInstanceTable.class,
+					DDMFormInstanceRecordTable.class,
+					DDMFormInstanceRecordVersionTable.class,
+					DDMFormInstanceTable.class,
+					DDMFormInstanceVersionTable.class,
+					DDMStructureLayoutTable.class, DDMStructureTable.class,
+					DDMStructureVersionTable.class, DDMTemplateTable.class,
+					DDMTemplateVersionTable.class
+				}));
+
+		registry.register(
 			"3.0.0", "3.0.1",
 			new com.liferay.dynamic.data.mapping.internal.upgrade.v3_0_1.
 				UpgradeDDMFormParagraphFields(_jsonFactory));
 
 		registry.register("3.0.1", "3.1.0", new UpgradeDDMStructureLayout());
+
+		registry.register(
+			"3.1.0", "3.1.1",
+			new com.liferay.dynamic.data.mapping.internal.upgrade.v3_1_1.
+				UpgradeDDMStructureLayout());
 	}
 
 	protected DDMFormDeserializer getDDMFormJSONDeserializer() {
